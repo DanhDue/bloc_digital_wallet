@@ -1,0 +1,83 @@
+name: bloc_digital_wallet
+description: "A digital wallet app base on Flutter BLOC."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  theme_tailor_annotation: ^3.1.2
+  flutter_svg: ^2.2.3
+  google_sign_in: ^7.2.0
+  dio: ^5.9.0
+  retrofit: ^4.9.2
+  json_annotation: ^4.9.0
+  freezed_annotation: ^3.1.0
+  talker_flutter: ^5.1.9
+  talker_dio_logger: ^5.1.9
+  permission_handler: ^12.0.1
+  jiffy: ^6.4.4
+  auto_route: ^11.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  freezed: ^3.2.4
+  json_serializable: ^6.11.3
+  theme_tailor: ^3.1.2
+  build_runner: ^2.10.4
+  flutter_gen_runner: ^5.12.0
+  source_gen: ^4.1.1
+
+dartfmt: 
+  line_length: 99
+
+flutter_gen: 
+  output: lib/generated/
+  integrations: 
+    flutter_svg: true
+    rive: false
+    lottie: true
+  assets: 
+    outputs: 
+      class_name: Assets
+    enabled: true
+  colors: 
+    outputs: 
+      class_name: AppColors
+    inputs: 
+      - assets/colors/colors.xml
+    enabled: true
+  fonts: 
+    outputs: 
+      class_name: AppFontFamily
+      package_parameter_enabled: true
+    enabled: true
+  line_length: 99
+
+flutter:
+  uses-material-design: true
+  assets: 
+    - assets/images/
+    - assets/lotties/
+    - assets/jsons/
+  fonts: 
+    - family: SfCompactRegular
+      fonts: 
+        - asset: assets/fonts/SF_Compact_Display_Regular.ttf
+    - family: SfCompactMedium
+      fonts: 
+        - asset: assets/fonts/SF_Compact_Display_Medium.ttf
+    - family: SfCompactSemiBold
+      fonts: 
+        - asset: assets/fonts/SF_Compact_Display_Semibold.ttf
+    - family: SfCompactBold
+      fonts: 
+        - asset: assets/fonts/SF_Compact_Display_Bold.ttf

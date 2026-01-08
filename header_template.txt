@@ -1,0 +1,1 @@
+Copyright (c) {{.Year}}, one of DanhDue ExOICTIF projects. All rights reserved.

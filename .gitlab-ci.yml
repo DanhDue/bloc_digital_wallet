@@ -1,0 +1,37 @@
+stages:
+  - CIChecking
+
+variables:
+  LC_ALL: "en_US.UTF-8"
+  LANG: "en_US.UTF-8"
+
+before_script:
+  - echo $ANDROID_HOME
+  - echo $GOPATH
+  - echo $PATH
+  - mkdir .ci-reports
+
+CIChecking:
+  dependencies: []
+  stage: CIChecking
+  cache:
+    paths:
+      - ./.gradle
+      - ./build
+      - ./app/build
+      - ./build-caches
+  artifacts:
+    paths:
+      - .ci-reports
+  script:
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+    - cp secureFiles/dev/google-services.json android/app/src/dev/google-services.json
+    - cp secureFiles/stg/google-services.json android/app/src/stg/google-services.json
+    - cp secureFiles/prd/google-services.json android/app/src/prd/google-services.json
+    - cp secureFiles/dev/GoogleService-Info.plist ios/Runner/Firebase/GoogleService-Info.dev.plist
+    - cp secureFiles/stg/GoogleService-Info.plist ios/Runner/Firebase/GoogleService-Info.stg.plist
+    - cp secureFiles/prd/GoogleService-Info.plist ios/Runner/Firebase/GoogleService-Info.prd.plist
+    - melos buildIPA
+  interruptible: true
+  tags:
+    - danhdue_pc

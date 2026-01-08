@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+# format the source code & generate necessary files before commitment.
+before=$(git diff --name-only | wc -l)
+melos genAlls
+after=$(git diff --name-only | wc -l)
+if [ "$before" != "$after" ]; then
+    echo "Commit aborted because unformatted files found. Please format and commit again"
+	exit 1
+fi

@@ -1,0 +1,99 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Zeno(devDebug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file",
+        "secureFiles/dev/environment-configs.json",
+        "--flavor",
+        "dev",
+        "--debug"
+      ]
+    },
+    {
+      "name": "Zeno(devProfile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file",
+        "secureFiles/dev/environment-configs.json",
+        "--flavor",
+        "dev",
+        "--profile"
+      ]
+    },
+    {
+      "name": "Zeno(devProd)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file",
+        "secureFiles/dev/environment-configs.json",
+        "--flavor",
+        "dev",
+        "--release"
+      ]
+    },
+    {
+      "name": "Zeno(stgDebug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file",
+        "secureFiles/stg/environment-configs.json",
+        "--flavor",
+        "stg",
+        "--debug"
+      ]
+    },
+    {
+      "name": "Zeno(stgRelease)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file",
+        "secureFiles/stg/environment-configs.json",
+        "--flavor",
+        "stg",
+        "--release"
+      ]
+    },
+    {
+      "name": "Zeno(prdDebug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file",
+        "secureFiles/prd/environment-configs.json",
+        "--flavor",
+        "prd",
+        "--debug"
+      ]
+    },
+    {
+      "name": "Zeno(prdRelease)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file",
+        "secureFiles/prd/environment-configs.json",
+        "--flavor",
+        "prd",
+        "--release"
+      ]
+    }
+  ]
+}
