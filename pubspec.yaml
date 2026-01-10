@@ -52,6 +52,9 @@ melos:
     genAlls:
       run: ./scripts/genAlls.sh
       description: Generate all models, APIs, themes, assets, and localization.
+    genTheme:
+      run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      description: Generate theme classes with theme_tailor.
     genImages:
       run: fvm flutter pub run build_runner build --delete-conflicting-outputs
       description: Generate type-safe accessors for images.
@@ -86,6 +89,11 @@ melos:
     check-license-header:
       run: ./scripts/check_license_header.sh
       description: check the license header in all necessary files.
+
+theme_tailor:
+  input_folder: lib/config/theme
+  output_folder: lib/config/theme
+  output_line_length: 99
 
 flutter_gen: 
   output: lib/generated/

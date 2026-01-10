@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'counter/cubit/counter_cubit.dart';
 import 'di/injection.dart';
+import 'config/theme/app_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +18,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      title: 'Digital Wallet',
+      theme: ThemeData(
+        extensions: [AppThemes.light],
+        colorScheme: ColorScheme.light(
+          primary: AppThemes.light.primaryColor,
+          secondary: AppThemes.light.secondaryColor,
+          surface: AppThemes.light.surfaceColor,
+          error: AppThemes.light.errorColor,
+        ),
+      ),
+      darkTheme: ThemeData(
+        extensions: [AppThemes.dark],
+        colorScheme: ColorScheme.dark(
+          primary: AppThemes.dark.primaryColor,
+          secondary: AppThemes.dark.secondaryColor,
+          surface: AppThemes.dark.surfaceColor,
+          error: AppThemes.dark.errorColor,
+        ),
+      ),
       home: BlocProvider(
         create: (_) => getIt<CounterCubit>(),
         child: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -46,7 +64,7 @@ class MyHomePage extends StatelessWidget {
             const Text('You have pushed the button this many times:'),
             BlocBuilder<CounterCubit, int>(
               builder: (context, count) {
-                return Text('$count', style: Theme.of(context).textTheme.headlineMedium);
+                return Text('$count', style: context.appThemes.displayMedium);
               },
             ),
           ],
