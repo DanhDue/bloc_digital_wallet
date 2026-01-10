@@ -3,9 +3,8 @@ set -e
 
 fvm dart run build_runner build -d
 fluttergen -c pubspec.yaml
-get generate locales assets/locales
-melos dartfmt
-melos add-header-ignore-flags
-melos add-license-header
-melos check-license-header
+melos run dartfmt
+melos run add-header-ignore-flags
+melos run add-license-header
+melos run check-license-header
 git add .

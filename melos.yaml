@@ -1,0 +1,103 @@
+name: bloc_digital_wallet
+
+packages:
+  - .
+
+command:
+  bootstrap:
+    runPubGetInParallel: false
+
+scripts:
+  # Main generation scripts
+  genAlls:
+    run: ./scripts/genAlls.sh
+    description: Generate all models, APIs, themes, assets, and localization.
+
+  genImages:
+    run: melos build_runner
+    description: Generate type-safe accessors for images.
+
+  genColors:
+    run: melos build_runner
+    description: Generate type-safe accessors for colors from assets/colors/colors.xml.
+
+  genLocales:
+    run: get generate locales assets/locales
+    description: Generate localization classes from JSON files in assets/locales.
+
+  # Code generation
+  build_runner:
+    run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+    description: Run build_runner to generate code for Freezed, Retrofit, etc.
+
+  build_runner_watch:
+    run: fvm flutter pub run build_runner watch --delete-conflicting-outputs
+    description: Watch mode for build_runner with auto-regeneration.
+
+  # Formatting
+  dartfmt:
+    run: ./scripts/dartfmt.sh
+    description: Format Dart code with 99 line length.
+
+  format:
+    run: fvm dart format lib test -l 99
+    description: Format Dart files in lib and test directories.
+
+  # Project management
+  clean:
+    run: fvm flutter clean
+    description: Clean Flutter build artifacts.
+
+  pub_get:
+    run: fvm flutter pub get
+    description: Install Flutter dependencies.
+
+  # License and coverage headers
+  add-header-ignore-flags:
+    run: ./scripts/add_header_ignore_flags.sh
+    description: |
+      Add header ignore_flags.txt to all necessary files.
+      - Requires: Run this one before header license adding.
+
+  add-license-header:
+    run: ./scripts/add_license_header.sh
+    description: |
+      Add a license header to all necessary files.
+      - Requires: Run add-header-ignore-flags to add necessary ignore flags first.
+
+  check-license-header:
+    run: ./scripts/check_license_header.sh
+    description: check the license header in all necessary files.
+
+  # Testing
+  test:
+    run: fvm flutter test
+    description: Run Flutter tests.
+
+  test_coverage:
+    run: ./scripts/testWithCoverage.sh
+    description: Run tests with coverage report.
+
+  # Build commands
+  build_apk:
+    run: ./scripts/buildApk.sh
+    description: Build Android APK.
+
+  build_bundle:
+    run: ./scripts/buildBundle.sh
+    description: Build Android App Bundle.
+
+  build_ios:
+    run: ./scripts/buildIPA.sh
+    description: Build iOS IPA.
+
+  # Analysis
+  analyze:
+    run: fvm flutter analyze
+    description: Analyze Dart code for issues.
+
+  # Git tools
+  install_git_hooks:
+    run: ./scripts/install_git_tools.sh
+    description: Install Git hooks for the project.
+sdkPath: .fvm/flutter_sdk

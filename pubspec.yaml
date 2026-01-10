@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   theme_tailor_annotation: ^3.1.2
   flutter_svg: ^2.2.3
+  lottie: ^3.1.4
   google_sign_in: ^7.2.0
   dio: ^5.9.0
   retrofit: ^4.9.2
@@ -23,21 +24,68 @@ dependencies:
   permission_handler: ^12.0.1
   jiffy: ^6.4.4
   auto_route: ^11.1.0
+  flutter_bloc: ^9.1.1
+  get_it: ^9.2.0
+  injectable: ^2.5.0
+  bloc: ^9.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  melos: ^7.3.0
   freezed: ^3.2.4
   json_serializable: ^6.11.3
   theme_tailor: ^3.1.2
   build_runner: ^2.10.4
   flutter_gen_runner: ^5.12.0
-  source_gen: ^4.1.1
+  injectable_generator: ^2.7.0
+  retrofit_generator: ^10.2.1
+  mocktail: ^1.0.4
 
 dartfmt: 
   line_length: 99
+
+melos:
+  scripts:
+    genAlls:
+      run: ./scripts/genAlls.sh
+      description: Generate all models, APIs, themes, assets, and localization.
+    genImages:
+      run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      description: Generate type-safe accessors for images.
+    genColors:
+      run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      description: Generate type-safe accessors for colors from assets/colors/colors.xml.
+    genLocales:
+      run: get generate locales assets/locales
+      description: Generate localization classes from JSON files in assets/locales.
+    build_runner:
+      run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      description: Run build_runner to generate code for Freezed, Retrofit, etc.
+    build_runner_watch:
+      run: fvm flutter pub run build_runner watch --delete-conflicting-outputs
+      description: Watch mode for build_runner with auto-regeneration.
+    dartfmt:
+      run: ./scripts/dartfmt.sh
+      description: Format Dart code with 99 line length.
+    format:
+      run: fvm dart format lib test -l 99
+      description: Format Dart files in lib and test directories.
+    add-header-ignore-flags:
+      run: ./scripts/add_header_ignore_flags.sh
+      description: |
+        Add header ignore_flags.txt to all necessary files.
+        - Requires: Run this one before header license adding.
+    add-license-header:
+      run: ./scripts/add_license_header.sh
+      description: |
+        Add a license header to all necessary files.
+        - Requires: Run add-header-ignore-flags to add necessary ignore flags first.
+    check-license-header:
+      run: ./scripts/check_license_header.sh
+      description: check the license header in all necessary files.
 
 flutter_gen: 
   output: lib/generated/

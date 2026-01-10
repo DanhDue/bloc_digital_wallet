@@ -1,3 +1,5 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
 // This is a basic Flutter widget test.
 //
 // To perform an interaction with a widget in your test, use the WidgetTester
