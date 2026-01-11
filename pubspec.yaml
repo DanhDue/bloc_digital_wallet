@@ -10,31 +10,69 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # UI & Icons
   cupertino_icons: ^1.0.8
-  theme_tailor_annotation: ^3.1.2
   flutter_svg: ^2.2.3
   lottie: ^3.1.4
-  google_sign_in: ^7.2.0
-  dio: ^5.9.0
-  retrofit: ^4.9.2
-  json_annotation: ^4.9.0
-  freezed_annotation: ^3.1.0
-  talker_flutter: ^5.1.9
-  talker_dio_logger: ^5.1.9
-  permission_handler: ^12.0.1
-  jiffy: ^6.4.4
-  auto_route: ^11.1.0
-  flutter_bloc: ^9.1.1
+  
+  # Theme
+  theme_tailor_annotation: ^3.1.2
+  
+  # State Management (MVI Pattern)
+  flutter_bloc: ^8.1.6
+  bloc: ^8.1.4
+  bloc_concurrency: ^0.2.5
+  
+  # Dependency Injection
   get_it: ^9.2.0
   injectable: ^2.5.0
-  bloc: ^9.2.0
+  
+  # Networking
+  dio: ^5.9.0
+  retrofit: ^4.9.2
+  connectivity_plus: ^6.0.5
+  
+  # Data & Serialization
+  json_annotation: ^4.9.0
+  freezed_annotation: ^3.1.0
+  
+  # Functional Programming
+  dartz: ^0.10.1
+  
+  # Value Equality
+  equatable: ^2.0.8
+  
+  # Logging & Debugging
+  talker_flutter: ^5.1.9
+  talker_dio_logger: ^5.1.9
+  logger: ^2.5.0
+  
+  # Storage
+  shared_preferences: ^2.3.4
+  flutter_secure_storage: ^9.2.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+  # Authentication
+  google_sign_in: ^7.2.0
+  
+  # Utils
+  permission_handler: ^12.0.1
+  jiffy: ^6.4.4
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Linting
   flutter_lints: ^6.0.0
+  
+  # Workspace Management
   melos: ^7.3.0
+  
+  # Code Generation
   freezed: ^3.2.4
   json_serializable: ^6.11.3
   theme_tailor: ^3.1.2
@@ -42,7 +80,12 @@ dev_dependencies:
   flutter_gen_runner: ^5.12.0
   injectable_generator: ^2.7.0
   retrofit_generator: ^10.2.1
+  
+  # Testing
   mocktail: ^1.0.4
+  
+  # Code Templates
+  mason: ^0.1.0-dev.59
 
 dartfmt: 
   line_length: 99

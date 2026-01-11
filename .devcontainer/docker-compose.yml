@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  flutter-dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    
+    container_name: bloc_digital_wallet
+    
+    volumes:
+      # Mount workspace
+      - ..:/workspace:cached
+      
+      # Cache volumes for performance
+      - pub-cache:/home/vscode/.pub-cache
+      - fvm-cache:/home/vscode/fvm
+      - dart-tool-cache:/workspace/.dart_tool
+      
+      # Git configuration
+      - ~/.gitconfig:/home/vscode/.gitconfig:ro
+      - ~/.ssh:/home/vscode/.ssh:ro
+    
+    environment:
+      # Go settings
+      - GOPATH=/home/vscode/go
+      
+      # Ruby/Gem settings
+      - GEM_HOME=/home/vscode/.gem
+      - LC_ALL=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      
+      # Flutter settings (using FVM)
+      - FVM_HOME=/home/vscode/fvm
+      - FLUTTER_ROOT=/home/vscode/fvm/default
+      - PUB_CACHE=/home/vscode/.pub-cache
+      
+      # Android SDK
+      - ANDROID_HOME=/opt/android-sdk
+      - ANDROID_SDK_ROOT=/opt/android-sdk
+    
+    ports:
+      - "8080:8080"    # Development server
+      - "9000:9000"    # Debug port
+      - "5000:5000"    # Additional service
+      - "42000:42000"  # Flutter DevTools
+    
+    working_dir: /workspace
+    
+    command: sleep infinity
+    
+    # Privileged mode for Android emulator (if needed)
+    privileged: true
+    
+    # Add capabilities
+    cap_add:
+      - SYS_PTRACE
+    
+    security_opt:
+      - seccomp:unconfined
+
+volumes:
+  pub-cache:
+    name: bloc_digital_wallet_pub_cache
+  fvm-cache:
+    name: bloc_digital_wallet_fvm
+  dart-tool-cache:
+    name: bloc_digital_wallet_dart_tool

@@ -1,0 +1,152 @@
+{
+  "name": "Flutter BLoC Digital Wallet - AI Agent Ready",
+  "image": "ubuntu:22.04",
+  
+  // Configure features to install
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installMaven": false,
+      "installGradle": true
+    },
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/ruby:1": {
+      "version": "3.3"
+    }
+  },
+
+  // Set environment variables (aligned with install_dev_tools.sh)
+  "containerEnv": {
+    // Go settings
+    "GOPATH": "/home/vscode/go",
+    "PATH": "${containerEnv:PATH}:/home/vscode/go/bin",
+    
+    // Ruby/Gem settings
+    "GEM_HOME": "/home/vscode/.gem",
+    "LC_ALL": "en_US.UTF-8",
+    "LANG": "en_US.UTF-8",
+    
+    // Flutter settings (using FVM)
+    "FVM_HOME": "/home/vscode/fvm",
+    "FLUTTER_ROOT": "/home/vscode/fvm/default",
+    "PATH_FLUTTER": "/home/vscode/fvm/default/bin:/home/vscode/.pub-cache/bin",
+    
+    // Android SDK
+    "ANDROID_HOME": "/opt/android-sdk",
+    "ANDROID_SDK_ROOT": "/opt/android-sdk",
+    
+    // Pub cache
+    "PUB_CACHE": "/home/vscode/.pub-cache"
+  },
+
+  // Mount workspace
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    // Cache directories for faster rebuilds
+    "source=vscode-flutter-pub-cache,target=/home/vscode/.pub-cache,type=volume",
+    "source=vscode-fvm,target=/home/vscode/fvm,type=volume"
+  ],
+
+  "workspaceFolder": "/workspace",
+
+  // Post-create command to set up the environment
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  // VSCode extensions for AI Agents
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Flutter & Dart
+        "dart-code.dart-code",
+        "dart-code.flutter",
+        
+        // AI Agent Helpers
+        "redhat.vscode-yaml",
+        "streetsidesoftware.code-spell-checker",
+        "eamodio.gitlens",
+        "ms-vscode.live-server",
+        
+        // Code Quality
+        "usernamehw.errorlens",
+        "aaron-bond.better-comments",
+        
+        // Utilities
+        "editorconfig.editorconfig",
+        "gruntfuggly.todo-tree",
+        
+        // Mason support
+        "felangel.bloc"
+      ],
+      "settings": {
+        "dart.flutterSdkPath": "/home/vscode/fvm/default",
+        "dart.lineLength": 120,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit"
+        },
+        "files.exclude": {
+          "**/.git": true,
+          "**/.DS_Store": true,
+          "**/node_modules": true,
+          "**/*.freezed.dart": true,
+          "**/*.g.dart": true,
+          "**/build": true,
+          "**/.fvm": true
+        },
+        "search.exclude": {
+          "**/.git": true,
+          "**/*.freezed.dart": true,
+          "**/*.g.dart": true,
+          "**/build": true,
+          "**/pubspec.lock": true,
+          "**/.fvm": true
+        },
+        // AI Agent optimizations
+        "files.watcherExclude": {
+          "**/.git/objects/**": true,
+          "**/build/**": true,
+          "**/.fvm/**": true,
+          "**/ios/Pods/**": true,
+          "**/android/.gradle/**": true
+        },
+        "terminal.integrated.defaultProfile.linux": "bash",
+        // Mason settings
+        "files.associations": {
+          "brick.yaml": "yaml",
+          "mason.yaml": "yaml",
+          "mason-lock.json": "json"
+        }
+      }
+    }
+  },
+
+  // Forward ports for development
+  "forwardPorts": [
+    8080,  // Development server
+    9000,  // Debug port
+    5000,  // Additional service port
+    42000  // Flutter DevTools
+  ],
+
+  // Container user
+  "remoteUser": "vscode",
+
+  // Post-start commands
+  "postStartCommand": "fvm flutter doctor -v",
+
+  // Container options
+  "runArgs": [
+    "--privileged"
+  ]
+}

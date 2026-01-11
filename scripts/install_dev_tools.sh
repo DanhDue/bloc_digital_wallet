@@ -74,7 +74,7 @@ source ~/.zshrc
 ruby -v
 
 # Install Melos
-dart pub global activate melos 2.9.0
+dart pub global activate melos
 
 # Install FlutterGen
 dart pub global activate flutter_gen

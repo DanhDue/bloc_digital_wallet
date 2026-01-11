@@ -100,4 +100,22 @@ scripts:
   install_git_hooks:
     run: ./scripts/install_git_tools.sh
     description: Install Git hooks for the project.
+
+  # Mason code generation
+  mason_get:
+    run: mason get
+    description: Install Mason bricks.
+
+  mason_make_feature:
+    run: mason make mvi_feature
+    description: Generate a new feature with Clean Architecture + MVI structure.
+
+  mason_list:
+    run: mason list
+    description: List all available Mason bricks.
+
+  mason_upgrade:
+    run: mason upgrade
+    description: Upgrade Mason bricks to latest versions.
+    
 sdkPath: .fvm/flutter_sdk

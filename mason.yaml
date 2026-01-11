@@ -1,0 +1,6 @@
+# Register bricks which can be consumed via the Mason CLI.
+# Run "mason get" to install all registered bricks.
+bricks:
+  # MVI Feature brick for Clean Architecture + MVI pattern
+  mvi_feature:
+    path: bricks/mvi_feature
