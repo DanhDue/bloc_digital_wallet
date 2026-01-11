@@ -71,10 +71,7 @@ class MyHomePage extends StatelessWidget {
             if (EnvironmentConfig.enableLogging)
               Text(
                 'ENV: ${EnvironmentConfig.environment.toUpperCase()}',
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.normal,
-                ),
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
               ),
           ],
         ),
@@ -93,10 +90,7 @@ class MyHomePage extends StatelessWidget {
             // Environment indicator
             if (EnvironmentConfig.enableLogging) ...[
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: _getEnvironmentColor(),
                   borderRadius: BorderRadius.circular(8),
@@ -114,10 +108,7 @@ class MyHomePage extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       EnvironmentConfig.apiBaseUrl,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
+                      style: const TextStyle(color: Colors.white70, fontSize: 10),
                     ),
                   ],
                 ),

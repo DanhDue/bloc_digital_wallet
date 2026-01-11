@@ -11,23 +11,25 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
 
 ## 📚 Documentation
 
+👉 **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Complete documentation navigation
+
 ### 📘 For Beginners
-- **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Step-by-step feature creation guide
-- **[Quick Reference](QUICK_REFERENCE.md)** - Cheat sheet with code templates
-- **[Quick Start](docs/QUICK_START.md)** - Get started in 5 minutes
-- **[Double Check Guide](DOUBLE_CHECK_GUIDE.md)** ⚠️ **MUST READ** - Verification steps
+- **[Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md)** - Step-by-step feature creation guide
+- **[Quick Reference](docs/getting-started/QUICK_REFERENCE.md)** - Cheat sheet with code templates
+- **[Quick Start](docs/getting-started/QUICK_START.md)** - Get started in 5 minutes
+- **[Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)** ⚠️ **MUST READ** - Verification steps
 
 ### 📗 For Advanced Developers
-- **[Architecture Guide](ARCHITECTURE.md)** - Complete architecture overview
-- **[Visual Guide](docs/VISUAL_GUIDE.md)** - Architecture diagrams
-- **[Mason Guide](docs/MASON_GUIDE.md)** - Code generation guide
+- **[Architecture Guide](docs/architecture/ARCHITECTURE_OVERVIEW.md)** - Complete architecture overview
+- **[Visual Guide](docs/architecture/VISUAL_GUIDE.md)** - Architecture diagrams
+- **[Mason Guide](docs/mason/MASON_GUIDE.md)** - Code generation guide
 
 ### 🤖 For AI Agents
-- **[AI Agent README](AI_AGENT_README.md)** - Start here! Complete guide index
-- **[AI Agent Context](AI_AGENT_CONTEXT.md)** - Architecture context & patterns
-- **[AI Agent Workflows](AI_AGENT_WORKFLOWS.md)** - Step-by-step task workflows
-- **[AI Agent Checklist](AI_AGENT_CHECKLIST.md)** - Quick reference checklist
-- **[Double Check Guide](DOUBLE_CHECK_GUIDE.md)** ⚠️ **MANDATORY** - Verification steps
+- **[AI Agent README](docs/ai-agents/AI_AGENT_README.md)** - Start here! Complete guide index
+- **[AI Agent Context](docs/ai-agents/AI_AGENT_CONTEXT.md)** - Architecture context & patterns
+- **[AI Agent Workflows](docs/ai-agents/AI_AGENT_WORKFLOWS.md)** - Step-by-step task workflows
+- **[AI Agent Checklist](docs/ai-agents/AI_AGENT_CHECKLIST.md)** - Quick reference checklist
+- **[Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)** ⚠️ **MANDATORY** - Verification steps
 
 ## 🚀 Getting Started
 
@@ -199,12 +201,13 @@ melos build_apk             # Build Android APK
 
 ## 📖 Learn More
 
-- **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Complete tutorial for creating features
-- **[Quick Reference](QUICK_REFERENCE.md)** - Cheat sheet with code templates
-- **[Architecture Guide](ARCHITECTURE.md)** - Clean Architecture + MVI overview
-- **[MVI Flow](ARCHITECTURE.md#2-presentation-layer-flutter)** - Understanding Action, State, Event
-- **[Visual Guide](docs/VISUAL_GUIDE.md)** - Architecture diagrams
-- **[Mason Usage](docs/MASON_GUIDE.md)** - Code generation guide
+- **[Documentation Index](DOCUMENTATION_INDEX.md)** - Complete documentation navigation
+- **[Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md)** - Complete tutorial for creating features
+- **[Quick Reference](docs/getting-started/QUICK_REFERENCE.md)** - Cheat sheet with code templates
+- **[Architecture Guide](docs/architecture/ARCHITECTURE_OVERVIEW.md)** - Clean Architecture + MVI overview
+- **[Visual Guide](docs/architecture/VISUAL_GUIDE.md)** - Architecture diagrams
+- **[Mason Usage](docs/mason/MASON_GUIDE.md)** - Code generation guide
+- **[Environment Setup](docs/environment/FLAVORS_SETUP_COMPLETE.md)** - Environment & flavors configuration
 
 ## 📝 License
 

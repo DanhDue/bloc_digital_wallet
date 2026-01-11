@@ -14,11 +14,7 @@ class AppException implements Exception {
 
 /// Server exception
 class ServerException extends AppException {
-  ServerException({
-    required super.message,
-    super.code,
-    super.originalException,
-  });
+  ServerException({required super.message, super.code, super.originalException});
 }
 
 /// Cache exception
@@ -28,18 +24,10 @@ class CacheException extends AppException {
 
 /// Network exception
 class NetworkException extends AppException {
-  NetworkException({
-    required super.message,
-    super.code,
-    super.originalException,
-  });
+  NetworkException({required super.message, super.code, super.originalException});
 }
 
 /// Validation exception
 class ValidationException extends AppException {
-  ValidationException({
-    required super.message,
-    super.code,
-    super.originalException,
-  });
+  ValidationException({required super.message, super.code, super.originalException});
 }

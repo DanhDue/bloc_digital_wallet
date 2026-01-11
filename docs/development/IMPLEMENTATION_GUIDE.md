@@ -29,7 +29,7 @@ Before starting, ensure you have:
 - [ ] Project dependencies installed: `flutter pub get`
 - [ ] Mason CLI installed: `mason get`
 - [ ] Basic understanding of Clean Architecture
-- [ ] Basic understanding of MVI pattern (read `ARCHITECTURE.md`)
+- [ ] Basic understanding of MVI pattern (read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md))
 
 ---
 
@@ -1322,8 +1322,8 @@ flutter test
 ---
 
 **Need help?** Check:
-- `ARCHITECTURE.md` - Architecture overview
-- `docs/VISUAL_GUIDE.md` - Visual diagrams
-- `docs/CLEAN_MVI_SUMMARY.md` - Quick reference
+- [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) - Architecture overview
+- [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md) - Visual diagrams
+- [docs/architecture/CLEAN_MVI_SUMMARY.md](../architecture/CLEAN_MVI_SUMMARY.md) - Quick reference
 
 **Happy coding! 🚀**

@@ -33,9 +33,9 @@ Updated `.vscode/launch.json` with 9 configurations:
 - prd-debug, prd-profile, prd-release
 
 ### 5. **Documentation**
-- ✅ `ENVIRONMENT_SETUP.md` - Complete guide (detailed)
-- ✅ `ENVIRONMENT_QUICK_START.md` - Quick reference (TL;DR)
-- ✅ `secureFiles/README.md` - Security notes
+- ✅ [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md) - Complete guide (detailed)
+- ✅ [ENVIRONMENT_QUICK_START.md](ENVIRONMENT_QUICK_START.md) - Quick reference (TL;DR)
+- ✅ [secureFiles/README.md](../../secureFiles/README.md) - Security notes
 
 ---
 
@@ -358,7 +358,7 @@ A: Yes! Many large Flutter apps use this approach. It's officially supported by 
 
 ## 📞 Support
 
-- **Issues**: Check troubleshooting in ENVIRONMENT_SETUP.md
+- **Issues**: Check troubleshooting in [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md)
 - **Questions**: Ask in team chat
 - **Bugs**: Report with environment context
 

@@ -6,7 +6,7 @@
 
 ## 📚 Documentation Categories
 
-### 🤖 AI Agents & Development Tools
+### 🤖 AI Agents & Development Tools ([docs/ai-agents/](docs/ai-agents/))
 Documentation for AI assistants and automated development workflows.
 
 - [docs/ai-agents/AI_AGENT_README.md](docs/ai-agents/AI_AGENT_README.md) - Main guide for AI agents
@@ -20,7 +20,7 @@ Documentation for AI assistants and automated development workflows.
 
 ---
 
-### 🏗️ Architecture & Design
+### 🏗️ Architecture & Design ([docs/architecture/](docs/architecture/))
 Core architectural patterns and design principles.
 
 - [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md) - Main architecture overview
@@ -33,7 +33,7 @@ Core architectural patterns and design principles.
 
 ---
 
-### 🚀 Getting Started & Quick Reference
+### 🚀 Getting Started & Quick Reference ([docs/getting-started/](docs/getting-started/), [/](./))
 Quick start guides and reference materials.
 
 - [README.md](README.md) - Project overview and setup
@@ -45,7 +45,7 @@ Quick start guides and reference materials.
 
 ---
 
-### 🎨 Implementation & Development
+### 🎨 Implementation & Development ([docs/development/](docs/development/), [docs/mason/](docs/mason/))
 Step-by-step guides for implementing features and development workflows.
 
 - [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md) - Complete feature implementation tutorial
@@ -57,7 +57,7 @@ Step-by-step guides for implementing features and development workflows.
 
 ---
 
-### ⚙️ Environment & Configuration
+### ⚙️ Environment & Configuration ([docs/environment/](docs/environment/))
 Environment setup, flavors, and build configuration.
 
 - [docs/environment/FLAVORS_SETUP_COMPLETE.md](docs/environment/FLAVORS_SETUP_COMPLETE.md) - ⭐ **NEW** Android flavors + dart-defines
@@ -69,7 +69,7 @@ Environment setup, flavors, and build configuration.
 
 ---
 
-### 🧱 Code Templates (Mason Bricks)
+### 🧱 Code Templates (Mason Bricks) ([bricks/](bricks/))
 Reusable code generation templates.
 
 - [bricks/mvi_feature/README.md](bricks/mvi_feature/README.md) - MVI feature brick
@@ -113,25 +113,25 @@ Reusable code generation templates.
 
 ## 🔍 By Topic
 
-### Architecture
+### Architecture ([docs/architecture/](docs/architecture/))
 - [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
 - [docs/architecture/ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md)
 - [docs/architecture/CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md)
 - [docs/architecture/VISUAL_GUIDE.md](docs/architecture/VISUAL_GUIDE.md)
 
-### Environment & Build
+### Environment & Build ([docs/environment/](docs/environment/))
 - [docs/environment/FLAVORS_SETUP_COMPLETE.md](docs/environment/FLAVORS_SETUP_COMPLETE.md) ⭐ **Latest**
 - [docs/environment/ENVIRONMENT_SETUP.md](docs/environment/ENVIRONMENT_SETUP.md)
 - [docs/environment/ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md)
 - [docs/environment/ENVIRONMENT_SETUP_SUMMARY.md](docs/environment/ENVIRONMENT_SETUP_SUMMARY.md)
 
-### Feature Development
+### Feature Development ([docs/development/](docs/development/), [docs/mason/](docs/mason/))
 - [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md)
 - [docs/mason/MASON_GUIDE.md](docs/mason/MASON_GUIDE.md)
 - [docs/mason/MASON_INTEGRATION.md](docs/mason/MASON_INTEGRATION.md)
 - [docs/mason/MASON_SYNTAX.md](docs/mason/MASON_SYNTAX.md)
 
-### AI & Automation
+### AI & Automation ([docs/ai-agents/](docs/ai-agents/))
 - [docs/ai-agents/AI_AGENT_README.md](docs/ai-agents/AI_AGENT_README.md)
 - [docs/ai-agents/AI_AGENT_CHECKLIST.md](docs/ai-agents/AI_AGENT_CHECKLIST.md)
 - [docs/ai-agents/AI_AGENT_WORKFLOWS.md](docs/ai-agents/AI_AGENT_WORKFLOWS.md)
@@ -139,7 +139,7 @@ Reusable code generation templates.
 - [docs/ai-agents/GOOGLE_JULES_AI_GUIDE.md](docs/ai-agents/GOOGLE_JULES_AI_GUIDE.md)
 - [docs/ai-agents/DOUBLE_CHECK_GUIDE.md](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)
 
-### Quick Reference
+### Quick Reference ([docs/getting-started/](docs/getting-started/), [/](./))
 - [README.md](README.md)
 - [docs/getting-started/QUICK_REFERENCE.md](docs/getting-started/QUICK_REFERENCE.md)
 - [docs/getting-started/QUICK_START.md](docs/getting-started/QUICK_START.md)
@@ -164,50 +164,51 @@ Reusable code generation templates.
 
 ## 📁 New Folder Structure
 
-```
-bloc_digital_wallet/
-├── README.md                          # Main entry point
-├── DOCUMENTATION_INDEX.md             # This file
-├── DOCUMENTATION_CATEGORIES.md        # Quick category reference
-│
-└── docs/
-    ├── ai-agents/                     # 🤖 AI Agent Documentation
-    │   ├── AI_AGENT_README.md
-    │   ├── AI_AGENT_CONTEXT.md
-    │   ├── AI_AGENT_CHECKLIST.md
-    │   ├── AI_AGENT_WORKFLOWS.md
-    │   ├── DOUBLE_CHECK_GUIDE.md
-    │   └── GOOGLE_JULES_AI_GUIDE.md
-    │
-    ├── architecture/                  # 🏗️ Architecture Documentation
-    │   ├── ARCHITECTURE_OVERVIEW.md
-    │   ├── ARCHITECTURE_DETAILED.md
-    │   ├── CLEAN_MVI_SUMMARY.md
-    │   ├── VISUAL_GUIDE.md
-    │   └── DOCUMENTATION_SUMMARY.md
-    │
-    ├── environment/                   # ⚙️ Environment Configuration
-    │   ├── FLAVORS_SETUP_COMPLETE.md
-    │   ├── ENVIRONMENT_SETUP.md
-    │   ├── ENVIRONMENT_QUICK_START.md
-    │   └── ENVIRONMENT_SETUP_SUMMARY.md
-    │
-    ├── development/                   # 🎨 Implementation Guides
-    │   └── IMPLEMENTATION_GUIDE.md
-    │
-    ├── getting-started/               # 🚀 Getting Started
-    │   ├── QUICK_REFERENCE.md
-    │   ├── QUICK_START.md
-    │   └── DOCUMENTATION_NAV_MAP.md
-    │
-    ├── mason/                         # 🧱 Mason Code Generation
-    │   ├── MASON_GUIDE.md
-    │   ├── MASON_INTEGRATION.md
-    │   └── MASON_SYNTAX.md
-    │
-    ├── README.md                      # Docs folder overview
-    └── ORGANIZATION_PROPOSAL.md       # Organization notes
-```
+**[bloc_digital_wallet/](./)**
+
+**Root Files:**
+- [README.md](README.md) - Main entry point
+- [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) - This file
+- [DOCUMENTATION_CATEGORIES.md](DOCUMENTATION_CATEGORIES.md) - Quick category reference
+
+**[docs/](docs/)**
+- 🤖 **[ai-agents/](docs/ai-agents/)** - AI Agent Documentation
+  - [AI_AGENT_README.md](docs/ai-agents/AI_AGENT_README.md)
+  - [AI_AGENT_CONTEXT.md](docs/ai-agents/AI_AGENT_CONTEXT.md)
+  - [AI_AGENT_CHECKLIST.md](docs/ai-agents/AI_AGENT_CHECKLIST.md)
+  - [AI_AGENT_WORKFLOWS.md](docs/ai-agents/AI_AGENT_WORKFLOWS.md)
+  - [DOUBLE_CHECK_GUIDE.md](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)
+  - [GOOGLE_JULES_AI_GUIDE.md](docs/ai-agents/GOOGLE_JULES_AI_GUIDE.md)
+
+- 🏗️ **[architecture/](docs/architecture/)** - Architecture Documentation
+  - [ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+  - [ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md)
+  - [CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md)
+  - [VISUAL_GUIDE.md](docs/architecture/VISUAL_GUIDE.md)
+  - [DOCUMENTATION_SUMMARY.md](docs/architecture/DOCUMENTATION_SUMMARY.md)
+
+- ⚙️ **[environment/](docs/environment/)** - Environment Configuration
+  - [FLAVORS_SETUP_COMPLETE.md](docs/environment/FLAVORS_SETUP_COMPLETE.md)
+  - [ENVIRONMENT_SETUP.md](docs/environment/ENVIRONMENT_SETUP.md)
+  - [ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md)
+  - [ENVIRONMENT_SETUP_SUMMARY.md](docs/environment/ENVIRONMENT_SETUP_SUMMARY.md)
+
+- 🎨 **[development/](docs/development/)** - Implementation Guides
+  - [IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md)
+
+- 🚀 **[getting-started/](docs/getting-started/)** - Getting Started
+  - [QUICK_REFERENCE.md](docs/getting-started/QUICK_REFERENCE.md)
+  - [QUICK_START.md](docs/getting-started/QUICK_START.md)
+  - [DOCUMENTATION_NAV_MAP.md](docs/getting-started/DOCUMENTATION_NAV_MAP.md)
+
+- 🧱 **[mason/](docs/mason/)** - Mason Code Generation
+  - [MASON_GUIDE.md](docs/mason/MASON_GUIDE.md)
+  - [MASON_INTEGRATION.md](docs/mason/MASON_INTEGRATION.md)
+  - [MASON_SYNTAX.md](docs/mason/MASON_SYNTAX.md)
+
+**Other docs:**
+- [docs/README.md](docs/README.md) - Docs folder overview
+- [docs/ORGANIZATION_PROPOSAL.md](docs/ORGANIZATION_PROPOSAL.md) - Organization notes
 
 ---
 

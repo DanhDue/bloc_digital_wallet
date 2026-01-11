@@ -387,10 +387,10 @@ dev_dependencies:
 
 ## 📚 Documentation
 
-- `ARCHITECTURE.md` - Full architecture guide
-- `IMPLEMENTATION_GUIDE.md` - Step-by-step tutorial
-- `docs/VISUAL_GUIDE.md` - Visual diagrams
-- `README.md` - Project overview
+- [docs/architecture/ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) - Full architecture guide
+- [docs/development/IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) - Step-by-step tutorial
+- [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md) - Visual diagrams
+- [README.md](../../README.md) - Project overview
 
 ---
 

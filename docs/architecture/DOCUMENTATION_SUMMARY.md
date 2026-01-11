@@ -8,20 +8,20 @@
 
 ### For Human Developers
 
-1. **README.md** - Project overview and getting started
-2. **ARCHITECTURE.md** - Detailed Clean Architecture + MVI explanation
-3. **IMPLEMENTATION_GUIDE.md** - Step-by-step tutorial for creating features (1296 lines)
-4. **QUICK_REFERENCE.md** - Developer cheat sheet with code templates (405 lines)
-5. **docs/QUICK_START.md** - 5-minute quick start guide
-6. **docs/VISUAL_GUIDE.md** - Architecture diagrams
-7. **docs/MASON_GUIDE.md** - Mason code generation guide
-8. **docs/MASON_INTEGRATION.md** - Mason integration details
-9. **docs/MASON_SYNTAX.md** - Mason syntax reference
-10. **docs/CLEAN_MVI_SUMMARY.md** - Architecture summary
+1. **[README.md](../../README.md)** - Project overview and getting started
+2. **[ARCHITECTURE_OVERVIEW.md](ARCHITECTURE_OVERVIEW.md)** - Detailed Clean Architecture + MVI explanation
+3. **[IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)** - Step-by-step tutorial for creating features (1296 lines)
+4. **[QUICK_REFERENCE.md](../getting-started/QUICK_REFERENCE.md)** - Developer cheat sheet with code templates (405 lines)
+5. **[docs/getting-started/QUICK_START.md](../getting-started/QUICK_START.md)** - 5-minute quick start guide
+6. **[docs/architecture/VISUAL_GUIDE.md](VISUAL_GUIDE.md)** - Architecture diagrams
+7. **[docs/mason/MASON_GUIDE.md](../mason/MASON_GUIDE.md)** - Mason code generation guide
+8. **[docs/mason/MASON_INTEGRATION.md](../mason/MASON_INTEGRATION.md)** - Mason integration details
+9. **[docs/mason/MASON_SYNTAX.md](../mason/MASON_SYNTAX.md)** - Mason syntax reference
+10. **[docs/architecture/CLEAN_MVI_SUMMARY.md](CLEAN_MVI_SUMMARY.md)** - Architecture summary
 
 ### For AI Agents
 
-1. **AI_AGENT_README.md** - Complete guide index and navigation (entry point)
+1. **[AI_AGENT_README.md](../ai-agents/AI_AGENT_README.md)** - Complete guide index and navigation (entry point)
 2. **AI_AGENT_CONTEXT.md** - Comprehensive context, patterns, and templates (~2000 lines)
 3. **AI_AGENT_WORKFLOWS.md** - 10 detailed step-by-step workflows (~2500 lines)
 4. **AI_AGENT_CHECKLIST.md** - Quick reference checklist (~500 lines)
@@ -84,36 +84,36 @@
 ### I want to...
 
 **Understand the architecture**
-- Human: → ARCHITECTURE.md
-- AI Agent: → AI_AGENT_CONTEXT.md
+- Human: → [ARCHITECTURE_OVERVIEW.md](ARCHITECTURE_OVERVIEW.md)
+- AI Agent: → [AI_AGENT_CONTEXT.md](../ai-agents/AI_AGENT_CONTEXT.md)
 
 **Create a new feature**
-- Human: → IMPLEMENTATION_GUIDE.md
-- AI Agent: → AI_AGENT_WORKFLOWS.md → Create Feature
+- Human: → [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)
+- AI Agent: → [AI_AGENT_WORKFLOWS.md](../ai-agents/AI_AGENT_WORKFLOWS.md) → Create Feature
 
 **Look up code template**
-- Human: → QUICK_REFERENCE.md
-- AI Agent: → AI_AGENT_CONTEXT.md → Code Patterns
+- Human: → [QUICK_REFERENCE.md](../getting-started/QUICK_REFERENCE.md)
+- AI Agent: → [AI_AGENT_CONTEXT.md](../ai-agents/AI_AGENT_CONTEXT.md) → Code Patterns
 
 **Fix a bug**
-- Human: → IMPLEMENTATION_GUIDE.md → Common Pitfalls
-- AI Agent: → AI_AGENT_WORKFLOWS.md → Fix Bug
+- Human: → [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) → Common Pitfalls
+- AI Agent: → [AI_AGENT_WORKFLOWS.md](../ai-agents/AI_AGENT_WORKFLOWS.md) → Fix Bug
 
 **Quick command reference**
-- Human: → QUICK_REFERENCE.md → Quick Start Commands
-- AI Agent: → AI_AGENT_CHECKLIST.md → Essential Commands
+- Human: → [QUICK_REFERENCE.md](../getting-started/QUICK_REFERENCE.md) → Quick Start Commands
+- AI Agent: → [AI_AGENT_CHECKLIST.md](../ai-agents/AI_AGENT_CHECKLIST.md) → Essential Commands
 
 **Understand MVI pattern**
-- Human: → ARCHITECTURE.md → Presentation Layer
-- AI Agent: → AI_AGENT_CONTEXT.md → Architecture Rules
+- Human: → [ARCHITECTURE_OVERVIEW.md](ARCHITECTURE_OVERVIEW.md) → Presentation Layer
+- AI Agent: → [AI_AGENT_CONTEXT.md](../ai-agents/AI_AGENT_CONTEXT.md) → Architecture Rules
 
 **Add tests**
-- Human: → IMPLEMENTATION_GUIDE.md → Step 7
-- AI Agent: → AI_AGENT_WORKFLOWS.md → Add Unit Tests
+- Human: → [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) → Step 7
+- AI Agent: → [AI_AGENT_WORKFLOWS.md](../ai-agents/AI_AGENT_WORKFLOWS.md) → Add Unit Tests
 
 **Debug state issues**
-- Human: → IMPLEMENTATION_GUIDE.md → Common Pitfalls
-- AI Agent: → AI_AGENT_WORKFLOWS.md → Debug State Management
+- Human: → [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) → Common Pitfalls
+- AI Agent: → [AI_AGENT_WORKFLOWS.md](../ai-agents/AI_AGENT_WORKFLOWS.md) → Debug State Management
 
 ---
 

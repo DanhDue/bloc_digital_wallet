@@ -34,11 +34,11 @@ Created `bricks/mvi_feature/`:
 - Presentation layer (intents, states, side effects, BLoC, pages)
 
 ### 5. **Comprehensive Documentation** ✅
-- `docs/ARCHITECTURE.md` - Complete architecture guide
-- `docs/MASON_GUIDE.md` - Mason usage guide
-- `docs/QUICK_START.md` - Quick start tutorial
-- `docs/MASON_SYNTAX.md` - Template syntax reference
-- Updated `README.md` - Project overview
+- [docs/architecture/ARCHITECTURE_OVERVIEW.md](ARCHITECTURE_OVERVIEW.md) - Complete architecture guide
+- [docs/mason/MASON_GUIDE.md](../mason/MASON_GUIDE.md) - Mason usage guide
+- [docs/getting-started/QUICK_START.md](../getting-started/QUICK_START.md) - Quick start tutorial
+- [docs/mason/MASON_SYNTAX.md](../mason/MASON_SYNTAX.md) - Template syntax reference
+- Updated [README.md](../../README.md) - Project overview
 
 ## 🏗️ Architecture: Clean Architecture + MVI
 
@@ -274,10 +274,10 @@ melos build_ios             # Build iOS IPA
 
 ## 📚 Documentation
 
-- **[Architecture Guide](docs/ARCHITECTURE.md)** - Deep dive into architecture
-- **[Mason Guide](docs/MASON_GUIDE.md)** - Code generation guide  
-- **[Quick Start](docs/QUICK_START.md)** - Get started quickly
-- **[Mason Syntax](docs/MASON_SYNTAX.md)** - Template syntax reference
+- **[Architecture Guide](ARCHITECTURE_OVERVIEW.md)** - Deep dive into architecture
+- **[Mason Guide](../mason/MASON_GUIDE.md)** - Code generation guide  
+- **[Quick Start](../getting-started/QUICK_START.md)** - Get started quickly
+- **[Mason Syntax](../mason/MASON_SYNTAX.md)** - Template syntax reference
 
 ## 🎓 Learning Resources
 

@@ -84,7 +84,7 @@ bloc_digital_wallet/
                   │  └─> ARCHITECTURE.md
                   │
                   └─ Visual diagrams (10 min)
-                     └─> docs/VISUAL_GUIDE.md
+                     └─> [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md)
 
 ┌─────────────────────────────────────────┐
 │      I want to create a new feature     │
@@ -234,8 +234,8 @@ ARCHITECTURE.md
 IMPLEMENTATION_GUIDE.md
     ↓ references
     ├─> ARCHITECTURE.md (theory)
-    ├─> QUICK_REFERENCE.md (quick lookup)
-    └─> docs/VISUAL_GUIDE.md (diagrams)
+    ├─> [QUICK_REFERENCE.md](QUICK_REFERENCE.md) (quick lookup)
+    └─> [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md) (diagrams)
 
 QUICK_REFERENCE.md
     ↓ references
@@ -267,10 +267,10 @@ AI_AGENT_CHECKLIST.md
 
 ```
 Day 1:
-  08:00 - Read README.md (overview)
-  08:30 - Read ARCHITECTURE.md (theory)
+  08:00 - Read [README.md](../../README.md) (overview)
+  08:30 - Read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) (theory)
   10:00 - Coffee break
-  10:15 - Start IMPLEMENTATION_GUIDE.md
+  10:15 - Start [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)
   12:00 - Lunch
   13:00 - Continue IMPLEMENTATION_GUIDE.md
   15:00 - Create first simple feature
@@ -314,7 +314,7 @@ Total Time: 30 minutes
 
 ```
 Human Developer:
-  1. Check IMPLEMENTATION_GUIDE.md → Common Pitfalls
+  1. Check [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) → Common Pitfalls
   2. If not found, debug manually
   3. Fix and test
   Time: 30-60 minutes
@@ -475,25 +475,25 @@ Purpose: Visual navigation guide for all documentation
 ### For Your First Visit
 
 **If you're a human developer:**
-1. Start → README.md
-2. Then → ARCHITECTURE.md
-3. Then → IMPLEMENTATION_GUIDE.md
+1. Start → [README.md](../../README.md)
+2. Then → [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md)
+3. Then → [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)
 
 **If you're an AI Agent:**
-1. Start → AI_AGENT_README.md
-2. Then → AI_AGENT_CONTEXT.md
-3. Then → AI_AGENT_WORKFLOWS.md (when task received)
+1. Start → [AI_AGENT_README.md](../ai-agents/AI_AGENT_README.md)
+2. Then → [AI_AGENT_CONTEXT.md](../ai-agents/AI_AGENT_CONTEXT.md)
+3. Then → [AI_AGENT_WORKFLOWS.md](../ai-agents/AI_AGENT_WORKFLOWS.md) (when task received)
 
 ### For Daily Work
 
 **Human developers:**
-- Keep QUICK_REFERENCE.md open
-- Reference IMPLEMENTATION_GUIDE.md when stuck
+- Keep [QUICK_REFERENCE.md](QUICK_REFERENCE.md) open
+- Reference [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) when stuck
 
 **AI Agents:**
-- Reference AI_AGENT_CHECKLIST.md for each task
-- Use AI_AGENT_WORKFLOWS.md for complex operations
-- Lookup templates in AI_AGENT_CONTEXT.md
+- Reference [AI_AGENT_CHECKLIST.md](../ai-agents/AI_AGENT_CHECKLIST.md) for each task
+- Use [AI_AGENT_WORKFLOWS.md](../ai-agents/AI_AGENT_WORKFLOWS.md) for complex operations
+- Lookup templates in [AI_AGENT_CONTEXT.md](../ai-agents/AI_AGENT_CONTEXT.md)
 
 ---
 

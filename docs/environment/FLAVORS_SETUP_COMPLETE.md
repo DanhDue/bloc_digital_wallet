@@ -340,9 +340,9 @@ iOS **does not** use product flavors the same way. The `--flavor` argument is pa
 
 ## 📚 Documentation
 
-- **ENVIRONMENT_SETUP.md** - Complete guide (updated)
-- **ENVIRONMENT_QUICK_START.md** - Quick reference (updated)
-- **secureFiles/signing/README.md** - Signing setup
+- **[ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md)** - Complete guide (updated)
+- **[ENVIRONMENT_QUICK_START.md](ENVIRONMENT_QUICK_START.md)** - Quick reference (updated)
+- **[secureFiles/signing/README.md](../../secureFiles/signing/README.md)** - Signing setup
 
 ---
 

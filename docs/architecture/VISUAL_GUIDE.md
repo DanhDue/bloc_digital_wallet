@@ -311,11 +311,11 @@ melos build_apk
 
 ## 📚 Documentation
 
-- `docs/ARCHITECTURE.md` - Architecture deep dive
-- `docs/MASON_GUIDE.md` - Mason usage
-- `docs/QUICK_START.md` - Quick start
-- `docs/CLEAN_MVI_SUMMARY.md` - This file
-- `README.md` - Project overview
+- [docs/architecture/ARCHITECTURE_OVERVIEW.md](ARCHITECTURE_OVERVIEW.md) - Architecture deep dive
+- [docs/mason/MASON_GUIDE.md](../mason/MASON_GUIDE.md) - Mason usage
+- [docs/getting-started/QUICK_START.md](../getting-started/QUICK_START.md) - Quick start
+- [docs/architecture/CLEAN_MVI_SUMMARY.md](CLEAN_MVI_SUMMARY.md) - This file
+- [README.md](../../README.md) - Project overview
 
 ---
 

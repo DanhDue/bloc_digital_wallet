@@ -110,10 +110,10 @@ mason --version
 ### First Task (15 minutes reading + task time)
 
 ```
-1. Read AI_AGENT_README.md (2 min)
+1. Read [AI_AGENT_README.md](AI_AGENT_README.md) (2 min)
    └─ Understand documentation structure
 
-2. Read AI_AGENT_CONTEXT.md (15 min)
+2. Read [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) (15 min)
    ├─ Project Identity
    ├─ File Structure Patterns
    ├─ Architecture Rules
@@ -201,9 +201,9 @@ create-feature.sh transaction_history
 ### Task 2: Fix Bug
 
 ```bash
-# 1. Check AI_AGENT_CHECKLIST.md → "Common Errors"
+# 1. Check [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md) → "Common Errors"
 # 2. Apply quick fix if available
-# 3. If complex, follow AI_AGENT_WORKFLOWS.md → "Workflow 3: Fix Bug"
+# 3. If complex, follow [AI_AGENT_WORKFLOWS.md](AI_AGENT_WORKFLOWS.md) → "Workflow 3: Fix Bug"
 # 4. Report fix
 ```
 
@@ -400,26 +400,24 @@ Jules AI should achieve:
 
 ## 📖 Complete Documentation Index
 
-```
-AI Agent Documentation:
-├── AI_AGENT_README.md          # Navigation hub
-├── AI_AGENT_CONTEXT.md         # Core knowledge (~2000 lines)
-├── AI_AGENT_WORKFLOWS.md       # 10 workflows (~2500 lines)
-├── AI_AGENT_CHECKLIST.md       # Quick reference (~500 lines)
-└── .devcontainer/README.md     # DevContainer setup
+**AI Agent Documentation ([docs/ai-agents/](./)):**
+- [AI_AGENT_README.md](AI_AGENT_README.md) - Navigation hub
+- [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) - Core knowledge (~2000 lines)
+- [AI_AGENT_WORKFLOWS.md](AI_AGENT_WORKFLOWS.md) - 10 workflows (~2500 lines)
+- [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md) - Quick reference (~500 lines)
+- [.devcontainer/README.md](../../.devcontainer/README.md) - DevContainer setup
 
-Human Documentation:
-├── ARCHITECTURE.md             # Architecture details
-├── IMPLEMENTATION_GUIDE.md     # Tutorial for humans
-├── QUICK_REFERENCE.md          # Human cheat sheet
-└── README.md                   # Project overview
+**Human Documentation:**
+- [docs/architecture/ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) - Architecture details
+- [docs/development/IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) - Tutorial for humans
+- [docs/getting-started/QUICK_REFERENCE.md](../getting-started/QUICK_REFERENCE.md) - Human cheat sheet
+- [README.md](../../README.md) - Project overview
 
-Project Files:
-├── lib/core/architecture/      # MVI base classes
-├── lib/features/               # Feature modules
-├── bricks/mvi_feature/         # Mason template
-└── scripts/                    # Build scripts
-```
+**Project Files:**
+- `lib/core/architecture/` - MVI base classes
+- `lib/features/` - Feature modules
+- [bricks/mvi_feature/](../../bricks/mvi_feature/) - Mason template (see [README.md](../../bricks/mvi_feature/README.md))
+- `scripts/` - Build scripts
 
 ---
 
@@ -443,10 +441,10 @@ Your environment is fully configured. Jules AI has everything needed to:
 ### For Jules AI
 
 **If unclear about:**
-- Architecture → Read `AI_AGENT_CONTEXT.md`
-- How to do X → Read `AI_AGENT_WORKFLOWS.md`
-- Quick reference → Read `AI_AGENT_CHECKLIST.md`
-- Navigation → Read `AI_AGENT_README.md`
+- Architecture → Read [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md)
+- How to do X → Read [AI_AGENT_WORKFLOWS.md](AI_AGENT_WORKFLOWS.md)
+- Quick reference → Read [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md)
+- Navigation → Read [AI_AGENT_README.md](AI_AGENT_README.md)
 
 **If environment issue:**
 ```bash

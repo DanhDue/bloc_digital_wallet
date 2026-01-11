@@ -31,29 +31,17 @@ class NetworkFailure extends Failure {
 
 /// Validation failure
 class ValidationFailure extends Failure {
-  const ValidationFailure({
-    required super.message,
-    super.code,
-    super.exception,
-  });
+  const ValidationFailure({required super.message, super.code, super.exception});
 }
 
 /// Authentication failure
 class AuthenticationFailure extends Failure {
-  const AuthenticationFailure({
-    required super.message,
-    super.code,
-    super.exception,
-  });
+  const AuthenticationFailure({required super.message, super.code, super.exception});
 }
 
 /// Authorization failure
 class AuthorizationFailure extends Failure {
-  const AuthorizationFailure({
-    required super.message,
-    super.code,
-    super.exception,
-  });
+  const AuthorizationFailure({required super.message, super.code, super.exception});
 }
 
 /// Not found failure

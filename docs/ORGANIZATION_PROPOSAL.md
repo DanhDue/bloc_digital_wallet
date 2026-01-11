@@ -27,51 +27,55 @@ bloc_digital_wallet/
 
 ## 📁 Proposed Structure
 
-```
-bloc_digital_wallet/
-├── README.md                          # Main entry point
-├── DOCUMENTATION_INDEX.md             # ⭐ Navigation hub
-├── QUICK_REFERENCE.md                 # Quick commands
-│
-├── docs/
-│   ├── architecture/
-│   │   ├── ARCHITECTURE.md            # Main architecture doc
-│   │   ├── CLEAN_MVI_SUMMARY.md       # MVI pattern
-│   │   ├── VISUAL_GUIDE.md            # Diagrams
-│   │   └── DOCUMENTATION_SUMMARY.md   # Summary
-│   │
-│   ├── getting-started/
-│   │   ├── QUICK_START.md             # Quick start guide
-│   │   ├── IMPLEMENTATION_GUIDE.md    # Feature implementation
-│   │   └── DOCUMENTATION_NAV_MAP.md   # Navigation map
-│   │
-│   ├── environment/
-│   │   ├── FLAVORS_SETUP_COMPLETE.md  # ⭐ Flavors + dart-defines
-│   │   ├── ENVIRONMENT_SETUP.md       # Complete env guide
-│   │   ├── ENVIRONMENT_QUICK_START.md # Quick env reference
-│   │   └── ENVIRONMENT_SETUP_SUMMARY.md
-│   │
-│   ├── ai-agents/
-│   │   ├── AI_AGENT_README.md         # Main AI guide
-│   │   ├── AI_AGENT_CONTEXT.md        # Project context
-│   │   ├── AI_AGENT_CHECKLIST.md      # Checklist
-│   │   ├── AI_AGENT_WORKFLOWS.md      # Workflows
-│   │   ├── DOUBLE_CHECK_GUIDE.md      # Quality verification
-│   │   └── GOOGLE_JULES_AI_GUIDE.md   # Jules-specific
-│   │
-│   └── mason/
-│       ├── MASON_GUIDE.md             # Mason guide
-│       ├── MASON_INTEGRATION.md       # Integration
-│       └── MASON_SYNTAX.md            # Syntax reference
-│
-└── bricks/
-    ├── mvi_feature/
-    │   ├── README.md
-    │   └── CHANGELOG.md
-    └── test_brick/
-        ├── README.md
-        └── CHANGELOG.md
-```
+**[bloc_digital_wallet/](../)**
+
+**Root Level:**
+- [README.md](../README.md) - Main entry point
+- [DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md) - ⭐ Navigation hub
+- [DOCUMENTATION_CATEGORIES.md](../DOCUMENTATION_CATEGORIES.md) - Quick category reference
+
+**[docs/](../docs/)**
+- **[architecture/](architecture/)** - Architecture documentation
+  - [ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md) - Main architecture doc
+  - [ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md) - Detailed architecture
+  - [CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md) - MVI pattern
+  - [VISUAL_GUIDE.md](architecture/VISUAL_GUIDE.md) - Diagrams
+  - [DOCUMENTATION_SUMMARY.md](architecture/DOCUMENTATION_SUMMARY.md) - Summary
+
+- **[getting-started/](getting-started/)** - Getting started guides
+  - [QUICK_START.md](getting-started/QUICK_START.md) - Quick start guide
+  - [QUICK_REFERENCE.md](getting-started/QUICK_REFERENCE.md) - Quick commands
+  - [DOCUMENTATION_NAV_MAP.md](getting-started/DOCUMENTATION_NAV_MAP.md) - Navigation map
+
+- **[environment/](environment/)** - Environment setup
+  - [FLAVORS_SETUP_COMPLETE.md](environment/FLAVORS_SETUP_COMPLETE.md) - ⭐ Flavors + dart-defines
+  - [ENVIRONMENT_SETUP.md](environment/ENVIRONMENT_SETUP.md) - Complete env guide
+  - [ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md) - Quick env reference
+  - [ENVIRONMENT_SETUP_SUMMARY.md](environment/ENVIRONMENT_SETUP_SUMMARY.md) - Environment summary
+
+- **[development/](development/)** - Implementation guides
+  - [IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md) - Feature implementation
+
+- **[ai-agents/](ai-agents/)** - AI agent documentation
+  - [AI_AGENT_README.md](ai-agents/AI_AGENT_README.md) - Main AI guide
+  - [AI_AGENT_CONTEXT.md](ai-agents/AI_AGENT_CONTEXT.md) - Project context
+  - [AI_AGENT_CHECKLIST.md](ai-agents/AI_AGENT_CHECKLIST.md) - Checklist
+  - [AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md) - Workflows
+  - [DOUBLE_CHECK_GUIDE.md](ai-agents/DOUBLE_CHECK_GUIDE.md) - Quality verification
+  - [GOOGLE_JULES_AI_GUIDE.md](ai-agents/GOOGLE_JULES_AI_GUIDE.md) - Jules-specific
+
+- **[mason/](mason/)** - Mason code generation
+  - [MASON_GUIDE.md](mason/MASON_GUIDE.md) - Mason guide
+  - [MASON_INTEGRATION.md](mason/MASON_INTEGRATION.md) - Integration
+  - [MASON_SYNTAX.md](mason/MASON_SYNTAX.md) - Syntax reference
+
+**[bricks/](../bricks/)** - Code generation templates
+- **mvi_feature/**
+  - [README.md](../bricks/mvi_feature/README.md)
+  - [CHANGELOG.md](../bricks/mvi_feature/CHANGELOG.md)
+- **test_brick/**
+  - [README.md](../bricks/test_brick/README.md)
+  - [CHANGELOG.md](../bricks/test_brick/CHANGELOG.md)
 
 ---
 
@@ -127,40 +131,41 @@ bloc_digital_wallet/
 ## 📊 Document Categories
 
 ### 🏠 Root Level (Keep)
-- README.md
-- DOCUMENTATION_INDEX.md
-- QUICK_REFERENCE.md
+- [README.md](../README.md)
+- [DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md)
+- [DOCUMENTATION_CATEGORIES.md](../DOCUMENTATION_CATEGORIES.md)
 
-### 🏗️ Architecture (Move to docs/architecture/)
-- ARCHITECTURE.md
-- docs/ARCHITECTURE.md → ARCHITECTURE_DETAILED.md
-- docs/CLEAN_MVI_SUMMARY.md
-- docs/VISUAL_GUIDE.md
-- DOCUMENTATION_SUMMARY.md
+### 🏗️ Architecture (Move to [docs/architecture/](architecture/))
+- [ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md)
+- [ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md) (was docs/ARCHITECTURE.md)
+- [CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md) (was docs/CLEAN_MVI_SUMMARY.md)
+- [VISUAL_GUIDE.md](architecture/VISUAL_GUIDE.md) (was docs/VISUAL_GUIDE.md)
+- [DOCUMENTATION_SUMMARY.md](architecture/DOCUMENTATION_SUMMARY.md)
 
-### 🚀 Getting Started (Move to docs/getting-started/)
-- docs/QUICK_START.md
-- IMPLEMENTATION_GUIDE.md
-- DOCUMENTATION_NAV_MAP.md
+### 🚀 Getting Started (Move to [docs/getting-started/](getting-started/))
+- [QUICK_START.md](getting-started/QUICK_START.md) (was docs/QUICK_START.md)
+- [QUICK_REFERENCE.md](getting-started/QUICK_REFERENCE.md)
+- [IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md)
+- [DOCUMENTATION_NAV_MAP.md](getting-started/DOCUMENTATION_NAV_MAP.md)
 
-### ⚙️ Environment (Move to docs/environment/)
-- FLAVORS_SETUP_COMPLETE.md
-- ENVIRONMENT_SETUP.md
-- ENVIRONMENT_QUICK_START.md
-- ENVIRONMENT_SETUP_SUMMARY.md
+### ⚙️ Environment (Move to [docs/environment/](environment/))
+- [FLAVORS_SETUP_COMPLETE.md](environment/FLAVORS_SETUP_COMPLETE.md)
+- [ENVIRONMENT_SETUP.md](environment/ENVIRONMENT_SETUP.md)
+- [ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md)
+- [ENVIRONMENT_SETUP_SUMMARY.md](environment/ENVIRONMENT_SETUP_SUMMARY.md)
 
-### 🤖 AI Agents (Move to docs/ai-agents/)
-- AI_AGENT_README.md
-- AI_AGENT_CONTEXT.md
-- AI_AGENT_CHECKLIST.md
-- AI_AGENT_WORKFLOWS.md
-- DOUBLE_CHECK_GUIDE.md
-- GOOGLE_JULES_AI_GUIDE.md
+### 🤖 AI Agents (Move to [docs/ai-agents/](ai-agents/))
+- [AI_AGENT_README.md](ai-agents/AI_AGENT_README.md)
+- [AI_AGENT_CONTEXT.md](ai-agents/AI_AGENT_CONTEXT.md)
+- [AI_AGENT_CHECKLIST.md](ai-agents/AI_AGENT_CHECKLIST.md)
+- [AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md)
+- [DOUBLE_CHECK_GUIDE.md](ai-agents/DOUBLE_CHECK_GUIDE.md)
+- [GOOGLE_JULES_AI_GUIDE.md](ai-agents/GOOGLE_JULES_AI_GUIDE.md)
 
-### 🧱 Mason (Move to docs/mason/)
-- docs/MASON_GUIDE.md
-- docs/MASON_INTEGRATION.md
-- docs/MASON_SYNTAX.md
+### 🧱 Mason (Move to [docs/mason/](mason/))
+- [MASON_GUIDE.md](mason/MASON_GUIDE.md) (was docs/MASON_GUIDE.md)
+- [MASON_INTEGRATION.md](mason/MASON_INTEGRATION.md) (was docs/MASON_INTEGRATION.md)
+- [MASON_SYNTAX.md](mason/MASON_SYNTAX.md) (was docs/MASON_SYNTAX.md)
 
 ---
 

@@ -26,10 +26,10 @@ melos mason_upgrade          # Upgrade bricks
 ```
 
 ### 5. **Documentation Created**
-- ✅ `docs/MASON_GUIDE.md` - Comprehensive Mason usage guide
-- ✅ `docs/QUICK_START.md` - 5-minute quick start tutorial
-- ✅ Updated `README.md` with Mason information
-- ✅ `bricks/clean_feature/README.md` - Brick-specific documentation
+- ✅ [docs/mason/MASON_GUIDE.md](MASON_GUIDE.md) - Comprehensive Mason usage guide
+- ✅ [docs/getting-started/QUICK_START.md](../getting-started/QUICK_START.md) - 5-minute quick start tutorial
+- ✅ Updated [README.md](../../README.md) with Mason information
+- ✅ [bricks/clean_feature/README.md](../../bricks/clean_feature/README.md) - Brick-specific documentation
 
 ## 📦 Generated Structure
 
@@ -123,9 +123,9 @@ melos test
 
 ## 📚 Documentation
 
-- **Full Guide:** [`docs/MASON_GUIDE.md`](docs/MASON_GUIDE.md)
-- **Quick Start:** [`docs/QUICK_START.md`](docs/QUICK_START.md)
-- **Main README:** [`README.md`](README.md)
+- **Full Guide:** [docs/mason/MASON_GUIDE.md](MASON_GUIDE.md)
+- **Quick Start:** [docs/getting-started/QUICK_START.md](../getting-started/QUICK_START.md)
+- **Main README:** [README.md](../../README.md)
 
 ## ⚙️ Technical Details
 
@@ -198,8 +198,8 @@ If generated files have incorrect names (e.g., `_entity.dart` instead of `wallet
 ## 📞 Support
 
 For questions or issues:
-1. Check the documentation in `docs/`
-2. Review the brick README: `bricks/clean_feature/README.md`
+1. Check the documentation in [docs/](../)
+2. Review the brick README: [bricks/clean_feature/README.md](../../bricks/clean_feature/README.md)
 3. Visit [Mason Documentation](https://docs.brickhub.dev/)
 
 ---

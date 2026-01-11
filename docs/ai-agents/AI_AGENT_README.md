@@ -177,7 +177,7 @@ This project provides specialized documentation for AI Agents to understand and 
 
 ### Creating New Code
 
-**Priority**: AI_AGENT_WORKFLOWS.md → AI_AGENT_CHECKLIST.md → AI_AGENT_CONTEXT.md
+**Priority**: [AI_AGENT_WORKFLOWS.md](AI_AGENT_WORKFLOWS.md) → [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md) → [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md)
 
 1. Read workflow for task type
 2. Use checklist to track progress
@@ -185,14 +185,14 @@ This project provides specialized documentation for AI Agents to understand and 
 
 ### Understanding Architecture
 
-**Priority**: AI_AGENT_CONTEXT.md → ARCHITECTURE.md
+**Priority**: [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) → [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md)
 
-1. Read AI_AGENT_CONTEXT.md for AI-friendly summary
-2. Read ARCHITECTURE.md for detailed explanation
+1. Read [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) for AI-friendly summary
+2. Read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) for detailed explanation
 
 ### Fixing Bugs
 
-**Priority**: AI_AGENT_CHECKLIST.md → AI_AGENT_CONTEXT.md → AI_AGENT_WORKFLOWS.md
+**Priority**: [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md) → [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) → [AI_AGENT_WORKFLOWS.md](AI_AGENT_WORKFLOWS.md)
 
 1. Check checklist for common fixes
 2. Check context for error patterns
@@ -212,10 +212,10 @@ This project provides specialized documentation for AI Agents to understand and 
 
 ### For Humans (Developers)
 
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Full architecture explanation
-- **[IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)** - Beginner tutorial
-- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Developer cheat sheet
-- **[README.md](README.md)** - Project overview
+- **[ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md)** - Full architecture explanation
+- **[IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)** - Beginner tutorial
+- **[QUICK_REFERENCE.md](../getting-started/QUICK_REFERENCE.md)** - Developer cheat sheet
+- **[README.md](../../README.md)** - Project overview
 
 ### For AI Agents
 
@@ -229,26 +229,24 @@ This project provides specialized documentation for AI Agents to understand and 
 
 ### Finding Information Fast
 
-```yaml
-Need to know WHERE to add code?
-  → AI_AGENT_CONTEXT.md → Decision Trees
+**Need to know WHERE to add code?**
+→ [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) → Decision Trees
 
-Need to know HOW to implement?
-  → AI_AGENT_WORKFLOWS.md → Specific workflow
+**Need to know HOW to implement?**
+→ [AI_AGENT_WORKFLOWS.md](AI_AGENT_WORKFLOWS.md) → Specific workflow
 
-Need to verify NOTHING missed?
-  → AI_AGENT_CHECKLIST.md → Task checklist
+**Need to verify NOTHING missed?**
+→ [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md) → Task checklist
 
-Need CODE template?
-  → AI_AGENT_CONTEXT.md → Code Patterns
+**Need CODE template?**
+→ [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) → Code Patterns
 
-Need to FIX error?
-  → AI_AGENT_CHECKLIST.md → Common Errors
-  → AI_AGENT_CONTEXT.md → Error Resolution Patterns
+**Need to FIX error?**
+→ [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md) → Common Errors
+→ [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) → Error Resolution Patterns
 
-Need COMMAND syntax?
-  → AI_AGENT_CHECKLIST.md → Essential Commands
-```
+**Need COMMAND syntax?**
+→ [AI_AGENT_CHECKLIST.md](AI_AGENT_CHECKLIST.md) → Essential Commands
 
 ---
 
@@ -256,7 +254,7 @@ Need COMMAND syntax?
 
 ### Before Starting Work
 
-1. ✅ Read AI_AGENT_CONTEXT.md (first time only)
+1. ✅ Read [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) (first time only)
 2. ✅ Identify task type
 3. ✅ Open relevant workflow
 4. ✅ Have checklist ready
@@ -289,7 +287,7 @@ Need COMMAND syntax?
 
 ### Day 1: Understanding
 ```
-1. Read AI_AGENT_CONTEXT.md completely
+1. Read [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) completely
 2. Review code templates
 3. Understand MVI flow
 4. Learn layer rules
@@ -414,7 +412,7 @@ AI Agents should be able to:
 
 ### If Task Unknown
 
-1. Check AI_AGENT_WORKFLOWS.md for similar task
+1. Check [AI_AGENT_WORKFLOWS.md](AI_AGENT_WORKFLOWS.md) for similar task
 2. Break down into smaller known tasks
 3. Ask user for requirements clarification
 4. Document new workflow for future

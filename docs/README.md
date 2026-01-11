@@ -12,55 +12,53 @@
 
 ## 📁 Folder Structure
 
-```
-docs/
-├── ai-agents/          # 🤖 AI Agent guides
-├── architecture/       # 🏗️ Architecture documentation
-├── environment/        # ⚙️ Environment setup
-├── development/        # 🎨 Implementation guides
-├── getting-started/    # 🚀 Quick start guides
-└── mason/              # 🧱 Code generation
-```
+**[docs/](./)**
+- 🤖 **[ai-agents/](ai-agents/)** - AI Agent guides
+- 🏗️ **[architecture/](architecture/)** - Architecture documentation
+- ⚙️ **[environment/](environment/)** - Environment setup
+- 🎨 **[development/](development/)** - Implementation guides
+- 🚀 **[getting-started/](getting-started/)** - Quick start guides
+- 🧱 **[mason/](mason/)** - Code generation
 
 ---
 
 ## 📚 What's Inside
 
-### 🤖 ai-agents/
+### 🤖 [ai-agents/](ai-agents/)
 AI assistant documentation and workflows
-- AI_AGENT_README.md - Main AI guide
-- AI_AGENT_WORKFLOWS.md - Common workflows
-- DOUBLE_CHECK_GUIDE.md - Quality checks
+- [AI_AGENT_README.md](ai-agents/AI_AGENT_README.md) - Main AI guide
+- [AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md) - Common workflows
+- [DOUBLE_CHECK_GUIDE.md](ai-agents/DOUBLE_CHECK_GUIDE.md) - Quality checks
 - And more...
 
-### 🏗️ architecture/
+### 🏗️ [architecture/](architecture/)
 Project architecture and design patterns
-- ARCHITECTURE_OVERVIEW.md - Main overview
-- ARCHITECTURE_DETAILED.md - In-depth details
-- CLEAN_MVI_SUMMARY.md - MVI pattern
-- VISUAL_GUIDE.md - Diagrams
+- [ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md) - Main overview
+- [ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md) - In-depth details
+- [CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md) - MVI pattern
+- [VISUAL_GUIDE.md](architecture/VISUAL_GUIDE.md) - Diagrams
 
-### ⚙️ environment/
+### ⚙️ [environment/](environment/)
 Environment setup and build configuration
-- **FLAVORS_SETUP_COMPLETE.md** ⭐ - Flavors + dart-defines (latest!)
-- ENVIRONMENT_SETUP.md - Complete guide
-- ENVIRONMENT_QUICK_START.md - Quick reference
+- **[FLAVORS_SETUP_COMPLETE.md](environment/FLAVORS_SETUP_COMPLETE.md)** ⭐ - Flavors + dart-defines (latest!)
+- [ENVIRONMENT_SETUP.md](environment/ENVIRONMENT_SETUP.md) - Complete guide
+- [ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md) - Quick reference
 
-### 🎨 development/
+### 🎨 [development/](development/)
 Feature implementation guides
-- IMPLEMENTATION_GUIDE.md - Complete tutorial
+- [IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md) - Complete tutorial
 
-### 🚀 getting-started/
+### 🚀 [getting-started/](getting-started/)
 Quick start and reference materials
-- QUICK_REFERENCE.md - Commands and tips
-- QUICK_START.md - Detailed quickstart
-- DOCUMENTATION_NAV_MAP.md - Navigation
+- [QUICK_REFERENCE.md](getting-started/QUICK_REFERENCE.md) - Commands and tips
+- [QUICK_START.md](getting-started/QUICK_START.md) - Detailed quickstart
+- [DOCUMENTATION_NAV_MAP.md](getting-started/DOCUMENTATION_NAV_MAP.md) - Navigation
 
-### 🧱 mason/
+### 🧱 [mason/](mason/)
 Mason code generation templates
-- MASON_GUIDE.md - Complete guide
-- MASON_INTEGRATION.md - Integration
-- MASON_SYNTAX.md - Syntax reference
+- [MASON_GUIDE.md](mason/MASON_GUIDE.md) - Complete guide
+- [MASON_INTEGRATION.md](mason/MASON_INTEGRATION.md) - Integration
+- [MASON_SYNTAX.md](mason/MASON_SYNTAX.md) - Syntax reference
 
 ---
 

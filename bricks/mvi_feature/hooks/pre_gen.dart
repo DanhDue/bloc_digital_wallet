@@ -1,3 +1,7 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+
 import 'package:mason/mason.dart';
 
 Future<void> run(HookContext context) async {
