@@ -61,6 +61,7 @@ dependencies:
   permission_handler: ^12.0.1
   jiffy: ^6.4.4
   rxdart: ^0.28.0
+  auto_route: ^11.1.0
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +87,7 @@ dev_dependencies:
   
   # Code Templates
   mason: ^0.1.0-dev.59
+  auto_route_generator: ^10.4.0
 
 dartfmt: 
   line_length: 99

@@ -14,6 +14,16 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:bloc_digital_wallet/counter/cubit/counter_cubit.dart' as _i348;
+import 'package:bloc_digital_wallet/features/authentication/data/datasources/auth_remote_datasource.dart'
+    as _i891;
+import 'package:bloc_digital_wallet/features/authentication/data/repositories/authentication_repository_impl.dart'
+    as _i558;
+import 'package:bloc_digital_wallet/features/authentication/domain/repositories/authentication_repository.dart'
+    as _i941;
+import 'package:bloc_digital_wallet/features/authentication/domain/usecases/login_with_email_password_usecase.dart'
+    as _i384;
+import 'package:bloc_digital_wallet/features/authentication/presentation/mvi/authentication_bloc.dart'
+    as _i330;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -25,6 +35,21 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.factory<_i348.CounterCubit>(() => _i348.CounterCubit());
+    gh.lazySingleton<_i891.AuthRemoteDataSource>(
+      () => _i891.AuthRemoteDataSource(),
+    );
+    gh.lazySingleton<_i941.AuthenticationRepository>(
+      () =>
+          _i558.AuthenticationRepositoryImpl(gh<_i891.AuthRemoteDataSource>()),
+    );
+    gh.factory<_i384.LoginWithEmailPasswordUseCase>(
+      () => _i384.LoginWithEmailPasswordUseCase(
+        gh<_i941.AuthenticationRepository>(),
+      ),
+    );
+    gh.factory<_i330.AuthenticationBloc>(
+      () => _i330.AuthenticationBloc(gh<_i384.LoginWithEmailPasswordUseCase>()),
+    );
     return this;
   }
 }
