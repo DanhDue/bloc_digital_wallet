@@ -729,12 +729,27 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 ### Step 7: Format and Analyze
 
+**🔍 CRITICAL: Double Check (Run these commands):**
+
 ```bash
+# 1. Format all code
 flutter format .
-flutter analyze
+
+# 2. Analyze code (MUST show "No issues found!")
+flutter analyze --no-fatal-infos
+
+# Expected output:
+# Analyzing bloc_digital_wallet...
+# No issues found! (ran in X.Xs)
+
+# 3. If ANY issues found:
+#    - Read error messages
+#    - Fix each issue
+#    - Run flutter analyze again
+#    - Repeat until 0 issues
 ```
 
-**Fix any issues** reported by analyzer.
+**Fix any issues** reported by analyzer. **DO NOT proceed** until output is `"No issues found!"`
 
 ### Step 8: Test (Optional)
 
@@ -1906,6 +1921,134 @@ Results:
 - Initial load time: reduced by 60%
 - Memory usage: reduced by 40%
 - Smooth scrolling for 1000+ items
+```
+
+---
+
+## 🔍 CRITICAL: Double Check Before Reporting
+
+**⚠️ MANDATORY STEP AFTER EVERY TASK**
+
+Before reporting completion to the user, **ALWAYS** run these verification steps:
+
+### Step-by-Step Verification
+
+```bash
+# Step 1: Format all code
+flutter format .
+
+# Step 2: Run analyzer (MUST show "No issues found!")
+flutter analyze --no-fatal-infos
+
+# Step 3: Check output
+# ✅ Success: "No issues found! (ran in X.Xs)"
+# ❌ Failure: Any errors, warnings, or info messages
+
+# Step 4: If issues found:
+#    a. Read each error message carefully
+#    b. Fix the issue in the affected file
+#    c. Run flutter analyze again
+#    d. Repeat until "No issues found!"
+
+# Step 5: Run tests (if applicable)
+flutter test
+
+# Step 6: Verify code generation (if models/DI changed)
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+### Expected Success Output
+
+```
+$ flutter analyze --no-fatal-infos
+Analyzing bloc_digital_wallet...
+No issues found! (ran in 1.5s)
+```
+
+### What to Do If Errors Found
+
+**Example Error:**
+```
+lib/features/wallet/data/models/wallet_model.dart:15:7: 
+error • Missing type annotation • strict_top_level_inference
+```
+
+**Fix Process:**
+1. ✅ Open the file: `lib/features/wallet/data/models/wallet_model.dart`
+2. ✅ Go to line 15, column 7
+3. ✅ Read the error: "Missing type annotation"
+4. ✅ Fix: Add the missing type
+5. ✅ Run `flutter analyze --no-fatal-infos` again
+6. ✅ Verify: "No issues found!"
+
+### Common Issues & Quick Fixes
+
+| Error | Quick Fix |
+|-------|-----------|
+| Missing type annotation | Add explicit return type |
+| Undefined name | Add import or fix spelling |
+| Unused import | Remove the import |
+| Angle brackets in doc comment | Use different phrasing |
+| Missing @override | Add @override annotation |
+
+### Success Checklist
+
+Before reporting to user, verify:
+
+- [ ] `flutter format .` completed
+- [ ] `flutter analyze --no-fatal-infos` shows **"No issues found!"**
+- [ ] Exit code is **0**
+- [ ] No errors, warnings, or info messages
+- [ ] Tests pass (if applicable)
+- [ ] Code generation completed (if needed)
+- [ ] All files saved
+
+### ⚠️ Important Notes
+
+1. **DO NOT skip this step** - It's mandatory for every task
+2. **DO NOT report completion** until 0 issues
+3. **DO NOT ignore warnings** - Fix them all
+4. **DO report** what you fixed if any issues were found
+
+### Example Report
+
+**Good Report (No Issues):**
+```
+✅ Task completed: Created transaction history feature
+
+Changes:
+- Created domain entities and use cases
+- Implemented data layer with remote/local sources
+- Built presentation layer with MVI pattern
+
+Verification:
+✅ flutter analyze: No issues found!
+✅ All code formatted
+✅ Architecture compliance verified
+
+Files created: 15 files across domain/data/presentation layers
+```
+
+**Good Report (Issues Fixed):**
+```
+✅ Task completed: Created transaction history feature
+
+Changes:
+- Created domain entities and use cases
+- Implemented data layer with remote/local sources
+- Built presentation layer with MVI pattern
+
+Issues Fixed:
+- Fixed 2 missing type annotations in use cases
+- Removed 1 unused import
+- Fixed doc comment formatting
+
+Verification:
+✅ flutter analyze: No issues found!
+✅ All code formatted
+✅ Architecture compliance verified
+
+Files created: 15 files across domain/data/presentation layers
 ```
 
 ---

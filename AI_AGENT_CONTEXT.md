@@ -911,11 +911,33 @@ flutter pub outdated
 
 ### After Making Changes
 
-1. **Run Code Generation**: flutter pub run build_runner build --delete-conflicting-outputs
-2. **Format Code**: flutter format .
-3. **Analyze Code**: flutter analyze
-4. **Run Tests**: flutter test (if tests exist)
-5. **Verify Build**: flutter build apk --debug (optional)
+**🔍 CRITICAL: Double Check Steps (MANDATORY after EVERY task)**
+
+1. **Format Code**: `flutter format .`
+2. **Analyze Code**: `flutter analyze --no-fatal-infos`
+   - **MUST show**: `"No issues found!"`
+   - **MUST have**: Exit code 0
+   - **If errors found**: Fix them and re-analyze
+   - **Repeat until**: 0 issues
+3. **Run Tests**: `flutter test` (if tests exist)
+4. **Run Code Generation** (if models/DI changed): `flutter pub run build_runner build --delete-conflicting-outputs`
+5. **Verify Build**: `flutter build apk --debug` (optional)
+
+**Expected Output:**
+```bash
+$ flutter analyze --no-fatal-infos
+Analyzing bloc_digital_wallet...
+No issues found! (ran in X.Xs)
+```
+
+**Success Criteria:**
+- ✅ `flutter analyze` shows **"No issues found!"**
+- ✅ Exit code: **0**
+- ✅ No errors, warnings, or info messages
+- ✅ All files formatted
+- ✅ Tests passing (if exist)
+
+**⚠️ DO NOT report to user until all checks pass!**
 
 ### Communication with Users
 

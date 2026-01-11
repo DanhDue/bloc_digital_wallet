@@ -326,12 +326,29 @@ create-feature.sh <name>    # Not: mason make...
 quick-fix.sh                # Not: flutter format && ...
 ```
 
-### 5. Verify Before Reporting
+### 5. Verify Before Reporting (CRITICAL STEP)
+
+**⚠️ MANDATORY: Run these commands after EVERY task**
+
 ```bash
-format       # Format code
-analyze      # Check errors
-test         # Run tests (if applicable)
+# Step 1: Format code
+flutter format .
+
+# Step 2: Analyze (MUST show "No issues found!")
+flutter analyze --no-fatal-infos
+
+# Expected output:
+# Analyzing bloc_digital_wallet...
+# No issues found! (ran in X.Xs)
+
+# Step 3: If errors, fix and re-analyze
+# Repeat until 0 issues
+
+# Step 4: Run tests (if applicable)
+flutter test
 ```
+
+**DO NOT report to user until `flutter analyze` shows "No issues found!"**
 
 ---
 

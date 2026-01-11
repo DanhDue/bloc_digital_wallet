@@ -409,13 +409,51 @@ One-time UI Effect (Toast/Navigation)?
 
 ```
 [ ] Code generation completed
-[ ] No analyzer errors
-[ ] Code formatted
-[ ] Tests pass (if exist)
+[ ] No analyzer errors: flutter analyze --no-fatal-infos
+[ ] Code formatted: flutter format .
+[ ] Tests pass (if exist): flutter test
 [ ] Imports organized
 [ ] No unused code
 [ ] Architecture compliance verified
+[ ] All linter errors fixed (0 issues)
 ```
+
+### 🔍 **CRITICAL: Double Check Steps (Run After Every Task)**
+
+**Always run these commands before reporting completion:**
+
+```bash
+# 1. Format all code
+flutter format .
+
+# 2. Run analyzer (MUST show "No issues found!")
+flutter analyze --no-fatal-infos
+
+# 3. If any issues found:
+#    - Read the error messages carefully
+#    - Fix each issue
+#    - Run flutter analyze again
+#    - Repeat until "No issues found!"
+
+# 4. Run tests (if applicable)
+flutter test
+
+# 5. Verify build (optional but recommended)
+flutter build apk --debug
+```
+
+**Expected Output:**
+```
+Analyzing bloc_digital_wallet...
+No issues found! (ran in X.Xs)
+```
+
+**If you see errors:**
+1. ✅ Read each error message
+2. ✅ Fix the issue in the file
+3. ✅ Run `flutter analyze` again
+4. ✅ Repeat until clean
+5. ✅ DO NOT report to user until 0 issues
 
 ---
 

@@ -20,7 +20,7 @@ class GoodLog extends TalkerLog {
   @override
   AnsiPen get pen => getPen;
 
-  static get getPen => AnsiPen()..xterm(121);
+  static AnsiPen get getPen => AnsiPen()..xterm(121);
 
-  static get getKey => 'good';
+  static String get getKey => 'good';
 }

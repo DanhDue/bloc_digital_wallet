@@ -15,6 +15,7 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
 - **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Step-by-step feature creation guide
 - **[Quick Reference](QUICK_REFERENCE.md)** - Cheat sheet with code templates
 - **[Quick Start](docs/QUICK_START.md)** - Get started in 5 minutes
+- **[Double Check Guide](DOUBLE_CHECK_GUIDE.md)** ⚠️ **MUST READ** - Verification steps
 
 ### 📗 For Advanced Developers
 - **[Architecture Guide](ARCHITECTURE.md)** - Complete architecture overview
@@ -26,6 +27,7 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
 - **[AI Agent Context](AI_AGENT_CONTEXT.md)** - Architecture context & patterns
 - **[AI Agent Workflows](AI_AGENT_WORKFLOWS.md)** - Step-by-step task workflows
 - **[AI Agent Checklist](AI_AGENT_CHECKLIST.md)** - Quick reference checklist
+- **[Double Check Guide](DOUBLE_CHECK_GUIDE.md)** ⚠️ **MANDATORY** - Verification steps
 
 ## 🚀 Getting Started
 

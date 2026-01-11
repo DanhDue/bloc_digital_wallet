@@ -22,7 +22,7 @@ abstract class MviBloc<Action extends BaseAction, State extends BaseState, Event
   late final StreamController<Event> _eventController;
 
   /// Stream of events (one-time side effects like Navigation, Toast, Dialog)
-  /// Similar to Android's Channel<Event>
+  /// Similar to Android's Channel of Event
   Stream<Event> get events => _eventController.stream;
 
   /// Emit an event (side effect)

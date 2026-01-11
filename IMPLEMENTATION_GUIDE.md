@@ -1253,7 +1253,39 @@ class TransactionCreatedSuccessfully extends TransactionEvent {}
 - [ ] Code generation ran successfully
 - [ ] Tests written (at least for use cases)
 - [ ] Code formatted: `flutter format .`
-- [ ] No linter errors: `flutter analyze`
+- [ ] **No linter errors: `flutter analyze --no-fatal-infos`**
+- [ ] **Analyzer shows: "No issues found!"**
+
+### 🔍 Critical Double Check Step
+
+**Run these commands before considering the task complete:**
+
+```bash
+# 1. Format all code
+flutter format .
+
+# 2. Run analyzer (MUST show "No issues found!")
+flutter analyze --no-fatal-infos
+
+# Expected output:
+Analyzing bloc_digital_wallet...
+No issues found! (ran in X.Xs)
+
+# 3. If ANY errors, warnings, or info messages:
+#    - Read each message
+#    - Fix the issue
+#    - Run flutter analyze again
+#    - Repeat until "No issues found!"
+
+# 4. Run tests
+flutter test
+```
+
+**Success Criteria:**
+- ✅ `flutter analyze` output: **"No issues found!"**
+- ✅ Exit code: **0**
+- ✅ Tests passing
+- ✅ All files formatted
 
 ### Architecture Compliance
 
