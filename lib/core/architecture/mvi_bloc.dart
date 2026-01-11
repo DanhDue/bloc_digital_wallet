@@ -13,7 +13,11 @@ import 'mvi_base.dart';
 /// - State managed with StateFlow pattern
 /// - Events managed with Channel (one-shot)
 /// - Unidirectional data flow: View → ViewModel → Domain → Data → View
-abstract class MviBloc<Action extends BaseAction, State extends BaseState, Event extends BaseEvent>
+abstract class MviBloc<
+  Action extends BaseAction,
+  State extends BaseState,
+  Event extends BaseEvent
+>
     extends Bloc<Action, State> {
   MviBloc(super.initialState) {
     _eventController = StreamController<Event>.broadcast();
@@ -47,12 +51,16 @@ abstract class MviBloc<Action extends BaseAction, State extends BaseState, Event
   }
 
   /// Helper: Handle actions sequentially
-  void handleActionSequential<T extends Action>(EventHandler<T, State> handler) {
+  void handleActionSequential<T extends Action>(
+    EventHandler<T, State> handler,
+  ) {
     on<T>(handler, transformer: sequential());
   }
 
   /// Helper: Handle actions with restart on new
-  void handleActionRestartable<T extends Action>(EventHandler<T, State> handler) {
+  void handleActionRestartable<T extends Action>(
+    EventHandler<T, State> handler,
+  ) {
     on<T>(handler, transformer: restartable());
   }
 

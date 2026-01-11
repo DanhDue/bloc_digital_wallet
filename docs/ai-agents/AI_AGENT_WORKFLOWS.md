@@ -34,10 +34,13 @@ Extract: feature_name = "transaction_history" (snake_case)
 ### Step 2: Generate Feature Structure
 ```bash
 cd /Users/danhdue/AllProjects/sample/bloc_digital_wallet
+```bash
 mason make mvi_feature --feature_name transaction_history
 ```
 
 **Expected Output**: Files generated in `lib/features/transaction_history/`
+
+> **Note**: Copyright year is auto-set to current year via `pre_gen.dart` hook.
 
 ### Step 3: Define Domain Layer
 

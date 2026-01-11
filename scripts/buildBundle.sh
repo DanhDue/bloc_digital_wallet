@@ -18,15 +18,16 @@ fvm dart run build_runner clean
 echo -e "\033[0;32mmelos genAlls\033[0m"
 melos genAlls
 
+# Build app bundle with flavor and dart-define-from-file
 echo -e "\033[0;32mfvm flutter build appbundle --flavor $BUILD_FLAVOR \t
 --build-name=${!versionName} --build-number=${!versionCode} \t
 --dart-define-from-file=secureFiles/$BUILD_FLAVOR/environment-configs.json \t
---dart-define=FLAVOR=$BUILD_FLAVOR --target lib/main.dart --$BUILD_TYPE\033[0m"
+--target lib/main.dart --$BUILD_TYPE\033[0m"
 
 fvm flutter build appbundle --flavor $BUILD_FLAVOR \
 --build-name=${!versionName} --build-number=${!versionCode} \
 --dart-define-from-file=secureFiles/$BUILD_FLAVOR/environment-configs.json \
---dart-define=FLAVOR=$BUILD_FLAVOR --target lib/main.dart --$BUILD_TYPE
+--target lib/main.dart --$BUILD_TYPE
 
 if $DISTRIBUTE_FIREBASE
 then

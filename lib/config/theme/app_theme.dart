@@ -153,31 +153,51 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       return this;
     }
     return AppThemes(
-      primaryColor: Color.lerp(primaryColor, other.primaryColor, t) ?? primaryColor,
-      secondaryColor: Color.lerp(secondaryColor, other.secondaryColor, t) ?? secondaryColor,
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t) ?? backgroundColor,
-      surfaceColor: Color.lerp(surfaceColor, other.surfaceColor, t) ?? surfaceColor,
+      primaryColor:
+          Color.lerp(primaryColor, other.primaryColor, t) ?? primaryColor,
+      secondaryColor:
+          Color.lerp(secondaryColor, other.secondaryColor, t) ?? secondaryColor,
+      backgroundColor:
+          Color.lerp(backgroundColor, other.backgroundColor, t) ??
+          backgroundColor,
+      surfaceColor:
+          Color.lerp(surfaceColor, other.surfaceColor, t) ?? surfaceColor,
       errorColor: Color.lerp(errorColor, other.errorColor, t) ?? errorColor,
       textPrimaryColor:
-          Color.lerp(textPrimaryColor, other.textPrimaryColor, t) ?? textPrimaryColor,
+          Color.lerp(textPrimaryColor, other.textPrimaryColor, t) ??
+          textPrimaryColor,
       textSecondaryColor:
-          Color.lerp(textSecondaryColor, other.textSecondaryColor, t) ?? textSecondaryColor,
-      dividerColor: Color.lerp(dividerColor, other.dividerColor, t) ?? dividerColor,
+          Color.lerp(textSecondaryColor, other.textSecondaryColor, t) ??
+          textSecondaryColor,
+      dividerColor:
+          Color.lerp(dividerColor, other.dividerColor, t) ?? dividerColor,
       shadowColor: Color.lerp(shadowColor, other.shadowColor, t) ?? shadowColor,
-      displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t) ?? displayLarge,
-      displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t) ?? displayMedium,
-      displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t) ?? displaySmall,
-      headlineLarge: TextStyle.lerp(headlineLarge, other.headlineLarge, t) ?? headlineLarge,
-      headlineMedium: TextStyle.lerp(headlineMedium, other.headlineMedium, t) ?? headlineMedium,
-      headlineSmall: TextStyle.lerp(headlineSmall, other.headlineSmall, t) ?? headlineSmall,
+      displayLarge:
+          TextStyle.lerp(displayLarge, other.displayLarge, t) ?? displayLarge,
+      displayMedium:
+          TextStyle.lerp(displayMedium, other.displayMedium, t) ??
+          displayMedium,
+      displaySmall:
+          TextStyle.lerp(displaySmall, other.displaySmall, t) ?? displaySmall,
+      headlineLarge:
+          TextStyle.lerp(headlineLarge, other.headlineLarge, t) ??
+          headlineLarge,
+      headlineMedium:
+          TextStyle.lerp(headlineMedium, other.headlineMedium, t) ??
+          headlineMedium,
+      headlineSmall:
+          TextStyle.lerp(headlineSmall, other.headlineSmall, t) ??
+          headlineSmall,
       titleLarge: TextStyle.lerp(titleLarge, other.titleLarge, t) ?? titleLarge,
-      titleMedium: TextStyle.lerp(titleMedium, other.titleMedium, t) ?? titleMedium,
+      titleMedium:
+          TextStyle.lerp(titleMedium, other.titleMedium, t) ?? titleMedium,
       titleSmall: TextStyle.lerp(titleSmall, other.titleSmall, t) ?? titleSmall,
       bodyLarge: TextStyle.lerp(bodyLarge, other.bodyLarge, t) ?? bodyLarge,
       bodyMedium: TextStyle.lerp(bodyMedium, other.bodyMedium, t) ?? bodyMedium,
       bodySmall: TextStyle.lerp(bodySmall, other.bodySmall, t) ?? bodySmall,
       labelLarge: TextStyle.lerp(labelLarge, other.labelLarge, t) ?? labelLarge,
-      labelMedium: TextStyle.lerp(labelMedium, other.labelMedium, t) ?? labelMedium,
+      labelMedium:
+          TextStyle.lerp(labelMedium, other.labelMedium, t) ?? labelMedium,
       labelSmall: TextStyle.lerp(labelSmall, other.labelSmall, t) ?? labelSmall,
     );
   }
@@ -197,7 +217,9 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.black),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.black),
     headlineLarge: AppTextStyles.headlineLarge.copyWith(color: AppColors.black),
-    headlineMedium: AppTextStyles.headlineMedium.copyWith(color: AppColors.black),
+    headlineMedium: AppTextStyles.headlineMedium.copyWith(
+      color: AppColors.black,
+    ),
     headlineSmall: AppTextStyles.headlineSmall.copyWith(color: AppColors.black),
     titleLarge: AppTextStyles.titleLarge.copyWith(color: AppColors.black),
     titleMedium: AppTextStyles.titleMedium.copyWith(color: AppColors.black),
@@ -225,18 +247,24 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.white),
     headlineLarge: AppTextStyles.headlineLarge.copyWith(color: AppColors.white),
-    headlineMedium: AppTextStyles.headlineMedium.copyWith(color: AppColors.white),
+    headlineMedium: AppTextStyles.headlineMedium.copyWith(
+      color: AppColors.white,
+    ),
     headlineSmall: AppTextStyles.headlineSmall.copyWith(color: AppColors.white),
     titleLarge: AppTextStyles.titleLarge.copyWith(color: AppColors.white),
     titleMedium: AppTextStyles.titleMedium.copyWith(color: AppColors.white),
     titleSmall: AppTextStyles.titleSmall.copyWith(color: AppColors.white),
     bodyLarge: AppTextStyles.bodyLarge.copyWith(color: AppColors.white),
     bodyMedium: AppTextStyles.bodyMedium.copyWith(color: AppColors.white),
-    bodySmall: AppTextStyles.bodySmall.copyWith(color: AppColors.themeTextSecondaryDark),
+    bodySmall: AppTextStyles.bodySmall.copyWith(
+      color: AppColors.themeTextSecondaryDark,
+    ),
     labelLarge: AppTextStyles.labelLarge.copyWith(color: AppColors.white),
     labelMedium: AppTextStyles.labelMedium.copyWith(color: AppColors.white),
     labelSmall: AppTextStyles.labelSmall.copyWith(color: AppColors.white),
   );
 }
 
-final talkerTheme = TalkerScreenTheme(logColors: {GoodLog.getKey: AppColors.materialGreen500});
+final talkerTheme = TalkerScreenTheme(
+  logColors: {GoodLog.getKey: AppColors.materialGreen500},
+);

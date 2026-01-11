@@ -1,4 +1,4 @@
-// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+// Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

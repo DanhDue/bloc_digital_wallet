@@ -1,230 +1,184 @@
 # MVI Feature Brick
 
-Generate a complete feature following **Clean Architecture + MVI** pattern.
+Generate a complete feature following **Clean Architecture + MVI** pattern with feature-first organization.
 
-## 🎯 What It Generates
+## 🎯 Purpose
 
-### Complete feature structure with:
-- ✅ Domain layer (entities, repositories, use cases)
-- ✅ Data layer (models with Freezed, data sources, repository impl)
-- ✅ Presentation layer (MVI: intents, states, side effects, BLoC, pages)
-- ✅ Dependency injection ready
-- ✅ Error handling with Either
-- ✅ Immutable models with Freezed
-- ✅ Local caching strategy
-- ✅ Side effects for one-time events
+This Mason brick scaffolds a new feature with all necessary layers:
+- **Domain Layer**: Entities, repositories (interfaces), and use cases
+- **Data Layer**: Models, data sources (local/remote), and repository implementations
+- **Presentation Layer**: MVI components (Action, State, Event, BLoC) and UI pages
 
-## 🚀 Usage
+## 📦 Usage
+
+### Basic Usage
 
 ```bash
-mason make mvi_feature --feature_name wallet
+mason make mvi_feature
 ```
 
-## 📁 Generated Structure
+You'll be prompted for:
+- `feature_name`: The name of your feature (e.g., `transaction`, `wallet`, `profile`)
+- `year`: Copyright year (auto-set to current year, press Enter to accept)
+
+### Non-Interactive Usage
+
+```bash
+mason make mvi_feature --feature_name transaction --year 2025
+```
+
+## 🎨 Generated Structure
 
 ```
-lib/features/wallet/
+lib/features/{feature_name}/
 ├── data/
 │   ├── datasources/
-│   │   ├── wallet_remote_datasource.dart
-│   │   └── wallet_local_datasource.dart
+│   │   ├── {feature_name}_local_datasource.dart
+│   │   └── {feature_name}_remote_datasource.dart
 │   ├── models/
-│   │   └── wallet_model.dart
+│   │   └── {feature_name}_model.dart
 │   └── repositories/
-│       └── wallet_repository_impl.dart
+│       └── {feature_name}_repository_impl.dart
 ├── domain/
 │   ├── entities/
-│   │   └── wallet_entity.dart
+│   │   └── {feature_name}_entity.dart
 │   ├── repositories/
-│   │   └── wallet_repository.dart
+│   │   └── {feature_name}_repository.dart
 │   └── usecases/
-│       ├── get_wallet_usecase.dart
-│       └── get_all_wallets_usecase.dart
+│       ├── get_{feature_name}_usecase.dart
+│       └── get_all_{feature_name}s_usecase.dart
 └── presentation/
     ├── mvi/
-    │   ├── wallet_intent.dart
-    │   ├── wallet_state.dart
-    │   ├── wallet_side_effect.dart
-    │   └── wallet_bloc.dart
+    │   ├── {feature_name}_action.dart
+    │   ├── {feature_name}_state.dart
+    │   ├── {feature_name}_event.dart
+    │   └── {feature_name}_bloc.dart
     └── pages/
-        └── wallet_page.dart
+        └── {feature_name}_page.dart
 ```
 
-## 🔧 After Generation
+## 🔧 Variables
 
-1. **Update entity properties**:
-   ```dart
-   // wallet_entity.dart
-   class WalletEntity extends Equatable {
-     final String address;
-     final double balance;
-     final String network;
-     // Add your properties
-   }
-   ```
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `feature_name` | string | (required) | The name of the feature (snake_case recommended) |
+| `year` | number | Current year | Copyright year (auto-set via `pre_gen.dart` hook) |
 
-2. **Update model properties**:
-   ```dart
-   // wallet_model.dart
-   @freezed
-   class WalletModel with _$WalletModel {
-     const factory WalletModel({
-       required String address,
-       required double balance,
-       required String network,
-     }) = _WalletModel;
-   }
-   ```
+## 🪝 Hooks
 
-3. **Implement data sources**:
-   ```dart
-   // wallet_remote_datasource.dart
-   class WalletRemoteDataSourceImpl {
-     final Dio dio;
-     
-     @override
-     Future<WalletModel> getWallet(String address) async {
-       final response = await dio.get('/wallets/$address');
-       return WalletModel.fromJson(response.data);
-     }
-   }
-   ```
+### `pre_gen.dart`
 
-4. **Run code generation**:
-   ```bash
-   flutter pub run build_runner build --delete-conflicting-outputs
-   ```
+Automatically sets the `year` variable to the current year if not provided by the user. This ensures copyright headers always have the correct year.
 
-5. **Register in DI**:
-   ```dart
-   @module
-   abstract class WalletModule {
-     @lazySingleton
-     WalletRemoteDataSource remoteDataSource(Dio dio) =>
-         WalletRemoteDataSourceImpl(dio);
-     
-     // ... register other dependencies
-   }
-   ```
-
-6. **Use in your app**:
-   ```dart
-   BlocProvider(
-     create: (_) => getIt<WalletBloc>()
-       ..add(LoadWalletIntent('address')),
-     child: WalletPage(),
-   )
-   ```
-
-## 🎨 MVI Pattern
-
-### Intent → BLoC → State + Side Effects → View
-
-**Intent** (User action):
 ```dart
-class LoadWalletIntent extends WalletIntent {
-  final String address;
+Future<void> run(HookContext context) async {
+  if (!context.vars.containsKey('year') || context.vars['year'] == null) {
+    context.vars['year'] = DateTime.now().year;
+  }
 }
 ```
 
-**State** (UI state):
-```dart
-class WalletLoaded extends WalletState {
-  final WalletEntity wallet;
-}
-```
+## 📝 Generated Files Details
 
-**Side Effect** (One-time event):
-```dart
-class ShowSuccessMessage extends WalletSideEffect {
-  final String message;
-}
-```
+### Domain Layer (Pure Dart)
 
-**BLoC** (Business logic):
-```dart
-class WalletBloc extends MviBloc<
-  WalletIntent, 
-  WalletState, 
-  WalletSideEffect
-> {
-  // Transforms intents to states
-  // Emits side effects
-}
-```
-
-**View** (UI):
-```dart
-BlocBuilder<WalletBloc, WalletState>(
-  builder: (context, state) {
-    return switch (state) {
-      WalletLoading() => CircularProgressIndicator(),
-      WalletLoaded(:final wallet) => WalletView(wallet),
-      WalletError(:final message) => ErrorView(message),
-    };
-  },
-)
-```
-
-## 📚 Clean Architecture Layers
-
-### Domain Layer
-- **Entities**: Business objects (pure Dart)
-- **Repositories**: Abstract interfaces
-- **Use Cases**: Single-responsibility operations
+- **Entity**: Immutable data class using Equatable
+- **Repository Interface**: Abstract contract for data operations
+- **Use Cases**: Business logic isolated from UI and data sources
 
 ### Data Layer
-- **Models**: DTOs with JSON serialization
-- **Data Sources**: Remote (API) and Local (Cache)
-- **Repositories**: Concrete implementations
+
+- **Model**: Entity + JSON serialization (`freezed`, `json_serializable`)
+- **Data Sources**: Local (Hive, SharedPreferences) and Remote (Retrofit, Dio)
+- **Repository Implementation**: Implements domain repository, handles errors with `Either`
 
 ### Presentation Layer (MVI)
-- **Intents**: User actions
-- **States**: UI states
-- **Side Effects**: One-time events
-- **BLoC**: Business logic
-- **Pages**: UI widgets
 
-## ✅ Best Practices
+- **Action**: User interactions (e.g., button clicks, input changes)
+- **State**: UI state (Loading, Success, Error, etc.)
+- **Event**: One-time side effects (e.g., navigation, snackbar, dialog)
+- **BLoC**: Processes Actions → emits States & Events
+- **Page**: Flutter widget with `BlocConsumer` for State & Event handling
 
-1. **Keep entities simple** - No framework dependencies
-2. **Use Either for errors** - Left(Failure) or Right(Success)
-3. **Cache strategically** - Try cache first, then remote
-4. **Separate side effects** - Don't mix with state
-5. **Use sealed classes** - For exhaustive pattern matching
-6. **One use case, one responsibility** - Don't create god use cases
+## 🎯 MVI Architecture Principles
 
-## 🧪 Testing
+### Unidirectional Data Flow
 
-```dart
-// Use case test
-test('should return wallet when repository succeeds', () async {
-  when(() => repository.getWallet(any()))
-      .thenAnswer((_) async => Right(tWallet));
-  
-  final result = await useCase('address');
-  
-  expect(result, Right(tWallet));
-});
-
-// BLoC test
-blocTest<WalletBloc, WalletState>(
-  'emits [Loading, Loaded] when LoadWalletIntent succeeds',
-  build: () => WalletBloc(getWalletUseCase: mockUseCase),
-  act: (bloc) => bloc.add(LoadWalletIntent('address')),
-  expect: () => [
-    WalletLoading(),
-    WalletLoaded(tWallet),
-  ],
-);
+```
+User Action → BLoC (onAction) → Domain → Data → BLoC (emit State/Event) → UI
 ```
 
-## 📖 Learn More
+### Key Concepts
 
-- [Clean Architecture](../docs/ARCHITECTURE.md)
-- [MVI Pattern](../docs/VISUAL_GUIDE.md)
-- [Project README](../../README.md)
+- **Action**: What user wants to do (e.g., `LoadData`, `SubmitForm`)
+- **State**: Current UI state (e.g., `Loading`, `Success`, `Error`)
+- **Event**: One-time effects (e.g., `NavigateToDetail`, `ShowError`)
 
----
+### Android Alignment
 
-**Happy Coding! 🚀**
+This MVI implementation mirrors Android architecture:
+- **Action** = Android's Intent/Action
+- **State** = StateFlow pattern
+- **Event** = Channel pattern (one-shot)
+
+## 📚 Next Steps After Generation
+
+1. **Define Entity Properties**: Update entity with actual fields
+2. **Implement Use Cases**: Add business logic
+3. **Implement Data Sources**: Connect to APIs or local storage
+4. **Define Actions/States/Events**: Create specific actions and states for your feature
+5. **Implement BLoC Logic**: Handle actions and emit states
+6. **Build UI**: Create the page layout and widgets
+7. **Add Dependency Injection**: Register in `di/injection.dart`
+8. **Add Navigation**: Register route in `config/router.dart`
+9. **Write Tests**: Unit tests for use cases, BLoC, and repositories
+
+## 📖 Documentation References
+
+- **Architecture Guide**: `/docs/ARCHITECTURE.md`
+- **Implementation Guide**: `/IMPLEMENTATION_GUIDE.md`
+- **Quick Reference**: `/QUICK_REFERENCE.md`
+- **AI Agent Workflows**: `/AI_AGENT_WORKFLOWS.md`
+
+## 🔍 Example Usage
+
+### Creating a Transaction Feature
+
+```bash
+# Generate the feature
+mason make mvi_feature --feature_name transaction
+
+# The brick creates:
+# - lib/features/transaction/...
+# - All necessary files with:
+#   - Copyright (c) 2025, one of DanhDue ExOICTIF projects. All rights reserved.
+#   - Proper MVI structure
+#   - TODO comments for customization
+```
+
+## 🚨 Important Notes
+
+1. **Naming Convention**: Use `snake_case` for feature names (e.g., `user_profile`, not `UserProfile`)
+2. **Domain Layer Purity**: Never import Flutter packages in domain layer
+3. **MVI Pattern**: Follow Action → State transformation strictly
+4. **Events for Side Effects**: Use Events for navigation, dialogs, snackbars
+5. **Copyright Year**: Automatically set to current year, no manual update needed
+
+## 🛠 Troubleshooting
+
+### Generated files are empty
+- Ensure you're running Mason from the project root
+- Check that `mason.yaml` is properly configured
+
+### Copyright year is wrong
+- The `pre_gen.dart` hook should auto-set the year
+- Manually specify: `--year 2025`
+- Check that `hooks/pre_gen.dart` exists and is executable
+
+### Files not generated in correct location
+- Run from project root
+- Feature files should generate in `lib/features/{feature_name}/`
+
+## 📄 License
+
+Copyright (c) 2025, one of DanhDue ExOICTIF projects. All rights reserved.

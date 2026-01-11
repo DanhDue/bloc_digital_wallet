@@ -1,4 +1,4 @@
-// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+// Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/{{{feature_name.snakeCase()}}}_entity.dart';

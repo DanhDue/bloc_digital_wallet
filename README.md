@@ -1,4 +1,4 @@
-# bloc_digital_wallet
+# BLOC DIGITAL WALLET
 
 A modern digital wallet app built with **Flutter**, following **Clean Architecture** and **MVI (Model-View-Intent)** pattern.
 

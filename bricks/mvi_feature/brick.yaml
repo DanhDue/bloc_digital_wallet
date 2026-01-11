@@ -10,3 +10,7 @@ vars:
     type: string
     description: The name of the feature (e.g., authentication, wallet, profile)
     prompt: What is the feature name?
+  year:
+    type: number
+    description: Copyright year (auto-set to current year by pre_gen hook)
+    prompt: Copyright year?

@@ -25,6 +25,7 @@ echo -e "\033[0;32mpod install\033[0m"
 pod install
 cd ..
 
+# Build IPA with flavor and dart-define-from-file
 # export method included in the ExportOptions.plist file.
 echo -e "\033[0;32mfvm flutter build ipa --flavor $BUILD_FLAVOR --export-options-plist=scripts/buildConfigs/$BUILD_FLAVOR/ExportOptions.plist \t
 --build-name=${!versionName} --build-number=${!versionCode} --dart-define-from-file=secureFiles/$BUILD_FLAVOR/environment-configs.json \t

@@ -41,6 +41,8 @@ Before starting, ensure you have:
 mason make mvi_feature --feature_name transaction
 ```
 
+> **Note:** The copyright year in generated files is automatically set to the current year via a pre-generation hook. You can also manually specify the year with `--year 2025` if needed.
+
 This generates the complete structure:
 ```
 lib/features/transaction/

@@ -1,4 +1,4 @@
-// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+// Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';

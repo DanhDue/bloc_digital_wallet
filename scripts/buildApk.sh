@@ -18,8 +18,9 @@ fvm dart run build_runner clean
 echo -e "\033[0;32mmelos genAlls\033[0m"
 melos genAlls
 
+# Build APK with flavor and dart-define-from-file
 echo -e "\033[0;32mflutter build apk --no-shrink --flavor $BUILD_FLAVOR --build-name=${!versionName} --build-number=${!versionCode} \t
---dart-define-from-file=secureFiles/dev/environment-configs.json --target lib/main.dart --$BUILD_TYPE\033[0m"
+--dart-define-from-file=secureFiles/$BUILD_FLAVOR/environment-configs.json --target lib/main.dart --$BUILD_TYPE\033[0m"
 
 fvm flutter build apk --no-shrink --flavor $BUILD_FLAVOR --build-name=${!versionName} --build-number=${!versionCode} \
 --dart-define-from-file=secureFiles/$BUILD_FLAVOR/environment-configs.json --target lib/main.dart --$BUILD_TYPE
