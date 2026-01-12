@@ -36,6 +36,20 @@ import 'package:bloc_digital_wallet/features/authentication/presentation/login/l
     as _i859;
 import 'package:bloc_digital_wallet/features/authentication/presentation/register/register_bloc.dart'
     as _i795;
+import 'package:bloc_digital_wallet/features/home/data/datasources/home_local_datasource.dart'
+    as _i844;
+import 'package:bloc_digital_wallet/features/home/data/datasources/home_remote_datasource.dart'
+    as _i273;
+import 'package:bloc_digital_wallet/features/home/data/repositories/home_repository_impl.dart'
+    as _i375;
+import 'package:bloc_digital_wallet/features/home/domain/repositories/home_repository.dart'
+    as _i433;
+import 'package:bloc_digital_wallet/features/home/domain/usecases/get_all_homes_usecase.dart'
+    as _i1066;
+import 'package:bloc_digital_wallet/features/home/domain/usecases/get_home_usecase.dart'
+    as _i438;
+import 'package:bloc_digital_wallet/features/home/presentation/home/home_bloc.dart'
+    as _i45;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -49,6 +63,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i348.CounterCubit>(() => _i348.CounterCubit());
     gh.lazySingleton<_i891.AuthRemoteDataSource>(
       () => _i891.AuthRemoteDataSource(),
+    );
+    gh.lazySingleton<_i844.HomeLocalDataSource>(
+      () => _i844.HomeLocalDataSourceImpl(),
+    );
+    gh.lazySingleton<_i273.HomeRemoteDataSource>(
+      () => _i273.HomeRemoteDataSourceImpl(),
+    );
+    gh.lazySingleton<_i433.HomeRepository>(
+      () => _i375.HomeRepositoryImpl(
+        remoteDataSource: gh<_i273.HomeRemoteDataSource>(),
+        localDataSource: gh<_i844.HomeLocalDataSource>(),
+      ),
     );
     gh.lazySingleton<_i941.AuthenticationRepository>(
       () =>
@@ -66,6 +92,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i124.ForgotPasswordBloc>(
       () => _i124.ForgotPasswordBloc(gh<_i166.ForgotPasswordUseCase>()),
     );
+    gh.factory<_i1066.GetAllHomesUseCase>(
+      () => _i1066.GetAllHomesUseCase(gh<_i433.HomeRepository>()),
+    );
+    gh.factory<_i438.GetHomeUseCase>(
+      () => _i438.GetHomeUseCase(gh<_i433.HomeRepository>()),
+    );
     gh.factory<_i384.LoginWithEmailPasswordUseCase>(
       () => _i384.LoginWithEmailPasswordUseCase(
         gh<_i941.AuthenticationRepository>(),
@@ -73,6 +105,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i2.RegisterWithEmailUseCase>(
       () => _i2.RegisterWithEmailUseCase(gh<_i941.AuthenticationRepository>()),
+    );
+    gh.factory<_i45.HomeBloc>(
+      () => _i45.HomeBloc(
+        getHomeUseCase: gh<_i438.GetHomeUseCase>(),
+        getAllHomesUseCase: gh<_i1066.GetAllHomesUseCase>(),
+      ),
     );
     gh.factory<_i859.LoginBloc>(
       () => _i859.LoginBloc(gh<_i384.LoginWithEmailPasswordUseCase>()),
