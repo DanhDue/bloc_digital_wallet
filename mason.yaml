@@ -8,3 +8,7 @@ bricks:
   # MVI Subfeature brick for adding features to existing modules
   mvi_subfeature:
     path: bricks/mvi_subfeature
+  remove_feature:
+    path: bricks/remove_feature
+  remove_subfeature:
+    path: bricks/remove_subfeature
