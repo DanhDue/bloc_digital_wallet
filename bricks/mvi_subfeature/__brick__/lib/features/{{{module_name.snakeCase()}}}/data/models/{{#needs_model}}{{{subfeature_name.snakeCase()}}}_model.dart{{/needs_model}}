@@ -8,7 +8,7 @@ part '{{{subfeature_name.snakeCase()}}}_model.g.dart';
 
 /// Data model for {{subfeature_name.titleCase()}} in {{module_name.titleCase()}} module
 @freezed
-class {{subfeature_name.pascalCase()}}Model with _${{subfeature_name.pascalCase()}}Model {
+sealed class {{subfeature_name.pascalCase()}}Model with _${{subfeature_name.pascalCase()}}Model {
   const factory {{subfeature_name.pascalCase()}}Model({
     required String id,
     required String name,

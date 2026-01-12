@@ -7,7 +7,7 @@ part '{{{feature_name.snakeCase()}}}_model.freezed.dart';
 part '{{{feature_name.snakeCase()}}}_model.g.dart';
 
 @freezed
-class {{feature_name.pascalCase()}}Model with _${{feature_name.pascalCase()}}Model {
+sealed class {{feature_name.pascalCase()}}Model with _${{feature_name.pascalCase()}}Model {
   const {{feature_name.pascalCase()}}Model._();
   
   const factory {{feature_name.pascalCase()}}Model({

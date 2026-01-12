@@ -1,5 +1,6 @@
 // Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import 'package:injectable/injectable.dart';
 import '../models/{{{feature_name.snakeCase()}}}_model.dart';
 
 abstract class {{feature_name.pascalCase()}}LocalDataSource {
@@ -9,6 +10,7 @@ abstract class {{feature_name.pascalCase()}}LocalDataSource {
   Future<void> clearCache();
 }
 
+@LazySingleton(as: {{feature_name.pascalCase()}}LocalDataSource)
 class {{feature_name.pascalCase()}}LocalDataSourceImpl implements {{feature_name.pascalCase()}}LocalDataSource {
   // TODO: Inject Hive, SharedPreferences, or SecureStorage
   // final Box<{{feature_name.pascalCase()}}Model> box;
