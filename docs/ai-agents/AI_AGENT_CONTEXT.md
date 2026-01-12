@@ -165,6 +165,113 @@ context.appThemes.bodyMedium.copyWith(color: context.appThemes.textSecondaryColo
 
 ---
 
+## 🌐 Localization Rules (CRITICAL)
+
+### Using Slang for Translations
+
+This project uses `slang` for type-safe, compile-time checked localization. **ALWAYS** use `context.t` for user-facing strings.
+
+#### ❌ NEVER Do This:
+```dart
+// ❌ Hardcoded strings
+Text('Welcome Back')
+Text('Login to continue')
+const Text('Sign up')
+
+// ❌ Using t directly in widgets (won't rebuild on locale change)
+Text(t.authWelcomeBack)
+```
+
+#### ✅ ALWAYS Do This:
+```dart
+// ✅ Using context.t for text
+Text(context.t.authWelcomeBack)
+Text(context.t.authLoginToContinue)
+Text(context.t.authSignUp)
+
+// ✅ With parameters
+Text(context.t.welcome(name: user.name))
+
+// ✅ In TextButton/other widgets
+TextButton(
+  onPressed: () {},
+  child: Text(context.t.authLogin),
+)
+```
+
+### Adding New Translations
+
+**Step 1**: Add to both locale files:
+
+```json
+// assets/locales/en.i18n.json
+{
+  "myNewKey": "My text in English"
+}
+
+// assets/locales/vi.i18n.json
+{
+  "myNewKey": "Văn bản bằng tiếng Việt"
+}
+```
+
+**Step 2**: Regenerate:
+```bash
+melos genAlls
+# If needed: mv lib/generated/translations lib/generated/translations.dart
+```
+
+**Step 3**: Use in code:
+```dart
+import 'package:bloc_digital_wallet/generated/translations.dart';
+
+Text(context.t.myNewKey)
+```
+
+### Translation Key Naming
+
+```yaml
+Format: {module}{Descriptive}
+Examples:
+  - authWelcomeBack (not welcomeBack)
+  - authLoginToContinue (not loginMsg)
+  - authEmail (not email1)
+  - profileEditButton (not edit)
+  - walletBalance (not balance)
+```
+
+### Supported Locales
+
+- **English (en)**: Base locale
+- **Vietnamese (vi)**: Secondary locale
+
+**Access current locale**: `LocaleSettings.currentLocale`  
+**Change locale**: `await LocaleSettings.setLocale(AppLocale.vi)`  
+**Use device locale**: `await LocaleSettings.useDeviceLocale()`
+
+### Common Patterns
+
+```dart
+// Simple text
+Text(context.t.authEmail)
+
+// Snackbar
+SnackBar(content: Text(context.t.authForgotPasswordTapped))
+
+// AppBar title
+AppBar(title: Text(context.t.authCreateAccount))
+
+// TextField labels
+AuthTextField(
+  label: context.t.authEmail,
+  hintText: context.t.authEnterYourEmail,
+)
+```
+
+**See**: [docs/development/SLANG_LOCALIZATION_GUIDE.md](../../development/SLANG_LOCALIZATION_GUIDE.md)
+
+---
+
 ## 🏗️ Architecture Rules (CRITICAL)
 
 ### MVI Pattern Components

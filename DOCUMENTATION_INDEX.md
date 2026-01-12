@@ -4,6 +4,13 @@
 
 ---
 
+## ⚡ Quick Start
+
+**[.cursorrules](.cursorrules)** - ⭐ **Concise development rules for Cursor AI & quick reference**  
+Essential patterns, commands, and best practices in one file. Perfect for rapid development.
+
+---
+
 ## 📚 Documentation Categories
 
 ### 🤖 AI Agents & Development Tools ([docs/ai-agents/](docs/ai-agents/))
@@ -128,7 +135,8 @@ Reusable code generation templates.
 
 ### Feature Development ([docs/development/](docs/development/), [docs/mason/](docs/mason/))
 - [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md)
-- [docs/development/THEME_TAILOR_GUIDE.md](docs/development/THEME_TAILOR_GUIDE.md) ⭐ **New**
+- [docs/development/THEME_TAILOR_GUIDE.md](docs/development/THEME_TAILOR_GUIDE.md)
+- [docs/development/SLANG_LOCALIZATION_GUIDE.md](docs/development/SLANG_LOCALIZATION_GUIDE.md) ⭐ **New**
 - [docs/mason/MASON_GUIDE.md](docs/mason/MASON_GUIDE.md)
 - [docs/mason/MASON_INTEGRATION.md](docs/mason/MASON_INTEGRATION.md)
 - [docs/mason/MASON_SYNTAX.md](docs/mason/MASON_SYNTAX.md)

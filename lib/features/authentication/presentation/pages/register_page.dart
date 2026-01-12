@@ -1,12 +1,14 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
 import 'package:bloc_digital_wallet/di/injection.dart';
+import 'package:bloc_digital_wallet/generated/translations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../mvi/authentication_action.dart';
 import '../mvi/authentication_bloc.dart';
 import '../mvi/authentication_event.dart';
@@ -41,11 +43,15 @@ class _RegisterPageState extends State<RegisterPage> {
       if (!mounted) return;
       switch (event) {
         case ShowAuthSuccessMessage():
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(event.message)));
           // Navigate back after successful registration
           context.router.maybePop();
         case ShowAuthErrorMessage():
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(event.message)));
       }
     });
   }
@@ -68,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_selectedDate == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Please select your date of birth')));
+      ).showSnackBar(SnackBar(content: Text(context.t.authPleaseSelectDob)));
       return;
     }
 
@@ -104,7 +110,10 @@ class _RegisterPageState extends State<RegisterPage> {
       value: _bloc,
       child: Scaffold(
         backgroundColor: theme.surfaceColor,
-        appBar: AppBar(title: const Text('Create Account'), centerTitle: true),
+        appBar: AppBar(
+          title: Text(context.t.authCreateAccount),
+          centerTitle: true,
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
@@ -113,15 +122,19 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 const SizedBox(height: 12),
                 Text(
-                  'Sign Up',
+                  context.t.authSignUpTitle,
                   textAlign: TextAlign.center,
-                  style: theme.headlineSmall.copyWith(fontWeight: FontWeight.w700),
+                  style: theme.headlineSmall.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Create your account to get started',
+                  context.t.authCreateYourAccount,
                   textAlign: TextAlign.center,
-                  style: theme.bodyMedium.copyWith(color: theme.textSecondaryColor),
+                  style: theme.bodyMedium.copyWith(
+                    color: theme.textSecondaryColor,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -129,8 +142,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     Expanded(
                       child: AuthTextField(
                         controller: _firstNameController,
-                        label: 'First Name',
-                        hintText: 'John',
+                        label: context.t.authFirstName,
+                        hintText: context.t.authFirstNameHint,
                         textInputAction: TextInputAction.next,
                         prefixIcon: Icons.person_outline,
                       ),
@@ -139,8 +152,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     Expanded(
                       child: AuthTextField(
                         controller: _lastNameController,
-                        label: 'Last Name',
-                        hintText: 'Doe',
+                        label: context.t.authLastName,
+                        hintText: context.t.authLastNameHint,
                         textInputAction: TextInputAction.next,
                         prefixIcon: Icons.person_outline,
                       ),
@@ -150,8 +163,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 14),
                 AuthTextField(
                   controller: _emailController,
-                  label: 'Email',
-                  hintText: 'Enter your email',
+                  label: context.t.authEmail,
+                  hintText: context.t.authEnterYourEmail,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   prefixIcon: Icons.email_outlined,
@@ -159,8 +172,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 14),
                 AuthTextField(
                   controller: _phoneController,
-                  label: 'Phone Number',
-                  hintText: 'Enter your phone',
+                  label: context.t.authPhoneNumber,
+                  hintText: context.t.authEnterYourPhone,
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   prefixIcon: Icons.phone_outlined,
@@ -170,14 +183,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   onTap: _selectDate,
                   child: InputDecorator(
                     decoration: InputDecoration(
-                      labelText: 'Date of Birth',
-                      hintText: 'Select your birthday',
+                      labelText: context.t.authDateOfBirth,
+                      hintText: context.t.authSelectYourBirthday,
                       prefixIcon: const Icon(Icons.calendar_today_outlined),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     child: Text(
                       _selectedDate == null
-                          ? 'Select date'
+                          ? context.t.authSelectDate
                           : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
                       style: theme.bodyMedium,
                     ),
@@ -186,15 +201,18 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 14),
                 AuthTextField(
                   controller: _passwordController,
-                  label: 'Password',
-                  hintText: 'Create a password',
+                  label: context.t.authPassword,
+                  hintText: context.t.authCreateAPassword,
                   obscureText: _obscurePassword,
                   textInputAction: TextInputAction.done,
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: IconButton(
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                      _obscurePassword
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
                     ),
                   ),
                   onSubmitted: (_) => _onRegisterPressed(),
@@ -208,7 +226,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: isLoading ? null : _onRegisterPressed,
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                       child: isLoading
                           ? SizedBox(
@@ -219,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 color: theme.surfaceColor,
                               ),
                             )
-                          : const Text('Create Account'),
+                          : Text(context.t.authCreateAccount),
                     );
                   },
                 ),
@@ -227,10 +247,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already have an account?", style: theme.bodyMedium),
+                    Text(
+                      context.t.authAlreadyHaveAccount,
+                      style: theme.bodyMedium,
+                    ),
                     TextButton(
                       onPressed: () => context.router.maybePop(),
-                      child: const Text('Login'),
+                      child: Text(context.t.authLoginButton),
                     ),
                   ],
                 ),

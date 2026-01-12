@@ -1,0 +1,22 @@
+# Build configuration for code generation
+targets:
+  $default:
+    builders:
+      slang_build_runner:
+        enabled: true
+        options:
+          base_locale: en
+          fallback_strategy: base_locale
+          input_directory: assets/locales
+          input_file_pattern: .i18n.json
+          output_directory: lib/generated
+          output_file_name: translations.dart
+          output_format: single_file
+          string_interpolation: dart
+          translate_var_regex: '{([^}]+)}'
+          flat_map: false
+          key_case: null
+          key_map_case: camel
+          param_case: camel
+          timestamp: true
+          translation_class_visibility: public

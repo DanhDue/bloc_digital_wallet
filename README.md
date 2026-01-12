@@ -11,7 +11,8 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
 
 ## 📚 Documentation
 
-👉 **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Complete documentation navigation
+👉 **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Complete documentation navigation  
+⚡ **[.cursorrules](.cursorrules)** - Quick development rules & patterns (for Cursor AI)
 
 ### 📘 For Beginners
 - **[Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md)** - Step-by-step feature creation guide
@@ -30,6 +31,32 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
 - **[AI Agent Workflows](docs/ai-agents/AI_AGENT_WORKFLOWS.md)** - Step-by-step task workflows
 - **[AI Agent Checklist](docs/ai-agents/AI_AGENT_CHECKLIST.md)** - Quick reference checklist
 - **[Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)** ⚠️ **MANDATORY** - Verification steps
+
+## ⚡ Quick Development Rules
+
+**For fastest development, follow these critical rules:**
+
+```dart
+// 1. Theme & Styling - ALWAYS use context.appThemes
+Text('Hello', style: context.appThemes.bodyMedium)
+Container(color: context.appThemes.surfaceColor)
+
+// 2. Localization - ALWAYS use context.t
+Text(context.t.authWelcomeBack)
+Text(context.t.authEmail)
+
+// 3. MVI Pattern - Single entry point
+_bloc.onAction(const LoadDataAction());  // ✅ Only way
+_bloc.events.listen((event) { /* handle one-time effects */ });
+
+// 4. Before submitting - MANDATORY
+dart format lib/
+flutter analyze --no-fatal-infos  // Must show "No issues found!"
+```
+
+📖 **Complete rules**: See [.cursorrules](.cursorrules) file
+
+---
 
 ## 🚀 Getting Started
 

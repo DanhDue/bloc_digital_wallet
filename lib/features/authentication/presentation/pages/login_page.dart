@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
+import 'package:bloc_digital_wallet/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,9 +41,13 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       switch (event) {
         case ShowAuthSuccessMessage():
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(event.message)));
         case ShowAuthErrorMessage():
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(event.message)));
       }
     });
   }
@@ -90,26 +95,34 @@ class _LoginPageState extends State<LoginPage> {
                       color: theme.primaryColor.withValues(alpha: 0.10),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.account_circle, color: theme.primaryColor, size: 54),
+                    child: Icon(
+                      Icons.account_circle,
+                      color: theme.primaryColor,
+                      size: 54,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
                 Text(
-                  'Welcome Back',
+                  context.t.authWelcomeBack,
                   textAlign: TextAlign.center,
-                  style: theme.headlineSmall.copyWith(fontWeight: FontWeight.w700),
+                  style: theme.headlineSmall.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Login to continue',
+                  context.t.authLoginToContinue,
                   textAlign: TextAlign.center,
-                  style: theme.bodyMedium.copyWith(color: theme.textSecondaryColor),
+                  style: theme.bodyMedium.copyWith(
+                    color: theme.textSecondaryColor,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 AuthTextField(
                   controller: _emailController,
-                  label: 'Email',
-                  hintText: 'Enter your email',
+                  label: context.t.authEmail,
+                  hintText: context.t.authEnterYourEmail,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   prefixIcon: Icons.email_outlined,
@@ -117,15 +130,18 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 14),
                 AuthTextField(
                   controller: _passwordController,
-                  label: 'Password',
-                  hintText: 'Enter your password',
+                  label: context.t.authPassword,
+                  hintText: context.t.authEnterYourPassword,
                   obscureText: _obscurePassword,
                   textInputAction: TextInputAction.done,
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: IconButton(
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                      _obscurePassword
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
                     ),
                   ),
                   onSubmitted: (_) => _onLoginPressed(),
@@ -137,10 +153,12 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       // TODO(authentication): navigate to forgot password screen.
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Forgot password tapped (UI only).')),
+                        SnackBar(
+                          content: Text(context.t.authForgotPasswordTapped),
+                        ),
                       );
                     },
-                    child: const Text('Forgot Password?'),
+                    child: Text(context.t.authForgotPassword),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -152,7 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: isLoading ? null : _onLoginPressed,
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                       child: isLoading
                           ? SizedBox(
@@ -163,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                                 color: theme.surfaceColor,
                               ),
                             )
-                          : const Text('Login'),
+                          : Text(context.t.authLogin),
                     );
                   },
                 ),
@@ -174,8 +194,10 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
-                        'OR',
-                        style: theme.labelMedium.copyWith(color: theme.textSecondaryColor),
+                        context.t.authOr,
+                        style: theme.labelMedium.copyWith(
+                          color: theme.textSecondaryColor,
+                        ),
                       ),
                     ),
                     Expanded(child: Divider(color: theme.dividerColor)),
@@ -183,32 +205,34 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16),
                 SocialLoginButton(
-                  label: 'Continue with Google',
+                  label: context.t.authContinueWithGoogle,
                   icon: Icons.g_mobiledata,
                   onPressed: () {
                     // TODO(authentication): implement social login.
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Google login tapped (UI only).')),
+                      SnackBar(content: Text(context.t.authGoogleLoginTapped)),
                     );
                   },
                 ),
                 const SizedBox(height: 10),
                 SocialLoginButton(
-                  label: 'Continue with Apple',
+                  label: context.t.authContinueWithApple,
                   icon: Icons.apple,
                   onPressed: () {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(const SnackBar(content: Text('Apple login tapped (UI only).')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(context.t.authAppleLoginTapped)),
+                    );
                   },
                 ),
                 const SizedBox(height: 10),
                 SocialLoginButton(
-                  label: 'Continue with Facebook',
+                  label: context.t.authContinueWithFacebook,
                   icon: Icons.facebook,
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Facebook login tapped (UI only).')),
+                      SnackBar(
+                        content: Text(context.t.authFacebookLoginTapped),
+                      ),
                     );
                   },
                 ),
@@ -216,12 +240,15 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account?", style: theme.bodyMedium),
+                    Text(
+                      context.t.authDontHaveAccount,
+                      style: theme.bodyMedium,
+                    ),
                     TextButton(
                       onPressed: () {
                         context.router.push(const RegisterRoute());
                       },
-                      child: const Text('Sign up'),
+                      child: Text(context.t.authSignUp),
                     ),
                   ],
                 ),

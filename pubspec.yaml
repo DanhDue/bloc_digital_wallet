@@ -57,6 +57,10 @@ dependencies:
   # Authentication
   google_sign_in: ^7.2.0
   
+  # Localization
+  slang: ^4.0.0
+  slang_flutter: ^4.0.0
+  
   # Utils
   permission_handler: ^12.0.1
   jiffy: ^6.4.4
@@ -82,6 +86,7 @@ dev_dependencies:
   flutter_gen_runner: ^5.12.0
   injectable_generator: ^2.7.0
   retrofit_generator: ^10.2.1
+  slang_build_runner: ^4.0.0
   
   # Testing
   mocktail: ^1.0.4

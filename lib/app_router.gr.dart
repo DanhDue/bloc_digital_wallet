@@ -1,7 +1,3 @@
-// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
-
-// coverage:ignore-file
-
 // dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 

@@ -21,10 +21,16 @@ class EnvironmentConfig {
   );
 
   /// App display name
-  static const String appName = String.fromEnvironment('APP_NAME', defaultValue: 'Digital Wallet');
+  static const String appName = String.fromEnvironment(
+    'APP_NAME',
+    defaultValue: 'Digital Wallet',
+  );
 
   /// App suffix (dev, stg, prd)
-  static const String appSuffix = String.fromEnvironment('APP_SUFFIX', defaultValue: 'dev');
+  static const String appSuffix = String.fromEnvironment(
+    'APP_SUFFIX',
+    defaultValue: 'dev',
+  );
 
   /// Environment name (development, staging, production)
   static const String environment = String.fromEnvironment(
@@ -39,10 +45,16 @@ class EnvironmentConfig {
   );
 
   /// API Version
-  static const String apiVersion = String.fromEnvironment('API_VERSION', defaultValue: 'v1');
+  static const String apiVersion = String.fromEnvironment(
+    'API_VERSION',
+    defaultValue: 'v1',
+  );
 
   /// Enable logging
-  static const bool enableLogging = bool.fromEnvironment('ENABLE_LOGGING', defaultValue: true);
+  static const bool enableLogging = bool.fromEnvironment(
+    'ENABLE_LOGGING',
+    defaultValue: true,
+  );
 
   /// Enable analytics
   static const bool enableAnalytics = bool.fromEnvironment(
