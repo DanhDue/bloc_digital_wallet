@@ -30,9 +30,6 @@ class LoginWithEmailPasswordUseCase {
       return const Left(ValidationFailure(message: 'Password is required'));
     }
 
-    return repository.loginWithEmailPassword(
-      email: email.trim(),
-      password: password,
-    );
+    return repository.loginWithEmailPassword(email: email.trim(), password: password);
   }
 }

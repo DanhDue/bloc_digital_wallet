@@ -303,11 +303,16 @@ AuthTextField(
    - Include your **recommendation** with reasoning
    - Explain benefits of recommended approach
 
-3. **ASK TO COLLECT MODULE INFORMATION AND CONFIRMATION**
-   - Request necessary details (module name, subfeature name, etc.)
+3. **PREPARE TASK ASSIGNMENT TEMPLATE & ASK TO COLLECT MODULE INFORMATION AND CONFIRMATION**
+   - **Prepare structured template** using format from `docs/task-prompt-templates/README.md`
+   - Request necessary details in organized format:
+     - Module information (module name, subfeature name)
+     - Feature scope (functionality, UI requirements)
+     - Technical details (API endpoints, validation rules)
+     - Additional requirements (edge cases, success criteria)
    - Confirm the chosen approach
    - Clarify any ambiguities
-   - Wait for user response
+   - Wait for user response with all required information
 
 4. **THEN PROCEED** - Execute the confirmed workflow:
    - Use appropriate template
@@ -392,11 +397,36 @@ OPTION 2 (Not Recommended): Create New Module
 • Creates: Complete separate forgot_password module
 • Drawback: Duplicates authentication infrastructure
 
-Should I proceed with Option 1 (adding forgot_password as a subfeature to authentication)?"
+---
 
-[User confirms]
+To proceed, I need to confirm the following details:
 
-"Perfect! I'll proceed with adding forgot_password as a subfeature to the authentication module."
+MODULE INFORMATION:
+• Target module: authentication (existing)
+• Subfeature name: forgot_password
+• Functionality: Password reset via email link
+• UI requirements: New page with email input, accessible from login screen
+• API endpoint: POST /auth/forgot-password (please confirm or provide correct endpoint)
+
+TECHNICAL DETAILS:
+• Email validation: Yes (validate format before submission)
+• Rate limiting: Handle too many requests error
+• Success flow: Show success message → navigate back to login
+• Error handling: Display user-friendly error messages
+
+ADDITIONAL REQUIREMENTS:
+• Translations needed: authForgotPassword* keys (I'll add to en.i18n.json & vi.i18n.json)
+• Theme compliance: Will use context.appThemes throughout
+• Navigation: Add route /forgot-password to app_router.dart
+
+CONFIRMATION:
+Should I proceed with Option 1 (adding forgot_password as a subfeature to authentication module)?
+
+Please confirm or provide any corrections to the above details."
+
+[User confirms: "Yes, proceed. API endpoint is correct."]
+
+"Perfect! I'll proceed with adding forgot_password as a subfeature to the authentication module with the confirmed details."
 
 [Then executes mvi_subfeature workflow]
 ```

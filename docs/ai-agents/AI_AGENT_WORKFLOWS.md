@@ -45,10 +45,25 @@ This document provides step-by-step workflows for common tasks AI Agents will pe
    - Include your **recommendation** based on the analysis
    - Explain the benefits of recommended approach
 
-3. **ASK TO COLLECT MODULE INFORMATION AND CONFIRMATION**
+3. **PREPARE TASK ASSIGNMENT TEMPLATE & ASK TO COLLECT MODULE INFORMATION AND CONFIRMATION**
+   - **Prepare structured template** to collect missing information
+   - Use format from `docs/task-prompt-templates/README.md` for clarity
+   - Include in your request:
+     ```
+     To proceed, I need to confirm:
+     
+     MODULE INFORMATION:
+     - [If subfeature] Target module: [recommended_module]?
+     - [If new module] Module name: [suggested_name]?
+     - Feature scope: [what functionality]?
+     - UI requirements: [any specific screens]?
+     
+     CONFIRMATION:
+     Should I proceed with [recommended option]?
+     ```
    - If subfeature: "Should this be added to [existing_module]?"
-   - If new module: "Confirm creating as new module?"
-   - Request any missing information
+   - If new module: "Confirm creating as new module with name [suggested_name]?"
+   - Request any other missing information
    - Wait for user confirmation
 
 4. **THEN PROCEED** - After receiving confirmation, execute the appropriate workflow:
@@ -99,7 +114,32 @@ OPTION 2 (Not Recommended): Create New Module
 - Creates: Complete separate forgot_password module
 - Note: Would duplicate authentication infrastructure unnecessarily
 
-Should I proceed with Option 1 (adding forgot_password as a subfeature to authentication)?"
+---
+
+To proceed, I need to confirm the following details:
+
+MODULE INFORMATION:
+• Target module: authentication (existing)
+• Subfeature name: forgot_password
+• Functionality: Allow users to request password reset via email
+• UI requirements: New page accessible from login screen
+• API endpoint: POST /auth/forgot-password (please confirm)
+
+TECHNICAL DETAILS:
+• Email validation: Yes (RFC 5322 format)
+• Rate limiting: Handle "too many requests" error
+• Success flow: Show success message → navigate back to login
+• Error handling: Display user-friendly messages for all scenarios
+
+ADDITIONAL REQUIREMENTS:
+• Translations needed: authForgotPassword* keys (I'll add to en.i18n.json & vi.i18n.json)
+• Theme compliance: Will use context.appThemes throughout
+• Navigation: Add route /forgot-password to app_router.dart
+
+CONFIRMATION:
+Should I proceed with Option 1 (adding forgot_password as a subfeature to authentication module)?
+
+If you need to modify any of these details, please let me know. Otherwise, confirm and I'll begin implementation."
 
 [WAITS FOR CONFIRMATION]
 ```

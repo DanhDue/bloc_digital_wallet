@@ -19,6 +19,7 @@
 - 🎨 **[development/](development/)** - Implementation guides
 - 🚀 **[getting-started/](getting-started/)** - Quick start guides
 - 🧱 **[mason/](mason/)** - Code generation
+- 📝 **[task-prompt-templates/](task-prompt-templates/)** ⭐ **NEW** - AI task templates
 
 ---
 
@@ -60,6 +61,21 @@ Mason code generation templates
 - [MASON_INTEGRATION.md](mason/MASON_INTEGRATION.md) - Integration
 - [MASON_SYNTAX.md](mason/MASON_SYNTAX.md) - Syntax reference
 
+### 📝 [task-prompt-templates/](task-prompt-templates/) ⭐ **NEW**
+Ready-to-use templates for AI task assignment
+- **[README.md](task-prompt-templates/README.md)** - Main guide (comprehensive)
+- **[create-new-feature.md](task-prompt-templates/create-new-feature.md)** - New modules/subfeatures (2 examples)
+- **[fix-bug.md](task-prompt-templates/fix-bug.md)** - Bug fixes (2 examples)
+- **[refactor-code.md](task-prompt-templates/refactor-code.md)** - Code improvements (2 examples)
+- **[update-ui.md](task-prompt-templates/update-ui.md)** - UI/styling updates (2 examples)
+
+**Why Use These?**
+- ✅ Structured task assignments for AI agents
+- ✅ All critical rules included automatically
+- ✅ 8 complete real-world examples
+- ✅ Consistent, high-quality results
+- ✅ Fewer errors and iterations
+
 ---
 
 ## 🔍 Quick Links
@@ -83,9 +99,10 @@ Mason code generation templates
 2. [mason/MASON_GUIDE.md](mason/MASON_GUIDE.md)
 
 ### AI Agent?
-1. [ai-agents/AI_AGENT_README.md](ai-agents/AI_AGENT_README.md)
-2. [ai-agents/AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md)
-3. [ai-agents/DOUBLE_CHECK_GUIDE.md](ai-agents/DOUBLE_CHECK_GUIDE.md)
+1. **[task-prompt-templates/README.md](task-prompt-templates/README.md)** ⭐ Start here for task assignment!
+2. [ai-agents/AI_AGENT_README.md](ai-agents/AI_AGENT_README.md)
+3. [ai-agents/AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md)
+4. [ai-agents/DOUBLE_CHECK_GUIDE.md](ai-agents/DOUBLE_CHECK_GUIDE.md)
 
 ---
 
@@ -96,6 +113,7 @@ Mason code generation templates
 | Get started | [getting-started/QUICK_START.md](getting-started/QUICK_START.md) |
 | Understand architecture | [architecture/ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md) |
 | Create a feature | [development/IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md) |
+| Assign task to AI | **[task-prompt-templates/README.md](task-prompt-templates/README.md)** ⭐ |
 | Setup environment | [environment/ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md) |
 | Use code generation | [mason/MASON_GUIDE.md](mason/MASON_GUIDE.md) |
 | AI workflow | [ai-agents/AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md) |
@@ -104,15 +122,22 @@ Mason code generation templates
 
 ## 📊 Statistics
 
-- **Total Documentation Files**: 25+
-- **Categories**: 6
+- **Total Documentation Files**: 30+
+- **Categories**: 7 (added task-prompt-templates)
 - **Organization**: ✅ By folder
-- **Last Updated**: 2026-01-11
+- **Last Updated**: 2026-01-12
 
 ---
 
-## 🆕 Recent Changes (2026-01-11)
+## 🆕 Recent Changes
 
+### 2026-01-12
+✅ **Added** task-prompt-templates folder with 5 comprehensive files  
+✅ **Created** 8 complete real-world examples for AI task assignment  
+✅ **Merged** TASK_ASSIGNMENT.md into centralized location  
+✅ **Improved** AI agent task assignment workflow
+
+### 2026-01-11
 ✅ **Reorganized** documentation into logical folders  
 ✅ **Cleaned** root directory (only 3 files!)  
 ✅ **Improved** navigation and discoverability  

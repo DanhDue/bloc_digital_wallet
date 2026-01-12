@@ -9,18 +9,19 @@ This guide will walk you through creating a complete feature from scratch, follo
 ## 📋 Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Deciding: New Module vs Subfeature](#deciding-new-module-vs-subfeature)
-3. [Option A: Create New Module](#option-a-create-new-module)
-4. [Option B: Add Subfeature to Existing Module](#option-b-add-subfeature-to-existing-module)
-5. [Step 1: Generate Feature Structure](#step-1-generate-feature-structure)
-6. [Step 2: Define Domain Layer](#step-2-define-domain-layer)
-7. [Step 3: Implement Data Layer](#step-3-implement-data-layer)
-8. [Step 4: Implement Presentation Layer (MVI)](#step-4-implement-presentation-layer-mvi)
-9. [Step 5: Dependency Injection](#step-5-dependency-injection)
-10. [Step 6: Navigation & Integration](#step-6-navigation--integration)
-11. [Step 7: Testing](#step-7-testing)
-12. [Common Pitfalls](#common-pitfalls)
-13. [Checklist](#checklist)
+2. [Working with AI Agents? Use Task Templates!](#-working-with-ai-agents-use-task-templates)
+3. [Deciding: New Module vs Subfeature](#deciding-new-module-vs-subfeature)
+4. [Option A: Create New Module](#option-a-create-new-module)
+5. [Option B: Add Subfeature to Existing Module](#option-b-add-subfeature-to-existing-module)
+6. [Step 1: Generate Feature Structure](#step-1-generate-feature-structure)
+7. [Step 2: Define Domain Layer](#step-2-define-domain-layer)
+8. [Step 3: Implement Data Layer](#step-3-implement-data-layer)
+9. [Step 4: Implement Presentation Layer (MVI)](#step-4-implement-presentation-layer-mvi)
+10. [Step 5: Dependency Injection](#step-5-dependency-injection)
+11. [Step 6: Navigation & Integration](#step-6-navigation--integration)
+12. [Step 7: Testing](#step-7-testing)
+13. [Common Pitfalls](#common-pitfalls)
+14. [Checklist](#checklist)
 
 ---
 
@@ -34,6 +35,111 @@ Before starting, ensure you have:
 - [ ] Basic understanding of Clean Architecture
 - [ ] Basic understanding of MVI pattern (read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md))
 - [ ] Understanding of Theme Tailor usage (see below)
+
+---
+
+## 📝 Working with AI Agents? Use Task Templates!
+
+**⭐ IMPORTANT**: If you're working with AI agents (Cursor, GitHub Copilot, ChatGPT, etc.), use our **Task Prompt Templates** for better results:
+
+👉 **[Task Prompt Templates Guide](../task-prompt-templates/README.md)**
+
+### Why Use Templates?
+
+**Without Templates:**
+- ❌ Vague requirements lead to wrong implementations
+- ❌ AI agents miss critical rules (theme usage, translations, etc.)
+- ❌ Multiple iterations to fix mistakes
+- ❌ Inconsistent code patterns
+- ❌ Time wasted on corrections
+
+**With Templates:**
+- ✅ **Clear, structured task assignments**
+- ✅ **All critical rules included automatically**
+- ✅ **8 complete real-world examples** to follow
+- ✅ **Consistent, high-quality results**
+- ✅ **Fewer errors and iterations**
+- ✅ **Better AI agent understanding**
+
+### Available Templates:
+
+1. **[Create New Feature](../task-prompt-templates/create-new-feature.md)** 
+   - For new modules (e.g., wallet, notifications)
+   - For subfeatures (e.g., forgot_password in authentication)
+   - Includes 2 complete examples
+
+2. **[Fix Bug](../task-prompt-templates/fix-bug.md)**
+   - For fixing bugs and errors
+   - Includes root cause analysis steps
+   - Includes 2 complete examples
+
+3. **[Refactor Code](../task-prompt-templates/refactor-code.md)**
+   - For improving code quality
+   - For performance optimization
+   - Includes 2 complete examples
+
+4. **[Update UI](../task-prompt-templates/update-ui.md)**
+   - For visual/styling changes
+   - For redesigning screens
+   - Includes 2 complete examples
+
+### Quick Start with Templates:
+
+```bash
+# 1. Choose the right template based on your task
+# 2. Open the template file
+# 3. Copy the template structure
+# 4. Fill in your specific requirements
+# 5. Attach relevant files using @file or @folder
+# 6. Submit to AI agent
+# 7. Review the AI's plan before proceeding
+```
+
+### Example: Assigning "Add Forgot Password" Task
+
+**❌ Without Template (Vague):**
+```
+"Add forgot password to the app"
+```
+Result: AI might create wrong structure, miss translations, use wrong theme patterns, etc.
+
+**✅ With Template (Clear):**
+```
+See: docs/task-prompt-templates/create-new-feature.md
+Example 1: Add Forgot Password Feature
+
+TASK: Add forgot_password as subfeature to authentication module
+
+GOAL: Allow users to reset password via email
+
+MODULE INFORMATION:
+- Target module: authentication
+- Subfeature name: forgot_password
+- Feature type: Subfeature (reuse existing auth module)
+
+REQUIREMENTS:
+- Functionality: Email input, send reset link, success confirmation
+- UI: Forgot password page with email field
+- Validation: Email format validation
+- API: POST /auth/forgot-password endpoint
+
+FILES TO REVIEW:
+@lib/features/authentication
+
+[... complete structured template ...]
+```
+Result: AI creates correct structure, follows all rules, implements properly on first try!
+
+### 💡 Pro Tip:
+
+**Always use task templates when:**
+- 🎯 Creating any new feature or subfeature
+- 🐛 Fixing bugs (especially complex ones)
+- 🔧 Refactoring code
+- 🎨 Updating UI/styling
+- 🤖 Working with AI agents
+
+**This saves time and ensures quality!**
 
 ---
 

@@ -20,15 +20,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     required String password,
   }) async {
     try {
-      final user = await remote.loginWithEmailPassword(
-        email: email,
-        password: password,
-      );
+      final user = await remote.loginWithEmailPassword(email: email, password: password);
       return Right(user);
     } on AuthInvalidCredentialsException {
-      return const Left(
-        AuthenticationFailure(message: 'Invalid email or password'),
-      );
+      return const Left(AuthenticationFailure(message: 'Invalid email or password'));
     } catch (e) {
       return Left(UnknownFailure(message: 'Login failed', exception: e));
     }
@@ -55,9 +50,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Right(user);
     } on AuthEmailAlreadyExistsException {
       return const Left(
-        AuthenticationFailure(
-          message: 'An account with this email already exists',
-        ),
+        AuthenticationFailure(message: 'An account with this email already exists'),
       );
     } catch (e) {
       return Left(UnknownFailure(message: 'Registration failed', exception: e));

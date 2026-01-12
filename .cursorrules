@@ -31,10 +31,25 @@
      - What will be modified: bloc, repository, etc.
    - Include your **recommendation** based on analysis
 
-3. **ASK FOR MODULE INFORMATION AND CONFIRMATION**
-   - If subfeature: "Which module should this belong to?"
-   - If new module: "Confirm creating as new module?"
-   - Wait for user response
+3. **PREPARE TASK ASSIGNMENT TEMPLATE & ASK FOR MODULE INFORMATION AND CONFIRMATION**
+   - Prepare structured template (see docs/task-prompt-templates/README.md format)
+   - Present organized information request:
+     ```
+     MODULE INFORMATION:
+     - Target module: [recommended]
+     - Feature name: [suggested]
+     - Functionality: [scope]
+     - UI requirements: [screens/components]
+     
+     TECHNICAL DETAILS:
+     - API endpoints: [if applicable]
+     - Validation: [requirements]
+     - Error handling: [approach]
+     
+     CONFIRMATION:
+     Should I proceed with [recommended option]?
+     ```
+   - Wait for user response with confirmations/corrections
 
 4. **THEN PROCEED** - After receiving confirmation, execute the appropriate workflow
 
@@ -65,7 +80,26 @@ OPTION 2: Create New Module
 - Creates: Complete new forgot_password module
 - Note: Would duplicate authentication infrastructure (not recommended)
 
-Which option should I proceed with? (Option 1 recommended)"
+Which option should I proceed with? (Option 1 recommended)
+
+---
+
+To proceed, I need to confirm:
+
+MODULE INFORMATION:
+- Target module: authentication
+- Subfeature: forgot_password
+- Functionality: Password reset via email
+- UI: New page from login screen
+
+TECHNICAL DETAILS:
+- API: POST /auth/forgot-password (confirm?)
+- Validation: Email format
+- Flow: Input → API call → Success message → Back to login
+
+CONFIRMATION:
+Proceed with Option 1 (subfeature)?
+Please confirm or provide corrections."
 
 [WAITS FOR CONFIRMATION]
 ```
@@ -638,7 +672,7 @@ For AI Agents:
 # Change color → Add to colors.xml → Update app_themes.dart → genAlls → Use context.appThemes
 
 # Quick check
-flutter analyze --no-fatal-infos  # Must show "No issues found!"
+fvm flutter analyze --no-fatal-infos  # Must show "No issues found!"
 ```
 
 ### For New Features
@@ -652,7 +686,7 @@ mason make mvi_feature --feature_name wallet
 # 3. Generate & verify (30 sec)
 melos genAlls
 dart format lib/
-flutter analyze --no-fatal-infos
+fvm flutter analyze --no-fatal-infos
 
 # 4. Test (variable time)
 ```

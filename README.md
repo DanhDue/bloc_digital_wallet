@@ -32,6 +32,20 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
 - **[AI Agent Checklist](docs/ai-agents/AI_AGENT_CHECKLIST.md)** - Quick reference checklist
 - **[Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)** ⚠️ **MANDATORY** - Verification steps
 
+### 📝 Task Assignment Templates
+- **[Task Prompt Templates](docs/task-prompt-templates/README.md)** ⭐ **NEW** - Ready-to-use templates for AI agents
+  - **[Create New Feature](docs/task-prompt-templates/create-new-feature.md)** - For new modules/subfeatures
+  - **[Fix Bug](docs/task-prompt-templates/fix-bug.md)** - For bug fixes
+  - **[Refactor Code](docs/task-prompt-templates/refactor-code.md)** - For code improvements
+  - **[Update UI](docs/task-prompt-templates/update-ui.md)** - For UI/styling updates
+
+**💡 Why Use Templates?**
+- ✅ Consistent task structure
+- ✅ All critical rules included
+- ✅ Complete examples (8 real-world scenarios)
+- ✅ Better AI agent performance
+- ✅ Fewer errors and iterations
+
 ## ⚡ Quick Development Rules
 
 **For fastest development, follow these critical rules:**
@@ -256,6 +270,7 @@ melos build_apk             # Build Android APK
 
 ## 📖 Learn More
 
+### Core Documentation
 - **[Documentation Index](DOCUMENTATION_INDEX.md)** - Complete documentation navigation
 - **[Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md)** - Complete tutorial for creating features
 - **[Quick Reference](docs/getting-started/QUICK_REFERENCE.md)** - Cheat sheet with code templates
@@ -263,6 +278,12 @@ melos build_apk             # Build Android APK
 - **[Visual Guide](docs/architecture/VISUAL_GUIDE.md)** - Architecture diagrams
 - **[Mason Usage](docs/mason/MASON_GUIDE.md)** - Code generation guide
 - **[Environment Setup](docs/environment/FLAVORS_SETUP_COMPLETE.md)** - Environment & flavors configuration
+
+### Working with AI Agents
+- **[Task Prompt Templates](docs/task-prompt-templates/README.md)** ⭐ - Structured templates for AI task assignment
+  - Use these templates when assigning tasks to AI agents (Cursor, GitHub Copilot, etc.)
+  - Ensures consistent, high-quality results
+  - Includes 8 complete real-world examples
 
 ## 📝 License
 

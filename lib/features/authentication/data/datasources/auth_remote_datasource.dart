@@ -17,11 +17,7 @@ class AuthRemoteDataSource {
 
     // Demo-only credentials. Replace with real implementation.
     if (password == '123456' || password == 'password') {
-      return AuthUserModel(
-        id: 'demo-user',
-        email: email,
-        displayName: 'Demo User',
-      );
+      return AuthUserModel(id: 'demo-user', email: email, displayName: 'Demo User');
     }
 
     throw const AuthInvalidCredentialsException();

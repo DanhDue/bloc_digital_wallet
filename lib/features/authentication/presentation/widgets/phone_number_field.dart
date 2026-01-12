@@ -60,10 +60,7 @@ class PhoneNumberField extends StatelessWidget {
                     bottomLeft: Radius.circular(10),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 14,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -74,16 +71,10 @@ class PhoneNumberField extends StatelessWidget {
                         borderRadius: BorderRadius.circular(2),
                         border: Border.all(color: theme.authBorderColor),
                       ),
-                      child: const Center(
-                        child: Text('🇬🇧', style: TextStyle(fontSize: 12)),
-                      ),
+                      child: const Center(child: Text('🇬🇧', style: TextStyle(fontSize: 12))),
                     ),
                     const SizedBox(width: 4),
-                    Icon(
-                      Icons.arrow_drop_down,
-                      size: 16,
-                      color: theme.authTextSecondary,
-                    ),
+                    Icon(Icons.arrow_drop_down, size: 16, color: theme.authTextSecondary),
                   ],
                 ),
               ),
@@ -103,10 +94,7 @@ class PhoneNumberField extends StatelessWidget {
                     hintText: '(454) 726-0592',
                     hintStyle: TextStyle(color: theme.authTextPrimary),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 14,
-                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                   ),
                 ),
               ),

@@ -5,12 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
 
 class SocialLoginButton extends StatelessWidget {
-  const SocialLoginButton({
-    super.key,
-    required this.label,
-    required this.icon,
-    this.onPressed,
-  });
+  const SocialLoginButton({super.key, required this.label, required this.icon, this.onPressed});
 
   final String label;
   final IconData icon;

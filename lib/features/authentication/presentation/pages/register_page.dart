@@ -43,15 +43,11 @@ class _RegisterPageState extends State<RegisterPage> {
       if (!mounted) return;
       switch (event) {
         case ShowAuthSuccessMessage():
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(event.message)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
           // Navigate back after successful registration
           context.router.maybePop();
         case ShowAuthErrorMessage():
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(event.message)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
       }
     });
   }
@@ -110,10 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
       value: _bloc,
       child: Scaffold(
         backgroundColor: theme.surfaceColor,
-        appBar: AppBar(
-          title: Text(context.t.authCreateAccount),
-          centerTitle: true,
-        ),
+        appBar: AppBar(title: Text(context.t.authCreateAccount), centerTitle: true),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
@@ -124,17 +117,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 Text(
                   context.t.authSignUpTitle,
                   textAlign: TextAlign.center,
-                  style: theme.headlineSmall.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: theme.headlineSmall.copyWith(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   context.t.authCreateYourAccount,
                   textAlign: TextAlign.center,
-                  style: theme.bodyMedium.copyWith(
-                    color: theme.textSecondaryColor,
-                  ),
+                  style: theme.bodyMedium.copyWith(color: theme.textSecondaryColor),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -186,9 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       labelText: context.t.authDateOfBirth,
                       hintText: context.t.authSelectYourBirthday,
                       prefixIcon: const Icon(Icons.calendar_today_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     child: Text(
                       _selectedDate == null
@@ -207,12 +194,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   textInputAction: TextInputAction.done,
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: IconButton(
-                    onPressed: () =>
-                        setState(() => _obscurePassword = !_obscurePassword),
+                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                     icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
+                      _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                     ),
                   ),
                   onSubmitted: (_) => _onRegisterPressed(),
@@ -226,9 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: isLoading ? null : _onRegisterPressed,
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
                       child: isLoading
                           ? SizedBox(
@@ -247,10 +229,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      context.t.authAlreadyHaveAccount,
-                      style: theme.bodyMedium,
-                    ),
+                    Text(context.t.authAlreadyHaveAccount, style: theme.bodyMedium),
                     TextButton(
                       onPressed: () => context.router.maybePop(),
                       child: Text(context.t.authLoginButton),

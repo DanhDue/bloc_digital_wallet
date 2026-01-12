@@ -36,10 +36,17 @@
             [ ] Include recommendation with reasoning
             [ ] Explain architecture implications
         
-        [ ] 3. ASK FOR MODULE INFORMATION AND CONFIRMATION:
-            [ ] Request missing details (module name, etc.)
+        [ ] 3. PREPARE TASK ASSIGNMENT TEMPLATE & ASK FOR MODULE INFO AND CONFIRMATION:
+            [ ] Prepare structured information request template
+            [ ] Use format from docs/task-prompt-templates/README.md
+            [ ] Include sections:
+                [ ] MODULE INFORMATION (module, subfeature, functionality, UI)
+                [ ] TECHNICAL DETAILS (API, validation, error handling)
+                [ ] ADDITIONAL REQUIREMENTS (translations, routing, etc.)
+                [ ] CONFIRMATION (clear yes/no question)
+            [ ] Request missing details in organized format
             [ ] Confirm chosen approach
-            [ ] Wait for user response
+            [ ] Wait for user response with all required information
         
         [ ] 4. THEN PROCEED:
             [ ] Execute confirmed workflow
