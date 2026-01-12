@@ -61,6 +61,29 @@ class AuthRemoteDataSource {
     // Demo-only: Success  - in real implementation, would trigger email via API
     // No return needed for void success
   }
+
+  Future<void> verifyResetCode({required String code}) async {
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    // Demo-only: Simulate different scenarios
+    if (code == '00000') {
+      throw const AuthCodeExpiredException();
+    }
+
+    if (code != '12345') {
+      throw const AuthInvalidCodeException();
+    }
+
+    // Demo-only: Success - code '12345' is valid
+  }
+}
+
+class AuthInvalidCodeException implements Exception {
+  const AuthInvalidCodeException();
+}
+
+class AuthCodeExpiredException implements Exception {
+  const AuthCodeExpiredException();
 }
 
 class AuthInvalidCredentialsException implements Exception {

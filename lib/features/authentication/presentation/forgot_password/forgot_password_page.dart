@@ -9,10 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:bloc_digital_wallet/di/injection.dart';
-import '../mvi/authentication_action.dart';
-import '../mvi/authentication_bloc.dart';
-import '../mvi/authentication_event.dart';
-import '../mvi/authentication_state.dart';
+import 'package:bloc_digital_wallet/app_router.dart';
+import 'forgot_password_action.dart';
+import 'forgot_password_bloc.dart';
+import 'forgot_password_event.dart';
+import 'forgot_password_state.dart';
 
 @RoutePage()
 class ForgotPasswordPage extends StatefulWidget {
@@ -23,8 +24,8 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  late final AuthenticationBloc _bloc;
-  late final StreamSubscription<AuthenticationEvent> _eventSub;
+  late final ForgotPasswordBloc _bloc;
+  late final StreamSubscription<ForgotPasswordEvent> _eventSub;
 
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -32,27 +33,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   void initState() {
     super.initState();
-    _bloc = getIt<AuthenticationBloc>();
+    _bloc = getIt<ForgotPasswordBloc>();
     _eventSub = _bloc.events.listen((event) {
       if (!mounted) return;
       switch (event) {
-        case ShowAuthSuccessMessage():
+        case ShowForgotPasswordSuccessMessage():
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(event.message),
               backgroundColor: context.appThemes.primaryColor,
             ),
           );
-          // Navigate back to login after showing success message
-          Future.delayed(const Duration(milliseconds: 800), () {
-            if (mounted) {
-              context.router.maybePop();
-            }
-          });
-        case ShowAuthErrorMessage():
+        case ShowForgotPasswordErrorMessage():
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(event.message), backgroundColor: context.appThemes.errorColor),
           );
+        case NavigateToCodeVerification():
+          context.router.push(const CodeVerificationRoute());
       }
     });
   }
@@ -69,7 +66,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     FocusScope.of(context).unfocus();
 
     if (_formKey.currentState?.validate() ?? false) {
-      _bloc.onAction(ForgotPasswordAction(_emailController.text.trim()));
+      _bloc.onAction(SendResetLinkAction(_emailController.text.trim()));
     }
   }
 
@@ -166,9 +163,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   const SizedBox(height: 32),
                   // Submit button
-                  BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
                     builder: (context, state) {
-                      final isLoading = state is AuthenticationLoading;
+                      final isLoading = state is ForgotPasswordLoading;
 
                       return FilledButton(
                         onPressed: isLoading ? null : _onSubmitPressed,

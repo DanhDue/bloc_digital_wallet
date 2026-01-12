@@ -26,8 +26,16 @@ import 'package:bloc_digital_wallet/features/authentication/domain/usecases/logi
     as _i384;
 import 'package:bloc_digital_wallet/features/authentication/domain/usecases/register_with_email_usecase.dart'
     as _i2;
-import 'package:bloc_digital_wallet/features/authentication/presentation/mvi/authentication_bloc.dart'
-    as _i330;
+import 'package:bloc_digital_wallet/features/authentication/domain/usecases/verify_code_usecase.dart'
+    as _i1059;
+import 'package:bloc_digital_wallet/features/authentication/presentation/code_verification/code_verification_bloc.dart'
+    as _i150;
+import 'package:bloc_digital_wallet/features/authentication/presentation/forgot_password/forgot_password_bloc.dart'
+    as _i124;
+import 'package:bloc_digital_wallet/features/authentication/presentation/login/login_bloc.dart'
+    as _i859;
+import 'package:bloc_digital_wallet/features/authentication/presentation/register/register_bloc.dart'
+    as _i795;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -49,6 +57,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i166.ForgotPasswordUseCase>(
       () => _i166.ForgotPasswordUseCase(gh<_i941.AuthenticationRepository>()),
     );
+    gh.factory<_i1059.VerifyCodeUseCase>(
+      () => _i1059.VerifyCodeUseCase(gh<_i941.AuthenticationRepository>()),
+    );
+    gh.factory<_i150.CodeVerificationBloc>(
+      () => _i150.CodeVerificationBloc(gh<_i1059.VerifyCodeUseCase>()),
+    );
+    gh.factory<_i124.ForgotPasswordBloc>(
+      () => _i124.ForgotPasswordBloc(gh<_i166.ForgotPasswordUseCase>()),
+    );
     gh.factory<_i384.LoginWithEmailPasswordUseCase>(
       () => _i384.LoginWithEmailPasswordUseCase(
         gh<_i941.AuthenticationRepository>(),
@@ -57,12 +74,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i2.RegisterWithEmailUseCase>(
       () => _i2.RegisterWithEmailUseCase(gh<_i941.AuthenticationRepository>()),
     );
-    gh.factory<_i330.AuthenticationBloc>(
-      () => _i330.AuthenticationBloc(
-        gh<_i384.LoginWithEmailPasswordUseCase>(),
-        gh<_i2.RegisterWithEmailUseCase>(),
-        gh<_i166.ForgotPasswordUseCase>(),
-      ),
+    gh.factory<_i859.LoginBloc>(
+      () => _i859.LoginBloc(gh<_i384.LoginWithEmailPasswordUseCase>()),
+    );
+    gh.factory<_i795.RegisterBloc>(
+      () => _i795.RegisterBloc(gh<_i2.RegisterWithEmailUseCase>()),
     );
     return this;
   }

@@ -70,4 +70,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(UnknownFailure(message: 'Failed to send reset email', exception: e));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> verifyResetCode({required String code}) async {
+    try {
+      await remote.verifyResetCode(code: code);
+      return const Right(null);
+    } on AuthInvalidCodeException {
+      return const Left(AuthenticationFailure(message: 'Invalid verification code'));
+    } on AuthCodeExpiredException {
+      return const Left(
+        AuthenticationFailure(message: 'Code has expired. Please request a new one'),
+      );
+    } catch (e) {
+      return Left(UnknownFailure(message: 'Failed to verify code', exception: e));
+    }
+  }
 }

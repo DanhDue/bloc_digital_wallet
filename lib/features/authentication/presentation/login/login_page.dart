@@ -10,12 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:bloc_digital_wallet/di/injection.dart';
-import '../mvi/authentication_action.dart';
-import '../mvi/authentication_bloc.dart';
-import '../mvi/authentication_event.dart';
-import '../mvi/authentication_state.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
+import 'login_action.dart';
+import 'login_bloc.dart';
+import 'login_event.dart';
+import 'login_state.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -26,8 +26,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late final AuthenticationBloc _bloc;
-  late final StreamSubscription<AuthenticationEvent> _eventSub;
+  late final LoginBloc _bloc;
+  late final StreamSubscription<LoginEvent> _eventSub;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -36,13 +36,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _bloc = getIt<AuthenticationBloc>();
+    _bloc = getIt<LoginBloc>();
     _eventSub = _bloc.events.listen((event) {
       if (!mounted) return;
       switch (event) {
-        case ShowAuthSuccessMessage():
+        case ShowLoginSuccessMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
-        case ShowAuthErrorMessage():
+        case ShowLoginErrorMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
       }
     });
@@ -142,9 +142,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                BlocBuilder<LoginBloc, LoginState>(
                   builder: (context, state) {
-                    final isLoading = state is AuthenticationLoading;
+                    final isLoading = state is LoginLoading;
 
                     return FilledButton(
                       onPressed: isLoading ? null : _onLoginPressed,

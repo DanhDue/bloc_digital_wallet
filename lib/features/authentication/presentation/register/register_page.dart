@@ -9,11 +9,11 @@ import 'package:bloc_digital_wallet/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../mvi/authentication_action.dart';
-import '../mvi/authentication_bloc.dart';
-import '../mvi/authentication_event.dart';
-import '../mvi/authentication_state.dart';
 import '../widgets/auth_text_field.dart';
+import 'register_action.dart';
+import 'register_bloc.dart';
+import 'register_event.dart';
+import 'register_state.dart';
 
 @RoutePage()
 class RegisterPage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _lastNameController = TextEditingController();
   final _phoneController = TextEditingController();
 
-  late final AuthenticationBloc _bloc;
+  late final RegisterBloc _bloc;
   late final StreamSubscription _eventSub;
   bool _obscurePassword = true;
   DateTime? _selectedDate;
@@ -38,15 +38,15 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    _bloc = getIt<AuthenticationBloc>();
+    _bloc = getIt<RegisterBloc>();
     _eventSub = _bloc.events.listen((event) {
       if (!mounted) return;
       switch (event) {
-        case ShowAuthSuccessMessage():
+        case ShowRegisterSuccessMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
           // Navigate back after successful registration
           context.router.maybePop();
-        case ShowAuthErrorMessage():
+        case ShowRegisterErrorMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
       }
     });
@@ -202,9 +202,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   onSubmitted: (_) => _onRegisterPressed(),
                 ),
                 const SizedBox(height: 24),
-                BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                BlocBuilder<RegisterBloc, RegisterState>(
                   builder: (context, state) {
-                    final isLoading = state is AuthenticationLoading;
+                    final isLoading = state is RegisterLoading;
 
                     return FilledButton(
                       onPressed: isLoading ? null : _onRegisterPressed,

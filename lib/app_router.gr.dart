@@ -15,6 +15,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [CodeVerificationPage]
+class CodeVerificationRoute extends PageRouteInfo<void> {
+  const CodeVerificationRoute({List<PageRouteInfo>? children})
+    : super(CodeVerificationRoute.name, initialChildren: children);
+
+  static const String name = 'CodeVerificationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CodeVerificationPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ForgotPasswordPage]
 class ForgotPasswordRoute extends PageRouteInfo<void> {
   const ForgotPasswordRoute({List<PageRouteInfo>? children})

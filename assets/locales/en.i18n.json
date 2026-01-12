@@ -270,5 +270,10 @@
   "authForgotPasswordSuccess": "Password reset email sent! Check your inbox.",
   "authBackToLogin": "Back to Login",
   "authEmailNotFound": "No account found with this email address",
-  "authInvalidEmailFormat": "Please enter a valid email address"
+  "authInvalidEmailFormat": "Please enter a valid email address",
+  "authCodeFormatInvalid": "Please enter a valid 5-digit code",
+  "authCheckYourEmail": "Check your email",
+  "authEnterCodeInstruction": "enter 5 digit code that mentioned in the email",
+  "authVerifyCode": "Verify Code",
+  "authResendEmail": "Resend email"
 }
