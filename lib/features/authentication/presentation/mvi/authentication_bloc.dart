@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/architecture/architecture.dart';
 import '../../domain/usecases/login_with_email_password_usecase.dart';
+import '../../domain/usecases/register_with_email_usecase.dart';
 import 'authentication_action.dart';
 import 'authentication_event.dart';
 import 'authentication_state.dart';
@@ -13,9 +14,12 @@ import 'authentication_state.dart';
 class AuthenticationBloc
     extends MviBloc<AuthenticationAction, AuthenticationState, AuthenticationEvent> {
   final LoginWithEmailPasswordUseCase loginWithEmailPasswordUseCase;
+  final RegisterWithEmailUseCase registerWithEmailUseCase;
 
-  AuthenticationBloc(this.loginWithEmailPasswordUseCase) : super(const AuthenticationInitial()) {
+  AuthenticationBloc(this.loginWithEmailPasswordUseCase, this.registerWithEmailUseCase)
+    : super(const AuthenticationInitial()) {
     handleActionDroppable<LoginWithEmailPasswordAction>(_onLoginWithEmailPassword);
+    handleActionDroppable<RegisterWithEmailAction>(_onRegisterWithEmail);
   }
 
   @override
@@ -42,6 +46,33 @@ class AuthenticationBloc
       (user) {
         emit(AuthenticationSuccess(user));
         emitEvent(ShowAuthSuccessMessage('Logged in as ${user.email}'));
+      },
+    );
+  }
+
+  Future<void> _onRegisterWithEmail(
+    RegisterWithEmailAction action,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    emit(const AuthenticationLoading());
+
+    final result = await registerWithEmailUseCase(
+      email: action.email,
+      password: action.password,
+      firstName: action.firstName,
+      lastName: action.lastName,
+      phoneNumber: action.phoneNumber,
+      dateOfBirth: action.dateOfBirth,
+    );
+
+    result.fold(
+      (failure) {
+        emit(AuthenticationError(failure.message));
+        emitEvent(ShowAuthErrorMessage(failure.message));
+      },
+      (user) {
+        emit(AuthenticationSuccess(user));
+        emitEvent(ShowAuthSuccessMessage('Welcome ${user.firstName}! Registration successful.'));
       },
     );
   }

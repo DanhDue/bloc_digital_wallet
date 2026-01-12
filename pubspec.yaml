@@ -62,6 +62,7 @@ dependencies:
   jiffy: ^6.4.4
   rxdart: ^0.28.0
   auto_route: ^11.1.0
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:

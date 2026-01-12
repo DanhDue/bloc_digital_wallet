@@ -28,4 +28,32 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(UnknownFailure(message: 'Login failed', exception: e));
     }
   }
+
+  @override
+  Future<Either<Failure, AuthUserEntity>> registerWithEmail({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+    required DateTime dateOfBirth,
+  }) async {
+    try {
+      final user = await remote.registerWithEmail(
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        dateOfBirth: dateOfBirth,
+      );
+      return Right(user);
+    } on AuthEmailAlreadyExistsException {
+      return const Left(
+        AuthenticationFailure(message: 'An account with this email already exists'),
+      );
+    } catch (e) {
+      return Left(UnknownFailure(message: 'Registration failed', exception: e));
+    }
+  }
 }

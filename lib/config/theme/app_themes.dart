@@ -9,7 +9,7 @@ import 'package:bloc_digital_wallet/config/good_log.dart';
 import 'package:bloc_digital_wallet/config/theme/app_text_styles.dart';
 import 'package:bloc_digital_wallet/generated/colors.gen.dart';
 
-part 'app_theme.tailor.dart';
+part 'app_themes.tailor.dart';
 
 @TailorMixin(themeGetter: ThemeGetter.onBuildContext)
 @TailorMixinComponent()
@@ -32,6 +32,16 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
   final Color dividerColor;
   @override
   final Color shadowColor;
+
+  // Authentication colors
+  @override
+  final Color authTextSecondary;
+  @override
+  final Color authBorderColor;
+  @override
+  final Color authShadowColor;
+  @override
+  final Color authTextPrimary;
 
   // Text styles from Material textTheme
   @override
@@ -75,6 +85,10 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     required this.textSecondaryColor,
     required this.dividerColor,
     required this.shadowColor,
+    required this.authTextSecondary,
+    required this.authBorderColor,
+    required this.authShadowColor,
+    required this.authTextPrimary,
     required this.displayLarge,
     required this.displayMedium,
     required this.displaySmall,
@@ -103,6 +117,10 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     Color? textSecondaryColor,
     Color? dividerColor,
     Color? shadowColor,
+    Color? authTextSecondary,
+    Color? authBorderColor,
+    Color? authShadowColor,
+    Color? authTextPrimary,
     TextStyle? displayLarge,
     TextStyle? displayMedium,
     TextStyle? displaySmall,
@@ -129,6 +147,10 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       textSecondaryColor: textSecondaryColor ?? this.textSecondaryColor,
       dividerColor: dividerColor ?? this.dividerColor,
       shadowColor: shadowColor ?? this.shadowColor,
+      authTextSecondary: authTextSecondary ?? this.authTextSecondary,
+      authBorderColor: authBorderColor ?? this.authBorderColor,
+      authShadowColor: authShadowColor ?? this.authShadowColor,
+      authTextPrimary: authTextPrimary ?? this.authTextPrimary,
       displayLarge: displayLarge ?? this.displayLarge,
       displayMedium: displayMedium ?? this.displayMedium,
       displaySmall: displaySmall ?? this.displaySmall,
@@ -164,6 +186,11 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
           Color.lerp(textSecondaryColor, other.textSecondaryColor, t) ?? textSecondaryColor,
       dividerColor: Color.lerp(dividerColor, other.dividerColor, t) ?? dividerColor,
       shadowColor: Color.lerp(shadowColor, other.shadowColor, t) ?? shadowColor,
+      authTextSecondary:
+          Color.lerp(authTextSecondary, other.authTextSecondary, t) ?? authTextSecondary,
+      authBorderColor: Color.lerp(authBorderColor, other.authBorderColor, t) ?? authBorderColor,
+      authShadowColor: Color.lerp(authShadowColor, other.authShadowColor, t) ?? authShadowColor,
+      authTextPrimary: Color.lerp(authTextPrimary, other.authTextPrimary, t) ?? authTextPrimary,
       displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t) ?? displayLarge,
       displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t) ?? displayMedium,
       displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t) ?? displaySmall,
@@ -193,6 +220,10 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     textSecondaryColor: AppColors.textGrey,
     dividerColor: AppColors.themeDividerLight,
     shadowColor: Colors.black12,
+    authTextSecondary: AppColors.authTextSecondary,
+    authBorderColor: AppColors.authBorderColor,
+    authShadowColor: AppColors.authShadowColor,
+    authTextPrimary: AppColors.authTextPrimary,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.black),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.black),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.black),
@@ -221,6 +252,10 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     textSecondaryColor: AppColors.themeTextSecondaryDark,
     dividerColor: AppColors.themeDividerDark,
     shadowColor: Colors.black45,
+    authTextSecondary: AppColors.themeTextSecondaryDark,
+    authBorderColor: AppColors.themeDividerDark,
+    authShadowColor: Colors.black26,
+    authTextPrimary: AppColors.white,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.white),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.white),

@@ -1,35 +1,36 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 
-import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:bloc_digital_wallet/di/injection.dart';
 import '../mvi/authentication_action.dart';
 import '../mvi/authentication_bloc.dart';
 import '../mvi/authentication_event.dart';
 import '../mvi/authentication_state.dart';
 import '../widgets/auth_text_field.dart';
-import '../widgets/social_login_button.dart';
 
 @RoutePage()
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  late final AuthenticationBloc _bloc;
-  late final StreamSubscription<AuthenticationEvent> _eventSub;
-
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _phoneController = TextEditingController();
+
+  late final AuthenticationBloc _bloc;
+  late final StreamSubscription _eventSub;
   bool _obscurePassword = true;
+  DateTime? _selectedDate;
 
   @override
   void initState() {
@@ -40,6 +41,8 @@ class _LoginPageState extends State<LoginPage> {
       switch (event) {
         case ShowAuthSuccessMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+          // Navigate back after successful registration
+          context.router.maybePop();
         case ShowAuthErrorMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
       }
@@ -52,18 +55,44 @@ class _LoginPageState extends State<LoginPage> {
     _bloc.close();
     _emailController.dispose();
     _passwordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
-  void _onLoginPressed() {
+  void _onRegisterPressed() {
     FocusScope.of(context).unfocus();
 
+    if (_selectedDate == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select your date of birth')));
+      return;
+    }
+
     _bloc.onAction(
-      LoginWithEmailPasswordAction(
-        email: _emailController.text,
+      RegisterWithEmailAction(
+        email: _emailController.text.trim(),
         password: _passwordController.text,
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        phoneNumber: _phoneController.text.trim(),
+        dateOfBirth: _selectedDate!,
       ),
     );
+  }
+
+  Future<void> _selectDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
+    }
   }
 
   @override
@@ -74,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
       value: _bloc,
       child: Scaffold(
         backgroundColor: colorScheme.surface,
+        appBar: AppBar(title: const Text('Create Account'), centerTitle: true),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
@@ -81,20 +111,8 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 12),
-                Center(
-                  child: Container(
-                    height: 84,
-                    width: 84,
-                    decoration: BoxDecoration(
-                      color: colorScheme.primary.withValues(alpha: 0.10),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(Icons.account_circle, color: colorScheme.primary, size: 54),
-                  ),
-                ),
-                const SizedBox(height: 18),
                 Text(
-                  'Welcome Back',
+                  'Sign Up',
                   textAlign: TextAlign.center,
                   style: Theme.of(
                     context,
@@ -102,13 +120,37 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Login to continue',
+                  'Create your account to get started',
                   textAlign: TextAlign.center,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
                 const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AuthTextField(
+                        controller: _firstNameController,
+                        label: 'First Name',
+                        hintText: 'John',
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: Icons.person_outline,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AuthTextField(
+                        controller: _lastNameController,
+                        label: 'Last Name',
+                        hintText: 'Doe',
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: Icons.person_outline,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
                 AuthTextField(
                   controller: _emailController,
                   label: 'Email',
@@ -119,9 +161,36 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 14),
                 AuthTextField(
+                  controller: _phoneController,
+                  label: 'Phone Number',
+                  hintText: 'Enter your phone',
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.phone_outlined,
+                ),
+                const SizedBox(height: 14),
+                InkWell(
+                  onTap: _selectDate,
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Date of Birth',
+                      hintText: 'Select your birthday',
+                      prefixIcon: const Icon(Icons.calendar_today_outlined),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    child: Text(
+                      _selectedDate == null
+                          ? 'Select date'
+                          : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                AuthTextField(
                   controller: _passwordController,
                   label: 'Password',
-                  hintText: 'Enter your password',
+                  hintText: 'Create a password',
                   obscureText: _obscurePassword,
                   textInputAction: TextInputAction.done,
                   prefixIcon: Icons.lock_outline,
@@ -131,28 +200,15 @@ class _LoginPageState extends State<LoginPage> {
                       _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                     ),
                   ),
-                  onSubmitted: (_) => _onLoginPressed(),
+                  onSubmitted: (_) => _onRegisterPressed(),
                 ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // TODO(authentication): navigate to forgot password screen.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Forgot password tapped (UI only).')),
-                      );
-                    },
-                    child: const Text('Forgot Password?'),
-                  ),
-                ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 24),
                 BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
                     final isLoading = state is AuthenticationLoading;
 
                     return FilledButton(
-                      onPressed: isLoading ? null : _onLoginPressed,
+                      onPressed: isLoading ? null : _onRegisterPressed,
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -166,54 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                                 color: colorScheme.onPrimary,
                               ),
                             )
-                          : const Text('Login'),
-                    );
-                  },
-                ),
-                const SizedBox(height: 18),
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: colorScheme.outlineVariant)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        'OR',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant),
-                      ),
-                    ),
-                    Expanded(child: Divider(color: colorScheme.outlineVariant)),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                SocialLoginButton(
-                  label: 'Continue with Google',
-                  icon: Icons.g_mobiledata,
-                  onPressed: () {
-                    // TODO(authentication): implement social login.
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Google login tapped (UI only).')),
-                    );
-                  },
-                ),
-                const SizedBox(height: 10),
-                SocialLoginButton(
-                  label: 'Continue with Apple',
-                  icon: Icons.apple,
-                  onPressed: () {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(const SnackBar(content: Text('Apple login tapped (UI only).')));
-                  },
-                ),
-                const SizedBox(height: 10),
-                SocialLoginButton(
-                  label: 'Continue with Facebook',
-                  icon: Icons.facebook,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Facebook login tapped (UI only).')),
+                          : const Text('Create Account'),
                     );
                   },
                 ),
@@ -221,12 +230,13 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account?", style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      "Already have an account?",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     TextButton(
-                      onPressed: () {
-                        context.router.push(const RegisterRoute());
-                      },
-                      child: const Text('Sign up'),
+                      onPressed: () => context.router.maybePop(),
+                      child: const Text('Login'),
                     ),
                   ],
                 ),

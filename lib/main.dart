@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_router.dart';
-import 'config/theme/app_theme.dart';
+import 'config/theme/app_themes.dart';
 import 'config/environment_config.dart';
 import 'di/injection.dart';
 

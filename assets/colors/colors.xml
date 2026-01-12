@@ -377,4 +377,10 @@
 
     <!-- Other -->
     <color name="EOF">#FA0606</color>
+
+    <!-- Authentication/Register Colors (from Figma Design) -->
+    <color name="auth_text_secondary">#6C7278</color>
+    <color name="auth_border_color">#EDF1F3</color>
+    <color name="auth_shadow_color">#E4E5E7</color>
+    <color name="auth_text_primary">#1A1C1E</color>
 </resources>

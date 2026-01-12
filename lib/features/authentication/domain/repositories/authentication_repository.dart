@@ -10,4 +10,13 @@ abstract class AuthenticationRepository {
     required String email,
     required String password,
   });
+
+  Future<Either<Failure, AuthUserEntity>> registerWithEmail({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+    required DateTime dateOfBirth,
+  });
 }

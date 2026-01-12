@@ -12,3 +12,21 @@ class LoginWithEmailPasswordAction extends AuthenticationAction {
 
   const LoginWithEmailPasswordAction({required this.email, required this.password});
 }
+
+class RegisterWithEmailAction extends AuthenticationAction {
+  final String email;
+  final String password;
+  final String firstName;
+  final String lastName;
+  final String phoneNumber;
+  final DateTime dateOfBirth;
+
+  const RegisterWithEmailAction({
+    required this.email,
+    required this.password,
+    required this.firstName,
+    required this.lastName,
+    required this.phoneNumber,
+    required this.dateOfBirth,
+  });
+}

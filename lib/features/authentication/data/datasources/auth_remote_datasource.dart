@@ -22,8 +22,39 @@ class AuthRemoteDataSource {
 
     throw const AuthInvalidCredentialsException();
   }
+
+  Future<AuthUserModel> registerWithEmail({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+    required DateTime dateOfBirth,
+  }) async {
+    await Future<void>.delayed(const Duration(milliseconds: 800));
+
+    // Demo-only: Check if email already exists
+    if (email.toLowerCase() == 'test@test.com') {
+      throw const AuthEmailAlreadyExistsException();
+    }
+
+    // Demo-only: Create mock user
+    return AuthUserModel(
+      id: 'user-${DateTime.now().millisecondsSinceEpoch}',
+      email: email,
+      displayName: '$firstName $lastName',
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      dateOfBirth: dateOfBirth,
+    );
+  }
 }
 
 class AuthInvalidCredentialsException implements Exception {
   const AuthInvalidCredentialsException();
+}
+
+class AuthEmailAlreadyExistsException implements Exception {
+  const AuthEmailAlreadyExistsException();
 }

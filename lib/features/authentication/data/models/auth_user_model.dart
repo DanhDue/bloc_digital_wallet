@@ -3,5 +3,13 @@
 import '../../domain/entities/auth_user_entity.dart';
 
 class AuthUserModel extends AuthUserEntity {
-  const AuthUserModel({required super.id, required super.email, super.displayName});
+  const AuthUserModel({
+    required super.id,
+    required super.email,
+    super.displayName,
+    super.firstName,
+    super.lastName,
+    super.phoneNumber,
+    super.dateOfBirth,
+  });
 }

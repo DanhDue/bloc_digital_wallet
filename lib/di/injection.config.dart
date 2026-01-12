@@ -22,6 +22,8 @@ import 'package:bloc_digital_wallet/features/authentication/domain/repositories/
     as _i941;
 import 'package:bloc_digital_wallet/features/authentication/domain/usecases/login_with_email_password_usecase.dart'
     as _i384;
+import 'package:bloc_digital_wallet/features/authentication/domain/usecases/register_with_email_usecase.dart'
+    as _i2;
 import 'package:bloc_digital_wallet/features/authentication/presentation/mvi/authentication_bloc.dart'
     as _i330;
 import 'package:get_it/get_it.dart' as _i174;
@@ -47,8 +49,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i941.AuthenticationRepository>(),
       ),
     );
+    gh.factory<_i2.RegisterWithEmailUseCase>(
+      () => _i2.RegisterWithEmailUseCase(gh<_i941.AuthenticationRepository>()),
+    );
     gh.factory<_i330.AuthenticationBloc>(
-      () => _i330.AuthenticationBloc(gh<_i384.LoginWithEmailPasswordUseCase>()),
+      () => _i330.AuthenticationBloc(
+        gh<_i384.LoginWithEmailPasswordUseCase>(),
+        gh<_i2.RegisterWithEmailUseCase>(),
+      ),
     );
     return this;
   }
