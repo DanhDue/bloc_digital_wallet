@@ -18,6 +18,43 @@ Action (INPUT)  →  BLoC  →  State (DATA) + Event (OUTPUT)  →  View
 
 ---
 
+## 🎨 Theme & Styling Rules
+
+### ✅ ALWAYS Use Theme Tailor
+
+```dart
+// ❌ NEVER
+Theme.of(context).textTheme.bodyMedium
+Theme.of(context).colorScheme.surface
+Colors.red
+
+// ✅ ALWAYS
+context.appThemes.bodyMedium
+context.appThemes.surfaceColor
+context.appThemes.errorColor
+```
+
+### Quick Reference
+
+```dart
+// Text Styles
+context.appThemes.headlineSmall
+context.appThemes.bodyMedium
+context.appThemes.labelLarge
+
+// Colors
+context.appThemes.primaryColor
+context.appThemes.surfaceColor
+context.appThemes.textSecondaryColor
+
+// Combined
+context.appThemes.bodyMedium.copyWith(
+  color: context.appThemes.textSecondaryColor
+)
+```
+
+---
+
 ## 📁 File Structure Template
 
 ```

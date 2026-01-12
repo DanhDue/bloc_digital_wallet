@@ -87,6 +87,84 @@ Generated:
 
 ---
 
+## 🎨 Theme & Styling Rules (CRITICAL)
+
+### Using Theme Tailor
+
+This project uses `theme_tailor` for centralized theme management. **ALWAYS** use `context.appThemes` for colors and text styles.
+
+#### ❌ NEVER Do This:
+```dart
+// ❌ Using Theme.of(context) directly
+Theme.of(context).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)
+Theme.of(context).colorScheme.surface
+Theme.of(context).colorScheme.primary
+
+// ❌ Hardcoded colors
+Colors.red
+Colors.green
+Color(0xFF123456)
+```
+
+#### ✅ ALWAYS Do This:
+```dart
+// ✅ Using context.appThemes for text styles
+context.appThemes.bodyMedium.copyWith(color: context.appThemes.textSecondaryColor)
+context.appThemes.headlineSmall
+
+// ✅ Using context.appThemes for colors
+context.appThemes.surfaceColor
+context.appThemes.primaryColor
+context.appThemes.errorColor
+context.appThemes.authTextSecondary
+```
+
+### Adding New Colors to Theme
+
+1. **Add to colors.xml**: `assets/colors/colors.xml`
+```xml
+<color name="your_color_name">#HEX_CODE</color>
+```
+
+2. **Add field to AppThemes**: `lib/config/theme/app_themes.dart`
+```dart
+@override
+final Color yourColorName;
+```
+
+3. **Initialize in light/dark themes**: Add to both `AppThemes.light` and `AppThemes.dark`
+```dart
+static final light = AppThemes(
+  // ... existing colors ...
+  yourColorName: AppColors.yourColorName,
+  // ...
+);
+```
+
+4. **Generate code**: Run `melos genAlls` or `flutter pub run build_runner build --delete-conflicting-outputs`
+
+5. **Use in UI**: Access via `context.appThemes.yourColorName`
+
+### Using Text Styles
+
+```dart
+// ✅ Material 3 text styles available:
+context.appThemes.displayLarge     // 57sp, Regular
+context.appThemes.headlineSmall    // 24sp, Regular
+context.appThemes.titleMedium      // 16sp, Medium
+context.appThemes.bodyMedium       // 14sp, Regular
+context.appThemes.labelLarge       // 14sp, Medium
+
+// ✅ Emphasized variants:
+context.appThemes.bodyMediumEmphasized   // 14sp, Medium
+context.appThemes.titleLargeEmphasized   // 22sp, Medium
+
+// ✅ With color:
+context.appThemes.bodyMedium.copyWith(color: context.appThemes.textSecondaryColor)
+```
+
+---
+
 ## 🏗️ Architecture Rules (CRITICAL)
 
 ### MVI Pattern Components

@@ -12,13 +12,22 @@ import 'authentication_state.dart';
 
 @injectable
 class AuthenticationBloc
-    extends MviBloc<AuthenticationAction, AuthenticationState, AuthenticationEvent> {
+    extends
+        MviBloc<
+          AuthenticationAction,
+          AuthenticationState,
+          AuthenticationEvent
+        > {
   final LoginWithEmailPasswordUseCase loginWithEmailPasswordUseCase;
   final RegisterWithEmailUseCase registerWithEmailUseCase;
 
-  AuthenticationBloc(this.loginWithEmailPasswordUseCase, this.registerWithEmailUseCase)
-    : super(const AuthenticationInitial()) {
-    handleActionDroppable<LoginWithEmailPasswordAction>(_onLoginWithEmailPassword);
+  AuthenticationBloc(
+    this.loginWithEmailPasswordUseCase,
+    this.registerWithEmailUseCase,
+  ) : super(const AuthenticationInitial()) {
+    handleActionDroppable<LoginWithEmailPasswordAction>(
+      _onLoginWithEmailPassword,
+    );
     handleActionDroppable<RegisterWithEmailAction>(_onRegisterWithEmail);
   }
 
@@ -72,7 +81,11 @@ class AuthenticationBloc
       },
       (user) {
         emit(AuthenticationSuccess(user));
-        emitEvent(ShowAuthSuccessMessage('Welcome ${user.firstName}! Registration successful.'));
+        emitEvent(
+          ShowAuthSuccessMessage(
+            'Welcome ${user.firstName}! Registration successful.',
+          ),
+        );
       },
     );
   }

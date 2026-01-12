@@ -176,9 +176,37 @@ flutter test
 
 ## 🎨 Theme & Localization
 
-- Light/Dark mode support
-- Multi-language (en_US, vn_VI)
-- Type-safe theme access
+- **Light/Dark mode** support
+- **Multi-language** (en_US, vn_VI)
+- **Type-safe theme** access via `theme_tailor`
+
+### Theme Usage (IMPORTANT)
+
+**Always use `context.appThemes` for colors and styles:**
+
+```dart
+// ✅ Correct way
+Text(
+  'Hello',
+  style: context.appThemes.bodyMedium.copyWith(
+    color: context.appThemes.textSecondaryColor,
+  ),
+)
+
+Container(color: context.appThemes.surfaceColor)
+
+// ❌ Never do this
+Text('Hello', style: Theme.of(context).textTheme.bodyMedium)
+Container(color: Theme.of(context).colorScheme.surface)
+Container(color: Colors.red) // No hardcoded colors!
+```
+
+**Adding new colors:**
+1. Add to `assets/colors/colors.xml`
+2. Add field to `lib/config/theme/app_themes.dart`
+3. Initialize in both light and dark themes
+4. Run `melos genAlls`
+5. Use via `context.appThemes.yourColorName`
 
 ## 📝 Available Scripts
 

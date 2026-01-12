@@ -79,10 +79,15 @@ class RegisterTextField extends StatelessWidget {
             ),
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: TextStyle(color: theme.authTextPrimary.withValues(alpha: 0.4)),
+              hintStyle: TextStyle(
+                color: theme.authTextPrimary.withValues(alpha: 0.4),
+              ),
               suffixIcon: suffixIcon,
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 14,
+              ),
             ),
           ),
         ),

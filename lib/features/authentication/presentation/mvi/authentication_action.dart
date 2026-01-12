@@ -10,7 +10,10 @@ class LoginWithEmailPasswordAction extends AuthenticationAction {
   final String email;
   final String password;
 
-  const LoginWithEmailPasswordAction({required this.email, required this.password});
+  const LoginWithEmailPasswordAction({
+    required this.email,
+    required this.password,
+  });
 }
 
 class RegisterWithEmailAction extends AuthenticationAction {

@@ -23,11 +23,15 @@ class RegisterWithEmailUseCase {
   }) async {
     // Basic validation
     if (email.isEmpty || !email.contains('@')) {
-      return const Left(ValidationFailure(message: 'Please enter a valid email'));
+      return const Left(
+        ValidationFailure(message: 'Please enter a valid email'),
+      );
     }
 
     if (password.length < 6) {
-      return const Left(ValidationFailure(message: 'Password must be at least 6 characters'));
+      return const Left(
+        ValidationFailure(message: 'Password must be at least 6 characters'),
+      );
     }
 
     if (firstName.isEmpty) {

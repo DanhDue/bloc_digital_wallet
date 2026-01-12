@@ -30,6 +30,100 @@ Before starting, ensure you have:
 - [ ] Mason CLI installed: `mason get`
 - [ ] Basic understanding of Clean Architecture
 - [ ] Basic understanding of MVI pattern (read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md))
+- [ ] Understanding of Theme Tailor usage (see below)
+
+---
+
+## 🎨 Theme & Styling Guidelines
+
+### Using Theme Tailor (MANDATORY)
+
+This project uses `theme_tailor` for centralized theme management. **NEVER** use `Theme.of(context)` directly.
+
+#### ❌ NEVER Do This:
+```dart
+// ❌ Direct theme access
+Text(
+  'Hello',
+  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+    color: Theme.of(context).colorScheme.onSurfaceVariant,
+  ),
+)
+
+Container(
+  color: Theme.of(context).colorScheme.surface,
+)
+
+// ❌ Hardcoded colors
+Container(color: Colors.red)
+Text('Error', style: TextStyle(color: Colors.red))
+```
+
+#### ✅ ALWAYS Do This:
+```dart
+// ✅ Using context.appThemes
+Text(
+  'Hello',
+  style: context.appThemes.bodyMedium.copyWith(
+    color: context.appThemes.textSecondaryColor,
+  ),
+)
+
+Container(
+  color: context.appThemes.surfaceColor,
+)
+
+// ✅ Using theme colors
+Container(color: context.appThemes.errorColor)
+Text('Error', style: context.appThemes.bodyMedium.copyWith(
+  color: context.appThemes.errorColor,
+))
+```
+
+#### Adding New Colors
+
+1. **Add to `assets/colors/colors.xml`**:
+```xml
+<color name="your_color_name">#HEX_CODE</color>
+```
+
+2. **Add field to `lib/config/theme/app_themes.dart`**:
+```dart
+@override
+final Color yourColorName;
+```
+
+3. **Initialize in both `light` and `dark` themes**:
+```dart
+static final light = AppThemes(
+  // ... existing colors ...
+  yourColorName: AppColors.yourColorName,
+);
+
+static final dark = AppThemes(
+  // ... existing colors ...
+  yourColorName: AppColors.yourColorNameDark, // or adaptive color
+);
+```
+
+4. **Run code generation**:
+```bash
+melos genAlls
+```
+
+5. **Use in widgets**:
+```dart
+Container(color: context.appThemes.yourColorName)
+```
+
+#### Available Text Styles
+
+- Display: `displayLarge`, `displayMedium`, `displaySmall`
+- Headline: `headlineLarge`, `headlineMedium`, `headlineSmall`
+- Title: `titleLarge`, `titleMedium`, `titleSmall`
+- Body: `bodyLarge`, `bodyMedium`, `bodySmall`
+- Label: `labelLarge`, `labelMedium`, `labelSmall`
+- Emphasized variants: Add `Emphasized` suffix (e.g., `bodyMediumEmphasized`)
 
 ---
 

@@ -49,6 +49,7 @@ Quick start guides and reference materials.
 Step-by-step guides for implementing features and development workflows.
 
 - [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md) - Complete feature implementation tutorial
+- [docs/development/THEME_TAILOR_GUIDE.md](docs/development/THEME_TAILOR_GUIDE.md) - Theme management with theme_tailor ⭐ **NEW**
 - [docs/mason/MASON_GUIDE.md](docs/mason/MASON_GUIDE.md) - Mason code generation guide
 - [docs/mason/MASON_INTEGRATION.md](docs/mason/MASON_INTEGRATION.md) - Mason integration details
 - [docs/mason/MASON_SYNTAX.md](docs/mason/MASON_SYNTAX.md) - Mason template syntax reference
@@ -127,6 +128,7 @@ Reusable code generation templates.
 
 ### Feature Development ([docs/development/](docs/development/), [docs/mason/](docs/mason/))
 - [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md)
+- [docs/development/THEME_TAILOR_GUIDE.md](docs/development/THEME_TAILOR_GUIDE.md) ⭐ **New**
 - [docs/mason/MASON_GUIDE.md](docs/mason/MASON_GUIDE.md)
 - [docs/mason/MASON_INTEGRATION.md](docs/mason/MASON_INTEGRATION.md)
 - [docs/mason/MASON_SYNTAX.md](docs/mason/MASON_SYNTAX.md)
@@ -153,6 +155,7 @@ Reusable code generation templates.
 |------|-------|
 | Set up development environment | [docs/environment/ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md) |
 | Create a new feature | [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md) |
+| Use theme & styling | [docs/development/THEME_TAILOR_GUIDE.md](docs/development/THEME_TAILOR_GUIDE.md) |
 | Understand architecture | [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md) |
 | Use Mason for code gen | [docs/mason/MASON_GUIDE.md](docs/mason/MASON_GUIDE.md) |
 | Switch environments | [docs/environment/ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md) |
@@ -195,6 +198,7 @@ Reusable code generation templates.
 
 - 🎨 **[development/](docs/development/)** - Implementation Guides
   - [IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md)
+  - [THEME_TAILOR_GUIDE.md](docs/development/THEME_TAILOR_GUIDE.md)
 
 - 🚀 **[getting-started/](docs/getting-started/)** - Getting Started
   - [QUICK_REFERENCE.md](docs/getting-started/QUICK_REFERENCE.md)

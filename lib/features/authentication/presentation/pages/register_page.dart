@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
+import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
 import 'package:bloc_digital_wallet/di/injection.dart';
 import '../mvi/authentication_action.dart';
 import '../mvi/authentication_bloc.dart';
@@ -97,12 +98,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = context.appThemes;
 
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: theme.surfaceColor,
         appBar: AppBar(title: const Text('Create Account'), centerTitle: true),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -114,17 +115,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 Text(
                   'Sign Up',
                   textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+                  style: theme.headlineSmall.copyWith(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Create your account to get started',
                   textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+                  style: theme.bodyMedium.copyWith(color: theme.textSecondaryColor),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -182,7 +179,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       _selectedDate == null
                           ? 'Select date'
                           : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: theme.bodyMedium,
                     ),
                   ),
                 ),
@@ -219,7 +216,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: colorScheme.onPrimary,
+                                color: theme.surfaceColor,
                               ),
                             )
                           : const Text('Create Account'),
@@ -230,10 +227,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Already have an account?",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    Text("Already have an account?", style: theme.bodyMedium),
                     TextButton(
                       onPressed: () => context.router.maybePop(),
                       child: const Text('Login'),

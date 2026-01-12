@@ -273,6 +273,47 @@
 
 ---
 
+## 🎨 Theme & Styling Rules (MANDATORY)
+
+### ✅ Always Use Theme Tailor
+
+```yaml
+Text Styles:
+  ❌ NEVER: Theme.of(context).textTheme.bodyMedium
+  ✅ ALWAYS: context.appThemes.bodyMedium
+  
+  ❌ NEVER: Theme.of(context).textTheme.headlineSmall?.copyWith(...)
+  ✅ ALWAYS: context.appThemes.headlineSmall.copyWith(...)
+
+Colors:
+  ❌ NEVER: Theme.of(context).colorScheme.surface
+  ✅ ALWAYS: context.appThemes.surfaceColor
+  
+  ❌ NEVER: Colors.red, Colors.green, Color(0xFF123456)
+  ✅ ALWAYS: context.appThemes.primaryColor, context.appThemes.errorColor
+
+Combined:
+  ❌ NEVER: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant
+            )
+  ✅ ALWAYS: context.appThemes.bodyMedium.copyWith(
+              color: context.appThemes.textSecondaryColor
+            )
+```
+
+### Adding New Colors Checklist
+
+```
+[ ] Add color to assets/colors/colors.xml
+[ ] Add field to AppThemes class (lib/config/theme/app_themes.dart)
+[ ] Initialize in AppThemes.light
+[ ] Initialize in AppThemes.dark
+[ ] Run: melos genAlls
+[ ] Use via context.appThemes.yourColorName
+```
+
+---
+
 ## 📝 Naming Conventions Quick Reference
 
 ```yaml

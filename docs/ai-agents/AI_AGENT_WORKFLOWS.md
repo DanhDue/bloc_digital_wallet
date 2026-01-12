@@ -21,6 +21,111 @@ This document provides step-by-step workflows for common tasks AI Agents will pe
 
 ---
 
+## 🎨 Theme & Styling Rules (CRITICAL - READ FIRST)
+
+### ⚠️ MANDATORY: Always Use Theme Tailor
+
+**NEVER** access theme directly via `Theme.of(context)`. **ALWAYS** use `context.appThemes`.
+
+#### ❌ FORBIDDEN Patterns:
+```dart
+// ❌ Direct theme access
+Theme.of(context).textTheme.bodyMedium
+Theme.of(context).colorScheme.surface
+Theme.of(context).colorScheme.primary
+
+// ❌ Hardcoded colors
+Colors.red
+Colors.green
+Color(0xFF123456)
+
+// ❌ Combined wrong pattern
+Theme.of(context).textTheme.bodyMedium?.copyWith(
+  color: Theme.of(context).colorScheme.onSurfaceVariant
+)
+```
+
+#### ✅ REQUIRED Patterns:
+```dart
+// ✅ Text styles via context.appThemes
+context.appThemes.bodyMedium
+context.appThemes.headlineSmall
+context.appThemes.titleMedium
+
+// ✅ Colors via context.appThemes
+context.appThemes.surfaceColor
+context.appThemes.primaryColor
+context.appThemes.textSecondaryColor
+
+// ✅ Combined correct pattern
+context.appThemes.bodyMedium.copyWith(
+  color: context.appThemes.textSecondaryColor
+)
+```
+
+### Adding New Colors to Theme
+
+**Step 1**: Add to `assets/colors/colors.xml`
+```xml
+<color name="your_color_name">#HEX_CODE</color>
+```
+
+**Step 2**: Add field to `lib/config/theme/app_themes.dart`
+```dart
+@override
+final Color yourColorName;
+```
+
+**Step 3**: Initialize in both light and dark themes
+```dart
+static final light = AppThemes(
+  // ... existing fields ...
+  yourColorName: AppColors.yourColorName,
+  // ...
+);
+
+static final dark = AppThemes(
+  // ... existing fields ...
+  yourColorName: AppColors.yourColorNameDark, // or adaptive
+  // ...
+);
+```
+
+**Step 4**: Run code generation
+```bash
+melos genAlls
+# OR
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+**Step 5**: Use in widgets
+```dart
+Container(color: context.appThemes.yourColorName)
+Text('Hello', style: context.appThemes.bodyMedium.copyWith(
+  color: context.appThemes.yourColorName,
+))
+```
+
+### Available Theme Properties
+
+**Text Styles** (All support `.copyWith()`):
+- Display: `displayLarge`, `displayMedium`, `displaySmall`
+- Headline: `headlineLarge`, `headlineMedium`, `headlineSmall`
+- Title: `titleLarge`, `titleMedium`, `titleSmall`
+- Body: `bodyLarge`, `bodyMedium`, `bodySmall`
+- Label: `labelLarge`, `labelMedium`, `labelSmall`
+- Emphasized: Add `Emphasized` suffix (e.g., `bodyMediumEmphasized`)
+
+**Colors**:
+- `primaryColor`, `secondaryColor`
+- `backgroundColor`, `surfaceColor`
+- `errorColor`
+- `textPrimaryColor`, `textSecondaryColor`
+- `dividerColor`, `shadowColor`
+- `authTextSecondary`, `authBorderColor`, `authShadowColor`, `authTextPrimary`
+
+---
+
 ## Workflow: Create Complete New Feature
 
 **Scenario**: User requests a new feature (e.g., "Add transaction history feature")

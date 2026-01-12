@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -68,12 +69,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = context.appThemes;
 
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: theme.surfaceColor,
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
@@ -86,27 +87,23 @@ class _LoginPageState extends State<LoginPage> {
                     height: 84,
                     width: 84,
                     decoration: BoxDecoration(
-                      color: colorScheme.primary.withValues(alpha: 0.10),
+                      color: theme.primaryColor.withValues(alpha: 0.10),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.account_circle, color: colorScheme.primary, size: 54),
+                    child: Icon(Icons.account_circle, color: theme.primaryColor, size: 54),
                   ),
                 ),
                 const SizedBox(height: 18),
                 Text(
                   'Welcome Back',
                   textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+                  style: theme.headlineSmall.copyWith(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Login to continue',
                   textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+                  style: theme.bodyMedium.copyWith(color: theme.textSecondaryColor),
                 ),
                 const SizedBox(height: 24),
                 AuthTextField(
@@ -163,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: colorScheme.onPrimary,
+                                color: theme.surfaceColor,
                               ),
                             )
                           : const Text('Login'),
@@ -173,17 +170,15 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 18),
                 Row(
                   children: [
-                    Expanded(child: Divider(color: colorScheme.outlineVariant)),
+                    Expanded(child: Divider(color: theme.dividerColor)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
                         'OR',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+                        style: theme.labelMedium.copyWith(color: theme.textSecondaryColor),
                       ),
                     ),
-                    Expanded(child: Divider(color: colorScheme.outlineVariant)),
+                    Expanded(child: Divider(color: theme.dividerColor)),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -221,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account?", style: Theme.of(context).textTheme.bodyMedium),
+                    Text("Don't have an account?", style: theme.bodyMedium),
                     TextButton(
                       onPressed: () {
                         context.router.push(const RegisterRoute());
