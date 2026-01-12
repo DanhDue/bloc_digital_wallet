@@ -26,15 +26,10 @@ vars:
     type: boolean
     description: Does this subfeature need a new data model?
     prompt: Create a new data model?
-    default: false
+    default: true
   
   needs_entity:
     type: boolean
     description: Does this subfeature need a new entity?
     prompt: Create a new entity?
-    default: false
-  
-  year:
-    type: number
-    description: Copyright year (auto-set to current year by pre_gen hook)
-    prompt: Copyright year?
+    default: true

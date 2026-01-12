@@ -183,7 +183,7 @@ melos:
       description: Generate a new feature with Clean Architecture + MVI structure.
 
     mason_make_subfeature:
-      run: mason make mvi_subfeature -o lib/features
+      run: mason make mvi_subfeature
       description: Generate a subfeature within an existing module.
 
     mason_list:
