@@ -49,6 +49,18 @@ class AuthRemoteDataSource {
       dateOfBirth: dateOfBirth,
     );
   }
+
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    // Demo-only: Simulate email not found for specific test case
+    if (email.toLowerCase() == 'notfound@test.com') {
+      throw const AuthEmailNotFoundException();
+    }
+
+    // Demo-only: Success  - in real implementation, would trigger email via API
+    // No return needed for void success
+  }
 }
 
 class AuthInvalidCredentialsException implements Exception {
@@ -57,4 +69,8 @@ class AuthInvalidCredentialsException implements Exception {
 
 class AuthEmailAlreadyExistsException implements Exception {
   const AuthEmailAlreadyExistsException();
+}
+
+class AuthEmailNotFoundException implements Exception {
+  const AuthEmailNotFoundException();
 }

@@ -20,6 +20,8 @@ import 'package:bloc_digital_wallet/features/authentication/data/repositories/au
     as _i558;
 import 'package:bloc_digital_wallet/features/authentication/domain/repositories/authentication_repository.dart'
     as _i941;
+import 'package:bloc_digital_wallet/features/authentication/domain/usecases/forgot_password_usecase.dart'
+    as _i166;
 import 'package:bloc_digital_wallet/features/authentication/domain/usecases/login_with_email_password_usecase.dart'
     as _i384;
 import 'package:bloc_digital_wallet/features/authentication/domain/usecases/register_with_email_usecase.dart'
@@ -44,6 +46,9 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i558.AuthenticationRepositoryImpl(gh<_i891.AuthRemoteDataSource>()),
     );
+    gh.factory<_i166.ForgotPasswordUseCase>(
+      () => _i166.ForgotPasswordUseCase(gh<_i941.AuthenticationRepository>()),
+    );
     gh.factory<_i384.LoginWithEmailPasswordUseCase>(
       () => _i384.LoginWithEmailPasswordUseCase(
         gh<_i941.AuthenticationRepository>(),
@@ -56,6 +61,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i330.AuthenticationBloc(
         gh<_i384.LoginWithEmailPasswordUseCase>(),
         gh<_i2.RegisterWithEmailUseCase>(),
+        gh<_i166.ForgotPasswordUseCase>(),
       ),
     );
     return this;

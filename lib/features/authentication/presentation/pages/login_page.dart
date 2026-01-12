@@ -136,10 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // TODO(authentication): navigate to forgot password screen.
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(context.t.authForgotPasswordTapped)));
+                      context.router.push(const ForgotPasswordRoute());
                     },
                     child: Text(context.t.authForgotPassword),
                   ),

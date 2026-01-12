@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/architecture/architecture.dart';
+import '../../domain/usecases/forgot_password_usecase.dart';
 import '../../domain/usecases/login_with_email_password_usecase.dart';
 import '../../domain/usecases/register_with_email_usecase.dart';
 import 'authentication_action.dart';
@@ -15,11 +16,16 @@ class AuthenticationBloc
     extends MviBloc<AuthenticationAction, AuthenticationState, AuthenticationEvent> {
   final LoginWithEmailPasswordUseCase loginWithEmailPasswordUseCase;
   final RegisterWithEmailUseCase registerWithEmailUseCase;
+  final ForgotPasswordUseCase forgotPasswordUseCase;
 
-  AuthenticationBloc(this.loginWithEmailPasswordUseCase, this.registerWithEmailUseCase)
-    : super(const AuthenticationInitial()) {
+  AuthenticationBloc(
+    this.loginWithEmailPasswordUseCase,
+    this.registerWithEmailUseCase,
+    this.forgotPasswordUseCase,
+  ) : super(const AuthenticationInitial()) {
     handleActionDroppable<LoginWithEmailPasswordAction>(_onLoginWithEmailPassword);
     handleActionDroppable<RegisterWithEmailAction>(_onRegisterWithEmail);
+    handleActionDroppable<ForgotPasswordAction>(_onForgotPassword);
   }
 
   @override
@@ -73,6 +79,26 @@ class AuthenticationBloc
       (user) {
         emit(AuthenticationSuccess(user));
         emitEvent(ShowAuthSuccessMessage('Welcome ${user.firstName}! Registration successful.'));
+      },
+    );
+  }
+
+  Future<void> _onForgotPassword(
+    ForgotPasswordAction action,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    emit(const AuthenticationLoading());
+
+    final result = await forgotPasswordUseCase(action.email);
+
+    result.fold(
+      (failure) {
+        emit(AuthenticationError(failure.message));
+        emitEvent(ShowAuthErrorMessage(failure.message));
+      },
+      (_) {
+        emit(const AuthenticationInitial());
+        emitEvent(const ShowAuthSuccessMessage('Password reset email sent! Check your inbox.'));
       },
     );
   }

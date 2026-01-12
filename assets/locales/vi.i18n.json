@@ -262,5 +262,14 @@
   "authCreateAPassword": "Tạo mật khẩu",
   "authPleaseSelectDob": "Vui lòng chọn ngày sinh của bạn",
   "authAlreadyHaveAccount": "Đã có tài khoản?",
-  "authLoginButton": "Đăng nhập"
+  "authLoginButton": "Đăng nhập",
+  "authForgotPasswordTitle": "Quên mật khẩu",
+  "authForgotPasswordSubtitle": "Vui lòng nhập email để đặt lại mật khẩu",
+  "authForgotPasswordEmailLabel": "Email của bạn",
+  "authForgotPasswordEmailHint": "contact@example.com",
+  "authForgotPasswordSubmitButton": "Đặt lại mật khẩu",
+  "authForgotPasswordSuccess": "Email đặt lại mật khẩu đã được gửi! Kiểm tra hộp thư của bạn.",
+  "authBackToLogin": "Quay lại đăng nhập",
+  "authEmailNotFound": "Không tìm thấy tài khoản với email này",
+  "authInvalidEmailFormat": "Vui lòng nhập địa chỉ email hợp lệ"
 }

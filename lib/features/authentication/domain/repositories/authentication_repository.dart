@@ -19,4 +19,6 @@ abstract class AuthenticationRepository {
     required String phoneNumber,
     required DateTime dateOfBirth,
   });
+
+  Future<Either<Failure, void>> sendPasswordResetEmail({required String email});
 }

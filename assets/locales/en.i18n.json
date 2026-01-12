@@ -261,5 +261,14 @@
   "authCreateAPassword": "Create a password",
   "authPleaseSelectDob": "Please select your date of birth",
   "authAlreadyHaveAccount": "Already have an account?",
-  "authLoginButton": "Login"
+  "authLoginButton": "Login",
+  "authForgotPasswordTitle": "Forgot password",
+  "authForgotPasswordSubtitle": "Please enter your email to reset the password",
+  "authForgotPasswordEmailLabel": "Your Email",
+  "authForgotPasswordEmailHint": "contact@example.com",
+  "authForgotPasswordSubmitButton": "Reset Password",
+  "authForgotPasswordSuccess": "Password reset email sent! Check your inbox.",
+  "authBackToLogin": "Back to Login",
+  "authEmailNotFound": "No account found with this email address",
+  "authInvalidEmailFormat": "Please enter a valid email address"
 }

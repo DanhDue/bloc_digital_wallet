@@ -40,6 +40,10 @@ REQUIREMENTS:
 - IF Subfeature: Target module: [module_name]
 - Functionality: [Describe what it does]
 - UI requirements: [Describe screens/components]
+- **Figma Design**: [If available, provide Figma link]
+  - **IMPORTANT**: Use `figma-dev-mode-mcp-server` to fetch design specs BEFORE implementing UI
+  - Extract node ID from URL: `https://figma.com/design/:fileKey/:fileName?node-id=1-2` → nodeId: `1:2`
+  - Never guess colors, spacing, or typography - always reference Figma
 - API endpoints: [If applicable]
 
 FILES TO REVIEW:
@@ -100,6 +104,9 @@ REQUIREMENTS:
   - Submit button with loading state
   - Success/error message display
   - Navigation from login page
+- **Figma Design**: https://figma.com/design/example/wallet?node-id=2-117
+  - **Node ID**: `2:117` (Forgot Password screen)
+  - Use `mcp_figma-dev-mode-mcp-server_get_design_context` to fetch specs
 - API endpoints: 
   - POST /auth/forgot-password
     Request: { "email": "user@example.com" }

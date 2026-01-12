@@ -20,6 +20,12 @@ GOAL: [What UI changes to make in 1-2 sentences]
 
 REQUIREMENTS:
 - Changes: [Describe UI changes]
+- **Figma Design**: [Provide Figma link if available]
+  - **🎯 UI Development Strategy**:
+    - **Source of Truth**: Figma design is the absolute authority for UI/UX
+    - **Priority**: Use `figma-dev-mode-mcp-server` to fetch design specs BEFORE generating frontend code
+    - **No Guessing**: Never guess colors, spacing, or font sizes - always reference Figma
+    - Extract node ID from URL and use MCP tools to get exact specifications
 - Design reference: [If available, attach design files]
 - Responsive: [Mobile/Tablet requirements]
 - Accessibility: [Any a11y requirements]
@@ -28,8 +34,10 @@ AFFECTED FILES:
 @[mention UI files to update]
 
 ⚠️ MANDATORY RULES:
+[ ] **Fetch Figma design FIRST** using `mcp_figma-dev-mode-mcp-server_get_design_context`
 [ ] Use context.appThemes for ALL styling (never Theme.of(context))
 [ ] Use context.t for ALL text (never hardcoded strings)
+[ ] Match Figma specs exactly (colors, spacing, typography)
 [ ] Follow Material Design 3 guidelines
 [ ] Maintain existing functionality
 [ ] Ensure responsive design
@@ -76,6 +84,9 @@ REQUIREMENTS:
   - Improve spacing and padding
   - Add subtle animations on field focus
   - Update color scheme to match app theme
+- **Figma Design**: https://figma.com/design/example/wallet?node-id=1-5
+  - **Node ID**: `1:5` (Login Screen)
+  - **MCP Integration**: Fetch design context before implementation
 - Design reference: Material Design 3 Login pattern
 - Responsive: Works on phones (320px - 428px width)
 - Accessibility: 
@@ -90,16 +101,23 @@ AFFECTED FILES:
 @assets/locales/vi.i18n.json
 
 ⚠️ MANDATORY RULES:
+[ ] **Fetch Figma design FIRST**: Use `mcp_figma-dev-mode-mcp-server_get_design_context` with nodeId `1:5`
 [ ] Use context.appThemes.primaryColor (not Theme.of(context).colorScheme.primary)
 [ ] Use context.appThemes.bodyMedium (not Theme.of(context).textTheme.bodyMedium)
 [ ] Use context.t.authWelcomeBack (not "Welcome Back" hardcoded)
+[ ] Match Figma spacing, colors, and typography exactly
 [ ] Follow Material Design 3 guidelines
 [ ] Keep all existing functionality (login logic unchanged)
 [ ] Test both light and dark themes
 [ ] Add all new text to translations
 
 🛠 MISSION:
-1. REVIEW:
+1. **FETCH DESIGN SPECS**:
+   [x] Use `mcp_figma-dev-mode-mcp-server_get_design_context` with nodeId: `1:5`
+   [x] Review colors, spacing, typography from Figma
+   [x] Note any component specifications
+
+2. REVIEW:
    [x] Check current login_page.dart implementation
    [x] Identify hardcoded colors/strings
    [x] Review existing authentication logic

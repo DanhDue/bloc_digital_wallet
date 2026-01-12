@@ -30,3 +30,9 @@ class RegisterWithEmailAction extends AuthenticationAction {
     required this.dateOfBirth,
   });
 }
+
+class ForgotPasswordAction extends AuthenticationAction {
+  final String email;
+
+  const ForgotPasswordAction(this.email);
+}

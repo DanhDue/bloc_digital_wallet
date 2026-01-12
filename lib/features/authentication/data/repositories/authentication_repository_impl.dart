@@ -56,4 +56,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(UnknownFailure(message: 'Registration failed', exception: e));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> sendPasswordResetEmail({required String email}) async {
+    try {
+      await remote.sendPasswordResetEmail(email: email);
+      return const Right(null);
+    } on AuthEmailNotFoundException {
+      return const Left(
+        AuthenticationFailure(message: 'No account found with this email address'),
+      );
+    } catch (e) {
+      return Left(UnknownFailure(message: 'Failed to send reset email', exception: e));
+    }
+  }
 }
