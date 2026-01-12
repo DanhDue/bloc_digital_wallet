@@ -141,6 +141,59 @@ melos:
       run: ./scripts/check_license_header.sh
       description: check the license header in all necessary files.
 
+    # Testing
+    test:
+      run: fvm flutter test
+      description: Run Flutter tests.
+
+    test_coverage:
+      run: ./scripts/testWithCoverage.sh
+      description: Run tests with coverage report.
+
+    # Build commands
+    build_apk:
+      run: ./scripts/buildApk.sh
+      description: Build Android APK.
+
+    build_bundle:
+      run: ./scripts/buildBundle.sh
+      description: Build Android App Bundle.
+
+    build_ios:
+      run: ./scripts/buildIPA.sh
+      description: Build iOS IPA.
+
+    # Analysis
+    analyze:
+      run: fvm flutter analyze
+      description: Analyze Dart code for issues.
+
+    # Git tools
+    install_git_hooks:
+      run: ./scripts/install_git_tools.sh
+      description: Install Git hooks for the project.
+
+    # Mason code generation
+    mason_get:
+      run: mason get
+      description: Install Mason bricks.
+
+    mason_make_feature:
+      run: mason make mvi_feature
+      description: Generate a new feature with Clean Architecture + MVI structure.
+
+    mason_make_subfeature:
+      run: mason make mvi_subfeature -o lib/features
+      description: Generate a subfeature within an existing module.
+
+    mason_list:
+      run: mason list
+      description: List all available Mason bricks.
+
+    mason_upgrade:
+      run: mason upgrade
+      description: Upgrade Mason bricks to latest versions.
+
 theme_tailor:
   input_folder: lib/config/theme
   output_folder: lib/config/theme
