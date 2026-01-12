@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 import '../../../../core/architecture/architecture.dart';
-{{#needs_entity}}import '../../domain/entities/{{{subfeature_name.snakeCase()}}}_entity.dart';{{/needs_entity}}
+{{#needs_entity}}import '../../domain/entities/{{{entity_name.snakeCase()}}}_entity.dart';{{/needs_entity}}
 
-sealed class {{subfeature_name.pascalCase()}}State extends MviState with EquatableMixin {
+sealed class {{subfeature_name.pascalCase()}}State extends BaseState with EquatableMixin {
   const {{subfeature_name.pascalCase()}}State();
 
   @override

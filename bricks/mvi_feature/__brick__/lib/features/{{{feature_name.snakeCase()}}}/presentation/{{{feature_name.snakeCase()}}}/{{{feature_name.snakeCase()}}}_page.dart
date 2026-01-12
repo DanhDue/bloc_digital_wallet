@@ -2,11 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 import '{{{feature_name.snakeCase()}}}_bloc.dart';
 import '{{{feature_name.snakeCase()}}}_action.dart';
 import '{{{feature_name.snakeCase()}}}_state.dart';
 import '{{{feature_name.snakeCase()}}}_event.dart';
 
+@RoutePage()
 class {{feature_name.pascalCase()}}Page extends StatefulWidget {
   const {{feature_name.pascalCase()}}Page({super.key});
 
@@ -127,7 +129,6 @@ class _{{feature_name.pascalCase()}}PageState extends State<{{feature_name.pasca
                     Text(
                       'Error: $message',
                       style: const TextStyle(color: Colors.red),
-                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(

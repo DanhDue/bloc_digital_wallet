@@ -55,10 +55,18 @@ app.*.map.json
 *.g.dart
 *.freezed.dart
 *.tailor.dart
-/secureFiles
+*.gr.dart
+*.config.dart
+secureFiles/
 */fastlane/report.xml
 /lib/generated/
 
 # ignore public folder contained Figma's exported images.
 public/
 .continue/
+
+# Mason
+.mason/
+bricks/**/hooks/build/
+bricks/**/hooks/.dart_tool/
+bricks/**/hooks/packages/

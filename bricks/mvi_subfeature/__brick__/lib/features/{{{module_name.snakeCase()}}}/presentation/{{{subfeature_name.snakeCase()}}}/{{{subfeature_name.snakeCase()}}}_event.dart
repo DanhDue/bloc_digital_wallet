@@ -2,7 +2,7 @@
 
 import '../../../../core/architecture/architecture.dart';
 
-sealed class {{subfeature_name.pascalCase()}}Event extends MviEvent {
+sealed class {{subfeature_name.pascalCase()}}Event extends BaseEvent {
   const {{subfeature_name.pascalCase()}}Event();
 }
 

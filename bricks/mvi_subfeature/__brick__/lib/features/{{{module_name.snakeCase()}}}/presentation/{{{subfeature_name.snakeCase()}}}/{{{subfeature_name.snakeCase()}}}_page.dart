@@ -47,8 +47,6 @@ class _{{subfeature_name.pascalCase()}}PageState extends State<{{subfeature_name
               backgroundColor: Colors.red,
             ),
           );
-        default:
-          break;
       }
     });
 
@@ -78,7 +76,6 @@ class _{{subfeature_name.pascalCase()}}PageState extends State<{{subfeature_name
               {{subfeature_name.pascalCase()}}Loading() => const Center(child: CircularProgressIndicator()),
               {{subfeature_name.pascalCase()}}Error(:final message) => Center(child: Text('Error: $message')),
               {{subfeature_name.pascalCase()}}Success(:final data) => Center(child: Text('Success: $data')),
-              _ => const Center(child: CircularProgressIndicator()),
             };
           },
         ),
