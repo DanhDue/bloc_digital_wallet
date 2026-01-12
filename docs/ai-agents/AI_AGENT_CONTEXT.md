@@ -15,7 +15,10 @@
 - **Code Organization**: Feature-first structure
 - **State Management**: flutter_bloc with MVI adaptation
 - **Dependency Injection**: GetIt + Injectable (auto-registration)
-- **Code Generation**: Mason (features), build_runner (models, DI)
+- **Code Generation**: Mason (features & subfeatures), build_runner (models, DI)
+- **Mason Templates**: 
+  - `mvi_feature` - Create new module
+  - `mvi_subfeature` - Add to existing module
 
 ### Root Directory
 ```
@@ -269,6 +272,134 @@ AuthTextField(
 ```
 
 **See**: [docs/development/SLANG_LOCALIZATION_GUIDE.md](../../development/SLANG_LOCALIZATION_GUIDE.md)
+
+---
+
+## 🚨 CRITICAL RULE: Feature Creation Planning
+
+### MANDATORY: When User Requests a Feature Without Clear Module Context
+
+**IF** user says "create a feature" or "add a feature" **WITHOUT** specifying:
+- Whether it's a new module or subfeature
+- Which existing module it belongs to
+
+**THEN** you MUST follow this proactive workflow:
+
+1. **ANALYZE** - Proactively examine the codebase:
+   - Check `lib/features/` for existing modules
+   - Determine if feature belongs to existing module
+   - Or if it's a completely new domain concept
+   - Identify the best approach based on architecture
+
+2. **PRESENT PLAN** - Show comprehensive options:
+   - **Option 1**: Create as new module
+     - When appropriate
+     - What will be created
+     - Template: `mvi_feature`
+   - **Option 2**: Add as subfeature
+     - When appropriate
+     - What will be created/modified
+     - Template: `mvi_subfeature`
+   - Include your **recommendation** with reasoning
+   - Explain benefits of recommended approach
+
+3. **ASK TO COLLECT MODULE INFORMATION AND CONFIRMATION**
+   - Request necessary details (module name, subfeature name, etc.)
+   - Confirm the chosen approach
+   - Clarify any ambiguities
+   - Wait for user response
+
+4. **THEN PROCEED** - Execute the confirmed workflow:
+   - Use appropriate template
+   - Follow complete implementation steps
+   - Generate, implement, and verify
+
+### Decision Matrix
+
+| User Request | Existing Module? | Template | Action |
+|-------------|------------------|----------|---------|
+| "Create authentication" | ❌ No | `mvi_feature` | ✅ Proceed |
+| "Add forgot password" | ✅ authentication | `mvi_subfeature` | ✅ Proceed |
+| "Add feature X" | ❓ Unknown | **STOP** | ⚠️ **ASK USER FIRST** |
+| "Create wallet system" | ❌ No | `mvi_feature` | ✅ Proceed |
+| "Add transfer money" | ✅ wallet | `mvi_subfeature` | ✅ Proceed |
+
+### When to Use `mvi_feature`
+
+✅ **Use for new modules**:
+- Creating authentication system
+- Creating wallet/payment system
+- Creating profile management
+- Creating notifications system
+- Creating settings system
+
+### When to Use `mvi_subfeature`
+
+✅ **Use for adding to existing modules**:
+- Add "Forgot Password" to authentication
+- Add "Email Verification" to authentication
+- Add "Transfer Money" to wallet
+- Add "Transaction History" to wallet
+- Add "Edit Profile" to profile
+- Add "Change Avatar" to profile
+
+### Example: Proactive Analysis and Planning
+
+```
+User: "Create a forgot password feature"
+
+❌ WRONG: mason make mvi_feature --feature_name forgot_password
+❌ WRONG: Stop immediately and ask without analyzing
+
+✅ CORRECT - Proactive Workflow:
+
+"I'll analyze the codebase to determine the best implementation approach:
+
+ANALYSIS:
+• Checked lib/features/ directory
+• Found existing authentication module at lib/features/authentication/
+• Current authentication structure:
+  - Repository: AuthenticationRepository (login, register methods)
+  - Bloc: AuthenticationBloc (handles login, register actions)
+  - Entity: AuthUserEntity
+  - Pages: login_page.dart, register_page.dart
+• Forgot password functionality belongs to authentication domain
+• Module has established patterns we can reuse
+
+RECOMMENDATION: Add as subfeature to authentication module (Option 1)
+
+OPTION 1 (Recommended): Add Subfeature
+• Template: mvi_subfeature
+• Module: authentication
+• Subfeature: forgot_password
+• Creates:
+  - domain/usecases/forgot_password_usecase.dart
+  - presentation/pages/forgot_password_page.dart
+  - presentation/widgets/forgot_password_widget.dart
+• Modifies:
+  - presentation/mvi/authentication_action.dart (add action)
+  - presentation/mvi/authentication_bloc.dart (add handler)
+  - domain/repositories/authentication_repository.dart (add method)
+  - data/repositories/authentication_repository_impl.dart (implement)
+• Benefits:
+  ✓ Reuses existing AuthenticationRepository
+  ✓ Reuses existing AuthenticationBloc
+  ✓ Maintains cohesive authentication module
+  ✓ Consistent with existing patterns
+
+OPTION 2 (Not Recommended): Create New Module
+• Template: mvi_feature
+• Creates: Complete separate forgot_password module
+• Drawback: Duplicates authentication infrastructure
+
+Should I proceed with Option 1 (adding forgot_password as a subfeature to authentication)?"
+
+[User confirms]
+
+"Perfect! I'll proceed with adding forgot_password as a subfeature to the authentication module."
+
+[Then executes mvi_subfeature workflow]
+```
 
 ---
 

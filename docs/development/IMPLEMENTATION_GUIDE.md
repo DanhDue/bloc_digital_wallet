@@ -9,15 +9,18 @@ This guide will walk you through creating a complete feature from scratch, follo
 ## 📋 Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Step 1: Generate Feature Structure](#step-1-generate-feature-structure)
-3. [Step 2: Define Domain Layer](#step-2-define-domain-layer)
-4. [Step 3: Implement Data Layer](#step-3-implement-data-layer)
-5. [Step 4: Implement Presentation Layer (MVI)](#step-4-implement-presentation-layer-mvi)
-6. [Step 5: Dependency Injection](#step-5-dependency-injection)
-7. [Step 6: Navigation & Integration](#step-6-navigation--integration)
-8. [Step 7: Testing](#step-7-testing)
-9. [Common Pitfalls](#common-pitfalls)
-10. [Checklist](#checklist)
+2. [Deciding: New Module vs Subfeature](#deciding-new-module-vs-subfeature)
+3. [Option A: Create New Module](#option-a-create-new-module)
+4. [Option B: Add Subfeature to Existing Module](#option-b-add-subfeature-to-existing-module)
+5. [Step 1: Generate Feature Structure](#step-1-generate-feature-structure)
+6. [Step 2: Define Domain Layer](#step-2-define-domain-layer)
+7. [Step 3: Implement Data Layer](#step-3-implement-data-layer)
+8. [Step 4: Implement Presentation Layer (MVI)](#step-4-implement-presentation-layer-mvi)
+9. [Step 5: Dependency Injection](#step-5-dependency-injection)
+10. [Step 6: Navigation & Integration](#step-6-navigation--integration)
+11. [Step 7: Testing](#step-7-testing)
+12. [Common Pitfalls](#common-pitfalls)
+13. [Checklist](#checklist)
 
 ---
 
@@ -124,6 +127,284 @@ Container(color: context.appThemes.yourColorName)
 - Body: `bodyLarge`, `bodyMedium`, `bodySmall`
 - Label: `labelLarge`, `labelMedium`, `labelSmall`
 - Emphasized variants: Add `Emphasized` suffix (e.g., `bodyMediumEmphasized`)
+
+---
+
+## Deciding: New Module vs Subfeature
+
+Before creating a feature, analyze the codebase and determine whether you need a new module or a subfeature:
+
+### Decision Workflow
+
+When you need to add functionality:
+
+1. **ANALYZE** - Check existing modules:
+   - Look at `lib/features/` directory
+   - Identify if related module exists
+   - Determine if feature shares domain concepts
+   - Consider architecture implications
+
+2. **DETERMINE** - Choose appropriate approach:
+   - New domain concept → `mvi_feature`
+   - Extends existing module → `mvi_subfeature`
+
+3. **PLAN** - Consider:
+   - Code reuse opportunities
+   - Module cohesion
+   - Maintenance implications
+   - Future extensibility
+
+### Use `mvi_feature` (New Module) When:
+
+- ✅ Creating a completely new domain concept
+- ✅ Feature has entirely different data and business logic
+- ✅ Feature needs its own repository and data sources
+- ✅ No existing module handles this domain
+- ✅ Feature is independent from other modules
+
+**Examples**: Authentication (first time), Wallet (first time), Profile (first time), Settings, Notifications
+
+### Use `mvi_subfeature` (Add to Existing Module) When:
+
+- ✅ Related module already exists
+- ✅ Adding a feature that shares same domain/data
+- ✅ Want to reuse existing repository and bloc
+- ✅ Feature is a variation of module's core functionality
+- ✅ Maintains module cohesion
+
+**Examples**:
+- Add "Forgot Password" to authentication module (auth-related)
+- Add "Transfer Money" to wallet module (wallet-related)
+- Add "Edit Profile" to profile module (profile-related)
+- Add "Transaction History" to wallet module (wallet-related)
+
+### Decision Tree
+
+```
+Need to add functionality?
+│
+├─ Step 1: ANALYZE
+│  └─ Check lib/features/ for existing modules
+│
+├─ Step 2: Does a related module exist?
+│  │
+│  ├─ YES → Does feature belong to this domain?
+│  │         │
+│  │         ├─ YES → Use mvi_subfeature ✅
+│  │         │         Benefits:
+│  │         │         • Reuses repository, bloc, entities
+│  │         │         • Maintains module cohesion
+│  │         │         • Easier maintenance
+│  │         │         Example: add forgot_password to authentication
+│  │         │
+│  │         └─ NO → Use mvi_feature ✅
+│  │                 (Different domain concept)
+│  │                 Example: add notifications (separate from auth/wallet)
+│  │
+│  └─ NO → Use mvi_feature ✅
+│            (New domain needs new module)
+│            Example: create authentication module
+```
+
+### Quick Reference
+
+| Scenario | Module Exists? | Template | Example |
+|----------|----------------|----------|---------|
+| Create auth system | ❌ No | `mvi_feature` | New authentication module |
+| Add forgot password | ✅ auth exists | `mvi_subfeature` | Add to authentication |
+| Create wallet | ❌ No | `mvi_feature` | New wallet module |
+| Add transfer money | ✅ wallet exists | `mvi_subfeature` | Add to wallet |
+| Create profile | ❌ No | `mvi_feature` | New profile module |
+| Add edit profile | ✅ profile exists | `mvi_subfeature` | Add to profile |
+
+---
+
+## Option A: Create New Module
+
+Follow these steps when creating a new module with `mvi_feature`:
+
+[Continue with existing steps below...]
+
+---
+
+## Option B: Add Subfeature to Existing Module
+
+Follow these steps when adding a subfeature with `mvi_subfeature`:
+
+### B.1: Generate Subfeature Structure
+
+```bash
+mason make mvi_subfeature
+```
+
+**Prompts**:
+```
+? What is the module name? authentication
+? What is the subfeature name? forgot_password
+? Entity name (press Enter to use module's main entity)? [Press Enter]
+? Create a new data model? (y/N) N
+? Create a new entity? (y/N) N
+```
+
+**What Gets Created**:
+```
+lib/features/authentication/
+  domain/usecases/
+    forgot_password_usecase.dart        ✨ NEW
+  presentation/pages/
+    forgot_password_page.dart           ✨ NEW
+  presentation/widgets/
+    forgot_password_widget.dart         ✨ NEW
+```
+
+### B.2: Implement Use Case
+
+Open `lib/features/{module}/domain/usecases/{subfeature}_usecase.dart` and implement logic:
+
+```dart
+@injectable
+class ForgotPasswordUseCase {
+  final AuthenticationRepository _repository;
+
+  ForgotPasswordUseCase(this._repository);
+
+  Future<Either<Failure, void>> call(String email) async {
+    // Add validation
+    if (email.isEmpty) {
+      return Left(ValidationFailure('Email is required'));
+    }
+    
+    // Call repository
+    return await _repository.sendPasswordResetEmail(email);
+  }
+}
+```
+
+### B.3: Add Action to Bloc
+
+Open `lib/features/{module}/presentation/mvi/{module}_action.dart`:
+
+```dart
+// Add new action
+class ForgotPasswordAction extends AuthenticationAction {
+  final String email;
+  const ForgotPasswordAction(this.email);
+}
+```
+
+### B.4: Handle Action in Bloc
+
+Open `lib/features/{module}/presentation/mvi/{module}_bloc.dart`:
+
+```dart
+@injectable
+class AuthenticationBloc extends MviBloc<AuthenticationAction, AuthenticationState, AuthenticationEvent> {
+  final ForgotPasswordUseCase _forgotPasswordUseCase; // Add
+
+  AuthenticationBloc(
+    // ... existing
+    this._forgotPasswordUseCase, // Add
+  ) : super(const AuthenticationInitial());
+
+  @override
+  Future<void> onAction(AuthenticationAction action) async {
+    switch (action) {
+      // Existing cases...
+      
+      // Add new case
+      case ForgotPasswordAction(:final email):
+        emit(const AuthenticationLoading());
+        final result = await _forgotPasswordUseCase(email);
+        result.fold(
+          (failure) => emitEvent(ShowErrorMessage(failure.message)),
+          (_) => emitEvent(const ShowSuccessMessage('Email sent!')),
+        );
+    }
+  }
+}
+```
+
+### B.5: Update Repository
+
+**Interface** (`lib/features/{module}/domain/repositories/{module}_repository.dart`):
+
+```dart
+abstract class AuthenticationRepository {
+  // Add method signature
+  Future<Either<Failure, void>> sendPasswordResetEmail(String email);
+}
+```
+
+**Implementation** (`lib/features/{module}/data/repositories/{module}_repository_impl.dart`):
+
+```dart
+@override
+Future<Either<Failure, void>> sendPasswordResetEmail(String email) async {
+  try {
+    await _remoteDataSource.sendPasswordResetEmail(email);
+    return const Right(null);
+  } on ServerException catch (e) {
+    return Left(ServerFailure(e.message));
+  }
+}
+```
+
+### B.6: Update Data Source
+
+Open `lib/features/{module}/data/datasources/{module}_remote_datasource.dart`:
+
+```dart
+abstract class AuthRemoteDataSource {
+  Future<void> sendPasswordResetEmail(String email);
+}
+
+@Injectable(as: AuthRemoteDataSource)
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    final response = await _dio.post('/auth/forgot-password', data: {'email': email});
+    if (response.statusCode != 200) {
+      throw ServerException('Failed to send email');
+    }
+  }
+}
+```
+
+### B.7: Add Translations
+
+Add to `assets/locales/en.i18n.json` and `assets/locales/vi.i18n.json`:
+
+```json
+{
+  "authForgotPasswordTitle": "Forgot Password",
+  "authForgotPasswordButton": "Send Reset Link"
+}
+```
+
+### B.8: Implement Page UI
+
+Edit `lib/features/{module}/presentation/pages/{subfeature}_page.dart` to implement your UI using:
+- ✅ `context.t` for translations
+- ✅ `context.appThemes` for styling
+- ✅ BlocBuilder/BlocProvider for state management
+
+### B.9: Add Route
+
+Add route in `lib/app_router.dart`:
+
+```dart
+AutoRoute(page: ForgotPasswordRoute.page, path: '/forgot-password'),
+```
+
+### B.10: Run Code Generation
+
+```bash
+melos genAlls
+dart format lib/
+flutter analyze --no-fatal-infos  # Must be 0 issues
+```
+
+**For detailed subfeature guide, see**: `docs/mason/MVI_SUBFEATURE_GUIDE.md`
 
 ---
 

@@ -1,8 +1,94 @@
 # Cursor Rules for bloc_digital_wallet
 
-**Architecture**: Clean Architecture + MVI Pattern  
-**Framework**: Flutter/Dart  
+**Architecture**: Clean Architecture + MVI Pattern 
+**Framework**: Flutter/Dart 
 **Organization**: Feature-first structure
+
+---
+
+## ⚠️ CRITICAL: Plan Before Creating Features
+
+### MANDATORY RULE: When User Requests Feature Without Module Context
+
+**IF** user says "create a feature" or "add a feature" **WITHOUT** clearly specifying:
+- Whether it's a new module (e.g., "create authentication module")
+- OR a subfeature of existing module (e.g., "add forgot password to authentication")
+
+**THEN** you MUST follow this workflow:
+
+1. **ANALYZE** - Check if related module exists in `lib/features/`
+   - List existing modules
+   - Determine if this feature belongs to existing module
+   - Or if it's a new domain concept
+
+2. **PRESENT PLAN** - Show clear options with recommendations:
+   - **Option 1**: Create as new module (if no related module exists)
+     - Use `mvi_feature`
+     - What will be created: complete module structure
+   - **Option 2**: Add as subfeature (if related module exists)
+     - Use `mvi_subfeature`
+     - What will be created: use case, page, widget
+     - What will be modified: bloc, repository, etc.
+   - Include your **recommendation** based on analysis
+
+3. **ASK FOR MODULE INFORMATION AND CONFIRMATION**
+   - If subfeature: "Which module should this belong to?"
+   - If new module: "Confirm creating as new module?"
+   - Wait for user response
+
+4. **THEN PROCEED** - After receiving confirmation, execute the appropriate workflow
+
+### Example Workflow
+
+```
+User: "Create a forgot password feature"
+
+AI Response:
+"I'll analyze the codebase and present implementation options:
+
+ANALYSIS:
+- Found existing module: lib/features/authentication/
+- Forgot password is related to authentication domain
+- Current auth module has: login, register use cases
+
+RECOMMENDATION: Add as subfeature to authentication module
+
+OPTION 1 (Recommended): Add Subfeature
+- Template: mvi_subfeature
+- Module: authentication
+- Creates: forgot_password_usecase.dart, forgot_password_page.dart, widget
+- Modifies: authentication_action.dart, authentication_bloc.dart, repository
+- Benefit: Reuses existing AuthenticationRepository, AuthenticationBloc
+
+OPTION 2: Create New Module
+- Template: mvi_feature
+- Creates: Complete new forgot_password module
+- Note: Would duplicate authentication infrastructure (not recommended)
+
+Which option should I proceed with? (Option 1 recommended)"
+
+[WAITS FOR CONFIRMATION]
+```
+
+### Decision Matrix
+
+| User Request | Module Exists? | Recommended | Action |
+|-------------|----------------|-------------|---------|
+| "Create authentication" | ❌ No | `mvi_feature` | Analyze → Present → Confirm → Proceed |
+| "Add forgot password" | ✅ authentication | `mvi_subfeature` | Analyze → Present → Confirm → Proceed |
+| "Add feature X" | ❓ Unknown | **Analyze first** | Analyze → Present → Ask → Proceed |
+
+### Quick Reference
+
+**New Module** (`mvi_feature`):
+- ✅ Completely new domain concept
+- ✅ No existing related module
+- ✅ Examples: authentication (first time), wallet (first time), profile (first time)
+
+**Subfeature** (`mvi_subfeature`):
+- ✅ Related module already exists
+- ✅ Extends existing functionality
+- ✅ Examples: forgot_password (to authentication), transfer_money (to wallet)
 
 ---
 
@@ -151,15 +237,17 @@ mason make mvi_feature --feature_name wallet
 
 ### Using Mason (Recommended)
 
+#### Create New Module (mvi_feature)
 ```bash
-# 1. Generate feature scaffold
-mason make mvi_feature --feature_name my_feature
+# 1. Generate complete module scaffold
+mason make mvi_feature
+# → What is the feature name? my_feature
 
 # 2. Verify generated files
 lib/features/my_feature/
-  domain/...
-  data/...
-  presentation/...
+ domain/...
+ data/...
+ presentation/...
 
 # 3. Run code generation
 melos genAlls
@@ -168,6 +256,38 @@ melos genAlls
 # Check lib/di/injection.config.dart
 
 # 5. Add route (if page)
+lib/app_router.dart → @AutoRouterConfig
+```
+
+#### Add Subfeature to Existing Module (mvi_subfeature)
+```bash
+# 1. Generate subfeature (e.g., forgot_password in authentication)
+mason make mvi_subfeature
+# → Module name? authentication
+# → Subfeature name? forgot_password
+# → Entity name? [Press Enter to reuse module's entity]
+# → Create new data model? N
+# → Create new entity? N
+
+# 2. Verify generated files
+lib/features/authentication/
+ domain/usecases/forgot_password_usecase.dart
+ presentation/pages/forgot_password_page.dart
+ presentation/widgets/forgot_password_widget.dart
+
+# 3. Add action to module bloc
+# Edit: lib/features/authentication/presentation/mvi/authentication_action.dart
+
+# 4. Handle action in bloc
+# Edit: lib/features/authentication/presentation/mvi/authentication_bloc.dart
+
+# 5. Update repository (if needed)
+# Edit: domain/repositories/ and data/repositories/
+
+# 6. Run code generation
+melos genAlls
+
+# 7. Add route (if needed)
 lib/app_router.dart → @AutoRouterConfig
 ```
 
@@ -446,7 +566,8 @@ Routing:
   - lib/app_router.gr.dart (generated)
 
 Mason Bricks:
-  - bricks/mvi_feature/
+ - bricks/mvi_feature/ (create new module)
+ - bricks/mvi_subfeature/ (add to existing module)
 ```
 
 ---
@@ -459,11 +580,13 @@ Quick References:
   - docs/getting-started/QUICK_REFERENCE.md
 
 Detailed Guides:
-  - docs/architecture/ARCHITECTURE_OVERVIEW.md
-  - docs/development/IMPLEMENTATION_GUIDE.md
-  - docs/development/THEME_TAILOR_GUIDE.md
-  - docs/development/SLANG_LOCALIZATION_GUIDE.md
-  - docs/mason/MASON_GUIDE.md
+ - docs/architecture/ARCHITECTURE_OVERVIEW.md
+ - docs/development/IMPLEMENTATION_GUIDE.md
+ - docs/development/THEME_TAILOR_GUIDE.md
+ - docs/development/SLANG_LOCALIZATION_GUIDE.md
+ - docs/mason/MASON_TEMPLATES_OVERVIEW.md (quick reference)
+ - docs/mason/MVI_SUBFEATURE_GUIDE.md (comprehensive guide)
+ - docs/mason/MASON_GUIDE.md
 
 For AI Agents:
   - docs/ai-agents/AI_AGENT_CONTEXT.md (comprehensive)

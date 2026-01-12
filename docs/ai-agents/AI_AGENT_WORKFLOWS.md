@@ -8,16 +8,150 @@ This document provides step-by-step workflows for common tasks AI Agents will pe
 
 ## 📋 Table of Contents
 
-1. [Workflow: Create Complete New Feature](#workflow-create-complete-new-feature)
-2. [Workflow: Add New API Endpoint Integration](#workflow-add-new-api-endpoint-integration)
-3. [Workflow: Fix Bug in Existing Feature](#workflow-fix-bug-in-existing-feature)
-4. [Workflow: Add New Use Case to Existing Feature](#workflow-add-new-use-case-to-existing-feature)
-5. [Workflow: Update Entity/Model](#workflow-update-entitymodel)
-6. [Workflow: Handle Dependency Conflicts](#workflow-handle-dependency-conflicts)
-7. [Workflow: Debug State Management Issues](#workflow-debug-state-management-issues)
-8. [Workflow: Add Unit Tests](#workflow-add-unit-tests)
-9. [Workflow: Refactor Existing Code](#workflow-refactor-existing-code)
-10. [Workflow: Performance Optimization](#workflow-performance-optimization)
+1. [⚠️ CRITICAL RULE: Plan Before Creating Features](#️-critical-rule-plan-before-creating-features)
+2. [Workflow: Create Complete New Feature (New Module)](#workflow-create-complete-new-feature-new-module)
+3. [Workflow: Add Subfeature to Existing Module](#workflow-add-subfeature-to-existing-module)
+4. [Workflow: Add New API Endpoint Integration](#workflow-add-new-api-endpoint-integration)
+5. [Workflow: Fix Bug in Existing Feature](#workflow-fix-bug-in-existing-feature)
+6. [Workflow: Add New Use Case to Existing Feature](#workflow-add-new-use-case-to-existing-feature)
+7. [Workflow: Update Entity/Model](#workflow-update-entitymodel)
+8. [Workflow: Handle Dependency Conflicts](#workflow-handle-dependency-conflicts)
+9. [Workflow: Debug State Management Issues](#workflow-debug-state-management-issues)
+10. [Workflow: Add Unit Tests](#workflow-add-unit-tests)
+11. [Workflow: Refactor Existing Code](#workflow-refactor-existing-code)
+12. [Workflow: Performance Optimization](#workflow-performance-optimization)
+
+---
+
+## ⚠️ CRITICAL RULE: Plan Before Creating Features
+
+### MANDATORY: When User Asks to "Create a Feature" Without Module Context
+
+**IF** user says "create a feature" or "add a feature" **WITHOUT** specifying whether it's:
+- A new module (e.g., "create authentication module")
+- A subfeature of existing module (e.g., "add forgot password to authentication")
+
+**THEN** you MUST follow this workflow:
+
+1. **ANALYZE** - Check the codebase proactively:
+   - List existing modules in `lib/features/`
+   - Determine if this feature belongs to an existing module
+   - Or if it's a completely new domain concept
+   - Identify which approach makes more sense
+
+2. **PRESENT PLAN** - Show clear options with your analysis:
+   - **Option 1**: Create as new module (when to use, what gets created)
+   - **Option 2**: Add as subfeature to existing module (when to use, what gets created/modified)
+   - Include your **recommendation** based on the analysis
+   - Explain the benefits of recommended approach
+
+3. **ASK TO COLLECT MODULE INFORMATION AND CONFIRMATION**
+   - If subfeature: "Should this be added to [existing_module]?"
+   - If new module: "Confirm creating as new module?"
+   - Request any missing information
+   - Wait for user confirmation
+
+4. **THEN PROCEED** - After receiving confirmation, execute the appropriate workflow:
+   - Use `mvi_feature` for new modules
+   - Use `mvi_subfeature` for adding to existing modules
+
+#### Example Scenarios
+
+**Scenario 1: Ambiguous Request**
+```
+User: "Create a forgot password feature"
+
+❌ WRONG: Immediately run mason make mvi_feature --feature_name forgot_password
+❌ WRONG: Stop immediately without analyzing
+
+✅ CORRECT:
+"I'll analyze the codebase and present implementation options for the forgot password feature:
+
+ANALYSIS:
+- Checked lib/features/ directory
+- Found: authentication module exists with login, register functionality
+- Forgot password is part of authentication domain
+- Authentication already has repository, bloc, and entity structure
+
+RECOMMENDATION: Add as subfeature to existing authentication module
+
+OPTION 1 (Recommended): Add Subfeature to Authentication
+- Template: mason make mvi_subfeature
+- Module: authentication
+- Subfeature: forgot_password
+- Creates:
+  • forgot_password_usecase.dart (business logic)
+  • forgot_password_page.dart (UI)
+  • forgot_password_widget.dart (components)
+- Modifies:
+  • authentication_action.dart (add ForgotPasswordAction)
+  • authentication_bloc.dart (add action handler)
+  • authentication_repository.dart (add method signature)
+  • authentication_repository_impl.dart (implement method)
+- Benefits:
+  ✓ Reuses existing AuthenticationRepository
+  ✓ Reuses existing AuthenticationBloc
+  ✓ Reuses existing AuthUserEntity
+  ✓ Maintains cohesive authentication module
+
+OPTION 2 (Not Recommended): Create New Module
+- Template: mason make mvi_feature
+- Creates: Complete separate forgot_password module
+- Note: Would duplicate authentication infrastructure unnecessarily
+
+Should I proceed with Option 1 (adding forgot_password as a subfeature to authentication)?"
+
+[WAITS FOR CONFIRMATION]
+```
+
+**Scenario 2: Clear Module Context**
+```
+User: "Add forgot password to the authentication module"
+
+✅ PROCEED: This is clearly a subfeature request
+- Module: authentication (existing)
+- Subfeature: forgot_password
+- Use: mason make mvi_subfeature
+```
+
+**Scenario 3: New Domain Concept**
+```
+User: "Create a notifications system"
+
+✅ PROCEED: This is clearly a new module
+- New domain concept
+- Use: mason make mvi_feature --feature_name notifications
+```
+
+### Decision Tree for Feature Creation
+
+```
+User requests feature
+│
+├─ Is module context clear?
+│  │
+│  ├─ YES → Is it adding to existing module?
+│  │         │
+│  │         ├─ YES → Use mvi_subfeature ✅
+│  │         └─ NO → Use mvi_feature ✅
+│  │
+│  └─ NO → ANALYZE and PRESENT:
+│            1. Check if related module exists (lib/features/)
+│            2. Analyze: new domain vs extends existing
+│            3. Present both options with recommendation
+│            4. Ask for module information and confirmation
+│            5. Then proceed with chosen approach ✅
+```
+
+### Quick Reference: When to Use What
+
+| User Request | Module Exists? | Use Template | Workflow |
+|-------------|----------------|--------------|----------|
+| "Add forgot password" | ✅ authentication exists | `mvi_subfeature` | Analyze → Confirm → Proceed |
+| "Create authentication" | ❌ No | `mvi_feature` | Analyze → Confirm → Proceed |
+| "Add transfer money" | ✅ wallet exists | `mvi_subfeature` | Analyze → Confirm → Proceed |
+| "Create wallet system" | ❌ No | `mvi_feature` | Analyze → Confirm → Proceed |
+| "Add feature X" | ❓ Unclear | **Analyze first** | Analyze → Present Plan → Ask → Proceed |
 
 ---
 
@@ -126,9 +260,14 @@ Text('Hello', style: context.appThemes.bodyMedium.copyWith(
 
 ---
 
-## Workflow: Create Complete New Feature
+## Workflow: Create Complete New Feature (New Module)
 
-**Scenario**: User requests a new feature (e.g., "Add transaction history feature")
+**Scenario**: User requests a completely new module with different domain concept (e.g., "Create notifications system")
+
+**Use This When**:
+- ✅ The feature is a completely new domain concept
+- ✅ No existing module handles this domain
+- ✅ Feature needs its own repository and data sources
 
 ### Step 1: Extract Feature Name
 ```
@@ -894,6 +1033,531 @@ Navigator.push(
     builder: (_) => TransactionHistoryPage(walletAddress: 'your_address'),
   ),
 );
+```
+
+---
+
+## Workflow: Add Subfeature to Existing Module
+
+**Scenario**: User requests a feature that belongs to an existing module (e.g., "Add forgot password to authentication")
+
+**Use This When**:
+- ✅ The module already exists (e.g., authentication, wallet, profile)
+- ✅ Adding a related feature that shares same domain/data
+- ✅ Want to reuse existing repository and bloc
+- ✅ Feature is a variation of module's core functionality
+
+**Examples**:
+- Add "Forgot Password" to authentication module
+- Add "Transfer Money" to wallet module
+- Add "Edit Profile" to profile module
+
+### Step 1: Identify Module and Subfeature
+
+```
+User Input: "Add forgot password feature"
+Analysis:
+  - Domain: authentication
+  - Existing Module: lib/features/authentication/ ✅ EXISTS
+  - Subfeature: forgot_password
+  - Template: mvi_subfeature
+```
+
+### Step 2: Generate Subfeature Structure
+
+**Interactive Mode**:
+```bash
+cd /Users/danhdue/AllProjects/sample/bloc_digital_wallet
+mason make mvi_subfeature
+```
+
+**Prompts**:
+```
+? What is the module name? authentication
+? What is the subfeature name? forgot_password
+? Entity name (press Enter to use module's main entity)? [Press Enter]
+? Create a new data model? (y/N) N
+? Create a new entity? (y/N) N
+```
+
+**Expected Output**: Files generated in `lib/features/authentication/`:
+```
+lib/features/authentication/
+  domain/usecases/
+    forgot_password_usecase.dart        ✨ NEW
+  presentation/pages/
+    forgot_password_page.dart           ✨ NEW
+  presentation/widgets/
+    forgot_password_widget.dart         ✨ NEW
+```
+
+### Step 3: Implement Use Case
+
+**File**: `lib/features/authentication/domain/usecases/forgot_password_usecase.dart`
+
+```dart
+import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
+import '../../../../core/errors/failures.dart';
+import '../repositories/authentication_repository.dart';
+
+@injectable
+class ForgotPasswordUseCase {
+  final AuthenticationRepository _repository;
+
+  ForgotPasswordUseCase(this._repository);
+
+  Future<Either<Failure, void>> call(String email) async {
+    // ✅ Add validation
+    if (email.isEmpty) {
+      return Left(ValidationFailure('Email cannot be empty'));
+    }
+    
+    if (!_isValidEmail(email)) {
+      return Left(ValidationFailure('Invalid email format'));
+    }
+    
+    // ✅ Call repository method
+    return await _repository.sendPasswordResetEmail(email);
+  }
+  
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+}
+```
+
+### Step 4: Add Action to Module Bloc
+
+**File**: `lib/features/authentication/presentation/mvi/authentication_action.dart`
+
+```dart
+sealed class AuthenticationAction extends MviAction {
+  const AuthenticationAction();
+}
+
+// Existing actions...
+class LoginAction extends AuthenticationAction { ... }
+class RegisterAction extends AuthenticationAction { ... }
+
+// ✅ Add new action
+class ForgotPasswordAction extends AuthenticationAction {
+  final String email;
+  
+  const ForgotPasswordAction(this.email);
+}
+```
+
+### Step 5: Handle Action in Bloc
+
+**File**: `lib/features/authentication/presentation/mvi/authentication_bloc.dart`
+
+```dart
+@injectable
+class AuthenticationBloc extends MviBloc<AuthenticationAction, AuthenticationState, AuthenticationEvent> {
+  final LoginUseCase _loginUseCase;
+  final RegisterUseCase _registerUseCase;
+  final ForgotPasswordUseCase _forgotPasswordUseCase; // ✅ Add
+
+  AuthenticationBloc(
+    this._loginUseCase,
+    this._registerUseCase,
+    this._forgotPasswordUseCase, // ✅ Add
+  ) : super(const AuthenticationInitial());
+
+  @override
+  Future<void> onAction(AuthenticationAction action) async {
+    switch (action) {
+      case LoginAction(:final email, :final password):
+        // existing implementation...
+        break;
+        
+      case RegisterAction(...):
+        // existing implementation...
+        break;
+      
+      // ✅ Add new case
+      case ForgotPasswordAction(:final email):
+        emit(const AuthenticationLoading());
+        final result = await _forgotPasswordUseCase(email);
+        result.fold(
+          (failure) {
+            emit(AuthenticationError(failure.message));
+            emitEvent(ShowErrorMessage(failure.message));
+          },
+          (_) {
+            emit(const AuthenticationInitial());
+            emitEvent(const ShowSuccessMessage('Password reset email sent! Check your inbox.'));
+          },
+        );
+    }
+  }
+}
+```
+
+### Step 6: Update Repository Interface
+
+**File**: `lib/features/authentication/domain/repositories/authentication_repository.dart`
+
+```dart
+abstract class AuthenticationRepository {
+  Future<Either<Failure, AuthUserEntity>> login(String email, String password);
+  Future<Either<Failure, AuthUserEntity>> register(String email, String password);
+  
+  // ✅ Add new method signature
+  Future<Either<Failure, void>> sendPasswordResetEmail(String email);
+}
+```
+
+### Step 7: Implement Repository Method
+
+**File**: `lib/features/authentication/data/repositories/authentication_repository_impl.dart`
+
+```dart
+@Injectable(as: AuthenticationRepository)
+class AuthenticationRepositoryImpl implements AuthenticationRepository {
+  final AuthRemoteDataSource _remoteDataSource;
+
+  // Existing methods...
+  
+  // ✅ Implement new method
+  @override
+  Future<Either<Failure, void>> sendPasswordResetEmail(String email) async {
+    try {
+      await _remoteDataSource.sendPasswordResetEmail(email);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
+      return Left(UnknownFailure('Failed to send reset email: $e'));
+    }
+  }
+}
+```
+
+### Step 8: Update Data Source
+
+**File**: `lib/features/authentication/data/datasources/auth_remote_datasource.dart`
+
+```dart
+abstract class AuthRemoteDataSource {
+  Future<AuthUserModel> login(String email, String password);
+  Future<AuthUserModel> register(String email, String password);
+  
+  // ✅ Add method signature
+  Future<void> sendPasswordResetEmail(String email);
+}
+
+@Injectable(as: AuthRemoteDataSource)
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  final Dio _dio;
+
+  AuthRemoteDataSourceImpl(this._dio);
+
+  // Existing methods...
+  
+  // ✅ Implement method
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      final response = await _dio.post(
+        '/auth/forgot-password',
+        data: {'email': email},
+      );
+      
+      if (response.statusCode != 200) {
+        throw ServerException(
+          message: response.data['message'] ?? 'Failed to send reset email',
+          code: response.statusCode.toString(),
+        );
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw NetworkException(
+          message: 'Connection timeout. Please check your internet.',
+          code: 'TIMEOUT',
+        );
+      }
+      throw ServerException(
+        message: e.response?.data['message'] ?? 'Network error',
+        code: e.response?.statusCode?.toString() ?? 'UNKNOWN',
+      );
+    }
+  }
+}
+```
+
+### Step 9: Add Translations
+
+**File**: `assets/locales/en.i18n.json`
+
+```json
+{
+  "authForgotPasswordTitle": "Forgot Password",
+  "authForgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password",
+  "authForgotPasswordEmailLabel": "Email Address",
+  "authForgotPasswordEmailHint": "Enter your email",
+  "authForgotPasswordSubmitButton": "Send Reset Link",
+  "authForgotPasswordSuccessMessage": "Password reset email sent! Check your inbox.",
+  "authForgotPasswordErrorMessage": "Failed to send reset email. Please try again.",
+  "authBackToLogin": "Back to Login"
+}
+```
+
+**File**: `assets/locales/vi.i18n.json`
+
+```json
+{
+  "authForgotPasswordTitle": "Quên Mật Khẩu",
+  "authForgotPasswordDescription": "Nhập địa chỉ email và chúng tôi sẽ gửi cho bạn liên kết đặt lại mật khẩu",
+  "authForgotPasswordEmailLabel": "Địa Chỉ Email",
+  "authForgotPasswordEmailHint": "Nhập email của bạn",
+  "authForgotPasswordSubmitButton": "Gửi Liên Kết Đặt Lại",
+  "authForgotPasswordSuccessMessage": "Email đặt lại mật khẩu đã được gửi! Kiểm tra hộp thư của bạn.",
+  "authForgotPasswordErrorMessage": "Không thể gửi email đặt lại. Vui lòng thử lại.",
+  "authBackToLogin": "Quay Lại Đăng Nhập"
+}
+```
+
+### Step 10: Implement Page UI
+
+**File**: `lib/features/authentication/presentation/pages/forgot_password_page.dart`
+
+```dart
+import 'dart:async';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../config/theme/app_theme_extension.dart';
+import '../../../../di/injection.dart';
+import '../../../../generated/translations.dart';
+import '../mvi/authentication_bloc.dart';
+import '../mvi/authentication_action.dart';
+import '../mvi/authentication_state.dart';
+import '../mvi/authentication_event.dart';
+
+@RoutePage()
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  late final AuthenticationBloc _bloc;
+  late final StreamSubscription<AuthenticationEvent> _eventSubscription;
+  final _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = getIt<AuthenticationBloc>();
+    
+    _eventSubscription = _bloc.events.listen((event) {
+      if (!mounted) return;
+      
+      switch (event) {
+        case ShowSuccessMessage(:final message):
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              backgroundColor: context.appThemes.primaryColor,
+            ),
+          );
+        case ShowErrorMessage(:final message):
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              backgroundColor: context.appThemes.errorColor,
+            ),
+          );
+        default:
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _eventSubscription.cancel();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  void _onSubmit() {
+    if (_formKey.currentState?.validate() ?? false) {
+      _bloc.onAction(ForgotPasswordAction(_emailController.text.trim()));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _bloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.t.authForgotPasswordTitle),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    context.t.authForgotPasswordDescription,
+                    style: context.appThemes.bodyMedium.copyWith(
+                      color: context.appThemes.textSecondaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: context.t.authForgotPasswordEmailLabel,
+                      hintText: context.t.authForgotPasswordEmailHint,
+                      prefixIcon: const Icon(Icons.email_outlined),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Email is required';
+                      }
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                        return 'Invalid email format';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                    builder: (context, state) {
+                      final isLoading = state is AuthenticationLoading;
+                      
+                      return ElevatedButton(
+                        onPressed: isLoading ? null : _onSubmit,
+                        child: isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : Text(context.t.authForgotPasswordSubmitButton),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () => context.router.pop(),
+                    child: Text(context.t.authBackToLogin),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Step 11: Add Route
+
+**File**: `lib/app_router.dart`
+
+```dart
+@AutoRouterConfig()
+class AppRouter extends $AppRouter {
+  @override
+  List<AutoRoute> get routes => [
+    // Existing routes...
+    AutoRoute(page: LoginRoute.page, path: '/login'),
+    AutoRoute(page: RegisterRoute.page, path: '/register'),
+    
+    // ✅ Add new route
+    AutoRoute(page: ForgotPasswordRoute.page, path: '/forgot-password'),
+    
+    // ...
+  ];
+}
+```
+
+### Step 12: Run Code Generation
+
+```bash
+cd /Users/danhdue/AllProjects/sample/bloc_digital_wallet
+
+# Generate all (freezed, injectable, routes, translations)
+melos genAlls
+
+# Or run individually
+# flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+### Step 13: Format and Verify
+
+```bash
+# 1. Format code
+dart format lib/
+
+# 2. Analyze code (MUST show "No issues found!")
+flutter analyze --no-fatal-infos
+
+# Expected output:
+# Analyzing bloc_digital_wallet...
+# No issues found! (ran in X.Xs)
+```
+
+**Fix any issues** reported by analyzer. **DO NOT proceed** until output is `"No issues found!"`
+
+### Step 14: Test Navigation
+
+Navigate from login page:
+
+```dart
+// In login_page.dart
+TextButton(
+  onPressed: () {
+    context.router.push(const ForgotPasswordRoute());
+  },
+  child: Text(context.t.authForgotPassword),
+)
+```
+
+### Step 15: Report to User
+
+```
+✅ Subfeature "forgot_password" added to "authentication" module successfully!
+
+Files created:
+- Domain: 1 use case (forgot_password_usecase.dart)
+- Presentation: 1 page (forgot_password_page.dart), 1 widget
+
+Files modified:
+- authentication_action.dart (added ForgotPasswordAction)
+- authentication_bloc.dart (added action handler, injected use case)
+- authentication_repository.dart (added sendPasswordResetEmail method)
+- authentication_repository_impl.dart (implemented sendPasswordResetEmail)
+- auth_remote_datasource.dart (added API call)
+- app_router.dart (added route)
+- en.i18n.json (added translations)
+- vi.i18n.json (added translations)
+
+Next steps:
+1. Test the feature by navigating to /forgot-password
+2. Verify email sending works with your backend
+3. Update error messages if needed
+
+To navigate:
+context.router.push(const ForgotPasswordRoute());
 ```
 
 ---

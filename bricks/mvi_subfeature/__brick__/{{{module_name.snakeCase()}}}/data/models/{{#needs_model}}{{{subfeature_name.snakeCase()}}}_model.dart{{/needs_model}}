@@ -1,0 +1,41 @@
+// Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../domain/entities/{{{subfeature_name.snakeCase()}}}_entity.dart';
+
+part '{{{subfeature_name.snakeCase()}}}_model.freezed.dart';
+part '{{{subfeature_name.snakeCase()}}}_model.g.dart';
+
+/// Data model for {{subfeature_name.titleCase()}} in {{module_name.titleCase()}} module
+@freezed
+class {{subfeature_name.pascalCase()}}Model with _${{subfeature_name.pascalCase()}}Model {
+  const factory {{subfeature_name.pascalCase()}}Model({
+    required String id,
+    required String name,
+    // TODO: Add your model properties
+  }) = _{{subfeature_name.pascalCase()}}Model;
+
+  const {{subfeature_name.pascalCase()}}Model._();
+
+  /// Convert from JSON
+  factory {{subfeature_name.pascalCase()}}Model.fromJson(Map<String, dynamic> json) =>
+      _${{subfeature_name.pascalCase()}}ModelFromJson(json);
+
+  /// Convert to Entity (Domain Layer)
+  {{subfeature_name.pascalCase()}}Entity toEntity() {
+    return {{subfeature_name.pascalCase()}}Entity(
+      id: id,
+      name: name,
+      // TODO: Map your properties
+    );
+  }
+
+  /// Create from Entity (Domain Layer)
+  factory {{subfeature_name.pascalCase()}}Model.fromEntity({{subfeature_name.pascalCase()}}Entity entity) {
+    return {{subfeature_name.pascalCase()}}Model(
+      id: entity.id,
+      name: entity.name,
+      // TODO: Map your properties
+    );
+  }
+}

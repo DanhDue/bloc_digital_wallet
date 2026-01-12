@@ -4,3 +4,7 @@ bricks:
   # MVI Feature brick for Clean Architecture + MVI pattern
   mvi_feature:
     path: bricks/mvi_feature
+  
+  # MVI Subfeature brick for adding features to existing modules
+  mvi_subfeature:
+    path: bricks/mvi_subfeature

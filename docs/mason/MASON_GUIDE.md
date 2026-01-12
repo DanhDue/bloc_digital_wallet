@@ -43,9 +43,15 @@ melos mason_list
 
 ## 🧱 Available Bricks
 
-### `clean_feature`
+### `mvi_feature`
 
-Generates a complete feature following Clean Architecture with BLoC pattern.
+Generates a complete new module following Clean Architecture + MVI pattern.
+
+**When to Use:**
+- Creating an entirely new module from scratch
+- Feature has completely different domain concepts
+- Feature needs its own repository and data sources
+- Feature is unrelated to any existing module
 
 **Generated Structure:**
 ```

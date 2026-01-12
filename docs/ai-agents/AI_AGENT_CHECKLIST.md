@@ -12,13 +12,54 @@
 [ ] Check if feature exists: ls lib/features/
 [ ] Review architecture: cat AI_AGENT_CONTEXT.md (if first time)
 [ ] Determine layer: Domain / Data / Presentation
+[ ] ⚠️ CRITICAL: If creating feature, check if module exists first!
 ```
 
 ---
 
-## ✅ Task: Create New Feature
+## ⚠️ CRITICAL: Feature Creation Decision
 
 ```
+[ ] User requests "create a feature" or "add a feature"
+[ ] ❓ Is module context clear?
+    
+    [ ] NO → ANALYZE and PRESENT:
+        [ ] 1. ANALYZE:
+            [ ] Check lib/features/ for existing modules
+            [ ] Determine if feature belongs to existing module
+            [ ] Or if it's new domain concept
+            [ ] Identify best approach
+        
+        [ ] 2. PRESENT PLAN:
+            [ ] Show Option 1: New module (when/what/benefits)
+            [ ] Show Option 2: Subfeature (when/what/benefits)
+            [ ] Include recommendation with reasoning
+            [ ] Explain architecture implications
+        
+        [ ] 3. ASK FOR MODULE INFORMATION AND CONFIRMATION:
+            [ ] Request missing details (module name, etc.)
+            [ ] Confirm chosen approach
+            [ ] Wait for user response
+        
+        [ ] 4. THEN PROCEED:
+            [ ] Execute confirmed workflow
+    
+    [ ] YES → Determine template:
+        [ ] New domain concept? → Use mvi_feature
+        [ ] Add to existing? → Use mvi_subfeature
+```
+
+**Workflow Examples**:
+- "Create authentication" → Analyze → Present → Confirm → mvi_feature
+- "Add forgot password" → Analyze → Present (recommend subfeature) → Confirm → mvi_subfeature
+- "Add feature X" → **Analyze → Present options → Ask → Proceed**
+
+---
+
+## ✅ Task: Create New Module (mvi_feature)
+
+```
+[ ] Confirm this is a NEW domain concept
 [ ] Extract feature name (snake_case)
 [ ] Run: mason make mvi_feature --feature_name {name}
 [ ] Update Entity (domain/entities/)
@@ -72,6 +113,90 @@
 [ ] Run: flutter analyze
 [ ] Fix any errors
 [ ] Report to user
+```
+
+---
+
+## ✅ Task: Add Subfeature to Existing Module (mvi_subfeature)
+
+```
+[ ] Confirm module exists: lib/features/{module}/
+[ ] Extract module name (snake_case): e.g., authentication
+[ ] Extract subfeature name (snake_case): e.g., forgot_password
+[ ] Run: mason make mvi_subfeature
+    Prompts:
+    [ ] Module name: {existing_module}
+    [ ] Subfeature name: {subfeature_name}
+    [ ] Entity name: [Press Enter to reuse module's entity]
+    [ ] Create new model: N (usually)
+    [ ] Create new entity: N (usually)
+
+Generated Files:
+[ ] Review: domain/usecases/{subfeature}_usecase.dart
+[ ] Review: presentation/pages/{subfeature}_page.dart
+[ ] Review: presentation/widgets/{subfeature}_widget.dart
+
+Implement Use Case:
+[ ] Open: domain/usecases/{subfeature}_usecase.dart
+[ ] Replace TODO with business logic
+[ ] Add validation
+[ ] Call repository method
+
+Add Action to Bloc:
+[ ] Open: presentation/mvi/{module}_action.dart
+[ ] Add: class {Subfeature}Action extends {Module}Action
+[ ] Define required fields
+
+Handle Action in Bloc:
+[ ] Open: presentation/mvi/{module}_bloc.dart
+[ ] Inject use case in constructor
+[ ] Add case in onAction() switch
+[ ] Emit states and events
+
+Update Repository:
+[ ] Interface: domain/repositories/{module}_repository.dart
+    [ ] Add method signature
+[ ] Implementation: data/repositories/{module}_repository_impl.dart
+    [ ] Implement method
+    [ ] Handle exceptions → failures
+
+Update Data Source (if needed):
+[ ] Open: data/datasources/{module}_remote_datasource.dart
+[ ] Add method signature
+[ ] Implement API call
+
+Add Translations:
+[ ] Edit: assets/locales/en.i18n.json
+    [ ] Add {module}{Subfeature}* keys
+[ ] Edit: assets/locales/vi.i18n.json
+    [ ] Add translations
+
+Implement Page UI:
+[ ] Open: presentation/pages/{subfeature}_page.dart
+[ ] Use context.t for translations
+[ ] Use context.appThemes for styling
+[ ] Use BlocBuilder/BlocProvider
+[ ] Listen to events stream
+
+Add Route:
+[ ] Edit: lib/app_router.dart
+[ ] Add: AutoRoute(page: {Subfeature}Route.page, path: '/path')
+
+Code Generation:
+[ ] Run: melos genAlls
+[ ] Run: dart format lib/
+[ ] Run: flutter analyze --no-fatal-infos
+[ ] Fix any issues (must be 0)
+
+Test:
+[ ] Navigate to new page
+[ ] Verify functionality
+[ ] Test error cases
+
+Report:
+[ ] List created files
+[ ] List modified files
+[ ] Provide navigation example
 ```
 
 ---
