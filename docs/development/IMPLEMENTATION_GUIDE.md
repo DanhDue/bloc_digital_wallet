@@ -1312,6 +1312,15 @@ class TransactionBloc extends MviBloc<
 
 ### 4.5 Create Page
 
+> ⚠️ **MVI PAGE PATTERN (CRITICAL)**
+> 
+> **Default**: Use `StatelessWidget` with `BlocProvider`/`BlocConsumer`
+> - All UI state managed in BLoC
+> - NO local state with `setState()`
+> - Use `context.read<Bloc>().onAction()` to dispatch actions
+>
+> **Exception**: Use `StatefulWidget` only for `TextEditingController`, `FocusNode`, or `AnimationController`
+
 **File:** `lib/features/transaction/presentation/pages/transaction_list_page.dart`
 
 ```dart

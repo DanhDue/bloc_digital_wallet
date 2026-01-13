@@ -2,34 +2,20 @@
 
 import '../../../../core/architecture/architecture.dart';
 
+/// Message types for ShowMessage event
+enum MessageType { success, error, info }
+
 /// Events for {{feature_name.pascalCase()}} feature (OUTPUT: ViewModel → View)
-/// One-time side effects: Navigation, Toast, Dialog (Transient)
 sealed class {{feature_name.pascalCase()}}Event extends BaseEvent {
   const {{feature_name.pascalCase()}}Event();
 }
 
-/// Show success message (Toast/Snackbar)
-class ShowSuccessMessage extends {{feature_name.pascalCase()}}Event {
+/// Show message (Toast/Snackbar)
+class ShowMessage extends {{feature_name.pascalCase()}}Event {
   final String message;
-  
-  const ShowSuccessMessage(this.message);
-}
+  final MessageType type;
 
-/// Show error message (Toast/Snackbar)
-class ShowErrorMessage extends {{feature_name.pascalCase()}}Event {
-  final String message;
-  
-  const ShowErrorMessage(this.message);
-}
-
-/// Navigate to detail page
-class NavigateTo{{feature_name.pascalCase()}}Detail extends {{feature_name.pascalCase()}}Event {
-  final String id;
-  
-  const NavigateTo{{feature_name.pascalCase()}}Detail(this.id);
-}
-
-/// Navigate back
-class NavigateBack extends {{feature_name.pascalCase()}}Event {
-  const NavigateBack();
+  const ShowMessage(this.message, {this.type = MessageType.info});
+  const ShowMessage.success(this.message) : type = MessageType.success;
+  const ShowMessage.error(this.message) : type = MessageType.error;
 }

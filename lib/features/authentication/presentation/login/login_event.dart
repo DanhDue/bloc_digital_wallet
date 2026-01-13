@@ -6,6 +6,11 @@ sealed class LoginEvent extends BaseEvent {
   const LoginEvent();
 }
 
+/// Navigate to home after successful login
+class NavigateToHome extends LoginEvent {
+  const NavigateToHome();
+}
+
 class ShowLoginSuccessMessage extends LoginEvent {
   final String message;
   const ShowLoginSuccessMessage(this.message);

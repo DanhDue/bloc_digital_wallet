@@ -822,6 +822,19 @@ class TransactionHistoryBloc extends MviBloc<TransactionHistoryAction,
 ```
 
 #### 5.5 Create Page
+
+> ⚠️ **MVI PAGE PATTERN (CRITICAL)**
+> 
+> **Default**: Use `StatelessWidget` with `BlocProvider`/`BlocConsumer`
+> - All UI state managed in BLoC
+> - NO local state with `setState()`
+> - Use `context.read<Bloc>().onAction()` to dispatch actions
+>
+> **Exception - Forms with TextEditingController**:
+> - Use `StatefulWidget` only when you need `TextEditingController`, `FocusNode`, or `AnimationController`
+> - These require lifecycle management (`dispose()`)
+> - Even then, keep BLoC for all business logic state
+
 **File**: `lib/features/transaction_history/presentation/pages/transaction_history_page.dart`
 
 ```dart
@@ -1365,6 +1378,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 ### Step 10: Implement Page UI
 
 **File**: `lib/features/authentication/presentation/pages/forgot_password_page.dart`
+
+> **Note**: This example uses `StatefulWidget` because it manages `TextEditingController`.
+> For pages without form controllers, use `StatelessWidget` + `BlocProvider`/`BlocConsumer` instead.
 
 ```dart
 import 'dart:async';

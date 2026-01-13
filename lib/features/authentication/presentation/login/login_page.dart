@@ -40,6 +40,9 @@ class _LoginPageState extends State<LoginPage> {
     _eventSub = _bloc.events.listen((event) {
       if (!mounted) return;
       switch (event) {
+        case NavigateToHome():
+          // Replace login screen with home (can't go back)
+          context.router.replaceAll([const HomeRoute()]);
         case ShowLoginSuccessMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
         case ShowLoginErrorMessage():

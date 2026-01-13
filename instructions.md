@@ -569,57 +569,57 @@ class WalletBloc extends MviBloc<WalletAction, WalletState, WalletEvent> {
 ```
 
 ### Page
+
+> ⚠️ **CRITICAL**: Pages MUST use `StatelessWidget` with `BlocProvider`/`BlocConsumer`.
+> Do NOT use `StatefulWidget` with local state. All UI state must be in the BLoC.
+
 ```dart
 @RoutePage()
-class WalletPage extends StatefulWidget {
+class WalletPage extends StatelessWidget {
   const WalletPage({super.key});
-  
-  @override
-  State<WalletPage> createState() => _WalletPageState();
-}
 
-class _WalletPageState extends State<WalletPage> {
-  late final WalletBloc _bloc;
-  late final StreamSubscription<WalletEvent> _eventSub;
-  
-  @override
-  void initState() {
-    super.initState();
-    _bloc = getIt<WalletBloc>();
-    _eventSub = _bloc.events.listen((event) {
-      if (!mounted) return;
-      switch (event) {
-        case ShowWalletErrorMessage(:final message):
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message)),
-          );
-      }
-    });
-    _bloc.onAction(const LoadWalletAction('123'));
-  }
-  
-  @override
-  void dispose() {
-    _eventSub.cancel();
-    _bloc.close();
-    super.dispose();
-  }
-  
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _bloc,
-      child: Scaffold(
-        body: BlocBuilder<WalletBloc, WalletState>(
-          builder: (context, state) {
-            return switch (state) {
-              WalletLoading() => const CircularProgressIndicator(),
-              WalletLoaded(:final wallet) => Text('Balance: ${wallet.balance}'),
-              WalletError(:final message) => Text('Error: $message'),
+    return BlocProvider(
+      create: (_) => getIt<WalletBloc>()..onAction(const LoadWalletAction('123')),
+      child: BlocConsumer<WalletBloc, WalletState>(
+        listener: (context, state) {
+          // Listen to events for side effects
+          context.read<WalletBloc>().events.listen((event) {
+            if (!context.mounted) return;
+            switch (event) {
+              case ShowWalletErrorMessage(:final message):
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(message)),
+                );
+              case NavigateToDetail(:final id):
+                context.router.push(WalletDetailRoute(id: id));
+            }
+          });
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(title: Text(context.t.navMyWallet)),
+            body: switch (state) {
+              WalletLoading() => const Center(child: CircularProgressIndicator()),
+              WalletLoaded(:final wallet) => Center(
+                child: Text(
+                  'Balance: ${wallet.balance}',
+                  style: context.appThemes.headlineMedium,
+                ),
+              ),
+              WalletError(:final message) => Center(
+                child: Text(
+                  'Error: $message',
+                  style: context.appThemes.bodyMedium.copyWith(
+                    color: context.appThemes.errorColor,
+                  ),
+                ),
+              ),
               _ => const SizedBox.shrink(),
-            };
-          },
-        ),
+            },
+          );
+        },
       ),
     );
   }

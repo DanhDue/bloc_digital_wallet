@@ -12,7 +12,8 @@ class Get{{feature_name.pascalCase()}}UseCase {
 
   Get{{feature_name.pascalCase()}}UseCase(this.repository);
 
-  Future<Either<Failure, {{feature_name.pascalCase()}}Entity>> call(String id) async {
-    return await repository.get{{feature_name.pascalCase()}}(id);
+  /// Get all {{feature_name.lowerCase()}}s
+  Future<Either<Failure, List<{{feature_name.pascalCase()}}Entity>>> call() async {
+    return await repository.get{{feature_name.pascalCase()}}s();
   }
 }

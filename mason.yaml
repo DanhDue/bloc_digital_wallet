@@ -12,3 +12,11 @@ bricks:
     path: bricks/remove_feature
   remove_subfeature:
     path: bricks/remove_subfeature
+  
+  # Sample brick for demo purposes with all actions, events, states
+  sample:
+    path: bricks/sample
+
+  # Remove sample brick
+  remove_sample:
+    path: bricks/remove_sample

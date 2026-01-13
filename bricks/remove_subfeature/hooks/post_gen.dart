@@ -22,7 +22,7 @@ void run(HookContext context) async {
     // Domain Entity
     'lib/features/$snakeModule/domain/entities/${snakeSubfeature}_entity.dart',
     // Domain UseCase
-    'lib/features/$snakeModule/domain/usecases/${snakeSubfeature}_usecase.dart',
+    'lib/features/$snakeModule/domain/usecases/get_${snakeSubfeature}_usecase.dart',
   ];
 
   // 1. Delete Files and Directories

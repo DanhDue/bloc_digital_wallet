@@ -38,6 +38,8 @@ class LoginBloc extends MviBloc<LoginAction, LoginState, LoginEvent> {
       (user) {
         emit(LoginSuccess(user));
         emitEvent(ShowLoginSuccessMessage('Logged in as ${user.email}'));
+        // Navigate to home after successful login
+        emitEvent(const NavigateToHome());
       },
     );
   }
