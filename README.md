@@ -21,8 +21,8 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
 - **[Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)** ⚠️ **MUST READ** - Verification steps
 
 ### 📗 For Advanced Developers
-- **[Architecture Guide](docs/architecture/ARCHITECTURE_OVERVIEW.md)** - Complete architecture overview
-- **[Visual Guide](docs/architecture/VISUAL_GUIDE.md)** - Architecture diagrams
+- **[Architecture Guide](docs/architecture/ARCHITECTURE.md)** - Complete architecture overview
+- **[Architecture Diagrams](docs/architecture/ARCHITECTURE.md#1-clean-architecture--mvi-diagram)** - Visual guides
 - **[Mason Guide](docs/mason/MASON_GUIDE.md)** - Code generation guide
 
 ### 🤖 For AI Agents

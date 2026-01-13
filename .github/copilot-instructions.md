@@ -1,46 +1,136 @@
 # AI Coding Guidelines for bloc_digital_wallet
 
-## Project Overview
-This is a Flutter-based digital wallet application using the BLoC pattern for state management. The app leverages code generation extensively for models, APIs, themes, assets, and localization to maintain consistency and reduce boilerplate.
+## Architecture: Clean Architecture + MVI Pattern
 
-## Architecture
-- **State Management**: BLoC pattern with blocs handling business logic and UI state
-- **Data Layer**: Repositories abstract data sources; Retrofit for API clients with Dio HTTP client
-- **Models**: Immutable data classes generated with Freezed and JSON serialization
-- **Navigation**: Auto Route for declarative routing
-- **Theming**: Theme Tailor for type-safe theme generation
-- **Assets**: Flutter Gen generates type-safe accessors for images, colors (from XML), fonts, and Lottie animations
-- **Localization**: JSON-based locales with custom generation script
+This Flutter digital wallet app follows **Clean Architecture** with **MVI (Model-View-Intent)** state management, organized in a **feature-first** structure. Each feature isolates domain logic, data handling, and presentation.
 
-## Key Workflows
-- **Setup**: Run `fvm flutter pub get` to install dependencies (FVM manages Flutter version)
-- **Code Generation**: Execute `melos genAlls` to run all generators: build_runner (Freezed/Retrofit), Flutter Gen (assets), locales, formatting, and license headers
-- **Asset Generation**: Use `melos genImages`, `genColors`, `genLocales` for specific asset types
-- **Build**: `fvm flutter pub run build_runner build --delete-conflicting-outputs` for code generation
-- **Formatting**: Line length set to 99 characters; use `melos dartfmt` for consistent formatting
+### MVI Flow (Android-inspired)
+- **Action**: User interactions (INPUT from View) - single entry point via `bloc.onAction(action)`
+- **State**: Persistent UI data (OUTPUT to View) - emitted via `emit(state)`
+- **Event**: One-time side effects (Toast/Navigation) - emitted via `emitEvent(event)` and consumed via `bloc.events.listen()`
 
-## Conventions
-- **Imports**: Organize with Flutter imports first, then third-party, then local
-- **Models**: Use Freezed for all data models with `fromJson`/`toJson` for API serialization
-- **API**: Define Retrofit clients in separate files with `@RestApi` annotation
-- **Assets**: Place in `assets/` subdirs; access via generated `Assets` class (e.g., `Assets.images.logo`)
-- **Colors**: Define in `assets/colors/colors.xml`; access via `AppColors` class
-- **Fonts**: SF Compact Display family; access via `AppFontFamily`
-- **Localization**: Keys in `assets/locales/*.json`; generate with `get generate locales assets/locales`
-- **Logging**: Use Talker for logging with Dio interceptor for API requests
-- **Permissions**: Handle with permission_handler package
-- **Date/Time**: Use Jiffy for date manipulation
+### Layer Structure (per feature in `lib/features/{feature}/`)
+```
+domain/           # Pure Dart - NO Flutter imports
+├── entities/     # Equatable classes
+├── repositories/ # Abstract interfaces returning Either<Failure, T>
+└── usecases/     # Single responsibility, call repository
 
-## Examples
-- **Freezed Model**: Annotate classes with `@freezed` and part files for generation
-- **Retrofit API**: `@RestApi(baseUrl: "...") class ApiClient { @GET("/endpoint") Future<Model> getData(); }`
-- **BLoC**: Extend `Bloc<Event, State>` with event handlers and state emissions
-- **Asset Usage**: `Image.asset(Assets.images.icon.path)` or `AppColors.primary` for colors
+data/
+├── models/       # @freezed with toEntity()/fromEntity(), fromJson/toJson
+├── datasources/  # API clients (Retrofit), throw Exceptions
+└── repositories/ # Implements domain repo, converts Exceptions → Failures
 
-## Dependencies
-- Core: flutter, bloc (implied), dio, retrofit, freezed
-- UI: flutter_svg, theme_tailor, auto_route
-- Utils: talker, permission_handler, jiffy, google_sign_in
+presentation/
+├── {usecase}/    # One folder per use case/subfeature
+│   ├── *_action.dart  # Sealed actions extending BaseAction
+│   ├── *_state.dart   # Sealed states extending BaseState
+│   ├── *_event.dart   # Sealed events extending BaseEvent
+│   ├── *_bloc.dart    # Extends MviBloc<Action, State, Event>
+│   └── *_page.dart    # StatefulWidget with BlocProvider + event stream listener
+└── widgets/      # Shared widgets for this feature
+```
 
-Focus on generating code with build_runner and maintaining generated files in sync.</content>
+## Critical Workflows
+
+### Code Generation Pipeline
+After ANY change to models, APIs, themes, assets, or locales:
+```bash
+melos genAlls  # Runs: build_runner, fluttergen, dartfmt, license headers, git add
+```
+Individual generators: `melos genImages`, `melos genColors`, `melos build_runner`
+
+### Feature Creation - MANDATORY Planning
+**Before creating features**, analyze if it's a new module or subfeature:
+- **New module**: `mason make mvi_feature --feature_name <name>` (e.g., authentication, wallet)
+- **Subfeature**: `mason make mvi_subfeature --module_name <module> --subfeature_name <name>` (e.g., forgot_password to authentication)
+
+Check existing modules in `lib/features/` first. See `.cursorrules` lines 1-130 for decision workflow.
+
+### Dependency Injection (get_it + injectable)
+Register with `@injectable` annotation, generate with `melos build_runner`, access via `getIt<T>()` in widgets.
+
+## Essential Conventions
+
+### Styling - ALWAYS use context.appThemes
+```dart
+Text('Hello', style: context.appThemes.bodyMedium)
+Container(color: context.appThemes.surfaceColor)
+// NEVER: Theme.of(context) or Colors.red
+```
+Define colors in `assets/colors/colors.xml`, reference in `lib/config/theme/app_themes.dart`, regenerate with `melos genAlls`.
+
+### Localization - ALWAYS use context.t
+```dart
+Text(context.t.authWelcomeBack)
+// Keys defined in assets/locales/*.i18n.json (en.i18n.json, vi.i18n.json)
+// Generated to lib/generated/translations.dart via slang
+```
+
+### MVI BLoC Pattern
+```dart
+class MyBloc extends MviBloc<MyAction, MyState, MyEvent> {
+  MyBloc(this._useCase) : super(const MyInitial()) {
+    handleActionDroppable<LoadAction>(_onLoad); // or Sequential/Restartable
+  }
+  
+  @override
+  void onAction(MyAction action) => add(action); // Single entry point
+  
+  Future<void> _onLoad(LoadAction action, Emitter<MyState> emit) async {
+    emit(const MyLoading());
+    final result = await _useCase();
+    result.fold(
+      (failure) => emit(MyError(failure.message)),
+      (data) {
+        emit(MyLoaded(data));
+        emitEvent(ShowSuccessMessage('Done!')); // One-time effect
+      },
+    );
+  }
+}
+
+// In Page: _bloc.onAction(const LoadAction());
+// Listen to events: _bloc.events.listen((event) => /* handle navigation/toast */);
+```
+
+### Error Handling with Either
+Repositories return `Either<Failure, T>` from dartz. Data sources throw Exceptions, repositories catch and convert to Failures (`ServerFailure`, `NetworkFailure`, etc. from `lib/core/errors/`).
+
+### Asset Access (generated by fluttergen)
+```dart
+Image.asset(Assets.images.logo.path)
+Lottie.asset(Assets.lotties.digitalWallet)
+AppColors.primaryColor // From colors.xml
+AppFontFamily.sfCompactDisplay
+```
+
+## Project Tooling
+
+- **FVM**: Flutter version manager - prefix all flutter commands with `fvm`
+- **Melos**: Monorepo scripts - see `melos.yaml` for all commands
+- **Mason**: Code generation templates in `bricks/` - see `docs/mason/MASON_GUIDE.md`
+- **Injectable**: DI with `@injectable`, `@singleton`, `@lazySingleton` annotations
+- **Auto Route**: Navigation with `@RoutePage()` annotation and `app_router.dart`
+- **Formatting**: 99 character line length - `melos dartfmt` or `dart format -l 99`
+
+## Key Files
+- `lib/core/architecture/mvi_bloc.dart`: Base MviBloc implementation with event stream
+- `lib/core/errors/`: Failure and Exception definitions
+- `lib/config/theme/app_themes.dart`: Theme Tailor generated themes with context extension
+- `lib/generated/translations.dart`: Slang generated i18n with context extension
+- `lib/di/injection.dart`: GetIt setup with `configureDependencies()`
+- `build.yaml`: Slang configuration for localization generation
+- `melos.yaml`: All development scripts
+
+## Before Submitting Code
+```bash
+melos dartfmt                   # Format with 99 line length
+flutter analyze --no-fatal-infos # Must show "No issues found!"
+```
+
+## References
+- Full architecture: `docs/architecture/ARCHITECTURE.md`
+- AI agent workflows: `docs/ai-agents/AI_AGENT_README.md`
+- Detailed rules: `.cursorrules` (815 lines with examples)</content>
 <parameter name="filePath">/Users/danhdue/AllProjects/sample/bloc_digital_wallet/.github/copilot-instructions.md
