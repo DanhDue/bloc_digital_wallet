@@ -7,9 +7,19 @@ This project leverages [Mason](https://pub.dev/packages/mason) to automate the c
 | Command | Description |
 |---|---|
 | `mason make mvi_feature --feature_name <name>` | Create a new feature module |
-| `mason make mvi_subfeature --module_name <mod> --subfeature_name <name>` | Add a subfeature to a module |
+| `mason make mvi_subfeature` | Add a subfeature to a module (interactive prompts) |
 | `mason make remove_feature --feature_name <name>` | Remove a feature module |
 | `mason make remove_subfeature --module_name <mod> --subfeature_name <name>` | Remove a subfeature |
+
+### `mvi_subfeature` Variables
+
+| Variable | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `module_name` | string | ✅ | - | Parent module name (e.g., `authentication`) |
+| `subfeature_name` | string | ✅ | - | Subfeature name (e.g., `forgot_password`) |
+| `entity_name` | string | ❌ | `""` | Entity name (leave empty to use module's entity) |
+| `needs_model` | boolean | ❌ | `true` | Create a new data model? |
+| `needs_entity` | boolean | ❌ | `true` | Create a new entity? |
 
 ## 📋 Table of Contents
 
@@ -78,9 +88,43 @@ lib/features/<name>/
 
 Adds a nested feature (e.g., `forgot_password` inside `authentication`) using the parent's infrastructure where possible.
 
-**Command:**
+**Command (Interactive):**
 ```bash
-mason make mvi_subfeature --module_name <parent> --subfeature_name <name>
+mason make mvi_subfeature
+# → What is the module name? authentication
+# → What is the subfeature name? forgot_password
+# → Entity name (press Enter to use module's main entity)? [Enter]
+# → Create a new data model? false
+# → Create a new entity? false
+```
+
+**Command (Non-Interactive):**
+```bash
+mason make mvi_subfeature \
+  --module_name authentication \
+  --subfeature_name forgot_password \
+  --entity_name "" \
+  --needs_model false \
+  --needs_entity false
+```
+
+**What Gets Generated:**
+```
+lib/features/{module_name}/
+  domain/usecases/
+    {subfeature_name}_usecase.dart          # Always created
+  presentation/pages/
+    {subfeature_name}_page.dart             # Always created
+  presentation/widgets/
+    {subfeature_name}_widget.dart           # Always created
+  
+  # Optional (if needs_entity = true)
+  domain/entities/
+    {subfeature_name}_entity.dart
+  
+  # Optional (if needs_model = true)
+  data/models/
+    {subfeature_name}_model.dart
 ```
 
 **What It Does:**

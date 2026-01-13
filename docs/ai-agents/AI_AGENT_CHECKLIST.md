@@ -92,17 +92,17 @@
     [ ] Add @LazySingleton(as: Interface)
     [ ] Convert Exceptions to Failures
     [ ] Return Either<Failure, Success>
-[ ] Define Actions (presentation/mvi/{name}_action.dart)
+[ ] Define Actions (presentation/{name}/{name}_action.dart)
     [ ] Extend BaseAction
     [ ] Sealed class
-[ ] Define States (presentation/mvi/{name}_state.dart)
+[ ] Define States (presentation/{name}/{name}_state.dart)
     [ ] Extend BaseState + EquatableMixin
     [ ] Sealed class
     [ ] Add props getter
-[ ] Define Events (presentation/mvi/{name}_event.dart)
+[ ] Define Events (presentation/{name}/{name}_event.dart)
     [ ] Extend BaseEvent
     [ ] Sealed class
-[ ] Implement BLoC (presentation/mvi/{name}_bloc.dart)
+[ ] Implement BLoC (presentation/{name}/{name}_bloc.dart)
     [ ] Extend MviBloc<Action, State, Event>
     [ ] Add @injectable
     [ ] Inject Use Cases in constructor
@@ -150,12 +150,12 @@ Implement Use Case:
 [ ] Call repository method
 
 Add Action to Bloc:
-[ ] Open: presentation/mvi/{module}_action.dart
+[ ] Open: presentation/{module}/{module}_action.dart
 [ ] Add: class {Subfeature}Action extends {Module}Action
 [ ] Define required fields
 
 Handle Action in Bloc:
-[ ] Open: presentation/mvi/{module}_bloc.dart
+[ ] Open: presentation/{module}/{module}_bloc.dart
 [ ] Inject use case in constructor
 [ ] Add case in onAction() switch
 [ ] Emit states and events

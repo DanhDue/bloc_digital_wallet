@@ -185,10 +185,10 @@ This project provides specialized documentation for AI Agents to understand and 
 
 ### Understanding Architecture
 
-**Priority**: [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) → [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md)
+**Priority**: [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) → [ARCHITECTURE.md](../architecture/ARCHITECTURE.md)
 
 1. Read [AI_AGENT_CONTEXT.md](AI_AGENT_CONTEXT.md) for AI-friendly summary
-2. Read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) for detailed explanation
+2. Read [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) for detailed explanation
 
 ### Fixing Bugs
 
@@ -212,7 +212,7 @@ This project provides specialized documentation for AI Agents to understand and 
 
 ### For Humans (Developers)
 
-- **[ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md)** - Full architecture explanation
+- **[ARCHITECTURE.md](../architecture/ARCHITECTURE.md)** - Full architecture explanation
 - **[IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)** - Beginner tutorial
 - **[QUICK_REFERENCE.md](../getting-started/QUICK_REFERENCE.md)** - Developer cheat sheet
 - **[README.md](../../README.md)** - Project overview

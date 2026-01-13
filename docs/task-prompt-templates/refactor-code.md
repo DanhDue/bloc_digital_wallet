@@ -108,7 +108,7 @@ GOAL:
   - Clearer separation of concerns
 
 AFFECTED FILES:
-@lib/features/authentication/presentation/mvi/authentication_bloc.dart
+@lib/features/authentication/presentation/authentication/authentication_bloc.dart
 @lib/features/authentication/domain/usecases/login_with_email_password_usecase.dart
 @lib/features/authentication/domain/usecases/register_with_email_usecase.dart
 

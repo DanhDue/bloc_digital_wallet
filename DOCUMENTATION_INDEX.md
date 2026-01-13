@@ -30,7 +30,7 @@ Documentation for AI assistants and automated development workflows.
 ### 🏗️ Architecture & Design ([docs/architecture/](docs/architecture/))
 Core architectural patterns and design principles.
 
-- [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md) - Main architecture overview
+- [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) - Main architecture overview
 - [docs/architecture/ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md) - Detailed architecture
 - [docs/architecture/CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md) - MVI pattern summary
 - [docs/architecture/VISUAL_GUIDE.md](docs/architecture/VISUAL_GUIDE.md) - Visual diagrams
@@ -94,7 +94,7 @@ Reusable code generation templates.
 
 #### 👨‍💻 **New Developer**
 1. Start: [README.md](README.md)
-2. Learn Architecture: [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+2. Learn Architecture: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
 3. Quick Start: [docs/getting-started/QUICK_START.md](docs/getting-started/QUICK_START.md)
 4. Setup Environment: [docs/environment/ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md)
 5. Implement Feature: [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md)
@@ -107,7 +107,7 @@ Reusable code generation templates.
 5. Verify: [docs/ai-agents/DOUBLE_CHECK_GUIDE.md](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)
 
 #### 🏗️ **Architect**
-1. Architecture Overview: [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+1. Architecture Overview: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
 2. Detailed Architecture: [docs/architecture/ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md)
 3. MVI Pattern: [docs/architecture/CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md)
 4. Visual Diagrams: [docs/architecture/VISUAL_GUIDE.md](docs/architecture/VISUAL_GUIDE.md)
@@ -122,7 +122,7 @@ Reusable code generation templates.
 ## 🔍 By Topic
 
 ### Architecture ([docs/architecture/](docs/architecture/))
-- [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+- [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
 - [docs/architecture/ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md)
 - [docs/architecture/CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md)
 - [docs/architecture/VISUAL_GUIDE.md](docs/architecture/VISUAL_GUIDE.md)
@@ -164,7 +164,7 @@ Reusable code generation templates.
 | Set up development environment | [docs/environment/ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md) |
 | Create a new feature | [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md) |
 | Use theme & styling | [docs/development/THEME_TAILOR_GUIDE.md](docs/development/THEME_TAILOR_GUIDE.md) |
-| Understand architecture | [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md) |
+| Understand architecture | [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) |
 | Use Mason for code gen | [docs/mason/MASON_GUIDE.md](docs/mason/MASON_GUIDE.md) |
 | Switch environments | [docs/environment/ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md) |
 | Build for production | [docs/environment/FLAVORS_SETUP_COMPLETE.md](docs/environment/FLAVORS_SETUP_COMPLETE.md) |
@@ -192,7 +192,7 @@ Reusable code generation templates.
   - [GOOGLE_JULES_AI_GUIDE.md](docs/ai-agents/GOOGLE_JULES_AI_GUIDE.md)
 
 - 🏗️ **[architecture/](docs/architecture/)** - Architecture Documentation
-  - [ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+  - [ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
   - [ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md)
   - [CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md)
   - [VISUAL_GUIDE.md](docs/architecture/VISUAL_GUIDE.md)

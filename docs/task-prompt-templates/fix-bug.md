@@ -77,7 +77,7 @@ SYMPTOMS:
 
 AFFECTED FILES:
 @lib/features/authentication/presentation/pages/login_page.dart
-@lib/features/authentication/presentation/mvi/authentication_bloc.dart
+@lib/features/authentication/presentation/authentication/authentication_bloc.dart
 @lib/features/authentication/presentation/widgets/auth_text_field.dart
 
 ⚠️ CONSTRAINTS:
@@ -168,7 +168,7 @@ SYMPTOMS:
 AFFECTED FILES:
 @lib/features/wallet/presentation/pages/wallet_page.dart
 @lib/features/wallet/presentation/pages/transfer_page.dart
-@lib/features/wallet/presentation/mvi/wallet_bloc.dart
+@lib/features/wallet/presentation/wallet/wallet_bloc.dart
 
 ⚠️ CONSTRAINTS:
 [ ] Don't change transaction creation logic

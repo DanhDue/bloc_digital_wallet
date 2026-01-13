@@ -605,7 +605,7 @@ class TransactionHistoryRepositoryImpl implements TransactionHistoryRepository {
 ### Step 5: Implement Presentation Layer
 
 #### 5.1 Define Actions
-**File**: `lib/features/transaction_history/presentation/mvi/transaction_history_action.dart`
+**File**: `lib/features/transaction_history/presentation/transaction_history/transaction_history_action.dart`
 
 ```dart
 import '../../../../core/architecture/architecture.dart';
@@ -631,7 +631,7 @@ class LoadMoreTransactionsAction extends TransactionHistoryAction {
 ```
 
 #### 5.2 Define States
-**File**: `lib/features/transaction_history/presentation/mvi/transaction_history_state.dart`
+**File**: `lib/features/transaction_history/presentation/transaction_history/transaction_history_state.dart`
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -691,7 +691,7 @@ class TransactionHistoryEmpty extends TransactionHistoryState {
 ```
 
 #### 5.3 Define Events
-**File**: `lib/features/transaction_history/presentation/mvi/transaction_history_event.dart`
+**File**: `lib/features/transaction_history/presentation/transaction_history/transaction_history_event.dart`
 
 ```dart
 import '../../../../core/architecture/architecture.dart';
@@ -717,7 +717,7 @@ class NavigateToTransactionDetail extends TransactionHistoryEvent {
 ```
 
 #### 5.4 Implement BLoC
-**File**: `lib/features/transaction_history/presentation/mvi/transaction_history_bloc.dart`
+**File**: `lib/features/transaction_history/presentation/transaction_history/transaction_history_bloc.dart`
 
 ```dart
 import 'package:injectable/injectable.dart';
@@ -1169,7 +1169,7 @@ class ForgotPasswordUseCase {
 
 ### Step 4: Add Action to Module Bloc
 
-**File**: `lib/features/authentication/presentation/mvi/authentication_action.dart`
+**File**: `lib/features/authentication/presentation/authentication/authentication_action.dart`
 
 ```dart
 sealed class AuthenticationAction extends MviAction {
@@ -1190,7 +1190,7 @@ class ForgotPasswordAction extends AuthenticationAction {
 
 ### Step 5: Handle Action in Bloc
 
-**File**: `lib/features/authentication/presentation/mvi/authentication_bloc.dart`
+**File**: `lib/features/authentication/presentation/authentication/authentication_bloc.dart`
 
 ```dart
 @injectable
@@ -1711,7 +1711,7 @@ class GetUserProfileUseCase {
 
 ### Step 6: Add to BLoC
 
-**File**: `lib/features/user/presentation/mvi/user_bloc.dart`
+**File**: `lib/features/user/presentation/user/user_bloc.dart`
 
 ```dart
 @injectable
@@ -1779,7 +1779,7 @@ Issue: Wrong calculation → Check Domain (UseCase)
 
 ### Step 3: Debug BLoC
 
-**Check**: `lib/features/wallet/presentation/mvi/wallet_bloc.dart`
+**Check**: `lib/features/wallet/presentation/wallet/wallet_bloc.dart`
 
 ```dart
 // Look for action handler
@@ -1795,7 +1795,7 @@ case UpdateWalletBalanceAction(:final newBalance):
 
 ### Step 4: Check State Definition
 
-**File**: `lib/features/wallet/presentation/mvi/wallet_state.dart`
+**File**: `lib/features/wallet/presentation/wallet/wallet_state.dart`
 
 ```dart
 class WalletLoaded extends WalletState {
@@ -1854,7 +1854,7 @@ flutter test test/features/wallet/presentation/bloc/wallet_bloc_test.dart
 Root Cause: State property 'balance' was missing from props getter
 
 Fix Applied:
-- File: lib/features/wallet/presentation/mvi/wallet_state.dart
+- File: lib/features/wallet/presentation/wallet/wallet_state.dart
 - Added 'balance' to props list
 - Ensures BlocBuilder detects state changes
 
@@ -1995,7 +1995,7 @@ Future<String> exportTransactionsToPdf({
 
 ### Step 6: Add Action
 
-**File**: `lib/features/wallet/presentation/mvi/wallet_action.dart`
+**File**: `lib/features/wallet/presentation/wallet/wallet_action.dart`
 
 ```dart
 class ExportTransactionsToPdfAction extends WalletAction {
@@ -2013,7 +2013,7 @@ class ExportTransactionsToPdfAction extends WalletAction {
 
 ### Step 7: Add Event
 
-**File**: `lib/features/wallet/presentation/mvi/wallet_event.dart`
+**File**: `lib/features/wallet/presentation/wallet/wallet_event.dart`
 
 ```dart
 class PdfExportedSuccessfully extends WalletEvent {
@@ -2024,7 +2024,7 @@ class PdfExportedSuccessfully extends WalletEvent {
 
 ### Step 8: Handle in BLoC
 
-**File**: `lib/features/wallet/presentation/mvi/wallet_bloc.dart`
+**File**: `lib/features/wallet/presentation/wallet/wallet_bloc.dart`
 
 ```dart
 @injectable
@@ -2467,7 +2467,7 @@ Goal: Split into WalletBloc and TransactionBloc
 
 ### Step 2: Create New BLoC Structure
 
-**New File**: `lib/features/wallet/presentation/mvi/transaction_bloc.dart`
+**New File**: `lib/features/wallet/presentation/transaction/transaction_bloc.dart`
 
 ```dart
 @injectable

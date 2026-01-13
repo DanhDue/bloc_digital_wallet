@@ -36,7 +36,7 @@ bloc_digital_wallet/
 
 **[docs/](../docs/)**
 - **[architecture/](architecture/)** - Architecture documentation
-  - [ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md) - Main architecture doc
+  - [ARCHITECTURE.md](architecture/ARCHITECTURE.md) - Main architecture doc
   - [ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md) - Detailed architecture
   - [CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md) - MVI pattern
   - [VISUAL_GUIDE.md](architecture/VISUAL_GUIDE.md) - Diagrams
@@ -136,7 +136,7 @@ bloc_digital_wallet/
 - [DOCUMENTATION_CATEGORIES.md](../DOCUMENTATION_CATEGORIES.md)
 
 ### 🏗️ Architecture (Move to [docs/architecture/](architecture/))
-- [ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md)
+- [ARCHITECTURE.md](architecture/ARCHITECTURE.md)
 - [ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md) (was docs/ARCHITECTURE.md)
 - [CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md) (was docs/CLEAN_MVI_SUMMARY.md)
 - [VISUAL_GUIDE.md](architecture/VISUAL_GUIDE.md) (was docs/VISUAL_GUIDE.md)

@@ -268,7 +268,7 @@ AI_AGENT_CHECKLIST.md
 ```
 Day 1:
   08:00 - Read [README.md](../../README.md) (overview)
-  08:30 - Read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) (theory)
+  08:30 - Read [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) (theory)
   10:00 - Coffee break
   10:15 - Start [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)
   12:00 - Lunch
@@ -476,7 +476,7 @@ Purpose: Visual navigation guide for all documentation
 
 **If you're a human developer:**
 1. Start → [README.md](../../README.md)
-2. Then → [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md)
+2. Then → [ARCHITECTURE.md](../architecture/ARCHITECTURE.md)
 3. Then → [IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md)
 
 **If you're an AI Agent:**

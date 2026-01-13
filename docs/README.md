@@ -34,7 +34,7 @@ AI assistant documentation and workflows
 
 ### 🏗️ [architecture/](architecture/)
 Project architecture and design patterns
-- [ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md) - Main overview
+- [ARCHITECTURE.md](architecture/ARCHITECTURE.md) - Main overview
 - [ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md) - In-depth details
 - [CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md) - MVI pattern
 - [VISUAL_GUIDE.md](architecture/VISUAL_GUIDE.md) - Diagrams
@@ -86,7 +86,7 @@ Ready-to-use templates for AI task assignment
 3. [getting-started/QUICK_START.md](getting-started/QUICK_START.md)
 
 ### Understanding Architecture?
-1. [architecture/ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md)
+1. [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md)
 2. [architecture/ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md)
 3. [architecture/CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md)
 
@@ -111,7 +111,7 @@ Ready-to-use templates for AI task assignment
 | I want to... | Go to |
 |--------------|-------|
 | Get started | [getting-started/QUICK_START.md](getting-started/QUICK_START.md) |
-| Understand architecture | [architecture/ARCHITECTURE_OVERVIEW.md](architecture/ARCHITECTURE_OVERVIEW.md) |
+| Understand architecture | [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md) |
 | Create a feature | [development/IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md) |
 | Assign task to AI | **[task-prompt-templates/README.md](task-prompt-templates/README.md)** ⭐ |
 | Setup environment | [environment/ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md) |

@@ -452,13 +452,14 @@ lib/features/{feature}/
     datasources/{feature}_remote_datasource.dart
     repositories/{feature}_repository_impl.dart
   presentation/
-    mvi/
+    models/{feature}_ui_model.dart
+    {feature}/                           # Main feature page
       {feature}_action.dart
-      {feature}_state.dart
-      {feature}_event.dart
       {feature}_bloc.dart
-    pages/{feature}_page.dart
-    widgets/{feature}_widget.dart
+      {feature}_event.dart
+      {feature}_page.dart
+      {feature}_state.dart
+    {subfeature}/                        # Subfeatures (mvi_subfeature)
 ```
 
 ---
@@ -728,7 +729,7 @@ Quick References:
   - docs/getting-started/QUICK_REFERENCE.md
 
 Detailed Guides:
- - docs/architecture/ARCHITECTURE_OVERVIEW.md
+ - docs/architecture/ARCHITECTURE.md
  - docs/development/IMPLEMENTATION_GUIDE.md
  - docs/development/THEME_TAILOR_GUIDE.md
  - docs/development/SLANG_LOCALIZATION_GUIDE.md
@@ -807,7 +808,7 @@ fvm flutter analyze --no-fatal-infos
 
 ---
 
-**Last Updated**: 2026-01-12  
+**Last Updated**: 2026-01-13  
 **Version**: 1.0  
 **Status**: Production Ready ✅
 

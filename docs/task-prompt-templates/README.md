@@ -576,7 +576,7 @@ Need to:
 
 ### For Development:
 - [Implementation Guide](../development/IMPLEMENTATION_GUIDE.md) - Complete implementation guide
-- [Architecture Overview](../architecture/ARCHITECTURE_OVERVIEW.md) - Architecture details
+- [Architecture Overview](../architecture/ARCHITECTURE.md) - Architecture details
 - [Cursor Rules](../../.cursorrules) - Critical project rules
 
 ---

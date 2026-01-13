@@ -114,7 +114,7 @@ REQUIREMENTS:
 
 FILES TO REVIEW:
 @lib/features/authentication/presentation/pages/login_page.dart
-@lib/features/authentication/presentation/mvi/authentication_bloc.dart
+@lib/features/authentication/presentation/authentication/authentication_bloc.dart
 @lib/features/authentication/domain/repositories/authentication_repository.dart
 
 IMPLEMENTATION STEPS:

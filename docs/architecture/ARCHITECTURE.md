@@ -91,6 +91,17 @@ graph LR
 
 ### Layer Dependency Rules
 
+
+<br/>
+
+> [!IMPORTANT]
+> **Important Rules**
+>
+> 1. **Dependency Rule:** `Presentation` -> `Domain` <- `Data`. Presentation MUST NOT call Data directly. Domain MUST NOT import anything from Presentation or Data.
+> 2. **No Flutter in Domain:** Domain layer must be `Pure Dart`. If you see `import 'package:flutter/*'` in Domain, it violates architecture.
+> 3. **Unidirectional Data Flow:** Data always flows in a circle: `View` -> `BLoC` -> `Domain` -> `Data` -> `Domain` -> `BLoC` -> `View`.
+
+
 ```
 Allowed Dependencies:
   Presentation → Domain
@@ -112,11 +123,11 @@ Forbidden:
 
 Three core components with specific naming and responsibilities:
 
-| Component | Type | Direction | Responsibility |
-|-----------|------|-----------|----------------|
-| **Action** | INPUT | View → BLoC | User actions. Triggers processing logic (e.g., Button click, Key press). |
-| **State** | DATA | BLoC → View | UI state. Data needed to render the screen (Persistent). View listens to State to rebuild. |
-| **Event** | OUTPUT | BLoC → View | One-time events (Side Effect). UI control commands without state storage (e.g., Toast, Navigation). |
+| Component | Type | Direction | Meaning & Responsibility |
+| :--- | :--- | :--- | :--- |
+| **Action** | **INPUT** | **View ➡️ BLoC** | **User actions.** <br> Triggers processing logic (e.g., Button click, Key press). |
+| **State** | **DATA** | **BLoC ➡️ View** | **UI state.** <br> Data needed to render the screen (Persistent). View listens to State to rebuild. |
+| **Event** | **OUTPUT** | **BLoC ➡️ View** | **One-time events (Side Effect).** <br> UI control commands without state storage (e.g., Toast, Navigation, Dialog). |
 
 #### Action (User Input)
 - **Base Class**: `BaseAction`

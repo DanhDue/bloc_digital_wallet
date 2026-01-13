@@ -411,11 +411,11 @@ lib/app_router.dart → @AutoRouterConfig
 ```bash
 # 1. Generate subfeature (e.g., forgot_password in authentication)
 mason make mvi_subfeature
-# → Module name? authentication
-# → Subfeature name? forgot_password
-# → Entity name? [Press Enter to reuse module's entity]
-# → Create new data model? N
-# → Create new entity? N
+# → What is the module name? authentication
+# → What is the subfeature name? forgot_password
+# → Entity name (press Enter to use module's main entity)? [Enter]
+# → Create a new data model? false
+# → Create a new entity? false
 
 # 2. Verify generated files
 lib/features/authentication/
@@ -424,10 +424,10 @@ lib/features/authentication/
  presentation/widgets/forgot_password_widget.dart
 
 # 3. Add action to module bloc
-# Edit: lib/features/authentication/presentation/mvi/authentication_action.dart
+# Edit: lib/features/authentication/presentation/authentication/authentication_action.dart
 
 # 4. Handle action in bloc
-# Edit: lib/features/authentication/presentation/mvi/authentication_bloc.dart
+# Edit: lib/features/authentication/presentation/authentication/authentication_bloc.dart
 
 # 5. Update repository (if needed)
 # Edit: domain/repositories/ and data/repositories/
@@ -437,6 +437,15 @@ melos genAlls
 
 # 7. Add route (if needed)
 lib/app_router.dart → @AutoRouterConfig
+```
+
+#### Remove Feature or Subfeature
+```bash
+# Remove a complete feature module
+mason make remove_feature --feature_name my_feature
+
+# Remove a subfeature from a module
+mason make remove_subfeature --module_name authentication --subfeature_name forgot_password
 ```
 
 ### Manual Creation Pattern
@@ -452,13 +461,14 @@ lib/features/{feature}/
     datasources/{feature}_remote_datasource.dart
     repositories/{feature}_repository_impl.dart
   presentation/
-    mvi/
+    models/{feature}_ui_model.dart
+    {feature}/                           # Main feature page
       {feature}_action.dart
-      {feature}_state.dart
-      {feature}_event.dart
       {feature}_bloc.dart
-    pages/{feature}_page.dart
-    widgets/{feature}_widget.dart
+      {feature}_event.dart
+      {feature}_page.dart
+      {feature}_state.dart
+    {subfeature}/                        # Subfeatures (mvi_subfeature)
 ```
 
 ---
@@ -728,7 +738,7 @@ Quick References:
   - docs/getting-started/QUICK_REFERENCE.md
 
 Detailed Guides:
- - docs/architecture/ARCHITECTURE_OVERVIEW.md
+ - docs/architecture/ARCHITECTURE.md
  - docs/development/IMPLEMENTATION_GUIDE.md
  - docs/development/THEME_TAILOR_GUIDE.md
  - docs/development/SLANG_LOCALIZATION_GUIDE.md
@@ -807,7 +817,7 @@ fvm flutter analyze --no-fatal-infos
 
 ---
 
-**Last Updated**: 2026-01-12  
+**Last Updated**: 2026-01-13  
 **Version**: 1.0  
 **Status**: Production Ready ✅
 

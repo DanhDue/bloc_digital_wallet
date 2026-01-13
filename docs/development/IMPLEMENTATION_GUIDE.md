@@ -33,7 +33,7 @@ Before starting, ensure you have:
 - [ ] Project dependencies installed: `flutter pub get`
 - [ ] Mason CLI installed: `mason get`
 - [ ] Basic understanding of Clean Architecture
-- [ ] Basic understanding of MVI pattern (read [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md))
+- [ ] Basic understanding of MVI pattern (read [ARCHITECTURE.md](../architecture/ARCHITECTURE.md))
 - [ ] Understanding of Theme Tailor usage (see below)
 
 ---
@@ -388,7 +388,7 @@ class ForgotPasswordUseCase {
 
 ### B.3: Add Action to Bloc
 
-Open `lib/features/{module}/presentation/mvi/{module}_action.dart`:
+Open `lib/features/{module}/presentation/{module}/{module}_action.dart`:
 
 ```dart
 // Add new action
@@ -400,7 +400,7 @@ class ForgotPasswordAction extends AuthenticationAction {
 
 ### B.4: Handle Action in Bloc
 
-Open `lib/features/{module}/presentation/mvi/{module}_bloc.dart`:
+Open `lib/features/{module}/presentation/{module}/{module}_bloc.dart`:
 
 ```dart
 @injectable
@@ -1047,7 +1047,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
 ### 4.1 Define Actions
 
-**File:** `lib/features/transaction/presentation/mvi/transaction_action.dart`
+**File:** `lib/features/transaction/presentation/transaction/transaction_action.dart`
 
 ```dart
 import '../../../../core/architecture/architecture.dart';
@@ -1086,7 +1086,7 @@ class RefreshTransactionsAction extends TransactionAction {
 
 ### 4.2 Define States
 
-**File:** `lib/features/transaction/presentation/mvi/transaction_state.dart`
+**File:** `lib/features/transaction/presentation/transaction/transaction_state.dart`
 
 ```dart
 import 'package:equatable/equatable.dart';
@@ -1155,7 +1155,7 @@ class TransactionCreating extends TransactionState {
 
 ### 4.3 Define Events
 
-**File:** `lib/features/transaction/presentation/mvi/transaction_event.dart`
+**File:** `lib/features/transaction/presentation/transaction/transaction_event.dart`
 
 ```dart
 import '../../../../core/architecture/architecture.dart';
@@ -1191,7 +1191,7 @@ class TransactionCreatedSuccessfully extends TransactionEvent {
 
 ### 4.4 Implement BLoC
 
-**File:** `lib/features/transaction/presentation/mvi/transaction_bloc.dart`
+**File:** `lib/features/transaction/presentation/transaction/transaction_bloc.dart`
 
 ```dart
 import 'package:injectable/injectable.dart';
@@ -1803,7 +1803,7 @@ flutter test
 ---
 
 **Need help?** Check:
-- [ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) - Architecture overview
+- [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - Architecture overview
 - [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md) - Visual diagrams
 - [docs/architecture/CLEAN_MVI_SUMMARY.md](../architecture/CLEAN_MVI_SUMMARY.md) - Quick reference
 

@@ -385,7 +385,7 @@ Minimal generation: just use case, page, and widget.
 
 ### Import Errors
 **Error**: Cannot find '{module_name}_bloc.dart'
-**Solution**: Ensure the module has a bloc file at `presentation/mvi/{module_name}_bloc.dart`
+**Solution**: Ensure the module has a bloc file at `presentation/{module_name}/{module_name}_bloc.dart`
 
 ### Entity Not Found
 **Error**: Cannot resolve '{entity_name}_entity.dart'

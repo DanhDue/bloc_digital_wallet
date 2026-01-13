@@ -35,7 +35,7 @@
 
 | File | Description |
 |------|-------------|
-| [ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md) | Main architecture overview |
+| [ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md) | Main architecture overview |
 | [ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md) | Detailed architecture |
 | [CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md) | MVI pattern summary |
 | [VISUAL_GUIDE.md](docs/architecture/VISUAL_GUIDE.md) | Visual diagrams |
@@ -88,7 +88,7 @@
 
 **👨‍💻 Developer:**
 - [README.md](README.md)
-- → [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+- → [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
 - → [docs/development/IMPLEMENTATION_GUIDE.md](docs/development/IMPLEMENTATION_GUIDE.md)
 - → [docs/environment/ENVIRONMENT_QUICK_START.md](docs/environment/ENVIRONMENT_QUICK_START.md)
 
@@ -99,7 +99,7 @@
 - → [docs/ai-agents/DOUBLE_CHECK_GUIDE.md](docs/ai-agents/DOUBLE_CHECK_GUIDE.md)
 
 **🏗️ Architect:**
-- [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+- [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
 - → [docs/architecture/ARCHITECTURE_DETAILED.md](docs/architecture/ARCHITECTURE_DETAILED.md)
 - → [docs/architecture/CLEAN_MVI_SUMMARY.md](docs/architecture/CLEAN_MVI_SUMMARY.md)
 
@@ -139,7 +139,7 @@ Only 3 files in root:
 → [docs/ai-agents/AI_AGENT_README.md](docs/ai-agents/AI_AGENT_README.md)
 
 **Architecture overview:**  
-→ [docs/architecture/ARCHITECTURE_OVERVIEW.md](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+→ [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
 
 **Environment setup:**  
 → [docs/environment/FLAVORS_SETUP_COMPLETE.md](docs/environment/FLAVORS_SETUP_COMPLETE.md)

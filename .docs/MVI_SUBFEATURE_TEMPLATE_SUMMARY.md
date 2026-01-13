@@ -485,7 +485,7 @@ lib/features/authentication/
 1. **Start Here**: `docs/mason/MASON_TEMPLATES_OVERVIEW.md`
 2. **Deep Dive**: `docs/mason/MVI_SUBFEATURE_GUIDE.md`
 3. **Examples**: Check authentication module for patterns
-4. **Architecture**: `docs/architecture/ARCHITECTURE_OVERVIEW.md`
+4. **Architecture**: `docs/architecture/ARCHITECTURE.md`
 
 ---
 

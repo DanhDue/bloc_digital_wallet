@@ -274,7 +274,7 @@ melos build_apk             # Build Android APK
 - **[Documentation Index](DOCUMENTATION_INDEX.md)** - Complete documentation navigation
 - **[Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md)** - Complete tutorial for creating features
 - **[Quick Reference](docs/getting-started/QUICK_REFERENCE.md)** - Cheat sheet with code templates
-- **[Architecture Guide](docs/architecture/ARCHITECTURE_OVERVIEW.md)** - Clean Architecture + MVI overview
+- **[Architecture Guide](docs/architecture/ARCHITECTURE.md)** - Clean Architecture + MVI overview
 - **[Visual Guide](docs/architecture/VISUAL_GUIDE.md)** - Architecture diagrams
 - **[Mason Usage](docs/mason/MASON_GUIDE.md)** - Code generation guide
 - **[Environment Setup](docs/environment/FLAVORS_SETUP_COMPLETE.md)** - Environment & flavors configuration

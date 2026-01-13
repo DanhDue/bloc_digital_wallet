@@ -58,12 +58,14 @@ Data Layer (Implementation):
 
 Presentation Layer (UI):
   - Path: lib/features/{feature}/presentation/
-  - Action: lib/features/{feature}/presentation/mvi/{feature}_action.dart
-  - State: lib/features/{feature}/presentation/mvi/{feature}_state.dart
-  - Event: lib/features/{feature}/presentation/mvi/{feature}_event.dart
-  - BLoC: lib/features/{feature}/presentation/mvi/{feature}_bloc.dart
-  - Page: lib/features/{feature}/presentation/pages/{feature}_page.dart
-  - Widgets: lib/features/{feature}/presentation/widgets/{feature}_{widget_name}.dart
+  - UI Models: lib/features/{feature}/presentation/models/{feature}_ui_model.dart
+  - Feature folder: lib/features/{feature}/presentation/{feature}/
+    - Action: {feature}_action.dart
+    - State: {feature}_state.dart
+    - Event: {feature}_event.dart
+    - BLoC: {feature}_bloc.dart
+    - Page: {feature}_page.dart
+  - Subfeatures: lib/features/{feature}/presentation/{subfeature}/
   - Rules:
     - Action extends BaseAction (user inputs)
     - State extends BaseState (persistent UI data)
@@ -379,11 +381,10 @@ OPTION 1 (Recommended): Add Subfeature
 • Subfeature: forgot_password
 • Creates:
   - domain/usecases/forgot_password_usecase.dart
-  - presentation/pages/forgot_password_page.dart
-  - presentation/widgets/forgot_password_widget.dart
+  - presentation/forgot_password/forgot_password_page.dart
 • Modifies:
-  - presentation/mvi/authentication_action.dart (add action)
-  - presentation/mvi/authentication_bloc.dart (add handler)
+  - presentation/authentication/authentication_action.dart (add action)
+  - presentation/authentication/authentication_bloc.dart (add handler)
   - domain/repositories/authentication_repository.dart (add method)
   - data/repositories/authentication_repository_impl.dart (implement)
 • Benefits:
@@ -526,11 +527,11 @@ Post-Generation Steps:
      - datasources/: Implement remote and local data sources
      - repositories/{feature_name}_repository_impl.dart: Implement repository
   4. Update Presentation:
-     - mvi/{feature_name}_action.dart: Define user actions
-     - mvi/{feature_name}_state.dart: Define UI states
-     - mvi/{feature_name}_event.dart: Define one-time events
-     - mvi/{feature_name}_bloc.dart: Implement action handlers
-     - pages/{feature_name}_page.dart: Build UI with BlocConsumer
+     - {feature_name}/{feature_name}_action.dart: Define user actions
+     - {feature_name}/{feature_name}_state.dart: Define UI states
+     - {feature_name}/{feature_name}_event.dart: Define one-time events
+     - {feature_name}/{feature_name}_bloc.dart: Implement action handlers
+     - {feature_name}/{feature_name}_page.dart: Build UI with BlocConsumer
   5. Run code generation:
      flutter pub run build_runner build --delete-conflicting-outputs
   6. Verify DI registration in: lib/di/injection.config.dart
@@ -873,7 +874,7 @@ class {Feature}RepositoryImpl implements {Feature}Repository {
 ### Pattern 7: Action (Presentation)
 
 ```dart
-// File: lib/features/{feature}/presentation/mvi/{feature}_action.dart
+// File: lib/features/{feature}/presentation/{feature}/{feature}_action.dart
 import '../../../../core/architecture/architecture.dart';
 
 sealed class {Feature}Action extends BaseAction {
@@ -889,7 +890,7 @@ class Load{Feature}Action extends {Feature}Action {
 ### Pattern 8: State (Presentation)
 
 ```dart
-// File: lib/features/{feature}/presentation/mvi/{feature}_state.dart
+// File: lib/features/{feature}/presentation/{feature}/{feature}_state.dart
 import 'package:equatable/equatable.dart';
 import '../../../../core/architecture/architecture.dart';
 import '../../domain/entities/{feature}_entity.dart';
@@ -928,7 +929,7 @@ class {Feature}Error extends {Feature}State {
 ### Pattern 9: Event (Presentation)
 
 ```dart
-// File: lib/features/{feature}/presentation/mvi/{feature}_event.dart
+// File: lib/features/{feature}/presentation/{feature}/{feature}_event.dart
 import '../../../../core/architecture/architecture.dart';
 
 sealed class {Feature}Event extends BaseEvent {
@@ -949,7 +950,7 @@ class NavigateTo{Feature}Detail extends {Feature}Event {
 ### Pattern 10: BLoC (Presentation)
 
 ```dart
-// File: lib/features/{feature}/presentation/mvi/{feature}_bloc.dart
+// File: lib/features/{feature}/presentation/{feature}/{feature}_bloc.dart
 import 'package:injectable/injectable.dart';
 import '../../../../core/architecture/architecture.dart';
 import '../../domain/usecases/get_{feature}_usecase.dart';
@@ -987,14 +988,14 @@ class {Feature}Bloc extends MviBloc<{Feature}Action, {Feature}State, {Feature}Ev
 ### Pattern 11: Page (Presentation)
 
 ```dart
-// File: lib/features/{feature}/presentation/pages/{feature}_page.dart
+// File: lib/features/{feature}/presentation/{feature}/{feature}_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../di/injection.dart';
-import '../mvi/{feature}_bloc.dart';
-import '../mvi/{feature}_action.dart';
-import '../mvi/{feature}_state.dart';
-import '../mvi/{feature}_event.dart';
+import '{feature}_bloc.dart';
+import '{feature}_action.dart';
+import '{feature}_state.dart';
+import '{feature}_event.dart';
 
 class {Feature}Page extends StatelessWidget {
   const {Feature}Page({super.key});
@@ -1159,19 +1160,19 @@ New API endpoint integration?
   → Add method to existing RemoteDataSource OR create new one
 
 New UI screen?
-  → Create Page in presentation/pages/
+  → Create Page in presentation/{feature}/{feature}_page.dart
 
 New reusable UI component?
-  → Create Widget in presentation/widgets/
+  → Create in shared widgets or feature folder
 
 New user interaction?
-  → Add Action in presentation/mvi/{feature}_action.dart
+  → Add Action in presentation/{feature}/{feature}_action.dart
 
 New UI state?
-  → Add State in presentation/mvi/{feature}_state.dart
+  → Add State in presentation/{feature}/{feature}_state.dart
 
 New one-time UI effect?
-  → Add Event in presentation/mvi/{feature}_event.dart
+  → Add Event in presentation/{feature}/{feature}_event.dart
 ```
 
 ### Decision: When to Run Code Generation?

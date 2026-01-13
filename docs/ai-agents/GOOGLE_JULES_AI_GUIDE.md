@@ -408,7 +408,7 @@ Jules AI should achieve:
 - [.devcontainer/README.md](../../.devcontainer/README.md) - DevContainer setup
 
 **Human Documentation:**
-- [docs/architecture/ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) - Architecture details
+- [docs/architecture/ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - Architecture details
 - [docs/development/IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) - Tutorial for humans
 - [docs/getting-started/QUICK_REFERENCE.md](../getting-started/QUICK_REFERENCE.md) - Human cheat sheet
 - [README.md](../../README.md) - Project overview

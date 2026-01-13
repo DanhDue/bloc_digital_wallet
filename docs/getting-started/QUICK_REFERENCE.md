@@ -89,23 +89,44 @@ lib/features/{feature}/
 
 ## 🚀 Quick Start Commands
 
+### Mason Feature Generation
+
 ```bash
-# 1. Generate feature
+# Create new feature module
 mason make mvi_feature --feature_name wallet
 
-# 2. Run code generation
-flutter pub run build_runner build --delete-conflicting-outputs
+# Add subfeature to existing module (interactive)
+mason make mvi_subfeature
+# → What is the module name? authentication
+# → What is the subfeature name? forgot_password
+# → Entity name (press Enter to use module's main entity)? [Enter]
+# → Create a new data model? false
+# → Create a new entity? false
 
-# 3. Format code
-flutter format .
+# Remove feature module
+mason make remove_feature --feature_name wallet
 
-# 4. Analyze
-flutter analyze
+# Remove subfeature
+mason make remove_subfeature --module_name authentication --subfeature_name forgot_password
+```
 
-# 5. Test
+### Code Generation & Verification
+
+```bash
+# 1. Run code generation
+melos genAlls
+# OR: flutter pub run build_runner build --delete-conflicting-outputs
+
+# 2. Format code
+dart format lib/
+
+# 3. Analyze (must be 0 issues)
+flutter analyze --no-fatal-infos
+
+# 4. Test
 flutter test
 
-# 6. Run app
+# 5. Run app
 flutter run
 ```
 
@@ -424,7 +445,7 @@ dev_dependencies:
 
 ## 📚 Documentation
 
-- [docs/architecture/ARCHITECTURE_OVERVIEW.md](../architecture/ARCHITECTURE_OVERVIEW.md) - Full architecture guide
+- [docs/architecture/ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - Full architecture guide
 - [docs/development/IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) - Step-by-step tutorial
 - [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md) - Visual diagrams
 - [README.md](../../README.md) - Project overview
