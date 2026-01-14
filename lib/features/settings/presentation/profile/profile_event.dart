@@ -1,16 +1,29 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+// coverage:ignore-file
+
 import '../../../../core/architecture/architecture.dart';
 
-/// Message types for ShowMessage event
-enum MessageType { success, error, info }
+/// ============================================================================
+/// Profile Events
+/// ============================================================================
+/// Events are one-time occurrences (navigation, snackbar, dialog).
+/// Unlike states, events are consumed once and don't persist.
+///
+/// HOW TO EXTEND:
+/// 1. Add new event classes for different one-time actions
+/// 2. Each event should extend ProfileEvent
+/// 3. Handle events in the page's event listener
+/// ============================================================================
 
-/// Events for Profile subfeature (OUTPUT: ViewModel → View)
 sealed class ProfileEvent extends BaseEvent {
   const ProfileEvent();
 }
 
-/// Show message (Toast/Snackbar)
+/// Message types for showing feedback to user
+enum MessageType { success, error, info }
+
+/// Event to show a message (snackbar/toast)
 class ShowMessage extends ProfileEvent {
   final String message;
   final MessageType type;

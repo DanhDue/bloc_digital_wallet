@@ -11,3 +11,7 @@ sealed class SettingsAction extends BaseAction {
 class LoadSettingsAction extends SettingsAction {
   const LoadSettingsAction();
 }
+
+class NavigateToProfile extends SettingsAction {
+  const NavigateToProfile();
+}

@@ -25,14 +25,14 @@ class {{feature_name.pascalCase()}}Loading extends {{feature_name.pascalCase()}}
   List<Object?> get props => [];
 }
 
-/// Loaded state with list
-class {{feature_name.pascalCase()}}sLoaded extends {{feature_name.pascalCase()}}State {
-  final List<{{feature_name.pascalCase()}}Entity> items;
+/// Success state with data (can be single object or list)
+class {{feature_name.pascalCase()}}Success<T> extends {{feature_name.pascalCase()}}State {
+  final T data;
 
-  const {{feature_name.pascalCase()}}sLoaded(this.items);
+  const {{feature_name.pascalCase()}}Success(this.data);
 
   @override
-  List<Object?> get props => [items];
+  List<Object?> get props => [data];
 }
 
 /// Error state

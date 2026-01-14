@@ -19,3 +19,7 @@ class ShowMessage extends SettingsEvent {
   const ShowMessage.success(this.message) : type = MessageType.success;
   const ShowMessage.error(this.message) : type = MessageType.error;
 }
+
+class NavigateToProfileEvent extends SettingsEvent {
+  const NavigateToProfileEvent();
+}

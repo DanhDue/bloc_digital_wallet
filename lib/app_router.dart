@@ -10,8 +10,10 @@ import 'features/authentication/presentation/forgot_password/forgot_password_pag
 import 'features/authentication/presentation/code_verification/code_verification_page.dart';
 import 'features/authentication/presentation/login/login_page.dart';
 import 'features/authentication/presentation/register/register_page.dart';
+import 'features/dashboard/presentation/dashboard/dashboard_page.dart';
 import 'features/settings/presentation/settings/settings_page.dart';
 import 'features/settings/presentation/profile/profile_page.dart';
+import 'features/settings/presentation/settings/settings_tab_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -19,14 +21,27 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: ProfileRoute.page, path: '/profile'),
-    AutoRoute(page: SettingsRoute.page, path: '/settings'),
-    AutoRoute(page: TrendsRoute.page, path: '/trends'),
-    AutoRoute(page: TransactionRoute.page, path: '/transaction'),
-    AutoRoute(page: WalletRoute.page, path: '/wallet'),
+    AutoRoute(
+      page: HomeRoute.page,
+      path: '/home',
+      initial: true,
+      children: [
+        AutoRoute(page: WalletRoute.page, path: 'wallet'),
+        AutoRoute(page: TransactionRoute.page, path: 'transaction'),
+        AutoRoute(page: TrendsRoute.page, path: 'trends'),
+        AutoRoute(
+          page: SettingsTabRoute.page,
+          path: 'settings-tab',
+          children: [
+            AutoRoute(page: SettingsRoute.page, path: '', initial: true),
+            AutoRoute(page: ProfileRoute.page, path: 'profile'),
+          ],
+        ),
+      ],
+    ),
+    AutoRoute(page: DashboardRoute.page, path: '/dashboard'),
     AutoRoute(page: ScannerRoute.page, path: '/scanner'),
-    AutoRoute(page: HomeRoute.page, path: '/home'),
-    AutoRoute(page: LoginRoute.page, initial: true),
+    AutoRoute(page: LoginRoute.page),
     AutoRoute(page: RegisterRoute.page, path: '/register'),
     AutoRoute(page: ForgotPasswordRoute.page, path: '/forgot-password'),
     AutoRoute(page: CodeVerificationRoute.page, path: '/verify-code'),

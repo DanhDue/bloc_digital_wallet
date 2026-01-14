@@ -1,5 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
@@ -62,56 +63,72 @@ class HomePage extends StatelessWidget {
           });
         },
         builder: (context, state) {
-          final currentIndex = state.currentTabIndex;
+          return AutoTabsRouter(
+            routes: const [
+              WalletRoute(),
+              TransactionRoute(),
+              // Placeholder route for center FAB index, handled by bottom nav logic
+              TrendsRoute(), // Using Trends as dummy if needed, but better to handle index skipping
+              TrendsRoute(),
+              SettingsTabRoute(),
+            ],
+            builder: (context, child) {
+              final tabsRouter = AutoTabsRouter.of(context);
 
-          return Scaffold(
-            body: IndexedStack(index: currentIndex, children: _pages),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: currentIndex,
-              onTap: (index) {
-                context.read<HomeBloc>().onAction(ChangeTabAction(index));
-              },
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: context.appThemes.surfaceColor,
-              selectedItemColor: context.appThemes.primaryColor,
-              unselectedItemColor: context.appThemes.textSecondaryColor,
-              selectedLabelStyle: context.appThemes.labelSmall,
-              unselectedLabelStyle: context.appThemes.labelSmall,
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.account_balance_wallet_outlined),
-                  activeIcon: const Icon(Icons.account_balance_wallet),
-                  label: context.t.navMyWallet,
+              return Scaffold(
+                body: child,
+                bottomNavigationBar: BottomNavigationBar(
+                  currentIndex: tabsRouter.activeIndex,
+                  onTap: (index) {
+                    if (index == 2) return; // Skip FAB placeholder
+                    // Adjust index for skipped FAB if using 5 items in bar but 4 routes
+                    // But here we mapped 5 routes for simplicity with dummy middle
+                    context.read<HomeBloc>().onAction(ChangeTabAction(index));
+                    tabsRouter.setActiveIndex(index);
+                  },
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: context.appThemes.surfaceColor,
+                  selectedItemColor: context.appThemes.primaryColor,
+                  unselectedItemColor: context.appThemes.textSecondaryColor,
+                  selectedLabelStyle: context.appThemes.labelSmall,
+                  unselectedLabelStyle: context.appThemes.labelSmall,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.account_balance_wallet_outlined),
+                      activeIcon: const Icon(Icons.account_balance_wallet),
+                      label: context.t.navMyWallet,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.language_outlined),
+                      activeIcon: const Icon(Icons.language),
+                      label: context.t.navTransactions,
+                    ),
+                    // Center placeholder for FAB
+                    const BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.show_chart_outlined),
+                      activeIcon: const Icon(Icons.show_chart),
+                      label: context.t.navTrends,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.settings_outlined),
+                      activeIcon: const Icon(Icons.settings),
+                      label: context.t.navSettings,
+                    ),
+                  ],
                 ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.language_outlined),
-                  activeIcon: const Icon(Icons.language),
-                  label: context.t.navTransactions,
+                floatingActionButton: FloatingActionButton(
+                  heroTag: 'home_scanner_fab',
+                  onPressed: () {
+                    context.read<HomeBloc>().onAction(const OpenScannerAction());
+                  },
+                  backgroundColor: context.appThemes.primaryColor,
+                  elevation: 4,
+                  child: Icon(Icons.add, color: context.appThemes.surfaceColor, size: 28),
                 ),
-                // Center placeholder for FAB
-                const BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.show_chart_outlined),
-                  activeIcon: const Icon(Icons.show_chart),
-                  label: context.t.navTrends,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.settings_outlined),
-                  activeIcon: const Icon(Icons.settings),
-                  label: context.t.navSettings,
-                ),
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              heroTag: 'home_scanner_fab',
-              onPressed: () {
-                context.read<HomeBloc>().onAction(const OpenScannerAction());
-              },
-              backgroundColor: context.appThemes.primaryColor,
-              elevation: 4,
-              child: Icon(Icons.add, color: context.appThemes.surfaceColor, size: 28),
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              );
+            },
           );
         },
       ),

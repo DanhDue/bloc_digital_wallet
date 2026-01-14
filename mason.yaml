@@ -1,22 +1,17 @@
-# Register bricks which can be consumed via the Mason CLI.
-# Run "mason get" to install all registered bricks.
 bricks:
-  # MVI Feature brick for Clean Architecture + MVI pattern
   mvi_feature:
     path: bricks/mvi_feature
-  
-  # MVI Subfeature brick for adding features to existing modules
   mvi_subfeature:
     path: bricks/mvi_subfeature
   remove_feature:
     path: bricks/remove_feature
   remove_subfeature:
     path: bricks/remove_subfeature
-  
-  # Sample brick for demo purposes with all actions, events, states
   sample:
     path: bricks/sample
-
-  # Remove sample brick
   remove_sample:
     path: bricks/remove_sample
+  mvi_basefeature:
+    path: bricks/mvi_basefeature
+  mvi_base_subfeature:
+    path: bricks/mvi_base_subfeature

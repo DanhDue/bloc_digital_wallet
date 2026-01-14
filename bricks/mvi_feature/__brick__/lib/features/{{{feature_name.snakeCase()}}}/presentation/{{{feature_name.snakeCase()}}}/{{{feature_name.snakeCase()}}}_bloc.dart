@@ -20,7 +20,7 @@ class {{feature_name.pascalCase()}}Bloc extends MviBloc<
 
   {{feature_name.pascalCase()}}Bloc(this._get{{feature_name.pascalCase()}}UseCase)
       : super(const {{feature_name.pascalCase()}}Initial()) {
-    handleAction(null, _onLoad{{feature_name.pascalCase()}});
+    handleActionDroppable<Load{{feature_name.pascalCase()}}Action>(_onLoad{{feature_name.pascalCase()}});
   }
 
   @override
@@ -41,7 +41,7 @@ class {{feature_name.pascalCase()}}Bloc extends MviBloc<
         emit({{feature_name.pascalCase()}}Error(failure.message));
         emitEvent(ShowMessage.error(failure.message));
       },
-      (items) => emit({{feature_name.pascalCase()}}sLoaded(items)),
+      (data) => emit({{feature_name.pascalCase()}}Success(data)),
     );
   }
 }

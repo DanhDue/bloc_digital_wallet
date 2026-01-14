@@ -25,14 +25,14 @@ class SettingsLoading extends SettingsState {
   List<Object?> get props => [];
 }
 
-/// Loaded state with list
-class SettingssLoaded extends SettingsState {
-  final List<SettingsEntity> items;
+/// Success state with data (can be single object or list)
+class SettingsSuccess<T> extends SettingsState {
+  final T data;
 
-  const SettingssLoaded(this.items);
+  const SettingsSuccess(this.data);
 
   @override
-  List<Object?> get props => [items];
+  List<Object?> get props => [data];
 }
 
 /// Error state

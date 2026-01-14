@@ -1,0 +1,8 @@
+name: mvi_basefeature_hooks
+version: 0.1.0
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  mason: ^0.1.0-dev

@@ -45,16 +45,16 @@ lib/features/{feature_name}/
 │   ├── repositories/
 │   │   └── {feature_name}_repository.dart
 │   └── usecases/
-│       ├── get_{feature_name}_usecase.dart
-│       └── get_all_{feature_name}s_usecase.dart
+│       └── get_{feature_name}_usecase.dart
 └── presentation/
-    ├── mvi/
-    │   ├── {feature_name}_action.dart
-    │   ├── {feature_name}_state.dart
-    │   ├── {feature_name}_event.dart
-    │   └── {feature_name}_bloc.dart
-    └── pages/
-        └── {feature_name}_page.dart
+    ├── models/
+    │   └── {feature_name}_ui_model.dart
+    └── {feature_name}/
+        ├── {feature_name}_action.dart
+        ├── {feature_name}_bloc.dart
+        ├── {feature_name}_event.dart
+        ├── {feature_name}_page.dart
+        └── {feature_name}_state.dart
 ```
 
 ## 🔧 Variables
