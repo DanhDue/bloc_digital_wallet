@@ -23,3 +23,7 @@ class ShowMessage extends SettingsEvent {
 class NavigateToProfileEvent extends SettingsEvent {
   const NavigateToProfileEvent();
 }
+
+class NavigateToLoginEvent extends SettingsEvent {
+  const NavigateToLoginEvent();
+}

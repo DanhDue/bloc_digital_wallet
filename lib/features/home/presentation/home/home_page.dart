@@ -1,35 +1,22 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc_digital_wallet/app_router.dart';
+import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
+import 'package:bloc_digital_wallet/di/injection.dart';
+import 'package:bloc_digital_wallet/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
-import 'package:bloc_digital_wallet/generated/translations.dart';
-import 'package:bloc_digital_wallet/di/injection.dart';
 
-import '../../../wallet/presentation/wallet/wallet_page.dart';
-import '../../../transaction/presentation/transaction/transaction_page.dart';
 import '../../../scanner/presentation/scanner/scanner_page.dart';
-import '../../../trends/presentation/trends/trends_page.dart';
-import '../../../settings/presentation/settings/settings_page.dart';
-import 'home_bloc.dart';
 import 'home_action.dart';
-import 'home_state.dart';
+import 'home_bloc.dart';
 import 'home_event.dart';
+import 'home_state.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  // Pages for each tab (excluding scanner which is handled by FAB)
-  static const List<Widget> _pages = [
-    WalletPage(),
-    TransactionPage(),
-    SizedBox.shrink(), // Placeholder for Scanner (center FAB)
-    TrendsPage(),
-    SettingsPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {

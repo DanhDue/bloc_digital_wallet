@@ -172,6 +172,48 @@ BlocBuilder<WalletBloc, WalletState>(
 )
 ```
 
+## 🧭 Navigation
+
+The app uses **AutoRoute** for robust, declarative routing with support for nested navigation.
+
+### 1. Nested Navigation (Tabs)
+Each tab (Wallet, Settings, etc.) has its own independent navigation stack.
+- **Usage:** Standard `context.router` operations automatically target the current nested stack.
+- **Example:** Navigating from Settings -> Profile stays inside the Settings tab.
+
+```dart
+// SettingsStack: SettingsPage -> ProfilePage
+context.router.push(const ProfileRoute());
+```
+
+### 2. Global Navigation (Root)
+To navigate cleanly out of nested stacks (e.g., Logout, Full-screen Scanner), use the **Root Router**.
+
+```dart
+// Logout: Replaces the entire App stack with Login
+context.router.root.replaceAll([const LoginRoute()]);
+
+// Full-screen Modal: Opens covering the bottom nav
+context.router.root.push(const ScannerRoute());
+```
+
+### 3. Passing Arguments
+Arguments defined in your Page constructor are automatically generated into the Route class.
+
+**1. Define Page with arguments:**
+```dart
+class DetailPage extends StatelessWidget {
+  final String id;
+  const DetailPage({super.key, required this.id});
+  // ...
+}
+```
+
+**2. Pass arguments using the generated Route:**
+```dart
+context.router.push(DetailRoute(id: '123'));
+```
+
 ## 🛠️ Modern Stack
 
 ### State Management

@@ -49,21 +49,12 @@ class _SettingsView extends StatelessWidget {
     );
   }
 
-  /// ============================================================================
-  /// State Handling
-  /// ============================================================================
   Widget _handleState(BuildContext context, SettingsState state) {
     return switch (state) {
       SettingsInitial() => _buildInitial(context),
-      SettingsLoading() => _buildLoading(context),
-      SettingsSuccess(:final data) => _buildSuccess(context, data),
-      SettingsError(:final message) => _buildError(context, message),
     };
   }
 
-  /// ============================================================================
-  /// Event Handling
-  /// ============================================================================
   void _handleEvent(BuildContext context, SettingsState state, SettingsEvent event) {
     switch (event) {
       case ShowMessage(:final message, :final type):
@@ -77,12 +68,11 @@ class _SettingsView extends StatelessWidget {
         ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
       case NavigateToProfileEvent():
         context.router.push(const ProfileRoute());
+      case NavigateToLoginEvent():
+        context.router.root.replaceAll([const LoginRoute()]);
     }
   }
 
-  /// ============================================================================
-  /// State Widgets
-  /// ============================================================================
   Widget _buildInitial(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -95,58 +85,13 @@ class _SettingsView extends StatelessWidget {
           },
           child: const Text('Navigate to Profile'),
         ),
-        ElevatedButton(onPressed: () {}, child: const Text('Logout')),
-      ],
-    );
-  }
-
-  Widget _buildLoading(BuildContext context) {
-    return const Center(child: CircularProgressIndicator());
-  }
-
-  Widget _buildSuccess<T>(BuildContext context, T data) {
-    // Handle both single object and list
-    final items = data is List ? data : [data];
-    if (items.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.inbox, size: 64, color: context.appThemes.textSecondaryColor),
-            const SizedBox(height: 16),
-            Text('No data found', style: context.appThemes.bodyMedium),
-          ],
+        ElevatedButton(
+          onPressed: () {
+            context.read<SettingsBloc>().onAction(const LogoutAction());
+          },
+          child: const Text('Logout'),
         ),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return ListTile(
-          leading: CircleAvatar(child: Text(item.name[0].toUpperCase())),
-          title: Text(item.name, style: context.appThemes.bodyLarge),
-          subtitle: Text('ID: ${item.id}', style: context.appThemes.bodySmall),
-          trailing: const Icon(Icons.chevron_right),
-        );
-      },
-    );
-  }
-
-  Widget _buildError(BuildContext context, String message) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.error, size: 64, color: context.appThemes.errorColor),
-          const SizedBox(height: 16),
-          Text(
-            'Error: $message',
-            style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.errorColor),
-          ),
-        ],
-      ),
+      ],
     );
   }
 }

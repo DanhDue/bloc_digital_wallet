@@ -15,3 +15,7 @@ class LoadSettingsAction extends SettingsAction {
 class NavigateToProfile extends SettingsAction {
   const NavigateToProfile();
 }
+
+class LogoutAction extends SettingsAction {
+  const LogoutAction();
+}
