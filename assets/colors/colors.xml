@@ -207,6 +207,7 @@
     <color name="material_indigo_700">#303F9F</color>
     <color name="material_indigo_800">#283593</color>
     <color name="material_indigo_900">#1A237E</color>
+    <color name="scanner_blue">#007BFF</color>
 
     <!-- Blue -->
     <color name="material_blue_50">#E3F2FD</color>

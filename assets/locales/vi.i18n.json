@@ -1,5 +1,6 @@
 {
   "appName": "Wallet",
+  "appExitAppConfirm": "Nhấn nút quay lại một lần nữa để thoát ứng dụng",
   "close": "Đóng",
   "titleDialog": "Thông báo",
   "commonErrorMessage": "Đã có lỗi xảy ra. Vui lòng thử lại sau!",

@@ -1,5 +1,6 @@
 {
   "appName": "Wallet",
+  "appExitAppConfirm": "Press back again to exit app",
   "close": "Close",
   "titleDialog": "Warning",
   "commonErrorMessage": "An error occurred. Please try again later!",

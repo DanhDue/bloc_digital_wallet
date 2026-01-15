@@ -37,6 +37,10 @@ class MyApp extends StatelessWidget {
         locale: LocaleSettings.currentLocale.flutterLocale,
         supportedLocales: AppLocaleUtils.supportedLocales,
         theme: ThemeData(
+          splashFactory: NoSplash.splashFactory,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          hoverColor: Colors.transparent,
           extensions: [AppThemes.light],
           colorScheme: ColorScheme.light(
             primary: AppThemes.light.primaryColor,
@@ -46,6 +50,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(
+          splashFactory: NoSplash.splashFactory,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          hoverColor: Colors.transparent,
           extensions: [AppThemes.dark],
           colorScheme: ColorScheme.dark(
             primary: AppThemes.dark.primaryColor,

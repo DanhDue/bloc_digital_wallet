@@ -69,5 +69,6 @@
   "java.compile.nullAnalysis.mode": "automatic",
   "java.project.sourcePaths": [
     "ios"
-  ]
+  ],
+  "kiroAgent.configureMCP": "Enabled"
 }

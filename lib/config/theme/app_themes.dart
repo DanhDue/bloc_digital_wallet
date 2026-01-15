@@ -42,6 +42,30 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
   final Color authShadowColor;
   @override
   final Color authTextPrimary;
+  @override
+  final Color scannerButtonColor;
+  @override
+  final Color scannerIconColor;
+  @override
+  final Color trueBlue0;
+  @override
+  final Color trueBlue5;
+  @override
+  final Color trueBlue10;
+  @override
+  final Color trueBlue15;
+  @override
+  final Color trueBlue20;
+  @override
+  final Color trueBlue40;
+  @override
+  final Color trueBlue60;
+  @override
+  final Color trueBlue80;
+  @override
+  final Color trueBlue100;
+  @override
+  final Color trueBlue;
 
   // Text styles from Material textTheme
   @override
@@ -89,6 +113,18 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     required this.authBorderColor,
     required this.authShadowColor,
     required this.authTextPrimary,
+    required this.scannerButtonColor,
+    required this.scannerIconColor,
+    required this.trueBlue0,
+    required this.trueBlue5,
+    required this.trueBlue10,
+    required this.trueBlue15,
+    required this.trueBlue20,
+    required this.trueBlue40,
+    required this.trueBlue60,
+    required this.trueBlue80,
+    required this.trueBlue100,
+    required this.trueBlue,
     required this.displayLarge,
     required this.displayMedium,
     required this.displaySmall,
@@ -121,6 +157,18 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     Color? authBorderColor,
     Color? authShadowColor,
     Color? authTextPrimary,
+    Color? scannerButtonColor,
+    Color? scannerIconColor,
+    Color? trueBlue0,
+    Color? trueBlue5,
+    Color? trueBlue10,
+    Color? trueBlue15,
+    Color? trueBlue20,
+    Color? trueBlue40,
+    Color? trueBlue60,
+    Color? trueBlue80,
+    Color? trueBlue100,
+    Color? trueBlue,
     TextStyle? displayLarge,
     TextStyle? displayMedium,
     TextStyle? displaySmall,
@@ -151,6 +199,18 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       authBorderColor: authBorderColor ?? this.authBorderColor,
       authShadowColor: authShadowColor ?? this.authShadowColor,
       authTextPrimary: authTextPrimary ?? this.authTextPrimary,
+      scannerButtonColor: scannerButtonColor ?? this.scannerButtonColor,
+      scannerIconColor: scannerIconColor ?? this.scannerIconColor,
+      trueBlue0: trueBlue0 ?? this.trueBlue0,
+      trueBlue5: trueBlue5 ?? this.trueBlue5,
+      trueBlue10: trueBlue10 ?? this.trueBlue10,
+      trueBlue15: trueBlue15 ?? this.trueBlue15,
+      trueBlue20: trueBlue20 ?? this.trueBlue20,
+      trueBlue40: trueBlue40 ?? this.trueBlue40,
+      trueBlue60: trueBlue60 ?? this.trueBlue60,
+      trueBlue80: trueBlue80 ?? this.trueBlue80,
+      trueBlue100: trueBlue100 ?? this.trueBlue100,
+      trueBlue: trueBlue ?? this.trueBlue,
       displayLarge: displayLarge ?? this.displayLarge,
       displayMedium: displayMedium ?? this.displayMedium,
       displaySmall: displaySmall ?? this.displaySmall,
@@ -191,6 +251,20 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       authBorderColor: Color.lerp(authBorderColor, other.authBorderColor, t) ?? authBorderColor,
       authShadowColor: Color.lerp(authShadowColor, other.authShadowColor, t) ?? authShadowColor,
       authTextPrimary: Color.lerp(authTextPrimary, other.authTextPrimary, t) ?? authTextPrimary,
+      scannerButtonColor:
+          Color.lerp(scannerButtonColor, other.scannerButtonColor, t) ?? scannerButtonColor,
+      scannerIconColor:
+          Color.lerp(scannerIconColor, other.scannerIconColor, t) ?? scannerIconColor,
+      trueBlue0: Color.lerp(trueBlue0, other.trueBlue0, t) ?? trueBlue0,
+      trueBlue5: Color.lerp(trueBlue5, other.trueBlue5, t) ?? trueBlue5,
+      trueBlue10: Color.lerp(trueBlue10, other.trueBlue10, t) ?? trueBlue10,
+      trueBlue15: Color.lerp(trueBlue15, other.trueBlue15, t) ?? trueBlue15,
+      trueBlue20: Color.lerp(trueBlue20, other.trueBlue20, t) ?? trueBlue20,
+      trueBlue40: Color.lerp(trueBlue40, other.trueBlue40, t) ?? trueBlue40,
+      trueBlue60: Color.lerp(trueBlue60, other.trueBlue60, t) ?? trueBlue60,
+      trueBlue80: Color.lerp(trueBlue80, other.trueBlue80, t) ?? trueBlue80,
+      trueBlue100: Color.lerp(trueBlue100, other.trueBlue100, t) ?? trueBlue100,
+      trueBlue: Color.lerp(trueBlue, other.trueBlue, t) ?? trueBlue,
       displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t) ?? displayLarge,
       displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t) ?? displayMedium,
       displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t) ?? displaySmall,
@@ -224,6 +298,18 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     authBorderColor: AppColors.authBorderColor,
     authShadowColor: AppColors.authShadowColor,
     authTextPrimary: AppColors.authTextPrimary,
+    scannerButtonColor: AppColors.scannerBlue,
+    scannerIconColor: AppColors.white,
+    trueBlue0: AppColors.trueBlue0,
+    trueBlue5: AppColors.trueBlue5,
+    trueBlue10: AppColors.trueBlue10,
+    trueBlue15: AppColors.trueBlue15,
+    trueBlue20: AppColors.trueBlue20,
+    trueBlue40: AppColors.trueBlue40,
+    trueBlue60: AppColors.trueBlue60,
+    trueBlue80: AppColors.trueBlue80,
+    trueBlue100: AppColors.trueBlue100,
+    trueBlue: AppColors.trueBlue,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.black),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.black),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.black),
@@ -256,6 +342,18 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     authBorderColor: AppColors.themeDividerDark,
     authShadowColor: Colors.black26,
     authTextPrimary: AppColors.white,
+    scannerButtonColor: AppColors.scannerBlue,
+    scannerIconColor: AppColors.white,
+    trueBlue0: AppColors.trueBlue0,
+    trueBlue5: AppColors.trueBlue5,
+    trueBlue10: AppColors.trueBlue10,
+    trueBlue15: AppColors.trueBlue15,
+    trueBlue20: AppColors.trueBlue20,
+    trueBlue40: AppColors.trueBlue40,
+    trueBlue60: AppColors.trueBlue60,
+    trueBlue80: AppColors.trueBlue80,
+    trueBlue100: AppColors.trueBlue100,
+    trueBlue: AppColors.trueBlue,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.white),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.white),
