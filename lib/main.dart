@@ -11,6 +11,8 @@ import 'config/theme/app_themes.dart';
 import 'config/environment_config.dart';
 import 'di/injection.dart';
 import 'generated/translations.dart';
+import 'dart:async';
+import 'core/services/auth_stream_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,16 +35,37 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   static final _appRouter = AppRouter();
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  StreamSubscription? _authSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _authSubscription = getIt<AuthStreamService>().onLoggedOut.listen((_) {
+      MyApp._appRouter.replaceAll([const LoginRoute()]);
+    });
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TranslationProvider(
       child: MaterialApp.router(
-        routerConfig: _appRouter.config(
+        routerConfig: MyApp._appRouter.config(
           navigatorObservers: () => [
             FlutterSmartDialog.observer,
             TalkerRouteObserver(getIt<Talker>()),

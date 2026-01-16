@@ -10,11 +10,41 @@ import '../core/network/dio_factory.dart';
 
 import '../../core/network/app_uri.dart';
 import '../../core/utils/extensions/string_ext.dart';
+import '../../core/services/auth_stream_service.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../features/authentication/data/datasources/local/auth_local_datasource.dart';
+import '../../core/network/interceptors/auth_interceptor.dart';
 
 @module
 abstract class NetworkModule {
   @singleton
-  Dio provideDio(Talker talker) => DioFactory(talker).dio;
+  FlutterSecureStorage get secureStorage => const FlutterSecureStorage();
+  Dio provideDio(
+    Talker talker,
+    AuthLocalDataSource localDataSource,
+    AuthStreamService authStreamService,
+  ) {
+    final dio = DioFactory(talker).dio;
+
+    // Create a separate basic Dio for the AuthClient used inside the interceptor
+    // to avoid circular dependency and infinite loops during refresh.
+    final refreshDio = DioFactory(talker).dio;
+
+    // AuthClient for refresh logic
+    final authClient = AuthClient(refreshDio, baseUrl: AppUri.users.buildAppUri()!);
+
+    final authInterceptor = AuthInterceptor(
+      dio,
+      localDataSource,
+      authClient,
+      talker,
+      authStreamService,
+    );
+    dio.interceptors.add(authInterceptor);
+
+    return dio;
+  }
 
   @singleton
   AuthClient provideAuthClient(Dio dio) => AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
