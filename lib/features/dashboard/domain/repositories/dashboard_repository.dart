@@ -2,10 +2,6 @@
 
 // coverage:ignore-file
 
-import 'package:dartz/dartz.dart';
-import '../../../../core/errors/failures.dart';
-import '../entities/dashboard_entity.dart';
-
 /// ============================================================================
 /// Dashboard Repository (Interface)
 /// ============================================================================
@@ -14,7 +10,7 @@ import '../entities/dashboard_entity.dart';
 ///
 /// HOW TO IMPLEMENT:
 /// 1. Define methods for each data operation needed
-/// 2. Return Either<Failure, T> for error handling
+/// 2. Return `Either<Failure, T>` for error handling
 /// 3. Use domain entities as return types (not data models)
 ///
 /// EXAMPLE - Adding repository methods:
@@ -42,7 +38,6 @@ import '../entities/dashboard_entity.dart';
 /// - Use descriptive method names
 /// - Document expected failure types in comments
 /// ============================================================================
-
 abstract class DashboardRepository {
   // TODO: Define repository methods
   // Example:

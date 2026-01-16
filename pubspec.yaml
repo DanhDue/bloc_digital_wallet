@@ -42,10 +42,12 @@ dependencies:
   
   # Value Equality
   equatable: ^2.0.8
+  crypto: ^3.0.3
   
   # Logging & Debugging
   talker_flutter: ^5.1.9
   talker_dio_logger: ^5.1.9
+  talker_bloc_logger: ^5.1.9
   logger: ^2.5.0
   
   # Storage
@@ -67,6 +69,12 @@ dependencies:
   rxdart: ^0.28.0
   auto_route: ^11.1.0
   intl: ^0.20.1
+
+  # Local Packages
+  native_security:
+    path: packages/native_security
+  flutter_smart_dialog: ^4.9.8+9
+
 
 dev_dependencies:
   flutter_test:

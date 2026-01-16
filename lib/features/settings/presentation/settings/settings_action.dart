@@ -19,3 +19,7 @@ class NavigateToProfile extends SettingsAction {
 class LogoutAction extends SettingsAction {
   const LogoutAction();
 }
+
+class NavigateToTalkerAction extends SettingsAction {
+  const NavigateToTalkerAction();
+}

@@ -66,6 +66,50 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
   final Color trueBlue100;
   @override
   final Color trueBlue;
+  @override
+  final Color greenVogue0;
+  @override
+  final Color greenVogue5;
+  @override
+  final Color greenVogue10;
+  @override
+  final Color greenVogue15;
+  @override
+  final Color greenVogue20;
+  @override
+  final Color greenVogue25;
+  @override
+  final Color greenVogue30;
+  @override
+  final Color greenVogue35;
+  @override
+  final Color greenVogue40;
+  @override
+  final Color greenVogue45;
+  @override
+  final Color greenVogue50;
+  @override
+  final Color greenVogue55;
+  @override
+  final Color greenVogue60;
+  @override
+  final Color greenVogue65;
+  @override
+  final Color greenVogue70;
+  @override
+  final Color greenVogue75;
+  @override
+  final Color greenVogue80;
+  @override
+  final Color greenVogue85;
+  @override
+  final Color greenVogue90;
+  @override
+  final Color greenVogue95;
+  @override
+  final Color greenVogue100;
+  @override
+  final Color greenVogue;
 
   // Text styles from Material textTheme
   @override
@@ -125,6 +169,28 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     required this.trueBlue80,
     required this.trueBlue100,
     required this.trueBlue,
+    required this.greenVogue0,
+    required this.greenVogue5,
+    required this.greenVogue10,
+    required this.greenVogue15,
+    required this.greenVogue20,
+    required this.greenVogue25,
+    required this.greenVogue30,
+    required this.greenVogue35,
+    required this.greenVogue40,
+    required this.greenVogue45,
+    required this.greenVogue50,
+    required this.greenVogue55,
+    required this.greenVogue60,
+    required this.greenVogue65,
+    required this.greenVogue70,
+    required this.greenVogue75,
+    required this.greenVogue80,
+    required this.greenVogue85,
+    required this.greenVogue90,
+    required this.greenVogue95,
+    required this.greenVogue100,
+    required this.greenVogue,
     required this.displayLarge,
     required this.displayMedium,
     required this.displaySmall,
@@ -169,6 +235,28 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     Color? trueBlue80,
     Color? trueBlue100,
     Color? trueBlue,
+    Color? greenVogue0,
+    Color? greenVogue5,
+    Color? greenVogue10,
+    Color? greenVogue15,
+    Color? greenVogue20,
+    Color? greenVogue25,
+    Color? greenVogue30,
+    Color? greenVogue35,
+    Color? greenVogue40,
+    Color? greenVogue45,
+    Color? greenVogue50,
+    Color? greenVogue55,
+    Color? greenVogue60,
+    Color? greenVogue65,
+    Color? greenVogue70,
+    Color? greenVogue75,
+    Color? greenVogue80,
+    Color? greenVogue85,
+    Color? greenVogue90,
+    Color? greenVogue95,
+    Color? greenVogue100,
+    Color? greenVogue,
     TextStyle? displayLarge,
     TextStyle? displayMedium,
     TextStyle? displaySmall,
@@ -211,6 +299,28 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       trueBlue80: trueBlue80 ?? this.trueBlue80,
       trueBlue100: trueBlue100 ?? this.trueBlue100,
       trueBlue: trueBlue ?? this.trueBlue,
+      greenVogue0: greenVogue0 ?? this.greenVogue0,
+      greenVogue5: greenVogue5 ?? this.greenVogue5,
+      greenVogue10: greenVogue10 ?? this.greenVogue10,
+      greenVogue15: greenVogue15 ?? this.greenVogue15,
+      greenVogue20: greenVogue20 ?? this.greenVogue20,
+      greenVogue25: greenVogue25 ?? this.greenVogue25,
+      greenVogue30: greenVogue30 ?? this.greenVogue30,
+      greenVogue35: greenVogue35 ?? this.greenVogue35,
+      greenVogue40: greenVogue40 ?? this.greenVogue40,
+      greenVogue45: greenVogue45 ?? this.greenVogue45,
+      greenVogue50: greenVogue50 ?? this.greenVogue50,
+      greenVogue55: greenVogue55 ?? this.greenVogue55,
+      greenVogue60: greenVogue60 ?? this.greenVogue60,
+      greenVogue65: greenVogue65 ?? this.greenVogue65,
+      greenVogue70: greenVogue70 ?? this.greenVogue70,
+      greenVogue75: greenVogue75 ?? this.greenVogue75,
+      greenVogue80: greenVogue80 ?? this.greenVogue80,
+      greenVogue85: greenVogue85 ?? this.greenVogue85,
+      greenVogue90: greenVogue90 ?? this.greenVogue90,
+      greenVogue95: greenVogue95 ?? this.greenVogue95,
+      greenVogue100: greenVogue100 ?? this.greenVogue100,
+      greenVogue: greenVogue ?? this.greenVogue,
       displayLarge: displayLarge ?? this.displayLarge,
       displayMedium: displayMedium ?? this.displayMedium,
       displaySmall: displaySmall ?? this.displaySmall,
@@ -265,6 +375,28 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       trueBlue80: Color.lerp(trueBlue80, other.trueBlue80, t) ?? trueBlue80,
       trueBlue100: Color.lerp(trueBlue100, other.trueBlue100, t) ?? trueBlue100,
       trueBlue: Color.lerp(trueBlue, other.trueBlue, t) ?? trueBlue,
+      greenVogue0: Color.lerp(greenVogue0, other.greenVogue0, t) ?? greenVogue0,
+      greenVogue5: Color.lerp(greenVogue5, other.greenVogue5, t) ?? greenVogue5,
+      greenVogue10: Color.lerp(greenVogue10, other.greenVogue10, t) ?? greenVogue10,
+      greenVogue15: Color.lerp(greenVogue15, other.greenVogue15, t) ?? greenVogue15,
+      greenVogue20: Color.lerp(greenVogue20, other.greenVogue20, t) ?? greenVogue20,
+      greenVogue25: Color.lerp(greenVogue25, other.greenVogue25, t) ?? greenVogue25,
+      greenVogue30: Color.lerp(greenVogue30, other.greenVogue30, t) ?? greenVogue30,
+      greenVogue35: Color.lerp(greenVogue35, other.greenVogue35, t) ?? greenVogue35,
+      greenVogue40: Color.lerp(greenVogue40, other.greenVogue40, t) ?? greenVogue40,
+      greenVogue45: Color.lerp(greenVogue45, other.greenVogue45, t) ?? greenVogue45,
+      greenVogue50: Color.lerp(greenVogue50, other.greenVogue50, t) ?? greenVogue50,
+      greenVogue55: Color.lerp(greenVogue55, other.greenVogue55, t) ?? greenVogue55,
+      greenVogue60: Color.lerp(greenVogue60, other.greenVogue60, t) ?? greenVogue60,
+      greenVogue65: Color.lerp(greenVogue65, other.greenVogue65, t) ?? greenVogue65,
+      greenVogue70: Color.lerp(greenVogue70, other.greenVogue70, t) ?? greenVogue70,
+      greenVogue75: Color.lerp(greenVogue75, other.greenVogue75, t) ?? greenVogue75,
+      greenVogue80: Color.lerp(greenVogue80, other.greenVogue80, t) ?? greenVogue80,
+      greenVogue85: Color.lerp(greenVogue85, other.greenVogue85, t) ?? greenVogue85,
+      greenVogue90: Color.lerp(greenVogue90, other.greenVogue90, t) ?? greenVogue90,
+      greenVogue95: Color.lerp(greenVogue95, other.greenVogue95, t) ?? greenVogue95,
+      greenVogue100: Color.lerp(greenVogue100, other.greenVogue100, t) ?? greenVogue100,
+      greenVogue: Color.lerp(greenVogue, other.greenVogue, t) ?? greenVogue,
       displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t) ?? displayLarge,
       displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t) ?? displayMedium,
       displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t) ?? displaySmall,
@@ -310,6 +442,28 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     trueBlue80: AppColors.trueBlue80,
     trueBlue100: AppColors.trueBlue100,
     trueBlue: AppColors.trueBlue,
+    greenVogue0: AppColors.greenVogue0,
+    greenVogue5: AppColors.greenVogue5,
+    greenVogue10: AppColors.greenVogue10,
+    greenVogue15: AppColors.greenVogue15,
+    greenVogue20: AppColors.greenVogue20,
+    greenVogue25: AppColors.greenVogue25,
+    greenVogue30: AppColors.greenVogue30,
+    greenVogue35: AppColors.greenVogue35,
+    greenVogue40: AppColors.greenVogue40,
+    greenVogue45: AppColors.greenVogue45,
+    greenVogue50: AppColors.greenVogue50,
+    greenVogue55: AppColors.greenVogue55,
+    greenVogue60: AppColors.greenVogue60,
+    greenVogue65: AppColors.greenVogue65,
+    greenVogue70: AppColors.greenVogue70,
+    greenVogue75: AppColors.greenVogue75,
+    greenVogue80: AppColors.greenVogue80,
+    greenVogue85: AppColors.greenVogue85,
+    greenVogue90: AppColors.greenVogue90,
+    greenVogue95: AppColors.greenVogue95,
+    greenVogue100: AppColors.greenVogue100,
+    greenVogue: AppColors.greenVogue,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.black),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.black),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.black),
@@ -354,6 +508,28 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     trueBlue80: AppColors.trueBlue80,
     trueBlue100: AppColors.trueBlue100,
     trueBlue: AppColors.trueBlue,
+    greenVogue0: AppColors.greenVogue0,
+    greenVogue5: AppColors.greenVogue5,
+    greenVogue10: AppColors.greenVogue10,
+    greenVogue15: AppColors.greenVogue15,
+    greenVogue20: AppColors.greenVogue20,
+    greenVogue25: AppColors.greenVogue25,
+    greenVogue30: AppColors.greenVogue30,
+    greenVogue35: AppColors.greenVogue35,
+    greenVogue40: AppColors.greenVogue40,
+    greenVogue45: AppColors.greenVogue45,
+    greenVogue50: AppColors.greenVogue50,
+    greenVogue55: AppColors.greenVogue55,
+    greenVogue60: AppColors.greenVogue60,
+    greenVogue65: AppColors.greenVogue65,
+    greenVogue70: AppColors.greenVogue70,
+    greenVogue75: AppColors.greenVogue75,
+    greenVogue80: AppColors.greenVogue80,
+    greenVogue85: AppColors.greenVogue85,
+    greenVogue90: AppColors.greenVogue90,
+    greenVogue95: AppColors.greenVogue95,
+    greenVogue100: AppColors.greenVogue100,
+    greenVogue: AppColors.greenVogue,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.white),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.white),

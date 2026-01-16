@@ -14,6 +14,7 @@ import 'features/dashboard/presentation/dashboard/dashboard_page.dart';
 import 'features/settings/presentation/settings/settings_page.dart';
 import 'features/settings/presentation/profile/profile_page.dart';
 import 'features/settings/presentation/settings/settings_tab_page.dart';
+import 'features/settings/presentation/talker/talker_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -23,27 +24,43 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
     AutoRoute(
       page: HomeRoute.page,
-      path: '/home',
-      initial: true,
+      path: AppRoutes.home,
       children: [
-        AutoRoute(page: WalletRoute.page, path: 'wallet'),
-        AutoRoute(page: TransactionRoute.page, path: 'transaction'),
-        AutoRoute(page: TrendsRoute.page, path: 'trends'),
+        AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
+        AutoRoute(page: TransactionRoute.page, path: AppRoutes.transaction),
+        AutoRoute(page: TrendsRoute.page, path: AppRoutes.trends),
         AutoRoute(
           page: SettingsTabRoute.page,
-          path: 'settings-tab',
+          path: AppRoutes.settingsTab,
           children: [
-            AutoRoute(page: SettingsRoute.page, path: '', initial: true),
-            AutoRoute(page: ProfileRoute.page, path: 'profile'),
+            AutoRoute(page: SettingsRoute.page, path: ''),
+            AutoRoute(page: ProfileRoute.page, path: AppRoutes.profile),
           ],
         ),
       ],
     ),
-    AutoRoute(page: DashboardRoute.page, path: '/dashboard'),
-    AutoRoute(page: ScannerRoute.page, path: '/scanner'),
-    AutoRoute(page: LoginRoute.page),
-    AutoRoute(page: RegisterRoute.page, path: '/register'),
-    AutoRoute(page: ForgotPasswordRoute.page, path: '/forgot-password'),
-    AutoRoute(page: CodeVerificationRoute.page, path: '/verify-code'),
+    AutoRoute(page: DashboardRoute.page, path: AppRoutes.dashboard),
+    AutoRoute(page: ScannerRoute.page, path: AppRoutes.scanner),
+    AutoRoute(page: LoginRoute.page, path: AppRoutes.login, initial: true),
+    AutoRoute(page: RegisterRoute.page, path: AppRoutes.register),
+    AutoRoute(page: ForgotPasswordRoute.page, path: AppRoutes.forgotPassword),
+    AutoRoute(page: CodeVerificationRoute.page, path: AppRoutes.verifyCode),
+    AutoRoute(page: TalkerRoute.page, path: AppRoutes.talker),
   ];
+}
+
+class AppRoutes {
+  static const String home = '/home';
+  static const String wallet = 'wallet';
+  static const String transaction = 'transaction';
+  static const String trends = 'trends';
+  static const String settingsTab = 'settings-tab';
+  static const String profile = 'profile';
+  static const String dashboard = '/dashboard';
+  static const String scanner = '/scanner';
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String forgotPassword = '/forgot-password';
+  static const String verifyCode = '/verify-code';
+  static const String talker = '/talker';
 }

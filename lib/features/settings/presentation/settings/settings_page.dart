@@ -7,6 +7,7 @@ import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../config/environment_config.dart';
 import '../../../../config/theme/app_themes.dart';
 import '../../../../di/injection.dart';
 import 'settings_action.dart';
@@ -70,6 +71,8 @@ class _SettingsView extends StatelessWidget {
         context.router.push(const ProfileRoute());
       case NavigateToLoginEvent():
         context.router.root.replaceAll([const LoginRoute()]);
+      case NavigateToTalkerEvent():
+        context.router.push(const TalkerRoute());
     }
   }
 
@@ -91,6 +94,16 @@ class _SettingsView extends StatelessWidget {
           },
           child: const Text('Logout'),
         ),
+        if (EnvironmentConfig.enableLogging)
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: ElevatedButton(
+              onPressed: () {
+                context.read<SettingsBloc>().onAction(const NavigateToTalkerAction());
+              },
+              child: const Text('Open Logs'),
+            ),
+          ),
       ],
     );
   }

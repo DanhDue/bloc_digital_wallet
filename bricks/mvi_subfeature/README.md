@@ -49,7 +49,7 @@ Use `mvi_feature` when:
 ```
 lib/features/{module_name}/
   domain/usecases/
-    {subfeature_name}_usecase.dart          # New use case
+    get_{subfeature_name}_usecase.dart      # New use case
   presentation/pages/
     {subfeature_name}_page.dart             # New page
   presentation/widgets/
@@ -130,7 +130,7 @@ lib/features/wallet/
 
 ## Generated Files Details
 
-### 1. Use Case (`{subfeature_name}_usecase.dart`)
+### 1. Use Case (`get_{subfeature_name}_usecase.dart`)
 - Injectable use case class
 - References existing module repository
 - Single responsibility: implements the subfeature's business logic
@@ -164,7 +164,7 @@ lib/features/wallet/
 
 ### 1. Implement the Use Case
 ```dart
-// In {subfeature_name}_usecase.dart
+// In get_{subfeature_name}_usecase.dart
 Future<Either<Failure, Entity>> call(String param) async {
   // Add your business logic
   return await _repository.yourMethod(param);
@@ -299,7 +299,7 @@ The generated subfeature follows Clean Architecture + MVI:
 ┌─────────────────────────────────────────────────────┐
 │                   Domain Layer                       │
 │  ┌──────────────────────────────────────────────┐   │
-│  │ {subfeature_name}_usecase.dart               │   │
+│  │ get_{subfeature_name}_usecase.dart           │   │
 │  │  - References existing repository            │   │
 │  │  - Business logic for subfeature             │   │
 │  └──────────────────────────────────────────────┘   │

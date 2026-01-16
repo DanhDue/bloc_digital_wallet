@@ -1,0 +1,27 @@
+name: native_security
+publish_to: 'none'
+description: A reusable native security module using Dart FFI for secure key storage.
+version: 0.0.1
+homepage: https://github.com/one-of-the-DanhDue-ExOICTIF-projects
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ffi: ^2.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        ffiPlugin: true
+      ios:
+        ffiPlugin: true

@@ -3,7 +3,6 @@
 // coverage:ignore-file
 
 import 'package:injectable/injectable.dart';
-import '../models/dashboard_model.dart';
 
 /// ============================================================================
 /// Dashboard Local DataSource

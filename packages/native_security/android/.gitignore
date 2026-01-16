@@ -1,0 +1,6 @@
+/build
+/.cxx
+/.externalNativeBuild
+/.gradle
+/.idea
+/.vscode

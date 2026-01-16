@@ -43,7 +43,7 @@ class HomeBottomNavigationBar extends StatelessWidget {
         },
         type: .fixed,
         backgroundColor: context.appThemes.surfaceColor,
-        selectedItemColor: context.appThemes.primaryColor,
+        selectedItemColor: context.appThemes.trueBlue100,
         unselectedItemColor: context.appThemes.textSecondaryColor,
         selectedLabelStyle: context.appThemes.labelSmall,
         unselectedLabelStyle: context.appThemes.labelSmall,
@@ -146,7 +146,7 @@ class HomeBottomNavigationBar extends StatelessWidget {
             activeIcon,
             Text(
               label,
-              style: context.appThemes.labelSmall.copyWith(color: context.appThemes.primaryColor),
+              style: context.appThemes.labelSmall.copyWith(color: context.appThemes.trueBlue100),
             ),
             Assets.images.icSelectedBotTabIndicator.image(fit: .contain),
           ],

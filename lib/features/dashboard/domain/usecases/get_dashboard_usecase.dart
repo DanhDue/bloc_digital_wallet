@@ -6,7 +6,6 @@ import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/dashboard_entity.dart';
-import '../repositories/dashboard_repository.dart';
 
 /// ============================================================================
 /// GetDashboard UseCase
@@ -17,7 +16,7 @@ import '../repositories/dashboard_repository.dart';
 /// HOW TO IMPLEMENT:
 /// 1. Inject repository via constructor
 /// 2. Implement call() method with business logic
-/// 3. Return Either<Failure, T> for consistent error handling
+/// 3. Return `Either<Failure, T>` for consistent error handling
 ///
 /// EXAMPLE - Full use case implementation:
 /// ```dart

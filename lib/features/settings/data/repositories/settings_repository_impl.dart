@@ -8,7 +8,6 @@ import '../../domain/entities/settings_entity.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../datasources/settings_local_datasource.dart';
 import '../datasources/settings_remote_datasource.dart';
-import '../models/settings_model.dart';
 
 @LazySingleton(as: SettingsRepository)
 class SettingsRepositoryImpl implements SettingsRepository {

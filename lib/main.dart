@@ -1,5 +1,10 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+import 'package:bloc_digital_wallet/core/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:talker_bloc_logger/talker_bloc_logger.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'app_router.dart';
 import 'config/theme/app_themes.dart';
@@ -19,6 +24,12 @@ void main() {
   // Initialize dependency injection
   configureDependencies();
 
+  // Initialize Bloc Observer
+  Bloc.observer = TalkerBlocObserver(
+    talker: getIt<Talker>(),
+    settings: const TalkerBlocLoggerSettings(printStateFullData: false, printEventFullData: false),
+  );
+
   runApp(const MyApp());
 }
 
@@ -31,7 +42,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return TranslationProvider(
       child: MaterialApp.router(
-        routerConfig: _appRouter.config(),
+        routerConfig: _appRouter.config(
+          navigatorObservers: () => [
+            FlutterSmartDialog.observer,
+            TalkerRouteObserver(getIt<Talker>()),
+          ],
+        ),
         title: EnvironmentConfig.appName,
         debugShowCheckedModeBanner: EnvironmentConfig.showDebugBanner,
         locale: LocaleSettings.currentLocale.flutterLocale,
@@ -61,6 +77,9 @@ class MyApp extends StatelessWidget {
             surface: AppThemes.dark.surfaceColor,
             error: AppThemes.dark.errorColor,
           ),
+        ),
+        builder: FlutterSmartDialog.init(
+          loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
         ),
       ),
     );

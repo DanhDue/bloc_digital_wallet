@@ -25,14 +25,6 @@ abstract class MviBloc<Action extends BaseAction, State extends BaseState, Event
   /// Similar to Android's Channel of Event
   Stream<Event> get events => _eventController.stream;
 
-  /// Emit an event (side effect)
-  /// Use for one-time actions: navigation, snackbars, dialogs
-  void emitEvent(Event event) {
-    if (!_eventController.isClosed) {
-      _eventController.add(event);
-    }
-  }
-
   /// Single entry point for all user actions
   /// This is the ONLY method View should call
   /// Similar to Android's: fun onAction(action: Action)
@@ -59,6 +51,14 @@ abstract class MviBloc<Action extends BaseAction, State extends BaseState, Event
   /// Helper: Handle actions with drop while processing
   void handleActionDroppable<T extends Action>(EventHandler<T, State> handler) {
     on<T>(handler, transformer: droppable());
+  }
+
+  /// Emit an event (side effect)
+  /// Use for one-time actions: navigation, snackbars, dialogs
+  void emitEvent(Event event) {
+    if (!_eventController.isClosed) {
+      _eventController.add(event);
+    }
   }
 
   @override

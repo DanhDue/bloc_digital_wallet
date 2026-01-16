@@ -27,3 +27,7 @@ class NavigateToProfileEvent extends SettingsEvent {
 class NavigateToLoginEvent extends SettingsEvent {
   const NavigateToLoginEvent();
 }
+
+class NavigateToTalkerEvent extends SettingsEvent {
+  const NavigateToTalkerEvent();
+}

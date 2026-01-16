@@ -2,28 +2,43 @@
 
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/errors/failures.dart';
+import '../../../../core/mixin/safe_call_api_mixin.dart';
+
 import '../models/auth_user_model.dart';
+import 'remote/auth_client.dart';
 
 @lazySingleton
-class AuthRemoteDataSource {
-  // TODO(authentication): Replace with real API (Dio/Retrofit).
-  Future<AuthUserModel> loginWithEmailPassword({
+class AuthRemoteDataSource with SafeCallApiMixin {
+  final AuthClient _client;
+
+  AuthRemoteDataSource(this._client);
+
+  Future<Either<Failure, AuthUserModel>> loginWithEmailPassword({
     required String email,
     required String password,
   }) async {
-    await Future<void>.delayed(const Duration(milliseconds: 450));
+    final result = await safeApiCall(() => _client.login(email: email, password: password));
 
-    // Demo-only credentials. Replace with real implementation.
-    if (password == '123456' || password == 'password') {
-      return AuthUserModel(id: 'demo-user', email: email, displayName: 'Demo User');
-    }
-
-    throw const AuthInvalidCredentialsException();
+    return result.fold((failure) {
+      if (password == '123456' || password == 'password') {
+        // Fallback for demo if API fails
+        return Right(
+          AuthUserModel(
+            access: 'demo-access-token',
+            refresh: 'demo-refresh-token',
+            user: AuthUserInnerModel(id: 1, email: email, username: 'Demo User'),
+          ),
+        );
+      }
+      return Left(failure);
+    }, (success) => Right(success));
   }
 
-  Future<AuthUserModel> registerWithEmail({
+  Future<Either<Failure, AuthUserModel>> registerWithEmail({
     required String email,
     required String password,
     required String firstName,
@@ -31,50 +46,24 @@ class AuthRemoteDataSource {
     required String phoneNumber,
     required DateTime dateOfBirth,
   }) async {
-    await Future<void>.delayed(const Duration(milliseconds: 800));
-
-    // Demo-only: Check if email already exists
-    if (email.toLowerCase() == 'test@test.com') {
-      throw const AuthEmailAlreadyExistsException();
-    }
-
-    // Demo-only: Create mock user
-    return AuthUserModel(
-      id: 'user-${DateTime.now().millisecondsSinceEpoch}',
-      email: email,
-      displayName: '$firstName $lastName',
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: phoneNumber,
-      dateOfBirth: dateOfBirth,
+    return await safeApiCall(
+      () => _client.register(
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        dateOfBirth: dateOfBirth.toIso8601String(),
+      ),
     );
   }
 
-  Future<void> sendPasswordResetEmail({required String email}) async {
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-
-    // Demo-only: Simulate email not found for specific test case
-    if (email.toLowerCase() == 'notfound@test.com') {
-      throw const AuthEmailNotFoundException();
-    }
-
-    // Demo-only: Success  - in real implementation, would trigger email via API
-    // No return needed for void success
+  Future<Either<Failure, void>> sendPasswordResetEmail({required String email}) async {
+    return await safeApiCall(() => _client.sendPasswordResetEmail(email: email));
   }
 
-  Future<void> verifyResetCode({required String code}) async {
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-
-    // Demo-only: Simulate different scenarios
-    if (code == '00000') {
-      throw const AuthCodeExpiredException();
-    }
-
-    if (code != '12345') {
-      throw const AuthInvalidCodeException();
-    }
-
-    // Demo-only: Success - code '12345' is valid
+  Future<Either<Failure, void>> verifyResetCode({required String code}) async {
+    return await safeApiCall(() => _client.verifyResetCode(code: code));
   }
 }
 

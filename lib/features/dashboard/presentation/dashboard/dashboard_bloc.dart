@@ -3,7 +3,6 @@
 // coverage:ignore-file
 
 import 'package:injectable/injectable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/architecture/architecture.dart';
 import 'dashboard_action.dart';
 import 'dashboard_state.dart';

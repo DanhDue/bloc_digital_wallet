@@ -16,6 +16,14 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     handleActionDroppable(_initialization);
     handleActionDroppable(_onNavigateToProfile);
     handleActionDroppable(_onLogout);
+    handleActionDroppable(_onNavigateToTalker);
+  }
+
+  Future<void> _onNavigateToTalker(
+    NavigateToTalkerAction action,
+    Emitter<SettingsState> emit,
+  ) async {
+    emitEvent(const NavigateToTalkerEvent());
   }
 
   Future<void> _onNavigateToProfile(NavigateToProfile action, Emitter<SettingsState> emit) async {
