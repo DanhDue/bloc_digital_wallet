@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/core/network/app_uri.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../models/auth_user_model.dart';
@@ -12,13 +13,13 @@ part 'auth_client.g.dart';
 abstract class AuthClient {
   factory AuthClient(Dio dio, {String baseUrl}) = _AuthClient;
 
-  @POST('/login')
+  @POST('/${AppUri.login}')
   Future<AuthUserModel> login({
     @Field('email') required String email,
     @Field('password') required String password,
   });
 
-  @POST('/register')
+  @POST('/${AppUri.register}')
   Future<AuthUserModel> register({
     @Field('email') required String email,
     @Field('password') required String password,

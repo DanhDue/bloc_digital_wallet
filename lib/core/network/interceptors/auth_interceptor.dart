@@ -1,5 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import 'package:bloc_digital_wallet/core/network/app_uri.dart';
 import 'package:dio/dio.dart';
 import '../../../../features/authentication/data/datasources/local/auth_local_datasource.dart';
 import '../../../../features/authentication/data/datasources/remote/auth_client.dart';
@@ -24,9 +25,15 @@ class AuthInterceptor extends QueuedInterceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await _localDataSource.getAccessToken();
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+    final path = options.path;
+    final isAuthRequest =
+        path.contains('/${AppUri.login}') || path.contains('/${AppUri.register}');
+
+    if (!isAuthRequest) {
+      final token = await _localDataSource.getAccessToken();
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
     }
     super.onRequest(options, handler);
   }

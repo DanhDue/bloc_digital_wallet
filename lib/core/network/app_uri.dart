@@ -9,6 +9,8 @@ class AppUri {
   static const String transactions = 'transactions';
   static const String markets = 'markets';
   static const String healthz = 'healthz';
+  static const String login = 'login';
+  static const String register = 'register';
 }
 
 class UriPaths {

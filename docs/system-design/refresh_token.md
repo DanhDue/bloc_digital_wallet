@@ -94,3 +94,16 @@ Thư viện `ninja-jwt` hỗ trợ sẵn Token Rotation nhưng cần kích hoạ
 
 ### Lưu ý cho Mobile App:
 Khi Backend bật `ROTATE_REFRESH_TOKENS = True`, API response sẽ trả về cấu trúc mới. Mobile App cần parse và lưu lại cả `refresh` token mới, thay vì chỉ lưu `access` token như mặc định.
+
+---
+
+## 5. Lưu ý quan trọng cho Auth Interceptor
+
+**Tuyệt đối không gửi Token khi gọi API Login/Register.**
+
+Trong logic của `onRequest` (Interceptor), bạn cần kiểm tra URL request. Nếu là API Login hoặc Register (Public Endpoints), **KHÔNG** được đính kèm header `Authorization`.
+
+* **Lý do:**
+    1.  **Tránh xung đột:** Nếu token cũ còn lưu trong máy nhưng đã hết hạn, gửi kèm nó lên API Login sẽ khiến Server trả về 401. Điều này kích hoạt logic Refresh Token một cách vô lý (refresh trong khi user đang cố login).
+    2.  **Đảm bảo Session mới:** Login là hành động khởi tạo phiên làm việc mới, Server cần trả về cặp Access + Refresh token mới hoàn toàn mà không bị ảnh hưởng bởi token cũ.
+* **Cách làm:** Tạo danh sách **Whitelist** (ví dụ: `/login`, `/register`). Nếu URL nằm trong danh sách này, bỏ qua bước gắn token.
