@@ -59,7 +59,29 @@ Should I proceed with creating this as a [New Module/Subfeature]?
 
 **Goal**: Define business logic interfaces.
 
-1.  **Entity**: Create `[feature]_entity.dart`.
+1.  **Entity**: Create `[feature]_entity.dart` with `@freezed` and `@JsonKey` annotations.
+    - Use `abstract class` with `_$ClassName` mixin pattern
+    - Import `freezed_annotation` and `foundation.dart`
+    - Use `@JsonKey(name: 'field_name')` for each field
+    - ⚠️ **IMPORTANT**: All entities and models will use freezed with `@JsonKey` annotations.
+    
+    ```dart
+    import 'package:freezed_annotation/freezed_annotation.dart';
+    import 'package:flutter/foundation.dart';
+    part '[feature]_entity.freezed.dart';
+    part '[feature]_entity.g.dart';
+
+    @freezed
+    abstract class [Feature]Entity with _$[Feature]Entity {
+      const factory [Feature]Entity({
+        @JsonKey(name: 'id') int? id,
+        @JsonKey(name: 'name') String? name,
+      }) = _[Feature]Entity;
+
+      factory [Feature]Entity.fromJson(Map<String, Object?> json) =>
+          _$[Feature]EntityFromJson(json);
+    }
+    ```
 2.  **Repository Interface**: Define `[feature]_repository.dart`.
 3.  **Use Cases**: Create use cases for each business action (e.g., `get_data_usecase.dart`).
 
@@ -67,7 +89,8 @@ Should I proceed with creating this as a [New Module/Subfeature]?
 
 **Goal**: Implement data handling.
 
-1.  **Model**: Create `[feature]_model.dart` with `freezed` and `json_serializable`.
+1.  **Model**: Create `[feature]_model.dart` with `@freezed`, `@JsonKey`, and `json_serializable`.
+    - Same pattern as Entity with `abstract class` and `_$ClassName` mixin
 2.  **Remote DataSource**: Implement `[feature]_remote_datasource.dart` (use `SafeCallApiMixin`).
 3.  **Repository Impl**: Implement `[feature]_repository_impl.dart`.
 

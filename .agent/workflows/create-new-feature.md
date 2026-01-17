@@ -28,12 +28,18 @@ mason make mvi_subfeature --module_name {{module_name}} --subfeature_name {{subf
 ```
 
 ## 3. Implement Domain Layer
-- Create/Update Entities.
+- Create/Update Entities with `@freezed`, `abstract class`, and `@JsonKey` annotations.
+  - Import `freezed_annotation` and `foundation.dart`
+  - Use `@JsonKey(name: 'field_name')` for each field
+  - ⚠️ **IMPORTANT**: All entities and models will use freezed with `@JsonKey` annotations.
 - Create/Update Repository Interfaces.
 - Create Use Cases matching the `Functionality` requirements.
 
 ## 4. Implement Data Layer
-- Create/Update Models (DTOs) with `freezed`.
+- Create/Update Models (DTOs) with `@freezed`, `abstract class`, and `@JsonKey` annotations.
+  - Import `freezed_annotation` and `foundation.dart`
+  - Use `@JsonKey(name: 'field_name')` for each field
+  - ⚠️ **IMPORTANT**: All entities and models will use freezed with `@JsonKey` annotations.
 - Implement Remote Data Source (API calls).
 - Implement Repository.
 
