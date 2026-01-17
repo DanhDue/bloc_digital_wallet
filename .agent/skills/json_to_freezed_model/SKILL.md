@@ -1,0 +1,127 @@
+---
+name: json_to_freezed_model
+description: Parse JSON and create freezed object classes following project conventions.
+conversation_mode: Fast
+---
+
+# JSON to Freezed Object Skill
+
+Parse JSON and generate freezed object classes in the data layer.
+
+> [!IMPORTANT]
+> **Execute Immediately**: When this skill is requested, skip the `PLANNING` phase and `implementation_plan.md` creation. Proceed directly to `EXECUTION`.
+
+## 1. Analyze JSON Structure
+
+1. **Identify root object** and nested objects
+2. **Map types**: `string` → `String?`, `number` → `int?`/`double?`, `boolean` → `bool?`, `object` → nested object
+3. **Note snake_case keys** that need `@JsonKey` mapping
+4. **Naming**: Add `Object` suffix to nested object class names (e.g., `user` → `UserObject`). **Do not add prefix for nested json object.**
+
+## 2. Create Model Files
+
+For each object in the JSON hierarchy, create a file in the target data layer:
+
+```
+lib/features/{module}/data/models/
+├── {root_object}.dart
+├── {nested_object_1}.dart
+└── {nested_object_2}.dart
+```
+
+## 3. Model Template
+
+```dart
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
+
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+// Import nested models if any
+import 'nested_object.dart';
+
+part '{model_name}.freezed.dart';
+part '{model_name}.g.dart';
+
+@freezed
+abstract class {ModelName} with _${ModelName} {
+  const factory {ModelName}({
+    @JsonKey(name: 'field_name') String? fieldName,
+    @JsonKey(name: 'count') int? count,
+    @JsonKey(name: 'snake_case_field') String? camelCaseField,
+    @JsonKey(name: 'nested') NestedObject? nested,
+  }) = _{ModelName};
+
+  factory {ModelName}.fromJson(Map<String, Object?> json) =>
+      _${ModelName}FromJson(json);
+}
+```
+
+## 4. Key Rules
+
+| JSON | Dart | Notes |
+|------|------|-------|
+| `snake_case` key | `camelCase` property | Use `@JsonKey(name: 'snake_case')` |
+| Same name | Same name | **Always use `@JsonKey(name: 'field_name')`** |
+| Nested object | `{Name}Object` class | Auto-add `Object` suffix. **No prefix.** |
+| All fields | Nullable (`?`) | Use `int?`, `String?`, etc. |
+
+> **Important**: Always add `@JsonKey` annotation for **every field**, even when the JSON key matches the Dart property name exactly.
+
+## 5. Example
+
+**Input JSON:**
+```json
+{
+  "refresh": "token123",
+  "access": "token456",
+  "user": {
+    "id": 1,
+    "username": "john"
+  }
+}
+```
+
+**Output:**
+
+`user_object.dart`:
+```dart
+@freezed
+abstract class UserObject with _$UserObject {
+  const factory UserObject({
+    @JsonKey(name: 'id') int? id,
+    @JsonKey(name: 'username') String? username,
+  }) = _UserObject;
+
+  factory UserObject.fromJson(Map<String, Object?> json) =>
+      _$UserObjectFromJson(json);
+}
+```
+
+`sign_in_object.dart`:
+```dart
+@freezed
+abstract class SignInObject with _$SignInObject {
+  const factory SignInObject({
+    @JsonKey(name: 'refresh') String? refresh,
+    @JsonKey(name: 'access') String? access,
+    @JsonKey(name: 'user') UserObject? user,
+  }) = _SignInObject;
+
+  factory SignInObject.fromJson(Map<String, Object?> json) =>
+      _$SignInObjectFromJson(json);
+}
+```
+
+## 6. After Creation
+
+```bash
+# Generate code
+melos genAlls
+
+# Verify
+fvm flutter analyze --no-fatal-infos
+```

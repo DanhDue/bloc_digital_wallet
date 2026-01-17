@@ -10,7 +10,8 @@
 .agent/
 ├── README.md              # This file - overview
 ├── skills/                # Detailed skill guides (step-by-step)
-│   └── create_new_feature/
+│   ├── create_new_feature/
+│   └── json_to_freezed_model/
 ├── workflows/             # Automated workflows
 │   ├── create-new-feature.md
 │   └── session-init.md
