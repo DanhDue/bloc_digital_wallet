@@ -35,6 +35,6 @@ abstract class AuthClient {
   @POST('/code/verify')
   Future<void> verifyResetCode({@Field('code') required String code});
 
-  @POST('/refresh')
+  @POST('/${AppUri.refreshToken}')
   Future<AuthUserModel> refreshToken({@Field('refresh') required String refresh});
 }

@@ -101,7 +101,7 @@ Khi Backend bật `ROTATE_REFRESH_TOKENS = True`, API response sẽ trả về c
 
 **Tuyệt đối không gửi Token khi gọi API Login/Register.**
 
-Trong logic của `onRequest` (Interceptor), bạn cần kiểm tra URL request. Nếu là API Login hoặc Register (Public Endpoints), **KHÔNG** được đính kèm header `Authorization`.
+Trong logic của `onRequest` (Interceptor), cần kiểm tra URL request. Nếu là API Login hoặc Register (Public Endpoints), **KHÔNG** được đính kèm header `Authorization`.
 
 * **Lý do:**
     1.  **Tránh xung đột:** Nếu token cũ còn lưu trong máy nhưng đã hết hạn, gửi kèm nó lên API Login sẽ khiến Server trả về 401. Điều này kích hoạt logic Refresh Token một cách vô lý (refresh trong khi user đang cố login).

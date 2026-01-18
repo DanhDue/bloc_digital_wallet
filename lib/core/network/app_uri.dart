@@ -11,6 +11,8 @@ class AppUri {
   static const String healthz = 'healthz';
   static const String login = 'login';
   static const String register = 'register';
+  static const String refreshToken = 'refresh';
+  static const String accounts = 'accounts';
 }
 
 class UriPaths {
