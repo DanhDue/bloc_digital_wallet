@@ -6,6 +6,9 @@ description: Initialize a new chat session with a specific name and focus area
 
 When starting a new conversation, use this format as your **first message** to establish context:
 
+> [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+
 ## Template
 
 ```

@@ -7,6 +7,9 @@ description: Guide for creating a new feature or subfeature following the projec
 
 This skill guides the agent through the process of creating a new feature (New Module) or adding a subfeature to an existing module (Subfeature).
 
+> [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+
 ## 1. Analyze Request & Codebase
 
 **Goal**: Determine the context and type of feature requested.

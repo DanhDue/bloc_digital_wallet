@@ -9,10 +9,10 @@ conversation_mode: Fast
 Parse JSON and generate freezed object classes in the data layer.
 
 > [!IMPORTANT]
-> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+> **Execute Immediately**: When this skill is requested, skip the `PLANNING` phase and `implementation_plan.md` creation. Proceed directly to `EXECUTION`.
 
 > [!IMPORTANT]
-> **Execute Immediately**: When this skill is requested, skip the `PLANNING` phase and `implementation_plan.md` creation. Proceed directly to `EXECUTION`.
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of **relative imports** (e.g., `import '../../core/network/app_uri.dart';`).
 
 ## 1. Analyze JSON Structure
 
@@ -51,6 +51,7 @@ part '{model_name}.g.dart';
 
 @freezed
 abstract class {ModelName} with _${ModelName} {
+  @JsonSerializable(includeIfNull: false)
   const factory {ModelName}({
     @JsonKey(name: 'field_name') String? fieldName,
     @JsonKey(name: 'count') int? count,
@@ -72,6 +73,7 @@ abstract class {ModelName} with _${ModelName} {
 | Nested object | `{Name}Object` class | Auto-add `Object` suffix. **No prefix.** |
 | All fields | Nullable (`?`) | Use `int?`, `String?`, etc. |
 | **Class** | **`abstract class`** | **Always use `abstract class` for Freezed models** |
+| **`includeIfNull`** | **`false`** | **Always use `@JsonSerializable(includeIfNull: false)`** |
 
 > **Important**: Always add `@JsonKey` annotation for **every field**, even when the JSON key matches the Dart property name exactly.
 

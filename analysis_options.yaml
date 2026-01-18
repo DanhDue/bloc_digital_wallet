@@ -20,6 +20,8 @@ analyzer:
     - ".devcontainer/**"
     - "build/**"
     - ".dart_tool/**"
+  errors:
+    invalid_annotation_target: ignore
 
 linter:
   # The lint rules applied to this project can be customized in the

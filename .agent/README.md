@@ -2,6 +2,9 @@
 
 **Purpose**: Quick-reference resources optimized for AI agents working with bloc_digital_wallet
 
+> [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+
 ---
 
 ## 📁 Folder Structure

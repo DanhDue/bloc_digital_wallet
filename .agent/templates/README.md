@@ -24,6 +24,9 @@
 
 ### Quick Start (6 Steps):
 
+> [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+
 1. **Choose Template** - Select based on task type (create, fix, refactor, update)
 2. **Copy Structure** - Use the template from the appropriate file
 3. **Fill Details** - Replace placeholders with your requirements

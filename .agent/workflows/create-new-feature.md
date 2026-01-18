@@ -5,6 +5,9 @@ description: Create a new feature or subfeature based on a simplified prompt.
 
 This workflow automates the creation of a new feature or subfeature.
 
+> [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+
 ## 1. Analyze Request
 Analyze the `GOAL`, `Figma Design`, `Functionality`, and `Requirements` provided in the prompt.
 - **Determine Type**: Is it a [New Module] or a [Subfeature]?

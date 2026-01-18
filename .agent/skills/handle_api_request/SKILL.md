@@ -1,11 +1,15 @@
 ---
 name: handle_api_request
 description: Automate the end-to-end process of handling a new API request, from model generation to Data Source integration.
+conversation_mode: Fast
 ---
 
 # Handle API Request Skill
 
 This skill guides the process of implementing a new API request in the wallet module, ensuring all layers are correctly updated.
+
+> [!IMPORTANT]
+> **Execute Immediately**: When this skill is requested, skip the `PLANNING` phase and `implementation_plan.md` creation. Proceed directly to `EXECUTION`.
 
 > [!IMPORTANT]
 > **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
@@ -20,6 +24,9 @@ This skill guides the process of implementing a new API request in the wallet mo
 Follow the `json_to_freezed_model` skill guidelines to create:
 - Root object (e.g., `TokenAccountObject`)
 - Nested objects (e.g., `MintTokenObject`)
+
+> [!IMPORTANT]
+> **Models Rule**: All Freezed models **MUST** use `abstract class`. Follow `json_to_freezed_model` template exactly.
 
 Place models in: `lib/features/{module}/data/models/`
 
@@ -59,13 +66,17 @@ YourClient provideYourClient(Dio dio) => YourClient(dio, baseUrl: AppUri.service
 
 ## 4. Update Remote Data Source
 
-1.  **Interface**: Add the method to the `RemoteDataSource` interface.
-2.  **Implementation**: Inject the client and implement the method.
+1.  **Interface**: Add the method to the `RemoteDataSource` interface. Use `Either<Failure, T>` return type.
+2.  **Implementation**: Use `with SafeCallApiMixin` and wrap API calls with `safeApiCall`.
 
 ```dart
+// Interface
+Future<Either<Failure, BaseResponseObject<T>>> getSomething(String param);
+
+// Implementation
 @override
-Future<BaseResponseObject<T>> getSomething(String param) {
-  return apiClient.getSomething(param: param);
+Future<Either<Failure, BaseResponseObject<T>>> getSomething(String param) {
+  return safeApiCall(() => apiClient.getSomething(param: param));
 }
 ```
 

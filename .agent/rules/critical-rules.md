@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Critical Rules for AI Agents
 
 **Mandatory rules extracted from .cursorrules**
@@ -24,6 +28,9 @@
 ---
 
 ## 🎯 Architecture Rules
+
+> [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
 
 ### Clean Architecture + MVI Pattern
 
