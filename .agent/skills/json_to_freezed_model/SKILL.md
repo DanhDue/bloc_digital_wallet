@@ -9,6 +9,9 @@ conversation_mode: Fast
 Parse JSON and generate freezed object classes in the data layer.
 
 > [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+
+> [!IMPORTANT]
 > **Execute Immediately**: When this skill is requested, skip the `PLANNING` phase and `implementation_plan.md` creation. Proceed directly to `EXECUTION`.
 
 ## 1. Analyze JSON Structure
@@ -41,7 +44,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 // Import nested models if any
-import 'nested_object.dart';
+import 'package:bloc_digital_wallet/features/{module}/data/models/nested_object.dart';
 
 part '{model_name}.freezed.dart';
 part '{model_name}.g.dart';
@@ -68,6 +71,7 @@ abstract class {ModelName} with _${ModelName} {
 | Same name | Same name | **Always use `@JsonKey(name: 'field_name')`** |
 | Nested object | `{Name}Object` class | Auto-add `Object` suffix. **No prefix.** |
 | All fields | Nullable (`?`) | Use `int?`, `String?`, etc. |
+| **Class** | **`abstract class`** | **Always use `abstract class` for Freezed models** |
 
 > **Important**: Always add `@JsonKey` annotation for **every field**, even when the JSON key matches the Dart property name exactly.
 

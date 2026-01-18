@@ -7,6 +7,9 @@ description: Automate the end-to-end process of handling a new API request, from
 
 This skill guides the process of implementing a new API request in the wallet module, ensuring all layers are correctly updated.
 
+> [!IMPORTANT]
+> **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
+
 ## 1. Analyze Request & Response
 
 1.  **Identify Endpoint**: Method (GET/POST/etc.) and Path (e.g., `api/v1/tokens/accounts/{address}`).
