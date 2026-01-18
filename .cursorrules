@@ -126,6 +126,27 @@ Please confirm or provide corrections."
 
 ---
 
+## ⚠️ API Integration Workflow
+
+### When User Provides API Details
+
+**IF** user provides:
+- A CURL command or raw HTTP request details.
+- A JSON response with a request to "handle", "integrate", or "implement" the API.
+- A functional description (e.g., "Add Token Accounts API") along with endpoint details.
+- A request to create a "client" or "datasource" for a specific API endpoint.
+
+**THEN** follow this workflow:
+
+1.  **Skip PLANNING** and `implementation_plan.md` creation.
+2.  **Proceed directly to EXECUTION** following these steps:
+    - **Models**: Create Freezed models in `lib/features/{module}/data/models/`.
+    - **Network**: Add constants to `AppUri`, create Retrofit client in `lib/features/{module}/data/datasources/remote/`, and register in `NetworkModule`.
+    - **Data Source**: Implement method in `RemoteDataSource` using `SafeCallApiMixin`.
+    - **Verification**: Run `melos genAlls` and `fvm flutter analyze --no-fatal-infos`.
+
+---
+
 ## 🎯 CRITICAL RULES (Always Follow)
 
 ### 1. Architecture Pattern: Clean + MVI
