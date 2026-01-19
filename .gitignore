@@ -70,3 +70,4 @@ public/
 bricks/**/hooks/build/
 bricks/**/hooks/.dart_tool/
 bricks/**/hooks/packages/
+.metadata

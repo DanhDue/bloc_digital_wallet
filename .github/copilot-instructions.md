@@ -1,136 +1,66 @@
 # AI Coding Guidelines for bloc_digital_wallet
 
-## Architecture: Clean Architecture + MVI Pattern
+**Architecture**: Clean Architecture + MVI Pattern  
+**Framework**: Flutter/Dart  
+**Organization**: Feature-first structure
 
-This Flutter digital wallet app follows **Clean Architecture** with **MVI (Model-View-Intent)** state management, organized in a **feature-first** structure. Each feature isolates domain logic, data handling, and presentation.
+---
 
-### MVI Flow (Android-inspired)
-- **Action**: User interactions (INPUT from View) - single entry point via `bloc.onAction(action)`
-- **State**: Persistent UI data (OUTPUT to View) - emitted via `emit(state)`
-- **Event**: One-time side effects (Toast/Navigation) - emitted via `emitEvent(event)` and consumed via `bloc.events.listen()`
+## 🤖 CRITICAL: AI Agents Must Scan `.agent/` Directory
 
-### Layer Structure (per feature in `lib/features/{feature}/`)
+**BEFORE** starting ANY task, AI Agents MUST discover and read documentation from `.agent/`:
+
 ```
-domain/           # Pure Dart - NO Flutter imports
-├── entities/     # Equatable classes
-├── repositories/ # Abstract interfaces returning Either<Failure, T>
-└── usecases/     # Single responsibility, call repository
-
-data/
-├── models/       # @freezed with toEntity()/fromEntity(), fromJson/toJson
-├── datasources/  # API clients (Retrofit), throw Exceptions
-└── repositories/ # Implements domain repo, converts Exceptions → Failures
-
-presentation/
-├── {usecase}/    # One folder per use case/subfeature
-│   ├── *_action.dart  # Sealed actions extending BaseAction
-│   ├── *_state.dart   # Sealed states extending BaseState
-│   ├── *_event.dart   # Sealed events extending BaseEvent
-│   ├── *_bloc.dart    # Extends MviBloc<Action, State, Event>
-│   └── *_page.dart    # StatefulWidget with BlocProvider + event stream listener
-└── widgets/      # Shared widgets for this feature
+.agent/
+├── skills/         # @json_to_freezed_model, @api_integration, @create_new_feature
+├── workflows/      # /create-new-feature, /session-init
+├── rules/          # critical-rules.md (MANDATORY conventions)
+├── patterns/       # clean-architecture.md, mvi-patterns.md
+├── templates/      # create-new-feature.md, fix-bug.md, update-ui.md
+└── checklists/     # feature-completion.md
 ```
 
-## Critical Workflows
+### Discovery Protocol
 
-### Code Generation Pipeline
-After ANY change to models, APIs, themes, assets, or locales:
+1. **List** `.agent/` subdirectories to discover documentation
+2. **Read** `.agent/rules/critical-rules.md` for MANDATORY conventions
+3. **Trigger Skills**: Identify relevant skills in `.agent/skills/` (see below)
+4. **Follow Workflows**: Use procedures in `.agent/workflows/`
+5. **Verify** with `.agent/checklists/` before completion
+
+## 🛠️ Skill Triggers
+
+- **API Integration**: Triggered by CURL, JSON response, or "integrate API" requests. Use `.agent/skills/api_integration/SKILL.md`.
+- **Model Generation**: Triggered by JSON and "generate models" requests. Use `.agent/skills/json_to_freezed_model/SKILL.md`.
+- **Feature Creation**: Triggered by "add/create feature" requests. Use `.agent/skills/create_new_feature/SKILL.md`.
+
+---
+
+## Quick Reference
+
+All detailed documentation is in `.agent/`:
+
+- **Rules**: `.agent/rules/critical-rules.md` - All MANDATORY conventions
+- **Patterns**: `.agent/patterns/` - Architecture patterns
+- **Skills**: `.agent/skills/` - Automation workflows
+- **Workflows**: `.agent/workflows/` - Step-by-step procedures
+- **Templates**: `.agent/templates/` - Task-specific guides
+- **Checklists**: `.agent/checklists/` - Verification steps
+
+---
+
+## Essential Commands
+
 ```bash
-melos genAlls  # Runs: build_runner, fluttergen, dartfmt, license headers, git add
-```
-Individual generators: `melos genImages`, `melos genColors`, `melos build_runner`
-
-### Feature Creation - MANDATORY Planning
-**Before creating features**, analyze if it's a new module or subfeature:
-- **New module**: `mason make mvi_feature --feature_name <name>` (e.g., authentication, wallet)
-- **Subfeature**: `mason make mvi_subfeature --module_name <module> --subfeature_name <name>` (e.g., forgot_password to authentication)
-
-Check existing modules in `lib/features/` first. See `.cursorrules` lines 1-130 for decision workflow.
-
-### Dependency Injection (get_it + injectable)
-Register with `@injectable` annotation, generate with `melos build_runner`, access via `getIt<T>()` in widgets.
-
-## Essential Conventions
-
-### Styling - ALWAYS use context.appThemes
-```dart
-Text('Hello', style: context.appThemes.bodyMedium)
-Container(color: context.appThemes.surfaceColor)
-// NEVER: Theme.of(context) or Colors.red
-```
-Define colors in `assets/colors/colors.xml`, reference in `lib/config/theme/app_themes.dart`, regenerate with `melos genAlls`.
-
-### Localization - ALWAYS use context.t
-```dart
-Text(context.t.authWelcomeBack)
-// Keys defined in assets/locales/*.i18n.json (en.i18n.json, vi.i18n.json)
-// Generated to lib/generated/translations.dart via slang
+melos genAlls                   # Code generation (models, themes, locales)
+melos dartfmt                   # Format code
+fvm flutter analyze --no-fatal-infos # Analyze (MUST show "No issues found!")
 ```
 
-### MVI BLoC Pattern
-```dart
-class MyBloc extends MviBloc<MyAction, MyState, MyEvent> {
-  MyBloc(this._useCase) : super(const MyInitial()) {
-    handleActionDroppable<LoadAction>(_onLoad); // or Sequential/Restartable
-  }
-  
-  @override
-  void onAction(MyAction action) => add(action); // Single entry point
-  
-  Future<void> _onLoad(LoadAction action, Emitter<MyState> emit) async {
-    emit(const MyLoading());
-    final result = await _useCase();
-    result.fold(
-      (failure) => emit(MyError(failure.message)),
-      (data) {
-        emit(MyLoaded(data));
-        emitEvent(ShowSuccessMessage('Done!')); // One-time effect
-      },
-    );
-  }
-}
-
-// In Page: _bloc.onAction(const LoadAction());
-// Listen to events: _bloc.events.listen((event) => /* handle navigation/toast */);
-```
-
-### Error Handling with Either
-Repositories return `Either<Failure, T>` from dartz. Data sources throw Exceptions, repositories catch and convert to Failures (`ServerFailure`, `NetworkFailure`, etc. from `lib/core/errors/`).
-
-### Asset Access (generated by fluttergen)
-```dart
-Image.asset(Assets.images.logo.path)
-Lottie.asset(Assets.lotties.digitalWallet)
-AppColors.primaryColor // From colors.xml
-AppFontFamily.sfCompactDisplay
-```
-
-## Project Tooling
-
-- **FVM**: Flutter version manager - prefix all flutter commands with `fvm`
-- **Melos**: Monorepo scripts - see `melos.yaml` for all commands
-- **Mason**: Code generation templates in `bricks/` - see `docs/mason/MASON_GUIDE.md`
-- **Injectable**: DI with `@injectable`, `@singleton`, `@lazySingleton` annotations
-- **Auto Route**: Navigation with `@RoutePage()` annotation and `app_router.dart`
-- **Formatting**: 99 character line length - `melos dartfmt` or `dart format -l 99`
-
-## Key Files
-- `lib/core/architecture/mvi_bloc.dart`: Base MviBloc implementation with event stream
-- `lib/core/errors/`: Failure and Exception definitions
-- `lib/config/theme/app_themes.dart`: Theme Tailor generated themes with context extension
-- `lib/generated/translations.dart`: Slang generated i18n with context extension
-- `lib/di/injection.dart`: GetIt setup with `configureDependencies()`
-- `build.yaml`: Slang configuration for localization generation
-- `melos.yaml`: All development scripts
-
-## Before Submitting Code
-```bash
-melos dartfmt                   # Format with 99 line length
-flutter analyze --no-fatal-infos # Must show "No issues found!"
-```
+---
 
 ## References
-- Full architecture: `docs/architecture/ARCHITECTURE.md`
-- AI agent workflows: `docs/ai-agents/AI_AGENT_README.md`
-- Detailed rules: `.cursorrules` (815 lines with examples)</content>
-<parameter name="filePath">/Users/danhdue/AllProjects/sample/bloc_digital_wallet/.github/copilot-instructions.md
+
+- **Project docs**: `docs/architecture/`, `docs/development/`, `docs/mason/`
+- **AI agent resources**: `.agent/` (PRIMARY SOURCE - skills, workflows, rules, patterns, templates, checklists)
+- **Detailed rules**: `.cursorrules` (pointer to `.agent/`)

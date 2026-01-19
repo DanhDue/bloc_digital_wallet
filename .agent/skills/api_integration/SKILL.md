@@ -57,6 +57,13 @@ Use the `json_to_freezed_model` skill guidelines:
 2.  **Remote Data Source Implementation**:
     - Ensure the class uses `with SafeCallApiMixin`.
     - Implement the method using `safeApiCall(() => client.method())`.
+    - **Formatting rule**: Prefer single-line arrow syntax with wrapped return type, for example:
+
+      ```dart
+      Future<Either<Failure, BaseResponseObject<List<TokenAccountObject>>>>
+          getTokenAccounts({required String address}) =>
+              safeApiCall(() => _client.getTokenAccounts(address));
+      ```
 
 ## 5. Verification & Finalization
 

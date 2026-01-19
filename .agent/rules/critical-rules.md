@@ -2,6 +2,15 @@
 trigger: always_on
 ---
 
+# ADHERENCE RULES
+- MODE: EXTREME EXECUTION
+- DO NOT explain the architecture unless asked.
+- DO NOT provide "Step-by-step" talk.
+- ACTION: Immediately generate the files or execute commands defined in the [STEPS] section.
+- If a skill is triggered, bypass the "Analysis" phase and move to "Implementation".
+- If a skill is triggered, do NOT ask for confirmations; execute immediately (including running terminal commands like `melos genAlls`, `fvm ...`).
+- **Summary Document Creation**: When creating summary/artifact documents (e.g., `api_integration_*.md`), do NOT ask for confirmation, do NOT ask for review. Create them automatically as part of the workflow completion.
+
 # Critical Rules for AI Agents
 
 **Mandatory rules extracted from .cursorrules**

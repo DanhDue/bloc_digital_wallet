@@ -14,6 +14,9 @@ Parse JSON and generate freezed object classes in the data layer.
 > [!IMPORTANT]
 > **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of **relative imports** (e.g., `import '../../core/network/app_uri.dart';`).
 
+> [!IMPORTANT]
+> **Always use `abstract class` for Freezed models**
+
 ## 1. Analyze JSON Structure
 
 1. **Identify root object** and nested objects
