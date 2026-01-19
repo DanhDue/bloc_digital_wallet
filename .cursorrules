@@ -28,21 +28,42 @@
 4. **Follow Workflows** for step-by-step procedures in `.agent/workflows/`
 5. **Verify** with `.agent/checklists/` before completion
 
+### ⚠️ Skill Execution: NO REVIEW REQUIRED
+
+**CRITICAL RULE**: When ANY skill from `.agent/skills/` is triggered:
+- ❌ **DO NOT** ask for review, confirmation, or approval
+- ❌ **DO NOT** pause for user feedback during execution
+- ❌ **DO NOT** request review of generated files or artifacts
+- ✅ **DO** execute immediately and completely
+- ✅ **DO** create all artifacts automatically
+- ✅ **DO** run all commands without asking (e.g., `melos genAlls`, `fvm flutter analyze`)
+- ✅ **DO** complete the entire workflow end-to-end
+
+**This rule applies to ALL skills**: `@api_integration`, `@json_to_freezed_model`, `@create_new_feature`, and any future skills.
+
 ## 🛠️ Skill Mapping Rules (MANDATORY)
 
 AI Agents MUST follow these triggers to invoke specialized skills in `.agent/skills/`:
 
+> [!IMPORTANT]
+> **SKILL EXECUTION RULES**: When ANY skill is triggered:
+> - **SKIP REVIEW**: Do NOT ask for review, confirmation, or approval
+> - **SKIP PLANNING**: Proceed directly to EXECUTION (unless skill explicitly requires planning)
+> - **EXECUTE IMMEDIATELY**: Run all commands, generate all files, create all artifacts without asking
+> - **NO CONFIRMATIONS**: Do NOT pause for user approval at any step
+> - **AUTOMATIC ARTIFACTS**: Create summary/artifact documents automatically without review requests
+
 ### 1. API Integration Skill (`@api_integration`)
 - **Trigger**: IF user provides CURL, raw HTTP, JSON response to "handle/integrate", or requests a "client/datasource".
-- **Action**: Use `.agent/skills/api_integration/SKILL.md`. Skip PLANNING. Proceed to EXECUTION.
+- **Action**: Use `.agent/skills/api_integration/SKILL.md`. Skip PLANNING. Proceed to EXECUTION. **NO REVIEW REQUIRED**.
 
 ### 2. JSON to Freezed Model Skill (`@json_to_freezed_model`)
 - **Trigger**: IF user provides JSON and asks to "generate models", "create objects", or "parse JSON".
-- **Action**: Use `.agent/skills/json_to_freezed_model/SKILL.md`. Skip PLANNING. Proceed to EXECUTION.
+- **Action**: Use `.agent/skills/json_to_freezed_model/SKILL.md`. Skip PLANNING. Proceed to EXECUTION. **NO REVIEW REQUIRED**.
 
 ### 3. Feature Creation Skill (`@create_new_feature`)
 - **Trigger**: IF user asks to "create/add a feature" or "new module".
-- **Action**: Use `.agent/skills/create_new_feature/SKILL.md`. Follow its mandatory planning and confirmation steps.
+- **Action**: Use `.agent/skills/create_new_feature/SKILL.md`. Follow its mandatory planning and confirmation steps. **NO REVIEW REQUIRED** after confirmation.
 
 ---
 
