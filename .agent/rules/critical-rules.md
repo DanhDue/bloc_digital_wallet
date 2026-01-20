@@ -85,6 +85,32 @@ _bloc.add(SomeEvent());
 context.read<MyBloc>().someMethod();
 ```
 
+### Dart Dot Shorthands (MANDATORY)
+
+Use dot shorthands for Enums and static members where supported by Dart.
+
+```dart
+// ❌ AVOID - Verbose
+BoxFit.contain
+BlendMode.srcIn
+BottomNavigationBarType.fixed
+ColorFilter.mode(...)
+EdgeInsets.only(...)
+EdgeInsets.all(...)
+double.infinity
+
+// ✅ PREFERRED - Concise
+.contain
+.srcIn
+.fixed
+.mode(...)
+.only(...)
+.all(...)
+.infinity
+```
+
+**Apply when**: Type can be inferred from context (constructors, static methods, enums).
+
 ---
 
 ## 🎨 Theme & Styling (MANDATORY)

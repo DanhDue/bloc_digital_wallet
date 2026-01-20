@@ -2,12 +2,13 @@
 
 // coverage:ignore-file
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:animated_visibility/animated_visibility.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
+import 'package:bloc_digital_wallet/core/widgets/blink_text.dart';
+import 'package:bloc_digital_wallet/features/onboard/presentation/splash/splash_constants.dart';
 import 'package:bloc_digital_wallet/generated/assets.gen.dart';
 import 'package:bloc_digital_wallet/generated/translations.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,13 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
       SplashError() => false,
     };
 
+    final isVisible = switch (state) {
+      SplashInitial() => false,
+      SplashLoading(:final isAnimationVisible) => isAnimationVisible,
+      SplashSuccess() => true,
+      SplashError() => true,
+    };
+
     final showRestartWarning = switch (state) {
       SplashInitial() => false,
       SplashLoading(:final showRestartWarning) => showRestartWarning,
@@ -56,39 +64,58 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
     };
 
     return AnimatedVisibility(
-      visible: true,
-      enter: fadeIn() + scaleIn(),
-      exit: fadeOut() + scaleOut(),
-      enterDuration: const Duration(milliseconds: 500),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 36),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RepaintBoundary(
-              child: Assets.lotties.digitalWallet.lottie(
-                width: double.infinity,
-                fit: BoxFit.cover,
-                animate: isAnimating,
-                repeat: true,
-                backgroundLoading: true,
+      visible: isVisible,
+      enter: scaleIn(),
+      exit: scaleOut(),
+      enterDuration: SplashConstants.containerEnterDuration,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              // Invisible placeholder to maintain size during animation
+              Opacity(
+                opacity: 0,
+                child: Padding(
+                  padding: .symmetric(horizontal: 36),
+                  child: Assets.lotties.digitalWallet.lottie(width: .infinity, fit: .cover),
+                ),
               ),
-            ),
-            OffsetText(
-              mode: AnimationMode.reverse,
-              text: context.t.digitalWallet,
-              duration: const Duration(milliseconds: 500),
-              type: AnimationType.letter,
-              slideType: SlideAnimationType.leftRight,
-              textStyle: context.appThemes.headlineMedium,
-            ),
-            const SizedBox(height: 16),
-            _buildStatusText(context, showRestartWarning),
-            const SizedBox(height: 136),
-          ],
-        ),
+              // Animated content
+              AnimatedVisibility(
+                visible: isVisible,
+                enter: fadeIn() + scaleIn(),
+                exit: fadeOut() + scaleOut(),
+                enterDuration: SplashConstants.lottieEnterDuration,
+                child: Padding(
+                  padding: .symmetric(horizontal: 36),
+                  child: RepaintBoundary(
+                    child: Assets.lotties.digitalWallet.lottie(
+                      width: .infinity,
+                      fit: .cover,
+                      animate: isAnimating,
+                      repeat: true,
+                      backgroundLoading: true,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          OffsetText(
+            mode: AnimationMode.reverse,
+            text: context.t.digitalWallet,
+            duration: SplashConstants.titleDuration,
+            type: AnimationType.letter,
+            slideType: SlideAnimationType.leftRight,
+            textStyle: context.appThemes.headlineMedium,
+          ),
+          const SizedBox(height: 16),
+          _buildStatusText(context, showRestartWarning),
+          const SizedBox(height: 136),
+        ],
       ),
     );
   }
@@ -112,20 +139,12 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
         ? context.t.restartServiceWarning
         : context.t.serviceHealthChecking;
 
-    return AnimatedTextKit(
-      repeatForever: true,
-      animatedTexts: [
-        ColorizeAnimatedText(
-          text,
-          textStyle: context.appThemes.bodyMedium,
-          textAlign: TextAlign.center,
-          colors: [
-            context.appThemes.textSecondaryColor,
-            context.appThemes.errorColor,
-            context.appThemes.textSecondaryColor,
-          ],
-        ),
-      ],
+    return BlinkText(
+      text,
+      style: context.appThemes.bodyLarge,
+      beginColor: context.appThemes.textSecondaryColor,
+      endColor: context.appThemes.errorColor,
+      textAlign: TextAlign.center,
     );
   }
 }

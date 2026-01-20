@@ -2,7 +2,7 @@
 
 // coverage:ignore-file
 
-import 'package:bloc_digital_wallet/config/constants.dart';
+import 'package:bloc_digital_wallet/features/onboard/presentation/splash/splash_constants.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
 import 'package:bloc_digital_wallet/features/onboard/domain/usecases/health_check_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +31,29 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
   }
 
   Future<void> _onInit(InitSplashAction action, Emitter<SplashState> emit) async {
+    // Start with visibility false to trigger AnimatedVisibility enter animation
+    emit(
+      const SplashLoading(
+        isAnimationVisible: false,
+        isAnimationPlaying: false,
+        showRestartWarning: false,
+      ),
+    );
+
+    // Short delay to allow first frame, then trigger AnimatedVisibility
+    await Future.delayed(SplashConstants.visibilityDelay);
+
+    emit(
+      const SplashLoading(
+        isAnimationVisible: true,
+        isAnimationPlaying: false,
+        showRestartWarning: false,
+      ),
+    );
+
+    // Wait for outer AnimatedVisibility to complete before starting lottie
+    await Future.delayed(SplashConstants.lottieDelay);
+
     emit(
       const SplashLoading(
         isAnimationVisible: true,
@@ -67,7 +90,7 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
     // Wait for both to complete before proceeding
     final results = await Future.wait([
       _healthCheckUseCase(),
-      Future.delayed(AppConstants.minSplashDuration),
+      Future.delayed(SplashConstants.minSplashDuration),
     ]);
 
     // Get the health check result (first item in the list)

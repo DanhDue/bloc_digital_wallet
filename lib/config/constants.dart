@@ -3,7 +3,4 @@
 /// Application-wide constants
 class AppConstants {
   AppConstants._();
-
-  /// Minimum splash screen display duration
-  static const minSplashDuration = Duration(seconds: 9);
 }
