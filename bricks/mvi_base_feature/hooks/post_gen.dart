@@ -92,7 +92,6 @@ void run(HookContext context) async {
     context.logger.success('build_runner completed successfully.');
   } else {
     context.logger.err('build_runner failed: ${result.stderr}');
-    context.logger.detail(result.stdout as String);
   }
 
   context.logger.info('Running dart format...');
@@ -101,6 +100,5 @@ void run(HookContext context) async {
     context.logger.success('dart format completed successfully.');
   } else {
     context.logger.err('dart format failed: ${fmtResult.stderr}');
-    context.logger.detail(fmtResult.stdout as String);
   }
 }

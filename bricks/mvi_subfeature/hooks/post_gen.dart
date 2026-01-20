@@ -11,10 +11,13 @@ void run(HookContext context) async {
 
   final pascalCaseName = subfeatureName.pascalCase;
   final routeName = '${pascalCaseName}Route';
-
-  // Path for subfeature: features/home/presentation/wallet/wallet_page.dart
   final pageImport =
       "import 'features/${moduleName.snakeCase}/presentation/${subfeatureName.snakeCase}/${subfeatureName.snakeCase}_page.dart';";
+  final camelCaseName = subfeatureName.camelCase;
+  final paramCaseName = subfeatureName.paramCase;
+  final routeConstant = 'AppRoutes.$camelCaseName';
+  final routePath = "/$paramCaseName";
+  final constantLine = "  static const String $camelCaseName = '$routePath';";
 
   final appRouterFile = File('lib/app_router.dart');
 
@@ -24,61 +27,58 @@ void run(HookContext context) async {
   }
 
   final lines = await appRouterFile.readAsLines();
-  final newLines = <String>[];
-  bool hasImport = false;
-  bool hasRoute = false;
-
-  for (final line in lines) {
-    if (line.contains(pageImport)) {
-      hasImport = true;
-    }
-    if (line.contains('$routeName.page')) {
-      hasRoute = true;
-    }
-    newLines.add(line);
-  }
-
-  if (hasImport && hasRoute) {
-    context.logger.info('$routeName already registered in app_router.dart');
-    return;
-  }
-
   final updatedLines = <String>[];
-  bool importAdded = hasImport;
-  bool routeAdded = hasRoute;
+  bool importAdded = false;
+  bool routeAdded = false;
+  bool constantAdded = false;
 
-  for (int i = 0; i < lines.length; i++) {
-    final line = lines[i];
-
-    // Add import after the last import or at top
-    if (!importAdded &&
-        line.startsWith('import ') &&
-        (i + 1 == lines.length || !lines[i + 1].startsWith('import '))) {
-      updatedLines.add(line);
-      updatedLines.add(pageImport);
-      importAdded = true;
-      continue;
-    }
-
-    // Add route to routes list
-    if (!routeAdded && line.contains('List<AutoRoute> get routes => [')) {
-      updatedLines.add(line);
-      updatedLines.add(
-        "    AutoRoute(page: $routeName.page, path: '/${subfeatureName.paramCase}'),",
-      );
-      routeAdded = true;
-      continue;
-    }
-
-    updatedLines.add(line);
+  // Check if already registered
+  for (final line in lines) {
+    if (line.contains(pageImport)) importAdded = true;
+    if (line.contains('$routeName.page')) routeAdded = true;
+    if (line.contains('static const String $camelCaseName =')) constantAdded = true;
   }
 
-  if (!importAdded) {
-    updatedLines.insert(0, pageImport);
-  }
+  if (importAdded && routeAdded && constantAdded) {
+    context.logger.info('$pascalCaseName already registered in app_router.dart');
+  } else {
+    for (int i = 0; i < lines.length; i++) {
+      final line = lines[i];
 
-  await appRouterFile.writeAsString(updatedLines.join('\n'));
-  context.logger.success('Added $routeName to app_router.dart');
+      // 1. Add import
+      if (!importAdded &&
+          line.startsWith('import ') &&
+          (i + 1 == lines.length || !lines[i + 1].startsWith('import '))) {
+        updatedLines.add(line);
+        updatedLines.add(pageImport);
+        importAdded = true;
+        continue;
+      }
+
+      // 2. Add route to routes list
+      if (!routeAdded && line.contains('List<AutoRoute> get routes => [')) {
+        updatedLines.add(line);
+        updatedLines.add("    AutoRoute(page: $routeName.page, path: $routeConstant),");
+        routeAdded = true;
+        continue;
+      }
+
+      // 3. Add constant to AppRoutes class
+      if (!constantAdded && line.contains('class AppRoutes {')) {
+        updatedLines.add(line);
+        updatedLines.add(constantLine);
+        constantAdded = true;
+        continue;
+      }
+
+      updatedLines.add(line);
+    }
+
+    if (!importAdded) updatedLines.insert(0, pageImport);
+
+    await appRouterFile.writeAsString(updatedLines.join('\n'));
+    context.logger.success('Registered $pascalCaseName in app_router.dart');
+  }
 
   context.logger.info('Running build_runner...');
   final result = await Process.run(

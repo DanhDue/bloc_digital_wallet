@@ -191,6 +191,9 @@ Use Cases: VerbNounUseCase
 ## 🔧 Code Generation Commands
 
 ```bash
+# Verify mason modifications (ALWAYS run "mason get", "mason list" and resolve all problems to verify all mason modification is done)
+mason get
+
 # Generate ALL (theme, assets, translations, DI, models)
 melos genAlls
 

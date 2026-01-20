@@ -26,6 +26,14 @@ This skill automates the process of implementing a new API request, ensuring all
 > [!IMPORTANT]
 > **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
 
+> [!IMPORTANT]
+> **DataSource Formatting**: Prefer single-line arrow syntax with wrapped return type:
+> ```dart
+> Future<Either<Failure, BaseResponseObject<List<TokenAccountObject>>>>
+>     getTokenAccounts({required String address}) =>
+>         safeApiCall(() => _client.getTokenAccounts(address));
+> ```
+
 ## 1. Analysis Phase
 
 1.  **Extract endpoint details**: Method, path, and parameters from the provided description or CURL.
@@ -57,13 +65,6 @@ Use the `json_to_freezed_model` skill guidelines:
 2.  **Remote Data Source Implementation**:
     - Ensure the class uses `with SafeCallApiMixin`.
     - Implement the method using `safeApiCall(() => client.method())`.
-    - **Formatting rule**: Prefer single-line arrow syntax with wrapped return type, for example:
-
-      ```dart
-      Future<Either<Failure, BaseResponseObject<List<TokenAccountObject>>>>
-          getTokenAccounts({required String address}) =>
-              safeApiCall(() => _client.getTokenAccounts(address));
-      ```
 
 ## 5. Verification & Finalization
 

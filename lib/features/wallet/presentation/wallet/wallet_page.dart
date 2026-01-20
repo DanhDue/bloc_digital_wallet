@@ -1,132 +1,113 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+// coverage:ignore-file
+
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:auto_route/auto_route.dart';
 import '../../../../di/injection.dart';
-import '../../../../config/theme/app_themes.dart';
 import 'wallet_bloc.dart';
-import 'wallet_action.dart';
 import 'wallet_state.dart';
 import 'wallet_event.dart';
+// TODO: Uncomment when dispatching actions
+// import 'wallet_action.dart';
 
-/// Wallet Page - uses StatelessWidget + BlocProvider/BlocConsumer
-/// All UI state is managed in the BLoC, not with setState()
+/// ============================================================================
+/// Wallet Page
+/// ============================================================================
+/// The UI layer that displays states and dispatches actions.
+///
+/// HOW TO EXTEND:
+/// 1. Add UI widgets in the _buildContent method
+/// 2. Handle different states in the BlocBuilder
+/// 3. Handle events (navigation, snackbar) in BlocListener
+/// 4. Dispatch actions via bloc.onAction(YourAction())
+///
+/// EXAMPLE - Handling multiple states:
+/// ```dart
+/// BlocBuilder<WalletBloc, WalletState>(
+///   builder: (context, state) {
+///     return switch (state) {
+///       WalletInitial() => _buildInitial(),
+///       WalletLoading() => const CircularProgressIndicator(),
+///       WalletSuccess(:final items) => _buildList(items),
+///       WalletError(:final message) => _buildError(message),
+///     };
+///   },
+/// )
+/// ```
+/// ============================================================================
+
 @RoutePage()
 class WalletPage extends StatelessWidget {
   const WalletPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<WalletBloc>()..onAction(const LoadAllWalletsAction()),
-      child: BlocConsumer<WalletBloc, WalletState>(
+    return BlocProvider(create: (_) => getIt<WalletBloc>(), child: const _WalletView());
+  }
+}
+
+class _WalletView extends StatelessWidget {
+  const _WalletView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Wallet')),
+      body: BlocConsumer<WalletBloc, WalletState>(
         listener: (context, state) {
-          // Listen to events for side effects (one-time actions)
+          // Listen to one-time events (navigation, snackbar, dialog)
+          // State is passed to access current data during event handling
           context.read<WalletBloc>().events.listen((event) {
             if (!context.mounted) return;
-            switch (event) {
-              case ShowSuccessMessage(:final message):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                    backgroundColor: context.appThemes.primaryColor,
-                  ),
-                );
-              case ShowErrorMessage(:final message):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(message), backgroundColor: context.appThemes.errorColor),
-                );
-              case NavigateToWalletDetail():
-                // TODO: Implement navigation
-                break;
-              case NavigateBack():
-                context.router.maybePop();
-            }
+            _handleEvent(context, state, event);
           });
         },
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Wallet', style: context.appThemes.titleLarge),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    context.read<WalletBloc>().onAction(const RefreshWalletsAction());
-                  },
-                ),
-              ],
-            ),
-            body: switch (state) {
-              WalletInitial() => Center(
-                child: Text('Press refresh to load data', style: context.appThemes.bodyMedium),
-              ),
-              WalletLoading() => const Center(child: CircularProgressIndicator()),
-              WalletEmpty() => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.inbox, size: 64, color: context.appThemes.textSecondaryColor),
-                    const SizedBox(height: 16),
-                    Text('No wallets found', style: context.appThemes.bodyMedium),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<WalletBloc>().onAction(const RefreshWalletsAction());
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
-              WalletsLoaded(:final items) => RefreshIndicator(
-                onRefresh: () async {
-                  context.read<WalletBloc>().onAction(const RefreshWalletsAction());
-                },
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return ListTile(
-                      leading: CircleAvatar(child: Text(item.name[0].toUpperCase())),
-                      title: Text(item.name, style: context.appThemes.bodyLarge),
-                      subtitle: Text('ID: ${item.id}', style: context.appThemes.bodySmall),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        // TODO: Navigate to detail
-                      },
-                    );
-                  },
-                ),
-              ),
-              WalletError(:final message) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error, size: 64, color: context.appThemes.errorColor),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Error: $message',
-                      style: context.appThemes.bodyMedium.copyWith(
-                        color: context.appThemes.errorColor,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<WalletBloc>().onAction(const RefreshWalletsAction());
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
-              _ => const Center(child: Text('Unknown state')),
-            },
-          );
-        },
+        builder: (context, state) => _handleState(context, state),
       ),
     );
+  }
+
+  /// ============================================================================
+  /// State Handling
+  /// ============================================================================
+  /// States represent the UI at any given moment. Handle them here:
+  /// ============================================================================
+  Widget _handleState(BuildContext context, WalletState state) {
+    return switch (state) {
+      WalletInitial() => _buildInitial(context),
+      // TODO: Add cases for other states
+      // WalletLoading() => const Center(child: CircularProgressIndicator()),
+      // WalletSuccess(:final items) => _buildSuccess(context, items),
+      // WalletError(:final message) => _buildError(context, message),
+    };
+  }
+
+  /// ============================================================================
+  /// Event Handling
+  /// ============================================================================
+  /// Events are one-time side effects. State is passed to access current data.
+  /// ============================================================================
+  void _handleEvent(BuildContext context, WalletState state, WalletEvent event) {
+    // TODO: Handle events with switch
+    // switch (event) {
+    //   case ShowMessage(:final message, :final type):
+    //     // Show snackbar
+    //     break;
+    //   case NavigateBackEvent():
+    //     // Access state data: if (state is WalletSuccess) { ... }
+    //     context.router.pop();
+    //     break;
+    // }
+    //     break;
+    // }
+  }
+
+  /// ============================================================================
+  /// State Widgets
+  /// ============================================================================
+  Widget _buildInitial(BuildContext context) {
+    return const Center(child: Text('Wallet Feature'));
   }
 }

@@ -37,6 +37,9 @@ void run(HookContext context) async {
       // Route pattern to remove
       final routePattern = "${pascalCaseName}Route.page";
 
+      // Constant pattern to remove
+      final constantPattern = "static const String ${featureName.camelCase} =";
+
       for (final line in lines) {
         if (line.contains(importPattern)) {
           context.logger.info('Removed import for $snakeCaseName');
@@ -45,6 +48,11 @@ void run(HookContext context) async {
         }
         if (line.contains(routePattern)) {
           context.logger.info('Removed route for $snakeCaseName');
+          changed = true;
+          continue;
+        }
+        if (line.contains(constantPattern)) {
+          context.logger.info('Removed AppRoutes constant for $snakeCaseName');
           changed = true;
           continue;
         }

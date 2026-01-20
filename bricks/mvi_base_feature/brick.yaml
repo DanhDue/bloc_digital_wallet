@@ -1,4 +1,4 @@
-name: mvi_basefeature
+name: mvi_base_feature
 description: Simple MVI feature with minimal code - Initial state only, skeleton layers for expansion
 version: 1.0.0+1
 

@@ -5,7 +5,7 @@ Generate a minimal MVI feature with all 3 layers containing skeleton code and de
 ## Usage
 
 ```bash
-mason make mvi_basefeature --feature_name dashboard
+mason make mvi_base_feature --feature_name dashboard
 ```
 
 ## Generated Structure
@@ -45,7 +45,7 @@ This brick generates only **Initial** state. Add more states as needed.
 | Brick | States | Use Case |
 |-------|--------|----------|
 | **mvi_feature** | Init, Loading, Success, Error | Network features |
-| **mvi_basefeature** | Initial only | Simple UI features |
+| **mvi_base_feature** | Initial only | Simple UI features |
 
 ## Next Steps
 

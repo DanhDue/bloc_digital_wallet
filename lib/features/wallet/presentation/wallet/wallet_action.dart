@@ -1,50 +1,41 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+// coverage:ignore-file
+
 import '../../../../core/architecture/architecture.dart';
 
-/// Actions for Wallet feature (INPUT: View → ViewModel)
-/// Represents user interactions and system triggers
+/// ============================================================================
+/// Wallet Actions
+/// ============================================================================
+/// Actions represent user intentions/interactions from the UI.
+///
+/// HOW TO EXTEND:
+/// 1. Create action classes for each user interaction
+/// 2. Each action should extend WalletAction
+/// 3. Include any data needed to process the action
+///
+/// EXAMPLE - Adding actions:
+/// ```dart
+/// class LoadWalletAction extends WalletAction {
+///   const LoadWalletAction();
+/// }
+///
+/// class SubmitWalletAction extends WalletAction {
+///   final String data;
+///   const SubmitWalletAction(this.data);
+/// }
+///
+/// class RefreshWalletAction extends WalletAction {
+///   const RefreshWalletAction();
+/// }
+/// ```
+/// ============================================================================
+
 sealed class WalletAction extends BaseAction {
   const WalletAction();
 }
 
-/// Load all wallets
-class LoadAllWalletsAction extends WalletAction {
-  const LoadAllWalletsAction();
-}
-
-/// Load single wallet
-class LoadWalletAction extends WalletAction {
-  final String id;
-
-  const LoadWalletAction(this.id);
-}
-
-/// Create wallet
-class CreateWalletAction extends WalletAction {
-  final String name;
-  // TODO: Add parameters
-
-  const CreateWalletAction({required this.name});
-}
-
-/// Update wallet
-class UpdateWalletAction extends WalletAction {
-  final String id;
-  final String name;
-  // TODO: Add parameters
-
-  const UpdateWalletAction({required this.id, required this.name});
-}
-
-/// Delete wallet
-class DeleteWalletAction extends WalletAction {
-  final String id;
-
-  const DeleteWalletAction(this.id);
-}
-
-/// Refresh wallets
-class RefreshWalletsAction extends WalletAction {
-  const RefreshWalletsAction();
+/// Initialize action - called when the feature starts
+class InitWalletAction extends WalletAction {
+  const InitWalletAction();
 }
