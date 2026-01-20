@@ -1,4 +1,4 @@
-// Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
 
@@ -6,39 +6,39 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/architecture/architecture.dart';
 
 /// ============================================================================
-/// {{feature_name.pascalCase()}} States
+/// Start States
 /// ============================================================================
 /// States represent the UI state at any given moment.
-/// 
+///
 /// HOW TO EXTEND:
 /// 1. Add new state classes for different UI states (e.g., Loading, Success, Error)
-/// 2. Each state should extend {{feature_name.pascalCase()}}State
+/// 2. Each state should extend StartState
 /// 3. Include relevant data in each state class
-/// 
+///
 /// EXAMPLE - Adding Loading and Success states:
 /// ```dart
-/// class {{feature_name.pascalCase()}}Loading extends {{feature_name.pascalCase()}}State {
-///   const {{feature_name.pascalCase()}}Loading();
+/// class StartLoading extends StartState {
+///   const StartLoading();
 ///   @override
 ///   List<Object?> get props => [];
 /// }
-/// 
-/// class {{feature_name.pascalCase()}}Success extends {{feature_name.pascalCase()}}State {
+///
+/// class StartSuccess extends StartState {
 ///   final List<YourEntity> items;
-///   const {{feature_name.pascalCase()}}Success(this.items);
+///   const StartSuccess(this.items);
 ///   @override
 ///   List<Object?> get props => [items];
 /// }
 /// ```
 /// ============================================================================
 
-sealed class {{feature_name.pascalCase()}}State extends BaseState with EquatableMixin {
-  const {{feature_name.pascalCase()}}State();
+sealed class StartState extends BaseState with EquatableMixin {
+  const StartState();
 }
 
 /// Initial state - the starting point
-class {{feature_name.pascalCase()}}Initial extends {{feature_name.pascalCase()}}State {
-  const {{feature_name.pascalCase()}}Initial();
+class StartInitial extends StartState {
+  const StartInitial();
 
   @override
   List<Object?> get props => [];

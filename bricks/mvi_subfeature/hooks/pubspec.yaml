@@ -1,7 +1,8 @@
-name: hooks
-description: Hooks for mvi_subfeature
-version: 0.1.0
+name: mvi_base_subfeature_hooks
+description: Hooks for mvi_base_subfeature brick
+
 environment:
   sdk: ">=3.0.0 <4.0.0"
+
 dependencies:
-  mason: any
+  mason: ^0.1.0-dev.60

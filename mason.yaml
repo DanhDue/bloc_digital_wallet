@@ -11,7 +11,3 @@ bricks:
     path: bricks/sample
   remove_sample:
     path: bricks/remove_sample
-  mvi_base_feature:
-    path: bricks/mvi_base_feature
-  mvi_base_subfeature:
-    path: bricks/mvi_base_subfeature

@@ -1,18 +1,18 @@
-// Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
-import '{{{feature_name.snakeCase()}}}_bloc.dart';
-import '{{{feature_name.snakeCase()}}}_state.dart';
-import '{{{feature_name.snakeCase()}}}_event.dart';
+import 'start_bloc.dart';
+import 'start_state.dart';
+import 'start_event.dart';
 // TODO: Uncomment when dispatching actions
-// import '{{{feature_name.snakeCase()}}}_action.dart';
+// import 'start_action.dart';
 
 /// ============================================================================
-/// {{feature_name.pascalCase()}} Page
+/// Start Page
 /// ============================================================================
 /// MVI Page - Only implement the MVI methods:
 /// - buildAppBar: Optional app bar
@@ -22,32 +22,32 @@ import '{{{feature_name.snakeCase()}}}_event.dart';
 /// ============================================================================
 
 @RoutePage()
-class {{feature_name.pascalCase()}}Page extends BaseMviPage<{{feature_name.pascalCase()}}Bloc, {{feature_name.pascalCase()}}State, {{feature_name.pascalCase()}}Event> {
-  const {{feature_name.pascalCase()}}Page({super.key});
+class StartPage extends BaseMviPage<StartBloc, StartState, StartEvent> {
+  const StartPage({super.key});
 
   // TODO: Uncomment to dispatch initial action
   // @override
-  // void Function({{feature_name.pascalCase()}}Bloc bloc)? get onBlocCreated =>
-  //     (bloc) => bloc.onAction(const Load{{feature_name.pascalCase()}}Action());
+  // void Function(StartBloc bloc)? get onBlocCreated =>
+  //     (bloc) => bloc.onAction(const LoadStartAction());
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
-    return AppBar(title: const Text('{{feature_name.titleCase()}}'));
+    return AppBar(title: const Text('Start'));
   }
 
   @override
-  Widget handleState(BuildContext context, {{feature_name.pascalCase()}}State state) {
+  Widget handleState(BuildContext context, StartState state) {
     return switch (state) {
-      {{feature_name.pascalCase()}}Initial() => _buildInitial(context),
+      StartInitial() => _buildInitial(context),
       // TODO: Add cases for other states
-      // {{feature_name.pascalCase()}}Loading() => const Center(child: CircularProgressIndicator()),
-      // {{feature_name.pascalCase()}}Success(:final data) => _buildSuccess(context, data),
-      // {{feature_name.pascalCase()}}Error(:final message) => _buildError(context, message),
+      // StartLoading() => const Center(child: CircularProgressIndicator()),
+      // StartSuccess(:final items) => _buildSuccess(context, items),
+      // StartError(:final message) => _buildError(context, message),
     };
   }
 
   @override
-  void handleEvent(BuildContext context, {{feature_name.pascalCase()}}Event event) {
+  void handleEvent(BuildContext context, StartEvent event) {
     // TODO: Handle events with switch
     // switch (event) {
     //   case ShowMessage(:final message, :final type):
@@ -63,6 +63,6 @@ class {{feature_name.pascalCase()}}Page extends BaseMviPage<{{feature_name.pasca
   /// State Widgets
   /// ============================================================================
   Widget _buildInitial(BuildContext context) {
-    return const Center(child: Text('{{feature_name.titleCase()}} Feature'));
+    return const Center(child: Text('Start Subfeature'));
   }
 }

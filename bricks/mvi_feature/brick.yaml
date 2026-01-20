@@ -1,5 +1,5 @@
 name: mvi_feature
-description: Generate a feature following Clean Architecture + MVI pattern with feature-first organization
+description: MVI feature with BaseMviPage - Initial state only, skeleton layers for expansion
 version: 1.0.0+1
 
 environment:
@@ -8,5 +8,5 @@ environment:
 vars:
   feature_name:
     type: string
-    description: The name of the feature (e.g., authentication, wallet, profile)
+    description: The name of the feature (e.g., dashboard, settings)
     prompt: What is the feature name?

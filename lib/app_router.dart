@@ -17,6 +17,7 @@ import 'features/settings/presentation/talker/talker_page.dart';
 import 'features/wallet/presentation/wallet/wallet_page.dart';
 import 'features/onboard/presentation/onboard/onboard_page.dart';
 import 'features/onboard/presentation/splash/splash_page.dart';
+import 'features/onboard/presentation/start/start_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -24,6 +25,7 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+    AutoRoute(page: StartRoute.page, path: AppRoutes.start),
     AutoRoute(page: SplashRoute.page, path: AppRoutes.splash, initial: true),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
     AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
@@ -54,6 +56,7 @@ class AppRouter extends RootStackRouter {
 }
 
 class AppRoutes {
+  static const String start = '/start';
   static const String splash = '/splash';
   static const String onboard = '/onboard';
   static const String wallet = '/wallet';

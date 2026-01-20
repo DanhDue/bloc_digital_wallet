@@ -1,18 +1,44 @@
 // Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+// coverage:ignore-file
 
-part '{{{subfeature_name.snakeCase()}}}_ui_model.freezed.dart';
-part '{{{subfeature_name.snakeCase()}}}_ui_model.g.dart';
+/// ============================================================================
+/// {{subfeature_name.pascalCase()}} UI Model
+/// ============================================================================
+/// UI Models are presentation-layer representations of data.
+/// They should contain only the data needed for displaying in the UI.
+/// 
+/// HOW TO EXTEND:
+/// 1. Add fields needed for UI display
+/// 2. Add factory constructors to convert from entities
+/// 3. Keep this model focused on presentation concerns
+/// 
+/// EXAMPLE:
+/// ```dart
+/// class {{subfeature_name.pascalCase()}}UiModel {
+///   final String id;
+///   final String displayName;
+///   final String formattedDate;
+///   
+///   const {{subfeature_name.pascalCase()}}UiModel({
+///     required this.id,
+///     required this.displayName,
+///     required this.formattedDate,
+///   });
+///   
+///   factory {{subfeature_name.pascalCase()}}UiModel.fromEntity(YourEntity entity) {
+///     return {{subfeature_name.pascalCase()}}UiModel(
+///       id: entity.id,
+///       displayName: entity.name.toUpperCase(),
+///       formattedDate: DateFormat.yMd().format(entity.createdAt),
+///     );
+///   }
+/// }
+/// ```
+/// ============================================================================
 
-@freezed
-sealed class {{subfeature_name.pascalCase()}}UiModel with _${{subfeature_name.pascalCase()}}UiModel {
-  const factory {{subfeature_name.pascalCase()}}UiModel({
-    // TODO: Add UI properties
-    required String id,
-    required String title,
-  }) = _{{subfeature_name.pascalCase()}}UiModel;
-
-  factory {{subfeature_name.pascalCase()}}UiModel.fromJson(Map<String, dynamic> json) => 
-      _${{subfeature_name.pascalCase()}}UiModelFromJson(json);
+class {{subfeature_name.pascalCase()}}UiModel {
+  const {{subfeature_name.pascalCase()}}UiModel();
+  
+  // TODO: Add UI-specific fields and factory constructors
 }

@@ -1,5 +1,5 @@
 name: mvi_subfeature
-description: Generate a subfeature within an existing module (e.g., add forgot_password to authentication module)
+description: MVI subfeature with BaseMviPage - Initial state only, skeleton for expansion
 version: 1.0.0+1
 
 environment:
@@ -8,28 +8,10 @@ environment:
 vars:
   module_name:
     type: string
-    description: The name of the existing module (e.g., authentication, wallet, profile)
+    description: The name of the existing module (e.g., authentication, settings)
     prompt: What is the module name?
-  
+
   subfeature_name:
     type: string
-    description: The name of the subfeature (e.g., forgot_password, change_password, email_verification)
+    description: The name of the subfeature (e.g., profile, edit_settings)
     prompt: What is the subfeature name?
-  
-  entity_name:
-    type: string
-    description: The entity name to use (leave empty to use module's main entity)
-    prompt: Entity name (press Enter to use module's main entity)?
-    default: ""
-  
-  needs_model:
-    type: boolean
-    description: Does this subfeature need a new data model?
-    prompt: Create a new data model?
-    default: true
-  
-  needs_entity:
-    type: boolean
-    description: Does this subfeature need a new entity?
-    prompt: Create a new entity?
-    default: true

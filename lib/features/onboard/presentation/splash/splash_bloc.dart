@@ -30,10 +30,7 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
     add(action);
   }
 
-  Future<void> _onInit(
-    InitSplashAction action,
-    Emitter<SplashState> emit,
-  ) async {
+  Future<void> _onInit(InitSplashAction action, Emitter<SplashState> emit) async {
     emit(
       const SplashLoading(
         isAnimationVisible: true,
