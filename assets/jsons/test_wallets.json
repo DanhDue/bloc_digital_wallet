@@ -29,11 +29,5 @@
         "address": "3Hqxvw13oVZsKnr9ktsk6SSvJuEd2F8xYfTyVLPGHq86",
         "mnemonics": "indoor pattern stereo embark actress behind clog tonight bitter crunch bless shoot attract garden mad gossip rapid essence jar sunset umbrella thank shell south",
         "balance": 0
-    },
-    {
-        "privateKey": "[164, 83, 255, 114, 137, 98, 3, 31, 20, 194, 33, 161, 54, 162, 225, 208, 33, 100, 190, 135, 67, 200, 200, 134, 118, 204, 229, 210, 148, 6, 222, 227, 169, 167, 160, 55, 68, 35, 236, 71, 173, 72, 175, 241, 149, 136, 140, 158, 124, 252, 212, 220, 240, 24, 228, 118, 15, 160, 226, 104, 78, 0, 181, 186]",
-        "bs58PrivateKey": "4HZEpa5xeaUQJtyGPRUqchytC4utgQPqGSQLUEgTmUBz9EBZ2zwpFAs1YJyEGqX4csByWZqvoqTZCH2UfFp6KGxh",
-        "address": "CRG9hpv6WpMHhiNZKF9XSjTnfS9SavtTJqhTRc3xG4GZ",
-        "balance": 0
     }
 ]

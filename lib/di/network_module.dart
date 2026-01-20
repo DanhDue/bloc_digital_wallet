@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import '../../features/authentication/data/datasources/remote/auth_client.dart';
+import '../../features/onboard/data/datasources/health_check_client.dart';
 import '../core/network/dio_factory.dart';
 
 import '../../core/network/app_uri.dart';
@@ -48,4 +49,8 @@ abstract class NetworkModule {
 
   @singleton
   AuthClient provideAuthClient(Dio dio) => AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
+
+  @singleton
+  HealthCheckClient provideHealthCheckClient(Dio dio) =>
+      HealthCheckClient(dio, baseUrl: AppUri.healthz.buildAppUri()!);
 }

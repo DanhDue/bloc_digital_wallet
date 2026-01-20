@@ -13,6 +13,7 @@ class AppUri {
   static const String register = 'register';
   static const String refreshToken = 'refresh';
   static const String accounts = 'accounts';
+  static const String baseUrl = 'baseUrl';
 }
 
 class UriPaths {
