@@ -3,19 +3,18 @@
 // coverage:ignore-file
 
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+
+import '../../core/network/app_uri.dart';
+import '../../core/network/interceptors/auth_interceptor.dart';
+import '../../core/services/auth_stream_service.dart';
+import '../../core/utils/extensions/string_ext.dart';
+import '../../features/authentication/data/datasources/local/auth_local_datasource.dart';
 import '../../features/authentication/data/datasources/remote/auth_client.dart';
 import '../../features/onboard/data/datasources/health_check_client.dart';
 import '../core/network/dio_factory.dart';
-
-import '../../core/network/app_uri.dart';
-import '../../core/utils/extensions/string_ext.dart';
-import '../../core/services/auth_stream_service.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../features/authentication/data/datasources/local/auth_local_datasource.dart';
-import '../../core/network/interceptors/auth_interceptor.dart';
 
 @module
 abstract class NetworkModule {
@@ -51,6 +50,5 @@ abstract class NetworkModule {
   AuthClient provideAuthClient(Dio dio) => AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
 
   @singleton
-  HealthCheckClient provideHealthCheckClient(Dio dio) =>
-      HealthCheckClient(dio, baseUrl: AppUri.healthz.buildAppUri()!);
+  HealthCheckClient provideHealthCheckClient(Dio dio) => HealthCheckClient(dio);
 }

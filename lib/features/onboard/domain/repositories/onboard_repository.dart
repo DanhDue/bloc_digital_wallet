@@ -2,10 +2,9 @@
 
 // coverage:ignore-file
 
-// TODO: Uncomment imports when adding methods
-// import 'package:dartz/dartz.dart';
-// import '../../../../core/errors/failures.dart';
-// import '../entities/onboard_entity.dart';
+import 'package:bloc_digital_wallet/core/errors/failures.dart';
+import 'package:bloc_digital_wallet/core/network/base_response_object.dart';
+import 'package:dartz/dartz.dart';
 
 /// ============================================================================
 /// Onboard Repository (Interface)
@@ -45,7 +44,6 @@
 /// ============================================================================
 
 abstract class OnboardRepository {
-  // TODO: Define repository methods
-  // Example:
-  // Future<Either<Failure, List<OnboardEntity>>> getAll();
+  /// Perform health check on the backend service
+  Future<Either<Failure, BaseResponseObject<dynamic>>> healthCheck();
 }
