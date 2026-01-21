@@ -8,6 +8,19 @@ set -e
 
 echo "🚀 Setting up Flutter Development Environment for AI Agents..."
 
+# Detect Project Root (defaults to /workspace if not found)
+if [ -f "pubspec.yaml" ]; then
+    WORKSPACE_DIR="$PWD"
+elif [ -f "../pubspec.yaml" ]; then
+    WORKSPACE_DIR="$(cd .. && pwd)"
+else
+    WORKSPACE_DIR="/workspace"
+fi
+
+echo "📂 Project root: $WORKSPACE_DIR"
+cd "$WORKSPACE_DIR"
+
+
 # ============================================
 # 0. Handle Secret Environment Variables
 # ============================================
@@ -80,7 +93,7 @@ print_success "System dependencies installed"
 # 2. Configure Git (aligned with install_dev_tools.sh)
 # ============================================
 print_header "Configuring Git..."
-git config --global --add safe.directory /workspace
+git config --global --add safe.directory "$WORKSPACE_DIR"
 git config --global --replace-all core.pager "less -F -X"
 git config --global core.editor "nano"
 print_success "Git configured"
@@ -252,7 +265,7 @@ fi
 # ============================================
 print_header "Installing project dependencies..."
 
-cd /workspace
+cd "$WORKSPACE_DIR"
 
 # Flutter pub get
 print_status "Running flutter pub get..."
@@ -295,7 +308,9 @@ cat >> ~/.bashrc << 'EOF'
 # ============================================
 
 # Secrets verification
-alias verify-secrets='ls -R secureFiles'
+alias verify-secrets='ls -R $WORKSPACE_DIR/secureFiles'
+
+export WORKSPACE_DIR="$WORKSPACE_DIR"
 
 # Flutter commands (using FVM)
 alias flutter='fvm flutter'
@@ -322,16 +337,16 @@ alias melos-test='melos test'
 alias melos-format='melos dartfmt'
 
 # Quick navigation
-alias goto-features='cd /workspace/lib/features'
-alias goto-core='cd /workspace/lib/core'
-alias goto-docs='cd /workspace'
-alias goto-scripts='cd /workspace/scripts'
+alias goto-features='cd $WORKSPACE_DIR/lib/features'
+alias goto-core='cd $WORKSPACE_DIR/lib/core'
+alias goto-docs='cd $WORKSPACE_DIR'
+alias goto-scripts='cd $WORKSPACE_DIR/scripts'
 
 # Project info
-alias project-info='cat /workspace/AI_AGENT_README.md'
-alias show-workflows='cat /workspace/AI_AGENT_WORKFLOWS.md'
-alias show-context='cat /workspace/AI_AGENT_CONTEXT.md'
-alias show-checklist='cat /workspace/AI_AGENT_CHECKLIST.md'
+alias project-info='cat $WORKSPACE_DIR/AI_AGENT_README.md'
+alias show-workflows='cat $WORKSPACE_DIR/AI_AGENT_WORKFLOWS.md'
+alias show-context='cat $WORKSPACE_DIR/AI_AGENT_CONTEXT.md'
+alias show-checklist='cat $WORKSPACE_DIR/AI_AGENT_CHECKLIST.md'
 
 # Quick commands
 alias quick-fix='fvm flutter format . && fvm flutter analyze'
@@ -476,9 +491,9 @@ check_command "addlicense"
 echo ""
 
 echo "📁 Project Status:"
-if [ -f "/workspace/pubspec.yaml" ]; then
-    echo "✅ Project found: /workspace"
-    cd /workspace
+if [ -f "$WORKSPACE_DIR/pubspec.yaml" ]; then
+    echo "✅ Project found: $WORKSPACE_DIR"
+    cd "$WORKSPACE_DIR"
     echo "📦 Dependencies status:"
     if [ -d ".dart_tool" ]; then
         echo "   ✅ .dart_tool exists"
@@ -492,7 +507,7 @@ if [ -f "/workspace/pubspec.yaml" ]; then
         echo "   ✅ pubspec.lock exists"
     fi
 else
-    echo "❌ Project not found at /workspace"
+    echo "❌ Project not found at $WORKSPACE_DIR"
 fi
 echo ""
 
