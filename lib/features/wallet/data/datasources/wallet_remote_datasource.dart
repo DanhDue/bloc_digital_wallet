@@ -2,9 +2,13 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/core/mixin/safe_call_api_mixin.dart';
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-// TODO: Uncomment when implementing
-// import '../models/wallet_model.dart';
+
+import '../../../../core/errors/failures.dart';
+import '../models/token_account_object.dart';
+import 'remote/wallet_client.dart';
 
 /// ============================================================================
 /// Wallet Remote DataSource
@@ -53,17 +57,21 @@ import 'package:injectable/injectable.dart';
 /// ============================================================================
 
 abstract class WalletRemoteDataSource {
-  // TODO: Define remote data source methods
-  // Future<List<WalletModel>> getAll();
+  Future<Either<Failure, List<TokenAccountObject>>> getTokenAccounts(String address);
 }
 
 @LazySingleton(as: WalletRemoteDataSource)
-class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
-  // TODO: Inject API client
-  // final Dio _dio;
+class WalletRemoteDataSourceImpl with SafeCallApiMixin implements WalletRemoteDataSource {
+  final WalletClient _client;
 
-  WalletRemoteDataSourceImpl();
-  // WalletRemoteDataSourceImpl(this._dio);
+  WalletRemoteDataSourceImpl(this._client);
 
-  // TODO: Implement datasource methods
+  @override
+  Future<Either<Failure, List<TokenAccountObject>>> getTokenAccounts(String address) async {
+    final result = await safeApiCall(() => _client.getTokenAccounts(address));
+    return result.fold(
+      (failure) => Left(failure),
+      (response) => Right(response.data ?? []),
+    );
+  }
 }
