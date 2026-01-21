@@ -7,6 +7,8 @@ description: Automates the setup of build variants (flavors) for Android and iOS
 
 This skill configures `dev`, `stg`, and `prd` build variants for both Android and iOS in a standard Flutter project.
 
+**Reference Guide:** [Setup Development Environments Guide](https://viblo.asia/p/setup-development-environmentsdevelopstagingproduction-for-the-flutter-project-bJzKmd9659N#_1-parse-properties-from-the-flutter-command-arguments-6)
+
 ## Prerequisites
 - A standard Flutter project structure
 - `secureFiles` directory with signing keys and flavor configurations (json)
