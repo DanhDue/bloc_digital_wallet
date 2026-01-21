@@ -7,7 +7,7 @@
 - **Constants**: `lowerCamelCase` (e.g., `kDefaultTimeout`) or `SCREAMING_SNAKE` for strict config.
 
 ## 🎨 Formatting
-- **Line Length**: 80 chars (standard Dart formatter).
+- **Line Length**: 99 chars (dart format -l 99).
 - **Trailing Commas**: ALWAYS use trailing commas in widget trees for better formatting.
 - **Organization**:
   1.  Imports (Dart -> Package -> Project)
