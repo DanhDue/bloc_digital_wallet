@@ -71,3 +71,4 @@ bricks/**/hooks/build/
 bricks/**/hooks/.dart_tool/
 bricks/**/hooks/packages/
 .metadata
+mason-lock.json

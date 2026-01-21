@@ -162,7 +162,7 @@ class BlinkTextState extends State<BlinkText> with SingleTickerProviderStateMixi
     _controller.forward();
   }
 
-  _endTween() {
+  void _endTween() {
     Future.delayed(duration!, () {
       _controller.stop();
     });

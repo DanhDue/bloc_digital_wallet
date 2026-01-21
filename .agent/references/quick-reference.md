@@ -3,6 +3,7 @@
 **MVI Architecture - Cheat Sheet**
 
 > [!IMPORTANT]
+> **Jules Master Guide**: For a complete index of all skills, rules, and workflows, see [.agent/JULES_GUIDE.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/JULES_GUIDE.md).
 > **Import Convention**: Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/core/network/app_uri.dart';`) instead of relative imports (e.g., `import '../../core/network/app_uri.dart';`).
 
 ---
@@ -59,6 +60,7 @@ context.appThemes.bodyMedium.copyWith(
 ---
 
 ## 📁 File Structure Template
+> **Rule**: One Object, One File. Each Freezed model must have its own dedicated file.
 
 ```
 lib/features/{feature}/

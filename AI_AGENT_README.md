@@ -1,5 +1,8 @@
 # 🤖 AI Agent Entry Point - bloc_digital_wallet
 
+> [!IMPORTANT]
+> **Jules Master Guide**: For a complete index of all skills, rules, and workflows, see [.agent/JULES_GUIDE.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/JULES_GUIDE.md).
+
 Welcome! This file provides the essential context for building and developing this project.
 
 ## 🏗️ Build Environment (CRITICAL)
