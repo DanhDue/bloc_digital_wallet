@@ -8,6 +8,12 @@ set -e
 
 echo "🚀 Setting up Flutter Development Environment for AI Agents..."
 
+# Ensure FVM and Pub Cache is in PATH (Critical for portability)
+export PATH="$HOME/.pub-cache/bin:$HOME/fvm/bin:$HOME/fvm/default/bin:$PATH"
+export FLUTTER_ROOT="$HOME/fvm/default"
+export PUB_CACHE="$HOME/.pub-cache"
+
+
 # Detect Project Root (defaults to /workspace if not found)
 if [ -f "pubspec.yaml" ]; then
     WORKSPACE_DIR="$PWD"
@@ -192,8 +198,8 @@ print_header "Installing FVM..."
 if [ ! -d "$HOME/fvm" ]; then
     print_status "Installing FVM..."
     
-    # Install FVM via pub
-    dart pub global activate fvm
+    # Install FVM via official script (if somehow missing)
+    curl -fsSL https://fvm.app/install.sh | bash
     
     # Set up FVM directory
     mkdir -p $HOME/fvm
@@ -218,27 +224,27 @@ print_header "Installing Dart global packages..."
 
 # Install Melos
 print_status "Installing Melos..."
-dart pub global activate melos || dart pub global activate melos
+fvm flutter pub global activate melos || fvm flutter pub global activate melos
 print_success "Melos installed"
 
 # Install FlutterGen
 print_status "Installing FlutterGen..."
-dart pub global activate flutter_gen
+fvm flutter pub global activate flutter_gen
 print_success "FlutterGen installed"
 
 # Install GetX CLI (from install_dev_tools.sh)
 print_status "Installing GetX CLI..."
-dart pub global activate get_cli
+fvm flutter pub global activate get_cli
 print_success "GetX CLI installed"
 
-# Install Mason CLI
-print_status "Installing Mason CLI..."
-dart pub global activate mason_cli
-print_success "Mason CLI installed"
+# Install Mason
+print_status "Installing Mason..."
+fvm flutter pub global activate mason_cli
+print_success "Mason installed"
 
 # Install flutterfire_cli (from install_dev_tools.sh)
 print_status "Installing flutterfire_cli..."
-dart pub global activate flutterfire_cli
+fvm flutter pub global activate flutterfire_cli
 print_success "flutterfire_cli installed"
 
 # ============================================
