@@ -1,4 +1,4 @@
-import 'package:bloc_digital_wallet/features/wallet/data/models/mint_token.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/models/mint_token_object.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/token_account_object.dart';
 import 'package:flutter_test/flutter_test.dart';
 

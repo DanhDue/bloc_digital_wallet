@@ -14,7 +14,7 @@ import '../../core/utils/extensions/string_ext.dart';
 import '../../features/authentication/data/datasources/local/auth_local_datasource.dart';
 import '../../features/authentication/data/datasources/remote/auth_client.dart';
 import '../../features/onboard/data/datasources/health_check_client.dart';
-import '../../features/wallet/data/datasources/remote/wallet_client.dart';
+import '../../features/wallet/data/datasources/remote/token_client.dart';
 import '../core/network/dio_factory.dart';
 
 @module
@@ -54,6 +54,6 @@ abstract class NetworkModule {
   AuthClient provideAuthClient(Dio dio) => AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
 
   @singleton
-  WalletClient provideWalletClient(Dio dio) =>
-      WalletClient(dio, baseUrl: AppUri.tokens.buildAppUri()!);
+  TokenClient provideTokenClient(Dio dio) =>
+      TokenClient(dio, baseUrl: AppUri.tokens.buildAppUri()!);
 }

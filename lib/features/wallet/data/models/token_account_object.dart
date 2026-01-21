@@ -1,33 +1,27 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+// coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
 
-import 'mint_token.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:bloc_digital_wallet/features/wallet/data/models/mint_token_object.dart';
+
+part 'token_account_object.freezed.dart';
 part 'token_account_object.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-class TokenAccountObject extends Equatable {
-  final String? address;
-  final String? owner;
-  final double? amount;
-  final MintToken? mintToken;
-  final String? accountOwner;
+@freezed
+abstract class TokenAccountObject with _$TokenAccountObject {
+  @JsonSerializable(includeIfNull: false)
+  const factory TokenAccountObject({
+    @JsonKey(name: 'address') String? address,
+    @JsonKey(name: 'owner') String? owner,
+    @JsonKey(name: 'amount') double? amount,
+    @JsonKey(name: 'mint_token') MintTokenObject? mintToken,
+    @JsonKey(name: 'account_owner') String? accountOwner,
+  }) = _TokenAccountObject;
 
-  const TokenAccountObject({
-    this.address,
-    this.owner,
-    this.amount,
-    this.mintToken,
-    this.accountOwner,
-  });
-
-  factory TokenAccountObject.fromJson(Map<String, dynamic> json) =>
+  factory TokenAccountObject.fromJson(Map<String, Object?> json) =>
       _$TokenAccountObjectFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TokenAccountObjectToJson(this);
-
-  @override
-  List<Object?> get props => [address, owner, amount, mintToken, accountOwner];
 }
