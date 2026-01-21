@@ -49,6 +49,9 @@ else
     echo "❌ secureFiles directory MISSING. Secrets may not be configured correctly."
 fi
 
+# Unset SECURE_FILES to prevent it from persisting in the environment
+unset SECURE_FILES
+
 # Color codes for output
 GREEN='\033[0;32m'
 GREEN_BOLD='\033[1;32m'
@@ -728,5 +731,10 @@ echo -e "\033[7;32m                                       \033[0m"
 echo -e "\033[7;32m Dev Environment Ready for AI Agents!  \033[0m"
 echo -e "\033[7;32m                                       \033[0m"
 echo ""
+
+# Ensure clean working tree (discard auto-generated changes like mason-lock.json)
+print_status "Cleaning working tree..."
+git reset --hard HEAD
+print_success "Working tree cleaned"
 
 print_success "Setup script completed successfully!"
