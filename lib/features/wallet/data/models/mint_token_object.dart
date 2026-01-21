@@ -1,7 +1,9 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'mint_token_object.freezed.dart';
@@ -9,6 +11,7 @@ part 'mint_token_object.g.dart';
 
 @freezed
 abstract class MintTokenObject with _$MintTokenObject {
+  @JsonSerializable(includeIfNull: false)
   const factory MintTokenObject({
     @JsonKey(name: 'address') String? address,
     @JsonKey(name: 'decimals') int? decimals,
@@ -23,5 +26,5 @@ abstract class MintTokenObject with _$MintTokenObject {
     @JsonKey(name: 'is_mutable') bool? isMutable,
   }) = _MintTokenObject;
 
-  factory MintTokenObject.fromJson(Map<String, dynamic> json) => _$MintTokenObjectFromJson(json);
+  factory MintTokenObject.fromJson(Map<String, Object?> json) => _$MintTokenObjectFromJson(json);
 }

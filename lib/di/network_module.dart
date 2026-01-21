@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/token_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
@@ -13,7 +14,6 @@ import '../../core/services/auth_stream_service.dart';
 import '../../core/utils/extensions/string_ext.dart';
 import '../../features/authentication/data/datasources/local/auth_local_datasource.dart';
 import '../../features/authentication/data/datasources/remote/auth_client.dart';
-import '../../features/wallet/data/datasources/remote/token_client.dart';
 import '../../features/onboard/data/datasources/health_check_client.dart';
 import '../core/network/dio_factory.dart';
 

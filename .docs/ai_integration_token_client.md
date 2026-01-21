@@ -17,16 +17,16 @@
 
 ### Network Layer
 - **Retrofit Client**: Created `TokenClient` in `lib/features/wallet/data/datasources/remote/token_client.dart`.
-- **Endpoint**: `@GET('/accounts/{address}')`.
-- **DI**: Registered `TokenClient` in `NetworkModule` using `AppUri.tokens.buildAppUri()`.
+- **Endpoint**: `@GET(AppUri.accounts + UriPathParameters.address)`.
+- **DI**: Verified `TokenClient` registration in `NetworkModule`.
 
 ### Data Source
 - Updated `WalletRemoteDataSource`.
 - Implemented `getTokenAccounts` method using `SafeCallApiMixin`.
 
 ## 3. Verification
-- **Code Generation**: Application of `melos genAlls` was successful.
-- **Static Analysis**: `flutter analyze` passed with 0 issues (after fixing `abstract` keyword missing in models).
+- **Code Generation**: `melos genAlls` executed successfully.
+- **Static Analysis**: `flutter analyze` passed with 0 errors.
 
 ## 4. Next Steps
 - Integrate the datasource into the repository and domain layer when needed.

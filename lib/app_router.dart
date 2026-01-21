@@ -14,10 +14,10 @@ import 'features/settings/presentation/settings/settings_page.dart';
 import 'features/settings/presentation/profile/profile_page.dart';
 import 'features/settings/presentation/settings/settings_tab_page.dart';
 import 'features/settings/presentation/talker/talker_page.dart';
-import 'features/wallet/presentation/wallet/wallet_page.dart';
 import 'features/onboard/presentation/onboard/onboard_page.dart';
 import 'features/onboard/presentation/splash/splash_page.dart';
 import 'features/onboard/presentation/start/start_page.dart';
+import 'features/wallet/presentation/wallet/wallet_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -25,10 +25,10 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+    AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
     AutoRoute(page: StartRoute.page, path: AppRoutes.start),
     AutoRoute(page: SplashRoute.page, path: AppRoutes.splash, initial: true),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
-    AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
     AutoRoute(
       page: HomeRoute.page,
       path: AppRoutes.home,
@@ -56,10 +56,10 @@ class AppRouter extends RootStackRouter {
 }
 
 class AppRoutes {
+  static const String wallet = '/wallet';
   static const String start = '/start';
   static const String splash = '/splash';
   static const String onboard = '/onboard';
-  static const String wallet = '/wallet';
   static const String home = '/home';
   static const String transaction = 'transaction';
   static const String trends = 'trends';

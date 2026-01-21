@@ -15,7 +15,7 @@
 ///
 /// HOW TO IMPLEMENT:
 /// 1. Define methods for each data operation needed
-/// 2. Return `Either<Failure, T>` for error handling
+/// 2. Return Either<Failure, T> for error handling
 /// 3. Use domain entities as return types (not data models)
 ///
 /// EXAMPLE - Adding repository methods:
@@ -43,6 +43,7 @@
 /// - Use descriptive method names
 /// - Document expected failure types in comments
 /// ============================================================================
+
 abstract class WalletRepository {
   // TODO: Define repository methods
   // Example:

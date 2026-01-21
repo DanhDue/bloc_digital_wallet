@@ -4,8 +4,7 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../di/injection.dart';
+import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
 import 'wallet_bloc.dart';
 import 'wallet_state.dart';
 import 'wallet_event.dart';
@@ -15,91 +14,47 @@ import 'wallet_event.dart';
 /// ============================================================================
 /// Wallet Page
 /// ============================================================================
-/// The UI layer that displays states and dispatches actions.
-///
-/// HOW TO EXTEND:
-/// 1. Add UI widgets in the _buildContent method
-/// 2. Handle different states in the BlocBuilder
-/// 3. Handle events (navigation, snackbar) in BlocListener
-/// 4. Dispatch actions via bloc.onAction(YourAction())
-///
-/// EXAMPLE - Handling multiple states:
-/// ```dart
-/// BlocBuilder<WalletBloc, WalletState>(
-///   builder: (context, state) {
-///     return switch (state) {
-///       WalletInitial() => _buildInitial(),
-///       WalletLoading() => const CircularProgressIndicator(),
-///       WalletSuccess(:final items) => _buildList(items),
-///       WalletError(:final message) => _buildError(message),
-///     };
-///   },
-/// )
-/// ```
+/// MVI Page - Only implement the MVI methods:
+/// - buildAppBar: Optional app bar
+/// - handleState: Build UI based on state
+/// - handleEvent: Handle one-time events
+/// - onBlocCreated: Optional initial action
 /// ============================================================================
 
 @RoutePage()
-class WalletPage extends StatelessWidget {
+class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> {
   const WalletPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => getIt<WalletBloc>(), child: const _WalletView());
-  }
-}
-
-class _WalletView extends StatelessWidget {
-  const _WalletView();
+  // TODO: Uncomment to dispatch initial action
+  // @override
+  // void Function(WalletBloc bloc)? get onBlocCreated =>
+  //     (bloc) => bloc.onAction(const LoadWalletAction());
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Wallet')),
-      body: BlocConsumer<WalletBloc, WalletState>(
-        listener: (context, state) {
-          // Listen to one-time events (navigation, snackbar, dialog)
-          // State is passed to access current data during event handling
-          context.read<WalletBloc>().events.listen((event) {
-            if (!context.mounted) return;
-            _handleEvent(context, state, event);
-          });
-        },
-        builder: (context, state) => _handleState(context, state),
-      ),
-    );
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return AppBar(title: const Text('Wallet'));
   }
 
-  /// ============================================================================
-  /// State Handling
-  /// ============================================================================
-  /// States represent the UI at any given moment. Handle them here:
-  /// ============================================================================
-  Widget _handleState(BuildContext context, WalletState state) {
+  @override
+  Widget handleState(BuildContext context, WalletState state) {
     return switch (state) {
       WalletInitial() => _buildInitial(context),
       // TODO: Add cases for other states
       // WalletLoading() => const Center(child: CircularProgressIndicator()),
-      // WalletSuccess(:final items) => _buildSuccess(context, items),
+      // WalletSuccess(:final data) => _buildSuccess(context, data),
       // WalletError(:final message) => _buildError(context, message),
     };
   }
 
-  /// ============================================================================
-  /// Event Handling
-  /// ============================================================================
-  /// Events are one-time side effects. State is passed to access current data.
-  /// ============================================================================
-  void _handleEvent(BuildContext context, WalletState state, WalletEvent event) {
+  @override
+  void handleEvent(BuildContext context, WalletEvent event) {
     // TODO: Handle events with switch
     // switch (event) {
     //   case ShowMessage(:final message, :final type):
     //     // Show snackbar
     //     break;
     //   case NavigateBackEvent():
-    //     // Access state data: if (state is WalletSuccess) { ... }
     //     context.router.pop();
-    //     break;
-    // }
     //     break;
     // }
   }
