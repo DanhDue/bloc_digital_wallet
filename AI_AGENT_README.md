@@ -10,7 +10,11 @@ This project is optimized for **Dev Containers**. To mirror the developer's loca
     ```bash
     bash .devcontainer/setup.sh
     ```
-3.  **Permissions**: Global git safe directory is configured in the Dockerfile to prevent ownership errors in cloud agents.
+3.  **Permissions**: Global git safe directory is configured to prevent ownership errors.
+4.  **Secrets (Environment Override)**:
+    - Automatically decoded from `SECURE_FILES` during `setup.sh`.
+    - To generate this value locally, run: `bash scripts/secrets_ops.sh encode`
+    - See the [Secrets ENV Workflow](file:///.agent/workflows/secrets-env.md) for details.
 
 ## 📚 Resources & Rules
 All detailed rules, skills, and workflows are located in the `.agent/` directory.

@@ -8,6 +8,15 @@ set -e
 
 echo "🚀 Setting up Flutter Development Environment for AI Agents..."
 
+# ============================================
+# 0. Handle Secret Environment Variables
+# ============================================
+if [ ! -z "$SECURE_FILES" ]; then
+    echo "🔑 SECURE_FILES detected. Provisioning secrets..."
+    # Use the script directly or inline logic for speed
+    echo "$SECURE_FILES" | base64 -d | tar -xz || echo "⚠️  Failed to decode SECURE_FILES"
+fi
+
 # Color codes for output
 GREEN='\033[0;32m'
 GREEN_BOLD='\033[1;32m'
