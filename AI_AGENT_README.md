@@ -13,8 +13,13 @@ This project is optimized for **Dev Containers**. To mirror the developer's loca
 3.  **Permissions**: Global git safe directory is configured to prevent ownership errors.
 4.  **Secrets (Environment Override)**:
     - Automatically decoded from `SECURE_FILES` during `setup.sh`.
+    - **How to verify**: Run `ls -d secureFiles/` to ensure the folder exists.
+    - **Manual Decoding**: If automatic decoding fails, run:
+      ```bash
+      echo "$SECURE_FILES" | base64 -d | tar -xz
+      ```
     - To generate this value locally, run: `bash scripts/secrets_ops.sh encode`
-    - See the [Secrets ENV Workflow](file:///.agent/workflows/secrets-env.md) for details.
+    - See [Secrets ENV Workflow](file:///.agent/workflows/secrets-env.md) for details.
 
 ## 📚 Resources & Rules
 All detailed rules, skills, and workflows are located in the `.agent/` directory.

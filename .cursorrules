@@ -66,6 +66,16 @@
 - **New Feature/Module** → `@create_new_feature`
 
 ---
+ 
++## 🔑 Secrets & Environment (SECURE_FILES)
++
++**CRITICAL**: This project relies on a git-ignored `secureFiles/` directory.
++1. **Check**: If `secureFiles/` is missing, you ARE BLOCKED.
++2. **Retrieve**: Check for the environment variable `SECURE_FILES` (base64 encoded).
++3. **Process**: Run `bash .devcontainer/setup.sh` to automatically decode it.
++4. **Manual**: If `setup.sh` fails, run: `echo "$SECURE_FILES" | base64 -d | tar -xz`
++
++---
 
 ## Quick Reference
 

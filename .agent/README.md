@@ -21,6 +21,7 @@
 This project uses **Dev Containers** to ensure consistency between developers and AI Agents.
 - **Config**: [.devcontainer/devcontainer.json](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.devcontainer/devcontainer.json)
 - **Setup**: Run `bash .devcontainer/setup.sh` to initialize all CLI tools.
+- **Secrets**: Requires environment variable `SECURE_FILES` (base64) for git-ignored files.
 - **Entry Point**: See [AI_AGENT_README.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/AI_AGENT_README.md) at the root.
 
 ---
