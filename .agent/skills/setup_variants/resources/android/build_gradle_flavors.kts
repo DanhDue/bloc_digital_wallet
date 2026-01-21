@@ -1,14 +1,3 @@
-import java.io.FileInputStream
-import java.util.Base64
-import java.util.Properties
-
-plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id("dev.flutter.flutter-gradle-plugin")
-}
-
 // Parse dart-defines from Flutter
 val dartEnvironmentVariables =
     mutableMapOf(
@@ -31,28 +20,9 @@ if (project.hasProperty("dart-defines")) {
 println("Dart defines: $dartEnvironmentVariables")
 
 android {
-    namespace = "com.example.bloc_digital_wallet"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     defaultConfig {
-        // Base application ID
-        applicationId = "com.example.bloc_digital_wallet"
         // Dynamic application ID suffix from dart-defines
         applicationIdSuffix = dartEnvironmentVariables["DART_DEFINES_APP_ID_SUFFIX"]
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
         // Dynamic version name suffix
         versionNameSuffix = dartEnvironmentVariables["DART_DEFINES_APP_ID_SUFFIX"]?.let { ".$it" }
         // Dynamic app name from dart-defines
@@ -88,22 +58,6 @@ android {
         }
     }
 
-    buildTypes {
-        debug {
-            isDebuggable = true
-            isMinifyEnabled = false
-        }
-        release {
-            isDebuggable = false
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
-
     productFlavors {
         create("dev") {
             dimension = "default"
@@ -118,8 +72,4 @@ android {
             signingConfig = signingConfigs.getByName("production")
         }
     }
-}
-
-flutter {
-    source = "../.."
 }

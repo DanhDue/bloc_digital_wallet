@@ -1,0 +1,5 @@
+// Default values for Dart Defines
+// These are overridden by the extract_dart_defines.sh script during build if provided via CLI
+
+DART_DEFINES_APP_NAME = Zeno
+DART_DEFINES_APP_ID_SUFFIX =

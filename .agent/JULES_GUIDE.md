@@ -32,6 +32,7 @@ Trigger these skills for repetitive or complex tasks. They are your primary "aut
 | **Complete API Integration** | `@api_integration` | [SKILL.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/skills/api_integration/SKILL.md) |
 | **New Feature Gen** | `@create_new_feature` | [SKILL.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/skills/create_new_feature/SKILL.md) |
 | **JSON to Freezed** | `@json_to_freezed_model` | [SKILL.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/skills/json_to_freezed_model/SKILL.md) |
+| **Setup Variants** | `@setup_variants` | [SKILL.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/skills/setup_variants/SKILL.md) |
 
 ---
 

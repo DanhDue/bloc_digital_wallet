@@ -14,6 +14,7 @@
 | **API Integration** | `@api_integration` | Automate API handling (Model/Client/DS) | [SKILL.md](skills/api_integration/SKILL.md) |
 | **Feature Creation** | `@create_new_feature` | Guide for New Modules & Subfeatures | [SKILL.md](skills/create_new_feature/SKILL.md) |
 | **JSON to Freezed** | `@json_to_freezed_model` | Parse JSON → Freezed Models | [SKILL.md](skills/json_to_freezed_model/SKILL.md) |
+| **Setup Variants** | `@setup_variants` | Automate Flavors (Android/iOS) | [SKILL.md](skills/setup_variants/SKILL.md) |
 
 ---
 

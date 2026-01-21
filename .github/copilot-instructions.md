@@ -50,6 +50,7 @@
  - **API Integration** → `@api_integration` (CURL, JSON response)
  - **Model Generation** → `@json_to_freezed_model` (JSON object)
  - **Feature Creation** → `@create_new_feature` (New feature/module)
+ - **Setup Flavors** → `@setup_variants` (Android/iOS Build Variants)
  
  ---
 

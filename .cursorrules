@@ -64,6 +64,7 @@
 - **API/CURL/JSON** → `@api_integration`
 - **JSON Model Gen** → `@json_to_freezed_model`
 - **New Feature/Module** → `@create_new_feature`
+- **Setup Flavors** → `@setup_variants`
 
 ---
  

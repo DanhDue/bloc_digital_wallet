@@ -74,6 +74,15 @@
                     "gemini-3-flash"
                 ],
                 "context_window": "small"
+            },
+            "setup_variants": {
+                "description": "Automate setup of build variants (flavors) for Android and iOS using scripts and config templates.",
+                "capability_required": "coding_specialist",
+                "recommended_models": [
+                    "claude-4.5-sonnet",
+                    "gemini-3-pro"
+                ],
+                "context_window": "medium"
             }
         },
         "roles": {
