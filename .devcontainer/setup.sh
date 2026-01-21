@@ -17,6 +17,14 @@ if [ ! -z "$SECURE_FILES" ]; then
     echo "$SECURE_FILES" | base64 -d | tar -xz || echo "⚠️  Failed to decode SECURE_FILES"
 fi
 
+# Verification of secureFiles
+if [ -d "secureFiles" ]; then
+    echo "✅ secureFiles directory exists."
+    ls -R secureFiles
+else
+    echo "❌ secureFiles directory MISSING. Secrets may not be configured correctly."
+fi
+
 # Color codes for output
 GREEN='\033[0;32m'
 GREEN_BOLD='\033[1;32m'
@@ -285,6 +293,9 @@ cat >> ~/.bashrc << 'EOF'
 # ============================================
 # AI Agent Helpful Aliases
 # ============================================
+
+# Secrets verification
+alias verify-secrets='ls -R secureFiles'
 
 # Flutter commands (using FVM)
 alias flutter='fvm flutter'

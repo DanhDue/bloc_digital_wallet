@@ -10,6 +10,8 @@
 Check if the setup script handled it already:
 ```bash
 ls -d secureFiles/
+# or use the alias
+verify-secrets
 ```
 If present, you are good to go.
 
