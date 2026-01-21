@@ -47,8 +47,8 @@ abstract class NetworkModule {
   }
 
   @singleton
-  AuthClient provideAuthClient(Dio dio) => AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
+  HealthCheckClient provideHealthCheckClient(Dio dio) => HealthCheckClient(dio);
 
   @singleton
-  HealthCheckClient provideHealthCheckClient(Dio dio) => HealthCheckClient(dio);
+  AuthClient provideAuthClient(Dio dio) => AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
 }
