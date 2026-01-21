@@ -1,0 +1,100 @@
+{
+    "project_name": "bloc_digital_wallet",
+    "version": "1.2.0",
+    "ai_optimization": {
+        "global_config": {
+            "max_context_window": 2000000,
+            "agentic_workflow": true,
+            "multimodal_input": true
+        },
+        "default_model": {
+            "capability": "balanced",
+            "recommended": [
+                "gemini-3-pro",
+                "claude-4.5-sonnet"
+            ]
+        },
+        "capabilities": {
+            "high_reasoning": {
+                "description": "Ability to handle complex, multi-step constraints and logic.",
+                "strengths": [
+                    "architectural_design",
+                    "error_analysis",
+                    "complex_refactoring"
+                ]
+            },
+            "coding_specialist": {
+                "description": "High fidelity code generation following strict patterns.",
+                "strengths": [
+                    "boilerplate_generation",
+                    "syntax_accuracy",
+                    "pattern_adherence"
+                ]
+            },
+            "fast_inference": {
+                "description": "Optimized for speed and cost-efficiency on simple tasks.",
+                "strengths": [
+                    "data_transformation",
+                    "simple_logic",
+                    "unit_tests"
+                ]
+            },
+            "balanced": {
+                "description": "General purpose reasoning and coding mix.",
+                "strengths": [
+                    "general_maintenance",
+                    "documentation",
+                    "explanation"
+                ]
+            }
+        },
+        "skills": {
+            "api_integration": {
+                "description": "Complex logic, requires understanding multiple files (DS, Repo, Entity, Model) and error handling.",
+                "capability_required": "high_reasoning",
+                "recommended_models": [
+                    "claude-4.5-opus",
+                    "gemini-3-pro"
+                ],
+                "context_window": "large"
+            },
+            "create_new_feature": {
+                "description": "Structural boilerplate generation, high consistency required.",
+                "capability_required": "coding_specialist",
+                "recommended_models": [
+                    "claude-4.5-sonnet",
+                    "gemini-3-pro"
+                ],
+                "context_window": "medium"
+            },
+            "json_to_freezed_model": {
+                "description": "Pure data transformation. High accuracy, low \"reasoning\" needed.",
+                "capability_required": "fast_inference",
+                "recommended_models": [
+                    "gemini-3-flash"
+                ],
+                "context_window": "small"
+            }
+        },
+        "roles": {
+            "architect": {
+                "recommended_models": [
+                    "claude-4.5-opus",
+                    "gemini-3-pro"
+                ]
+            },
+            "tech_lead": {
+                "recommended_models": [
+                    "claude-4.5-sonnet",
+                    "gemini-3-pro"
+                ]
+            },
+            "qa_engineer": {
+                "recommended_models": [
+                    "gemini-3-flash",
+                    "claude-4.5-sonnet"
+                ]
+            }
+        }
+    }
+}

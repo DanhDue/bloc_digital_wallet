@@ -17,6 +17,12 @@ Before writing a single line of code, you MUST be aware of these foundational ru
 
 ---
 
+## 🤖 AI Configuration (Model Opt)
+
+*   **Model Config**: [config.json](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/config.json) - Optimization rules.
+
+---
+
 ## 🛠️ AI Skills (Automation)
 
 Trigger these skills for repetitive or complex tasks. They are your primary "autopilot".
