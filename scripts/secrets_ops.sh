@@ -13,12 +13,12 @@ encode_secrets() {
 
     # Create a compressed tarball and convert to base64
     # -c: create, -z: gzip, -O: to stdout
-    B64_DATA=$(tar -cz "$SECURE_FILES_DIR" | base64 | tr -d '\n')
+    B64_DATA=$(tar -cz "$SECURE_FILES_DIR" | base64 | tr -d '[:space:]')
     
     echo "================================================================"
     echo "COPY THE CONTENT BELOW AND SET IT AS '$ENV_VAR_NAME' IN YOUR CLOUD ENVIRONMENT"
     echo "================================================================"
-    echo "$B64_DATA"
+    printf "%s\n" "$B64_DATA"
     echo "================================================================"
 }
 
@@ -33,7 +33,8 @@ decode_secrets() {
     echo "Decoding secrets into $SECURE_FILES_DIR..."
     
     # Decode base64 and extract tarball
-    echo "$B64_INPUT" | base64 -d | tar -xz
+    # Use printf and tr to ignore any whitespace/newlines from copy-paste
+    printf "%s" "$B64_INPUT" | tr -d '[:space:]' | base64 -d | tar -xz
     
     if [ $? -eq 0 ]; then
         echo "Successfully reconstructed $SECURE_FILES_DIR"

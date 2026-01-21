@@ -37,8 +37,8 @@ cd "$WORKSPACE_DIR"
 # ============================================
 if [ ! -z "$SECURE_FILES" ]; then
     echo "🔑 SECURE_FILES detected. Provisioning secrets..."
-    # Use the script directly or inline logic for speed
-    echo "$SECURE_FILES" | base64 -d | tar -xz || echo "⚠️  Failed to decode SECURE_FILES"
+    # Use printf to handle long strings and tr to strip any accidental whitespace/newlines
+    printf "%s" "$SECURE_FILES" | tr -d '[:space:]' | base64 -d | tar -xz || echo "⚠️  Failed to decode SECURE_FILES"
 fi
 
 # Verification of secureFiles
@@ -48,9 +48,6 @@ if [ -d "secureFiles" ]; then
 else
     echo "❌ secureFiles directory MISSING. Secrets may not be configured correctly."
 fi
-
-# Unset SECURE_FILES to prevent it from persisting in the environment
-unset SECURE_FILES
 
 # Color codes for output
 GREEN='\033[0;32m'
@@ -112,10 +109,6 @@ git config --global --replace-all core.pager "less -F -X"
 git config --global core.editor "nano"
 print_success "Git configured"
 
-# Ensure clean working tree (discard auto-generated changes like mason-lock.json)
-print_status "Cleaning working tree..."
-git reset --hard HEAD
-print_success "Working tree cleaned"
 
 # ============================================
 # 3. Set up environment variables
@@ -732,9 +725,12 @@ echo -e "\033[7;32m Dev Environment Ready for AI Agents!  \033[0m"
 echo -e "\033[7;32m                                       \033[0m"
 echo ""
 
-# Ensure clean working tree (discard auto-generated changes like mason-lock.json)
+
+# Ensure clean working tree (discard auto-generated changes and untracked metadata)
+# We do this at the end to ensure the workspace is pristine for building
 print_status "Cleaning working tree..."
 git reset --hard HEAD
+git clean -fd
 print_success "Working tree cleaned"
 
 print_success "Setup script completed successfully!"
