@@ -79,9 +79,6 @@ dart pub global activate melos
 # Install FlutterGen
 dart pub global activate flutter_gen
 
-# Install GetX CLI
-dart pub global activate get_cli
-
 # Install mason
 dart pub global activate mason
 dart pub global activate mason_cli

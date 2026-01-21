@@ -8,10 +8,15 @@ set -e
 
 echo "🚀 Setting up Flutter Development Environment for AI Agents..."
 
-# Ensure FVM and Pub Cache is in PATH (Critical for portability)
-export PATH="$HOME/.pub-cache/bin:$HOME/fvm/bin:$HOME/fvm/default/bin:$PATH"
+# Ensure FVM, Pub Cache, and rbenv are in PATH (Critical for portability)
+export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$HOME/.pub-cache/bin:$HOME/fvm/bin:$HOME/fvm/default/bin:$PATH"
 export FLUTTER_ROOT="$HOME/fvm/default"
 export PUB_CACHE="$HOME/.pub-cache"
+
+# Initialize rbenv if present
+if command -v rbenv &> /dev/null; then
+    eval "$(rbenv init - bash)"
+fi
 
 
 # Detect Project Root (defaults to /workspace if not found)
@@ -177,6 +182,7 @@ eval "$(rbenv init - bash)"
 EOF
     
     source ~/.bashrc
+    eval "$(rbenv init - bash)"
     print_success "rbenv installed"
 else
     print_status "rbenv already installed"
@@ -231,11 +237,6 @@ print_success "Melos installed"
 print_status "Installing FlutterGen..."
 fvm flutter pub global activate flutter_gen
 print_success "FlutterGen installed"
-
-# Install GetX CLI (from install_dev_tools.sh)
-print_status "Installing GetX CLI..."
-fvm flutter pub global activate get_cli
-print_success "GetX CLI installed"
 
 # Install Mason
 print_status "Installing Mason..."
@@ -676,6 +677,9 @@ echo ""
 
 # Source bashrc to apply all changes
 source ~/.bashrc 2>/dev/null || true
+if command -v rbenv &> /dev/null; then
+    eval "$(rbenv init - bash)"
+fi
 
 echo ""
 echo "========================================"
