@@ -109,6 +109,11 @@ git config --global --replace-all core.pager "less -F -X"
 git config --global core.editor "nano"
 print_success "Git configured"
 
+# Ensure clean working tree (discard auto-generated changes like mason-lock.json)
+print_status "Cleaning working tree..."
+git reset --hard HEAD
+print_success "Working tree cleaned"
+
 # ============================================
 # 3. Set up environment variables
 # ============================================
