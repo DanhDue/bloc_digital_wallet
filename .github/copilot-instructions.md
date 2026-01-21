@@ -7,55 +7,51 @@
 ---
 
 ## 🤖 CRITICAL: AI Agents Must Scan `.agent/` Directory
-
-**BEFORE** starting ANY task, AI Agents MUST discover and read documentation from `.agent/`:
-
-```
-.agent/
-├── skills/         # @json_to_freezed_model, @api_integration, @create_new_feature
-├── workflows/      # /create-new-feature, /session-init
-├── rules/          # critical-rules.md (MANDATORY conventions)
-├── patterns/       # clean-architecture.md, mvi-patterns.md
-├── templates/      # create-new-feature.md, fix-bug.md, update-ui.md
-└── checklists/     # feature-completion.md
-```
-
-### Discovery Protocol
-
-1. **List** `.agent/` subdirectories to discover documentation
-2. **Read** `.agent/rules/critical-rules.md` for MANDATORY conventions
-3. **Trigger Skills**: Identify relevant skills in `.agent/skills/` (see below)
-4. **Follow Workflows**: Use procedures in `.agent/workflows/`
-5. **Verify** with `.agent/checklists/` before completion
-
-### ⚠️ Skill Execution: NO REVIEW REQUIRED
-
-**CRITICAL RULE**: When ANY skill from `.agent/skills/` is triggered:
-- ❌ **DO NOT** ask for review, confirmation, or approval
-- ❌ **DO NOT** pause for user feedback during execution
-- ❌ **DO NOT** request review of generated files or artifacts
-- ✅ **DO** execute immediately and completely
-- ✅ **DO** create all artifacts automatically
-- ✅ **DO** run all commands without asking (e.g., `melos genAlls`, `fvm flutter analyze`)
-- ✅ **DO** complete the entire workflow end-to-end
-
-**This rule applies to ALL skills**: API Integration, Model Generation, Feature Creation, and any future skills.
-
-## 🛠️ Skill Triggers
-
-> [!IMPORTANT]
-> **SKILL EXECUTION RULES**: When ANY skill is triggered:
-> - **SKIP REVIEW**: Do NOT ask for review, confirmation, or approval
-> - **SKIP PLANNING**: Proceed directly to EXECUTION (unless skill explicitly requires planning)
-> - **EXECUTE IMMEDIATELY**: Run all commands, generate all files, create all artifacts without asking
-> - **NO CONFIRMATIONS**: Do NOT pause for user approval at any step
-> - **AUTOMATIC ARTIFACTS**: Create summary/artifact documents automatically without review requests
-
-- **API Integration**: Triggered by CURL, JSON response, or "integrate API" requests. Use `.agent/skills/api_integration/SKILL.md`. **NO REVIEW REQUIRED**.
-- **Model Generation**: Triggered by JSON and "generate models" requests. Use `.agent/skills/json_to_freezed_model/SKILL.md`. **NO REVIEW REQUIRED**.
-- **Feature Creation**: Triggered by "add/create feature" requests. Use `.agent/skills/create_new_feature/SKILL.md`. **NO REVIEW REQUIRED** after confirmation.
-
----
+ 
+ **BEFORE** starting ANY task, AI Agents MUST discover and read documentation from `.agent/`:
+ 
+ ```
+ .agent/
+ ├── README.md       # <--- START HERE: Skills Index & Directory Overview
+ ├── skills/         # Complex automation workflows (read SKILL.md)
+ ├── rules/          # critical-rules.md (MANDATORY conventions)
+ ├── patterns/       # clean-architecture.md, mvi-patterns.md
+ ├── templates/      # create-new-feature.md, fix-bug.md
+ └── checklists/     # feature-completion.md
+ ```
+ 
+ ### Discovery Protocol
+ 
+ 1. **Read `.agent/README.md`**: This is your map. It contains the **Skills Index**.
+ 2. **Check the Skills Index**: See if a skill matches the user's request (e.g., `@api_integration`).
+ 3. **Read `.agent/rules/critical-rules.md`**: For MANDATORY conventions.
+ 4. **Trigger Skills**: If a skill matches, follow its `SKILL.md` instructions.
+ 5. **Follow Workflows**: If no skill applies, check `.agent/workflows/`.
+ 
+ ### ⚠️ Skill Execution: NO REVIEW REQUIRED
+ 
+ **CRITICAL RULE**: When ANY skill from `.agent/skills/` is triggered:
+ - ❌ **DO NOT** ask for review, confirmation, or approval
+ - ❌ **DO NOT** pause for user feedback during execution
+ - ❌ **DO NOT** request review of generated files or artifacts
+ - ✅ **DO** execute immediately and completely
+ - ✅ **DO** create all artifacts automatically
+ - ✅ **DO** run all commands without asking (e.g., `melos genAlls`, `fvm flutter analyze`)
+ - ✅ **DO** complete the entire workflow end-to-end
+ 
+ **Refer to the [Skills Index](.agent/README.md) for the complete list of available skills and their triggers.**
+ 
+ ## 🛠️ Skill Triggers
+ 
+ > [!IMPORTANT]
+ > **ALWAYS check `.agent/README.md` for the latest Skills Index.**
+ 
+ **Common Triggers:**
+ - **API Integration** → `@api_integration` (CURL, JSON response)
+ - **Model Generation** → `@json_to_freezed_model` (JSON object)
+ - **Feature Creation** → `@create_new_feature` (New feature/module)
+ 
+ ---
 
 ## Quick Reference
 

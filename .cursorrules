@@ -1,7 +1,8 @@
 # Cursor Rules for bloc_digital_wallet
 
 **Architecture**: Clean Architecture + MVI Pattern  
-**Framework**: Flutter/Dart  
+**Architecture**: Clean Architecture + MVI Pattern
+**Framework**: Flutter/Dart
 **Organization**: Feature-first structure
 
 ---
@@ -12,21 +13,22 @@
 
 ```
 .agent/
+├── README.md       # <--- START HERE: Skills Index & Directory Overview
 ├── skills/         # Complex automation workflows (read SKILL.md)
-├── workflows/      # Step-by-step procedures (*.md)
-├── rules/          # MANDATORY project rules (critical-rules.md)
-├── patterns/       # Architecture patterns (clean-architecture.md, mvi-patterns.md)
-├── templates/      # Task-specific templates (create-new-feature.md, fix-bug.md, etc.)
-└── checklists/     # Verification checklists (feature-completion.md)
+├── rules/          # MANDATORY: tech-stack, coding-standards, security, git
+├── patterns/       # Architecture patterns
+├── templates/      # Task-specific templates
+└── checklists/     # Verification checklists
 ```
 
 ### Discovery Protocol (MANDATORY)
 
-1. **List** `.agent/` subdirectories to discover available documentation
-2. **Read** `.agent/rules/critical-rules.md` for MANDATORY conventions
-3. **Trigger Skills** based on user input mapping (see below)
-4. **Follow Workflows** for step-by-step procedures in `.agent/workflows/`
-5. **Verify** with `.agent/checklists/` before completion
+1. **Read `.agent/README.md`**: This is your map. It contains the **Skills Index**.
+2. **🧠 MEMORY CHECK (New)**: Read `.agent/contexts/project_state.md` to understand the current architecture and milestones.
+3. **Check the Skills Index**: See if a skill matches the user's request (e.g., `@api_integration`).
+4. **Read `.agent/rules/critical-rules.md`**: For MANDATORY conventions.
+5. **Trigger Skills**: If a skill matches, follow its `SKILL.md` instructions.
+6. **Follow Workflows**: If no skill applies, check `.agent/workflows/`.
 
 ### ⚠️ Skill Execution: NO REVIEW REQUIRED
 
@@ -39,31 +41,29 @@
 - ✅ **DO** run all commands without asking (e.g., `melos genAlls`, `fvm flutter analyze`)
 - ✅ **DO** complete the entire workflow end-to-end
 
-**This rule applies to ALL skills**: `@api_integration`, `@json_to_freezed_model`, `@create_new_feature`, and any future skills.
+**Refer to the [Skills Index](.agent/README.md) for the complete list of available skills and their triggers.**
 
-## 🛠️ Skill Mapping Rules (MANDATORY)
+## 🪝 Manual Hooks Protocol
 
-AI Agents MUST follow these triggers to invoke specialized skills in `.agent/skills/`:
+**Execute these actions AUTOMATICALLY when triggers are met:**
+
+| Trigger | Action |
+| :--- | :--- |
+| **Edit Model/Entity** | Run `melos genAlls` immediately. |
+| **Edit Assets/Locales** | Run `melos genAlls` immediately. |
+| **New Dependency** | Run `melos bootstrap` immediately. |
+| **"Build Failed"** | Check `.agent/workflows/build-fix.md`. |
+| **"Sync Project"** | Check `.agent/workflows/melos-sync.md`. |
+
+## 🛠️ Skill Mapping
 
 > [!IMPORTANT]
-> **SKILL EXECUTION RULES**: When ANY skill is triggered:
-> - **SKIP REVIEW**: Do NOT ask for review, confirmation, or approval
-> - **SKIP PLANNING**: Proceed directly to EXECUTION (unless skill explicitly requires planning)
-> - **EXECUTE IMMEDIATELY**: Run all commands, generate all files, create all artifacts without asking
-> - **NO CONFIRMATIONS**: Do NOT pause for user approval at any step
-> - **AUTOMATIC ARTIFACTS**: Create summary/artifact documents automatically without review requests
+> **ALWAYS check `.agent/README.md` for the latest Skills Index.**
 
-### 1. API Integration Skill (`@api_integration`)
-- **Trigger**: IF user provides CURL, raw HTTP, JSON response to "handle/integrate", or requests a "client/datasource".
-- **Action**: Use `.agent/skills/api_integration/SKILL.md`. Skip PLANNING. Proceed to EXECUTION. **NO REVIEW REQUIRED**.
-
-### 2. JSON to Freezed Model Skill (`@json_to_freezed_model`)
-- **Trigger**: IF user provides JSON and asks to "generate models", "create objects", or "parse JSON".
-- **Action**: Use `.agent/skills/json_to_freezed_model/SKILL.md`. Skip PLANNING. Proceed to EXECUTION. **NO REVIEW REQUIRED**.
-
-### 3. Feature Creation Skill (`@create_new_feature`)
-- **Trigger**: IF user asks to "create/add a feature" or "new module".
-- **Action**: Use `.agent/skills/create_new_feature/SKILL.md`. Follow its mandatory planning and confirmation steps. **NO REVIEW REQUIRED** after confirmation.
+**Common Triggers:**
+- **API/CURL/JSON** → `@api_integration`
+- **JSON Model Gen** → `@json_to_freezed_model`
+- **New Feature/Module** → `@create_new_feature`
 
 ---
 

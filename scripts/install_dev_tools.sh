@@ -82,6 +82,10 @@ dart pub global activate flutter_gen
 # Install GetX CLI
 dart pub global activate get_cli
 
+# Install mason
+dart pub global activate mason
+dart pub global activate mason_cli
+
 # Install ruby gems
 gem install bundler
 

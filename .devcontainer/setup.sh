@@ -146,11 +146,11 @@ else
     print_status "rbenv already installed"
 fi
 
-# Install Ruby 3.3.x
-print_status "Installing Ruby 3.3..."
+# Install Ruby 3.4.x
+print_status "Installing Ruby 3.4.4..."
 if command -v rbenv &> /dev/null; then
-    rbenv install 3.3.0 -s || print_warning "Ruby 3.3.0 installation skipped"
-    rbenv global 3.3.0
+    rbenv install 3.4.4 -s || print_warning "Ruby 3.4.4 installation skipped"
+    rbenv global 3.4.4
     ruby -v
     print_success "Ruby configured"
 fi

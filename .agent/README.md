@@ -7,125 +7,78 @@
 
 ---
 
+## 🛠️ Skills Index
+
+| Skill | Trigger | Description | File |
+|-------|---------|-------------|------|
+| **API Integration** | `@api_integration` | Automate API handling (Model/Client/DS) | [SKILL.md](skills/api_integration/SKILL.md) |
+| **Feature Creation** | `@create_new_feature` | Guide for New Modules & Subfeatures | [SKILL.md](skills/create_new_feature/SKILL.md) |
+| **JSON to Freezed** | `@json_to_freezed_model` | Parse JSON → Freezed Models | [SKILL.md](skills/json_to_freezed_model/SKILL.md) |
+
+---
+
 ## 📁 Folder Structure
 
 ```
 .agent/
-├── README.md              # This file - overview
-├── skills/                # Detailed skill guides (step-by-step)
-│   ├── create_new_feature/
-│   └── json_to_freezed_model/
-├── workflows/             # Automated workflows
-│   ├── create-new-feature.md
-│   └── session-init.md
-├── templates/             # Task prompt templates (mirrors docs/task-prompt-templates/)
-│   ├── create-new-feature.md
-│   ├── fix-bug.md
-│   ├── refactor-code.md
-│   └── update-ui.md
-├── patterns/              # Code patterns and architecture (from docs/architecture, docs/development)
-│   ├── mvi-patterns.md
-│   ├── clean-architecture.md
-│   └── ui-patterns.md
-├── rules/                 # Critical rules and standards (from .cursorrules, docs/ai-agents/)
-│   ├── coding-standards.md
-│   └── critical-rules.md
-├── checklists/            # Verification checklists (from docs/ai-agents/)
-│   ├── feature-completion.md
-│   └── code-quality.md
-└── references/            # Quick reference guides (from docs/getting-started/)
-    └── quick-reference.md
+├── README.md               # This file
+├── contexts/               # 🧠 Persistent Memory
+│   ├── project_state.md    # Architecture & Milestones
+│   └── active_context.md   # Current session scratchpad
+├── personas/               # 🎭 Role-based Instructions
+│   ├── architect.md        # Design & Strategy
+│   ├── tech_lead.md        # QC & Refactoring
+│   └── qa_engineer.md      # Testing & Edge Cases
+├── skills/                 # Detailed skill guides
+│   ├── api_integration/    # @api_integration
+│   ├── create_new_feature/ # @create_new_feature
+│   └── json_to_freezed_model/ # @json_to_freezed_model
+├── workflows/              # Step-by-step procedures
+├── templates/              # Task prompt templates
+├── patterns/               # Code & Architecture patterns
+├── rules/                  # Mandatory Project Rules
+│   ├── critical-rules.md   # 🚨 META-RULE (Start Here)
+│   ├── adherence-rules.md  # ⚡ Extreme Execution Rules
+│   ├── project-conventions.md # 🛠️ Strict Tech Constraints
+│   ├── tech-stack.md       # Flutter/Bloc/Arch rules
+│   ├── coding-standards.md # Formatting & Naming
+│   ├── git-workflow.md     # Commits & PRs
+│   └── security.md         # Secrets & Safety
+└── checklists/             # Verification Checklists
 ```
 
 ---
 
-## 🎯 Purpose of Each Folder
+## 🎯 Resource Guide
 
-### 📚 `skills/` - Detailed Skill Guides
-**Use for**: Step-by-step instructions for complex tasks  
-**Format**: Comprehensive guides with confirmation steps  
-**Example**: `create_new_feature/SKILL.md`
+### 📚 `skills/`
+**Purpose**: Automation for complex, repetitive tasks.  
+**Usage**: Triggered by user intent (e.g., "Add API", "New Feature").  
+**Protocol**: Execute immediately, NO review required (unless specified).
 
-### ⚙️ `workflows/` - Automated Workflows
-**Use for**: Streamlined execution paths for routine tasks  
-**Format**: Action-oriented steps  
-**Example**: `create-new-feature.md`, `session-init.md`
+### ⚙️ `workflows/`
+**Purpose**: Step-by-step manual guides for routine operations.  
+**Usage**: Follow when a skill doesn't apply.
 
-### 📋 `templates/` - Task Prompt Templates
-**Use for**: Ready-to-use task assignment templates  
-**Format**: Copy-paste templates with placeholders  
-**Mirrors**: `docs/task-prompt-templates/`
+### ⚠️ `rules/`
+**Purpose**: MANDATORY project conventions.  
+**Usage**: Must be referenced before ANY implementation.
 
-### 🏗️ `patterns/` - Code Patterns
-**Use for**: Quick lookup of architecture and code patterns  
-**Format**: Code examples and patterns  
-**Source**: `docs/architecture/`, `docs/development/`
-
-### ⚠️ `rules/` - Critical Rules
-**Use for**: Coding standards and mandatory rules  
-**Format**: Rules with do/don't examples  
-**Source**: `.cursorrules`, `docs/ai-agents/AI_AGENT_RULES.md`
-
-### ✅ `checklists/` - Verification Checklists
-**Use for**: Task verification and quality checks  
-**Format**: Checkbox lists  
-**Source**: `docs/ai-agents/AI_AGENT_CHECKLIST.md`
-
-### 📖 `references/` - Quick References
-**Use for**: Fast lookup of commands and syntax  
-**Format**: Cheat sheets  
-**Source**: `docs/getting-started/QUICK_REFERENCE.md`
+### 🏗️ `patterns/`
+**Purpose**: Architecture reference.  
+**Usage**: Consult for structural consistency (MVI, Clean Arch).
 
 ---
 
-## 🔍 How Agents Use These Files
+## 🔄 Relationship to `docs/`
 
-1. **Skills/Workflows**: Follow step-by-step for complex tasks
-2. **Templates**: Copy structure and fill placeholders for task assignment
-3. **Patterns**: Reference code examples when implementing
-4. **Rules**: Check compliance before submitting code
-5. **Checklists**: Verify completeness after implementation
-6. **References**: Quick lookup for commands and syntax
+The `.agent/` folder is the **Single Source of Truth** for AI Agents.
 
----
+| Category | `.agent/` (Agent-Optimized) | `docs/` (Human-Readable) |
+|----------|---------------------------|--------------------------|
+| **Rules** | `rules/` | `ai-agents/` |
+| **Patterns** | `patterns/` | `architecture/` |
+| **Tasks** | `templates/` | `task-prompt-templates/` |
 
-## 📊 Quick Navigation
-
-**Need to create a feature?**
-→ `skills/create_new_feature/` or `workflows/create-new-feature.md`
-
-**Need a task template?**
-→ `templates/create-new-feature.md`
-
-**Need code pattern?**
-→ `patterns/mvi-patterns.md`
-
-**Need to verify rules?**
-→ `rules/critical-rules.md`
-
-**Need verification checklist?**
-→ `checklists/feature-completion.md`
-
-**Need quick command?**
-→ `references/quick-reference.md`
-
----
-
-## 🔄 Relationship to `docs/` Folder
-
-The `.agent/` folder contains **agent-optimized** versions of documentation:
-
-| `docs/` | `.agent/` | Purpose |
-|---------|-----------|---------|
-| `task-prompt-templates/` | `templates/` | Task templates |
-| `ai-agents/AI_AGENT_*` | `rules/`, `checklists/` | Rules and verification |
-| `architecture/` | `patterns/` | Architecture patterns |
-| `development/` | `patterns/` | Implementation patterns |
-| `getting-started/QUICK_REFERENCE.md` | `references/` | Quick lookup |
-
-**Key Difference**: `.agent/` files are condensed, action-oriented, and optimized for quick lookup by AI agents, while `docs/` contains comprehensive documentation for humans.
-
----
-
-**Last Updated**: 2026-01-13  
+**Last Updated**: 2026-01-21
 **Status**: Active ✅

@@ -40,6 +40,9 @@ RUN apt-get update && apt-get install -y \
 # Generate locale
 RUN locale-gen en_US.UTF-8
 
+# Configure Git safe directory for Cloud AI Agents
+RUN git config --system --add safe.directory '*'
+
 # Create vscode user
 RUN useradd -ms /bin/bash vscode && \
     echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -52,13 +55,13 @@ WORKDIR /home/vscode
 RUN curl -fsSL https://fvm.app/install.sh | bash
 
 # Set up environment variables
-ENV PATH="/home/vscode/fvm/default/bin:/home/vscode/.pub-cache/bin:${PATH}"
+ENV PATH="/home/vscode/fvm/bin:/home/vscode/fvm/default/bin:/home/vscode/.pub-cache/bin:${PATH}"
 ENV FLUTTER_ROOT="/home/vscode/fvm/default"
 ENV PUB_CACHE="/home/vscode/.pub-cache"
 
 # Install Flutter via FVM
-RUN /home/vscode/.pub-cache/bin/fvm install stable && \
-    /home/vscode/.pub-cache/bin/fvm global stable
+RUN fvm install stable && \
+    fvm global stable
 
 # Precache Flutter
 RUN /home/vscode/fvm/default/bin/flutter precache
