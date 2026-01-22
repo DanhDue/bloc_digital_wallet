@@ -105,7 +105,7 @@ Use the `json_to_freezed_model` skill guidelines:
 > // → baseUrl = "https://api.com/api/v1/d3votion"
 >
 > // d3_votion_client.dart
-> @GET('/${AppUri.d3votion}')  // Adds "/d3votion" again!
+@GET('/${AppUri.d3Votion}')  // Adds "/d3votion" again!
 > Future<D3VotionResObject> getD3Votion(@Query("word") String word);
 > // → Final URL: https://api.com/api/v1/d3votion/d3votion ❌ WRONG!
 > ```
