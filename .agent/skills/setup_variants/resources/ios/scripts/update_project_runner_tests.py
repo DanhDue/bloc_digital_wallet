@@ -1,3 +1,5 @@
+# Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
 import uuid
 import re
 

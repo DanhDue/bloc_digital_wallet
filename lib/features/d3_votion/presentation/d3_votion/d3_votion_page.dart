@@ -1,3 +1,5 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
@@ -43,51 +45,43 @@ class D3VotionPage extends BaseMviPage<D3VotionBloc, D3VotionState, D3VotionEven
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            entity.word ?? '',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          Text(entity.word ?? '', style: Theme.of(context).textTheme.headlineMedium),
           if (entity.ipa != null)
             Text(
               entity.ipa!,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.grey,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontStyle: FontStyle.italic, color: Colors.grey),
             ),
           const SizedBox(height: 16),
-          Text(
-            entity.definition ?? '',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          Text(entity.definition ?? '', style: Theme.of(context).textTheme.bodyLarge),
           const SizedBox(height: 24),
           if (entity.samples != null && entity.samples!.isNotEmpty) ...[
-            Text(
-              'Samples',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text('Samples', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
-            ...entity.samples!.map((sample) => Card(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(sample.text ?? ''),
-                        if (sample.vietnameseText != null) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            sample.vietnameseText!,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Colors.grey[700],
-                                ),
-                          ),
-                        ],
+            ...entity.samples!.map(
+              (sample) => Card(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(sample.text ?? ''),
+                      if (sample.vietnameseText != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          sample.vietnameseText!,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
+                        ),
                       ],
-                    ),
+                    ],
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
         ],
       ),

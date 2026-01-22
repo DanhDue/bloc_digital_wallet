@@ -1,3 +1,5 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'd3_votion_sample_entity.freezed.dart';

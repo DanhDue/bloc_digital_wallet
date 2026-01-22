@@ -1,3 +1,5 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
 import 'package:injectable/injectable.dart';
 import 'package:bloc_digital_wallet/features/d3_votion/domain/entities/d3_votion_entity.dart';
 import 'package:bloc_digital_wallet/features/d3_votion/data/datasources/remote/d3_votion_client.dart';

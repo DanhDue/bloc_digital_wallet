@@ -1,3 +1,5 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
 import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart';
 import 'package:bloc_digital_wallet/core/errors/failures.dart';
