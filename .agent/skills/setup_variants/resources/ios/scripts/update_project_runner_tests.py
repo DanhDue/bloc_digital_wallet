@@ -1,4 +1,7 @@
 
+# coverage:ignore-file
+
+
 import uuid
 import re
 

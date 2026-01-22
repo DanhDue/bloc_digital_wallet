@@ -1,6 +1,13 @@
 /*
  */
 
+/*
+ * coverage:ignore-file
+ */
+
+/*
+ */
+
 // Parse dart-defines from Flutter
 val dartEnvironmentVariables =
     mutableMapOf(
