@@ -59,6 +59,71 @@ Use the `json_to_freezed_model` skill guidelines:
     - Register new clients in `lib/di/network_module.dart` using the `@singleton` or `@LazySingleton` annotation.
     - **CRITICAL**: Always provide the `baseUrl` explicitly when instantiating the client: `Client(dio, baseUrl: AppUri.service.buildAppUri()!)`. Avoid passing only `dio`.
 
+> [!CRITICAL]
+> **BaseUrl & Endpoint Path Analysis**
+>
+> Before implementing any new Retrofit client, **ALWAYS analyze existing clients** to understand the baseUrl pattern:
+>
+> **Step 1: Analyze the CURL/API endpoint**
+> - Example: `GET https://api.example.com/api/v1/d3votion?word=test`
+> - Full path: `/api/v1/d3votion`
+>
+> **Step 2: Determine baseUrl in network_module.dart**
+> - The `baseUrl` should include the **complete service path**
+> - Example: `baseUrl: AppUri.d3Votion.buildAppUri()!` → `https://api.example.com/api/v1/d3votion`
+>
+> **Step 3: Determine endpoint path in client**
+> - If baseUrl already includes the full service path, endpoint should be **empty string** `''` or just the sub-path
+> - **DO NOT duplicate the service path in the endpoint**
+>
+> **Examples:**
+>
+> ```dart
+> // ✅ CORRECT - No path duplication
+> // network_module.dart
+> D3VotionClient(dio, baseUrl: AppUri.d3Votion.buildAppUri()!)
+> // → baseUrl = "https://api.com/api/v1/d3votion"
+>
+> // d3_votion_client.dart
+> @GET('')  // Empty string, hits baseUrl directly
+> Future<D3VotionResObject> getD3Votion(@Query("word") String word);
+> // → Final URL: https://api.com/api/v1/d3votion?word=test ✅
+>
+> // ✅ CORRECT - Sub-path added
+> // network_module.dart
+> TokenClient(dio, baseUrl: AppUri.tokens.buildAppUri()!)
+> // → baseUrl = "https://api.com/api/v1/tokens"
+>
+> // token_client.dart
+> @GET(AppUri.accounts + UriPathParameters.address)  // Adds "/accounts/{address}"
+> Future<BaseResponseObject<List<TokenAccountObject>>> getTokenAccounts(@Path("address") String address);
+> // → Final URL: https://api.com/api/v1/tokens/accounts/{address} ✅
+>
+> // ❌ WRONG - Path duplication
+> // network_module.dart
+> D3VotionClient(dio, baseUrl: AppUri.d3Votion.buildAppUri()!)
+> // → baseUrl = "https://api.com/api/v1/d3votion"
+>
+> // d3_votion_client.dart
+> @GET('/${AppUri.d3votion}')  // Adds "/d3votion" again!
+> Future<D3VotionResObject> getD3Votion(@Query("word") String word);
+> // → Final URL: https://api.com/api/v1/d3votion/d3votion ❌ WRONG!
+> ```
+>
+> **Decision Tree:**
+> 1. Does the CURL hit the service root directly (e.g., `/api/v1/service`)?
+>    - YES → Use empty string `''` as endpoint
+>    - NO → Use the sub-path (e.g., `/accounts/{id}`)
+> 2. Does the baseUrl already include the service name?
+>    - YES → Do NOT add it again in the endpoint
+>    - NO → Add it to the endpoint
+>
+> **Always verify by comparing:**
+> - CURL URL: `https://api.com/api/v1/d3votion?word=test`
+> - baseUrl: `https://api.com/api/v1/d3votion`
+> - Endpoint: `''`
+> - Final URL: `https://api.com/api/v1/d3votion?word=test` ✅ Match!
+
 ## 4. Data Layer Integration
 
 1.  **Remote Data Source Interface**: Add the new method returning `Future<Either<Failure, BaseResponseObject<T>>>`.
