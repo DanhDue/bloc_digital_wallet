@@ -2,35 +2,50 @@
 
 This directory contains Kiro configuration and spec-driven development artifacts for the BLOC Digital Wallet project.
 
+> **Quick Start**: New here? Read [INDEX.md](INDEX.md) for a complete overview, or [QUICK_START.md](QUICK_START.md) for a 5-minute guide.
+
 ## Directory Structure
 
 ```
 .kiro/
-├── README.md                    # This file
+├── INDEX.md                         # Master index and quick reference
+├── README.md                        # This file - Main navigation
+├── QUICK_START.md                   # 5-minute quick start guide
+├── SETUP_SUMMARY.md                 # Setup documentation
 ├── settings/
-│   └── mcp.json                # MCP server configuration
-├── steering/
-│   ├── flutter-bloc-patterns.md # Flutter BLOC architecture rules
-│   └── spec-guidelines.md       # Spec workflow guidelines
-└── specs/
-    ├── README.md               # Specs index and workflow
-    └── {feature_name}/         # Individual feature specs
-        ├── requirements.md     # Feature requirements
-        ├── design.md          # Technical design
-        └── tasks.md           # Implementation tasks
+│   └── mcp.json                    # MCP server configuration
+├── steering/                        # Development rules (auto-included)
+│   ├── flutter-bloc-patterns.md    # Flutter BLOC patterns (legacy)
+│   ├── spec-guidelines.md          # Spec workflow guidelines
+│   ├── project-conventions.md      # Critical conventions ⚠️
+│   ├── mvi-architecture.md         # MVI pattern guide
+│   └── mason-workflows.md          # Mason brick workflows
+└── specs/                          # Feature specifications
+    ├── README.md                   # Specs workflow guide
+    └── {feature_name}/             # Individual feature specs
+        ├── requirements.md         # Feature requirements
+        ├── design.md              # Technical design
+        └── tasks.md               # Implementation tasks
 ```
 
 ## Quick Navigation
+
+### Essential Reading (Start Here)
+- **[INDEX.md](INDEX.md)** - Master index with complete overview
+- **[QUICK_START.md](QUICK_START.md)** - 5-minute quick start guide
+- **[Project Conventions](steering/project-conventions.md)** - ⚠️ Critical rules (MUST READ)
 
 ### For Spec Creation
 - **[Specs README](specs/README.md)** - How to create and manage specs
 - **[Spec Guidelines](steering/spec-guidelines.md)** - Spec workflow and best practices
 
 ### For Development
-- **[Flutter BLOC Patterns](steering/flutter-bloc-patterns.md)** - Architecture rules and patterns
-- **[AI Agent Context](../docs/ai-agents/AI_AGENT_CONTEXT.md)** - Code patterns and templates
+- **[MVI Architecture](steering/mvi-architecture.md)** - MVI pattern implementation
+- **[Mason Workflows](steering/mason-workflows.md)** - Feature generation with Mason
+- **[Flutter BLOC Patterns](steering/flutter-bloc-patterns.md)** - Legacy architecture reference
 
 ### For Implementation
+- **[AI Agent Context](../docs/ai-agents/AI_AGENT_CONTEXT.md)** - Code patterns and templates
 - **[Implementation Guide](../docs/development/IMPLEMENTATION_GUIDE.md)** - Step-by-step tutorial
 - **[Architecture Guide](../docs/architecture/ARCHITECTURE.md)** - Detailed architecture
 
