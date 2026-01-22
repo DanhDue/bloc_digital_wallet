@@ -1,3 +1,2 @@
+#include "Zeno.xcconfig"
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-prd.xcconfig"
-#include "Debug.xcconfig"
-PRODUCT_BUNDLE_IDENTIFIER = com.example.blocDigitalWallet

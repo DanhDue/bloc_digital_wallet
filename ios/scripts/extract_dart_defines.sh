@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Output file
-OUTPUT_FILE="${SRCROOT}/Flutter/Define.xcconfig"
+OUTPUT_FILE="${SRCROOT}/Flutter/${1:-Define}.xcconfig"
 
 # Function to decode base64
 function entry_decode() { echo "${*}" | base64 --decode; }

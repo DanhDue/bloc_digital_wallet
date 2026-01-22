@@ -20,6 +20,8 @@ Flutter/Flutter.framework
 Flutter/Flutter.podspec
 Flutter/Generated.xcconfig
 Flutter/Define.xcconfig
+Flutter/Zeno.xcconfig
+Flutter/Zeno-defaults.xcconfig
 Flutter/ephemeral/
 Flutter/app.flx
 Flutter/app.zip

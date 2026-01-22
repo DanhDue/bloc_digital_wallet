@@ -15,12 +15,7 @@ This skill configures `dev`, `stg`, and `prd` build variants for both Android an
 
 ## Steps
 
-### 1. Secure Files Setup
-1.  **Check/Create `secureFiles`**:
-    -   Copy the template `secureFiles` folder from resources (`.agent/skills/setup_variants/resources/secureFiles`) to the project root if it does not exist.
-    -   Ensure `signing/debug.keystore` and `signing/keystore.properties.template` are present.
-
-### 2. Android Setup
+### 1. Android Setup
 1.  **Modify `android/app/build.gradle.kts`**:
     -   Apply the flavor and signing configuration.
     -   Use the template from local resources: `.agent/skills/setup_variants/resources/android/build_gradle_flavors.kts`.
@@ -30,7 +25,7 @@ This skill configures `dev`, `stg`, and `prd` build variants for both Android an
 3.  **Verify Android Build**:
     -   Run `./gradlew bundleRelease` (or `assembleRelease`) to ensure gradle syncs and builds correctly.
 
-### 3. iOS Setup
+### 2. iOS Setup
 1.  **Clean Default Scheme**:
     -   Remove `ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme`.
 2.  **Copy Scripts**:
@@ -66,11 +61,11 @@ This skill configures `dev`, `stg`, and `prd` build variants for both Android an
 10. **Verify iOS Build**:
     -   Run `pod install` in `ios/`.
 
-### 4. VS Code Configuration
+### 3. VS Code Configuration
 1.  **Create `launch.json`**:
     -   Create `.vscode/launch.json` using the template from resources.
 
-### 5. Verification
+### 4. Verification
 
 
 Run the following commands to verify the setup for each environment. These match the configurations in `.vscode/launch.json`.
