@@ -1,6 +1,7 @@
 import sys
 import uuid
 import re
+import argparse
 
 PROJECT_PATH = 'ios/Runner.xcodeproj/project.pbxproj'
 
@@ -128,10 +129,16 @@ def update_pbxproj():
     
     created_configs = {} 
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--app-name', required=True, help='Name of the application (e.g. Wallet)')
+    args = parser.parse_args()
+    
+    app_name = args.app_name
+
     # 1. GENERATE FILE REFS
     file_ref_ids = {} 
     
-    for extra in ['Define-defaults.xcconfig', 'Define.xcconfig']:
+    for extra in [f'{app_name}-defaults.xcconfig', f'{app_name}.xcconfig']:
         fid = generate_id()
         file_ref_ids[extra] = fid
         new_file_refs.append(create_file_ref(fid, extra, f'Flutter/{extra}'))

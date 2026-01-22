@@ -36,15 +36,17 @@ This skill configures `dev`, `stg`, and `prd` build variants for both Android an
 2.  **Copy Scripts**:
     -   Copy `extract_dart_defines.sh` to `ios/scripts/`.
     -   Copy `update_project.py` and `update_project_runner_tests.py` to `ios/scripts/`.
-    -   Make `extract_dart_defines.sh` executable (`chmod +x`).
+    -   Copy `copy_google_service_plist.sh` to `ios/scripts/`.
+    -   Make `extract_dart_defines.sh` and `copy_google_service_plist.sh` executable (`chmod +x`).
 3.  **Run Automation Scripts**:
-    -   Run `python3 ios/scripts/update_project.py` to create Build Configurations (Debug-dev, etc.).
+    -   Run `python3 ios/scripts/update_project.py --app-name <your_app_name>` (e.g. `python3 ios/scripts/update_project.py --app-name Wallet`) to create Build Configurations.
     -   Run `python3 ios/scripts/update_project_runner_tests.py` to fix RunnerTests targets.
 4.  **Create XCConfigs**:
-    -   Create `ios/Flutter/Define-defaults.xcconfig` using the resource template.
-    -   Create flavor `.xcconfig` files (`Debug-dev.xcconfig`, etc.) in `lib/ios/Flutter/` that import `Define.xcconfig` and generated Pods configs.
+    -   Create `ios/Flutter/{app_name}-defaults.xcconfig` using the resource template `App-defaults.xcconfig`.
+    -   Create flavor `.xcconfig` files (e.g. `{app_name}-dev.xcconfig`, `{app_name}.xcconfig`) in `ios/Flutter/` that import `{app_name}.xcconfig` and generated Pods configs.
+    -   *Note*: Ensure your Xcode Build Phase that runs `extract_dart_defines.sh` passes `{app_name}` as the first argument.
 5.  **Update .gitignore**:
-    -   Add `Flutter/Define.xcconfig` to `ios/.gitignore` as it is a generated file.
+    -   Add `Flutter/{app_name}.xcconfig` to `ios/.gitignore` as it is a generated file.
 6.  **Update Info.plist**:
     -   Set `CFBundleDisplayName` to `$(DART_DEFINES_APP_NAME)`.
     -   Set `CFBundleIdentifier` to `$(PRODUCT_BUNDLE_IDENTIFIER)$(DART_DEFINES_APP_ID_SUFFIX)`.
@@ -55,7 +57,13 @@ This skill configures `dev`, `stg`, and `prd` build variants for both Android an
     -   Map the new configurations to `:debug` and `:release`.
     -   Ensure `platform :ios, '13.0'` (or higher) is set.
     -   Enforce `IPHONEOS_DEPLOYMENT_TARGET` in `post_install`.
-9.  **Verify iOS Build**:
+9.  **GoogleService-Info.plist Setup**:
+    -   **Prerequisite**: Run the `@copy_secure_configurations` skill first to copy your valid `GoogleService-Info.plist` files to `ios/Runner/Firebase/`.
+        -   This ensures files like `GoogleService-Info.dev.plist` exist.
+    -   In Xcode, add a new "Run Script" Build Phase *after* "Copy Bundle Resources".
+    -   Name it "Copy GoogleService-Info.plist".
+    -   Script: `"${SRCROOT}/scripts/copy_google_service_plist.sh"`
+10. **Verify iOS Build**:
     -   Run `pod install` in `ios/`.
 
 ### 4. VS Code Configuration

@@ -8,6 +8,7 @@ Index of all available AI Agent skills in the project.
 | **Create New Feature** | `@create_new_feature` | New Feature, Module, Page | Guide for creating a new feature following Clean Architecture. | [SKILL.md](skills/create_new_feature/SKILL.md) |
 | **JSON to Freezed** | `@json_to_freezed_model` | JSON, Model, Entity, Freezed | Parse JSON and create freezed object classes. | [SKILL.md](skills/json_to_freezed_model/SKILL.md) |
 | **Setup Variants** | `@setup_variants` | Flavor, Variant, Config, Signing | Automate setup of build variants (flavors). [Reference](https://viblo.asia/p/setup-development-environmentsdevelopstagingproduction-for-the-flutter-project-bJzKmd9659N#_1-parse-properties-from-the-flutter-command-arguments-6) | [SKILL.md](skills/setup_variants/SKILL.md) |
+| **Copy Secure Configs** | `@copy_secure_configurations` | Secure, Plist, JSON, GoogleService | Copy secure configuration files to project. | [SKILL.md](skills/copy_secure_configurations/SKILL.md) |
 
 ## Usage
 To use a skill, simply mention the **Trigger** in your request (e.g., "Use `@setup_variants` to configure flavors").
