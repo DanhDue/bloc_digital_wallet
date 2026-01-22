@@ -38,7 +38,6 @@ lib/features/{module}/data/models/
 ## 3. Model Template
 
 ```dart
-// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
 // ignore_for_file: invalid_annotation_target
