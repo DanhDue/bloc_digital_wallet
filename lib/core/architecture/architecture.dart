@@ -3,4 +3,5 @@
 export 'base_mvi_page.dart';
 export 'mvi_base.dart';
 export 'mvi_bloc.dart';
+export 'base_mvi_stateful_page.dart';
 export 'ui_state.dart';

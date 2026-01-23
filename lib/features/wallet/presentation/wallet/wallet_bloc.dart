@@ -58,11 +58,6 @@ class WalletBloc extends MviBloc<WalletAction, WalletState, WalletEvent> {
     // handleActionDroppable<InitWalletAction>(_onInit);
   }
 
-  @override
-  void onAction(WalletAction action) {
-    add(action);
-  }
-
   // TODO: Implement action handlers
   // Future<void> _onInit(
   //   InitWalletAction action,

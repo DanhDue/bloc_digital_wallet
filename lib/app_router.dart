@@ -3,8 +3,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'features/home/presentation/home/home_page.dart';
 import 'features/scanner/presentation/scanner/scanner_page.dart';
-import 'features/transaction/presentation/transaction/transaction_page.dart';
-import 'features/trends/presentation/trends/trends_page.dart';
 import 'features/authentication/presentation/forgot_password/forgot_password_page.dart';
 import 'features/authentication/presentation/code_verification/code_verification_page.dart';
 import 'features/authentication/presentation/login/login_page.dart';
@@ -18,6 +16,8 @@ import 'features/onboard/presentation/onboard/onboard_page.dart';
 import 'features/onboard/presentation/splash/splash_page.dart';
 import 'features/onboard/presentation/start/start_page.dart';
 import 'features/wallet/presentation/wallet/wallet_page.dart';
+import 'features/transaction/presentation/transaction/transaction_page.dart';
+import 'features/trends/presentation/trends/trends_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -25,7 +25,6 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
     AutoRoute(page: StartRoute.page, path: AppRoutes.start),
     AutoRoute(page: SplashRoute.page, path: AppRoutes.splash, initial: true),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
@@ -33,6 +32,7 @@ class AppRouter extends RootStackRouter {
       page: HomeRoute.page,
       path: AppRoutes.home,
       children: [
+        AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
         AutoRoute(page: TransactionRoute.page, path: AppRoutes.transaction),
         AutoRoute(page: TrendsRoute.page, path: AppRoutes.trends),
         AutoRoute(
@@ -56,13 +56,13 @@ class AppRouter extends RootStackRouter {
 }
 
 class AppRoutes {
-  static const String wallet = '/wallet';
+  static const String trends = 'trends';
+  static const String transaction = 'transaction';
+  static const String wallet = 'wallet';
   static const String start = '/start';
   static const String splash = '/splash';
   static const String onboard = '/onboard';
   static const String home = '/home';
-  static const String transaction = 'transaction';
-  static const String trends = 'trends';
   static const String settingsTab = 'settings-tab';
   static const String profile = 'profile';
   static const String dashboard = '/dashboard';

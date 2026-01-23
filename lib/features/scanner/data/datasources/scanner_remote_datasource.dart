@@ -1,50 +1,69 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+// coverage:ignore-file
+
 import 'package:injectable/injectable.dart';
-import '../models/scanner_model.dart';
+// TODO: Uncomment when implementing
+// import '../models/scanner_model.dart';
+
+/// ============================================================================
+/// Scanner Remote DataSource
+/// ============================================================================
+/// Remote datasources handle API calls and network requests.
+/// They return data models (not entities).
+///
+/// HOW TO IMPLEMENT:
+/// 1. Inject API client (Dio, http client)
+/// 2. Implement methods for each API endpoint
+/// 3. Throw ServerException on errors
+/// 4. Parse JSON response to models
+///
+/// EXAMPLE - Full remote datasource:
+/// ```dart
+/// abstract class ScannerRemoteDataSource {
+///   Future<List<ScannerModel>> getAll();
+///   Future<ScannerModel> getById(String id);
+///   Future<ScannerModel> create(ScannerModel model);
+/// }
+///
+/// @LazySingleton(as: ScannerRemoteDataSource)
+/// class ScannerRemoteDataSourceImpl implements ScannerRemoteDataSource {
+///   final Dio _dio;
+///
+///   ScannerRemoteDataSourceImpl(this._dio);
+///
+///   @override
+///   Future<List<ScannerModel>> getAll() async {
+///     try {
+///       final response = await _dio.get('/api/scanner');
+///       return (response.data as List)
+///           .map((json) => ScannerModel.fromJson(json))
+///           .toList();
+///     } on DioException catch (e) {
+///       throw ServerException(e.message ?? 'Network error');
+///     }
+///   }
+/// }
+/// ```
+///
+/// BEST PRACTICES:
+/// - Keep datasource focused on single data source
+/// - Always throw typed exceptions (ServerException)
+/// - Use interceptors for auth, logging
+/// ============================================================================
 
 abstract class ScannerRemoteDataSource {
-  Future<ScannerModel> getScanner(String id);
-  Future<List<ScannerModel>> getAllScanners();
-  Future<ScannerModel> createScanner(ScannerModel model);
-  Future<ScannerModel> updateScanner(ScannerModel model);
-  Future<void> deleteScanner(String id);
+  // TODO: Define remote data source methods
+  // Future<List<ScannerModel>> getAll();
 }
 
 @LazySingleton(as: ScannerRemoteDataSource)
 class ScannerRemoteDataSourceImpl implements ScannerRemoteDataSource {
-  // TODO: Inject Dio or Retrofit API client
-  // final ScannerApiClient apiClient;
+  // TODO: Inject API client
+  // final Dio _dio;
 
-  // const ScannerRemoteDataSourceImpl(this.apiClient);
+  ScannerRemoteDataSourceImpl();
+  // ScannerRemoteDataSourceImpl(this._dio);
 
-  @override
-  Future<ScannerModel> getScanner(String id) async {
-    // TODO: Implement API call
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<ScannerModel>> getAllScanners() async {
-    // TODO: Implement API call
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<ScannerModel> createScanner(ScannerModel model) async {
-    // TODO: Implement API call
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<ScannerModel> updateScanner(ScannerModel model) async {
-    // TODO: Implement API call
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteScanner(String id) async {
-    // TODO: Implement API call
-    throw UnimplementedError();
-  }
+  // TODO: Implement datasource methods
 }

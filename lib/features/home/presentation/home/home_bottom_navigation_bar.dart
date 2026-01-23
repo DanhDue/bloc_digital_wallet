@@ -11,9 +11,14 @@ import 'home_action.dart';
 import 'home_bloc.dart';
 
 class HomeBottomNavigationBar extends StatelessWidget {
-  const HomeBottomNavigationBar({required this.tabsRouter, super.key});
+  const HomeBottomNavigationBar({
+    required this.tabsRouter,
+    required this.onOpenScanner,
+    super.key,
+  });
 
   final TabsRouter tabsRouter;
+  final VoidCallback onOpenScanner;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class HomeBottomNavigationBar extends StatelessWidget {
         showUnselectedLabels: false,
         onTap: (index) {
           if (index == 2) {
-            context.read<HomeBloc>().onAction(const OpenScannerAction());
+            onOpenScanner();
             return;
           }
 
@@ -41,7 +46,7 @@ class HomeBottomNavigationBar extends StatelessWidget {
           final routerIndex = index > 2 ? index - 1 : index;
           tabsRouter.setActiveIndex(routerIndex);
         },
-        type: .fixed,
+        type: BottomNavigationBarType.fixed,
         backgroundColor: context.appThemes.surfaceColor,
         selectedItemColor: context.appThemes.trueBlue100,
         unselectedItemColor: context.appThemes.textSecondaryColor,
@@ -51,19 +56,21 @@ class HomeBottomNavigationBar extends StatelessWidget {
           _buildBottomNavItem(
             context,
             Assets.images.icWalletLine.svg(
-              colorFilter: .mode(context.appThemes.textSecondaryColor, .srcIn),
+              colorFilter: ColorFilter.mode(context.appThemes.textSecondaryColor, BlendMode.srcIn),
             ),
             Assets.images.icWalletLine.svg(
-              colorFilter: .mode(context.appThemes.trueBlue100, .srcIn),
+              colorFilter: ColorFilter.mode(context.appThemes.trueBlue100, BlendMode.srcIn),
             ),
             context.t.navMyWallet,
           ),
           _buildBottomNavItem(
             context,
             Assets.images.icGlobe.svg(
-              colorFilter: .mode(context.appThemes.textSecondaryColor, .srcIn),
+              colorFilter: ColorFilter.mode(context.appThemes.textSecondaryColor, BlendMode.srcIn),
             ),
-            Assets.images.icGlobe.svg(colorFilter: .mode(context.appThemes.trueBlue100, .srcIn)),
+            Assets.images.icGlobe.svg(
+              colorFilter: ColorFilter.mode(context.appThemes.trueBlue100, BlendMode.srcIn),
+            ),
             context.t.navTransactions,
           ),
           BottomNavigationBarItem(
@@ -74,7 +81,7 @@ class HomeBottomNavigationBar extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   color: context.appThemes.trueBlue100,
-                  shape: .circle,
+                  shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
                       color: context.appThemes.trueBlue100.withValues(alpha: 0.35),
@@ -92,18 +99,20 @@ class HomeBottomNavigationBar extends StatelessWidget {
           _buildBottomNavItem(
             context,
             Assets.images.icMarket.svg(
-              colorFilter: .mode(context.appThemes.textSecondaryColor, .srcIn),
+              colorFilter: ColorFilter.mode(context.appThemes.textSecondaryColor, BlendMode.srcIn),
             ),
-            Assets.images.icMarket.svg(colorFilter: .mode(context.appThemes.trueBlue100, .srcIn)),
+            Assets.images.icMarket.svg(
+              colorFilter: ColorFilter.mode(context.appThemes.trueBlue100, BlendMode.srcIn),
+            ),
             context.t.navTrends,
           ),
           _buildBottomNavItem(
             context,
             Assets.images.icSettingsLine.svg(
-              colorFilter: .mode(context.appThemes.textSecondaryColor, .srcIn),
+              colorFilter: ColorFilter.mode(context.appThemes.textSecondaryColor, BlendMode.srcIn),
             ),
             Assets.images.icSettingsLine.svg(
-              colorFilter: .mode(context.appThemes.trueBlue100, .srcIn),
+              colorFilter: ColorFilter.mode(context.appThemes.trueBlue100, BlendMode.srcIn),
             ),
             context.t.navSettings,
           ),
@@ -120,9 +129,9 @@ class HomeBottomNavigationBar extends StatelessWidget {
   ) {
     return BottomNavigationBarItem(
       icon: Padding(
-        padding: const .only(top: 8.0),
+        padding: const EdgeInsets.only(top: 8.0),
         child: Column(
-          mainAxisSize: .min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             icon,
             Text(
@@ -133,22 +142,22 @@ class HomeBottomNavigationBar extends StatelessWidget {
             ),
             Opacity(
               opacity: 0,
-              child: Assets.images.icSelectedBotTabIndicator.image(fit: .contain),
+              child: Assets.images.icSelectedBotTabIndicator.image(fit: BoxFit.contain),
             ),
           ],
         ),
       ),
       activeIcon: Padding(
-        padding: const .only(top: 8.0),
+        padding: const EdgeInsets.only(top: 8.0),
         child: Column(
-          mainAxisSize: .min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             activeIcon,
             Text(
               label,
               style: context.appThemes.labelSmall.copyWith(color: context.appThemes.trueBlue100),
             ),
-            Assets.images.icSelectedBotTabIndicator.image(fit: .contain),
+            Assets.images.icSelectedBotTabIndicator.image(fit: BoxFit.contain),
           ],
         ),
       ),

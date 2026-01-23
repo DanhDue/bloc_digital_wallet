@@ -1,50 +1,41 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+// coverage:ignore-file
+
 import '../../../../core/architecture/architecture.dart';
 
-/// Actions for Transaction feature (INPUT: View → ViewModel)
-/// Represents user interactions and system triggers
+/// ============================================================================
+/// Transaction Actions
+/// ============================================================================
+/// Actions represent user intentions/interactions from the UI.
+///
+/// HOW TO EXTEND:
+/// 1. Create action classes for each user interaction
+/// 2. Each action should extend TransactionAction
+/// 3. Include any data needed to process the action
+///
+/// EXAMPLE - Adding actions:
+/// ```dart
+/// class LoadTransactionAction extends TransactionAction {
+///   const LoadTransactionAction();
+/// }
+///
+/// class SubmitTransactionAction extends TransactionAction {
+///   final String data;
+///   const SubmitTransactionAction(this.data);
+/// }
+///
+/// class RefreshTransactionAction extends TransactionAction {
+///   const RefreshTransactionAction();
+/// }
+/// ```
+/// ============================================================================
+
 sealed class TransactionAction extends BaseAction {
   const TransactionAction();
 }
 
-/// Load all transactions
-class LoadAllTransactionsAction extends TransactionAction {
-  const LoadAllTransactionsAction();
-}
-
-/// Load single transaction
-class LoadTransactionAction extends TransactionAction {
-  final String id;
-
-  const LoadTransactionAction(this.id);
-}
-
-/// Create transaction
-class CreateTransactionAction extends TransactionAction {
-  final String name;
-  // TODO: Add parameters
-
-  const CreateTransactionAction({required this.name});
-}
-
-/// Update transaction
-class UpdateTransactionAction extends TransactionAction {
-  final String id;
-  final String name;
-  // TODO: Add parameters
-
-  const UpdateTransactionAction({required this.id, required this.name});
-}
-
-/// Delete transaction
-class DeleteTransactionAction extends TransactionAction {
-  final String id;
-
-  const DeleteTransactionAction(this.id);
-}
-
-/// Refresh transactions
-class RefreshTransactionsAction extends TransactionAction {
-  const RefreshTransactionsAction();
+/// Initialize action - called when the feature starts
+class InitTransactionAction extends TransactionAction {
+  const InitTransactionAction();
 }

@@ -1,22 +1,51 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:dartz/dartz.dart';
-import '../../../../core/errors/failures.dart';
-import '../entities/scanner_entity.dart';
+// coverage:ignore-file
+
+// TODO: Uncomment imports when adding methods
+// import 'package:dartz/dartz.dart';
+// import '../../../../core/errors/failures.dart';
+// import '../entities/scanner_entity.dart';
+
+/// ============================================================================
+/// Scanner Repository (Interface)
+/// ============================================================================
+/// Repository interfaces define the contract for data operations.
+/// They belong in the domain layer and should be implementation-agnostic.
+///
+/// HOW TO IMPLEMENT:
+/// 1. Define methods for each data operation needed
+/// 2. Return Either<Failure, T> for error handling
+/// 3. Use domain entities as return types (not data models)
+///
+/// EXAMPLE - Adding repository methods:
+/// ```dart
+/// abstract class ScannerRepository {
+///   /// Get all items
+///   Future<Either<Failure, List<ScannerEntity>>> getAll();
+///
+///   /// Get item by ID
+///   Future<Either<Failure, ScannerEntity>> getById(String id);
+///
+///   /// Create new item
+///   Future<Either<Failure, ScannerEntity>> create(ScannerEntity entity);
+///
+///   /// Update existing item
+///   Future<Either<Failure, ScannerEntity>> update(ScannerEntity entity);
+///
+///   /// Delete item
+///   Future<Either<Failure, void>> delete(String id);
+/// }
+/// ```
+///
+/// BEST PRACTICES:
+/// - Keep methods focused on single responsibility
+/// - Use descriptive method names
+/// - Document expected failure types in comments
+/// ============================================================================
 
 abstract class ScannerRepository {
-  /// Get scanner by id
-  Future<Either<Failure, ScannerEntity>> getScanner(String id);
-
-  /// Get all scanners
-  Future<Either<Failure, List<ScannerEntity>>> getAllScanners();
-
-  /// Create a new scanner
-  Future<Either<Failure, ScannerEntity>> createScanner(ScannerEntity entity);
-
-  /// Update scanner
-  Future<Either<Failure, ScannerEntity>> updateScanner(ScannerEntity entity);
-
-  /// Delete scanner
-  Future<Either<Failure, void>> deleteScanner(String id);
+  // TODO: Define repository methods
+  // Example:
+  // Future<Either<Failure, List<ScannerEntity>>> getAll();
 }

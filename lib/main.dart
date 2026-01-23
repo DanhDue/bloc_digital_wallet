@@ -13,8 +13,9 @@ import 'di/injection.dart';
 import 'generated/translations.dart';
 import 'dart:async';
 import 'core/services/auth_stream_service.dart';
+import 'core/app_initializer/app_initializer.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize slang translations
@@ -25,6 +26,9 @@ void main() {
 
   // Initialize dependency injection
   configureDependencies();
+
+  // Initialize App (Logging, etc.)
+  await getIt<AppInitializer>().init();
 
   // Initialize Bloc Observer
   Bloc.observer = TalkerBlocObserver(

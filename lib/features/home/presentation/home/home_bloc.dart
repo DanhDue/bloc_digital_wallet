@@ -20,20 +20,13 @@ class HomeBloc extends MviBloc<HomeAction, HomeState, HomeEvent> {
     : super(const HomeNavigationState()) {
     // Register action handlers
     handleAction(null, _onChangeTab);
-    handleAction(null, _onOpenScanner);
+    handleActionDroppable<OpenScannerAction>(_onOpenScanner);
     handleAction(null, _onLoadAllHomes);
     handleAction(null, _onLoadHome);
     handleAction(null, _onCreateHome);
     handleAction(null, _onUpdateHome);
     handleAction(null, _onDeleteHome);
     handleAction(null, _onRefreshHomes);
-  }
-
-  /// Single entry point for all actions (Following Android pattern)
-  /// This is the ONLY method View should call
-  @override
-  void onAction(HomeAction action) {
-    add(action);
   }
 
   /// Handle tab change

@@ -3,103 +3,71 @@
 // coverage:ignore-file
 
 import 'package:injectable/injectable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// TODO: Uncomment when adding action handlers
+// import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/architecture/architecture.dart';
-import '../../domain/usecases/get_transaction_usecase.dart';
-import '../../domain/usecases/get_all_transactions_usecase.dart';
 import 'transaction_action.dart';
 import 'transaction_state.dart';
 import 'transaction_event.dart';
 
+/// ============================================================================
+/// Transaction BLoC
+/// ============================================================================
+/// The BLoC processes Actions and emits States/Events.
+///
+/// HOW TO EXTEND:
+/// 1. Add use case dependencies via constructor injection
+/// 2. Register action handlers in constructor using handleAction methods
+/// 3. Implement handler methods that emit new states/events
+///
+/// EXAMPLE - Adding use case and handler:
+/// ```dart
+/// @injectable
+/// class TransactionBloc extends MviBloc<...> {
+///   final GetTransactionUseCase _getTransactionUseCase;
+///
+///   TransactionBloc(this._getTransactionUseCase)
+///       : super(const TransactionInitial()) {
+///     handleActionDroppable<LoadTransactionAction>(_onLoad);
+///   }
+///
+///   Future<void> _onLoad(
+///     LoadTransactionAction action,
+///     Emitter<TransactionState> emit,
+///   ) async {
+///     emit(const TransactionLoading());
+///     final result = await _getTransactionUseCase();
+///     result.fold(
+///       (failure) => emit(TransactionError(failure.message)),
+///       (data) => emit(TransactionSuccess(data)),
+///     );
+///   }
+/// }
+/// ```
+///
+/// ACTION HANDLER TYPES:
+/// - handleActionDroppable: Drops new actions while processing (default)
+/// - handleActionSequential: Queues actions, processes one at a time
+/// - handleActionConcurrent: Processes actions concurrently
+/// ============================================================================
+
 @injectable
 class TransactionBloc extends MviBloc<TransactionAction, TransactionState, TransactionEvent> {
-  final GetTransactionUseCase getTransactionUseCase;
-  final GetAllTransactionsUseCase getAllTransactionsUseCase;
-
-  TransactionBloc({required this.getTransactionUseCase, required this.getAllTransactionsUseCase})
-    : super(const TransactionInitial()) {
-    // Register action handlers
-    handleAction(null, _onLoadAllTransactions);
-    handleAction(null, _onLoadTransaction);
-    handleAction(null, _onCreateTransaction);
-    handleAction(null, _onUpdateTransaction);
-    handleAction(null, _onDeleteTransaction);
-    handleAction(null, _onRefreshTransactions);
+  TransactionBloc() : super(const TransactionInitial()) {
+    // TODO: Register action handlers here
+    // handleActionDroppable<InitTransactionAction>(_onInit);
   }
 
-  /// Single entry point for all actions (Following Android pattern)
-  /// This is the ONLY method View should call
   @override
   void onAction(TransactionAction action) {
     add(action);
   }
 
-  Future<void> _onLoadAllTransactions(
-    LoadAllTransactionsAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    emit(const TransactionLoading());
-
-    final result = await getAllTransactionsUseCase();
-
-    result.fold(
-      (failure) {
-        emit(TransactionError(failure.message));
-        emitEvent(ShowErrorMessage(failure.message));
-      },
-      (items) {
-        if (items.isEmpty) {
-          emit(const TransactionEmpty());
-        } else {
-          emit(TransactionsLoaded(items));
-        }
-      },
-    );
-  }
-
-  Future<void> _onLoadTransaction(
-    LoadTransactionAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    emit(const TransactionLoading());
-
-    final result = await getTransactionUseCase(action.id);
-
-    result.fold((failure) {
-      emit(TransactionError(failure.message));
-      emitEvent(ShowErrorMessage(failure.message));
-    }, (item) => emit(TransactionLoaded(item)));
-  }
-
-  Future<void> _onCreateTransaction(
-    CreateTransactionAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    // TODO: Implement create logic
-    emitEvent(const ShowSuccessMessage('Created successfully'));
-  }
-
-  Future<void> _onUpdateTransaction(
-    UpdateTransactionAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    // TODO: Implement update logic
-    emitEvent(const ShowSuccessMessage('Updated successfully'));
-  }
-
-  Future<void> _onDeleteTransaction(
-    DeleteTransactionAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    // TODO: Implement delete logic
-    emitEvent(const ShowSuccessMessage('Deleted successfully'));
-  }
-
-  Future<void> _onRefreshTransactions(
-    RefreshTransactionsAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    // Reload all items
-    add(const LoadAllTransactionsAction());
-  }
+  // TODO: Implement action handlers
+  // Future<void> _onInit(
+  //   InitTransactionAction action,
+  //   Emitter<TransactionState> emit,
+  // ) async {
+  //   // Handle initialization
+  // }
 }

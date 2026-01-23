@@ -1,132 +1,68 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// coverage:ignore-file
+
 import 'package:auto_route/auto_route.dart';
-import '../../../../di/injection.dart';
-import '../../../../config/theme/app_themes.dart';
+import 'package:flutter/material.dart';
+import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
 import 'scanner_bloc.dart';
-import 'scanner_action.dart';
 import 'scanner_state.dart';
 import 'scanner_event.dart';
+// TODO: Uncomment when dispatching actions
+// import 'scanner_action.dart';
 
-/// Scanner Page - uses StatelessWidget + BlocProvider/BlocConsumer
-/// All UI state is managed in the BLoC, not with setState()
+/// ============================================================================
+/// Scanner Page
+/// ============================================================================
+/// MVI Page - Only implement the MVI methods:
+/// - buildAppBar: Optional app bar
+/// - handleState: Build UI based on state
+/// - handleEvent: Handle one-time events
+/// - onBlocCreated: Optional initial action
+/// ============================================================================
+
 @RoutePage()
-class ScannerPage extends StatelessWidget {
+class ScannerPage extends BaseMviPage<ScannerBloc, ScannerState, ScannerEvent> {
   const ScannerPage({super.key});
 
+  // TODO: Uncomment to dispatch initial action
+  // @override
+  // void Function(ScannerBloc bloc)? get onBlocCreated =>
+  //     (bloc) => bloc.onAction(const LoadScannerAction());
+
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<ScannerBloc>()..onAction(const LoadAllScannersAction()),
-      child: BlocConsumer<ScannerBloc, ScannerState>(
-        listener: (context, state) {
-          // Listen to events for side effects (one-time actions)
-          context.read<ScannerBloc>().events.listen((event) {
-            if (!context.mounted) return;
-            switch (event) {
-              case ShowSuccessMessage(:final message):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                    backgroundColor: context.appThemes.primaryColor,
-                  ),
-                );
-              case ShowErrorMessage(:final message):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(message), backgroundColor: context.appThemes.errorColor),
-                );
-              case NavigateToScannerDetail():
-                // TODO: Implement navigation
-                break;
-              case NavigateBack():
-                context.router.maybePop();
-            }
-          });
-        },
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Scanner', style: context.appThemes.titleLarge),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    context.read<ScannerBloc>().onAction(const RefreshScannersAction());
-                  },
-                ),
-              ],
-            ),
-            body: switch (state) {
-              ScannerInitial() => Center(
-                child: Text('Press refresh to load data', style: context.appThemes.bodyMedium),
-              ),
-              ScannerLoading() => const Center(child: CircularProgressIndicator()),
-              ScannerEmpty() => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.inbox, size: 64, color: context.appThemes.textSecondaryColor),
-                    const SizedBox(height: 16),
-                    Text('No scanners found', style: context.appThemes.bodyMedium),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<ScannerBloc>().onAction(const RefreshScannersAction());
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
-              ScannersLoaded(:final items) => RefreshIndicator(
-                onRefresh: () async {
-                  context.read<ScannerBloc>().onAction(const RefreshScannersAction());
-                },
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return ListTile(
-                      leading: CircleAvatar(child: Text(item.name[0].toUpperCase())),
-                      title: Text(item.name, style: context.appThemes.bodyLarge),
-                      subtitle: Text('ID: ${item.id}', style: context.appThemes.bodySmall),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        // TODO: Navigate to detail
-                      },
-                    );
-                  },
-                ),
-              ),
-              ScannerError(:final message) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error, size: 64, color: context.appThemes.errorColor),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Error: $message',
-                      style: context.appThemes.bodyMedium.copyWith(
-                        color: context.appThemes.errorColor,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<ScannerBloc>().onAction(const RefreshScannersAction());
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
-              _ => const Center(child: Text('Unknown state')),
-            },
-          );
-        },
-      ),
-    );
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return AppBar(title: const Text('Scanner'));
+  }
+
+  @override
+  Widget handleState(BuildContext context, ScannerState state) {
+    return switch (state) {
+      ScannerInitial() => _buildInitial(context),
+      // TODO: Add cases for other states
+      // ScannerLoading() => const Center(child: CircularProgressIndicator()),
+      // ScannerSuccess(:final data) => _buildSuccess(context, data),
+      // ScannerError(:final message) => _buildError(context, message),
+    };
+  }
+
+  @override
+  void handleEvent(BuildContext context, ScannerEvent event) {
+    // TODO: Handle events with switch
+    // switch (event) {
+    //   case ShowMessage(:final message, :final type):
+    //     // Show snackbar
+    //     break;
+    //   case NavigateBackEvent():
+    //     context.router.pop();
+    //     break;
+    // }
+  }
+
+  /// ============================================================================
+  /// State Widgets
+  /// ============================================================================
+  Widget _buildInitial(BuildContext context) {
+    return const Center(child: Text('Scanner Feature'));
   }
 }

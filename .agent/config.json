@@ -1,6 +1,33 @@
 {
     "project_name": "bloc_digital_wallet",
     "version": "1.2.0",
+    "project_settings": {
+        "shell_aliases": {
+            "flutter": "fvm flutter",
+            "dart": "fvm dart",
+            "pod": "pod"
+        }
+    },
+    "agent": {
+        "terminal": {
+            "policy": "restricted",
+            "allowlist": [
+                "flutter test",
+                "fvm *",
+                "pod *",
+                "gradle *",
+                "./gradlew *",
+                "sh .agent/skills/*",
+                "ls *",
+                "git status",
+                "melos genAlls"
+            ],
+            "denylist": [
+                "rm -rf *",
+                "sudo"
+            ]
+        }
+    },
     "ai_optimization": {
         "global_config": {
             "max_context_window": 2000000,
@@ -83,6 +110,14 @@
                     "gemini-3-pro"
                 ],
                 "context_window": "medium"
+            },
+            "setup_keybindings": {
+                "description": "Merges workspace keybindings into user IDE configuration.",
+                "capability_required": "fast_inference",
+                "recommended_models": [
+                    "gemini-3-flash"
+                ],
+                "context_window": "small"
             }
         },
         "roles": {

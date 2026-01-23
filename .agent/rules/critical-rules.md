@@ -40,3 +40,4 @@
 5.  **AI AGENT WORKFLOW** - Before creating a PR, MUST run `melos genAlls`.
     *   **Why**: Handles code generation, formatting, and license headers.
     *   **Note**: `melos genAlls` executes `build_runner` internally. **DO NOT** run `build_runner` separately.
+6.  **SHELL ALIASES** - Commands **MUST** use the aliases defined in `.agent/config.json` > `project_settings` > `shell_aliases` (e.g., use `fvm flutter` instead of `flutter`).

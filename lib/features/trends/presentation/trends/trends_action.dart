@@ -1,50 +1,41 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+// coverage:ignore-file
+
 import '../../../../core/architecture/architecture.dart';
 
-/// Actions for Trends feature (INPUT: View → ViewModel)
-/// Represents user interactions and system triggers
+/// ============================================================================
+/// Trends Actions
+/// ============================================================================
+/// Actions represent user intentions/interactions from the UI.
+///
+/// HOW TO EXTEND:
+/// 1. Create action classes for each user interaction
+/// 2. Each action should extend TrendsAction
+/// 3. Include any data needed to process the action
+///
+/// EXAMPLE - Adding actions:
+/// ```dart
+/// class LoadTrendsAction extends TrendsAction {
+///   const LoadTrendsAction();
+/// }
+///
+/// class SubmitTrendsAction extends TrendsAction {
+///   final String data;
+///   const SubmitTrendsAction(this.data);
+/// }
+///
+/// class RefreshTrendsAction extends TrendsAction {
+///   const RefreshTrendsAction();
+/// }
+/// ```
+/// ============================================================================
+
 sealed class TrendsAction extends BaseAction {
   const TrendsAction();
 }
 
-/// Load all trendss
-class LoadAllTrendssAction extends TrendsAction {
-  const LoadAllTrendssAction();
-}
-
-/// Load single trends
-class LoadTrendsAction extends TrendsAction {
-  final String id;
-
-  const LoadTrendsAction(this.id);
-}
-
-/// Create trends
-class CreateTrendsAction extends TrendsAction {
-  final String name;
-  // TODO: Add parameters
-
-  const CreateTrendsAction({required this.name});
-}
-
-/// Update trends
-class UpdateTrendsAction extends TrendsAction {
-  final String id;
-  final String name;
-  // TODO: Add parameters
-
-  const UpdateTrendsAction({required this.id, required this.name});
-}
-
-/// Delete trends
-class DeleteTrendsAction extends TrendsAction {
-  final String id;
-
-  const DeleteTrendsAction(this.id);
-}
-
-/// Refresh trendss
-class RefreshTrendssAction extends TrendsAction {
-  const RefreshTrendssAction();
+/// Initialize action - called when the feature starts
+class InitTrendsAction extends TrendsAction {
+  const InitTrendsAction();
 }
