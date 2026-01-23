@@ -37,3 +37,6 @@
 2.  **TRANSLATIONS** - Use `context.t` (Slang).
 3.  **THEME** - Use `context.appThemes`.
 4.  **SKILLS** - Trigger `.agent/skills/` immediately.
+5.  **AI AGENT WORKFLOW** - Before creating a PR, MUST run `melos genAlls`.
+    *   **Why**: Handles code generation, formatting, and license headers.
+    *   **Note**: `melos genAlls` executes `build_runner` internally. **DO NOT** run `build_runner` separately.

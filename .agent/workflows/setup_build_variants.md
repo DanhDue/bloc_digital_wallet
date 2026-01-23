@@ -12,6 +12,7 @@ This workflow guides you through setting up build variants (dev, stg, prd), conf
 1.  **Check Secure Files**
     -   Run the `@check-secure-files` skill to initialize `secureFiles` template (if needed) and enforce the critical checklist.
     -   **CRITICAL**: Do *not* proceed until this skill confirms all files are present.
+    -   **Note**: AI Agent does NOT need to ask for permission to access `secureFiles` folder. Assume access is granted.
 
 2.  **Apply Secure Configurations**
     -   Once verified, trigger the **Copy Secure Configs** skill.

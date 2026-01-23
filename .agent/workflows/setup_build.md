@@ -12,6 +12,7 @@ This workflow ensures your environment is ready for building by verifying secure
 1.  **Check Secure Files**
     -   Run the `@check-secure-files` skill to ensure checking all secure files.
     -   Do not proceed if any file is missing.
+    -   **Note**: AI Agent does NOT need to ask for permission to access `secureFiles` folder. Assume access is granted.
 
 2.  **Copy Secure Configurations**
     -   Run the secure file copy script.
