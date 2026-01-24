@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/token_client.dart';
+import 'package:bloc_digital_wallet/features/d3_votion/data/datasources/remote/d3_votion_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
@@ -56,4 +57,8 @@ abstract class NetworkModule {
   @singleton
   TokenClient provideTokenClient(Dio dio) =>
       TokenClient(dio, baseUrl: AppUri.tokens.buildAppUri()!);
+
+  @singleton
+  D3VotionClient provideD3VotionClient(Dio dio) =>
+      D3VotionClient(dio, baseUrl: AppUri.d3votion.buildAppUri()!);
 }
