@@ -40,4 +40,9 @@
 5.  **AI AGENT WORKFLOW** - Before creating a PR, MUST run `melos genAlls`.
     *   **Why**: Handles code generation, formatting, and license headers.
     *   **Note**: `melos genAlls` executes `build_runner` internally. **DO NOT** run `build_runner` separately.
-6.  **SHELL ALIASES** - Commands **MUST** use the aliases defined in `.agent/config.json` > `project_settings` > `shell_aliases` (e.g., use `fvm flutter` instead of `flutter`).
+6.  **SKILL MODIFICATION POLICY** - 🚨 **AI agents MUST NOT edit any files in `.agent/skills/` unless explicitly requested by the user.**
+    *   ❌ **NEVER** modify skill files proactively
+    *   ❌ **NEVER** "improve" or "update" skills without direct user instruction
+    *   ✅ **ONLY** edit skills when user explicitly says "update skill X" or "modify skill Y"
+    *   **Reason**: Skills are carefully crafted instructions. Unsolicited changes can break agent behavior.
+7.  **SHELL ALIASES** - Commands **MUST** use the aliases defined in `.agent/config.json` > `project_settings` > `shell_aliases` (e.g., use `fvm flutter` instead of `flutter`).

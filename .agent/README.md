@@ -16,6 +16,9 @@
 | **JSON to Freezed** | `@json_to_freezed_model` | Parse JSON → Freezed Models | [SKILL.md](skills/json_to_freezed_model/SKILL.md) |
 | **Setup Variants** | `@setup_variants` | Automate Flavors (Android/iOS) | [SKILL.md](skills/setup_variants/SKILL.md) |
 
+> [!CAUTION]
+> **Skill Modification Policy**: AI agents **MUST NOT** edit any files in `.agent/skills/` unless explicitly requested by the user. See [config.json > skill_modification_policy](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/config.json).
+
 ---
 
 ## 🏗️ Build Environment
@@ -64,7 +67,8 @@ This project uses **Dev Containers** to ensure consistency between developers an
 ### 📚 `skills/`
 **Purpose**: Automation for complex, repetitive tasks.  
 **Usage**: Triggered by user intent (e.g., "Add API", "New Feature").  
-**Protocol**: Execute immediately, NO review required (unless specified).
+**Protocol**: Execute immediately, NO review required (unless specified).  
+🚨 **Protection**: Skills are **read-only** unless user explicitly requests modifications.
 
 ### ⚙️ `workflows/`
 **Purpose**: Step-by-step manual guides for routine operations.  
