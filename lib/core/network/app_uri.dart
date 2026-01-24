@@ -14,6 +14,7 @@ class AppUri {
   static const String refreshToken = 'refresh';
   static const String accounts = 'accounts';
   static const String baseUrl = 'baseUrl';
+  static const String d3votion = 'd3votion';
 }
 
 class UriPaths {

@@ -14,6 +14,7 @@ import '../../core/services/auth_stream_service.dart';
 import '../../core/utils/extensions/string_ext.dart';
 import '../../features/authentication/data/datasources/local/auth_local_datasource.dart';
 import '../../features/authentication/data/datasources/remote/auth_client.dart';
+import '../../features/d3_votion/data/datasources/remote/d3_votion_client.dart';
 import '../../features/onboard/data/datasources/health_check_client.dart';
 import '../core/network/dio_factory.dart';
 
@@ -56,4 +57,8 @@ abstract class NetworkModule {
   @singleton
   TokenClient provideTokenClient(Dio dio) =>
       TokenClient(dio, baseUrl: AppUri.tokens.buildAppUri()!);
+
+  @singleton
+  D3VotionClient provideD3VotionClient(Dio dio) =>
+      D3VotionClient(dio, baseUrl: AppUri.d3votion.buildAppUri()!);
 }

@@ -1,6 +1,6 @@
 {
     "project_name": "bloc_digital_wallet",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "project_settings": {
         "shell_aliases": {
             "flutter": "fvm flutter",
