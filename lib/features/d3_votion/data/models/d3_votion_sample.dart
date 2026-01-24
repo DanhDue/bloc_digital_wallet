@@ -11,7 +11,7 @@ part 'd3_votion_sample.g.dart';
 abstract class D3VotionSample with _$D3VotionSample {
   @JsonSerializable(includeIfNull: false)
   const factory D3VotionSample({
-    String? text,
+    @JsonKey(name: 'text') String? text,
     @JsonKey(name: 'vietnamese_text') String? vietnameseText,
     @JsonKey(name: 'audio_link') String? audioLink,
   }) = _D3VotionSample;

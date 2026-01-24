@@ -12,10 +12,10 @@ part 'd3_votion_res_object.g.dart';
 abstract class D3VotionResObject with _$D3VotionResObject {
   @JsonSerializable(includeIfNull: false)
   const factory D3VotionResObject({
-    String? word,
-    String? definition,
-    String? ipa,
-    List<D3VotionSample>? samples,
+    @JsonKey(name: 'word') String? word,
+    @JsonKey(name: 'definition') String? definition,
+    @JsonKey(name: 'ipa') String? ipa,
+    @JsonKey(name: 'samples') List<D3VotionSample>? samples,
   }) = _D3VotionResObject;
 
   factory D3VotionResObject.fromJson(Map<String, dynamic> json) =>
