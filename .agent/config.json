@@ -20,6 +20,8 @@
                 "sh .agent/skills/*",
                 "ls *",
                 "git status",
+                "fluttergen *",
+                "mason *",
                 "melos genAlls"
             ],
             "denylist": [
