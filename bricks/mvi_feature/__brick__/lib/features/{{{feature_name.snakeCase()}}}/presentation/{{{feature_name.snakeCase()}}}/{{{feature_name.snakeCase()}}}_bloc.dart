@@ -62,11 +62,6 @@ class {{feature_name.pascalCase()}}Bloc extends MviBloc<
     // handleActionDroppable<Init{{feature_name.pascalCase()}}Action>(_onInit);
   }
 
-  @override
-  void onAction({{feature_name.pascalCase()}}Action action) {
-    add(action);
-  }
-
   // TODO: Implement action handlers
   // Future<void> _onInit(
   //   Init{{feature_name.pascalCase()}}Action action,
@@ -75,3 +70,4 @@ class {{feature_name.pascalCase()}}Bloc extends MviBloc<
   //   // Handle initialization
   // }
 }
+
