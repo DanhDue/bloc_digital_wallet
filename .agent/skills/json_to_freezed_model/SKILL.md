@@ -26,7 +26,19 @@ Parse JSON and generate freezed object classes in the data layer.
 
 ## 2. Create Model Files
 
-For each object in the JSON hierarchy, create a file in the target data layer:
+> [!CRITICAL]
+> **ONE OBJECT, ONE FILE RULE**
+> 
+> Each class (Root or Nested) **MUST** have its own dedicated `.dart` file.
+> - ❌ **NEVER** define multiple classes in a single file
+> - ❌ **NEVER** put nested objects in the same file as the parent
+> - ✅ **ALWAYS** create a separate file for each object, even if it's small
+> 
+> **Example**: If JSON has `user` and `address` objects, create:
+> - `user_object.dart` (contains only `UserObject`)
+> - `address_object.dart` (contains only `AddressObject`)
+
+For each object in the JSON hierarchy, create a separated file in the target data layer:
 
 ```
 lib/features/{module}/data/models/
