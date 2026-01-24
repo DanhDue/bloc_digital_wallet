@@ -55,6 +55,7 @@ Use the `json_to_freezed_model` skill guidelines:
     - Create or update the module's client in `lib/features/{module}/data/datasources/`.
     - Use the `@RestApi()` and `@GET/@POST/etc.` annotations.
     - Wrap responses with `BaseResponseObject<T>`.
+    - **Exception**: For external APIs or APIs returning flat JSON (not wrapped in `BaseResponseObject`), **bypass the wrapper** and define models that map directly to the response.
 3.  **Dependency Injection**:
     - Register new clients in `lib/di/network_module.dart` using the `@singleton` or `@LazySingleton` annotation.
     - **CRITICAL**: Always provide the `baseUrl` explicitly when instantiating the client: `Client(dio, baseUrl: AppUri.service.buildAppUri()!)`. Avoid passing only `dio`.
