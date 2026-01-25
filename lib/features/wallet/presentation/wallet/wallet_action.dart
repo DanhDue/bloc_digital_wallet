@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
 import '../../../../core/architecture/architecture.dart';
 
 /// ============================================================================
@@ -38,4 +39,9 @@ sealed class WalletAction extends BaseAction {
 /// Initialize action - called when the feature starts
 class InitWalletAction extends WalletAction {
   const InitWalletAction();
+}
+
+class SelectNetworkAction extends WalletAction {
+  final NetworkObject network;
+  const SelectNetworkAction(this.network);
 }

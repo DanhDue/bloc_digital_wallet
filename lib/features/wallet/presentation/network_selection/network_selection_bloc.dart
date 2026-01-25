@@ -5,10 +5,14 @@
 import 'package:injectable/injectable.dart';
 // TODO: Uncomment when adding action handlers
 // import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/datasources/wallet_remote_datasource.dart';
+import 'package:bloc_digital_wallet/features/wallet/presentation/network_selection/network_selection_action.dart';
+import 'package:bloc_digital_wallet/features/wallet/presentation/network_selection/network_selection_event.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
+import 'package:bloc_digital_wallet/features/wallet/presentation/network_selection/network_selection_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../core/architecture/architecture.dart';
-import 'network_selection_action.dart';
-import 'network_selection_state.dart';
-import 'network_selection_event.dart';
 
 /// ============================================================================
 /// NetworkSelection BLoC
@@ -54,16 +58,42 @@ import 'network_selection_event.dart';
 @injectable
 class NetworkSelectionBloc
     extends MviBloc<NetworkSelectionAction, NetworkSelectionState, NetworkSelectionEvent> {
-  NetworkSelectionBloc() : super(const NetworkSelectionInitial()) {
-    // TODO: Register action handlers here
-    // handleActionDroppable<LoadNetworkSelectionAction>(_onLoad);
+  final WalletRemoteDataSource _walletRemoteDataSource;
+
+  List<NetworkObject> _allNetworks = [];
+
+  NetworkSelectionBloc(this._walletRemoteDataSource) : super(const NetworkSelectionInitial()) {
+    handleActionDroppable<LoadNetworkSelectionAction>(_onLoad);
+    handleActionDroppable<SearchNetworkSelectionAction>(_onSearch);
   }
 
-  // TODO: Implement action handlers
-  // Future<void> _onLoad(
-  //   LoadNetworkSelectionAction action,
-  //   Emitter<NetworkSelectionState> emit,
-  // ) async {
-  //   // Handle loading
-  // }
+  Future<void> _onLoad(
+    LoadNetworkSelectionAction action,
+    Emitter<NetworkSelectionState> emit,
+  ) async {
+    emit(const NetworkSelectionLoading());
+    final result = await _walletRemoteDataSource.getNetworks();
+    result.fold((failure) => emit(NetworkSelectionError(failure.message)), (data) {
+      _allNetworks = data.data ?? [];
+      emit(NetworkSelectionSuccess(_allNetworks));
+    });
+  }
+
+  Future<void> _onSearch(
+    SearchNetworkSelectionAction action,
+    Emitter<NetworkSelectionState> emit,
+  ) async {
+    final query = action.query.toLowerCase().trim();
+    if (query.isEmpty) {
+      emit(NetworkSelectionSuccess(_allNetworks));
+      return;
+    }
+
+    final filtered = _allNetworks.where((element) {
+      final name = element.name?.toLowerCase() ?? '';
+      return name.contains(query);
+    }).toList();
+
+    emit(NetworkSelectionSuccess(filtered));
+  }
 }

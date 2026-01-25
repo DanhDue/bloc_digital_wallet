@@ -5,10 +5,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-Route<T> modalSheetBuilder<T>(BuildContext context, Widget child, AutoRoutePage<T> page) {
+Route<T> modalSheetBuilder<T>(
+  BuildContext context,
+  Widget child,
+  AutoRoutePage<T> page, {
+  bool shouldWrap = true,
+}) {
   return ModalBottomSheetRoute(
     settings: page,
-    builder: (context) => child,
+    builder: (context) => shouldWrap ? ModalBottomSheetContainer(child: child) : child,
     isScrollControlled: true, // Required
     useSafeArea: false,
 
@@ -26,6 +31,6 @@ class ModalBottomSheetContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return child;
+    return Wrap(children: [child]);
   }
 }

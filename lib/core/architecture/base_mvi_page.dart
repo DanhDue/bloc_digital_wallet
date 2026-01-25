@@ -79,6 +79,9 @@ abstract class BaseMviPage<
   /// Returns null by default (no initial action).
   void Function(B bloc)? get onBlocCreated => null;
 
+  /// Override to return an initial action to dispatch when the BLoC is created.
+  BaseAction? get initialAction => null;
+
   /// Override to provide an app bar. Return null for no app bar.
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;
 
@@ -106,6 +109,10 @@ abstract class BaseMviPage<
       create: (_) {
         final bloc = getIt<B>();
         onBlocCreated?.call(bloc);
+        final action = initialAction;
+        if (action != null) {
+          bloc.onAction(action);
+        }
         return bloc;
       },
       child: Builder(builder: (context) => buildScaffold(context)),

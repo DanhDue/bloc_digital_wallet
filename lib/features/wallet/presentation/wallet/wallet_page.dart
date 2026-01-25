@@ -7,15 +7,18 @@ import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
 import 'package:bloc_digital_wallet/core/utils/log.dart';
 import 'package:bloc_digital_wallet/core/mixin/dialog_mixin.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
 import 'package:bloc_digital_wallet/generated/assets.gen.dart';
 import 'package:bloc_digital_wallet/generated/colors.gen.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'wallet_bloc.dart';
 import 'wallet_state.dart';
 import 'wallet_event.dart';
+import 'wallet_action.dart';
 import 'package:bloc_digital_wallet/core/extensions/dialog_extensions.dart';
 import 'package:bloc_digital_wallet/core/extensions/widget_extensions.dart';
 
@@ -33,18 +36,15 @@ import 'package:bloc_digital_wallet/core/extensions/widget_extensions.dart';
 class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with DialogMixin {
   const WalletPage({super.key});
 
-  // TODO: Uncomment to dispatch initial action
-  // @override
-  // void Function(WalletBloc bloc)? get onBlocCreated =>
-  //     (bloc) => bloc.onAction(const LoadWalletAction());
+  @override
+  BaseAction? get initialAction => const InitWalletAction();
 
   @override
   Widget handleState(BuildContext context, WalletState state) {
     return switch (state) {
-      WalletInitial() => _buildInitial(context),
-      // TODO: Add cases for other states
+      WalletInitial() => const Center(child: CircularProgressIndicator()),
+      WalletSuccess(:final selectedNetwork) => _buildSuccess(context, selectedNetwork),
       // WalletLoading() => const Center(child: CircularProgressIndicator()),
-      // WalletSuccess(:final data) => _buildSuccess(context, data),
       // WalletError(:final message) => _buildError(context, message),
     };
   }
@@ -65,16 +65,16 @@ class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with 
   /// ============================================================================
   /// State Widgets
   /// ============================================================================
-  Widget _buildInitial(BuildContext context) {
+  Widget _buildSuccess(BuildContext context, NetworkObject? selectedNetwork) {
     return Column(
       children: [
-        _buildTopBar(context),
+        _buildTopBar(context, selectedNetwork),
         Center(child: Text('Wallet Feature')),
       ],
     );
   }
 
-  _buildTopBar(BuildContext context) {
+  Widget _buildTopBar(BuildContext context, NetworkObject? selectedNetwork) {
     return Row(
       mainAxisAlignment: .start,
       crossAxisAlignment: .center,
@@ -95,28 +95,15 @@ class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with 
             ),
           ),
         ),
-        const SizedBox(width: 48),
+        const SizedBox(width: 42),
         Expanded(child: SizedBox.shrink()),
         InkWell(
           onTap: () async {
-            Log.d("select network");
-            final selectedNetwork = await showModalBottomSheet(
-              context: context,
-              useRootNavigator: true,
-              backgroundColor: AppColors.transparent,
-              shape: RoundedRectangleBorder(borderRadius: .vertical(top: .circular(8))),
-              clipBehavior: .antiAliasWithSaveLayer,
-              builder: (context) => Padding(
-                padding: .only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Wrap(
-                  children: [
-                    // NetworkSelectionView(selectedNetwork: controller.selectedNetwork.value),
-                  ],
-                ),
-              ),
-              routeSettings: const RouteSettings(name: AppRoutes.dashboard),
-              isScrollControlled: true,
-            );
+            final result = await context.router.push(const NetworkSelectionRoute());
+            Log.d("selected network: $result");
+            if (result != null && result is NetworkObject && context.mounted) {
+              context.read<WalletBloc>().onAction(SelectNetworkAction(result));
+            }
           },
           child: Container(
             padding: const .symmetric(horizontal: 10, vertical: 10),
@@ -143,17 +130,29 @@ class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with 
                   height: 24,
                   child: ClipRRect(
                     borderRadius: .circular(24),
-                    child: CachedNetworkImage(
-                      imageUrl: "https://s2.coinmarketcap.com/static/img/coins/200x200/5426.png",
-                      width: 36,
-                      height: 36,
-                      fit: .cover,
-                    ),
+                    child: (selectedNetwork?.logo?.isNotEmpty ?? false)
+                        ? Image.network(
+                            selectedNetwork!.logo!,
+                            width: 36,
+                            height: 36,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) =>
+                                const Icon(Icons.error, size: 16, color: Colors.white),
+                          )
+                        : SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: Icon(
+                              Icons.connected_tv_outlined,
+                              size: 24,
+                              color: context.appThemes.white,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  "DevNet",
+                  selectedNetwork?.name ?? "All Networks",
                   style: context.appThemes.bodyMedium.copyWith(color: AppColors.white),
                 ),
                 const SizedBox(width: 6),
@@ -172,7 +171,7 @@ class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with 
           onTap: () => context.showCommingSoon(),
           child: Assets.images.icSearch
               .svg(width: 24, height: 24, fit: .cover)
-              .paddingSymmetric(horizontal: 12),
+              .paddingSymmetric(horizontal: 6),
         ),
         InkWell(
           onTap: () => context.showCommingSoon(),

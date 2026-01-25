@@ -27,8 +27,7 @@ class {{feature_name.pascalCase()}}Page extends BaseMviPage<{{feature_name.pasca
 
   // TODO: Uncomment to dispatch initial action
   // @override
-  // void Function({{feature_name.pascalCase()}}Bloc bloc)? get onBlocCreated =>
-  //     (bloc) => bloc.onAction(const Load{{feature_name.pascalCase()}}Action());
+  // BaseAction? get initialAction => const Load{{feature_name.pascalCase()}}Action();
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {

@@ -1,24 +1,26 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:auto_route/auto_route.dart';
-import 'features/home/presentation/home/home_page.dart';
-import 'features/scanner/presentation/scanner/scanner_page.dart';
-import 'features/authentication/presentation/forgot_password/forgot_password_page.dart';
+
+import 'core/utils/route_utils.dart';
 import 'features/authentication/presentation/code_verification/code_verification_page.dart';
+import 'features/authentication/presentation/forgot_password/forgot_password_page.dart';
 import 'features/authentication/presentation/login/login_page.dart';
 import 'features/authentication/presentation/register/register_page.dart';
 import 'features/dashboard/presentation/dashboard/dashboard_page.dart';
-import 'features/settings/presentation/settings/settings_page.dart';
-import 'features/settings/presentation/profile/profile_page.dart';
-import 'features/settings/presentation/settings/settings_tab_page.dart';
-import 'features/settings/presentation/talker/talker_page.dart';
+import 'features/home/presentation/home/home_page.dart';
 import 'features/onboard/presentation/onboard/onboard_page.dart';
 import 'features/onboard/presentation/splash/splash_page.dart';
 import 'features/onboard/presentation/start/start_page.dart';
-import 'features/wallet/presentation/wallet/wallet_page.dart';
+import 'features/scanner/presentation/scanner/scanner_page.dart';
+import 'features/settings/presentation/profile/profile_page.dart';
+import 'features/settings/presentation/settings/settings_page.dart';
+import 'features/settings/presentation/settings/settings_tab_page.dart';
+import 'features/settings/presentation/talker/talker_page.dart';
 import 'features/transaction/presentation/transaction/transaction_page.dart';
 import 'features/trends/presentation/trends/trends_page.dart';
 import 'features/wallet/presentation/network_selection/network_selection_page.dart';
+import 'features/wallet/presentation/wallet/wallet_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -26,13 +28,18 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: NetworkSelectionRoute.page, path: AppRoutes.networkSelection),
+    CustomRoute(
+      page: NetworkSelectionRoute.page,
+      path: AppRoutes.networkSelection,
+      customRouteBuilder: modalSheetBuilder,
+    ),
     AutoRoute(page: StartRoute.page, path: AppRoutes.start),
-    AutoRoute(page: SplashRoute.page, path: AppRoutes.splash, initial: true),
+    AutoRoute(page: SplashRoute.page, path: AppRoutes.splash),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
     AutoRoute(
       page: HomeRoute.page,
       path: AppRoutes.home,
+      initial: true,
       children: [
         AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
         AutoRoute(page: TransactionRoute.page, path: AppRoutes.transaction),

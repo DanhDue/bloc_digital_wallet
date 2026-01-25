@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'package:equatable/equatable.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
 import '../../../../core/architecture/architecture.dart';
 
 /// ============================================================================
@@ -42,4 +43,27 @@ class NetworkSelectionInitial extends NetworkSelectionState {
 
   @override
   List<Object?> get props => [];
+}
+
+class NetworkSelectionLoading extends NetworkSelectionState {
+  const NetworkSelectionLoading();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class NetworkSelectionSuccess extends NetworkSelectionState {
+  final List<NetworkObject> items;
+  const NetworkSelectionSuccess(this.items);
+
+  @override
+  List<Object?> get props => [items];
+}
+
+class NetworkSelectionError extends NetworkSelectionState {
+  final String message;
+  const NetworkSelectionError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

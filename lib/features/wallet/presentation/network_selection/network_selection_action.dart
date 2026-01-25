@@ -23,3 +23,9 @@ sealed class NetworkSelectionAction extends BaseAction {
 class LoadNetworkSelectionAction extends NetworkSelectionAction {
   const LoadNetworkSelectionAction();
 }
+
+/// Action to search networks
+class SearchNetworkSelectionAction extends NetworkSelectionAction {
+  final String query;
+  const SearchNetworkSelectionAction(this.query);
+}

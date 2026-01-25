@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'package:equatable/equatable.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
 import '../../../../core/architecture/architecture.dart';
 
 /// ============================================================================
@@ -42,4 +43,16 @@ class WalletInitial extends WalletState {
 
   @override
   List<Object?> get props => [];
+}
+
+class WalletSuccess extends WalletState {
+  final NetworkObject? selectedNetwork;
+  const WalletSuccess({this.selectedNetwork});
+
+  @override
+  List<Object?> get props => [selectedNetwork];
+
+  WalletSuccess copyWith({NetworkObject? selectedNetwork}) {
+    return WalletSuccess(selectedNetwork: selectedNetwork ?? this.selectedNetwork);
+  }
 }

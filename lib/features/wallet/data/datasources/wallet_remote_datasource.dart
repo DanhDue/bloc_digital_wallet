@@ -8,7 +8,7 @@ import 'package:injectable/injectable.dart';
 import 'package:bloc_digital_wallet/core/errors/failures.dart';
 import 'package:bloc_digital_wallet/core/mixin/safe_call_api_mixin.dart';
 import 'package:bloc_digital_wallet/core/network/base_response_object.dart';
-import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/network_client.dart';
+
 import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/token_client.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/token_account_object.dart';
@@ -24,9 +24,8 @@ abstract class WalletRemoteDataSource {
 @LazySingleton(as: WalletRemoteDataSource)
 class WalletRemoteDataSourceImpl with SafeCallApiMixin implements WalletRemoteDataSource {
   final TokenClient _tokenClient;
-  final NetworkClient _networkClient;
 
-  WalletRemoteDataSourceImpl(this._tokenClient, this._networkClient);
+  WalletRemoteDataSourceImpl(this._tokenClient);
 
   @override
   Future<Either<Failure, BaseResponseObject<List<TokenAccountObject>>>> getTokenAccounts({
@@ -37,11 +36,11 @@ class WalletRemoteDataSourceImpl with SafeCallApiMixin implements WalletRemoteDa
   Future<Either<Failure, BaseResponseObject<List<NetworkObject>>>> getNetworks() =>
       safeApiCall(() async {
         final modifiedList = [
-          const NetworkObject(id: 'ALL', name: 'All networks', logo: ''),
+          const NetworkObject(id: 'ALL', name: 'All Networks', logo: ''),
           const NetworkObject(
             id: 'SOL',
             logo: 'https://s2.coinmarketcap.com/static/img/coins/200x200/5426.png',
-            name: 'Solana Mainnet Beta',
+            name: 'Solana Mainnet',
           ),
         ];
         return BaseResponseObject(
