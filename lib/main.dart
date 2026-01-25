@@ -5,11 +5,11 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'app_router.dart';
-import 'config/theme/app_themes.dart';
 import 'config/environment_config.dart';
+import 'config/theme/app_themes.dart';
+import 'core/app_initializer/app_initializer.dart';
 import 'di/injection.dart';
 import 'generated/translations.dart';
-import 'core/app_initializer/app_initializer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

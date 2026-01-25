@@ -81,6 +81,15 @@ dependencies:
   animated_text_kit: ^4.3.0
   pretty_animated_text: ^2.0.0
 
+  # Modal Bottom Sheet
+  modal_bottom_sheet: ^3.0.0
+
+  # Avatars
+  flutter_boring_avatars: ^2.0.1
+
+  # Image
+  cached_network_image: ^3.4.1
+
 
 dev_dependencies:
   flutter_test:
@@ -207,6 +216,14 @@ melos:
     mason_upgrade:
       run: mason upgrade
       description: Upgrade Mason bricks to latest versions.
+
+    enableSingleTouches:
+      run: defaults write com.apple.iphonesimulator ShowSingleTouches 1
+      description: Enable single touches in iOS Simulator.
+
+    disableSingleTouches:
+      run: defaults write com.apple.iphonesimulator ShowSingleTouches 0
+      description: Disable single touches in iOS Simulator.
 
 theme_tailor:
   input_folder: lib/config/theme

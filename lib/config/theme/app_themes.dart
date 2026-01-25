@@ -110,6 +110,34 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
   final Color greenVogue100;
   @override
   final Color greenVogue;
+  @override
+  final Color middleBlue;
+  @override
+  final Color pinkLady;
+  @override
+  final Color ink0;
+  @override
+  final Color ink5;
+  @override
+  final Color ink10;
+  @override
+  final Color ink20;
+  @override
+  final Color ink40;
+  @override
+  final Color ink60;
+  @override
+  final Color ink80;
+  @override
+  final Color ink100;
+  @override
+  final Color transparent;
+  @override
+  final Color white;
+  @override
+  final Color black;
+  @override
+  final Color mainGreen;
 
   // Text styles from Material textTheme
   @override
@@ -191,6 +219,20 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     required this.greenVogue95,
     required this.greenVogue100,
     required this.greenVogue,
+    required this.middleBlue,
+    required this.pinkLady,
+    required this.ink0,
+    required this.ink5,
+    required this.ink10,
+    required this.ink20,
+    required this.ink40,
+    required this.ink60,
+    required this.ink80,
+    required this.ink100,
+    required this.transparent,
+    required this.white,
+    required this.black,
+    required this.mainGreen,
     required this.displayLarge,
     required this.displayMedium,
     required this.displaySmall,
@@ -257,6 +299,20 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     Color? greenVogue95,
     Color? greenVogue100,
     Color? greenVogue,
+    Color? middleBlue,
+    Color? pinkLady,
+    Color? ink0,
+    Color? ink5,
+    Color? ink10,
+    Color? ink20,
+    Color? ink40,
+    Color? ink60,
+    Color? ink80,
+    Color? ink100,
+    Color? transparent,
+    Color? white,
+    Color? black,
+    Color? mainGreen,
     TextStyle? displayLarge,
     TextStyle? displayMedium,
     TextStyle? displaySmall,
@@ -321,6 +377,20 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       greenVogue95: greenVogue95 ?? this.greenVogue95,
       greenVogue100: greenVogue100 ?? this.greenVogue100,
       greenVogue: greenVogue ?? this.greenVogue,
+      middleBlue: middleBlue ?? this.middleBlue,
+      pinkLady: pinkLady ?? this.pinkLady,
+      ink0: ink0 ?? this.ink0,
+      ink5: ink5 ?? this.ink5,
+      ink10: ink10 ?? this.ink10,
+      ink20: ink20 ?? this.ink20,
+      ink40: ink40 ?? this.ink40,
+      ink60: ink60 ?? this.ink60,
+      ink80: ink80 ?? this.ink80,
+      ink100: ink100 ?? this.ink100,
+      transparent: transparent ?? this.transparent,
+      white: white ?? this.white,
+      black: black ?? this.black,
+      mainGreen: mainGreen ?? this.mainGreen,
       displayLarge: displayLarge ?? this.displayLarge,
       displayMedium: displayMedium ?? this.displayMedium,
       displaySmall: displaySmall ?? this.displaySmall,
@@ -397,6 +467,20 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       greenVogue95: Color.lerp(greenVogue95, other.greenVogue95, t) ?? greenVogue95,
       greenVogue100: Color.lerp(greenVogue100, other.greenVogue100, t) ?? greenVogue100,
       greenVogue: Color.lerp(greenVogue, other.greenVogue, t) ?? greenVogue,
+      middleBlue: Color.lerp(middleBlue, other.middleBlue, t) ?? middleBlue,
+      pinkLady: Color.lerp(pinkLady, other.pinkLady, t) ?? pinkLady,
+      ink0: Color.lerp(ink0, other.ink0, t) ?? ink0,
+      ink5: Color.lerp(ink5, other.ink5, t) ?? ink5,
+      ink10: Color.lerp(ink10, other.ink10, t) ?? ink10,
+      ink20: Color.lerp(ink20, other.ink20, t) ?? ink20,
+      ink40: Color.lerp(ink40, other.ink40, t) ?? ink40,
+      ink60: Color.lerp(ink60, other.ink60, t) ?? ink60,
+      ink80: Color.lerp(ink80, other.ink80, t) ?? ink80,
+      ink100: Color.lerp(ink100, other.ink100, t) ?? ink100,
+      transparent: Color.lerp(transparent, other.transparent, t) ?? transparent,
+      white: Color.lerp(white, other.white, t) ?? white,
+      black: Color.lerp(black, other.black, t) ?? black,
+      mainGreen: Color.lerp(mainGreen, other.mainGreen, t) ?? mainGreen,
       displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t) ?? displayLarge,
       displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t) ?? displayMedium,
       displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t) ?? displaySmall,
@@ -464,6 +548,20 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     greenVogue95: AppColors.greenVogue95,
     greenVogue100: AppColors.greenVogue100,
     greenVogue: AppColors.greenVogue,
+    middleBlue: AppColors.middleBlue,
+    pinkLady: AppColors.pinkLady,
+    ink0: AppColors.ink0,
+    ink5: AppColors.ink5,
+    ink10: AppColors.ink10,
+    ink20: AppColors.ink20,
+    ink40: AppColors.ink40,
+    ink60: AppColors.ink60,
+    ink80: AppColors.ink80,
+    ink100: AppColors.ink100,
+    transparent: AppColors.transparent,
+    white: AppColors.white,
+    black: AppColors.black,
+    mainGreen: AppColors.mainGreen,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.black),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.black),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.black),
@@ -530,6 +628,20 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     greenVogue95: AppColors.greenVogue95,
     greenVogue100: AppColors.greenVogue100,
     greenVogue: AppColors.greenVogue,
+    middleBlue: AppColors.middleBlue,
+    pinkLady: AppColors.pinkLady,
+    ink0: AppColors.ink0,
+    ink5: AppColors.ink5,
+    ink10: AppColors.ink10,
+    ink20: AppColors.ink20,
+    ink40: AppColors.ink40,
+    ink60: AppColors.ink60,
+    ink80: AppColors.ink80,
+    ink100: AppColors.ink100,
+    transparent: AppColors.transparent,
+    white: AppColors.white,
+    black: AppColors.black,
+    mainGreen: AppColors.mainGreen,
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.white),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.white),
