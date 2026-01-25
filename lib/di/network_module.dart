@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/network_client.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/token_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -56,4 +57,8 @@ abstract class NetworkModule {
   @singleton
   TokenClient provideTokenClient(Dio dio) =>
       TokenClient(dio, baseUrl: AppUri.tokens.buildAppUri()!);
+
+  @singleton
+  NetworkClient provideNetworkClient(Dio dio) =>
+      NetworkClient(dio, baseUrl: AppUri.network.buildAppUri()!);
 }

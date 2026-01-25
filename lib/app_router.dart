@@ -18,6 +18,7 @@ import 'features/onboard/presentation/start/start_page.dart';
 import 'features/wallet/presentation/wallet/wallet_page.dart';
 import 'features/transaction/presentation/transaction/transaction_page.dart';
 import 'features/trends/presentation/trends/trends_page.dart';
+import 'features/wallet/presentation/network_selection/network_selection_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -25,6 +26,7 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+    AutoRoute(page: NetworkSelectionRoute.page, path: AppRoutes.networkSelection),
     AutoRoute(page: StartRoute.page, path: AppRoutes.start),
     AutoRoute(page: SplashRoute.page, path: AppRoutes.splash, initial: true),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
@@ -56,6 +58,7 @@ class AppRouter extends RootStackRouter {
 }
 
 class AppRoutes {
+  static const String networkSelection = '/network-selection';
   static const String trends = 'trends';
   static const String transaction = 'transaction';
   static const String wallet = 'wallet';
