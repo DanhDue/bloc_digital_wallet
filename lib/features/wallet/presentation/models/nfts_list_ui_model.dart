@@ -3,7 +3,7 @@
 // coverage:ignore-file
 
 /// ============================================================================
-/// NetworkSelection UI Model
+/// NftsList UI Model
 /// ============================================================================
 /// UI Models are presentation-layer representations of data.
 /// They should contain only the data needed for displaying in the UI.
@@ -15,19 +15,19 @@
 ///
 /// EXAMPLE:
 /// ```dart
-/// class NetworkSelectionUiModel {
+/// class NftsListUiModel {
 ///   final String id;
 ///   final String displayName;
 ///   final String formattedDate;
 ///
-///   const NetworkSelectionUiModel({
+///   const NftsListUiModel({
 ///     required this.id,
 ///     required this.displayName,
 ///     required this.formattedDate,
 ///   });
 ///
-///   factory NetworkSelectionUiModel.fromEntity(YourEntity entity) {
-///     return NetworkSelectionUiModel(
+///   factory NftsListUiModel.fromEntity(YourEntity entity) {
+///     return NftsListUiModel(
 ///       id: entity.id,
 ///       displayName: entity.name.toUpperCase(),
 ///       formattedDate: DateFormat.yMd().format(entity.createdAt),
@@ -37,8 +37,8 @@
 /// ```
 /// ============================================================================
 
-class NetworkSelectionUiModel {
-  const NetworkSelectionUiModel();
+class NftsListUiModel {
+  const NftsListUiModel();
 
   // TODO: Add UI-specific fields and factory constructors
 }
