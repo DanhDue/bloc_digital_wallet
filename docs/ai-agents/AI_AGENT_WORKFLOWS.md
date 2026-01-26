@@ -96,8 +96,8 @@ OPTION 1 (Recommended): Add Subfeature to Authentication
 - Subfeature: forgot_password
 - Creates:
   • forgot_password_usecase.dart (business logic)
-  • forgot_password_page.dart (UI)
-  • forgot_password_widget.dart (components)
+  • forgot_password_ui_model.dart (presentation model)
+  • forgot_password/ folder (page, bloc, action, state, event)
 - Modifies:
   • authentication_action.dart (add ForgotPasswordAction)
   • authentication_bloc.dart (add action handler)
@@ -1138,10 +1138,15 @@ mason make mvi_subfeature
 lib/features/authentication/
   domain/usecases/
     forgot_password_usecase.dart        ✨ NEW
-  presentation/pages/
-    forgot_password_page.dart           ✨ NEW
-  presentation/widgets/
-    forgot_password_widget.dart         ✨ NEW
+  presentation/
+    models/
+      forgot_password_ui_model.dart     ✨ NEW
+    forgot_password/                    ✨ NEW folder
+      forgot_password_action.dart
+      forgot_password_bloc.dart
+      forgot_password_event.dart
+      forgot_password_page.dart
+      forgot_password_state.dart
 ```
 
 ### Step 3: Implement Use Case
@@ -1595,7 +1600,7 @@ TextButton(
 
 Files created:
 - Domain: 1 use case (forgot_password_usecase.dart)
-- Presentation: 1 page (forgot_password_page.dart), 1 widget
+- Presentation: 1 UI model, 1 page folder (bloc, state, event, action, page)
 
 Files modified:
 - authentication_action.dart (added ForgotPasswordAction)

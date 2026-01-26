@@ -357,10 +357,15 @@ mason make mvi_subfeature
 lib/features/authentication/
   domain/usecases/
     forgot_password_usecase.dart        ✨ NEW
-  presentation/pages/
-    forgot_password_page.dart           ✨ NEW
-  presentation/widgets/
-    forgot_password_widget.dart         ✨ NEW
+  presentation/
+    models/
+      forgot_password_ui_model.dart     ✨ NEW
+    forgot_password/                    ✨ NEW folder
+      forgot_password_action.dart
+      forgot_password_bloc.dart
+      forgot_password_event.dart
+      forgot_password_page.dart
+      forgot_password_state.dart
 ```
 
 ### B.2: Implement Use Case
@@ -510,7 +515,7 @@ dart format lib/
 flutter analyze --no-fatal-infos  # Must be 0 issues
 ```
 
-**For detailed subfeature guide, see**: `docs/mason/MVI_SUBFEATURE_GUIDE.md`
+**For detailed subfeature guide, see**: `docs/mason/MASON_GUIDE.md`
 
 ---
 
@@ -536,9 +541,14 @@ lib/features/transaction/
 │   ├── repositories/
 │   └── usecases/
 └── presentation/
-    ├── mvi/
-    ├── pages/
-    └── widgets/
+    ├── models/
+    │   └── transaction_ui_model.dart
+    └── transaction/
+        ├── transaction_action.dart
+        ├── transaction_bloc.dart
+        ├── transaction_event.dart
+        ├── transaction_page.dart
+        └── transaction_state.dart
 ```
 
 ---

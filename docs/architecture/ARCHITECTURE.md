@@ -412,9 +412,9 @@ lib/features/<module>/
 │   └── usecases/
 │       └── <subfeature>_usecase.dart          # NEW
 └── presentation/
+    ├── models/
+    │   └── <subfeature>_ui_model.dart
     └── <subfeature>/                          # NEW folder
-        ├── models/
-        │   └── <subfeature>_ui_model.dart
         ├── <subfeature>_action.dart
         ├── <subfeature>_bloc.dart
         ├── <subfeature>_event.dart

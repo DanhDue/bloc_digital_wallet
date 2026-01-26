@@ -261,9 +261,9 @@ GOAL:
   - Lower memory usage
 
 AFFECTED FILES:
-@lib/features/wallet/presentation/pages/wallet_page.dart
-@lib/features/wallet/presentation/widgets/balance_card_widget.dart
-@lib/features/wallet/presentation/widgets/transaction_list_widget.dart
+@lib/features/wallet/presentation/wallet/wallet_page.dart
+@lib/features/wallet/presentation/wallet/widgets/balance_card_widget.dart
+@lib/features/wallet/presentation/wallet/widgets/transaction_list_widget.dart
 
 ⚠️ CONSTRAINTS:
 [ ] UI appearance must remain the same

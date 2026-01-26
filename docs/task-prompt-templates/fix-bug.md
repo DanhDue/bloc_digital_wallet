@@ -76,9 +76,9 @@ SYMPTOMS:
 - Frequency: Happens 100% of the time on first tap
 
 AFFECTED FILES:
-@lib/features/authentication/presentation/pages/login_page.dart
+@lib/features/authentication/presentation/authentication/login_page.dart
 @lib/features/authentication/presentation/authentication/authentication_bloc.dart
-@lib/features/authentication/presentation/widgets/auth_text_field.dart
+@lib/features/authentication/presentation/authentication/widgets/auth_text_field.dart
 
 ⚠️ CONSTRAINTS:
 [ ] Minimal changes - fix button tap detection only
@@ -166,8 +166,8 @@ SYMPTOMS:
 - Frequency: Happens every time after completing a transaction
 
 AFFECTED FILES:
-@lib/features/wallet/presentation/pages/wallet_page.dart
-@lib/features/wallet/presentation/pages/transfer_page.dart
+@lib/features/wallet/presentation/wallet/wallet_page.dart
+@lib/features/wallet/presentation/transfer/transfer_page.dart
 @lib/features/wallet/presentation/wallet/wallet_bloc.dart
 
 ⚠️ CONSTRAINTS:

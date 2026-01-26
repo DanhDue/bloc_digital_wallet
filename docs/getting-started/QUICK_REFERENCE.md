@@ -75,14 +75,14 @@ lib/features/{feature}/
 │   └── usecases/
 │       └── get_{feature}_usecase.dart
 └── presentation/
-    ├── mvi/
-    │   ├── {feature}_action.dart
-    │   ├── {feature}_state.dart
-    │   ├── {feature}_event.dart
-    │   └── {feature}_bloc.dart
-    ├── pages/
-    │   └── {feature}_page.dart
-    └── widgets/
+    ├── models/
+    │   └── {feature}_ui_model.dart
+    └── {feature}/
+        ├── {feature}_action.dart
+        ├── {feature}_state.dart
+        ├── {feature}_event.dart
+        ├── {feature}_bloc.dart
+        └── {feature}_page.dart
 ```
 
 ---

@@ -58,14 +58,14 @@ Data Layer (Implementation):
 
 Presentation Layer (UI):
   - Path: lib/features/{feature}/presentation/
-  - UI Models: lib/features/{feature}/presentation/models/{feature}_ui_model.dart
-  - Feature folder: lib/features/{feature}/presentation/{feature}/
+  - Shared Models: lib/features/{feature}/presentation/models/ (contains {feature}_ui_model.dart and {subfeature}_ui_model.dart)
+  - Feature Page: lib/features/{feature}/presentation/{feature}/
     - Action: {feature}_action.dart
     - State: {feature}_state.dart
     - Event: {feature}_event.dart
     - BLoC: {feature}_bloc.dart
     - Page: {feature}_page.dart
-  - Subfeatures: lib/features/{feature}/presentation/{subfeature}/
+  - Subfeatures Page: lib/features/{feature}/presentation/{subfeature}/
   - Rules:
     - Action extends BaseAction (user inputs)
     - State extends BaseState (persistent UI data)

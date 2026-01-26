@@ -80,8 +80,14 @@ lib/features/<name>/
 │   ├── repositories/
 │   └── usecases/
 └── presentation/
-    ├── <name>/ (main page and bloc)
-    └── models/
+    ├── models/
+    │   └── <name>_ui_model.dart
+    └── <name>/
+        ├── <name>_action.dart
+        ├── <name>_bloc.dart
+        ├── <name>_event.dart
+        ├── <name>_page.dart
+        └── <name>_state.dart
 ```
 
 ### 2. `mvi_subfeature` - Add to Existing Module
@@ -110,21 +116,25 @@ mason make mvi_subfeature \
 
 **What Gets Generated:**
 ```
-lib/features/{module_name}/
-  domain/usecases/
-    {subfeature_name}_usecase.dart          # Always created
-  presentation/pages/
-    {subfeature_name}_page.dart             # Always created
-  presentation/widgets/
-    {subfeature_name}_widget.dart           # Always created
+lib/features/<module>/
+├── domain/
+│   └── usecases/
+│       └── <subfeature>_usecase.dart
+└── presentation/
+    ├── models/
+    │   └── <subfeature>_ui_model.dart
+    └── <subfeature>/
+        ├── <subfeature>_action.dart
+        ├── <subfeature>_bloc.dart
+        ├── <subfeature>_event.dart
+        ├── <subfeature>_page.dart
+        └── <subfeature>_state.dart
+
+   # Optional (if needs_entity = true)
+   # domain/entities/{subfeature}_entity.dart
   
-  # Optional (if needs_entity = true)
-  domain/entities/
-    {subfeature_name}_entity.dart
-  
-  # Optional (if needs_model = true)
-  data/models/
-    {subfeature_name}_model.dart
+   # Optional (if needs_model = true)
+   # data/models/{subfeature}_model.dart
 ```
 
 **What It Does:**

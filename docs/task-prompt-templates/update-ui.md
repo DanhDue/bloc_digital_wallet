@@ -95,8 +95,8 @@ REQUIREMENTS:
   - Touch targets minimum 48x48dp
 
 AFFECTED FILES:
-@lib/features/authentication/presentation/pages/login_page.dart
-@lib/features/authentication/presentation/widgets/auth_text_field.dart
+@lib/features/authentication/presentation/authentication/login_page.dart
+@lib/features/authentication/presentation/authentication/widgets/auth_text_field.dart
 @assets/locales/en.i18n.json
 @assets/locales/vi.i18n.json
 
@@ -262,7 +262,7 @@ REQUIREMENTS:
 - Accessibility: Maintain readability on gradient
 
 AFFECTED FILES:
-@lib/features/wallet/presentation/widgets/balance_card_widget.dart
+@lib/features/wallet/presentation/wallet/widgets/balance_card_widget.dart
 @assets/locales/en.i18n.json
 @assets/locales/vi.i18n.json
 

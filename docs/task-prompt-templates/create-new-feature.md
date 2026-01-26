@@ -113,7 +113,7 @@ REQUIREMENTS:
     Response: { "message": "Reset email sent" }
 
 FILES TO REVIEW:
-@lib/features/authentication/presentation/pages/login_page.dart
+@lib/features/authentication/presentation/authentication/login_page.dart
 @lib/features/authentication/presentation/authentication/authentication_bloc.dart
 @lib/features/authentication/domain/repositories/authentication_repository.dart
 
@@ -231,8 +231,8 @@ IMPLEMENTATION STEPS:
      - State: notifications_state.dart
      - Event: notifications_event.dart
      - BLoC: notifications_bloc.dart
-     - Pages: notifications_page.dart, notification_detail_page.dart
-     - Widgets: notification_item_widget.dart
+     - Pages: notifications/notifications_page.dart
+     - Widgets: notifications/widgets/notification_item_widget.dart
    - Translations: notifications* keys (en & vi)
    - Routes: /notifications, /notifications/:id
 

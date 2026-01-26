@@ -109,7 +109,7 @@
     [ ] Implement onAction() with switch
     [ ] Use emit() for states
     [ ] Use emitEvent() for events
-[ ] Create Page (presentation/pages/{name}_page.dart)
+[ ] Create Page (presentation/{name}/{name}_page.dart)
     [ ] Use BlocProvider
     [ ] Use BlocConsumer
     [ ] Listen to events
@@ -140,8 +140,8 @@
 
 Generated Files:
 [ ] Review: domain/usecases/{subfeature}_usecase.dart
-[ ] Review: presentation/pages/{subfeature}_page.dart
-[ ] Review: presentation/widgets/{subfeature}_widget.dart
+[ ] Review: presentation/models/{subfeature}_ui_model.dart
+[ ] Review: presentation/{subfeature}/{subfeature}_page.dart
 
 Implement Use Case:
 [ ] Open: domain/usecases/{subfeature}_usecase.dart
@@ -179,7 +179,7 @@ Add Translations:
     [ ] Add translations
 
 Implement Page UI:
-[ ] Open: presentation/pages/{subfeature}_page.dart
+[ ] Open: presentation/{subfeature}/{subfeature}_page.dart
 [ ] Use context.t for translations
 [ ] Use context.appThemes for styling
 [ ] Use BlocBuilder/BlocProvider
