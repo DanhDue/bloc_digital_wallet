@@ -10,6 +10,8 @@ part 'network_object.g.dart';
 
 @freezed
 abstract class NetworkObject with _$NetworkObject {
+  const NetworkObject._();
+
   @JsonSerializable(includeIfNull: false)
   const factory NetworkObject({
     @JsonKey(name: 'id') String? id,

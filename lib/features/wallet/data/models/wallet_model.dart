@@ -1,82 +1,44 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
 
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/wallet_entity.dart';
 
+part 'wallet_model.freezed.dart';
 part 'wallet_model.g.dart';
 
-/// ============================================================================
-/// Wallet Model
-/// ============================================================================
-/// Models handle JSON serialization and data transformation.
-/// They bridge external data (API/DB) to domain entities.
-///
-/// HOW TO IMPLEMENT:
-/// 1. Add properties matching your API/database schema
-/// 2. Add @JsonKey annotations for field mapping if needed
-/// 3. Implement toEntity() to convert to domain entity
-/// 4. Implement fromEntity() for reverse conversion
-///
-/// EXAMPLE - Full model implementation:
-/// ```dart
-/// @JsonSerializable()
-/// class WalletModel {
-///   @JsonKey(name: 'id')
-///   final String id;
-///
-///   @JsonKey(name: 'name')
-///   final String name;
-///
-///   @JsonKey(name: 'created_at')
-///   final DateTime createdAt;
-///
-///   const WalletModel({
-///     required this.id,
-///     required this.name,
-///     required this.createdAt,
-///   });
-///
-///   factory WalletModel.fromJson(Map<String, dynamic> json) =>
-///       _$WalletModelFromJson(json);
-///
-///   Map<String, dynamic> toJson() => _$WalletModelToJson(this);
-///
-///   WalletEntity toEntity() => WalletEntity(
-///     id: id,
-///     name: name,
-///     createdAt: createdAt,
-///   );
-///
-///   factory WalletModel.fromEntity(WalletEntity entity) =>
-///       WalletModel(
-///         id: entity.id,
-///         name: entity.name,
-///         createdAt: entity.createdAt,
-///       );
-/// }
-/// ```
-///
-/// AFTER ADDING PROPERTIES: Run build_runner to generate serialization code:
-/// ```bash
-/// dart run build_runner build --delete-conflicting-outputs
-/// ```
-/// ============================================================================
+@freezed
+abstract class WalletModel with _$WalletModel {
+  const WalletModel._();
 
-@JsonSerializable()
-class WalletModel {
-  // TODO: Add model properties with @JsonKey annotations
+  @JsonSerializable(includeIfNull: false)
+  const factory WalletModel({
+    @JsonKey(name: 'isValid') @Default(false) bool? isValid,
+    @JsonKey(name: 'privateKey') String? privateKey,
+    @JsonKey(name: 'bs58PrivateKey') String? bs58PrivateKey,
+    @JsonKey(name: 'address') String? address,
+    @JsonKey(name: 'balance') @Default(0.0) double? balance,
+  }) = _WalletModel;
 
-  const WalletModel();
-
-  factory WalletModel.fromJson(Map<String, dynamic> json) => _$WalletModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$WalletModelToJson(this);
+  factory WalletModel.fromJson(Map<String, Object?> json) => _$WalletModelFromJson(json);
 
   /// Convert to domain entity
-  WalletEntity toEntity() => const WalletEntity();
+  WalletEntity toEntity() => WalletEntity(
+    isValid: isValid ?? false,
+    privateKey: privateKey ?? '',
+    bs58PrivateKey: bs58PrivateKey ?? '',
+    address: address ?? '',
+    balance: balance ?? 0.0,
+  );
 
   /// Create from domain entity
-  factory WalletModel.fromEntity(WalletEntity entity) => const WalletModel();
+  factory WalletModel.fromEntity(WalletEntity entity) => WalletModel(
+    isValid: entity.isValid,
+    privateKey: entity.privateKey,
+    bs58PrivateKey: entity.bs58PrivateKey,
+    address: entity.address,
+    balance: entity.balance,
+  );
 }

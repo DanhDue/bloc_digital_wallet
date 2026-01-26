@@ -1,3 +1,7 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -15,7 +19,7 @@ abstract class BaseInfiniteListBloc<T>
   static const _throttleDuration = Duration(milliseconds: 100);
   static const int _defaultPageSize = 20;
 
-  BaseInfiniteListBloc() : super(const BaseInfiniteListState()) {
+  BaseInfiniteListBloc() : super(BaseInfiniteListState<T>()) {
     on<InfiniteListFetchFirstPage>(_onFetchFirstPage, transformer: restartable());
     on<InfiniteListFetchNextPage>(
       _onFetchNextPage,
@@ -37,7 +41,7 @@ abstract class BaseInfiniteListBloc<T>
         isLoadingMore: false,
         isRefreshing: false,
         hasReachedMax: false,
-        items: [],
+        items: <T>[],
         errorMessage: null,
       ),
     );

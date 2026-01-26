@@ -46,3 +46,19 @@
     *   ✅ **ONLY** edit skills when user explicitly says "update skill X" or "modify skill Y"
     *   **Reason**: Skills are carefully crafted instructions. Unsolicited changes can break agent behavior.
 7.  **SHELL ALIASES** - Commands **MUST** use the aliases defined in `.agent/config.json` > `project_settings` > `shell_aliases` (e.g., use `fvm flutter` instead of `flutter`).
+8.  **FREEZED EVERYWHERE** - 🚨 **All data classes MUST use `@freezed` annotation.**
+    *   **Applies to**:
+        *   Data Models (`lib/features/*/data/models/`)
+        *   Domain Entities (`lib/features/*/domain/entities/`)
+        *   BLoC States (`lib/features/*/presentation/*/*_state.dart`)
+        *   BLoC Events (`lib/features/*/presentation/*/*_event.dart`)
+    *   **Rationale**: Ensures immutability, value equality, and `copyWith` support across all layers.
+    *   **Pattern**:
+        ```dart
+        @freezed
+        abstract class MyModel with _$MyModel {
+          const MyModel._();
+          const factory MyModel({...}) = _MyModel;
+          factory MyModel.fromJson(Map<String, Object?> json) => _$MyModelFromJson(json);
+        }
+        ```

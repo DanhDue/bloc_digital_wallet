@@ -65,5 +65,5 @@ abstract class NetworkModule {
 
   @singleton
   WalletClient provideWalletClient(Dio dio) =>
-      WalletClient(dio, baseUrl: AppUri.wallet.buildAppUri()!);
+      WalletClient(dio, baseUrl: AppUri.wallets.buildAppUri()!);
 }

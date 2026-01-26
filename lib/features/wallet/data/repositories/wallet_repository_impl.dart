@@ -9,6 +9,8 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/wallet_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
 import '../datasources/wallet_local_datasource.dart';
+import '../datasources/wallet_remote_datasource.dart';
+import '../../domain/entities/token_account_entity.dart';
 
 /// ============================================================================
 /// Wallet Repository Implementation
@@ -67,8 +69,9 @@ import '../datasources/wallet_local_datasource.dart';
 @LazySingleton(as: WalletRepository)
 class WalletRepositoryImpl implements WalletRepository {
   final WalletLocalDataSource _localDataSource;
+  final WalletRemoteDataSource _remoteDataSource;
 
-  WalletRepositoryImpl(this._localDataSource);
+  WalletRepositoryImpl(this._localDataSource, this._remoteDataSource);
 
   @override
   Future<Either<Failure, List<WalletEntity>>> getWallets() async {
@@ -78,5 +81,14 @@ class WalletRepositoryImpl implements WalletRepository {
     } catch (e) {
       return Left(CacheFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<TokenAccountEntity>>> getTokenAccounts(String address) async {
+    final result = await _remoteDataSource.getTokenAccounts(address: address);
+    return result.fold((failure) => Left(failure), (response) {
+      if (response.data == null) return const Right([]);
+      return Right(response.data!.map((e) => e.toEntity()).toList());
+    });
   }
 }

@@ -42,6 +42,107 @@
                 ".agent/skills/**/*.sh",
                 ".agent/skills/**/resources/**"
             ]
+        },
+        "critical_rules": {
+            "description": "Mandatory architecture and coding rules for this project",
+            "freezed_everywhere": {
+                "rule": "All data classes MUST use @freezed annotation",
+                "applies_to": [
+                    "Data Models (lib/features/*/data/models/)",
+                    "Domain Entities (lib/features/*/domain/entities/)",
+                    "BLoC States (lib/features/*/presentation/*/*_state.dart)",
+                    "BLoC Events (lib/features/*/presentation/*/*_event.dart)"
+                ],
+                "rationale": "Ensures immutability, value equality, and copyWith support across all layers"
+            },
+            "theme_tailor": {
+                "rule": "ALWAYS use context.appThemes for colors and text styles",
+                "forbidden": [
+                    "Theme.of(context)",
+                    "Colors.*",
+                    "Color(0x...)"
+                ],
+                "correct": [
+                    "context.appThemes.primaryColor",
+                    "context.appThemes.bodyMedium"
+                ]
+            },
+            "localization": {
+                "rule": "ALWAYS use context.t for user-facing strings",
+                "forbidden": [
+                    "Hardcoded strings in Text()"
+                ],
+                "correct": [
+                    "Text(context.t.myKey)"
+                ]
+            },
+            "dot_shorthands": {
+                "rule": "Use dot shorthands for Enums and static members where supported by Dart",
+                "enums_and_static_members": {
+                    "preferred": [
+                        ".contain",
+                        ".srcIn",
+                        ".fixed",
+                        ".start",
+                        ".end",
+                        ".center"
+                    ],
+                    "avoid": [
+                        "BoxFit.contain",
+                        "BlendMode.srcIn",
+                        "BottomNavigationBarType.fixed"
+                    ]
+                },
+                "constructors_and_static_methods": {
+                    "preferred": [
+                        ".mode(...)",
+                        ".only(...)",
+                        ".all(...)",
+                        ".symmetric(...)",
+                        ".circular(...)"
+                    ],
+                    "avoid": [
+                        "ColorFilter.mode(...)",
+                        "EdgeInsets.only(...)",
+                        "EdgeInsets.all(...)",
+                        "BorderRadius.circular(...)"
+                    ]
+                },
+                "rationale": "Reduces verbosity and improves readability"
+            },
+            "color_workflow": {
+                "rule": "Follow 4-step workflow for adding and using colors",
+                "steps": [
+                    "1. Define: Add color to assets/colors/colors.xml",
+                    "2. Expose: Add color field to AppThemes in lib/config/theme/app_themes.dart",
+                    "3. Generate: Run melos genAlls to update generated files",
+                    "4. Use: Access via context.appThemes.yourColorName"
+                ],
+                "forbidden": [
+                    "Color(0xFF...)",
+                    "Colors.red"
+                ],
+                "rationale": "Ensures consistent theming and dark mode support"
+            },
+            "mvi_pattern": {
+                "rule": "BLoC entry point is onAction() only",
+                "forbidden": [
+                    "bloc.add()",
+                    "bloc.customMethod()"
+                ],
+                "correct": [
+                    "bloc.onAction(MyAction())"
+                ]
+            },
+            "pure_domain": {
+                "rule": "Domain layer must be Pure Dart",
+                "forbidden": [
+                    "import 'package:flutter/*'"
+                ],
+                "applies_to": [
+                    "lib/features/*/domain/"
+                ]
+            }
         }
     },
     "ai_optimization": {

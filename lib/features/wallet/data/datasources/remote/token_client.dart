@@ -15,7 +15,7 @@ part 'token_client.g.dart';
 abstract class TokenClient {
   factory TokenClient(Dio dio, {String baseUrl}) = _TokenClient;
 
-  @GET(AppUri.accounts + UriPathParameters.address)
+  @GET("/${AppUri.accounts}/${UriPathParameters.address}")
   Future<BaseResponseObject<List<TokenAccountObject>>> getTokenAccounts(
     @Path("address") String address,
   );

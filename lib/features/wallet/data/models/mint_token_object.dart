@@ -6,11 +6,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:bloc_digital_wallet/features/wallet/domain/entities/mint_token_entity.dart';
+
 part 'mint_token_object.freezed.dart';
 part 'mint_token_object.g.dart';
 
 @freezed
 abstract class MintTokenObject with _$MintTokenObject {
+  const MintTokenObject._();
+
   @JsonSerializable(includeIfNull: false)
   const factory MintTokenObject({
     @JsonKey(name: 'address') String? address,
@@ -27,4 +31,14 @@ abstract class MintTokenObject with _$MintTokenObject {
   }) = _MintTokenObject;
 
   factory MintTokenObject.fromJson(Map<String, Object?> json) => _$MintTokenObjectFromJson(json);
+
+  MintTokenEntity toEntity() {
+    return MintTokenEntity(
+      address: address,
+      symbol: symbol,
+      name: name,
+      decimals: decimals,
+      logo: logo,
+    );
+  }
 }

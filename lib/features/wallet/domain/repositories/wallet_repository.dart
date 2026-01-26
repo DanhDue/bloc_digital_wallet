@@ -6,6 +6,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/wallet_entity.dart';
+import '../entities/token_account_entity.dart';
 
 /// ============================================================================
 /// Wallet Repository (Interface)
@@ -46,4 +47,5 @@ import '../entities/wallet_entity.dart';
 
 abstract class WalletRepository {
   Future<Either<Failure, List<WalletEntity>>> getWallets();
+  Future<Either<Failure, List<TokenAccountEntity>>> getTokenAccounts(String address);
 }

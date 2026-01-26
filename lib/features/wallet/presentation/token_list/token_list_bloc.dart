@@ -5,10 +5,12 @@
 import 'package:injectable/injectable.dart';
 // TODO: Uncomment when adding action handlers
 // import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/architecture/architecture.dart';
-import 'token_list_action.dart';
-import 'token_list_state.dart';
-import 'token_list_event.dart';
+import 'package:bloc_digital_wallet/core/components/infinite_list/base_infinite_list_bloc.dart';
+import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
+import 'package:bloc_digital_wallet/features/wallet/domain/usecases/get_token_accounts_usecase.dart';
+// import 'token_list_action.dart';
+// import 'token_list_state.dart';
+// import 'token_list_event.dart';
 
 /// ============================================================================
 /// TokenList BLoC
@@ -52,17 +54,23 @@ import 'token_list_event.dart';
 /// ============================================================================
 
 @injectable
-class TokenListBloc extends MviBloc<TokenListAction, TokenListState, TokenListEvent> {
-  TokenListBloc() : super(const TokenListInitial()) {
-    // TODO: Register action handlers here
-    // handleActionDroppable<LoadTokenListAction>(_onLoad);
-  }
+class TokenListBloc extends BaseInfiniteListBloc<TokenAccountEntity> {
+  final GetTokenAccountsUseCase _getTokenAccountsUseCase;
 
-  // TODO: Implement action handlers
-  // Future<void> _onLoad(
-  //   LoadTokenListAction action,
-  //   Emitter<TokenListState> emit,
-  // ) async {
-  //   // Handle loading
-  // }
+  // TODO: remove hardcoded address when we have wallet selection
+  final String _currentAddress = "CRG9hpv6WpMHhiNZKF9XSjTnfS9SavtTJqhTRc3xG4GZ";
+
+  TokenListBloc(this._getTokenAccountsUseCase);
+
+  @override
+  Future<List<TokenAccountEntity>> fetchItems({required int page, required int limit}) async {
+    // Note: The API currently fetches ALL accounts for an address, pagination might not be supported individually
+    // But BaseInfiniteListBloc expects pages.
+    // If API returns all at once on page 0, subsequent pages should return empty.
+
+    if (page > 0) return []; // Assuming single page response for now
+
+    final result = await _getTokenAccountsUseCase(_currentAddress);
+    return result.fold((failure) => throw Exception(failure.message), (items) => items);
+  }
 }

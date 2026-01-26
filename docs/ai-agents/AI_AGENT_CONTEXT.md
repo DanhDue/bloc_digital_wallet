@@ -27,6 +27,67 @@
 
 ---
 
+## 🚨 CRITICAL RULES (MANDATORY FOR ALL AI AGENTS)
+
+> [!CAUTION]
+> These rules are **NON-NEGOTIABLE**. Violating them will break the architecture.
+
+### 1. Freezed Everywhere
+**Rule**: All data classes MUST use `@freezed` annotation.
+
+| Layer | Files | Example |
+|-------|-------|---------|
+| Data Models | `lib/features/*/data/models/*.dart` | `@freezed class WalletModel` |
+| Domain Entities | `lib/features/*/domain/entities/*.dart` | `@freezed class WalletEntity` |
+| BLoC States | `lib/features/*/presentation/*/*_state.dart` | `sealed class WalletState` |
+| BLoC Events | `lib/features/*/presentation/*/*_event.dart` | `sealed class WalletEvent` |
+
+### 2. Theme Tailor
+**Rule**: ALWAYS use `context.appThemes` for colors and text styles.
+
+```dart
+// ✅ CORRECT
+context.appThemes.primaryColor
+context.appThemes.bodyMedium
+
+// ❌ FORBIDDEN
+Theme.of(context).colorScheme.primary
+Colors.red
+Color(0xFF123456)
+```
+
+### 3. Localization (Slang)
+**Rule**: ALWAYS use `context.t` for user-facing strings.
+
+```dart
+// ✅ CORRECT
+Text(context.t.authWelcomeBack)
+
+// ❌ FORBIDDEN
+Text('Welcome Back')
+```
+
+### 4. MVI Pattern
+**Rule**: BLoC entry point is `onAction()` only.
+
+```dart
+// ✅ CORRECT
+context.read<WalletBloc>().onAction(LoadWalletAction());
+
+// ❌ FORBIDDEN
+context.read<WalletBloc>().add(LoadWalletAction());
+```
+
+### 5. Pure Domain
+**Rule**: Domain layer must be Pure Dart (no Flutter imports).
+
+```dart
+// ❌ FORBIDDEN in lib/features/*/domain/
+import 'package:flutter/material.dart';
+```
+
+---
+
 ## 📁 File Structure Patterns
 
 ### Pattern Recognition Rules
@@ -50,7 +111,7 @@ Data Layer (Implementation):
   - Local DS: lib/features/{feature}/data/datasources/{feature}_local_datasource.dart
   - Repository: lib/features/{feature}/data/repositories/{feature}_repository_impl.dart
   - Rules:
-    - Models use @freezed annotation
+    - Models MUST use @freezed annotation
     - Models have toEntity() and fromEntity() methods
     - DataSources throw Exceptions
     - Repository converts Exceptions to Failures

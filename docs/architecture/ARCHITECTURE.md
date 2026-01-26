@@ -299,7 +299,7 @@ lib/
 
 | Component | Responsibility |
 |-----------|----------------|
-| **Entity** | Pure Dart objects representing business data. No annotations (@freezed, @Json). |
+| **Entity** | Pure Dart objects representing business data. **MUST use `@freezed`** or `Equatable`. |
 | **Repository Interface** | Defines contract for data operations. Returns `Either<Failure, Entity>`. |
 | **UseCase** | Encapsulates specific business logic. Single responsibility. Orchestrates data flow. |
 
@@ -309,7 +309,7 @@ lib/
 
 | Component | Responsibility |
 |-----------|----------------|
-| **Model (DTO)** | Data matching 1:1 with API response or DB table. Uses `@freezed`, `@JsonSerializable`. |
+| **Model (DTO)** | Data matching 1:1 with API response or DB table. **MUST use `@freezed`** with `@JsonSerializable`. |
 | **DataSource** | Remote (Dio, Retrofit) or Local (Hive, SharedPreferences). Throws Exceptions on error. |
 | **Repository Impl** | Implements Domain interface. Decides cache strategy. Maps Model → Entity. Converts Exceptions → Failures. |
 
@@ -725,10 +725,11 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 1. ✅ **Unidirectional Data Flow** - View → BLoC → Domain → Data → Domain → BLoC → View
 2. ✅ **Separation of Concerns** - Each layer has single responsibility
-3. ✅ **Immutability** - All States, Actions, Events are immutable
+3. ✅ **Immutability** - All States, Actions, Events, Entities, Models are immutable
 4. ✅ **Single Entry Point** - BLoC has only `onAction()` method
 5. ✅ **Pure Domain** - No Flutter imports in Domain layer
 6. ✅ **Feature-First** - Code organized by feature, not by layer
+7. ✅ **Freezed Everywhere** - Use `@freezed` for all data classes (Models, Entities, States, Events)
 
 ### 3. Quick Commands
 

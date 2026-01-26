@@ -8,11 +8,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:bloc_digital_wallet/features/wallet/data/models/mint_token_object.dart';
 
+import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
+
 part 'token_account_object.freezed.dart';
 part 'token_account_object.g.dart';
 
 @freezed
 abstract class TokenAccountObject with _$TokenAccountObject {
+  const TokenAccountObject._();
+
   @JsonSerializable(includeIfNull: false)
   const factory TokenAccountObject({
     @JsonKey(name: 'address') String? address,
@@ -24,4 +28,14 @@ abstract class TokenAccountObject with _$TokenAccountObject {
 
   factory TokenAccountObject.fromJson(Map<String, Object?> json) =>
       _$TokenAccountObjectFromJson(json);
+
+  TokenAccountEntity toEntity() {
+    return TokenAccountEntity(
+      address: address,
+      owner: owner,
+      amount: amount,
+      mintToken: mintToken?.toEntity(),
+      accountOwner: accountOwner,
+    );
+  }
 }
