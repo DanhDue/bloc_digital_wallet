@@ -73,6 +73,8 @@ dependencies:
   # Local Packages
   native_security:
     path: packages/native_security
+
+  # Smart Dialog
   flutter_smart_dialog: ^4.9.8+9
 
   # Animation Packages
@@ -89,6 +91,8 @@ dependencies:
 
   # Image
   cached_network_image: ^3.4.1
+  pretty_qr_code: ^3.5.0
+  image_gallery_saver_plus: ^4.0.1
 
 
 dev_dependencies:

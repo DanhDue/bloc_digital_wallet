@@ -42,12 +42,20 @@ import 'package:equatable/equatable.dart';
 /// ============================================================================
 
 class WalletEntity extends Equatable {
-  // TODO: Add entity properties
-  // final String id;
-  // final String name;
+  final bool isValid;
+  final String privateKey;
+  final String bs58PrivateKey;
+  final String address;
+  final double balance;
 
-  const WalletEntity();
+  const WalletEntity({
+    this.isValid = false,
+    this.privateKey = '',
+    this.bs58PrivateKey = '',
+    this.address = '',
+    this.balance = 0.0,
+  });
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [isValid, privateKey, bs58PrivateKey, address, balance];
 }

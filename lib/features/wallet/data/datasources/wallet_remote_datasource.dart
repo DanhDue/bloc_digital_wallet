@@ -10,8 +10,10 @@ import 'package:bloc_digital_wallet/core/mixin/safe_call_api_mixin.dart';
 import 'package:bloc_digital_wallet/core/network/base_response_object.dart';
 
 import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/token_client.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/wallet_client.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/token_account_object.dart';
+import 'package:bloc_digital_wallet/features/wallet/data/models/wallet_response_object.dart';
 
 abstract class WalletRemoteDataSource {
   Future<Either<Failure, BaseResponseObject<List<TokenAccountObject>>>> getTokenAccounts({
@@ -19,13 +21,16 @@ abstract class WalletRemoteDataSource {
   });
 
   Future<Either<Failure, BaseResponseObject<List<NetworkObject>>>> getNetworks();
+
+  Future<Either<Failure, BaseResponseObject<List<WalletResponseObject>>>> getWallets();
 }
 
 @LazySingleton(as: WalletRemoteDataSource)
 class WalletRemoteDataSourceImpl with SafeCallApiMixin implements WalletRemoteDataSource {
   final TokenClient _tokenClient;
+  final WalletClient _walletClient;
 
-  WalletRemoteDataSourceImpl(this._tokenClient);
+  WalletRemoteDataSourceImpl(this._tokenClient, this._walletClient);
 
   @override
   Future<Either<Failure, BaseResponseObject<List<TokenAccountObject>>>> getTokenAccounts({
@@ -50,4 +55,7 @@ class WalletRemoteDataSourceImpl with SafeCallApiMixin implements WalletRemoteDa
           data: modifiedList,
         );
       });
+  @override
+  Future<Either<Failure, BaseResponseObject<List<WalletResponseObject>>>> getWallets() =>
+      safeApiCall(() => _walletClient.getWallets());
 }

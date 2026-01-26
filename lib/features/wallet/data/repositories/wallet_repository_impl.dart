@@ -4,12 +4,11 @@
 
 import 'package:injectable/injectable.dart';
 // TODO: Uncomment imports when implementing
-// import 'package:dartz/dartz.dart';
-// import '../../../../core/errors/failures.dart';
-// import '../../domain/entities/wallet_entity.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../../domain/entities/wallet_entity.dart';
 import '../../domain/repositories/wallet_repository.dart';
-// import '../datasources/wallet_remote_datasource.dart';
-// import '../datasources/wallet_local_datasource.dart';
+import '../datasources/wallet_local_datasource.dart';
 
 /// ============================================================================
 /// Wallet Repository Implementation
@@ -67,15 +66,17 @@ import '../../domain/repositories/wallet_repository.dart';
 
 @LazySingleton(as: WalletRepository)
 class WalletRepositoryImpl implements WalletRepository {
-  // TODO: Inject datasources
-  // final WalletRemoteDataSource _remoteDataSource;
-  // final WalletLocalDataSource _localDataSource;
+  final WalletLocalDataSource _localDataSource;
 
-  WalletRepositoryImpl();
-  // WalletRepositoryImpl(
-  //   this._remoteDataSource,
-  //   this._localDataSource,
-  // );
+  WalletRepositoryImpl(this._localDataSource);
 
-  // TODO: Implement repository methods
+  @override
+  Future<Either<Failure, List<WalletEntity>>> getWallets() async {
+    try {
+      final models = await _localDataSource.getWallets();
+      return Right(models.map((e) => e.toEntity()).toList());
+    } catch (e) {
+      return Left(CacheFailure(message: e.toString()));
+    }
+  }
 }

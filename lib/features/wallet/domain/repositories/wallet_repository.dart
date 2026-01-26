@@ -3,9 +3,9 @@
 // coverage:ignore-file
 
 // TODO: Uncomment imports when adding methods
-// import 'package:dartz/dartz.dart';
-// import '../../../../core/errors/failures.dart';
-// import '../entities/wallet_entity.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../entities/wallet_entity.dart';
 
 /// ============================================================================
 /// Wallet Repository (Interface)
@@ -45,7 +45,5 @@
 /// ============================================================================
 
 abstract class WalletRepository {
-  // TODO: Define repository methods
-  // Example:
-  // Future<Either<Failure, List<WalletEntity>>> getAll();
+  Future<Either<Failure, List<WalletEntity>>> getWallets();
 }

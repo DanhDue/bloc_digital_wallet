@@ -2,9 +2,10 @@
 
 // coverage:ignore-file
 
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
-// TODO: Uncomment when implementing
-// import '../models/wallet_model.dart';
+import '../models/wallet_response_object.dart';
 
 /// ============================================================================
 /// Wallet Local DataSource
@@ -56,9 +57,7 @@ import 'package:injectable/injectable.dart';
 /// ============================================================================
 
 abstract class WalletLocalDataSource {
-  // TODO: Define local data source methods
-  // Future<List<WalletModel>> getCached();
-  // Future<void> cacheAll(List<WalletModel> models);
+  Future<List<WalletResponseObject>> getWallets();
 }
 
 @LazySingleton(as: WalletLocalDataSource)
@@ -66,8 +65,10 @@ class WalletLocalDataSourceImpl implements WalletLocalDataSource {
   // TODO: Inject storage client
   // final Box<WalletModel> _box;
 
-  WalletLocalDataSourceImpl();
-  // WalletLocalDataSourceImpl(this._box);
-
-  // TODO: Implement datasource methods
+  @override
+  Future<List<WalletResponseObject>> getWallets() async {
+    final String response = await rootBundle.loadString('assets/jsons/test_wallets.json');
+    final List<dynamic> data = jsonDecode(response);
+    return data.map((e) => WalletResponseObject.fromJson(e)).toList();
+  }
 }
