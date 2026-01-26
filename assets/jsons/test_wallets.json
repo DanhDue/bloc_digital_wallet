@@ -1,29 +1,34 @@
 [
     {
+        "isValid": true,
         "privateKey": "[164, 83, 255, 114, 137, 98, 3, 31, 20, 194, 33, 161, 54, 162, 225, 208, 33, 100, 190, 135, 67, 200, 200, 134, 118, 204, 229, 210, 148, 6, 222, 227, 169, 167, 160, 55, 68, 35, 236, 71, 173, 72, 175, 241, 149, 136, 140, 158, 124, 252, 212, 220, 240, 24, 228, 118, 15, 160, 226, 104, 78, 0, 181, 186]",
         "bs58PrivateKey": "4HZEpa5xeaUQJtyGPRUqchytC4utgQPqGSQLUEgTmUBz9EBZ2zwpFAs1YJyEGqX4csByWZqvoqTZCH2UfFp6KGxh",
         "address": "CRG9hpv6WpMHhiNZKF9XSjTnfS9SavtTJqhTRc3xG4GZ",
         "balance": 0
     },
     {
+        "isValid": true,
         "privateKey": "[123, 210, 171, 255, 204, 182, 131, 58, 205, 107, 174, 87, 5, 131, 218, 136, 147, 49, 226, 96, 63, 233, 77, 127, 179, 16, 255, 82, 57, 132, 150, 237, 66, 215, 159, 36, 235, 186, 107, 223, 114, 38, 72, 6, 48, 143, 170, 168, 199, 111, 142, 108, 111, 34, 177, 74, 117, 164, 204, 214, 163, 184, 30, 197]",
         "bs58PrivateKey": "3Uayc8G5Dc76Z9uULWrPBuD46yDrW8e1tCh9Zo7u5p4LMkmFGisgHwppQtWPQccYSPP81g7W2e6TwJ5EypPgcaSG",
         "address": "5Vvc61qF3hzatbifr9x4dvUZrGAZ3UhWSuqNU5EBdgG4",
         "balance": 0
     },
     {
+        "isValid": true,
         "privateKey": "[30, 11, 190, 179, 246, 65, 118, 132, 202, 155, 23, 86, 66, 27, 192, 248, 240, 101, 105, 0, 108, 200, 33, 213, 2, 10, 153, 113, 230, 120, 39, 247, 182, 4, 65, 160, 255, 152, 38, 250, 239, 41, 103, 174, 141, 230, 77, 55, 88, 123, 171, 173, 74, 159, 104, 60, 216, 246, 74, 85, 70, 36, 160, 132]",
         "bs58PrivateKey": "bqoPDmymK4nn7tJWeFRoVt78v7s1t2NnUUsQobMfv1jLGaYYnZF1sVrusz3djjt415GooSFaVHpGAWXDC5Mpq9V",
         "address": "DFWxzQhpy8ZZags5ijzF7bWjZqqGhvWvWgyKZofkkjXh",
         "balance": 0
     },
     {
+        "isValid": true,
         "privateKey": "[199, 42, 14, 151, 52, 10, 145, 213, 56, 24, 25, 214, 175, 171, 68, 165, 178, 237, 17, 60, 19, 240, 192, 202, 252, 126, 56, 81, 44, 44, 191, 220, 79, 74, 174, 247, 99, 226, 163, 112, 74, 147, 16, 180, 70, 85, 53, 121, 223, 121, 49, 101, 154, 41, 235, 43, 206, 244, 216, 227, 225, 17, 39, 84]",
         "bs58PrivateKey": "4yxDiGDbW7MKUy6PN628ZDsSDT51zrys3vWWSkh58twVrSkqnxQ93EW2wLEaw2hVR1Rw7c72B5nLkCbkMpwQ3E6X",
         "address": "6LXFznMNbFKcJZbF3azQTnd3SaVf2kCnqF4B4NsH4u3R",
         "balance": 0
     },
     {
+        "isValid": true,
         "privateKey": "[194, 61, 158, 216, 40, 29, 163, 33, 207, 8, 244, 42, 147, 93, 161, 4, 46, 200, 13, 186, 142, 45, 185, 1, 84, 141, 203, 206, 148, 106, 207, 38, 34, 8, 7, 234, 46, 253, 1, 57, 175, 39, 200, 103, 51, 28, 116, 154, 193, 31, 19, 129, 253, 25, 118, 214, 190, 8, 15, 122, 125, 189, 243, 75]",
         "bs58PrivateKey": "4tF5FV7cQaj6HcP826tz3qniQbLHM94C6VrQ23AXY5oSbNsDvvRhuVmphkpdtyTLZiRdivymZQQhHrKiVExYG7j8",
         "address": "3Hqxvw13oVZsKnr9ktsk6SSvJuEd2F8xYfTyVLPGHq86",
