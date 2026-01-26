@@ -1,6 +1,7 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:auto_route/auto_route.dart';
+import 'features/wallet/presentation/token_list/token_list_page.dart';
 
 import 'core/utils/route_utils.dart';
 import 'features/authentication/presentation/code_verification/code_verification_page.dart';
@@ -29,6 +30,7 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+    AutoRoute(page: TokenListRoute.page, path: AppRoutes.tokenList),
     AutoRoute(page: WalletListRoute.page, path: AppRoutes.walletList),
     CustomRoute(
       page: NetworkSelectionRoute.page,
@@ -67,6 +69,7 @@ class AppRouter extends RootStackRouter {
 }
 
 class AppRoutes {
+  static const String tokenList = '/token-list';
   static const String walletList = '/wallet-list';
   static const String networkSelection = '/network-selection';
   static const String trends = 'trends';
