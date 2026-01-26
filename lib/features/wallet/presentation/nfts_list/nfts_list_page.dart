@@ -68,6 +68,7 @@ class NftsListPage extends BaseMviPage<NftsListBloc, NftsListState, NftsListEven
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              SizedBox(height: 36),
               Assets.images.icNoFound.svg(width: 86, fit: BoxFit.cover),
               const SizedBox(height: 4),
               Text(

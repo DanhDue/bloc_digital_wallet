@@ -37,7 +37,7 @@ class TokenItemView extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: .only(top: isFirst ? 0 : 8),
+        padding: .only(top: 8),
         child: Row(
           mainAxisAlignment: .start,
           crossAxisAlignment: .start,

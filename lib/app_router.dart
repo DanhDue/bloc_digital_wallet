@@ -31,7 +31,7 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(initial: true, page: NftsListRoute.page, path: AppRoutes.nftsList),
+    AutoRoute(page: NftsListRoute.page, path: AppRoutes.nftsList),
     AutoRoute(page: TokenListRoute.page, path: AppRoutes.tokenList),
     AutoRoute(page: WalletListRoute.page, path: AppRoutes.walletList),
     CustomRoute(
@@ -43,6 +43,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: SplashRoute.page, path: AppRoutes.splash),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
     AutoRoute(
+      initial: true,
       page: HomeRoute.page,
       path: AppRoutes.home,
       children: [

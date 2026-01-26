@@ -39,13 +39,15 @@ class TokenListPage extends StatelessWidget {
             // Only show loading on initial load (not during refresh)
             child: state.status == InfiniteListStatus.loading && !state.isRefreshing
                 ? Container(
-                    color: context.appThemes.backgroundColor,
-                    child: const Center(child: CustomLoadingWidget()),
+                    color: context.appThemes.white,
+                    child: const Center(
+                      child: Column(children: [SizedBox(height: 36), CustomLoadingWidget()]),
+                    ),
                   )
                 : SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Container(
-                      color: context.appThemes.backgroundColor,
+                      color: context.appThemes.white,
                       constraints: BoxConstraints(
                         minHeight: MediaQuery.of(context).size.height * 0.5,
                       ),
