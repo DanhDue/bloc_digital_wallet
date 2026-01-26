@@ -39,6 +39,7 @@ dependencies:
   
   # Functional Programming
   dartz: ^0.10.1
+  stream_transform: ^2.1.1
   
   # Value Equality
   equatable: ^2.0.8
