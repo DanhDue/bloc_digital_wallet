@@ -138,6 +138,24 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
   final Color black;
   @override
   final Color mainGreen;
+  @override
+  final Color indigo;
+
+  // Wallet Gradients
+  @override
+  final Color walletGradientBlueStart;
+  @override
+  final Color walletGradientBlueEnd;
+  @override
+  final Color walletGradientPurpleStart;
+  @override
+  final Color walletGradientPurpleEnd;
+  @override
+  final Color walletGradientGreenStart;
+  @override
+  final Color walletGradientGreenEnd;
+  @override
+  final Color trendUpColor;
 
   // Text styles from Material textTheme
   @override
@@ -233,6 +251,14 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     required this.white,
     required this.black,
     required this.mainGreen,
+    required this.indigo,
+    required this.walletGradientBlueStart,
+    required this.walletGradientBlueEnd,
+    required this.walletGradientPurpleStart,
+    required this.walletGradientPurpleEnd,
+    required this.walletGradientGreenStart,
+    required this.walletGradientGreenEnd,
+    required this.trendUpColor,
     required this.displayLarge,
     required this.displayMedium,
     required this.displaySmall,
@@ -313,6 +339,14 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     Color? white,
     Color? black,
     Color? mainGreen,
+    Color? indigo,
+    Color? walletGradientBlueStart,
+    Color? walletGradientBlueEnd,
+    Color? walletGradientPurpleStart,
+    Color? walletGradientPurpleEnd,
+    Color? walletGradientGreenStart,
+    Color? walletGradientGreenEnd,
+    Color? trendUpColor,
     TextStyle? displayLarge,
     TextStyle? displayMedium,
     TextStyle? displaySmall,
@@ -391,6 +425,14 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       white: white ?? this.white,
       black: black ?? this.black,
       mainGreen: mainGreen ?? this.mainGreen,
+      indigo: indigo ?? this.indigo,
+      walletGradientBlueStart: walletGradientBlueStart ?? this.walletGradientBlueStart,
+      walletGradientBlueEnd: walletGradientBlueEnd ?? this.walletGradientBlueEnd,
+      walletGradientPurpleStart: walletGradientPurpleStart ?? this.walletGradientPurpleStart,
+      walletGradientPurpleEnd: walletGradientPurpleEnd ?? this.walletGradientPurpleEnd,
+      walletGradientGreenStart: walletGradientGreenStart ?? this.walletGradientGreenStart,
+      walletGradientGreenEnd: walletGradientGreenEnd ?? this.walletGradientGreenEnd,
+      trendUpColor: trendUpColor ?? this.trendUpColor,
       displayLarge: displayLarge ?? this.displayLarge,
       displayMedium: displayMedium ?? this.displayMedium,
       displaySmall: displaySmall ?? this.displaySmall,
@@ -481,6 +523,26 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
       white: Color.lerp(white, other.white, t) ?? white,
       black: Color.lerp(black, other.black, t) ?? black,
       mainGreen: Color.lerp(mainGreen, other.mainGreen, t) ?? mainGreen,
+      indigo: Color.lerp(indigo, other.indigo, t) ?? indigo,
+      walletGradientBlueStart:
+          Color.lerp(walletGradientBlueStart, other.walletGradientBlueStart, t) ??
+          walletGradientBlueStart,
+      walletGradientBlueEnd:
+          Color.lerp(walletGradientBlueEnd, other.walletGradientBlueEnd, t) ??
+          walletGradientBlueEnd,
+      walletGradientPurpleStart:
+          Color.lerp(walletGradientPurpleStart, other.walletGradientPurpleStart, t) ??
+          walletGradientPurpleStart,
+      walletGradientPurpleEnd:
+          Color.lerp(walletGradientPurpleEnd, other.walletGradientPurpleEnd, t) ??
+          walletGradientPurpleEnd,
+      walletGradientGreenStart:
+          Color.lerp(walletGradientGreenStart, other.walletGradientGreenStart, t) ??
+          walletGradientGreenStart,
+      walletGradientGreenEnd:
+          Color.lerp(walletGradientGreenEnd, other.walletGradientGreenEnd, t) ??
+          walletGradientGreenEnd,
+      trendUpColor: Color.lerp(trendUpColor, other.trendUpColor, t) ?? trendUpColor,
       displayLarge: TextStyle.lerp(displayLarge, other.displayLarge, t) ?? displayLarge,
       displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t) ?? displayMedium,
       displaySmall: TextStyle.lerp(displaySmall, other.displaySmall, t) ?? displaySmall,
@@ -562,6 +624,14 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     white: AppColors.white,
     black: AppColors.black,
     mainGreen: AppColors.mainGreen,
+    indigo: AppColors.materialIndigo500,
+    walletGradientBlueStart: const Color(0xFF0091FF),
+    walletGradientBlueEnd: const Color(0xFFE89BA4),
+    walletGradientPurpleStart: const Color(0xFF4A00E0),
+    walletGradientPurpleEnd: const Color(0xFF8E2DE2),
+    walletGradientGreenStart: const Color(0xFF11998E),
+    walletGradientGreenEnd: const Color(0xFF38EF7D),
+    trendUpColor: const Color(0xFF4CAF50),
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.black),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.black),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.black),
@@ -642,6 +712,14 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
     white: AppColors.white,
     black: AppColors.black,
     mainGreen: AppColors.mainGreen,
+    indigo: AppColors.materialIndigo500,
+    walletGradientBlueStart: const Color(0xFF0091FF),
+    walletGradientBlueEnd: const Color(0xFFE89BA4),
+    walletGradientPurpleStart: const Color(0xFF4A00E0),
+    walletGradientPurpleEnd: const Color(0xFF8E2DE2),
+    walletGradientGreenStart: const Color(0xFF11998E),
+    walletGradientGreenEnd: const Color(0xFF38EF7D),
+    trendUpColor: const Color(0xFF4CAF50),
     displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.white),
     displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.white),
     displaySmall: AppTextStyles.displaySmall.copyWith(color: AppColors.white),

@@ -12,6 +12,8 @@ part 'wallet_response_object.g.dart';
 
 @freezed
 abstract class WalletResponseObject with _$WalletResponseObject {
+  const WalletResponseObject._();
+
   @JsonSerializable(includeIfNull: false)
   const factory WalletResponseObject({
     @JsonKey(name: 'isValid') bool? isValid,

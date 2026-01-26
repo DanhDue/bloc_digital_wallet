@@ -44,6 +44,8 @@ PODS:
   - GTMSessionFetcher/Core (3.5.0)
   - GTMSessionFetcher/Full (3.5.0):
     - GTMSessionFetcher/Core
+  - image_gallery_saver_plus (0.0.1):
+    - Flutter
   - native_security (0.0.1):
     - Flutter
   - permission_handler_apple (9.3.0):
@@ -66,6 +68,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_secure_storage_darwin (from `.symlinks/plugins/flutter_secure_storage_darwin/darwin`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
+  - image_gallery_saver_plus (from `.symlinks/plugins/image_gallery_saver_plus/ios`)
   - native_security (from `.symlinks/plugins/native_security/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - pretty_animated_text (from `.symlinks/plugins/pretty_animated_text/ios`)
@@ -94,6 +97,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage_darwin/darwin"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
+  image_gallery_saver_plus:
+    :path: ".symlinks/plugins/image_gallery_saver_plus/ios"
   native_security:
     :path: ".symlinks/plugins/native_security/ios"
   permission_handler_apple:
@@ -119,6 +124,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
+  image_gallery_saver_plus: e597bf65a7846979417a3eae0763b71b6dfec6c3
   native_security: 08203d45d48a22b5a708b0c36089d2fb500fcebc
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   pretty_animated_text: cc861d9e60db9165c80a914de16b43d514992942

@@ -66,6 +66,8 @@ part '{model_name}.g.dart';
 
 @freezed
 abstract class {ModelName} with _${ModelName} {
+  const {ModelName}._();
+
   @JsonSerializable(includeIfNull: false)
   const factory {ModelName}({
     @JsonKey(name: 'field_name') String? fieldName,
@@ -89,6 +91,7 @@ abstract class {ModelName} with _${ModelName} {
 | All fields | Nullable (`?`) | Use `int?`, `String?`, etc. |
 | **Class** | **`abstract class`** | **Always use `abstract class` for Freezed models** |
 | **`includeIfNull`** | **`false`** | **Always use `@JsonSerializable(includeIfNull: false)`** |
+| **Constructor** | **`const Class._();`** | **Always include private constructor** |
 
 > **Important**: Always add `@JsonKey` annotation for **every field**, even when the JSON key matches the Dart property name exactly.
 
@@ -112,6 +115,8 @@ abstract class {ModelName} with _${ModelName} {
 ```dart
 @freezed
 abstract class UserObject with _$UserObject {
+  const UserObject._();
+
   const factory UserObject({
     @JsonKey(name: 'id') int? id,
     @JsonKey(name: 'username') String? username,
@@ -126,6 +131,8 @@ abstract class UserObject with _$UserObject {
 ```dart
 @freezed
 abstract class SignInObject with _$SignInObject {
+  const SignInObject._();
+
   const factory SignInObject({
     @JsonKey(name: 'refresh') String? refresh,
     @JsonKey(name: 'access') String? access,

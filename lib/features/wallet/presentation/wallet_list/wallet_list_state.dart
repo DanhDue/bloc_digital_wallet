@@ -4,6 +4,7 @@
 
 import 'package:equatable/equatable.dart';
 import '../../../../core/architecture/architecture.dart';
+import '../../domain/entities/wallet_entity.dart';
 
 /// ============================================================================
 /// WalletList States
@@ -42,4 +43,29 @@ class WalletListInitial extends WalletListState {
 
   @override
   List<Object?> get props => [];
+}
+
+/// Loading state
+class WalletListLoading extends WalletListState {
+  const WalletListLoading();
+  @override
+  List<Object?> get props => [];
+}
+
+/// Success state with data
+class WalletListSuccess extends WalletListState {
+  final List<WalletEntity> wallets;
+  const WalletListSuccess(this.wallets);
+
+  @override
+  List<Object?> get props => [wallets];
+}
+
+/// Error state
+class WalletListError extends WalletListState {
+  final String message;
+  const WalletListError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

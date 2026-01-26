@@ -9,7 +9,6 @@ import 'package:bloc_digital_wallet/core/utils/log.dart';
 import 'package:bloc_digital_wallet/core/mixin/dialog_mixin.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
 import 'package:bloc_digital_wallet/generated/assets.gen.dart';
-import 'package:bloc_digital_wallet/generated/colors.gen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
@@ -19,6 +18,7 @@ import 'wallet_bloc.dart';
 import 'wallet_state.dart';
 import 'wallet_event.dart';
 import 'wallet_action.dart';
+import '../wallet_list/wallet_list_page.dart';
 import 'package:bloc_digital_wallet/core/extensions/dialog_extensions.dart';
 import 'package:bloc_digital_wallet/core/extensions/widget_extensions.dart';
 
@@ -69,6 +69,7 @@ class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with 
     return Column(
       children: [
         _buildTopBar(context, selectedNetwork),
+        const SizedBox(height: 240, child: WalletListPage()),
         Center(child: Text('Wallet Feature')),
       ],
     );
@@ -137,7 +138,7 @@ class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with 
                             height: 36,
                             fit: BoxFit.cover,
                             errorBuilder: (_, _, _) =>
-                                const Icon(Icons.error, size: 16, color: Colors.white),
+                                Icon(Icons.error, size: 16, color: context.appThemes.white),
                           )
                         : SizedBox(
                             width: 36,
@@ -153,7 +154,7 @@ class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> with 
                 const SizedBox(width: 6),
                 Text(
                   selectedNetwork?.name ?? "All Networks",
-                  style: context.appThemes.bodyMedium.copyWith(color: AppColors.white),
+                  style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.white),
                 ),
                 const SizedBox(width: 6),
                 Assets.images.icChevronDown.svg(

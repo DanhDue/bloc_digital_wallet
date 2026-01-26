@@ -6,8 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/wallet_entity.dart';
-// TODO: Uncomment when injecting repository
-// import '../repositories/wallet_repository.dart';
+import '../repositories/wallet_repository.dart';
 
 /// ============================================================================
 /// GetWallet UseCase
@@ -50,15 +49,12 @@ import '../entities/wallet_entity.dart';
 
 @injectable
 class GetWalletUseCase {
-  // TODO: Inject repository
-  // final WalletRepository _repository;
+  final WalletRepository _repository;
 
-  GetWalletUseCase();
-  // GetWalletUseCase(this._repository);
+  GetWalletUseCase(this._repository);
 
   Future<Either<Failure, List<WalletEntity>>> call() async {
     // TODO: Implement use case logic
-    // return _repository.getAll();
-    return const Right([]);
+    return _repository.getWallets();
   }
 }

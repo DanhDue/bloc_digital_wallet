@@ -3,13 +3,15 @@
 // coverage:ignore-file
 
 import 'package:auto_route/auto_route.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
 import 'wallet_list_bloc.dart';
 import 'wallet_list_state.dart';
 import 'wallet_list_event.dart';
-// TODO: Uncomment when dispatching actions
-// import 'wallet_list_action.dart';
+import 'wallet_list_action.dart';
+import 'widgets/wallet_item.dart';
+import '../../domain/entities/wallet_entity.dart';
 
 /// ============================================================================
 /// WalletList Page
@@ -25,35 +27,30 @@ import 'wallet_list_event.dart';
 class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, WalletListEvent> {
   const WalletListPage({super.key});
 
-  // TODO: Uncomment to dispatch initial action
-  // @override
-  // BaseAction? get initialAction => const LoadWalletListAction();
+  @override
+  BaseAction? get initialAction => const LoadWalletListAction();
 
   @override
-  PreferredSizeWidget? buildAppBar(BuildContext context) {
-    return AppBar(title: const Text('Wallet List'));
-  }
+  PreferredSizeWidget? buildAppBar(BuildContext context) => null;
+
+  @override
+  Widget buildScaffold(BuildContext context) => buildBody(context);
 
   @override
   Widget handleState(BuildContext context, WalletListState state) {
     return switch (state) {
-      WalletListInitial() => _buildInitial(context),
-      // TODO: Add cases for other states
-      // WalletListLoading() => const Center(child: CircularProgressIndicator()),
-      // WalletListSuccess(:final items) => _buildSuccess(context, items),
-      // WalletListError(:final message) => _buildError(context, message),
+      WalletListInitial() => _buildLoading(context),
+      WalletListLoading() => _buildLoading(context),
+      WalletListSuccess(:final wallets) => _buildSuccess(context, wallets),
+      WalletListError(:final message) => _buildError(context, message),
     };
   }
 
   @override
   void handleEvent(BuildContext context, WalletListEvent event) {
-    // TODO: Handle events with switch
     // switch (event) {
     //   case ShowMessage(:final message, :final type):
     //     // Show snackbar
-    //     break;
-    //   case NavigateBackEvent():
-    //     context.router.pop();
     //     break;
     // }
   }
@@ -61,7 +58,28 @@ class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, Wallet
   /// ============================================================================
   /// State Widgets
   /// ============================================================================
-  Widget _buildInitial(BuildContext context) {
-    return const Center(child: Text('Wallet List Subfeature'));
+  Widget _buildLoading(BuildContext context) {
+    return const Center(child: CircularProgressIndicator());
+  }
+
+  Widget _buildError(BuildContext context, String message) {
+    return Center(child: Text(message));
+  }
+
+  Widget _buildSuccess(BuildContext context, List<WalletEntity> wallets) {
+    if (wallets.isEmpty) {
+      return const Center(child: Text('No wallets found'));
+    }
+    return Swiper(
+      itemBuilder: (BuildContext context, int index) {
+        return WalletItem(wallet: wallets[index], index: index);
+      },
+      itemCount: wallets.length,
+      itemWidth: MediaQuery.of(context).size.width - 32,
+      itemHeight: 186,
+      layout: SwiperLayout.STACK,
+      scale: 0.96,
+      loop: false,
+    );
   }
 }

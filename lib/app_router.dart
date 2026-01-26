@@ -1,7 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:auto_route/auto_route.dart';
-import 'features/wallet/presentation/wallet_list/wallet_list_page.dart';
 
 import 'core/utils/route_utils.dart';
 import 'features/authentication/presentation/code_verification/code_verification_page.dart';
@@ -22,6 +21,7 @@ import 'features/transaction/presentation/transaction/transaction_page.dart';
 import 'features/trends/presentation/trends/trends_page.dart';
 import 'features/wallet/presentation/network_selection/network_selection_page.dart';
 import 'features/wallet/presentation/wallet/wallet_page.dart';
+import 'features/wallet/presentation/wallet_list/wallet_list_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -39,9 +39,9 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: SplashRoute.page, path: AppRoutes.splash),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
     AutoRoute(
+      initial: true,
       page: HomeRoute.page,
       path: AppRoutes.home,
-      initial: true,
       children: [
         AutoRoute(page: WalletRoute.page, path: AppRoutes.wallet),
         AutoRoute(page: TransactionRoute.page, path: AppRoutes.transaction),

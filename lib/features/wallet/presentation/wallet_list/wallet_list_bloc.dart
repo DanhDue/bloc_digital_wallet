@@ -4,7 +4,8 @@
 
 import 'package:injectable/injectable.dart';
 // TODO: Uncomment when adding action handlers
-// import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/usecases/get_wallet_usecase.dart';
 import '../../../../core/architecture/architecture.dart';
 import 'wallet_list_action.dart';
 import 'wallet_list_state.dart';
@@ -53,16 +54,18 @@ import 'wallet_list_event.dart';
 
 @injectable
 class WalletListBloc extends MviBloc<WalletListAction, WalletListState, WalletListEvent> {
-  WalletListBloc() : super(const WalletListInitial()) {
-    // TODO: Register action handlers here
-    // handleActionDroppable<LoadWalletListAction>(_onLoad);
+  final GetWalletUseCase _getWalletUseCase;
+
+  WalletListBloc(this._getWalletUseCase) : super(const WalletListInitial()) {
+    handleActionDroppable<LoadWalletListAction>(_onLoad);
   }
 
-  // TODO: Implement action handlers
-  // Future<void> _onLoad(
-  //   LoadWalletListAction action,
-  //   Emitter<WalletListState> emit,
-  // ) async {
-  //   // Handle loading
-  // }
+  Future<void> _onLoad(LoadWalletListAction action, Emitter<WalletListState> emit) async {
+    emit(const WalletListLoading());
+    final result = await _getWalletUseCase();
+    result.fold(
+      (failure) => emit(WalletListError(failure.message)),
+      (data) => emit(WalletListSuccess(data)),
+    );
+  }
 }
