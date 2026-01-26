@@ -19,6 +19,7 @@ class WalletBloc extends MviBloc<WalletAction, WalletState, WalletEvent> {
   WalletBloc() : super(const WalletInitial()) {
     handleActionDroppable<InitWalletAction>(_onInit);
     handleActionDroppable<SelectNetworkAction>(_onSelectNetwork);
+    handleActionDroppable<SelectWalletAction>(_onSelectWallet);
   }
 
   Future<void> _onInit(InitWalletAction action, Emitter<WalletState> emit) async {
@@ -30,6 +31,13 @@ class WalletBloc extends MviBloc<WalletAction, WalletState, WalletEvent> {
     final currentState = state;
     if (currentState is WalletSuccess) {
       emit(currentState.copyWith(selectedNetwork: action.network));
+    }
+  }
+
+  Future<void> _onSelectWallet(SelectWalletAction action, Emitter<WalletState> emit) async {
+    final currentState = state;
+    if (currentState is WalletSuccess) {
+      emit(currentState.copyWith(selectedWallet: action.wallet));
     }
   }
 }

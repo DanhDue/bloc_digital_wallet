@@ -4,6 +4,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
+import 'package:bloc_digital_wallet/features/wallet/domain/entities/wallet_entity.dart';
 import '../../../../core/architecture/architecture.dart';
 
 /// ============================================================================
@@ -47,12 +48,16 @@ class WalletInitial extends WalletState {
 
 class WalletSuccess extends WalletState {
   final NetworkObject? selectedNetwork;
-  const WalletSuccess({this.selectedNetwork});
+  final WalletEntity? selectedWallet;
+  const WalletSuccess({this.selectedNetwork, this.selectedWallet});
 
   @override
-  List<Object?> get props => [selectedNetwork];
+  List<Object?> get props => [selectedNetwork, selectedWallet];
 
-  WalletSuccess copyWith({NetworkObject? selectedNetwork}) {
-    return WalletSuccess(selectedNetwork: selectedNetwork ?? this.selectedNetwork);
+  WalletSuccess copyWith({NetworkObject? selectedNetwork, WalletEntity? selectedWallet}) {
+    return WalletSuccess(
+      selectedNetwork: selectedNetwork ?? this.selectedNetwork,
+      selectedWallet: selectedWallet ?? this.selectedWallet,
+    );
   }
 }

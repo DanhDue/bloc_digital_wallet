@@ -14,6 +14,7 @@ import 'package:bloc_digital_wallet/core/widgets/keep_alive_widget.dart';
 import 'package:bloc_digital_wallet/core/widgets/rectangular_indicator.dart';
 import 'package:bloc_digital_wallet/core/widgets/token_action_button.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
+import 'package:bloc_digital_wallet/features/wallet/domain/entities/wallet_entity.dart';
 import 'package:bloc_digital_wallet/features/wallet/presentation/nfts_list/nfts_list_page.dart';
 import 'package:bloc_digital_wallet/features/wallet/presentation/token_list/token_list_page.dart';
 import 'package:bloc_digital_wallet/features/wallet/presentation/wallet_list/wallet_list_page.dart';
@@ -70,7 +71,11 @@ class _WalletPageState extends BaseMviPageState<WalletBloc, WalletState, WalletE
   Widget handleState(BuildContext context, WalletState state) {
     return switch (state) {
       WalletInitial() => const Center(child: CircularProgressIndicator()),
-      WalletSuccess(:final selectedNetwork) => _buildSuccess(context, selectedNetwork),
+      WalletSuccess(:final selectedNetwork, :final selectedWallet) => _buildSuccess(
+        context,
+        selectedNetwork,
+        selectedWallet,
+      ),
       // WalletLoading() => const Center(child: CircularProgressIndicator()),
       // WalletError(:final message) => _buildError(context, message),
     };
@@ -81,12 +86,23 @@ class _WalletPageState extends BaseMviPageState<WalletBloc, WalletState, WalletE
     // TODO: Handle events with switch
   }
 
-  Widget _buildSuccess(BuildContext context, NetworkObject? selectedNetwork) {
+  Widget _buildSuccess(
+    BuildContext context,
+    NetworkObject? selectedNetwork,
+    WalletEntity? selectedWallet,
+  ) {
     return Column(
       children: [
         _buildTopBar(context, selectedNetwork),
         const SizedBox(height: 16),
-        const SizedBox(child: WalletListPage()),
+        SizedBox(
+          child: WalletListPage(
+            selectedWallet: selectedWallet,
+            onWalletChanged: (wallet) {
+              bloc.onAction(SelectWalletAction(wallet));
+            },
+          ),
+        ),
         const SizedBox(height: 16),
         _buildActionButtons(context),
         const SizedBox(height: 16),
@@ -131,7 +147,9 @@ class _WalletPageState extends BaseMviPageState<WalletBloc, WalletState, WalletE
           child: TabBarView(
             controller: _tabController,
             children: [
-              KeepAliveWidget(child: TokenListPage()).paddingSymmetric(horizontal: 16.0),
+              KeepAliveWidget(
+                child: TokenListPage(wallet: selectedWallet),
+              ).paddingSymmetric(horizontal: 16.0),
               KeepAliveWidget(child: NftsListPage()).paddingSymmetric(horizontal: 16.0),
             ],
           ),

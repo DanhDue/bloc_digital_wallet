@@ -13,19 +13,19 @@ import 'package:bloc_digital_wallet/core/components/infinite_list/base_infinite_
 import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
 import 'package:bloc_digital_wallet/features/wallet/presentation/token_list/widgets/token_item_view.dart';
 import 'token_list_bloc.dart';
-
-/// ============================================================================
-/// TokenList Page - Wrap Content Widget (for embedding in other pages)
-/// ============================================================================
+import 'package:bloc_digital_wallet/features/wallet/domain/entities/wallet_entity.dart';
 
 @RoutePage()
 class TokenListPage extends StatelessWidget {
-  const TokenListPage({super.key});
+  final WalletEntity? wallet;
+
+  const TokenListPage({super.key, this.wallet});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<TokenListBloc>()..add(const InfiniteListFetchFirstPage()),
+      key: ValueKey(wallet?.address),
+      create: (_) => getIt<TokenListBloc>()..updateWalletAddress(wallet?.address ?? ''),
       child: BlocBuilder<TokenListBloc, BaseInfiniteListState<TokenAccountEntity>>(
         builder: (context, state) {
           return RefreshIndicator(

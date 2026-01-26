@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 // TODO: Uncomment when adding action handlers
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_digital_wallet/core/components/infinite_list/base_infinite_list_bloc.dart';
+import 'package:bloc_digital_wallet/core/components/infinite_list/base_infinite_list_event.dart';
 import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
 import 'package:bloc_digital_wallet/features/wallet/domain/usecases/get_token_accounts_usecase.dart';
 // import 'token_list_action.dart';
@@ -57,10 +58,14 @@ import 'package:bloc_digital_wallet/features/wallet/domain/usecases/get_token_ac
 class TokenListBloc extends BaseInfiniteListBloc<TokenAccountEntity> {
   final GetTokenAccountsUseCase _getTokenAccountsUseCase;
 
-  // TODO: remove hardcoded address when we have wallet selection
-  final String _currentAddress = "CRG9hpv6WpMHhiNZKF9XSjTnfS9SavtTJqhTRc3xG4GZ";
+  String? _walletAddress;
 
   TokenListBloc(this._getTokenAccountsUseCase);
+
+  void updateWalletAddress(String address) {
+    _walletAddress = address;
+    add(const InfiniteListFetchFirstPage());
+  }
 
   @override
   Future<List<TokenAccountEntity>> fetchItems({required int page, required int limit}) async {
@@ -70,7 +75,9 @@ class TokenListBloc extends BaseInfiniteListBloc<TokenAccountEntity> {
 
     if (page > 0) return []; // Assuming single page response for now
 
-    final result = await _getTokenAccountsUseCase(_currentAddress);
+    if (_walletAddress == null || _walletAddress!.isEmpty) return [];
+
+    final result = await _getTokenAccountsUseCase(_walletAddress!);
     return result.fold((failure) => throw Exception(failure.message), (items) => items);
   }
 }

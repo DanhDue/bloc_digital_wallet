@@ -25,7 +25,10 @@ import '../../domain/entities/wallet_entity.dart';
 
 @RoutePage()
 class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, WalletListEvent> {
-  const WalletListPage({super.key});
+  final void Function(WalletEntity)? onWalletChanged;
+  final WalletEntity? selectedWallet;
+
+  const WalletListPage({super.key, this.onWalletChanged, this.selectedWallet});
 
   @override
   BaseAction? get initialAction => const LoadWalletListAction();
@@ -70,7 +73,19 @@ class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, Wallet
     if (wallets.isEmpty) {
       return const Center(child: Text('No wallets found'));
     }
+    // Trigger callback for the first item initially if no wallet is selected
+    if (wallets.isNotEmpty && selectedWallet == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        onWalletChanged?.call(wallets[0]);
+      });
+    }
+
+    final initialIndex = selectedWallet != null ? wallets.indexOf(selectedWallet!) : 0;
+    // Handle case where selectedWallet is not in list (e.g. network change)
+    final safeIndex = initialIndex >= 0 ? initialIndex : 0;
+
     return Swiper(
+      index: safeIndex,
       itemBuilder: (BuildContext context, int index) {
         return WalletItem(wallet: wallets[index], index: index);
       },
@@ -80,6 +95,9 @@ class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, Wallet
       layout: SwiperLayout.STACK,
       scale: 0.96,
       loop: false,
+      onIndexChanged: (index) {
+        onWalletChanged?.call(wallets[index]);
+      },
     );
   }
 }

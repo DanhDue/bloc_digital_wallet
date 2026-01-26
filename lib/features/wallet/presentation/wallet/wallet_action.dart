@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'package:bloc_digital_wallet/features/wallet/data/models/network_object.dart';
+import 'package:bloc_digital_wallet/features/wallet/domain/entities/wallet_entity.dart';
 import '../../../../core/architecture/architecture.dart';
 
 /// ============================================================================
@@ -44,4 +45,9 @@ class InitWalletAction extends WalletAction {
 class SelectNetworkAction extends WalletAction {
   final NetworkObject network;
   const SelectNetworkAction(this.network);
+}
+
+class SelectWalletAction extends WalletAction {
+  final WalletEntity wallet;
+  const SelectWalletAction(this.wallet);
 }
