@@ -234,12 +234,19 @@ lib/
     <td><img src="screenshots/demo_02.gif" width="250"/></td>
     <td><img src="screenshots/demo_03.gif" width="250"/></td>
   </tr>
+  <tr>
+    <td><img src="screenshots/demo_04.gif" width="250"/></td>
+    <td><img src="screenshots/demo_05.gif" width="250"/></td>
+    <td><img src="screenshots/demo_06.gif" width="250"/></td>
+  </tr>
 </table>
 
 ---
 
 ## 🔗 References
 
+-   **UI/UX Design** - [MetaMask Redesign on Figma](https://www.figma.com/design/uy4hISX1JFBu02QMpBKBql/Case-Study--Web-3.0---MetaMask-Redesign--Community-?m=auto&t=i8dTyUCu7EZFdKiT-6)
+-   **API Documents** - [Swagger Docs](https://digital-wallet-93c4ba68a41d.herokuapp.com/api/v1/docs)
 -   **Flutter BLoC** - [bloclibrary.dev](https://bloclibrary.dev)
 -   **Clean Architecture** - [Uncle Bob's Blog](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 -   **MVI Pattern** - [Hannes Dorfmann's Blog](http://hannesdorfmann.com/android/mosby3-mvi-1)

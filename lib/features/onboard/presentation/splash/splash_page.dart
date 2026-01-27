@@ -111,7 +111,7 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
             type: AnimationType.letter,
             slideType: SlideAnimationType.leftRight,
             textStyle: context.appThemes.headlineLarge.copyWith(
-              fontSize: 36,
+              fontSize: 34,
               fontWeight: FontWeight.bold,
             ),
           ),
