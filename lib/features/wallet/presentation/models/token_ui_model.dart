@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'dart:math';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
 
@@ -27,10 +28,10 @@ abstract class TokenUiModel with _$TokenUiModel {
     final balance = entity.amount ?? 0.0;
     final symbol = mintToken?.symbol ?? '';
 
-    // Placeholder logic matching previous UI implementation
-    // In a real app, you'd inject a formatter or currency service
-    final percentChange = 0.0;
-    final isPositive = percentChange >= 0;
+    // Generate random trend data for demo purposes
+    final random = Random(entity.address.hashCode);
+    final isPositive = random.nextBool();
+    final percentChange = (random.nextDouble() * 14.9) + 0.1;
 
     return TokenUiModel(
       id: entity.address ?? '', // or entity.mintToken?.address
@@ -40,7 +41,7 @@ abstract class TokenUiModel with _$TokenUiModel {
       formattedBalance: '${balance.toStringAsFixed(2)} $symbol',
       formattedFiatBalance:
           '\$${balance.toStringAsFixed(2)}', // Logic from previous view, likely needs price mult in future
-      formattedPercentChange: '${isPositive ? "+" : ""}${percentChange.toStringAsFixed(2)}%',
+      formattedPercentChange: '${isPositive ? "+" : "-"}${percentChange.toStringAsFixed(2)}%',
       isPositiveChange: isPositive,
     );
   }

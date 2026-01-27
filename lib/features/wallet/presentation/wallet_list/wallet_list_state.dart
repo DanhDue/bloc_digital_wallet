@@ -55,10 +55,16 @@ class WalletListLoading extends WalletListState {
 /// Success state with data
 class WalletListSuccess extends WalletListState {
   final List<WalletEntity> wallets;
-  const WalletListSuccess(this.wallets);
+  final bool isBalanceHidden;
+  final bool isBalanceLoading;
+  const WalletListSuccess(
+    this.wallets, {
+    this.isBalanceHidden = false,
+    this.isBalanceLoading = false,
+  });
 
   @override
-  List<Object?> get props => [wallets];
+  List<Object?> get props => [wallets, isBalanceHidden, isBalanceLoading];
 }
 
 /// Error state

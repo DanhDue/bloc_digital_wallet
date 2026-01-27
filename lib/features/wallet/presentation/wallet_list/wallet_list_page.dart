@@ -5,6 +5,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
 import 'wallet_list_bloc.dart';
 import 'wallet_list_state.dart';
@@ -44,7 +45,8 @@ class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, Wallet
     return switch (state) {
       WalletListInitial() => _buildLoading(context),
       WalletListLoading() => _buildLoading(context),
-      WalletListSuccess(:final wallets) => _buildSuccess(context, wallets),
+      WalletListSuccess(:final wallets, :final isBalanceHidden, :final isBalanceLoading) =>
+        _buildSuccess(context, wallets, isBalanceHidden, isBalanceLoading),
       WalletListError(:final message) => _buildError(context, message),
     };
   }
@@ -69,7 +71,12 @@ class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, Wallet
     return Center(child: Text(message));
   }
 
-  Widget _buildSuccess(BuildContext context, List<WalletEntity> wallets) {
+  Widget _buildSuccess(
+    BuildContext context,
+    List<WalletEntity> wallets,
+    bool isBalanceHidden,
+    bool isBalanceLoading,
+  ) {
     if (wallets.isEmpty) {
       return const Center(child: Text('No wallets found'));
     }
@@ -87,7 +94,14 @@ class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, Wallet
     return Swiper(
       index: safeIndex,
       itemBuilder: (BuildContext context, int index) {
-        return WalletItem(wallet: wallets[index], index: index);
+        return WalletItem(
+          wallet: wallets[index],
+          index: index,
+          isBalanceHidden: isBalanceHidden,
+          isBalanceLoading: isBalanceLoading,
+          onToggleBalance: () =>
+              context.read<WalletListBloc>().onAction(const ToggleBalanceVisibility()),
+        );
       },
       itemCount: wallets.length,
       itemWidth: MediaQuery.of(context).size.width - 32,

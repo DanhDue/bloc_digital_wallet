@@ -6,26 +6,40 @@ import 'dart:async';
 
 import 'package:animated_visibility/animated_visibility.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
+import 'package:bloc_digital_wallet/core/utils/secure_clipboard.dart';
 import 'package:bloc_digital_wallet/core/widgets/pretty_animated_qr_view.dart';
 import 'package:bloc_digital_wallet/features/wallet/domain/entities/wallet_entity.dart';
 import 'package:bloc_digital_wallet/generated/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:shimmer/shimmer.dart';
 
 class WalletItem extends StatefulWidget {
   final WalletEntity wallet;
   final int index;
   final VoidCallback? onTap;
+  final bool isBalanceHidden;
+  final VoidCallback? onToggleBalance;
 
-  const WalletItem({super.key, required this.wallet, this.index = 0, this.onTap});
+  const WalletItem({
+    super.key,
+    required this.wallet,
+    this.index = 0,
+    this.onTap,
+    this.isBalanceHidden = false,
+    this.isBalanceLoading = false,
+    this.onToggleBalance,
+  });
+
+  final bool isBalanceLoading;
 
   @override
   State<WalletItem> createState() => _WalletItemState();
 }
 
 class _WalletItemState extends State<WalletItem> {
-  bool _balanceIsHidden = false;
   bool _showQRCode = false;
   late final QrImage _qrImage;
 
@@ -41,12 +55,6 @@ class _WalletItemState extends State<WalletItem> {
 
   Timer? _qrTimer;
 
-  void _toggleBalance() {
-    setState(() {
-      _balanceIsHidden = !_balanceIsHidden;
-    });
-  }
-
   void _toggleQRCode() {
     setState(() {
       _showQRCode = !_showQRCode;
@@ -59,7 +67,7 @@ class _WalletItemState extends State<WalletItem> {
       _showQRCode = true;
     });
     _cancelQrTimer();
-    // Clipboard.setData(ClipboardData(text: widget.wallet.address)); // TODO: Use SecureClipboard if added later
+    SecureClipboard.copySensitive(text: widget.wallet.address);
     SmartDialog.showToast(
       "",
       builder: (context) {
@@ -93,15 +101,13 @@ class _WalletItemState extends State<WalletItem> {
       },
     );
     _qrTimer = Timer(const Duration(seconds: 30), () {
+      Clipboard.setData(const ClipboardData(text: ''));
       if (mounted) {
         setState(() {
           _showQRCode = false;
         });
       }
     });
-
-    // TODO: Implement actual copy to clipboard if needed
-    // Clipboard.setData(ClipboardData(text: widget.wallet.address));
   }
 
   void _cancelQrTimer() {
@@ -191,33 +197,46 @@ class _WalletItemState extends State<WalletItem> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text.rich(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          TextSpan(
-                            text: "\$ ",
-                            style: context.appThemes.headlineMedium.copyWith(
-                              color: context.appThemes.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: _balanceIsHidden
-                                    ? "••••••••"
-                                    : widget.wallet.balance.toStringAsFixed(2),
-                                style: context.appThemes.headlineMedium.copyWith(
-                                  color: context.appThemes.white,
-                                  fontWeight: FontWeight.bold,
+                        widget.isBalanceLoading
+                            ? Shimmer.fromColors(
+                                baseColor: context.appThemes.white.withValues(alpha: 0.4),
+                                highlightColor: context.appThemes.white.withValues(alpha: 0.8),
+                                child: Container(
+                                  width: 196,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: context.appThemes.white,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              )
+                            : Text.rich(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                TextSpan(
+                                  text: "\$ ",
+                                  style: context.appThemes.headlineMedium.copyWith(
+                                    color: context.appThemes.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: widget.isBalanceHidden
+                                          ? "••••••••"
+                                          : widget.wallet.balance.toStringAsFixed(2),
+                                      style: context.appThemes.headlineMedium.copyWith(
+                                        color: context.appThemes.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
                         const SizedBox(width: 14),
                         InkWell(
-                          onTap: _toggleBalance,
+                          onTap: widget.onToggleBalance,
                           child: Icon(
-                            _balanceIsHidden ? Icons.visibility : Icons.visibility_off,
+                            widget.isBalanceHidden ? Icons.visibility : Icons.visibility_off,
                             color: context.appThemes.white,
                             size: 24,
                           ),
@@ -226,19 +245,58 @@ class _WalletItemState extends State<WalletItem> {
                     ),
                     const SizedBox(height: 6),
                     // Trend Info (Hardcoded for now as per previous step)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: context.appThemes.indigo.withValues(alpha: 0.7),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                      child: Text(
-                        "↑ 20,878,699\$ (+11.48%)",
-                        style: context.appThemes.bodySmall.copyWith(
-                          color: context.appThemes.trendUpColor,
-                        ),
-                      ),
-                    ),
+                    widget.isBalanceLoading
+                        ? Shimmer.fromColors(
+                            baseColor: context.appThemes.white.withValues(alpha: 0.4),
+                            highlightColor: context.appThemes.white.withValues(alpha: 0.8),
+                            child: Container(
+                              width: 169,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: context.appThemes.white,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color:
+                                  (widget.isBalanceHidden ||
+                                      (widget.wallet.dailyChange >= 0) ||
+                                      widget.wallet.balance == 0)
+                                  ? context.appThemes.indigo.withValues(alpha: 0.6)
+                                  : context.appThemes.white.withValues(alpha: 0.6),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                            child: Builder(
+                              builder: (context) {
+                                final isZeroBalance = widget.wallet.balance == 0;
+                                final isTrendUp = widget.wallet.dailyChange >= 0;
+                                final trendPercent = widget.wallet.dailyChange.abs();
+                                final trendAmount = widget.wallet.balance * (trendPercent / 100);
+
+                                final sign = isTrendUp ? "↑" : "↓";
+                                final signChar = isTrendUp ? "+" : "-";
+                                final trendColor = isTrendUp
+                                    ? context.appThemes.trendUpColor
+                                    : context.appThemes.errorColor;
+
+                                return Text(
+                                  widget.isBalanceHidden
+                                      ? "••••••••"
+                                      : (isZeroBalance
+                                            ? "\$0.00 (0.00%)"
+                                            : "$sign \$${trendAmount.toStringAsFixed(2)} ($signChar${trendPercent.toStringAsFixed(2)}%)"),
+                                  style: context.appThemes.bodySmall.copyWith(
+                                    color: (widget.isBalanceHidden || isZeroBalance)
+                                        ? context.appThemes.white
+                                        : trendColor,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                     const SizedBox(height: 18),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,

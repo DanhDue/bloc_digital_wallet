@@ -25,5 +25,6 @@ abstract class WalletEntity with _$WalletEntity {
     @Default('') String bs58PrivateKey,
     @Default('') String address,
     @Default(0.0) double balance,
+    @Default(0.0) double dailyChange,
   }) = _WalletEntity;
 }

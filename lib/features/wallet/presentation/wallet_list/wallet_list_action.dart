@@ -23,3 +23,7 @@ sealed class WalletListAction extends BaseAction {
 class LoadWalletListAction extends WalletListAction {
   const LoadWalletListAction();
 }
+
+class ToggleBalanceVisibility extends WalletListAction {
+  const ToggleBalanceVisibility();
+}

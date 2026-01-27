@@ -96,6 +96,9 @@ dependencies:
   image_gallery_saver_plus: ^4.0.1
   card_swiper: ^3.0.1
 
+  # Shimmer Effect
+  shimmer: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
