@@ -11,8 +11,19 @@ A modern digital wallet app built with **Flutter**, following **Clean Architectu
   - [2. MVI Mechanism](#ii-mvi-mechanism)
   - [3. Feature-First Organization](#iii-feature-first-organization)
 - [II. Documents](#-documents)
+  - [1. Getting Started](#1-getting-started)
+  - [2. Architecture](#2-architecture)
+  - [3. Development](#3-development)
+  - [4. Mason](#4-mason)
+  - [5. Environment](#5-environment)
+  - [6. AI Agents](#6-ai-agents)
+  - [7. Task Templates](#7-task-templates)
 - [III. Demo](#-demo)
 - [IV. References](#-references)
+  - [1. UI/UX Design](#1-uiux-design)
+  - [2. API Documents](#2-api-documents)
+  - [3. Architecture & Patterns](#3-architecture--patterns)
+  - [4. Flutter Packages](#4-flutter-packages)
 - [V. License](#-license)
 
 
@@ -204,20 +215,45 @@ lib/
 
 ## 📚 Documents
 
-| Category | Document | Description |
-|----------|----------|-------------|
-| **Getting Started** | [Quick Start](docs/getting-started/QUICK_START.md) | Setup in 5 minutes |
-| | [Quick Reference](docs/getting-started/QUICK_REFERENCE.md) | Cheat sheet with code templates |
-| **Architecture** | [Architecture Guide](docs/architecture/ARCHITECTURE.md) | Complete architecture overview |
-| | [App Initializer](docs/architecture/app_initialization.md) | Startup logic guide |
-| **Development** | [Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md) | Step-by-step feature creation |
-| | [Theme Tailor Guide](docs/development/THEME_TAILOR_GUIDE.md) | Theming system |
-| | [Slang Localization](docs/development/SLANG_LOCALIZATION_GUIDE.md) | i18n setup |
-| **Mason** | [Mason Guide](docs/mason/MASON_GUIDE.md) | Code generation |
-| **Environment** | [Flavors Setup](docs/environment/FLAVORS_SETUP_COMPLETE.md) | Build variants |
-| **AI Agents** | [AI Agent README](docs/ai-agents/AI_AGENT_README.md) | Guide for AI assistants |
-| | [Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md) | Verification steps |
-| **Task Templates** | [Prompt Templates](docs/task-prompt-templates/README.md) | Ready-to-use AI prompts |
+### 1. Getting Started
+| Document | Description |
+|----------|-------------|
+| [Quick Start](docs/getting-started/QUICK_START.md) | Setup in 5 minutes |
+| [Quick Reference](docs/getting-started/QUICK_REFERENCE.md) | Cheat sheet with code templates |
+
+### 2. Architecture
+| Document | Description |
+|----------|-------------|
+| [Architecture Guide](docs/architecture/ARCHITECTURE.md) | Complete architecture overview |
+| [App Initializer](docs/architecture/app_initialization.md) | Startup logic guide |
+
+### 3. Development
+| Document | Description |
+|----------|-------------|
+| [Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md) | Step-by-step feature creation |
+| [Theme Tailor Guide](docs/development/THEME_TAILOR_GUIDE.md) | Theming system |
+| [Slang Localization](docs/development/SLANG_LOCALIZATION_GUIDE.md) | i18n setup |
+
+### 4. Mason
+| Document | Description |
+|----------|-------------|
+| [Mason Guide](docs/mason/MASON_GUIDE.md) | Code generation |
+
+### 5. Environment
+| Document | Description |
+|----------|-------------|
+| [Flavors Setup](docs/environment/FLAVORS_SETUP_COMPLETE.md) | Build variants |
+
+### 6. AI Agents
+| Document | Description |
+|----------|-------------|
+| [AI Agent README](docs/ai-agents/AI_AGENT_README.md) | Guide for AI assistants |
+| [Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md) | Verification steps |
+
+### 7. Task Templates
+| Document | Description |
+|----------|-------------|
+| [Prompt Templates](docs/task-prompt-templates/README.md) | Ready-to-use AI prompts |
 
 ---
 
@@ -245,16 +281,24 @@ lib/
 
 ## 🔗 References
 
--   **UI/UX Design** - [MetaMask Redesign on Figma](https://www.figma.com/design/uy4hISX1JFBu02QMpBKBql/Case-Study--Web-3.0---MetaMask-Redesign--Community-?m=auto&t=i8dTyUCu7EZFdKiT-6)
--   **API Documents** - [Swagger Docs](https://digital-wallet-93c4ba68a41d.herokuapp.com/api/v1/docs)
--   **Flutter BLoC** - [bloclibrary.dev](https://bloclibrary.dev)
--   **Clean Architecture** - [Uncle Bob's Blog](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
--   **MVI Pattern** - [Hannes Dorfmann's Blog](http://hannesdorfmann.com/android/mosby3-mvi-1)
--   **AutoRoute** - [auto_route on pub.dev](https://pub.dev/packages/auto_route)
--   **Freezed** - [freezed on pub.dev](https://pub.dev/packages/freezed)
--   **Mason** - [mason on pub.dev](https://pub.dev/packages/mason)
--   **Theme Tailor** - [theme_tailor on pub.dev](https://pub.dev/packages/theme_tailor)
--   **Slang** - [slang on pub.dev](https://pub.dev/packages/slang)
+### 1. UI/UX Design
+-   [MetaMask Redesign on Figma](https://www.figma.com/design/uy4hISX1JFBu02QMpBKBql/Case-Study--Web-3.0---MetaMask-Redesign--Community-?m=auto&t=i8dTyUCu7EZFdKiT-6) - Web 3.0 wallet redesign case study used as design inspiration.
+
+### 2. API Documents
+-   [Swagger Docs](https://digital-wallet-93c4ba68a41d.herokuapp.com/api/v1/docs) - Interactive API documentation for backend endpoints.
+
+### 3. Architecture & Patterns
+-   [Flutter BLoC](https://bloclibrary.dev) - Official BLoC library documentation.
+-   [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - Uncle Bob's original Clean Architecture article.
+-   [MVI Pattern](http://hannesdorfmann.com/android/mosby3-mvi-1) - Model-View-Intent pattern explanation by Hannes Dorfmann.
+
+### 4. Flutter Packages
+-   [AutoRoute](https://pub.dev/packages/auto_route) - Declarative routing with code generation.
+-   [Freezed](https://pub.dev/packages/freezed) - Immutable data classes with union types.
+-   [Mason](https://pub.dev/packages/mason) - Template-based code generation.
+-   [Theme Tailor](https://pub.dev/packages/theme_tailor) - Type-safe theming system.
+-   [Slang](https://pub.dev/packages/slang) - Type-safe localization.
+
 
 ---
 
