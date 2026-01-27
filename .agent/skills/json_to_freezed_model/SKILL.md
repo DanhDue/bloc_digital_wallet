@@ -17,6 +17,9 @@ Parse JSON and generate freezed object classes in the data layer.
 > [!IMPORTANT]
 > **Always use `abstract class` for Freezed models**
 
+> [!IMPORTANT]
+> **Always include private constructor**: `const ClassName._();`
+
 ## 1. Analyze JSON Structure
 
 1. **Identify root object** and nested objects
