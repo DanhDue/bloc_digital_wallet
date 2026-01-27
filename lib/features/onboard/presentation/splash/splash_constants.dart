@@ -20,5 +20,5 @@ class SplashConstants {
   static const lottieEnterDuration = Duration(milliseconds: 1500);
 
   /// Title text animation duration
-  static const titleDuration = Duration(milliseconds: 888);
+  static const titleDuration = Duration(milliseconds: 666);
 }

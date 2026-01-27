@@ -20,10 +20,9 @@ class AppRouter extends RootStackRouter {
       customRouteBuilder: modalSheetBuilder,
     ),
     AutoRoute(page: StartRoute.page, path: AppRoutes.start),
-    AutoRoute(page: SplashRoute.page, path: AppRoutes.splash),
+    AutoRoute(initial: true, page: SplashRoute.page, path: AppRoutes.splash),
     AutoRoute(page: OnboardRoute.page, path: AppRoutes.onboard),
     AutoRoute(
-      initial: true,
       page: HomeRoute.page,
       path: AppRoutes.home,
       children: [

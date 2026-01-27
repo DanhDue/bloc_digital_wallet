@@ -110,7 +110,10 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
             duration: SplashConstants.titleDuration,
             type: AnimationType.letter,
             slideType: SlideAnimationType.leftRight,
-            textStyle: context.appThemes.headlineMedium,
+            textStyle: context.appThemes.headlineLarge.copyWith(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
           _buildStatusText(context, showRestartWarning),
@@ -124,7 +127,7 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
   void handleEvent(BuildContext context, SplashEvent event) {
     switch (event) {
       case NavigateToNextEvent():
-        context.router.replace(const LoginRoute());
+        context.router.replace(const HomeRoute());
         break;
       case ShowErrorMessageEvent(:final message):
         ScaffoldMessenger.of(context).showSnackBar(
