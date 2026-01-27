@@ -7,8 +7,9 @@ import 'package:injectable/injectable.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_digital_wallet/core/components/infinite_list/base_infinite_list_bloc.dart';
 import 'package:bloc_digital_wallet/core/components/infinite_list/base_infinite_list_event.dart';
-import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
+
 import 'package:bloc_digital_wallet/features/wallet/domain/usecases/get_token_accounts_usecase.dart';
+import 'package:bloc_digital_wallet/features/wallet/presentation/models/token_ui_model.dart';
 // import 'token_list_action.dart';
 // import 'token_list_state.dart';
 // import 'token_list_event.dart';
@@ -55,7 +56,7 @@ import 'package:bloc_digital_wallet/features/wallet/domain/usecases/get_token_ac
 /// ============================================================================
 
 @injectable
-class TokenListBloc extends BaseInfiniteListBloc<TokenAccountEntity> {
+class TokenListBloc extends BaseInfiniteListBloc<TokenUiModel> {
   final GetTokenAccountsUseCase _getTokenAccountsUseCase;
 
   String? _walletAddress;
@@ -68,7 +69,7 @@ class TokenListBloc extends BaseInfiniteListBloc<TokenAccountEntity> {
   }
 
   @override
-  Future<List<TokenAccountEntity>> fetchItems({required int page, required int limit}) async {
+  Future<List<TokenUiModel>> fetchItems({required int page, required int limit}) async {
     // Note: The API currently fetches ALL accounts for an address, pagination might not be supported individually
     // But BaseInfiniteListBloc expects pages.
     // If API returns all at once on page 0, subsequent pages should return empty.
@@ -78,6 +79,9 @@ class TokenListBloc extends BaseInfiniteListBloc<TokenAccountEntity> {
     if (_walletAddress == null || _walletAddress!.isEmpty) return [];
 
     final result = await _getTokenAccountsUseCase(_walletAddress!);
-    return result.fold((failure) => throw Exception(failure.message), (items) => items);
+    return result.fold(
+      (failure) => throw Exception(failure.message),
+      (items) => items.map(TokenUiModel.fromEntity).toList(),
+    );
   }
 }

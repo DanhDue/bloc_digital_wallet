@@ -6,12 +6,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
-import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
+import 'package:bloc_digital_wallet/features/wallet/presentation/models/token_ui_model.dart';
 import 'package:bloc_digital_wallet/generated/assets.gen.dart';
 import 'package:bloc_digital_wallet/generated/translations.dart';
 
 class TokenItemView extends StatelessWidget {
-  final TokenAccountEntity token;
+  final TokenUiModel token;
   final VoidCallback? onTap;
   final bool balanceIsHidden;
   final bool isFirst;
@@ -26,14 +26,6 @@ class TokenItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mintToken = token.mintToken;
-    final name = mintToken?.name ?? '';
-    final symbol = mintToken?.symbol ?? '';
-    final logoUrl = mintToken?.logo ?? '';
-    final balance = token.amount ?? 0.0;
-    // Placeholder for percentage change - not available in current entity
-    const double? percentChange24h = null;
-
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -44,7 +36,7 @@ class TokenItemView extends StatelessWidget {
           mainAxisSize: .max,
           children: [
             // Coin Logo with Network Badge
-            _buildCoinLogo(context, logoUrl),
+            _buildCoinLogo(context, token.imageUrl),
             const SizedBox(width: 12),
 
             // Name and Percentage Change
@@ -53,18 +45,18 @@ class TokenItemView extends StatelessWidget {
               crossAxisAlignment: .start,
               mainAxisSize: .max,
               children: [
-                Text(name, style: context.appThemes.titleMedium.copyWith(fontWeight: .w500)),
+                Text(token.name, style: context.appThemes.titleMedium.copyWith(fontWeight: .w500)),
                 const SizedBox(height: 2),
                 Row(
                   mainAxisAlignment: .start,
                   crossAxisAlignment: .center,
                   mainAxisSize: .max,
                   children: [
-                    _buildTrendingIcon(context, percentChange24h),
+                    _buildTrendingIcon(context, token.isPositiveChange),
                     Text(
-                      _formatPercentChange(percentChange24h),
+                      token.formattedPercentChange,
                       style: context.appThemes.bodySmall.copyWith(
-                        color: (percentChange24h?.isNegative ?? false)
+                        color: !token.isPositiveChange
                             ? context.appThemes.errorColor
                             : context.appThemes.mainGreen,
                       ),
@@ -86,14 +78,12 @@ class TokenItemView extends StatelessWidget {
               mainAxisSize: .min,
               children: [
                 Text(
-                  balanceIsHidden
-                      ? context.t.myWalletHiddenBalance
-                      : _formatBalance(balance, symbol),
+                  balanceIsHidden ? context.t.myWalletHiddenBalance : token.formattedBalance,
                   style: context.appThemes.titleMedium.copyWith(fontWeight: .w500),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  balanceIsHidden ? context.t.myWalletHiddenBalance : _formatUsdEstimate(balance),
+                  balanceIsHidden ? context.t.myWalletHiddenBalance : token.formattedFiatBalance,
                   style: context.appThemes.bodySmall.copyWith(
                     color: context.appThemes.textSecondaryColor,
                   ),
@@ -156,31 +146,15 @@ class TokenItemView extends StatelessWidget {
     );
   }
 
-  Widget _buildTrendingIcon(BuildContext context, double? percentChange) {
-    final isNegative = percentChange?.isNegative ?? false;
-    final color = isNegative ? context.appThemes.errorColor : context.appThemes.mainGreen;
+  Widget _buildTrendingIcon(BuildContext context, bool isPositive) {
+    final color = !isPositive ? context.appThemes.errorColor : context.appThemes.mainGreen;
 
     return Transform.rotate(
-      angle: isNegative ? 0 : 180 * pi / 180,
+      angle: !isPositive ? 0 : 180 * pi / 180,
       child: Assets.images.icArrowAltLdown.svg(
         fit: BoxFit.cover,
         colorFilter: ColorFilter.mode(color, BlendMode.srcATop),
       ),
     );
-  }
-
-  String _formatPercentChange(double? percentChange) {
-    if (percentChange == null) return '0.00%';
-    final sign = percentChange.isNegative ? '' : '+';
-    return '$sign${percentChange.toStringAsFixed(2)}%';
-  }
-
-  String _formatBalance(double balance, String symbol) {
-    final formattedBalance = balance.toStringAsFixed(2);
-    return '$formattedBalance $symbol';
-  }
-
-  String _formatUsdEstimate(double balance) {
-    return '\$${balance.toStringAsFixed(2)}';
   }
 }

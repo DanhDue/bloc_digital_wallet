@@ -2,7 +2,9 @@
 
 // coverage:ignore-file
 
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part '{{feature_name.snakeCase()}}_entity.freezed.dart';
 
 /// ============================================================================
 /// {{feature_name.pascalCase()}} Entity
@@ -13,25 +15,20 @@ import 'package:equatable/equatable.dart';
 /// HOW TO IMPLEMENT:
 /// 1. Define the properties that represent your business data
 /// 2. Use const constructor and final fields for immutability
-/// 3. Extend Equatable for value equality comparison
+/// 3. Use Freezed for value equality comparison and copyWith
 /// 
 /// EXAMPLE - Adding properties:
 /// ```dart
-/// class {{feature_name.pascalCase()}}Entity extends Equatable {
-///   final String id;
-///   final String name;
-///   final DateTime createdAt;
-///   final bool isActive;
-/// 
-///   const {{feature_name.pascalCase()}}Entity({
-///     required this.id,
-///     required this.name,
-///     required this.createdAt,
-///     this.isActive = true,
-///   });
-/// 
-///   @override
-///   List<Object?> get props => [id, name, createdAt, isActive];
+/// @freezed
+/// abstract class {{feature_name.pascalCase()}}Entity with _${{feature_name.pascalCase()}}Entity {
+///   const {{feature_name.pascalCase()}}Entity._();
+///
+///   const factory {{feature_name.pascalCase()}}Entity({
+///     required String id,
+///     required String name,
+///     required DateTime createdAt,
+///     @Default(true) bool isActive,
+///   }) = _[{{feature_name.pascalCase()}}Entity;
 /// }
 /// ```
 /// 
@@ -41,13 +38,13 @@ import 'package:equatable/equatable.dart';
 /// - Entities should be serialization-agnostic (no toJson/fromJson)
 /// ============================================================================
 
-class {{feature_name.pascalCase()}}Entity extends Equatable {
-  // TODO: Add entity properties
-  // final String id;
-  // final String name;
+@freezed
+abstract class {{feature_name.pascalCase()}}Entity with _${{feature_name.pascalCase()}}Entity {
+  const {{feature_name.pascalCase()}}Entity._();
 
-  const {{feature_name.pascalCase()}}Entity();
-
-  @override
-  List<Object?> get props => [];
+  const factory {{feature_name.pascalCase()}}Entity({
+    // TODO: Add entity properties
+    // @Default('') String id,
+    // @Default('') String name,
+  }) = _{{feature_name.pascalCase()}}Entity;
 }

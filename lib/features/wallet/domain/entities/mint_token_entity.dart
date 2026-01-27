@@ -2,38 +2,20 @@
 
 // coverage:ignore-file
 
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class MintTokenEntity extends Equatable {
-  final String? address;
-  final String? symbol;
-  final String? name;
-  final int? decimals;
-  final String? logo;
-  final String? coingeckoId;
-  final String? status;
-  final bool? isVerified;
+part 'mint_token_entity.freezed.dart';
 
-  const MintTokenEntity({
-    this.address,
-    this.symbol,
-    this.name,
-    this.decimals,
-    this.logo,
-    this.coingeckoId,
-    this.status,
-    this.isVerified,
-  });
-
-  @override
-  List<Object?> get props => [
-    address,
-    symbol,
-    name,
-    decimals,
-    logo,
-    coingeckoId,
-    status,
-    isVerified,
-  ];
+@freezed
+abstract class MintTokenEntity with _$MintTokenEntity {
+  const factory MintTokenEntity({
+    String? address,
+    String? symbol,
+    String? name,
+    int? decimals,
+    String? logo,
+    String? coingeckoId,
+    String? status,
+    bool? isVerified,
+  }) = _MintTokenEntity;
 }

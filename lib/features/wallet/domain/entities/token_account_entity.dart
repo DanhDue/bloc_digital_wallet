@@ -2,24 +2,20 @@
 
 // coverage:ignore-file
 
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'mint_token_entity.dart';
 
-class TokenAccountEntity extends Equatable {
-  final String? address;
-  final String? owner;
-  final double? amount;
-  final MintTokenEntity? mintToken;
-  final String? accountOwner;
+part 'token_account_entity.freezed.dart';
 
-  const TokenAccountEntity({
-    this.address,
-    this.owner,
-    this.amount,
-    this.mintToken,
-    this.accountOwner,
-  });
+@freezed
+abstract class TokenAccountEntity with _$TokenAccountEntity {
+  const TokenAccountEntity._();
 
-  @override
-  List<Object?> get props => [address, owner, amount, mintToken, accountOwner];
+  const factory TokenAccountEntity({
+    String? address,
+    String? owner,
+    double? amount,
+    MintTokenEntity? mintToken,
+    String? accountOwner,
+  }) = _TokenAccountEntity;
 }

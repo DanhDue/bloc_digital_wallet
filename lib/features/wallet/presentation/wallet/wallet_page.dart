@@ -148,7 +148,10 @@ class _WalletPageState extends BaseMviPageState<WalletBloc, WalletState, WalletE
             controller: _tabController,
             children: [
               KeepAliveWidget(
-                child: TokenListPage(wallet: selectedWallet),
+                child: TokenListPage(
+                  key: ValueKey(selectedWallet?.address),
+                  wallet: selectedWallet,
+                ),
               ).paddingSymmetric(horizontal: 16.0),
               KeepAliveWidget(child: NftsListPage()).paddingSymmetric(horizontal: 16.0),
             ],

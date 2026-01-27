@@ -2,6 +2,10 @@
 
 // coverage:ignore-file
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part '{{subfeature_name.snakeCase()}}_ui_model.freezed.dart';
+
 /// ============================================================================
 /// {{subfeature_name.pascalCase()}} UI Model
 /// ============================================================================
@@ -15,16 +19,15 @@
 /// 
 /// EXAMPLE:
 /// ```dart
-/// class {{subfeature_name.pascalCase()}}UiModel {
-///   final String id;
-///   final String displayName;
-///   final String formattedDate;
-///   
-///   const {{subfeature_name.pascalCase()}}UiModel({
-///     required this.id,
-///     required this.displayName,
-///     required this.formattedDate,
-///   });
+/// @freezed
+/// abstract class {{subfeature_name.pascalCase()}}UiModel with _${{subfeature_name.pascalCase()}}UiModel {
+///   const {{subfeature_name.pascalCase()}}UiModel._();
+///
+///   const factory {{subfeature_name.pascalCase()}}UiModel({
+///     required String id,
+///     required String displayName,
+///     required String formattedDate,
+///   }) = _{{subfeature_name.pascalCase()}}UiModel;
 ///   
 ///   factory {{subfeature_name.pascalCase()}}UiModel.fromEntity(YourEntity entity) {
 ///     return {{subfeature_name.pascalCase()}}UiModel(
@@ -37,8 +40,12 @@
 /// ```
 /// ============================================================================
 
-class {{subfeature_name.pascalCase()}}UiModel {
-  const {{subfeature_name.pascalCase()}}UiModel();
-  
-  // TODO: Add UI-specific fields and factory constructors
+@freezed
+abstract class {{subfeature_name.pascalCase()}}UiModel with _${{subfeature_name.pascalCase()}}UiModel {
+  const {{subfeature_name.pascalCase()}}UiModel._();
+
+  const factory {{subfeature_name.pascalCase()}}UiModel({
+    // TODO: Add UI-specific fields
+    // required String id,
+  }) = _{{subfeature_name.pascalCase()}}UiModel;
 }
