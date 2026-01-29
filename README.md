@@ -294,24 +294,38 @@ lib/
 ## 🔗 References
 
 ### 1. UI/UX Design
--   [MetaMask Redesign on Figma](https://www.figma.com/design/uy4hISX1JFBu02QMpBKBql/Case-Study--Web-3.0---MetaMask-Redesign--Community-?m=auto&t=i8dTyUCu7EZFdKiT-6) - Web 3.0 wallet redesign case study used as design inspiration.
+-   [MetaMask Redesign on Figma][0] - Web 3.0 wallet redesign case study used as design inspiration.
 
 ### 2. API Documents
--   [Swagger Docs](https://digital-wallet-93c4ba68a41d.herokuapp.com/api/v1/docs) - Interactive API documentation for backend endpoints.
--   [API Repository](https://github.com/DanhDue/django_digital_wallet) - Backend API source code on GitHub that based on the Django Ninja Rest Framework.
+-   [Swagger Docs][1] - Interactive API documentation for backend endpoints.
+-   [API Repository][2] - Backend API source code on GitHub that based on the Django Ninja Rest Framework.
 
 ### 3. Architecture & Patterns
--   [Flutter BLoC](https://bloclibrary.dev) - Official BLoC library documentation.
--   [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - Uncle Bob's original Clean Architecture article.
--   [MVI Pattern](http://hannesdorfmann.com/android/mosby3-mvi-1) - Model-View-Intent pattern explanation by Hannes Dorfmann.
+-   [Flutter BLoC][3] - Official BLoC library documentation.
+-   [Clean Architecture][4] - Uncle Bob's original Clean Architecture article.
+-   [MVI Pattern][5] - Model-View-Intent pattern explanation by Hannes Dorfmann.
+-   [Dependency Manager][6] - Dependency Manager — An Approach to Multiple Repositories in Flutter.
 
 ### 4. Flutter Packages
--   [AutoRoute](https://pub.dev/packages/auto_route) - Declarative routing with code generation.
--   [Freezed](https://pub.dev/packages/freezed) - Immutable data classes with union types.
--   [Mason](https://pub.dev/packages/mason) - Template-based code generation.
--   [Theme Tailor](https://pub.dev/packages/theme_tailor) - Type-safe theming system.
--   [Slang](https://pub.dev/packages/slang) - Type-safe localization.
+-   [AutoRoute][7] - Declarative routing with code generation.
+-   [Freezed][8] - Immutable data classes with union types.
+-   [Mason][9] - Template-based code generation.
+-   [Theme Tailor][10] - Type-safe theming system.
+-   [Slang][11] - Type-safe localization.
 
+
+[0]: https://www.figma.com/design/uy4hISX1JFBu02QMpBKBql/Case-Study--Web-3.0---MetaMask-Redesign--Community-?m=auto&t=i8dTyUCu7EZFdKiT-6
+[1]: https://digital-wallet-93c4ba68a41d.herokuapp.com/api/v1/docs
+[2]: https://github.com/DanhDue/django_digital_wallet
+[3]: https://bloclibrary.dev
+[4]: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+[5]: http://hannesdorfmann.com/android/mosby3-mvi-1
+[6]: https://gpalma.pt/blog/dependency_manager/
+[7]: https://pub.dev/packages/auto_route
+[8]: https://pub.dev/packages/freezed
+[9]: https://pub.dev/packages/mason
+[10]: https://pub.dev/packages/theme_tailor
+[11]: https://pub.dev/packages/slang
 
 ---
 
