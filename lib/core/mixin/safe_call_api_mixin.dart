@@ -61,8 +61,8 @@ mixin SafeCallApiMixin {
     final data = error.response?.data;
     String message = error.message ?? 'Unknown server error';
 
-    if (data is Map<String, dynamic> && data.containsKey('message')) {
-      message = data['message'];
+    if (data is Map<String, dynamic> && data['message'] is String) {
+      message = data['message'] as String;
     }
 
     return switch (statusCode) {

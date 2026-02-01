@@ -23,23 +23,91 @@ Your task is to review the Pull Request for this project.
 
 ## GUIDING PRINCIPLES
 
-- **Clean Code** (Robert C. Martin)
-- **SOLID** Principles
-- **Defensive Programming**
-- **Reactive Programming**
+- **Effective Dart** (https://dart.dev/guides/language/effective-dart)
+- **Code Smells** (https://refactoring.guru/refactoring/smells)
+- **OWASP Mobile Top 10** (https://owasp.org/www-project-mobile-top-10/)
+- **Clean Code** (https://www.oreilly.com/library/view/clean-code-a/9780132350884/)
+- **SOLID Principles** (https://en.wikipedia.org/wiki/SOLID)
+- **Defensive Programming** (https://en.wikipedia.org/wiki/Defensive_programming)
+- **Reactive Programming** (https://www.reactivemanifesto.org/)
 
 ---
 
 ## REVIEW GUIDELINES
 
-### 1. Naming Conventions (Intent & Clarity)
+### 1. Effective Dart: Style
+
+| Rule | Description |
+|------|-------------|
+| **UpperCamelCase** | Types, extensions, enums use `UpperCamelCase` |
+| **lowerCamelCase** | Variables, functions, parameters, constants use `lowerCamelCase` |
+| **lowercase_with_underscores** | Packages, directories, source files use `snake_case` |
+| **Import Ordering** | Order: `dart:` → `package:` → relative. Sort alphabetically within sections |
+| **Curly Braces** | Use curly braces for all flow control statements |
+| **Line Length** | Prefer lines 80 characters or fewer |
+
+**Examples:**
+```dart
+// ❌ BAD - Wrong casing
+class user_entity {}
+const MAX_RETRY = 3;
+
+// ✅ GOOD - Correct casing
+class UserEntity {}
+const maxRetry = 3;
+```
+
+---
+
+### 2. Effective Dart: Usage
+
+| Rule | Description |
+|------|-------------|
+| **Don't Init Null** | Don't explicitly initialize variables to `null` |
+| **Collection Literals** | Use `[]`, `{}`, `<>{}` instead of `List()`, `Map()`, `Set()` |
+| **isEmpty/isNotEmpty** | Use `.isEmpty` instead of `.length == 0` |
+| **Avoid forEach** | Prefer `for-in` over `Iterable.forEach()` with function literals |
+| **Use whereType** | Use `whereType<T>()` to filter by type instead of `where + cast` |
+| **Avoid cast()** | Avoid using `.cast()`, prefer type-safe alternatives |
+| **Tear-offs** | Use `list.map(toUpper)` instead of `list.map((s) => toUpper(s))` |
+| **Final Fields** | Prefer `final` for read-only properties |
+
+**Examples:**
+```dart
+// ❌ BAD
+String? name = null;
+if (list.length == 0) {}
+items.forEach((item) { process(item); });
+
+// ✅ GOOD
+String? name;
+if (list.isEmpty) {}
+for (final item in items) { process(item); }
+```
+
+---
+
+### 3. Effective Dart: Design (Naming)
+
+| Rule | Description |
+|------|-------------|
+| **Avoid Abbreviations** | Use `buttonText` instead of `btnTxt` |
+| **Descriptive Noun Last** | Use `pageCount` not `countOfPages` |
+| **Boolean Names** | Use non-imperative verbs: `isEnabled`, `hasValue`, `canClose` |
+| **Positive Names** | Use `isVisible` instead of `isHidden` (prefer positive) |
+| **Avoid get Prefix** | Use `user` property instead of `getUser()` method |
+| **to___ / as___** | Use `toJson()` for copies, `asList()` for views |
+
+---
+
+### 4. Naming Conventions (Project-Specific)
 
 | Rule | Description |
 |------|-------------|
 | **Intention-Revealing Names** | Variable/function names must answer: Why it exists, what it does, and how it is used |
 | **BLoC Event Semantics** | Events must use past tense or intent-based nouns (e.g., `TopUpSubmitted`, `PinChanged`) |
 | **BLoC State Semantics** | States must describe the current UI status (e.g., `BalanceLoading`, `PaymentSuccess`) |
-| **Searchable Names** | Avoid "Magic Numbers" or "Magic Strings". Use named constants (e.g., `MAX_PIN_ATTEMPTS` instead of `3`) |
+| **Searchable Names** | Avoid "Magic Numbers" or "Magic Strings". Use named constants (e.g., `maxPinAttempts` instead of `3`) |
 
 **Examples:**
 ```dart
@@ -52,7 +120,51 @@ var daysSinceLastTransaction;
 
 ---
 
-### 2. Functions & Logic (The Power of Small)
+### 5. Code Smells ([refactoring.guru](https://refactoring.guru/refactoring/smells))
+
+> [!WARNING]
+> Watch for these common code smells that indicate deeper problems.
+
+#### Bloaters
+| Smell | Description | Fix |
+|-------|-------------|-----|
+| **Long Method** | Function > 20 lines | Extract smaller functions |
+| **Large Class** | Class doing too much | Split into focused classes |
+| **Primitive Obsession** | Using primitives instead of small objects | Create value objects (e.g., `Money`, `Email`) |
+| **Long Parameter List** | > 3 parameters | Use parameter object or builder |
+| **Data Clumps** | Same group of data appearing together | Extract into a class |
+
+#### OO Abusers
+| Smell | Description | Fix |
+|-------|-------------|-----|
+| **Switch Statements** | Complex switch/if-else chains | Use polymorphism or strategy pattern |
+| **Temporary Field** | Fields only used in certain situations | Extract class or use null object |
+| **Refused Bequest** | Subclass doesn't use inherited methods | Replace inheritance with delegation |
+
+#### Change Preventers
+| Smell | Description | Fix |
+|-------|-------------|-----|
+| **Divergent Change** | One class changed for different reasons | Split by responsibility |
+| **Shotgun Surgery** | One change requires editing many classes | Move related code together |
+
+#### Dispensables
+| Smell | Description | Fix |
+|-------|-------------|-----|
+| **Dead Code** | Unreachable or unused code | Delete it |
+| **Duplicate Code** | Same code in multiple places | Extract method/class |
+| **Lazy Class** | Class that does too little | Inline or merge |
+| **Speculative Generality** | Unused abstractions "for future" | Remove until needed |
+
+#### Couplers
+| Smell | Description | Fix |
+|-------|-------------|-----|
+| **Feature Envy** | Method uses another class's data more than its own | Move method to that class |
+| **Message Chains** | `a.b().c().d()` chains | Hide delegation, Law of Demeter |
+| **Middle Man** | Class delegates everything | Remove or inline |
+
+---
+
+### 6. Functions & Logic (The Power of Small)
 
 | Rule | Requirement |
 |------|-------------|
@@ -62,7 +174,7 @@ var daysSinceLastTransaction;
 
 ---
 
-### 3. Architecture & Layers (Isolation)
+### 7. Architecture & Layers (Isolation)
 
 | Rule | Description |
 |------|-------------|
@@ -82,7 +194,7 @@ user.getCurrencySymbol()
 
 ---
 
-### 4. BLoC & State Management
+### 8. BLoC & State Management
 
 | Rule | Description |
 |------|-------------|
@@ -92,30 +204,59 @@ user.getCurrencySymbol()
 
 ---
 
-### 5. Error Handling & Null Safety
+### 9. Error Handling & Null Safety
 
 | Rule | Description |
 |------|-------------|
 | **Don't Return/Pass Null** | Return empty collections `[]` or Null Objects instead of `null` |
 | **Contextual Exceptions** | Throw domain-specific exceptions (e.g., `InsufficientFundsException`) over generic errors |
+| **Type Safety on Dynamic Data** | Always verify type before casting from `Map<String, dynamic>` or JSON data |
+
+**Examples:**
+```dart
+// ❌ BAD - No type check, can throw runtime error
+if (data.containsKey('message')) {
+  message = data['message']; // Fails if value is int, null, etc.
+}
+
+// ✅ GOOD - Type-safe access
+if (data['message'] is String) {
+  message = data['message'] as String;
+}
+```
 
 ---
 
-### 6. Security & Fintech Standards
+### 10. Security: OWASP Mobile Top 10 (2024)
 
 > [!CAUTION]
-> **CRITICAL**: These are non-negotiable security requirements for a Digital Wallet application.
+> **CRITICAL**: These are non-negotiable security requirements based on [OWASP Mobile Top 10](https://owasp.org/www-project-mobile-top-10/).
 
-| Aspect | Verification |
-|--------|--------------|
-| **Data Privacy** | **ABSOLUTELY NO** logging of PII (Personally Identifiable Information), Card Numbers, Wallet Addresses, or Transaction Secrets |
-| **Sensitive Storage** | Sensitive data is stored using `flutter_secure_storage` or platform-specific secure enclaves |
-| **Input Validation** | All financial inputs are validated before processing |
-| **Network Security** | Certificate pinning is implemented, no HTTP (only HTTPS) |
+| Risk | Description | Verification |
+|------|-------------|--------------|
+| **M1: Improper Credential Usage** | Hardcoded secrets, API keys in code | No secrets in source code; use env vars or secure storage |
+| **M2: Supply Chain Security** | Vulnerable dependencies | Run `flutter pub outdated`; audit third-party packages |
+| **M3: Insecure Auth/AuthZ** | Weak authentication flows | Use proper token management; validate on server-side |
+| **M4: Input/Output Validation** | Injection, XSS, path traversal | Sanitize all user inputs; validate before processing |
+| **M5: Insecure Communication** | HTTP, no cert pinning | HTTPS only; implement certificate pinning |
+| **M6: Inadequate Privacy** | Excessive data collection, PII exposure | No logging of PII, card numbers, wallet addresses |
+| **M7: Binary Protection** | Reverse engineering, tampering | Enable code obfuscation (`--obfuscate`) |
+| **M8: Security Misconfiguration** | Debug mode in production, insecure defaults | Disable debug flags; review AndroidManifest/Info.plist |
+| **M9: Insecure Data Storage** | Plaintext sensitive data | Use `flutter_secure_storage` for all secrets/tokens |
+| **M10: Insufficient Cryptography** | Weak algorithms, hardcoded keys | Use platform crypto; never hardcode encryption keys |
+
+**Flutter-Specific Checks:**
+```dart
+// ❌ BAD - Hardcoded API key (M1)
+const apiKey = 'sk_live_abc123...';
+
+// ✅ GOOD - From secure storage
+final apiKey = await secureStorage.read(key: 'api_key');
+```
 
 ---
 
-### 7. Unit Test Standards (F.I.R.S.T)
+### 11. Unit Test Standards (F.I.R.S.T)
 
 | Principle | Description |
 |-----------|-------------|
@@ -127,7 +268,7 @@ user.getCurrencySymbol()
 
 ---
 
-### 8. Code Quality
+### 12. Code Quality
 
 | Aspect | Verification |
 |--------|--------------|
