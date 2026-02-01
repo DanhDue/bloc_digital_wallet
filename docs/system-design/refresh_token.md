@@ -107,3 +107,31 @@ Trong logic của `onRequest` (Interceptor), cần kiểm tra URL request. Nếu
     1.  **Tránh xung đột:** Nếu token cũ còn lưu trong máy nhưng đã hết hạn, gửi kèm nó lên API Login sẽ khiến Server trả về 401. Điều này kích hoạt logic Refresh Token một cách vô lý (refresh trong khi user đang cố login).
     2.  **Đảm bảo Session mới:** Login là hành động khởi tạo phiên làm việc mới, Server cần trả về cặp Access + Refresh token mới hoàn toàn mà không bị ảnh hưởng bởi token cũ.
 * **Cách làm:** Tạo danh sách **Whitelist** (ví dụ: `/login`, `/register`). Nếu URL nằm trong danh sách này, bỏ qua bước gắn token.
+
+---
+
+## 6. Chiến lược Xử lý Logout (Logout Strategy)
+
+Để đảm bảo kết nối an toàn và ngăn chặn vòng lặp lỗi, hệ thống sẽ tự động kích hoạt **Logout** (đăng xuất) trong 3 trường hợp cụ thể sau đây (được triển khai trong `AuthInterceptor`):
+
+### 1. Thất bại khi Retry (Persistent Failure)
+*   **Điều kiện:** Request API trả về lỗi 401, mặc dù request này đã được đánh dấu là `is_retry` (đã thử refresh token 1 lần trước đó).
+*   **Cơ chế:**
+    1.  Interceptor kiểm tra cờ `is_retry` trong `requestOptions.extra`.
+    2.  Nếu tồn tại, hệ thống hiểu rằng dù đã có token mới, server vẫn từ chối.
+    3.  **Hành động:** Gọi `logout()` ngay lập tức để ngắt phiên làm việc lỗi.
+
+### 2. Refresh Token Hết hạn hoặc Không hợp lệ (Dead Session)
+*   **Điều kiện:** Khi gọi API `refresh-token` để lấy Access Token mới, chính API này cũng trả về lỗi (401 Unauthorized hoặc 403 Forbidden).
+*   **Cơ chế:**
+    1.  Khối `try-catch` bao quanh call API refresh bắt được lỗi.
+    2.  Điều này đồng nghĩa Refresh Token hiện tại đã hết hạn (expired) hoặc bị thu hồi (revoked).
+    3.  **Hành động:** Xóa toàn bộ token trong Local Storage và gọi `logout()`.
+
+### 3. Không tìm thấy Refresh Token (Missing Token)
+*   **Điều kiện:** Request gặp lỗi 401 nhưng khi kiểm tra Local Storage thì không có Refresh Token (null).
+*   **Cơ chế:**
+    1.  Hệ thống không thể thực hiện quy trình làm mới do thiếu token nguồn.
+    2.  **Hành động:** Xóa sạch dữ liệu rác (nếu có) và gọi `logout()`.
+
+> **Lưu ý:** Việc xử lý logout cần được thực hiện qua một `AuthStreamService` hoặc cơ chế tương tự để thông báo cho toàn bộ ứng dụng (UI layers) chuyển hướng về màn hình Login ngay lập tức.
