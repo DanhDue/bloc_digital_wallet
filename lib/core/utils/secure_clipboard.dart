@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 
 class SecureClipboard {
   // Define a private MethodChannel
+  // WARNING: Requires native implementation in MainActivity (Android) and AppDelegate (iOS)
   static const MethodChannel _platform = MethodChannel('com.zeno.app/clipboard');
 
   /// Copies text to the clipboard with security features.

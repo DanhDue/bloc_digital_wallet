@@ -66,7 +66,7 @@ class DioFactory {
       );
     }
 
-    // TODO: Add AuthInterceptor here when implemented
+    // AuthInterceptor is added via Dependency Injection in NetworkModule
 
     // True SSL Pinning implementation
     if (!kIsWeb) {

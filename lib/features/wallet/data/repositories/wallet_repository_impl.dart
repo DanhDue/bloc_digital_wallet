@@ -87,6 +87,14 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<Either<Failure, List<TokenAccountEntity>>> getTokenAccounts(String address) async {
     final result = await _remoteDataSource.getTokenAccounts(address: address);
     return result.fold((failure) => Left(failure), (response) {
+      if (!response.isSuccess()) {
+        return Left(
+          ServerFailure(
+            message: response.message ?? 'Unknown API error',
+            code: int.tryParse(response.code ?? ''),
+          ),
+        );
+      }
       if (response.data == null) return const Right([]);
       return Right(response.data!.map((e) => e.toEntity()).toList());
     });

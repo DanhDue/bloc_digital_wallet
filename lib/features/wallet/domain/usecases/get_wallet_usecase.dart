@@ -54,7 +54,6 @@ class GetWalletUseCase {
   GetWalletUseCase(this._repository);
 
   Future<Either<Failure, List<WalletEntity>>> call() async {
-    // TODO: Implement use case logic
     return _repository.getWallets();
   }
 }
