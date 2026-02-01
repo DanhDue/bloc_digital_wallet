@@ -21,10 +21,10 @@ abstract class WalletEntity with _$WalletEntity {
 
   const factory WalletEntity({
     @Default(false) bool isValid,
-    @Default('') String privateKey,
-    @Default('') String bs58PrivateKey,
-    @Default('') String address,
-    @Default(0.0) double balance,
-    @Default(0.0) double dailyChange,
+    String? privateKey,
+    String? bs58PrivateKey,
+    String? address,
+    double? balance,
+    double? dailyChange,
   }) = _WalletEntity;
 }

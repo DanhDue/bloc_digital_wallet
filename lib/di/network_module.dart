@@ -10,14 +10,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import '../../core/network/app_uri.dart';
-import '../../core/network/interceptors/auth_interceptor.dart';
-import '../../core/services/auth_stream_service.dart';
-import '../../core/utils/extensions/string_ext.dart';
-import '../../features/authentication/data/datasources/local/auth_local_datasource.dart';
-import '../../features/authentication/data/datasources/remote/auth_client.dart';
-import '../../features/onboard/data/datasources/health_check_client.dart';
-import '../core/network/dio_factory.dart';
+import 'package:bloc_digital_wallet/core/network/app_uri.dart';
+import 'package:bloc_digital_wallet/core/network/interceptors/auth_interceptor.dart';
+import 'package:bloc_digital_wallet/core/services/auth_stream_service.dart';
+import 'package:bloc_digital_wallet/core/utils/extensions/string_ext.dart';
+import 'package:bloc_digital_wallet/features/authentication/data/datasources/local/auth_local_datasource.dart';
+import 'package:bloc_digital_wallet/features/authentication/data/datasources/remote/auth_client.dart';
+import 'package:bloc_digital_wallet/features/onboard/data/datasources/health_check_client.dart';
+import 'package:bloc_digital_wallet/core/network/dio_factory.dart';
 
 @module
 abstract class NetworkModule {

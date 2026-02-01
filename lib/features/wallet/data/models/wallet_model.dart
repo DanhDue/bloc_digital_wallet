@@ -25,20 +25,10 @@ abstract class WalletModel with _$WalletModel {
   factory WalletModel.fromJson(Map<String, Object?> json) => _$WalletModelFromJson(json);
 
   /// Convert to domain entity
-  WalletEntity toEntity() => WalletEntity(
-    isValid: isValid ?? false,
-    privateKey: privateKey ?? '',
-    bs58PrivateKey: bs58PrivateKey ?? '',
-    address: address ?? '',
-    balance: balance ?? 0.0,
-  );
+  WalletEntity toEntity() =>
+      WalletEntity(isValid: isValid ?? false, address: address ?? '', balance: balance ?? 0.0);
 
   /// Create from domain entity
-  factory WalletModel.fromEntity(WalletEntity entity) => WalletModel(
-    isValid: entity.isValid,
-    privateKey: entity.privateKey,
-    bs58PrivateKey: entity.bs58PrivateKey,
-    address: entity.address,
-    balance: entity.balance,
-  );
+  factory WalletModel.fromEntity(WalletEntity entity) =>
+      WalletModel(isValid: entity.isValid, address: entity.address, balance: entity.balance);
 }

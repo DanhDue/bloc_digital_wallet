@@ -4,14 +4,15 @@
 
 import 'dart:io';
 
+import 'package:bloc_digital_wallet/di/injection.dart';
+import 'package:bloc_digital_wallet/core/errors/failures.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import '../../di/injection.dart';
-import '../errors/failures.dart';
-
+/// Mixin for safe API calls with proper error handling.
+/// Following SRP: each error type has its own handler function.
 mixin SafeCallApiMixin {
   Future<Either<Failure, T>> safeApiCall<T>(Future<T> Function() call) async {
     try {
@@ -40,38 +41,42 @@ mixin SafeCallApiMixin {
   }
 
   Failure _handleDioError(DioException error) {
-    switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        return const NetworkFailure(message: 'Connection timeout');
-      case DioExceptionType.badResponse:
-        final statusCode = error.response?.statusCode;
-        final data = error.response?.data;
-        String message = error.message ?? 'Unknown server error';
+    return switch (error.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.receiveTimeout => _handleTimeoutError(),
+      DioExceptionType.badResponse => _handleBadResponseError(error),
+      DioExceptionType.cancel => const UnknownFailure(message: 'Request cancelled'),
+      DioExceptionType.unknown => _handleUnknownError(error),
+      _ => ServerFailure(message: error.message ?? 'Unknown error', exception: error),
+    };
+  }
 
-        if (data is Map<String, dynamic> && data.containsKey('message')) {
-          message = data['message'];
-        }
+  Failure _handleTimeoutError() {
+    return const NetworkFailure(message: 'Connection timeout');
+  }
 
-        if (statusCode == 401) {
-          return AuthenticationFailure(message: message, code: statusCode);
-        } else if (statusCode == 403) {
-          return AuthorizationFailure(message: message, code: statusCode);
-        } else if (statusCode == 404) {
-          return NotFoundFailure(message: message, code: statusCode);
-        }
+  Failure _handleBadResponseError(DioException error) {
+    final statusCode = error.response?.statusCode;
+    final data = error.response?.data;
+    String message = error.message ?? 'Unknown server error';
 
-        return ServerFailure(message: message, code: statusCode, exception: error);
-      case DioExceptionType.cancel:
-        return const UnknownFailure(message: 'Request cancelled');
-      case DioExceptionType.unknown:
-        if (error.error is SocketException) {
-          return const NetworkFailure(message: 'No internet connection');
-        }
-        return ServerFailure(message: error.message ?? 'Unknown error', exception: error);
-      default:
-        return ServerFailure(message: error.message ?? 'Unknown error', exception: error);
+    if (data is Map<String, dynamic> && data.containsKey('message')) {
+      message = data['message'];
     }
+
+    return switch (statusCode) {
+      401 => AuthenticationFailure(message: message, code: statusCode),
+      403 => AuthorizationFailure(message: message, code: statusCode),
+      404 => NotFoundFailure(message: message, code: statusCode),
+      _ => ServerFailure(message: message, code: statusCode, exception: error),
+    };
+  }
+
+  Failure _handleUnknownError(DioException error) {
+    if (error.error is SocketException) {
+      return const NetworkFailure(message: 'No internet connection');
+    }
+    return ServerFailure(message: error.message ?? 'Unknown error', exception: error);
   }
 }

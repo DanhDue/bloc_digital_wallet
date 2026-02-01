@@ -1,34 +1,29 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class AuthUserEntity extends Equatable {
-  final String id;
-  final String email;
-  final String? displayName;
-  final String? firstName;
-  final String? lastName;
-  final String? phoneNumber;
-  final DateTime? dateOfBirth;
+part 'auth_user_entity.freezed.dart';
 
-  const AuthUserEntity({
-    required this.id,
-    required this.email,
-    this.displayName,
-    this.firstName,
-    this.lastName,
-    this.phoneNumber,
-    this.dateOfBirth,
-  });
+/// ============================================================================
+/// AuthUser Entity
+/// ============================================================================
+/// Entities are pure Dart classes representing business objects.
+/// They should NOT have any Flutter or external dependencies.
+///
+/// Migrated from Equatable to Freezed for consistency with other entities.
+/// ============================================================================
 
-  @override
-  List<Object?> get props => [
-    id,
-    email,
-    displayName,
-    firstName,
-    lastName,
-    phoneNumber,
-    dateOfBirth,
-  ];
+@freezed
+abstract class AuthUserEntity with _$AuthUserEntity {
+  const AuthUserEntity._();
+
+  const factory AuthUserEntity({
+    required String id,
+    required String email,
+    String? displayName,
+    String? firstName,
+    String? lastName,
+    String? phoneNumber,
+    DateTime? dateOfBirth,
+  }) = _AuthUserEntity;
 }
