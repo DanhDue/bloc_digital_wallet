@@ -13,8 +13,17 @@ import 'ssl_configuration.dart';
 
 /// Debug SSL Configuration - Allows self-signed certificates.
 /// Only for development/testing environments.
+///
+/// [!CAUTION] This configuration accepts ALL certificates, bypassing SSL validation.
+/// A runtime assertion prevents instantiation in release builds.
 class DebugSslConfiguration extends SslConfiguration {
-  const DebugSslConfiguration();
+  DebugSslConfiguration() {
+    assert(
+      kDebugMode,
+      'DebugSslConfiguration must only be used in debug mode. '
+      'Using this in production would disable SSL certificate validation.',
+    );
+  }
 
   @override
   void configure(Dio dio, Talker talker) {

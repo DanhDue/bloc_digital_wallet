@@ -28,7 +28,6 @@ abstract class NetworkModule {
   /// SSL Configuration Strategy
   ///
   /// Options:
-  /// - [NoSslPinning] - Default platform SSL (no pinning) - for simple projects
   /// - [DebugSslConfiguration] - Accepts all certificates (dev only)
   /// - [HardenedSslPinning] - FFI-based fingerprint validation (production)
   /// - [AutoSslConfiguration] - Auto-selects based on build mode (recommended)

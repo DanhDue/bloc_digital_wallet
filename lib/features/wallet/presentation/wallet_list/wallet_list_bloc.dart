@@ -78,7 +78,11 @@ class WalletListBloc extends MviBloc<WalletListAction, WalletListState, WalletLi
       // Calculate total balance for each wallet asynchronously in parallel
       final updatedWallets = await Future.wait(
         wallets.map((wallet) async {
-          final tokenResult = await _getTokenAccountsUseCase(wallet.address ?? '');
+          final address = wallet.address;
+          if (address == null || address.isEmpty) {
+            return wallet; // Skip token fetch for wallets without valid addresses
+          }
+          final tokenResult = await _getTokenAccountsUseCase(address);
 
           return tokenResult.fold(
             (failure) => wallet, // If token fetch fails, keep original balance (usually 0)

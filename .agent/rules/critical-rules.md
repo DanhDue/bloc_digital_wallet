@@ -37,8 +37,9 @@
 2.  **TRANSLATIONS** - Use `context.t` (Slang).
 3.  **THEME** - Use `context.appThemes`.
 4.  **SKILLS** - Trigger `.agent/skills/` immediately.
-5.  **AI AGENT WORKFLOW** - Before creating a PR, MUST run `melos genAlls`.
-    *   **Why**: Handles code generation, formatting, and license headers.
+5.  **AI AGENT WORKFLOW** - Before creating a PR, MUST run `melos genAlls` AND use `@pr-review` skill.
+    *   **`melos genAlls`**: Handles code generation, formatting, and license headers.
+    *   **`@pr-review` skill**: Runs code quality checks following OWASP, Clean Architecture, and security standards.
     *   **Note**: `melos genAlls` executes `build_runner` internally. **DO NOT** run `build_runner` separately.
 6.  **SKILL MODIFICATION POLICY** - 🚨 **AI agents MUST NOT edit any files in `.agent/skills/` unless explicitly requested by the user.**
     *   ❌ **NEVER** modify skill files proactively

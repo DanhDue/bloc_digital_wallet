@@ -19,14 +19,13 @@ class DioFactory {
   /// Creates a DioFactory with optional SSL configuration.
   ///
   /// [talker] - Logger instance for debugging
-  /// [sslConfiguration] - SSL pinning strategy (default: NoSslPinning)
+  /// [sslConfiguration] - SSL pinning strategy (default: AutoSslConfiguration)
   ///
   /// Available strategies:
-  /// - [NoSslPinning] - Default platform SSL (no pinning)
   /// - [DebugSslConfiguration] - Accepts all certificates (dev only)
   /// - [HardenedSslPinning] - FFI-based fingerprint validation
-  /// - [AutoSslConfiguration] - Auto-selects based on build mode
-  DioFactory(this._talker, {SslConfiguration sslConfiguration = const NoSslPinning()})
+  /// - [AutoSslConfiguration] - Auto-selects based on build mode (recommended)
+  DioFactory(this._talker, {SslConfiguration sslConfiguration = const AutoSslConfiguration()})
     : _sslConfiguration = sslConfiguration;
 
   DioFactory withConnectTimeout(Duration timeout) {

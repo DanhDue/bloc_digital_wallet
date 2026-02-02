@@ -41,21 +41,38 @@ class WalletItem extends StatefulWidget {
 
 class _WalletItemState extends State<WalletItem> {
   bool _showQRCode = false;
-  late final QrImage _qrImage;
+  QrImage? _qrImage;
+
+  String get _walletAddress => widget.wallet.address ?? '';
+  bool get _hasValidAddress => _walletAddress.isNotEmpty;
 
   @override
   void initState() {
     super.initState();
-    final qrCode = QrCode.fromData(
-      data: widget.wallet.address ?? '',
-      errorCorrectLevel: QrErrorCorrectLevel.H,
-    );
+    _generateQrImage();
+  }
+
+  @override
+  void didUpdateWidget(WalletItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.wallet.address != widget.wallet.address) {
+      _generateQrImage();
+    }
+  }
+
+  void _generateQrImage() {
+    if (!_hasValidAddress) {
+      _qrImage = null;
+      return;
+    }
+    final qrCode = QrCode.fromData(data: _walletAddress, errorCorrectLevel: QrErrorCorrectLevel.H);
     _qrImage = QrImage(qrCode);
   }
 
   Timer? _qrTimer;
 
   void _toggleQRCode() {
+    if (!_hasValidAddress) return; // Don't toggle if no valid address
     setState(() {
       _showQRCode = !_showQRCode;
     });
@@ -63,11 +80,12 @@ class _WalletItemState extends State<WalletItem> {
   }
 
   void _onCopyAddress() {
+    if (!_hasValidAddress) return; // Don't copy if no valid address
     setState(() {
       _showQRCode = true;
     });
     _cancelQrTimer();
-    SecureClipboard.copySensitive(text: widget.wallet.address ?? '');
+    SecureClipboard.copySensitive(text: _walletAddress);
     SmartDialog.showToast(
       "",
       builder: (context) {
@@ -329,36 +347,37 @@ class _WalletItemState extends State<WalletItem> {
             ],
           ),
         ),
-        AnimatedVisibility(
-          visible: _showQRCode,
-          enter: fadeIn(),
-          exit: fadeOut(),
-          enterDuration: const Duration(milliseconds: 500),
-          child: GestureDetector(
-            onTap: _toggleQRCode,
-            child: Container(
-              color: context.appThemes.white,
-              width: 96,
-              height: 96,
-              margin: const EdgeInsets.only(right: 16, bottom: 16),
-              child: Padding(
-                padding: const EdgeInsets.all(3),
-                child: PrettyAnimatedQrView(
-                  qrImage: _qrImage,
-                  decoration: PrettyQrDecoration(
-                    shape: PrettyQrSmoothSymbol(color: context.appThemes.black, roundFactor: 1),
-                    image: PrettyQrDecorationImage(
-                      image: Assets.images.icZeno.provider(),
-                      opacity: 0.69,
-                      position: PrettyQrDecorationImagePosition.embedded,
+        if (_qrImage != null)
+          AnimatedVisibility(
+            visible: _showQRCode && _hasValidAddress,
+            enter: fadeIn(),
+            exit: fadeOut(),
+            enterDuration: const Duration(milliseconds: 500),
+            child: GestureDetector(
+              onTap: _toggleQRCode,
+              child: Container(
+                color: context.appThemes.white,
+                width: 96,
+                height: 96,
+                margin: const EdgeInsets.only(right: 16, bottom: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: PrettyAnimatedQrView(
+                    qrImage: _qrImage!,
+                    decoration: PrettyQrDecoration(
+                      shape: PrettyQrSmoothSymbol(color: context.appThemes.black, roundFactor: 1),
+                      image: PrettyQrDecorationImage(
+                        image: Assets.images.icZeno.provider(),
+                        opacity: 0.69,
+                        position: PrettyQrDecorationImagePosition.embedded,
+                      ),
+                      background: context.appThemes.transparent,
                     ),
-                    background: context.appThemes.transparent,
                   ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }

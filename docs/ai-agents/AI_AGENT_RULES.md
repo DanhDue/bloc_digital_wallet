@@ -14,6 +14,6 @@
 -   **Color Usage**: Follow the strict 4-step workflow for adding and using colors.
     1.  **Define**: Add the color to `assets/colors/colors.xml`.
     2.  **Expose**: Add the color field to `AppThemes` in `lib/config/theme/app_themes.dart` (including constructor, `copyWith`, `lerp`, `light`, and `dark` instances).
-    3.  **Generate**: Run `melos genAlls` to update generated files (colors, themes, etc.).
+    3.  **Generate & Review**: Run `melos genAlls` for code generation, then use `@pr-review` skill for code quality checks.
     4.  **Use**: Use the color via `context.appThemes.yourColorName` in widgets.
     -   **Avoid**: Hardcoding `Color(0xFF...)` or `Colors.red` directly in widgets.

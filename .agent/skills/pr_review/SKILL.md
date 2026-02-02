@@ -184,6 +184,21 @@ var daysSinceLastTransaction;
 | **List Performance** | Always use `ListView.builder` or `SliverList` for long/lazy-loaded lists. |
 | **Isolates** | Use `compute()` for expensive calculations (e.g., JSON parsing) to avoid blocking the UI. |
 | **Build Method** | Keep `build()` pure and fast. Move complex logic or network calls out of `build()`. |
+| **Callback Optimization** | Move expensive operations (FFI, I/O, parsing) outside callbacks that execute frequently. |
+
+```dart
+// ❌ BAD - FFI call on every callback invocation
+client.callback = () {
+  fingerprints = loadFromFFI(); // Called every time!
+  validate(fingerprints);
+};
+
+// ✅ GOOD - Load once, capture in closure
+fingerprints = loadFromFFI();
+client.callback = () {
+  validate(fingerprints); // Uses captured value
+};
+```
 
 #### Best Practices
 | Rule | Description |
@@ -242,6 +257,8 @@ user.getCurrencySymbol()
 | **Don't Return/Pass Null** | Return empty collections `[]` or Null Objects instead of `null` |
 | **Contextual Exceptions** | Throw domain-specific exceptions (e.g., `InsufficientFundsException`) over generic errors |
 | **Type Safety on Dynamic Data** | Always verify type before casting from `Map<String, dynamic>` or JSON data |
+| **Guard Before API Calls** | Check for null/empty values before making network requests |
+| **Guard Widget Generation** | Don't generate widgets (e.g., QR codes) with invalid/empty data |
 
 **Examples:**
 ```dart
@@ -256,25 +273,94 @@ if (data['message'] is String) {
 }
 ```
 
+```dart
+// ❌ BAD - Empty string fallback may cause invalid API calls
+final result = await useCase(entity.address ?? '');
+
+// ✅ GOOD - Guard before API call
+final address = entity.address;
+if (address == null || address.isEmpty) {
+  return entity; // Skip processing for invalid data
+}
+final result = await useCase(address);
+```
+
+```dart
+// ❌ BAD - Generates useless widget with empty data
+final qrCode = QrCode.fromData(data: address ?? '');
+
+// ✅ GOOD - Guard widget generation, update on changes
+QrImage? _qrImage;
+void _generateQrImage() {
+  if (address == null || address.isEmpty) {
+    _qrImage = null;
+    return;
+  }
+  _qrImage = QrImage(QrCode.fromData(data: address));
+}
+```
+
 ---
 
-### 11. Security: OWASP Mobile Top 10 (2024)
+### 11. Security: OWASP Mobile Top 10
 
 > [!CAUTION]
 > **CRITICAL**: These are non-negotiable security requirements based on [OWASP Mobile Top 10](https://owasp.org/www-project-mobile-top-10/).
 
+#### Mobile Top 10 - 2024 (Current)
+
 | Risk | Description | Verification |
 |------|-------------|--------------|
 | **M1: Improper Credential Usage** | Hardcoded secrets, API keys in code | No secrets in source code; use env vars or secure storage |
-| **M2: Supply Chain Security** | Vulnerable dependencies | Run `flutter pub outdated`; audit third-party packages |
-| **M3: Insecure Auth/AuthZ** | Weak authentication flows | Use proper token management; validate on server-side |
-| **M4: Input/Output Validation** | Injection, XSS, path traversal | Sanitize all user inputs; validate before processing |
+| **M2: Inadequate Supply Chain Security** | Vulnerable dependencies | Run `flutter pub outdated`; audit third-party packages |
+| **M3: Insecure Authentication/Authorization** | Weak authentication flows | Use proper token management; validate on server-side |
+| **M4: Insufficient Input/Output Validation** | Injection, XSS, path traversal | Sanitize all user inputs; validate before processing |
 | **M5: Insecure Communication** | HTTP, no cert pinning | HTTPS only; implement certificate pinning |
-| **M6: Inadequate Privacy** | Excessive data collection, PII exposure | No logging of PII, card numbers, wallet addresses |
-| **M7: Binary Protection** | Reverse engineering, tampering | Enable code obfuscation (`--obfuscate`) |
+| **M6: Inadequate Privacy Controls** | Excessive data collection, PII exposure | No logging of PII, card numbers, wallet addresses |
+| **M7: Insufficient Binary Protections** | Reverse engineering, tampering | Enable code obfuscation (`--obfuscate`) |
 | **M8: Security Misconfiguration** | Debug mode in production, insecure defaults | Disable debug flags; review AndroidManifest/Info.plist |
 | **M9: Insecure Data Storage** | Plaintext sensitive data | Use `flutter_secure_storage` for all secrets/tokens |
 | **M10: Insufficient Cryptography** | Weak algorithms, hardcoded keys | Use platform crypto; never hardcode encryption keys |
+
+<details>
+<summary><strong>📜 Mobile Top 10 - 2016</strong></summary>
+
+| Risk | Description |
+|------|-------------|
+| M1: Improper Platform Usage | Misuse of platform features or security controls |
+| M2: Insecure Data Storage | Unprotected data in SQLite, logs, plist, cookies |
+| M3: Insecure Communication | Lack of TLS, weak handshake, cleartext traffic |
+| M4: Insecure Authentication | Anonymous auth, weak passwords |
+| M5: Insufficient Cryptography | Using deprecated algorithms (MD5, SHA1) |
+| M6: Insecure Authorization | IDOR, missing role checks |
+| M7: Client Code Quality | Buffer overflows, format strings |
+| M8: Code Tampering | Binary patching, method swizzling |
+| M9: Reverse Engineering | Disassembly, string table analysis |
+| M10: Extraneous Functionality | Hidden backdoors, debug flags |
+
+</details>
+
+<details>
+<summary><strong>📜 Mobile Top 10 - 2014</strong></summary>
+
+| Risk | Description |
+|------|-------------|
+| M1: Weak Server Side Controls | Insecure API endpoints |
+| M2: Insecure Data Storage | Local storage vulnerabilities |
+| M3: Insufficient Transport Layer Protection | Missing/broken TLS |
+| M4: Unintended Data Leakage | Logs, clipboard, cache |
+| M5: Poor Authorization and Authentication | Weak identity controls |
+| M6: Broken Cryptography | Hardcoded keys, weak ciphers |
+| M7: Client Side Injection | SQLi, XSS in WebViews |
+| M8: Security Decisions Via Untrusted Inputs | Intent/URL scheme abuse |
+| M9: Improper Session Handling | Long sessions, insecure tokens |
+| M10: Lack of Binary Protections | No obfuscation, debugging enabled |
+
+</details>
+
+#### Upcoming Risks (Not Yet in Top 10)
+- Data Leakage, Hardcoded Secrets, Insecure Access Control
+- Path Overwrite/Traversal, Unprotected Endpoints (Deeplinks), Unsafe Sharing
 
 **Flutter-Specific Checks:**
 ```dart
@@ -283,6 +369,41 @@ const apiKey = 'sk_live_abc123...';
 
 // ✅ GOOD - From secure storage
 final apiKey = await secureStorage.read(key: 'api_key');
+```
+
+```dart
+// ❌ BAD - Debug-only configuration without guard (M8)
+class DebugSslConfiguration {
+  const DebugSslConfiguration(); // Can be used in production!
+}
+
+// ✅ GOOD - Runtime assertion prevents production usage
+class DebugSslConfiguration {
+  DebugSslConfiguration() {
+    assert(kDebugMode, 'Must only be used in debug mode.');
+  }
+}
+```
+
+```dart
+// ❌ BAD - Insecure default (M8)
+DioFactory({SslConfiguration ssl = const NoSslPinning()});
+
+// ✅ GOOD - Secure default with auto-selection
+DioFactory({SslConfiguration ssl = const AutoSslConfiguration()});
+```
+
+```dart
+// ❌ BAD - Logging sensitive security data (M6)
+talker.debug('Fingerprints: $fingerprints');
+talker.debug('Token: $authToken');
+
+// ✅ GOOD - Log counts, not values; gate debug logs
+talker.debug('Fingerprints loaded: ${fingerprints.length} entries');
+assert(() {
+  talker.debug('Debug fingerprint: $fingerprint');
+  return true;
+}());
 ```
 
 ---

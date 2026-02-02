@@ -19,7 +19,7 @@ class AutoSslConfiguration extends SslConfiguration {
   @override
   void configure(Dio dio, Talker talker) {
     if (kDebugMode) {
-      const DebugSslConfiguration().configure(dio, talker);
+      DebugSslConfiguration().configure(dio, talker);
     } else {
       const HardenedSslPinning().configure(dio, talker);
     }

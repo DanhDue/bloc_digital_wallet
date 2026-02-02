@@ -189,9 +189,9 @@ Add Route:
 [ ] Edit: lib/app_router.dart
 [ ] Add: AutoRoute(page: {Subfeature}Route.page, path: '/path')
 
-Code Generation:
+Code Generation & Review:
 [ ] Run: melos genAlls
-[ ] Run: dart format lib/
+[ ] Use @pr-review skill (code quality checks + analysis)
 [ ] Run: flutter analyze --no-fatal-infos
 [ ] Fix any issues (must be 0)
 
@@ -441,6 +441,7 @@ Combined:
 [ ] Initialize in AppThemes.light
 [ ] Initialize in AppThemes.dark
 [ ] Run: melos genAlls
+[ ] Use @pr-review skill (code quality review)
 [ ] Use via context.appThemes.yourColorName
 ```
 
