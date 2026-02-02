@@ -30,6 +30,7 @@ Your task is to review the Pull Request for this project.
 - [**SOLID Principles**] (https://en.wikipedia.org/wiki/SOLID)
 - [**Defensive Programming**] (https://en.wikipedia.org/wiki/Defensive_programming)
 - [**Reactive Programming**] (https://www.reactivemanifesto.org/)
+- [**Flutter AI Rules**] (https://docs.flutter.dev/ai/ai-rules)
 
 ---
 
@@ -164,7 +165,37 @@ var daysSinceLastTransaction;
 
 ---
 
-### 6. Functions & Logic (The Power of Small)
+### 6. Official Flutter & Dart AI Rules
+
+> [!TIP]
+> These rules are derived from the official [Flutter AI Rules](https://docs.flutter.dev/ai/ai-rules) to ensure modern, performant, and maintainable code.
+
+#### Visual Design & Theming
+| Rule | Description |
+|------|-------------|
+| **Premium Feel** | Apply subtle noise texture to backgrounds; use multi-layered drop shadows for depth. |
+| **Typography** | Use font sizes and weights (hero text, section headlines) to guide understanding. |
+| **Interactive Glow** | Interactive elements (buttons, sliders) should have shadows/colors that create a "glow" effect. |
+
+#### Performance & Optimization
+| Rule | Description |
+|------|-------------|
+| **Const Constructors** | Use `const` variables and constructors extensively to reduce widget rebuilds. |
+| **List Performance** | Always use `ListView.builder` or `SliverList` for long/lazy-loaded lists. |
+| **Isolates** | Use `compute()` for expensive calculations (e.g., JSON parsing) to avoid blocking the UI. |
+| **Build Method** | Keep `build()` pure and fast. Move complex logic or network calls out of `build()`. |
+
+#### Best Practices
+| Rule | Description |
+|------|-------------|
+| **Composition** | Favor composition over inheritance. Build complex UIs from smaller, private `Widget` classes (not helper methods). |
+| **Immutability** | Widgets (especially `StatelessWidget`) should be immutable. |
+| **State Management** | Separate ephemeral state (UI) from app state (Business Logic). Use `Bloc`/`Cubit` for app state as per project standard. |
+| **Testing** | Prefer `package:checks` for expressive assertions if applicable. Write code with testing in mind. |
+
+---
+
+### 7. Functions & Logic (The Power of Small)
 
 | Rule | Requirement |
 |------|-------------|
@@ -174,7 +205,7 @@ var daysSinceLastTransaction;
 
 ---
 
-### 7. Architecture & Layers (Isolation)
+### 8. Architecture & Layers (Isolation)
 
 | Rule | Description |
 |------|-------------|
@@ -194,7 +225,7 @@ user.getCurrencySymbol()
 
 ---
 
-### 8. BLoC & State Management
+### 9. BLoC & State Management
 
 | Rule | Description |
 |------|-------------|
@@ -204,7 +235,7 @@ user.getCurrencySymbol()
 
 ---
 
-### 9. Error Handling & Null Safety
+### 10. Error Handling & Null Safety
 
 | Rule | Description |
 |------|-------------|
@@ -227,7 +258,7 @@ if (data['message'] is String) {
 
 ---
 
-### 10. Security: OWASP Mobile Top 10 (2024)
+### 11. Security: OWASP Mobile Top 10 (2024)
 
 > [!CAUTION]
 > **CRITICAL**: These are non-negotiable security requirements based on [OWASP Mobile Top 10](https://owasp.org/www-project-mobile-top-10/).
@@ -256,7 +287,7 @@ final apiKey = await secureStorage.read(key: 'api_key');
 
 ---
 
-### 11. Unit Test Standards (F.I.R.S.T)
+### 12. Unit Test Standards (F.I.R.S.T)
 
 | Principle | Description |
 |-----------|-------------|
@@ -268,7 +299,7 @@ final apiKey = await secureStorage.read(key: 'api_key');
 
 ---
 
-### 12. Code Quality
+### 13. Code Quality
 
 | Aspect | Verification |
 |--------|--------------|
