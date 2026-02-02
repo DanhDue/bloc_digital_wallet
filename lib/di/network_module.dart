@@ -12,6 +12,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:bloc_digital_wallet/core/network/app_uri.dart';
 import 'package:bloc_digital_wallet/core/network/interceptors/auth_interceptor.dart';
+import 'package:bloc_digital_wallet/core/network/ssl/ssl.dart';
 import 'package:bloc_digital_wallet/core/services/auth_stream_service.dart';
 import 'package:bloc_digital_wallet/core/utils/extensions/string_ext.dart';
 import 'package:bloc_digital_wallet/features/authentication/data/datasources/local/auth_local_datasource.dart';
@@ -23,16 +24,28 @@ import 'package:bloc_digital_wallet/core/network/dio_factory.dart';
 abstract class NetworkModule {
   @singleton
   FlutterSecureStorage get secureStorage => const FlutterSecureStorage();
+
+  /// SSL Configuration Strategy
+  ///
+  /// Options:
+  /// - [NoSslPinning] - Default platform SSL (no pinning) - for simple projects
+  /// - [DebugSslConfiguration] - Accepts all certificates (dev only)
+  /// - [HardenedSslPinning] - FFI-based fingerprint validation (production)
+  /// - [AutoSslConfiguration] - Auto-selects based on build mode (recommended)
+  @singleton
+  SslConfiguration get sslConfiguration => const AutoSslConfiguration();
+
   Dio provideDio(
     Talker talker,
     AuthLocalDataSource localDataSource,
     AuthStreamService authStreamService,
+    SslConfiguration sslConfiguration,
   ) {
-    final dio = DioFactory(talker).dio;
+    final dio = DioFactory(talker, sslConfiguration: sslConfiguration).dio;
 
     // Create a separate basic Dio for the AuthClient used inside the interceptor
     // to avoid circular dependency and infinite loops during refresh.
-    final refreshDio = DioFactory(talker).dio;
+    final refreshDio = DioFactory(talker, sslConfiguration: sslConfiguration).dio;
 
     // AuthClient for refresh logic
     final authClient = AuthClient(refreshDio, baseUrl: AppUri.users.buildAppUri()!);
