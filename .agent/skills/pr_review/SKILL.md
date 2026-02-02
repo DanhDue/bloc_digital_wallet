@@ -23,13 +23,13 @@ Your task is to review the Pull Request for this project.
 
 ## GUIDING PRINCIPLES
 
-- **Effective Dart** (https://dart.dev/guides/language/effective-dart)
-- **Code Smells** (https://refactoring.guru/refactoring/smells)
-- **OWASP Mobile Top 10** (https://owasp.org/www-project-mobile-top-10/)
-- **Clean Code** (https://www.oreilly.com/library/view/clean-code-a/9780132350884/)
-- **SOLID Principles** (https://en.wikipedia.org/wiki/SOLID)
-- **Defensive Programming** (https://en.wikipedia.org/wiki/Defensive_programming)
-- **Reactive Programming** (https://www.reactivemanifesto.org/)
+- [**Effective Dart**] (https://dart.dev/guides/language/effective-dart)
+- [**Code Smells**] (https://refactoring.guru/refactoring/smells)
+- [**OWASP Mobile Top 10**] (https://owasp.org/www-project-mobile-top-10/)
+- [**Clean Code**] (https://www.oreilly.com/library/view/clean-code-a/9780132350884/)
+- [**SOLID Principles**] (https://en.wikipedia.org/wiki/SOLID)
+- [**Defensive Programming**] (https://en.wikipedia.org/wiki/Defensive_programming)
+- [**Reactive Programming**] (https://www.reactivemanifesto.org/)
 
 ---
 
