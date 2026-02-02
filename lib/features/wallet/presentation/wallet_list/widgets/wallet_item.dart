@@ -47,7 +47,7 @@ class _WalletItemState extends State<WalletItem> {
   void initState() {
     super.initState();
     final qrCode = QrCode.fromData(
-      data: widget.wallet.address,
+      data: widget.wallet.address ?? '',
       errorCorrectLevel: QrErrorCorrectLevel.H,
     );
     _qrImage = QrImage(qrCode);
@@ -67,7 +67,7 @@ class _WalletItemState extends State<WalletItem> {
       _showQRCode = true;
     });
     _cancelQrTimer();
-    SecureClipboard.copySensitive(text: widget.wallet.address);
+    SecureClipboard.copySensitive(text: widget.wallet.address ?? '');
     SmartDialog.showToast(
       "",
       builder: (context) {
@@ -223,7 +223,7 @@ class _WalletItemState extends State<WalletItem> {
                                     TextSpan(
                                       text: widget.isBalanceHidden
                                           ? "••••••••"
-                                          : widget.wallet.balance.toStringAsFixed(2),
+                                          : (widget.wallet.balance ?? 0).toStringAsFixed(2),
                                       style: context.appThemes.headlineMedium.copyWith(
                                         color: context.appThemes.white,
                                         fontWeight: FontWeight.bold,
@@ -262,8 +262,8 @@ class _WalletItemState extends State<WalletItem> {
                             decoration: BoxDecoration(
                               color:
                                   (widget.isBalanceHidden ||
-                                      (widget.wallet.dailyChange >= 0) ||
-                                      widget.wallet.balance == 0)
+                                      ((widget.wallet.dailyChange ?? 0) >= 0) ||
+                                      (widget.wallet.balance ?? 0) == 0)
                                   ? context.appThemes.indigo.withValues(alpha: 0.6)
                                   : context.appThemes.white.withValues(alpha: 0.6),
                               borderRadius: BorderRadius.circular(8),
@@ -271,10 +271,12 @@ class _WalletItemState extends State<WalletItem> {
                             padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
                             child: Builder(
                               builder: (context) {
-                                final isZeroBalance = widget.wallet.balance == 0;
-                                final isTrendUp = widget.wallet.dailyChange >= 0;
-                                final trendPercent = widget.wallet.dailyChange.abs();
-                                final trendAmount = widget.wallet.balance * (trendPercent / 100);
+                                final balance = widget.wallet.balance ?? 0;
+                                final dailyChange = widget.wallet.dailyChange ?? 0;
+                                final isZeroBalance = balance == 0;
+                                final isTrendUp = dailyChange >= 0;
+                                final trendPercent = dailyChange.abs();
+                                final trendAmount = balance * (trendPercent / 100);
 
                                 final sign = isTrendUp ? "↑" : "↓";
                                 final signChar = isTrendUp ? "+" : "-";
@@ -304,7 +306,7 @@ class _WalletItemState extends State<WalletItem> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          _formatAddress(widget.wallet.address),
+                          _formatAddress(widget.wallet.address ?? ''),
                           style: context.appThemes.bodyLarge.copyWith(
                             color: context.appThemes.white.withValues(alpha: 0.6),
                           ),

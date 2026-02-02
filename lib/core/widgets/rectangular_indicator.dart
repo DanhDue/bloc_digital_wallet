@@ -44,7 +44,7 @@ class RectangularIndicator extends Decoration {
     this.strokeWidth = 2,
   });
   @override
-  _CustomPainter createBoxPainter([VoidCallback? onChanged]) {
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
     return _CustomPainter(
       this,
       onChanged,
