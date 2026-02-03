@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part '{{subfeature_name.snakeCase()}}_ui_model.freezed.dart';

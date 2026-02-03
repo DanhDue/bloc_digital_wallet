@@ -57,6 +57,7 @@
 ### Data Layer
 ```
 [ ] Model created with @freezed, abstract class, and @JsonKey annotations
+- [ ] Imports freezed_annotation and foundation.dart
 [ ] toEntity() and fromEntity() implemented
 [ ] Data source throws Exceptions (not Failures)
 [ ] Repository impl converts Exceptions → Failures

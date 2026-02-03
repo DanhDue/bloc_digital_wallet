@@ -428,6 +428,7 @@ class GetTransactionHistoryUseCase {
 **File**: `lib/features/transaction_history/data/models/transaction_history_model.dart`
 
 ```dart
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/transaction_history_entity.dart';
 

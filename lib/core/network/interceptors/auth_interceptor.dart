@@ -1,24 +1,24 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import 'package:bloc_digital_wallet/core/auth/auth_local_datasource.dart';
+import 'package:bloc_digital_wallet/core/auth/token_refresher.dart';
 import 'package:bloc_digital_wallet/core/network/app_uri.dart';
 import 'package:dio/dio.dart';
-import '../../../../features/authentication/data/datasources/local/auth_local_datasource.dart';
-import '../../../../features/authentication/data/datasources/remote/auth_client.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-import '../../../../core/services/auth_stream_service.dart';
+import 'package:bloc_digital_wallet/core/services/auth_stream_service.dart';
 
 class AuthInterceptor extends QueuedInterceptor {
   final Dio _dio;
   final AuthLocalDataSource _localDataSource;
-  final AuthClient _authClient;
+  final TokenRefresher _tokenRefresher;
   final Talker _talker;
   final AuthStreamService _authStreamService;
 
   AuthInterceptor(
     this._dio,
     this._localDataSource,
-    this._authClient,
+    this._tokenRefresher,
     this._talker,
     this._authStreamService,
   );
@@ -83,12 +83,12 @@ class AuthInterceptor extends QueuedInterceptor {
       if (refreshToken != null) {
         try {
           // Perform refresh
-          // Note: This call uses a separate Dio instance (provided via DI) to avoid circular dependency
-          // and ensuring this request itself isn't intercepted by AuthInterceptor.
-          final newAuthData = await _authClient.refreshToken(refresh: refreshToken);
+          // Note: This call uses the injected TokenRefresher which should use a separate Dio instance
+          // to avoid circular dependency and ensuring this request itself isn't intercepted.
+          final result = await _tokenRefresher.refreshTokens(refreshToken: refreshToken);
 
-          final newAccess = newAuthData.access;
-          final newRefresh = newAuthData.refresh;
+          final newAccess = result.accessToken;
+          final newRefresh = result.refreshToken;
 
           if (newAccess != null && newRefresh != null) {
             await _localDataSource.saveTokens(accessToken: newAccess, refreshToken: newRefresh);

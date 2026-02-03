@@ -2,6 +2,9 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/features/authentication/data/datasources/remote/auth_client.dart';
+import 'package:bloc_digital_wallet/features/authentication/data/datasources/remote/auth_token_refresher.dart';
+import 'package:bloc_digital_wallet/core/auth/auth_local_datasource.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/network_client.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/token_client.dart';
 import 'package:bloc_digital_wallet/features/wallet/data/datasources/remote/wallet_client.dart';
@@ -15,8 +18,6 @@ import 'package:bloc_digital_wallet/core/network/interceptors/auth_interceptor.d
 import 'package:bloc_digital_wallet/core/network/ssl/ssl.dart';
 import 'package:bloc_digital_wallet/core/services/auth_stream_service.dart';
 import 'package:bloc_digital_wallet/core/utils/extensions/string_ext.dart';
-import 'package:bloc_digital_wallet/features/authentication/data/datasources/local/auth_local_datasource.dart';
-import 'package:bloc_digital_wallet/features/authentication/data/datasources/remote/auth_client.dart';
 import 'package:bloc_digital_wallet/features/onboard/data/datasources/health_check_client.dart';
 import 'package:bloc_digital_wallet/core/network/dio_factory.dart';
 
@@ -46,13 +47,16 @@ abstract class NetworkModule {
     // to avoid circular dependency and infinite loops during refresh.
     final refreshDio = DioFactory(talker, sslConfiguration: sslConfiguration).dio;
 
-    // AuthClient for refresh logic
+    // AuthClient for refresh logic (uses separate Dio without AuthInterceptor)
     final authClient = AuthClient(refreshDio, baseUrl: AppUri.users.buildAppUri()!);
+
+    // TokenRefresher adapter that wraps AuthClient (DIP: core depends on abstraction)
+    final tokenRefresher = AuthTokenRefresher(authClient);
 
     final authInterceptor = AuthInterceptor(
       dio,
       localDataSource,
-      authClient,
+      tokenRefresher,
       talker,
       authStreamService,
     );

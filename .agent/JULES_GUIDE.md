@@ -13,8 +13,9 @@ Before writing a single line of code, you MUST be aware of these foundational ru
     *   **Full Package Paths** ONLY.
     *   **One Object, One File** for Freezed models.
     *   **Explicit baseUrl** for Retrofit clients.
-3.  **Adherence**: [adherence-rules.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/rules/adherence-rules.md) - Extreme execution protocols.
-4.  🚨 **Skill Protection**: **NEVER** edit files in `.agent/skills/` unless explicitly requested. See [config.json > skill_modification_policy](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/config.json) and [critical-rules.md #6](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/rules/critical-rules.md).
+3.  **Freezed Everywhere**: All @freezed classes MUST import `foundation.dart` + `freezed_annotation`.
+4.  **Adherence**: [adherence-rules.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/rules/adherence-rules.md) - Extreme execution protocols.
+5.  🚨 **Skill Protection**: **NEVER** edit files in `.agent/skills/` unless explicitly requested. See [config.json > skill_modification_policy](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/config.json) and [critical-rules.md #6](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/rules/critical-rules.md).
 
 ---
 

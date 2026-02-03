@@ -1,5 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'sample_ui_model.freezed.dart';
@@ -13,6 +14,5 @@ sealed class SampleUiModel with _$SampleUiModel {
     // TODO: Add UI properties
   }) = _SampleUiModel;
 
-  factory SampleUiModel.fromJson(Map<String, dynamic> json) => 
-      _$SampleUiModelFromJson(json);
+  factory SampleUiModel.fromJson(Map<String, dynamic> json) => _$SampleUiModelFromJson(json);
 }

@@ -28,13 +28,19 @@ mason make mvi_subfeature --module_name <module> --subfeature_name <subfeature>
 3.  **Strings**: Add keys to `assets/locales/en.i18n.json`.
 
 ## 4. Implementation Loop
-1.  **Domain**: Define `Entity` (@freezed) -> `Repository` (interface) -> `UseCase`.
-2.  **Data**: Define `Model` (@freezed) -> `RemoteDataSource` (API) -> `RepositoryImpl`.
+1.  **Domain**: Define `Entity` (@freezed + `foundation.dart`) -> `Repository` (interface) -> `UseCase`.
+2.  **Data**: Define `Model` (@freezed + `foundation.dart`) -> `RemoteDataSource` (API) -> `RepositoryImpl`.
 3.  **Presentation**:
     - Define `Action` (User intent).
     - Define `State` (View state).
     - Implement `Bloc` logic (transform Action -> State).
     - Build `Page` UI.
+
+> **Note**: All @freezed classes require both imports:
+> ```dart
+> import 'package:flutter/foundation.dart';
+> import 'package:freezed_annotation/freezed_annotation.dart';
+> ```
 
 ## 5. Verification
 - `melos genAlls`

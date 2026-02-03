@@ -3,9 +3,9 @@
 // coverage:ignore-file
 
 import 'package:bloc_digital_wallet/core/network/app_uri.dart';
+import 'package:bloc_digital_wallet/features/authentication/data/models/auth_user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import '../../models/auth_user_model.dart';
 
 part 'auth_client.g.dart';
 

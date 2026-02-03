@@ -19,8 +19,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     required String email,
     required String password,
   }) async {
-    final result = await remote.loginWithEmailPassword(email: email, password: password);
-    return result.map((model) => model.toEntity());
+    return await remote.loginWithEmailPassword(email: email, password: password);
   }
 
   @override
@@ -32,7 +31,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     required String phoneNumber,
     required DateTime dateOfBirth,
   }) async {
-    final result = await remote.registerWithEmail(
+    return await remote.registerWithEmail(
       email: email,
       password: password,
       firstName: firstName,
@@ -40,7 +39,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       phoneNumber: phoneNumber,
       dateOfBirth: dateOfBirth,
     );
-    return result.map((model) => model.toEntity());
   }
 
   @override

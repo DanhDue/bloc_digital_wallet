@@ -53,7 +53,11 @@
                     "BLoC States (lib/features/*/presentation/*/*_state.dart)",
                     "BLoC Events (lib/features/*/presentation/*/*_event.dart)"
                 ],
-                "rationale": "Ensures immutability, value equality, and copyWith support across all layers"
+                "required_imports": [
+                    "import 'package:flutter/foundation.dart';",
+                    "import 'package:freezed_annotation/freezed_annotation.dart';"
+                ],
+                "rationale": "Ensures immutability, value equality, copyWith support, and debugFillProperties across all layers"
             },
             "theme_tailor": {
                 "rule": "ALWAYS use context.appThemes for colors and text styles",

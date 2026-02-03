@@ -829,6 +829,7 @@ class {Verb}{Feature}UseCase {
 
 ```dart
 // File: lib/features/{feature}/data/models/{feature}_model.dart
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/{feature}_entity.dart';
 

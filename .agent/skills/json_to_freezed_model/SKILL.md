@@ -95,6 +95,7 @@ abstract class {ModelName} with _${ModelName} {
 | **Class** | **`abstract class`** | **Always use `abstract class` for Freezed models** |
 | **`includeIfNull`** | **`false`** | **Always use `@JsonSerializable(includeIfNull: false)`** |
 | **Constructor** | **`const Class._();`** | **Always include private constructor** |
+| **Imports** | **`foundation.dart` + `freezed_annotation`** | **Both required for `debugFillProperties` support** |
 
 > **Important**: Always add `@JsonKey` annotation for **every field**, even when the JSON key matches the Dart property name exactly.
 

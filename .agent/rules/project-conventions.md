@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Project Conventions (Strict)
 
 > [!CRITICAL]
@@ -15,6 +19,7 @@
 *   ✅ **Requirement 1**: Must be an `abstract class`.
 *   ✅ **Requirement 2**: MUST use `@JsonKey(name: 'field_name')` for ALL fields to ensure backend compatibility.
 *   ✅ **Requirement 3**: MUST use `@JsonSerializable(includeIfNull: false)` (via `build.yaml` or explicit annotation).
+*   ✅ **Requirement 4**: MUST import "import 'package:freezed_annotation/freezed_annotation.dart';".
 
 **Example:**
 ```dart

@@ -135,3 +135,124 @@ Trong logic của `onRequest` (Interceptor), cần kiểm tra URL request. Nếu
     2.  **Hành động:** Xóa sạch dữ liệu rác (nếu có) và gọi `logout()`.
 
 > **Lưu ý:** Việc xử lý logout cần được thực hiện qua một `AuthStreamService` hoặc cơ chế tương tự để thông báo cho toàn bộ ứng dụng (UI layers) chuyển hướng về màn hình Login ngay lập tức.
+
+---
+
+## 7. Hướng dẫn sử dụng AuthInterceptor(keep DIP).
+
+### Tổng quan
+
+`AuthInterceptor` nằm trong core layer (`lib/core/network/`) và cần gọi API refresh token. Để tuân thủ Clean Architecture, core layer **KHÔNG** được phụ thuộc trực tiếp vào feature layer. Giải pháp: sử dụng **Dependency Inversion Principle (DIP)**.
+
+### Cấu trúc thư mục
+
+```
+lib/core/
+├── auth/
+│   ├── auth_local_datasource.dart  ← Lưu trữ token (SecureStorage)
+│   └── token_refresher.dart         ← Interface (abstraction)
+└── network/
+    └── interceptors/
+        └── auth_interceptor.dart    ← Phụ thuộc vào TokenRefresher (interface)
+
+lib/features/authentication/data/datasources/remote/
+├── auth_client.dart                 ← Retrofit API Client
+└── auth_token_refresher.dart        ← Implements TokenRefresher (adapter)
+```
+
+### Interface `TokenRefresher`
+
+**File:** `lib/core/auth/token_refresher.dart`
+
+```dart
+/// Interface cho việc refresh token.
+/// Core layer phụ thuộc vào interface này (abstraction).
+abstract interface class TokenRefresher {
+  Future<TokenRefreshResult> refreshTokens({required String refreshToken});
+}
+
+class TokenRefreshResult {
+  final String? accessToken;
+  final String? refreshToken;
+  const TokenRefreshResult({this.accessToken, this.refreshToken});
+}
+```
+
+### Adapter `AuthTokenRefresher`
+
+**File:** `lib/features/authentication/data/datasources/remote/auth_token_refresher.dart`
+
+```dart
+@LazySingleton(as: TokenRefresher)
+class AuthTokenRefresher implements TokenRefresher {
+  final AuthClient _authClient;
+
+  AuthTokenRefresher(this._authClient);
+
+  @override
+  Future<TokenRefreshResult> refreshTokens({required String refreshToken}) async {
+    final result = await _authClient.refreshToken(refresh: refreshToken);
+    return TokenRefreshResult(
+      accessToken: result.access,
+      refreshToken: result.refresh,
+    );
+  }
+}
+```
+
+### Sử dụng trong `AuthInterceptor`
+
+**File:** `lib/core/network/interceptors/auth_interceptor.dart`
+
+```dart
+class AuthInterceptor extends QueuedInterceptor {
+  final Dio _dio;
+  final AuthLocalDataSource _localDataSource;
+  final TokenRefresher _tokenRefresher;  // ← Interface, không phải concrete class
+  final Talker _talker;
+  final AuthStreamService _authStreamService;
+
+  // ...
+
+  // Gọi refresh qua interface
+  final result = await _tokenRefresher.refreshTokens(refreshToken: refreshToken);
+  final newAccess = result.accessToken;
+  final newRefresh = result.refreshToken;
+}
+```
+
+### Wiring trong `NetworkModule`
+
+**File:** `lib/di/network_module.dart`
+
+```dart
+Dio provideDio(Talker talker, AuthLocalDataSource localDataSource, ...) {
+  final dio = DioFactory(talker, sslConfiguration: sslConfiguration).dio;
+  
+  // Dio riêng cho refresh (tránh circular dependency)
+  final refreshDio = DioFactory(talker, sslConfiguration: sslConfiguration).dio;
+  final authClient = AuthClient(refreshDio, baseUrl: AppUri.users.buildAppUri()!);
+  
+  // Adapter wraps AuthClient → implements TokenRefresher
+  final tokenRefresher = AuthTokenRefresher(authClient);
+
+  final authInterceptor = AuthInterceptor(
+    dio,
+    localDataSource,
+    tokenRefresher,  // ← Truyền interface, không phải AuthClient
+    talker,
+    authStreamService,
+  );
+  dio.interceptors.add(authInterceptor);
+  return dio;
+}
+```
+
+### Lợi ích của DIP
+
+| Lợi ích | Giải thích |
+|---------|------------|
+| **Decoupling** | Core layer không import từ feature layer |
+| **Testability** | Dễ dàng mock `TokenRefresher` trong unit tests |
+| **Flexibility** | Có thể thay đổi implementation (ví dụ: OAuth, Firebase) mà không sửa `AuthInterceptor` |
+| **Clean Architecture** | Tuân thủ nguyên tắc dependency rule (outer → inner) |

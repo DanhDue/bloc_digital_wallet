@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bloc_digital_wallet/features/wallet/domain/entities/token_account_entity.dart';
 

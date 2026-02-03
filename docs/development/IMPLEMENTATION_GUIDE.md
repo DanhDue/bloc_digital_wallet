@@ -710,6 +710,7 @@ class CreateTransactionUseCase {
 **File:** `lib/features/transaction/data/models/transaction_model.dart`
 
 ```dart
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/transaction_entity.dart';
 

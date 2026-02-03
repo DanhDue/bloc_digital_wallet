@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'mint_token_entity.dart';
 

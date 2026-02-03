@@ -2,14 +2,14 @@
 
 import 'dart:async';
 
+import 'package:bloc_digital_wallet/features/authentication/data/datasources/remote/auth_client.dart';
+import 'package:bloc_digital_wallet/features/authentication/data/models/auth_user_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/errors/failures.dart';
-import '../../../../core/mixin/safe_call_api_mixin.dart';
-
-import '../models/auth_user_model.dart';
-import 'remote/auth_client.dart';
+import 'package:bloc_digital_wallet/core/errors/failures.dart';
+import 'package:bloc_digital_wallet/core/mixin/safe_call_api_mixin.dart';
+import 'package:bloc_digital_wallet/features/authentication/domain/entities/auth_user_entity.dart';
 
 @lazySingleton
 class AuthRemoteDataSource with SafeCallApiMixin {
@@ -17,7 +17,7 @@ class AuthRemoteDataSource with SafeCallApiMixin {
 
   AuthRemoteDataSource(this._client);
 
-  Future<Either<Failure, AuthUserModel>> loginWithEmailPassword({
+  Future<Either<Failure, AuthUserEntity>> loginWithEmailPassword({
     required String email,
     required String password,
   }) async {
@@ -27,18 +27,20 @@ class AuthRemoteDataSource with SafeCallApiMixin {
       if (password == '123456' || password == 'password') {
         // Fallback for demo if API fails
         return Right(
-          AuthUserModel(
-            access: 'demo-access-token',
-            refresh: 'demo-refresh-token',
-            user: AuthUserInnerModel(id: 1, email: email, username: 'Demo User'),
+          _toEntity(
+            AuthUserModel(
+              access: 'demo-access-token',
+              refresh: 'demo-refresh-token',
+              user: AuthUserInnerModel(id: 1, email: email, username: 'Demo User'),
+            ),
           ),
         );
       }
       return Left(failure);
-    }, (success) => Right(success));
+    }, (success) => Right(_toEntity(success)));
   }
 
-  Future<Either<Failure, AuthUserModel>> registerWithEmail({
+  Future<Either<Failure, AuthUserEntity>> registerWithEmail({
     required String email,
     required String password,
     required String firstName,
@@ -46,7 +48,7 @@ class AuthRemoteDataSource with SafeCallApiMixin {
     required String phoneNumber,
     required DateTime dateOfBirth,
   }) async {
-    return await safeApiCall(
+    final result = await safeApiCall(
       () => _client.register(
         email: email,
         password: password,
@@ -56,6 +58,7 @@ class AuthRemoteDataSource with SafeCallApiMixin {
         dateOfBirth: dateOfBirth.toIso8601String(),
       ),
     );
+    return result.map(_toEntity);
   }
 
   Future<Either<Failure, void>> sendPasswordResetEmail({required String email}) async {
@@ -64,6 +67,19 @@ class AuthRemoteDataSource with SafeCallApiMixin {
 
   Future<Either<Failure, void>> verifyResetCode({required String code}) async {
     return await safeApiCall(() => _client.verifyResetCode(code: code));
+  }
+
+  /// Convert core AuthUserModel to feature AuthUserEntity
+  AuthUserEntity _toEntity(AuthUserModel model) {
+    return AuthUserEntity(
+      id: model.user?.id?.toString() ?? '',
+      email: model.user?.email ?? '',
+      displayName: model.user?.username,
+      firstName: null,
+      lastName: null,
+      phoneNumber: null,
+      dateOfBirth: null,
+    );
   }
 }
 

@@ -53,9 +53,20 @@
         *   Domain Entities (`lib/features/*/domain/entities/`)
         *   BLoC States (`lib/features/*/presentation/*/*_state.dart`)
         *   BLoC Events (`lib/features/*/presentation/*/*_event.dart`)
-    *   **Rationale**: Ensures immutability, value equality, and `copyWith` support across all layers.
+    *   **Required Imports**:
+        ```dart
+        import 'package:flutter/foundation.dart';
+        import 'package:freezed_annotation/freezed_annotation.dart';
+        ```
+    *   **Rationale**: Ensures immutability, value equality, `copyWith` support, and `debugFillProperties` across all layers.
     *   **Pattern**:
         ```dart
+        import 'package:flutter/foundation.dart';
+        import 'package:freezed_annotation/freezed_annotation.dart';
+
+        part 'my_model.freezed.dart';
+        part 'my_model.g.dart';
+
         @freezed
         abstract class MyModel with _$MyModel {
           const MyModel._();
