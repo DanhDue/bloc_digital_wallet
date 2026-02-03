@@ -44,8 +44,10 @@ abstract class {{feature_name.pascalCase()}}Entity with _${{feature_name.pascalC
   const {{feature_name.pascalCase()}}Entity._();
 
   const factory {{feature_name.pascalCase()}}Entity({
-    // TODO: Add entity properties
-    // @Default('') String id,
-    // @Default('') String name,
+    // TODO: Replace this placeholder with actual entity properties
+    // Example:
+    // required String id,
+    // required String name,
+    @Default('') String id,
   }) = _{{feature_name.pascalCase()}}Entity;
 }

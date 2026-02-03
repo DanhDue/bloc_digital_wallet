@@ -47,9 +47,13 @@ part '{{feature_name.snakeCase()}}_model.g.dart';
 abstract class {{feature_name.pascalCase()}}Model with _${{feature_name.pascalCase()}}Model {
   const {{feature_name.pascalCase()}}Model._();
 
+  @JsonSerializable(includeIfNull: false)
   const factory {{feature_name.pascalCase()}}Model({
-    // TODO: Add model properties with @JsonKey annotations
+    // TODO: Replace this placeholder with actual model properties
+    // Example:
     // @JsonKey(name: 'id') String? id,
+    // @JsonKey(name: 'name') String? name,
+    @Default('') @JsonKey(name: 'id') String id,
   }) = _{{feature_name.pascalCase()}}Model;
 
   factory {{feature_name.pascalCase()}}Model.fromJson(Map<String, dynamic> json) =>
@@ -57,8 +61,8 @@ abstract class {{feature_name.pascalCase()}}Model with _${{feature_name.pascalCa
 
   /// Convert to domain entity
   {{feature_name.pascalCase()}}Entity toEntity() {
-    return const {{feature_name.pascalCase()}}Entity(
-      // id: id ?? '',
+    return {{feature_name.pascalCase()}}Entity(
+      id: id,
     );
   }
 }
