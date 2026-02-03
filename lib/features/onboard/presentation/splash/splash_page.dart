@@ -4,7 +4,6 @@
 
 import 'package:animated_visibility/animated_visibility.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
 import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
 import 'package:bloc_digital_wallet/core/widgets/blink_text.dart';
@@ -127,7 +126,7 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
   void handleEvent(BuildContext context, SplashEvent event) {
     switch (event) {
       case NavigateToNextEvent():
-        context.router.replace(const HomeRoute());
+        // context.router.replace(const HomeRoute());
         break;
       case ShowErrorMessageEvent(:final message):
         ScaffoldMessenger.of(context).showSnackBar(

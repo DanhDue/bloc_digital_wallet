@@ -2,13 +2,12 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/app_router.dart';
+import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
+import 'package:bloc_digital_wallet/core/widgets/comming_soon_modal_view.dart';
 import 'package:bloc_digital_wallet/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
-import 'package:bloc_digital_wallet/app_router.dart';
-
-import 'package:bloc_digital_wallet/core/widgets/comming_soon_modal_view.dart';
 
 extension DialogExtensions on BuildContext {
   Future showWrapBottomSheet(Widget widget, {RouteSettings? routeSettings}) async {
@@ -34,7 +33,7 @@ extension DialogExtensions on BuildContext {
   void showCommingSoon() async {
     showWrapBottomSheet(
       const CommingSoonModalView(),
-      routeSettings: const RouteSettings(name: AppRoutes.dashboard),
+      routeSettings: const RouteSettings(name: AppRoutes.login),
     );
   }
 

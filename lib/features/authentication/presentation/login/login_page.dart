@@ -4,12 +4,11 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
+import 'package:bloc_digital_wallet/di/injection.dart';
 import 'package:bloc_digital_wallet/generated/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:bloc_digital_wallet/app_router.dart';
-import 'package:bloc_digital_wallet/di/injection.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/social_login_button.dart';
 import 'login_action.dart';
@@ -42,7 +41,8 @@ class _LoginPageState extends State<LoginPage> {
       switch (event) {
         case NavigateToHome():
           // Replace login screen with home (can't go back)
-          context.router.replaceAll([const HomeRoute()]);
+          // context.router.replaceAll([const HomeRoute()]);
+          break;
         case ShowLoginSuccessMessage():
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
         case ShowLoginErrorMessage():
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      context.router.push(const ForgotPasswordRoute());
+                      // context.router.push(const ForgotPasswordRoute());
                     },
                     child: Text(context.t.authForgotPassword),
                   ),
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(context.t.authDontHaveAccount, style: theme.bodyMedium),
                     TextButton(
                       onPressed: () {
-                        context.router.push(const RegisterRoute());
+                        // context.router.push(const RegisterRoute());
                       },
                       child: Text(context.t.authSignUp),
                     ),
