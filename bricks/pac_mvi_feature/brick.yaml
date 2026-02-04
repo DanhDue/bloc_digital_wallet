@@ -1,0 +1,11 @@
+name: pac_mvi_feature
+description: A new feature package generator using MVI + Clean Architecture.
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0-dev.26 <1.0.0"
+vars:
+  name:
+    type: string
+    description: The name of the feature package (e.g. authentication, wallet, profile).
+    prompt: What is the name of the feature package?
+

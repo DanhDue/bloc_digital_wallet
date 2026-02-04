@@ -15,12 +15,10 @@ export 'package:onboard/onboard_router.dart';
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends RootStackRouter {
   final _authRouter = auth.AuthenticationRouter();
-
   @override
   List<AutoRoute> get routes => [
     AutoRoute(initial: true, page: onboard.SplashRoute.page, path: AppRoutes.splash),
-    ..._authRouter.routes,
-  ];
+    ..._authRouter.routes,  ];
 }
 
 class AppRoutes {

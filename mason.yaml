@@ -11,3 +11,7 @@ bricks:
     path: bricks/sample
   remove_sample:
     path: bricks/remove_sample
+  pac_mvi_feature:
+    path: bricks/pac_mvi_feature
+  remove_pac_feature:
+    path: bricks/remove_pac_feature

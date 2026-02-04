@@ -14,7 +14,7 @@ dependencies:
   core:
     path: ../core
   # Framework-specific dependencies
-  bloc_concurrency: ^0.3.0
+  bloc_concurrency: ^0.2.0
   modal_bottom_sheet: ^3.0.0
   flutter_hooks: ^0.21.3+1
 

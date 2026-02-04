@@ -17,7 +17,6 @@ final List<Widget Function({required Widget child})> appTranslationProviders = [
   // Features
   ({required child}) => auth.TranslationProvider(child: child),
   ({required child}) => onboard.TranslationProvider(child: child),
-
   // App Main
   ({required child}) => TranslationProvider(child: child),
 ];
