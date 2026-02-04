@@ -10,5 +10,14 @@ part '{{name.snakeCase()}}_router.gr.dart';
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class {{name.pascalCase()}}Router extends RootStackRouter {
   @override
-  List<AutoRoute> get routes => [AutoRoute(page: {{name.pascalCase()}}Route.page, path: '/{{name.snakeCase()}}')];
+  List<AutoRoute> get routes => [
+    AutoRoute(
+      page: {{name.pascalCase()}}Route.page,
+      path: {{name.pascalCase()}}Routes.{{name.camelCase()}},
+    ),
+  ];
+}
+
+class {{name.pascalCase()}}Routes {
+  static const String {{name.camelCase()}} = '/{{name.snakeCase()}}';
 }

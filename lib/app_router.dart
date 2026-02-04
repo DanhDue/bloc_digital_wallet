@@ -4,8 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:authentication/authentication.dart' as auth;
 import 'package:onboard/onboard.dart' as onboard;
 
-import 'app_router.gr.dart';
-
 export 'app_router.gr.dart';
 // Export only the router from authentication package to expose LoginRoute
 // without causing translation class conflicts.
@@ -18,7 +16,8 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     AutoRoute(initial: true, page: onboard.SplashRoute.page, path: AppRoutes.splash),
-    ..._authRouter.routes,  ];
+    ..._authRouter.routes,
+  ];
 }
 
 class AppRoutes {

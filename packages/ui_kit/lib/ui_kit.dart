@@ -2,8 +2,6 @@
 
 // coverage:ignore-file
 
-library ui_kit;
-
 export 'components/infinite_list/base_infinite_list_bloc.dart';
 export 'components/infinite_list/base_infinite_list_event.dart';
 export 'components/infinite_list/base_infinite_list_page.dart';

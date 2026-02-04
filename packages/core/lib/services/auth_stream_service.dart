@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:injectable/injectable.dart';
 
-@singleton
+@lazySingleton
 class AuthStreamService {
   final _controller = StreamController<void>.broadcast();
 

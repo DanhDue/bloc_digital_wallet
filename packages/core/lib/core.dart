@@ -2,8 +2,6 @@
 
 // coverage:ignore-file
 
-library core;
-
 // Re-export shared packages for transitive dependencies
 export 'package:bloc/bloc.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';

@@ -6,10 +6,7 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:get_it/get_it.dart';
 
 /// Mixin for safe API calls with proper error handling.
 /// Following SRP: each error type has its own handler function.

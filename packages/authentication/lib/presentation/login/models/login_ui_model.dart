@@ -2,12 +2,7 @@
 
 // coverage:ignore-file
 
-/// ============================================================================
-/// Login UI Model
-/// ============================================================================
-/// Presentation-layer model for the Login subfeature.
 /// Contains UI-specific state that may differ from domain entities.
-/// ============================================================================
 
 class LoginUiModel {
   final String email;

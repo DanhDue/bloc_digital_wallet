@@ -2,8 +2,6 @@
 
 // coverage:ignore-file
 
-library network;
-
 export 'app_uri.dart';
 export 'base_response_object.dart';
 export 'dio_factory.dart';

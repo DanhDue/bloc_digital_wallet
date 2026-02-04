@@ -8,7 +8,6 @@ import 'package:injectable/injectable.dart';
 import 'package:network/di/network_module.config.dart';
 import 'package:network/ssl/ssl.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:dio/dio.dart';
 
 /// Network package DI module providing core network dependencies.
 @InjectableInit(initializerName: r'$initModuleGetIt')

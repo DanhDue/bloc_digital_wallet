@@ -1,0 +1,14 @@
+name: remove_pac_subfeature
+description: Remove a subfeature from a package following Clean Architecture + MVI.
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0"
+vars:
+  package_name:
+    type: string
+    description: The name of the package (e.g., promo)
+    prompt: What is the package name?
+  subfeature_name:
+    type: string
+    description: The name of the subfeature to remove (e.g., detail)
+    prompt: What is the subfeature name to remove?

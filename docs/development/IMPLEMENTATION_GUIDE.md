@@ -523,8 +523,14 @@ flutter analyze --no-fatal-infos  # Must be 0 issues
 
 ### 1.1 Generate the feature using Mason
 
+**Option A: Monolith Module (Legacy)**
 ```bash
 mason make mvi_feature --feature_name transaction
+```
+
+**Option B: Package Module (Recommended for Modularization)**
+```bash
+mason make pac_mvi_feature --name transaction
 ```
 
 > **Note:** The copyright year in generated files is automatically set to the current year via a pre-generation hook. You can also manually specify the year with `--year 2025` if needed.

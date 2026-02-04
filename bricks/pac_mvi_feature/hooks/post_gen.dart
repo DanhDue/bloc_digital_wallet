@@ -14,19 +14,83 @@ Future<void> run(HookContext context) async {
   final progress = context.logger.progress('Integrating package $name...');
 
   try {
-    // 1. Update lib/di/injection.dart
+    // 1. Update root pubspec.yaml
+    await _updateRootPubspec(snakeCaseName);
+
+    // 2. Update lib/di/injection.dart
     await _updateInjection(snakeCaseName, camelCaseName);
 
-    // 2. Update lib/core/localization/app_translation_providers.dart
+    // 3. Update lib/core/localization/app_translation_providers.dart
     await _updateTranslationProviders(snakeCaseName, camelCaseName);
 
-    // 3. Update lib/app_router.dart
+    // 4. Update lib/app_router.dart
     await _updateAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
+
+    // 5. Run Melos commands
+    progress.update('Running melos bootstrap...');
+    await _runCommand('melos', ['bootstrap'], context.logger);
+
+    progress.update('Waiting for bootstrap to cool down...');
+    await Future.delayed(const Duration(seconds: 10));
+
+    progress.update('Running melos genAlls...');
+    await _runCommand('melos', ['genAlls'], context.logger);
 
     progress.complete('Package $name integrated successfully!');
   } catch (e) {
     progress.fail('Failed to integrate package $name: $e');
   }
+}
+
+Future<void> _updateRootPubspec(String snakeName) async {
+  final file = File('pubspec.yaml');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+
+  // Add to workspace
+  if (!content.contains("packages/$snakeName")) {
+    final workspaceMarker = "workspace:";
+    if (content.contains(workspaceMarker)) {
+      // Find the end of the workspace list or just append to the last item found
+      final workspaceRegex = RegExp(r'workspace:\s*\n(\s+- .*\n)+');
+      final match = workspaceRegex.firstMatch(content);
+
+      if (match != null) {
+        final currentWorkspaceBlock = match.group(0)!;
+        // Check if there is a newline at the end
+        final newWorkspaceBlock = currentWorkspaceBlock.endsWith('\n')
+            ? "${currentWorkspaceBlock}  - packages/$snakeName\n"
+            : "$currentWorkspaceBlock\n  - packages/$snakeName\n";
+
+        content = content.replaceFirst(currentWorkspaceBlock, newWorkspaceBlock);
+      }
+    }
+  }
+
+  // Add to dependencies
+  if (!content.contains("$snakeName:")) {
+    final dependenciesMarker = "dependencies:";
+    if (content.contains(dependenciesMarker)) {
+      // We want to add it nicely formatted.
+      // Finding a good insertion point: maybe after onboard or just after dependencies:
+      final onboardMarker = "path: packages/onboard";
+      if (content.contains(onboardMarker)) {
+        content = content.replaceFirst(
+          onboardMarker,
+          "$onboardMarker\n  $snakeName:\n    path: packages/$snakeName",
+        );
+      } else {
+        // Fallback: append to dependencies start
+        content = content.replaceFirst(
+          dependenciesMarker,
+          "$dependenciesMarker\n  $snakeName:\n    path: packages/$snakeName",
+        );
+      }
+    }
+  }
+
+  await file.writeAsString(content);
 }
 
 Future<void> _updateInjection(String snakeName, String camelName) async {
@@ -119,27 +183,43 @@ Future<void> _updateAppRouter(String snakeName, String pascalName, String camelN
 
   // Add router instance
   if (!content.contains("final _${camelName}Router")) {
-    final instanceMarker =
-        "final _authRouter = auth.AuthenticationRouter();"; // Assuming this exists based on step 8
-    // But step 8 showed: `final _authRouter = auth.AuthenticationRouter();`
-    // Wait, checking Step 8 output again.
-    // 17:   final _authRouter = auth.AuthenticationRouter();
+    final instanceMarker = "final _authRouter = auth.AuthenticationRouter();";
+    // Note: In previous step logic, it seemed to rely on _authRouter existing.
+    // Since we are fixing the logic, we should try to be consistent with what exists.
+    // However, if the user mentioned _authRouter in original code, we keep it.
 
-    content = content.replaceFirst(
-      instanceMarker,
-      "$instanceMarker\n  final _${camelName}Router = $camelName.${pascalName}Router();",
-    );
+    // Improving the logic to find ANY router definition if auth router is missing, but sticking to existing pattern first.
+    if (content.contains(instanceMarker)) {
+      content = content.replaceFirst(
+        instanceMarker,
+        "$instanceMarker\n  final _${camelName}Router = $camelName.${pascalName}Router();",
+      );
+    }
   }
 
   // Add routes
   if (!content.contains("..._${camelName}Router.routes")) {
-    // Step 8 showed: `    ..._authRouter.routes,`
     final routesMarker = "..._authRouter.routes,";
-    content = content.replaceFirst(
-      routesMarker,
-      "$routesMarker\n    ..._${camelName}Router.routes,",
-    );
+    if (content.contains(routesMarker)) {
+      content = content.replaceFirst(
+        routesMarker,
+        "$routesMarker\n    ..._${camelName}Router.routes,",
+      );
+    }
   }
 
   await file.writeAsString(content);
+}
+
+Future<void> _runCommand(String command, List<String> args, Logger logger) async {
+  final result = await Process.run(command, args, runInShell: true);
+
+  if (result.exitCode != 0) {
+    logger.err('Command failed: $command ${args.join(' ')}');
+    logger.err(result.stdout.toString());
+    logger.err(result.stderr.toString());
+    throw Exception('Command failed with exit code ${result.exitCode}');
+  } else {
+    logger.detail(result.stdout.toString());
+  }
 }

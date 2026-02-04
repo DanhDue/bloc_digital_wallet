@@ -45,15 +45,24 @@ Future<void> run(HookContext context) async {
     // 6. Update pubspec.yaml workspace - remove package from workspace list
     await _cleanPubspecWorkspace(snakeCaseName);
 
+    // Auto-remove from dependencies if present
+    await _cleanPubspecDependencies(snakeCaseName);
+
     // 7. Delete the package directory
     await packageDir.delete(recursive: true);
     context.logger.info('Deleted packages/$snakeCaseName');
 
-    progress.complete('Package $name removed successfully!');
+    // 8. Run Melos commands
+    progress.update('Running melos bootstrap...');
+    await _runCommand('melos', ['bootstrap'], context.logger);
 
-    context.logger.info('\nRemember to run:');
-    context.logger.info('  melos bootstrap');
-    context.logger.info('  melos genAlls');
+    progress.update('Waiting for bootstrap to cool down...');
+    await Future.delayed(const Duration(seconds: 10));
+
+    progress.update('Running melos genAlls...');
+    await _runCommand('melos', ['genAlls'], context.logger);
+
+    progress.complete('Package $name removed successfully!');
   } catch (e) {
     progress.fail('Failed to remove package $name: $e');
   }
@@ -65,13 +74,17 @@ Future<void> _cleanInjection(String snakeName, String camelName) async {
 
   var content = await file.readAsString();
 
-  // Remove import line
-  final importPattern = RegExp("import 'package:$snakeName/$snakeName.dart' as $camelName;\\n?");
-  content = content.replaceAll(importPattern, '');
+  // Remove import line: import 'package:promo/promo.dart' as promo;
+  content = content.replaceAll(
+    RegExp('^import \'package:$snakeName/$snakeName.dart\'.*\\n', multiLine: true),
+    '',
+  );
 
-  // Remove configuration line
-  final configPattern = RegExp("\\s*$camelName\\.configureModuleDependencies\\(getIt\\);\\n?");
-  content = content.replaceAll(configPattern, '');
+  // Remove configuration line: promo.configureModuleDependencies(getIt);
+  content = content.replaceAll(
+    RegExp('^\\s*$camelName\\.configureModuleDependencies\\(getIt\\);.*\\n', multiLine: true),
+    '',
+  );
 
   await file.writeAsString(content);
 }
@@ -83,14 +96,19 @@ Future<void> _cleanTranslationProviders(String snakeName, String camelName) asyn
   var content = await file.readAsString();
 
   // Remove import line
-  final importPattern = RegExp("import 'package:$snakeName/$snakeName.dart' as $camelName;\\n?");
-  content = content.replaceAll(importPattern, '');
-
-  // Remove provider line
-  final providerPattern = RegExp(
-    "\\s*\\(\\{required child\\}\\) => $camelName\\.TranslationProvider\\(child: child\\),\\n?",
+  content = content.replaceAll(
+    RegExp('^import \'package:$snakeName/$snakeName.dart\'.*\\n', multiLine: true),
+    '',
   );
-  content = content.replaceAll(providerPattern, '');
+
+  // Remove provider line: ({required child}) => promo.TranslationProvider(child: child),
+  content = content.replaceAll(
+    RegExp(
+      '^\\s*\\(\\{required child\\}\\) => $camelName\\.TranslationProvider.*\\n',
+      multiLine: true,
+    ),
+    '',
+  );
 
   await file.writeAsString(content);
 }
@@ -102,22 +120,31 @@ Future<void> _cleanAppRouter(String snakeName, String pascalName, String camelNa
   var content = await file.readAsString();
 
   // Remove import line
-  final importPattern = RegExp("import 'package:$snakeName/$snakeName.dart' as $camelName;\\n?");
-  content = content.replaceAll(importPattern, '');
+  content = content.replaceAll(
+    RegExp('^import \'package:$snakeName/$snakeName.dart\'.*\\n', multiLine: true),
+    '',
+  );
 
   // Remove export line
-  final exportPattern = RegExp("export 'package:$snakeName/${snakeName}_router.dart';\\n?");
-  content = content.replaceAll(exportPattern, '');
+  content = content.replaceAll(
+    RegExp('^export \'package:$snakeName/${snakeName}_router.dart\'.*\\n', multiLine: true),
+    '',
+  );
 
   // Remove router instance line
-  final instancePattern = RegExp(
-    "\\s*final _${camelName}Router = $camelName\\.${pascalName}Router\\(\\);\\n?",
+  content = content.replaceAll(
+    RegExp(
+      '^\\s*final _${camelName}Router = $camelName\\.${pascalName}Router\\(\\);.*\\n',
+      multiLine: true,
+    ),
+    '',
   );
-  content = content.replaceAll(instancePattern, '');
 
   // Remove routes spread line
-  final routesPattern = RegExp("\\s*\\.\\.\\._${camelName}Router\\.routes,\\n?");
-  content = content.replaceAll(routesPattern, '');
+  content = content.replaceAll(
+    RegExp('^\\s*\\.\\.\\._${camelName}Router\\.routes,.*\\n', multiLine: true),
+    '',
+  );
 
   await file.writeAsString(content);
 }
@@ -128,9 +155,47 @@ Future<void> _cleanPubspecWorkspace(String snakeName) async {
 
   var content = await file.readAsString();
 
-  // Remove workspace entry line
-  final workspacePattern = RegExp("\\s*- packages/$snakeName\\n?");
-  content = content.replaceAll(workspacePattern, '\n');
+  // Remove workspace entry line: - packages/promo
+  content = content.replaceAll(RegExp('^\\s*- packages/$snakeName\\s*\\n', multiLine: true), '');
 
   await file.writeAsString(content);
+}
+
+Future<void> _cleanPubspecDependencies(String snakeName) async {
+  final file = File('pubspec.yaml');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+
+  // Remove dependency block:
+  //   promo:
+  //     path: packages/promo
+
+  // Match the key line "  promo:"
+  // and the following path line "    path: packages/promo"
+  // ensuring we handle indentation and newlines strictly.
+  final dependencyPattern = RegExp(
+    '^\\s*$snakeName:\\s*\\n\\s*path: packages/$snakeName\\s*\\n',
+    multiLine: true,
+  );
+  content = content.replaceAll(dependencyPattern, '');
+
+  // NOTE: If there was a blank line AFTER this block, it remains, preserving separation.
+  // If there was no blank line and we wanted one, this simple removal might not add it,
+  // but it won't eat the previous newline like \s* did.
+
+  await file.writeAsString(content);
+}
+
+Future<void> _runCommand(String command, List<String> args, Logger logger) async {
+  final result = await Process.run(command, args, runInShell: true);
+
+  if (result.exitCode != 0) {
+    logger.err('Command failed: $command ${args.join(' ')}');
+    logger.err(result.stdout.toString());
+    logger.err(result.stderr.toString());
+    throw Exception('Command failed with exit code ${result.exitCode}');
+  } else {
+    logger.detail(result.stdout.toString());
+  }
 }

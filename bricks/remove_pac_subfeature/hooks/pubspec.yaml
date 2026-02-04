@@ -1,0 +1,7 @@
+name: hooks
+description: Hooks for remove_pac_subfeature brick
+version: 0.1.0
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  mason: ^0.1.0-dev.59

@@ -14,5 +14,8 @@ void configureDependencies() {
   // configureDataDependencies imported from feature_module
   core.configureModuleDependencies(getIt);
   network.configureModuleDependencies(getIt);
-  onboard.configureModuleDependencies(getIt);  getIt.$initGetIt();
+  onboard.configureModuleDependencies(getIt);
+
+  // we need to call $initGetIt after all modules are configured
+  getIt.$initGetIt();
 }

@@ -10,6 +10,10 @@ This project leverages [Mason](https://pub.dev/packages/mason) to automate the c
 | `mason make mvi_subfeature` | Add a subfeature to a module (interactive prompts) |
 | `mason make remove_feature --feature_name <name>` | Remove a feature module |
 | `mason make remove_subfeature --module_name <mod> --subfeature_name <name>` | Remove a subfeature |
+| `mason make pac_mvi_feature --name <name>` | Create a new feature package |
+| `mason make pac_mvi_subfeature --package_name <pkg> --subfeature_name <name>` | Add subfeature to package |
+| `mason make remove_pac_feature --name <name>` | Remove a feature package |
+| `mason make remove_pac_subfeature` | Remove a subfeature from package |
 
 ### `mvi_subfeature` Variables
 
@@ -168,7 +172,43 @@ mason make remove_subfeature --module_name <parent> --subfeature_name <name>
 **What It Does:**
 - **Deletes** specific subfeature files (Page, Bloc, UseCase, etc.).
 - **Removes** routes and imports from `lib/app_router.dart`.
-- **Runs** `build_runner`.
+  - **Runs** `build_runner`.
+
+### 5. `pac_mvi_feature` - Create New Package Module
+Generates a standalone package for a feature (e.g., `packages/promo`).
+
+**Command:**
+```bash
+mason make pac_mvi_feature --name <feature_name>
+```
+
+**What It Does:**
+- Creates `packages/<name>/` structure.
+- Adds package to `pubspec.yaml` workspace.
+- **Automatically adds** route to `lib/app_router.dart`.
+- **Automatically runs** `melos genAlls`.
+
+### 6. `pac_mvi_subfeature` - Add Subfeature to Package
+Adds a subfeature (presentation + data/domain skeleton) to an existing package.
+
+**Command:**
+```bash
+mason make pac_mvi_subfeature --package_name <package> --subfeature_name <name>
+```
+
+**What It Does:**
+- Adds files to `packages/<package>/lib/presentation/<subfeature>/`.
+- Adds remote data source and repository implementation.
+- Updates package router and exports.
+
+### 7. `remove_pac_feature` & `remove_pac_subfeature`
+Cleanup commands for package-based features.
+
+**Commands:**
+```bash
+mason make remove_pac_feature --name <name>
+mason make remove_pac_subfeature --package_name <package> --subfeature_name <subfeature>
+```
 
 ---
 

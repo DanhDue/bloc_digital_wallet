@@ -7,7 +7,9 @@ import 'package:injectable/injectable.dart';
 import 'package:core/di/core_module.config.dart';
 
 @InjectableInit(initializerName: r'$initModuleGetIt')
-void configureModuleDependencies(GetIt getIt) => getIt.$initModuleGetIt();
+void configureModuleDependencies(GetIt getIt) {
+  getIt.$initModuleGetIt();
+}
 
 @module
 abstract class CoreRegisterModule {

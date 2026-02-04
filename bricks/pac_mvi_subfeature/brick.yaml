@@ -1,0 +1,14 @@
+name: pac_mvi_subfeature
+description: Creates a new subfeature (presentation layer) inside an existing pac_mvi_feature package.
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0-dev.26 <1.0.0"
+vars:
+  package_name:
+    type: string
+    description: The name of the existing package (e.g. promo_feature, wallet)
+    prompt: What is the package name?
+  subfeature_name:
+    type: string
+    description: The name of the subfeature (e.g. detail, edit, list)
+    prompt: What is the subfeature name?

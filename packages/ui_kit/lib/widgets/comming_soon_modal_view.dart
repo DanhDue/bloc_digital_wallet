@@ -2,7 +2,6 @@
 
 // coverage:ignore-file
 
-import 'package:auto_route/auto_route.dart';
 import 'package:ui_kit/theme/app_themes.dart';
 import 'package:ui_kit/widgets/custom_filled_button.dart';
 import 'package:framework/framework.dart';

@@ -1,0 +1,7 @@
+name: pac_mvi_subfeature_hooks
+description: Hooks for pac_mvi_subfeature brick
+version: 0.1.0
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  mason: ">=0.1.0-dev.26 <1.0.0"
