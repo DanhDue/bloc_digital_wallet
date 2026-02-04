@@ -1,15 +1,14 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:bloc_digital_wallet/core/services/auth_stream_service.dart';
+import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
-import 'package:bloc_digital_wallet/core/app_initializer/app_initializer.dart';
-import 'package:bloc_digital_wallet/core/app_initializer/app_initializer_impl.dart';
 import 'package:bloc_digital_wallet/app_router.dart';
 import 'package:bloc_digital_wallet/core/app_initializer/auth_navigation_initializer.dart';
 import 'package:bloc_digital_wallet/core/app_initializer/bloc_observer_initializer.dart';
 import 'package:bloc_digital_wallet/core/app_initializer/environment_initializer.dart';
 import 'package:bloc_digital_wallet/core/app_initializer/localization_initializer.dart';
 import 'package:bloc_digital_wallet/core/app_initializer/logging_initializer.dart';
+import 'package:get_it/get_it.dart';
 
 @module
 abstract class AppModule {
@@ -50,4 +49,7 @@ abstract class AppModule {
       authNavigationInitializer,
     ]);
   }
+
+  @injectable
+  TokenRefresher get tokenRefresher => GetIt.instance<TokenRefresher>();
 }

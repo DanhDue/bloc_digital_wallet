@@ -4,8 +4,7 @@
 
 import 'package:talker_flutter/talker_flutter.dart';
 import '../../di/injection.dart';
-import '../utils/log.dart';
-import 'app_initializer.dart';
+import 'package:core/core.dart';
 
 class LoggingInitializer implements AppInitializer {
   @override

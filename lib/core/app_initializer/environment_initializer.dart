@@ -2,8 +2,8 @@
 
 // coverage:ignore-file
 
-import '../../config/environment_config.dart';
-import 'app_initializer.dart';
+// coverage:ignore-file
+import 'package:core/core.dart';
 
 class EnvironmentInitializer implements AppInitializer {
   @override

@@ -22,6 +22,8 @@ analyzer:
     - ".dart_tool/**"
   errors:
     invalid_annotation_target: ignore
+    depend_on_referenced_packages: ignore
+    unnecessary_import: ignore
 
 linter:
   # The lint rules applied to this project can be customized in the

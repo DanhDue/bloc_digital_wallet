@@ -3,8 +3,7 @@
 // coverage:ignore-file
 
 import '../../app_router.dart';
-import '../services/auth_stream_service.dart';
-import 'app_initializer.dart';
+import 'package:core/core.dart';
 
 class AuthNavigationInitializer implements AppInitializer {
   final AuthStreamService _authService;

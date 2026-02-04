@@ -2,8 +2,8 @@
 
 // coverage:ignore-file
 
-import '../../generated/translations.dart';
-import 'app_initializer.dart';
+import 'package:bloc_digital_wallet/generated/translations.dart';
+import 'package:core/core.dart' hide LocaleSettings;
 
 class LocalizationInitializer implements AppInitializer {
   @override

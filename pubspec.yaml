@@ -5,128 +5,51 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.4
+  sdk: ^3.10.7
+
+workspace:
+  - packages/authentication
+  - packages/core
+  - packages/framework
+  - packages/native_security
+  - packages/network
+  - packages/onboard
+  - packages/ui_kit
 
 dependencies:
   flutter:
     sdk: flutter
-  
-  # UI & Icons
-  cupertino_icons: ^1.0.8
-  flutter_svg: ^2.2.3
-  lottie: ^3.1.4
-  
-  # Theme
-  theme_tailor_annotation: ^3.1.2
-  
-  # State Management (MVI Pattern)
-  flutter_bloc: ^9.1.1
-  bloc: ^9.2.0
-  bloc_concurrency: ^0.3.0
-  
-  # Dependency Injection
-  get_it: ^9.2.0
-  injectable: ^2.5.0
-  
-  # Networking
-  dio: ^5.9.0
-  retrofit: ^4.9.2
-  connectivity_plus: ^7.0.0
-  
-  # Data & Serialization
-  json_annotation: ^4.9.0
-  freezed_annotation: ^3.1.0
-  
-  # Functional Programming
-  dartz: ^0.10.1
-  stream_transform: ^2.1.1
-  
-  # Value Equality
-  equatable: ^2.0.8
-  crypto: ^3.0.3
-  
-  # Logging & Debugging
-  talker_flutter: ^5.1.9
-  talker_dio_logger: ^5.1.9
-  talker_bloc_logger: ^5.1.9
-  logger: ^2.5.0
-  
-  # Storage
-  shared_preferences: ^2.3.4
-  flutter_secure_storage: ^10.0.0
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  
-  # Authentication
-  google_sign_in: ^7.2.0
-  
-  # Localization
-  slang: ^4.0.0
-  slang_flutter: ^4.0.0
-  
-  # Utils
-  permission_handler: ^12.0.1
-  jiffy: ^6.4.4
-  rxdart: ^0.28.0
-  auto_route: ^11.1.0
-  intl: ^0.20.1
-
-  # Local Packages
   native_security:
     path: packages/native_security
-
-  # Smart Dialog
+  core:
+    path: packages/core
+  network:
+    path: packages/network
+  ui_kit:
+    path: packages/ui_kit
+  authentication:
+    path: packages/authentication
+  framework:
+    path: packages/framework
+  onboard:
+    path: packages/onboard
+  # Dialog Management
   flutter_smart_dialog: ^4.9.8+9
-
-  # Animation Packages
-  animated_visibility: ^0.0.4
-  animated_item: ^0.0.2
-  animated_text_kit: ^4.3.0
-  pretty_animated_text: ^2.0.0
-
-  # Modal Bottom Sheet
-  modal_bottom_sheet: ^3.0.0
-
-  # Avatars
-  flutter_boring_avatars: ^2.0.1
-
-  # Image
-  cached_network_image: ^3.4.1
-  pretty_qr_code: ^3.5.0
-  image_gallery_saver_plus: ^4.0.1
-  card_swiper: ^3.0.1
-
-  # Shimmer Effect
-  shimmer: ^3.0.0
-
+  # Logging
+  talker_flutter: ^5.1.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # Linting
   flutter_lints: ^6.0.0
-  
   # Workspace Management
   melos: ^7.3.0
-  
-  # Code Generation
-  freezed: ^3.2.4
-  json_serializable: ^6.11.3
-  theme_tailor: ^3.1.2
-  build_runner: ^2.10.4
-  flutter_gen_runner: ^5.12.0
-  injectable_generator: ^2.7.0
-  retrofit_generator: ^10.2.1
-  slang_build_runner: ^4.0.0
-  
-  # Testing
-  mocktail: ^1.0.4
-  
   # Code Templates
   mason: ^0.1.0-dev.59
+  build_runner: ^2.10.4
+  injectable_generator: ^2.6.1
   auto_route_generator: ^10.4.0
-
+  
 dartfmt: 
   line_length: 99
 
@@ -254,7 +177,7 @@ flutter_gen:
       class_name: AppColors
     inputs: 
       - assets/colors/colors.xml
-    enabled: true
+    enabled: false
   fonts: 
     outputs: 
       class_name: AppFontFamily
@@ -264,20 +187,22 @@ flutter_gen:
 
 flutter:
   uses-material-design: true
-  assets: 
+
+  assets:
     - assets/images/
     - assets/lotties/
     - assets/jsons/
-  fonts: 
+    - assets/colors/
+  fonts:
     - family: SfCompactRegular
-      fonts: 
+      fonts:
         - asset: assets/fonts/SF_Compact_Display_Regular.ttf
     - family: SfCompactMedium
-      fonts: 
+      fonts:
         - asset: assets/fonts/SF_Compact_Display_Medium.ttf
     - family: SfCompactSemiBold
-      fonts: 
+      fonts:
         - asset: assets/fonts/SF_Compact_Display_Semibold.ttf
     - family: SfCompactBold
-      fonts: 
+      fonts:
         - asset: assets/fonts/SF_Compact_Display_Bold.ttf

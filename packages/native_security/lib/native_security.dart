@@ -60,9 +60,10 @@ class NativeSecurity {
       }
 
       throw UnsupportedError(
-          'iOS FFI load failed. Please run "flutter pub get" and "cd ios && pod install".\n'
-          'Detailed errors:\n${errors.join("\n")}\n'
-          'If this persists, check if the plugin is correctly registered in Xcode.');
+        'iOS FFI load failed. Please run "flutter pub get" and "cd ios && pod install".\n'
+        'Detailed errors:\n${errors.join("\n")}\n'
+        'If this persists, check if the plugin is correctly registered in Xcode.',
+      );
     }
     throw UnsupportedError('Platform not supported for NativeSecurity');
   }
