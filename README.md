@@ -162,6 +162,10 @@ This project adopts a **Modular Architecture** where each feature and infrastruc
 3.  **Faster Builds**: Changes in one package don't force recompilation of unrelated packages (cached by Melos/BuildRunner).
 4.  **Reusability**: Packages like `ui_kit` or `network` can be reused across different apps or modules.
 
+This project adopts a **Modular Architecture** where each feature and infrastructure layer is separated into its own standalone package. This follows the official [Flutter Packages & Plugins][12] guidelines.
+
+> **Note:** If you prefer a monolithic (single-module) approach, check out the [`single-module` branch][13].
+
 #### Directory Structure
 
 ```packages
@@ -279,7 +283,6 @@ packages/
 ### 3. Development
 | Document | Description |
 |----------|-------------|
-| [Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md) | Step-by-step feature creation |
 | [Theme Tailor Guide](docs/development/THEME_TAILOR_GUIDE.md) | Theming system |
 | [Slang Localization](docs/development/SLANG_LOCALIZATION_GUIDE.md) | i18n setup |
 
@@ -374,6 +377,8 @@ packages/
 [9]: https://pub.dev/packages/mason
 [10]: https://pub.dev/packages/theme_tailor
 [11]: https://pub.dev/packages/slang
+[12]: https://docs.flutter.dev/packages-and-plugins/developing-packages
+[13]: https://github.com/DanhDue/bloc_digital_wallet/tree/single-module?tab=readme-ov-file#iii-feature-first-organization
 
 ---
 

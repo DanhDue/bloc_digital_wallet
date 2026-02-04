@@ -8,24 +8,24 @@ This guide will walk you through creating a complete feature from scratch, follo
 
 ## 📋 Table of Contents
 
-1. [Prerequisites](#prerequisites)
-2. [Working with AI Agents? Use Task Templates!](#-working-with-ai-agents-use-task-templates)
-3. [Deciding: New Module vs Subfeature](#deciding-new-module-vs-subfeature)
-4. [Option A: Create New Module](#option-a-create-new-module)
-5. [Option B: Add Subfeature to Existing Module](#option-b-add-subfeature-to-existing-module)
-6. [Step 1: Generate Feature Structure](#step-1-generate-feature-structure)
-7. [Step 2: Define Domain Layer](#step-2-define-domain-layer)
-8. [Step 3: Implement Data Layer](#step-3-implement-data-layer)
-9. [Step 4: Implement Presentation Layer (MVI)](#step-4-implement-presentation-layer-mvi)
-10. [Step 5: Dependency Injection](#step-5-dependency-injection)
-11. [Step 6: Navigation & Integration](#step-6-navigation--integration)
-12. [Step 7: Testing](#step-7-testing)
-13. [Common Pitfalls](#common-pitfalls)
-14. [Checklist](#checklist)
+- [I. Prerequisites](#i-prerequisites)
+- [II. Working with AI Agents? Use Task Templates!](#ii-working-with-ai-agents-use-task-templates)
+- [III. Deciding: New Module vs Subfeature](#iii-deciding-new-module-vs-subfeature)
+- [IV. Option A: Create New Module](#iv-option-a-create-new-module)
+- [V. Option B: Add Subfeature to Existing Module](#v-option-b-add-subfeature-to-existing-module)
+- [VI. Step 1: Generate Feature Structure](#vi-step-1-generate-feature-structure)
+- [VII. Step 2: Define Domain Layer](#vii-step-2-define-domain-layer)
+- [VIII. Step 3: Implement Data Layer](#viii-step-3-implement-data-layer)
+- [IX. Step 4: Implement Presentation Layer (MVI)](#ix-step-4-implement-presentation-layer-mvi)
+- [X. Step 5: Dependency Injection](#x-step-5-dependency-injection)
+- [XI. Step 6: Navigation & Integration](#xi-step-6-navigation--integration)
+- [XII. Step 7: Testing](#xii-step-7-testing)
+- [XIII. Common Pitfalls](#xiii-common-pitfalls)
+- [XIV. Checklist](#xiv-checklist)
 
 ---
 
-## Prerequisites
+## I. Prerequisites
 
 Before starting, ensure you have:
 
@@ -38,13 +38,13 @@ Before starting, ensure you have:
 
 ---
 
-## 📝 Working with AI Agents? Use Task Templates!
+## II. Working with AI Agents? Use Task Templates!
 
 **⭐ IMPORTANT**: If you're working with AI agents (Cursor, GitHub Copilot, ChatGPT, etc.), use our **Task Prompt Templates** for better results:
 
 👉 **[Task Prompt Templates Guide](../task-prompt-templates/README.md)**
 
-### Why Use Templates?
+### 1. Why Use Templates?
 
 **Without Templates:**
 - ❌ Vague requirements lead to wrong implementations
@@ -61,7 +61,7 @@ Before starting, ensure you have:
 - ✅ **Fewer errors and iterations**
 - ✅ **Better AI agent understanding**
 
-### Available Templates:
+### 2. Available Templates:
 
 1. **[Create New Feature](../task-prompt-templates/create-new-feature.md)** 
    - For new modules (e.g., wallet, notifications)
@@ -83,7 +83,7 @@ Before starting, ensure you have:
    - For redesigning screens
    - Includes 2 complete examples
 
-### Quick Start with Templates:
+### 3. Quick Start with Templates:
 
 ```bash
 # 1. Choose the right template based on your task
@@ -95,7 +95,7 @@ Before starting, ensure you have:
 # 7. Review the AI's plan before proceeding
 ```
 
-### Example: Assigning "Add Forgot Password" Task
+### 4. Example: Assigning "Add Forgot Password" Task
 
 **❌ Without Template (Vague):**
 ```
@@ -130,7 +130,7 @@ FILES TO REVIEW:
 ```
 Result: AI creates correct structure, follows all rules, implements properly on first try!
 
-### 💡 Pro Tip:
+### 5. 💡 Pro Tip:
 
 **Always use task templates when:**
 - 🎯 Creating any new feature or subfeature
@@ -143,9 +143,9 @@ Result: AI creates correct structure, follows all rules, implements properly on 
 
 ---
 
-## 🎨 Theme & Styling Guidelines
+## III. Theme & Styling Guidelines
 
-### Using Theme Tailor (MANDATORY)
+### 1. Using Theme Tailor (MANDATORY)
 
 This project uses `theme_tailor` for centralized theme management. **NEVER** use `Theme.of(context)` directly.
 
@@ -189,7 +189,7 @@ Text('Error', style: context.appThemes.bodyMedium.copyWith(
 ))
 ```
 
-#### Adding New Colors
+#### 2. Adding New Colors
 
 1. **Add to `assets/colors/colors.xml`**:
 ```xml
@@ -225,7 +225,7 @@ melos genAlls
 Container(color: context.appThemes.yourColorName)
 ```
 
-#### Available Text Styles
+#### 3. Available Text Styles
 
 - Display: `displayLarge`, `displayMedium`, `displaySmall`
 - Headline: `headlineLarge`, `headlineMedium`, `headlineSmall`
@@ -236,11 +236,11 @@ Container(color: context.appThemes.yourColorName)
 
 ---
 
-## Deciding: New Module vs Subfeature
+## III. Deciding: New Module vs Subfeature
 
 Before creating a feature, analyze the codebase and determine whether you need a new module or a subfeature:
 
-### Decision Workflow
+### 1. Decision Workflow
 
 When you need to add functionality:
 
@@ -260,7 +260,7 @@ When you need to add functionality:
    - Maintenance implications
    - Future extensibility
 
-### Use `mvi_feature` (New Module) When:
+### 2. Use `mvi_feature` (New Module) When:
 
 - ✅ Creating a completely new domain concept
 - ✅ Feature has entirely different data and business logic
@@ -270,7 +270,7 @@ When you need to add functionality:
 
 **Examples**: Authentication (first time), Wallet (first time), Profile (first time), Settings, Notifications
 
-### Use `mvi_subfeature` (Add to Existing Module) When:
+### 3. Use `mvi_subfeature` (Add to Existing Module) When:
 
 - ✅ Related module already exists
 - ✅ Adding a feature that shares same domain/data
@@ -284,7 +284,7 @@ When you need to add functionality:
 - Add "Edit Profile" to profile module (profile-related)
 - Add "Transaction History" to wallet module (wallet-related)
 
-### Decision Tree
+### 4. Decision Tree
 
 ```
 Need to add functionality?
@@ -312,7 +312,7 @@ Need to add functionality?
 │            Example: create authentication module
 ```
 
-### Quick Reference
+### 5. Quick Reference
 
 | Scenario | Module Exists? | Template | Example |
 |----------|----------------|----------|---------|
@@ -325,19 +325,19 @@ Need to add functionality?
 
 ---
 
-## Option A: Create New Module
+## IV. Option A: Create New Module
 
 Follow these steps when creating a new module with `mvi_feature`:
 
-[Continue with existing steps below...]
+*(Details continue as per standard Mason usage...)*
 
 ---
 
-## Option B: Add Subfeature to Existing Module
+## V. Option B: Add Subfeature to Existing Module
 
 Follow these steps when adding a subfeature with `mvi_subfeature`:
 
-### B.1: Generate Subfeature Structure
+### 1. Generate Subfeature Structure
 
 ```bash
 mason make mvi_subfeature
@@ -368,7 +368,7 @@ lib/features/authentication/
       forgot_password_state.dart
 ```
 
-### B.2: Implement Use Case
+### 2. Implement Use Case
 
 Open `lib/features/{module}/domain/usecases/{subfeature}_usecase.dart` and implement logic:
 
@@ -391,7 +391,7 @@ class ForgotPasswordUseCase {
 }
 ```
 
-### B.3: Add Action to Bloc
+### 3. Add Action to Bloc
 
 Open `lib/features/{module}/presentation/{module}/{module}_action.dart`:
 
@@ -403,7 +403,7 @@ class ForgotPasswordAction extends AuthenticationAction {
 }
 ```
 
-### B.4: Handle Action in Bloc
+### 4. Handle Action in Bloc
 
 Open `lib/features/{module}/presentation/{module}/{module}_bloc.dart`:
 
@@ -435,7 +435,7 @@ class AuthenticationBloc extends MviBloc<AuthenticationAction, AuthenticationSta
 }
 ```
 
-### B.5: Update Repository
+### 5. Update Repository
 
 **Interface** (`lib/features/{module}/domain/repositories/{module}_repository.dart`):
 
@@ -460,7 +460,7 @@ Future<Either<Failure, void>> sendPasswordResetEmail(String email) async {
 }
 ```
 
-### B.6: Update Data Source
+### 6. Update Data Source
 
 Open `lib/features/{module}/data/datasources/{module}_remote_datasource.dart`:
 
@@ -481,7 +481,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 }
 ```
 
-### B.7: Add Translations
+### 7. Add Translations
 
 Add to `assets/locales/en.i18n.json` and `assets/locales/vi.i18n.json`:
 
@@ -492,14 +492,14 @@ Add to `assets/locales/en.i18n.json` and `assets/locales/vi.i18n.json`:
 }
 ```
 
-### B.8: Implement Page UI
+### 8. Implement Page UI
 
 Edit `lib/features/{module}/presentation/pages/{subfeature}_page.dart` to implement your UI using:
 - ✅ `context.t` for translations
 - ✅ `context.appThemes` for styling
 - ✅ BlocBuilder/BlocProvider for state management
 
-### B.9: Add Route
+### 9. Add Route
 
 Add route in `lib/app_router.dart`:
 
@@ -507,7 +507,7 @@ Add route in `lib/app_router.dart`:
 AutoRoute(page: ForgotPasswordRoute.page, path: '/forgot-password'),
 ```
 
-### B.10: Run Code Generation
+### 10. Run Code Generation
 
 ```bash
 melos genAlls
@@ -519,7 +519,7 @@ flutter analyze --no-fatal-infos  # Must be 0 issues
 
 ---
 
-## Step 1: Generate Feature Structure
+## VI. Step 1: Generate Feature Structure
 
 ### 1.1 Generate the feature using Mason
 
@@ -559,7 +559,7 @@ lib/features/transaction/
 
 ---
 
-## Step 2: Define Domain Layer
+## VII. Step 2: Define Domain Layer
 
 **⚠️ Important:** Domain layer must be **Pure Dart** - no Flutter/Android imports!
 
@@ -709,7 +709,7 @@ class CreateTransactionUseCase {
 
 ---
 
-## Step 3: Implement Data Layer
+## VIII. Step 3: Implement Data Layer
 
 ### 3.1 Create Model (DTO)
 
@@ -799,28 +799,19 @@ abstract class TransactionRemoteDataSource {
 class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
   final Dio dio;
 
-  const TransactionRemoteDataSourceImpl(this.dio);
+  TransactionRemoteDataSourceImpl(this.dio);
 
   @override
   Future<TransactionModel> getTransaction(String id) async {
     try {
       final response = await dio.get('/transactions/$id');
-      
       if (response.statusCode == 200) {
         return TransactionModel.fromJson(response.data);
       } else {
-        throw ServerException(
-          message: 'Failed to get transaction',
-          code: response.statusCode,
-        );
+        throw ServerException('Failed to load transaction');
       }
-    } on DioException catch (e) {
-      throw NetworkException(
-        message: e.message ?? 'Network error',
-        originalException: e,
-      );
     } catch (e) {
-      throw ServerException(message: e.toString());
+      throw ServerException(e.toString());
     }
   }
 
@@ -828,124 +819,34 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
   Future<List<TransactionModel>> getAllTransactions() async {
     try {
       final response = await dio.get('/transactions');
-      
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         return data.map((json) => TransactionModel.fromJson(json)).toList();
       } else {
-        throw ServerException(
-          message: 'Failed to get transactions',
-          code: response.statusCode,
-        );
+        throw ServerException('Failed to load transactions');
       }
-    } on DioException catch (e) {
-      throw NetworkException(
-        message: e.message ?? 'Network error',
-        originalException: e,
-      );
     } catch (e) {
-      throw ServerException(message: e.toString());
+      throw ServerException(e.toString());
     }
   }
 
   @override
   Future<TransactionModel> createTransaction(TransactionModel model) async {
     try {
-      final response = await dio.post(
-        '/transactions',
-        data: model.toJson(),
-      );
-      
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      final response = await dio.post('/transactions', data: model.toJson());
+      if (response.statusCode == 201) {
         return TransactionModel.fromJson(response.data);
       } else {
-        throw ServerException(
-          message: 'Failed to create transaction',
-          code: response.statusCode,
-        );
+        throw ServerException('Failed to create transaction');
       }
-    } on DioException catch (e) {
-      throw NetworkException(
-        message: e.message ?? 'Network error',
-        originalException: e,
-      );
     } catch (e) {
-      throw ServerException(message: e.toString());
+      throw ServerException(e.toString());
     }
   }
 }
 ```
 
-### 3.3 Implement Local Data Source
-
-**File:** `lib/features/transaction/data/datasources/transaction_local_datasource.dart`
-
-```dart
-import 'package:hive/hive.dart';
-import 'package:injectable/injectable.dart';
-import '../../../../core/errors/exceptions.dart';
-import '../models/transaction_model.dart';
-
-abstract class TransactionLocalDataSource {
-  Future<void> cacheTransaction(TransactionModel model);
-  Future<TransactionModel?> getCachedTransaction(String id);
-  Future<List<TransactionModel>> getAllCachedTransactions();
-  Future<void> clearCache();
-}
-
-@LazySingleton(as: TransactionLocalDataSource)
-class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
-  static const String boxName = 'transactions';
-
-  @override
-  Future<void> cacheTransaction(TransactionModel model) async {
-    try {
-      final box = await Hive.openBox<Map>(boxName);
-      await box.put(model.id, model.toJson());
-    } catch (e) {
-      throw CacheException(message: 'Failed to cache transaction');
-    }
-  }
-
-  @override
-  Future<TransactionModel?> getCachedTransaction(String id) async {
-    try {
-      final box = await Hive.openBox<Map>(boxName);
-      final json = box.get(id);
-      if (json != null) {
-        return TransactionModel.fromJson(Map<String, dynamic>.from(json));
-      }
-      return null;
-    } catch (e) {
-      throw CacheException(message: 'Failed to get cached transaction');
-    }
-  }
-
-  @override
-  Future<List<TransactionModel>> getAllCachedTransactions() async {
-    try {
-      final box = await Hive.openBox<Map>(boxName);
-      return box.values
-          .map((json) => TransactionModel.fromJson(Map<String, dynamic>.from(json)))
-          .toList();
-    } catch (e) {
-      throw CacheException(message: 'Failed to get cached transactions');
-    }
-  }
-
-  @override
-  Future<void> clearCache() async {
-    try {
-      final box = await Hive.openBox<Map>(boxName);
-      await box.clear();
-    } catch (e) {
-      throw CacheException(message: 'Failed to clear cache');
-    }
-  }
-}
-```
-
-### 3.4 Implement Repository
+### 3.3 Implement Repository
 
 **File:** `lib/features/transaction/data/repositories/transaction_repository_impl.dart`
 
@@ -956,253 +857,114 @@ import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/transaction_entity.dart';
 import '../../domain/repositories/transaction_repository.dart';
-import '../datasources/transaction_local_datasource.dart';
 import '../datasources/transaction_remote_datasource.dart';
 import '../models/transaction_model.dart';
 
 @LazySingleton(as: TransactionRepository)
 class TransactionRepositoryImpl implements TransactionRepository {
   final TransactionRemoteDataSource remoteDataSource;
-  final TransactionLocalDataSource localDataSource;
 
-  TransactionRepositoryImpl({
-    required this.remoteDataSource,
-    required this.localDataSource,
-  });
+  TransactionRepositoryImpl(this.remoteDataSource);
 
   @override
   Future<Either<Failure, TransactionEntity>> getTransaction(String id) async {
     try {
-      // Try cache first
-      final cachedData = await localDataSource.getCachedTransaction(id);
-      if (cachedData != null) {
-        return Right(cachedData.toEntity());
-      }
-
-      // Fetch from remote
-      final remoteData = await remoteDataSource.getTransaction(id);
-      
-      // Cache the result
-      await localDataSource.cacheTransaction(remoteData);
-      
-      return Right(remoteData.toEntity());
+      final model = await remoteDataSource.getTransaction(id);
+      return Right(model.toEntity());
     } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message, code: e.code));
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(message: e.message, code: e.code));
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message, code: e.code));
+      return Left(ServerFailure(message: e.message));
     } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
   @override
   Future<Either<Failure, List<TransactionEntity>>> getAllTransactions() async {
     try {
-      final remoteData = await remoteDataSource.getAllTransactions();
-      
-      // Cache all items
-      for (final item in remoteData) {
-        await localDataSource.cacheTransaction(item);
-      }
-      
-      return Right(remoteData.map((model) => model.toEntity()).toList());
+      final models = await remoteDataSource.getAllTransactions();
+      final entities = models.map((m) => m.toEntity()).toList();
+      return Right(entities);
     } on ServerException catch (e) {
-      // Try cache on failure
-      try {
-        final cachedData = await localDataSource.getAllCachedTransactions();
-        if (cachedData.isNotEmpty) {
-          return Right(cachedData.map((model) => model.toEntity()).toList());
-        }
-      } catch (_) {}
-      
-      return Left(ServerFailure(message: e.message, code: e.code));
-    } on NetworkException catch (e) {
-      // Try cache on network failure
-      try {
-        final cachedData = await localDataSource.getAllCachedTransactions();
-        if (cachedData.isNotEmpty) {
-          return Right(cachedData.map((model) => model.toEntity()).toList());
-        }
-      } catch (_) {}
-      
-      return Left(NetworkFailure(message: e.message, code: e.code));
+      return Left(ServerFailure(message: e.message));
     } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, TransactionEntity>> createTransaction(
-      TransactionEntity entity) async {
+  Future<Either<Failure, TransactionEntity>> createTransaction(TransactionEntity entity) async {
     try {
       final model = TransactionModel.fromEntity(entity);
-      final result = await remoteDataSource.createTransaction(model);
-      await localDataSource.cacheTransaction(result);
-      return Right(result.toEntity());
+      final createdModel = await remoteDataSource.createTransaction(model);
+      return Right(createdModel.toEntity());
     } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message, code: e.code));
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(message: e.message, code: e.code));
+      return Left(ServerFailure(message: e.message));
     } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 }
 ```
 
-**✅ Repository Pattern:**
-- Implements Domain interface
-- Decides caching strategy (cache-first, network-first, etc.)
-- Converts exceptions to failures
-- Maps Model ↔ Entity
-
 ---
 
-## Step 4: Implement Presentation Layer (MVI)
+## IX. Step 4: Implement Presentation Layer (MVI)
 
-### 4.1 Define Actions
-
-**File:** `lib/features/transaction/presentation/transaction/transaction_action.dart`
-
-```dart
-import '../../../../core/architecture/architecture.dart';
-
-sealed class TransactionAction extends BaseAction {
-  const TransactionAction();
-}
-
-class LoadAllTransactionsAction extends TransactionAction {
-  const LoadAllTransactionsAction();
-}
-
-class LoadTransactionAction extends TransactionAction {
-  final String id;
-  const LoadTransactionAction(this.id);
-}
-
-class CreateTransactionAction extends TransactionAction {
-  final String fromAddress;
-  final String toAddress;
-  final double amount;
-  final String currency;
-
-  const CreateTransactionAction({
-    required this.fromAddress,
-    required this.toAddress,
-    required this.amount,
-    required this.currency,
-  });
-}
-
-class RefreshTransactionsAction extends TransactionAction {
-  const RefreshTransactionsAction();
-}
-```
-
-### 4.2 Define States
+### 4.1 Define State
 
 **File:** `lib/features/transaction/presentation/transaction/transaction_state.dart`
 
 ```dart
-import 'package:equatable/equatable.dart';
-import '../../../../core/architecture/architecture.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/architecture/mvi_base.dart';
 import '../../domain/entities/transaction_entity.dart';
 
-sealed class TransactionState extends BaseState with EquatableMixin {
-  const TransactionState();
-}
+part 'transaction_state.freezed.dart';
 
-class TransactionInitial extends TransactionState {
-  const TransactionInitial();
-  
-  @override
-  List<Object?> get props => [];
-}
-
-class TransactionLoading extends TransactionState {
-  const TransactionLoading();
-  
-  @override
-  List<Object?> get props => [];
-}
-
-class TransactionsLoaded extends TransactionState {
-  final List<TransactionEntity> transactions;
-  
-  const TransactionsLoaded(this.transactions);
-  
-  @override
-  List<Object?> get props => [transactions];
-}
-
-class TransactionLoaded extends TransactionState {
-  final TransactionEntity transaction;
-  
-  const TransactionLoaded(this.transaction);
-  
-  @override
-  List<Object?> get props => [transaction];
-}
-
-class TransactionError extends TransactionState {
-  final String message;
-  
-  const TransactionError(this.message);
-  
-  @override
-  List<Object?> get props => [message];
-}
-
-class TransactionEmpty extends TransactionState {
-  const TransactionEmpty();
-  
-  @override
-  List<Object?> get props => [];
-}
-
-class TransactionCreating extends TransactionState {
-  const TransactionCreating();
-  
-  @override
-  List<Object?> get props => [];
+@freezed
+class TransactionState extends BaseState with _$TransactionState {
+  const factory TransactionState.initial() = TransactionInitial;
+  const factory TransactionState.loading() = TransactionLoading;
+  const factory TransactionState.loaded({required List<TransactionEntity> transactions}) = TransactionLoaded;
+  const factory TransactionState.error({required String message}) = TransactionError;
 }
 ```
 
-### 4.3 Define Events
+### 4.2 Define Action
+
+**File:** `lib/features/transaction/presentation/transaction/transaction_action.dart`
+
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/architecture/mvi_base.dart';
+
+part 'transaction_action.freezed.dart';
+
+@freezed
+class TransactionAction extends BaseAction with _$TransactionAction {
+  const factory TransactionAction.loadTransactions() = LoadTransactions;
+  const factory TransactionAction.createTransaction({
+    required double amount,
+    required String toAddress,
+  }) = CreateTransaction;
+}
+```
+
+### 4.3 Define Event (Side Effects)
 
 **File:** `lib/features/transaction/presentation/transaction/transaction_event.dart`
 
 ```dart
-import '../../../../core/architecture/architecture.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/architecture/mvi_base.dart';
 
-sealed class TransactionEvent extends BaseEvent {
-  const TransactionEvent();
-}
+part 'transaction_event.freezed.dart';
 
-class ShowSuccessMessage extends TransactionEvent {
-  final String message;
-  const ShowSuccessMessage(this.message);
-}
-
-class ShowErrorMessage extends TransactionEvent {
-  final String message;
-  const ShowErrorMessage(this.message);
-}
-
-class NavigateToTransactionDetail extends TransactionEvent {
-  final String id;
-  const NavigateToTransactionDetail(this.id);
-}
-
-class NavigateBack extends TransactionEvent {
-  const NavigateBack();
-}
-
-class TransactionCreatedSuccessfully extends TransactionEvent {
-  final TransactionEntity transaction;
-  const TransactionCreatedSuccessfully(this.transaction);
+@freezed
+class TransactionEvent extends BaseEvent with _$TransactionEvent {
+  const factory TransactionEvent.showSuccess({required String message}) = ShowSuccess;
+  const factory TransactionEvent.showError({required String message}) = ShowError;
+  const factory TransactionEvent.navigateToDetails({required String transactionId}) = NavigateToDetails;
 }
 ```
 
@@ -1211,626 +973,168 @@ class TransactionCreatedSuccessfully extends TransactionEvent {
 **File:** `lib/features/transaction/presentation/transaction/transaction_bloc.dart`
 
 ```dart
-import 'package:injectable/injectable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/architecture/architecture.dart';
+import 'package:injectable/injectable.dart';
+import '../../../../core/architecture/mvi_bloc.dart';
 import '../../domain/usecases/get_transaction_usecase.dart';
-import '../../domain/usecases/get_all_transactions_usecase.dart';
 import '../../domain/usecases/create_transaction_usecase.dart';
 import 'transaction_action.dart';
 import 'transaction_state.dart';
 import 'transaction_event.dart';
 
 @injectable
-class TransactionBloc extends MviBloc<
-  TransactionAction,
-  TransactionState,
-  TransactionEvent
-> {
-  final GetTransactionUseCase getTransactionUseCase;
-  final GetAllTransactionsUseCase getAllTransactionsUseCase;
-  final CreateTransactionUseCase createTransactionUseCase;
+class TransactionBloc extends MviBloc<TransactionAction, TransactionState, TransactionEvent> {
+  final GetTransactionUseCase _getTransactionUseCase;
+  final CreateTransactionUseCase _createTransactionUseCase;
 
-  TransactionBloc({
-    required this.getTransactionUseCase,
-    required this.getAllTransactionsUseCase,
-    required this.createTransactionUseCase,
-  }) : super(const TransactionInitial()) {
-    // Register action handlers
-    handleAction(null, _onLoadAllTransactions);
-    handleAction(null, _onLoadTransaction);
-    handleAction(null, _onCreateTransaction);
-    handleAction(null, _onRefreshTransactions);
-  }
-
-  /// Single entry point - ONLY method View calls
-  @override
-  void onAction(TransactionAction action) {
-    add(action);
-  }
-
-  Future<void> _onLoadAllTransactions(
-    LoadAllTransactionsAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    emit(const TransactionLoading());
-    
-    final result = await getAllTransactionsUseCase();
-    
-    result.fold(
-      (failure) {
-        emit(TransactionError(failure.message));
-        emitEvent(ShowErrorMessage(failure.message));
-      },
-      (transactions) {
-        if (transactions.isEmpty) {
-          emit(const TransactionEmpty());
-        } else {
-          emit(TransactionsLoaded(transactions));
-        }
-      },
-    );
-  }
-
-  Future<void> _onLoadTransaction(
-    LoadTransactionAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    emit(const TransactionLoading());
-    
-    final result = await getTransactionUseCase(action.id);
-    
-    result.fold(
-      (failure) {
-        emit(TransactionError(failure.message));
-        emitEvent(ShowErrorMessage(failure.message));
-      },
-      (transaction) {
-        emit(TransactionLoaded(transaction));
-      },
-    );
-  }
-
-  Future<void> _onCreateTransaction(
-    CreateTransactionAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    emit(const TransactionCreating());
-    
-    final result = await createTransactionUseCase(
-      fromAddress: action.fromAddress,
-      toAddress: action.toAddress,
-      amount: action.amount,
-      currency: action.currency,
-    );
-    
-    result.fold(
-      (failure) {
-        emit(TransactionError(failure.message));
-        emitEvent(ShowErrorMessage(failure.message));
-      },
-      (transaction) {
-        emitEvent(TransactionCreatedSuccessfully(transaction));
-        emitEvent(const ShowSuccessMessage('Transaction created successfully!'));
-        // Reload transactions list
-        add(const LoadAllTransactionsAction());
-      },
-    );
-  }
-
-  Future<void> _onRefreshTransactions(
-    RefreshTransactionsAction action,
-    Emitter<TransactionState> emit,
-  ) async {
-    add(const LoadAllTransactionsAction());
-  }
-}
-```
-
-### 4.5 Create Page
-
-> ⚠️ **MVI PAGE PATTERN (CRITICAL)**
-> 
-> **Default**: Use `StatelessWidget` with `BlocProvider`/`BlocConsumer`
-> - All UI state managed in BLoC
-> - NO local state with `setState()`
-> - Use `context.read<Bloc>().onAction()` to dispatch actions
->
-> **Exception**: Use `StatefulWidget` only for `TextEditingController`, `FocusNode`, or `AnimationController`
-
-**File:** `lib/features/transaction/presentation/pages/transaction_list_page.dart`
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../di/injection.dart';
-import '../mvi/transaction_bloc.dart';
-import '../mvi/transaction_action.dart';
-import '../mvi/transaction_state.dart';
-import '../mvi/transaction_event.dart';
-
-class TransactionListPage extends StatelessWidget {
-  const TransactionListPage({super.key});
+  TransactionBloc(
+    this._getTransactionUseCase,
+    this._createTransactionUseCase,
+  ) : super(const TransactionState.initial());
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<TransactionBloc>()
-        ..onAction(const LoadAllTransactionsAction()),
-      child: const _TransactionListView(),
+  Future<void> onAction(TransactionAction action) async {
+    action.when(
+      loadTransactions: () async {
+        emit(const TransactionState.loading());
+        // Simulating getting all transactions (assuming usecase exists)
+        // In real app, you would call getAllTransactionsUseCase
+        await Future.delayed(const Duration(seconds: 1));
+        emit(const TransactionState.loaded(transactions: []));
+      },
+      createTransaction: (amount, toAddress) async {
+        emit(const TransactionState.loading());
+        
+        final result = await _createTransactionUseCase(
+          amount: amount,
+          toAddress: toAddress,
+          fromAddress: 'me', // Hardcoded for example
+          currency: 'USD',
+        );
+
+        result.fold(
+          (failure) {
+            emit(TransactionState.error(message: failure.message));
+            emitEvent(TransactionEvent.showError(message: failure.message));
+          },
+          (transaction) {
+            emit(TransactionState.loaded(transactions: [transaction]));
+            emitEvent(const TransactionEvent.showSuccess(message: 'Transaction created!'));
+          },
+        );
+      },
     );
-  }
-}
-
-class _TransactionListView extends StatelessWidget {
-  const _TransactionListView();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Transactions'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              context
-                  .read<TransactionBloc>()
-                  .onAction(const RefreshTransactionsAction());
-            },
-          ),
-        ],
-      ),
-      body: BlocConsumer<TransactionBloc, TransactionState>(
-        // Listen to events (side effects)
-        listener: (context, state) {
-          context.read<TransactionBloc>().events.listen((event) {
-            switch (event) {
-              case ShowSuccessMessage(:final message):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              case ShowErrorMessage(:final message):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              case NavigateToTransactionDetail(:final id):
-                // Navigator.pushNamed(context, '/transaction/$id');
-                break;
-              case TransactionCreatedSuccessfully(:final transaction):
-                // Handle success
-                break;
-              case NavigateBack():
-                Navigator.of(context).pop();
-            }
-          });
-        },
-        // Build UI based on state
-        builder: (context, state) {
-          return switch (state) {
-            TransactionInitial() => const Center(
-                child: Text('Press refresh to load transactions'),
-              ),
-            TransactionLoading() || TransactionCreating() => const Center(
-                child: CircularProgressIndicator(),
-              ),
-            TransactionEmpty() => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.inbox, size: 64, color: Colors.grey),
-                    const SizedBox(height: 16),
-                    const Text('No transactions found'),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context
-                            .read<TransactionBloc>()
-                            .onAction(const RefreshTransactionsAction());
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
-            TransactionsLoaded(:final transactions) => RefreshIndicator(
-                onRefresh: () async {
-                  context
-                      .read<TransactionBloc>()
-                      .onAction(const RefreshTransactionsAction());
-                },
-                child: ListView.builder(
-                  itemCount: transactions.length,
-                  itemBuilder: (context, index) {
-                    final tx = transactions[index];
-                    return ListTile(
-                      leading: _StatusIcon(status: tx.status),
-                      title: Text('${tx.amount} ${tx.currency}'),
-                      subtitle: Text(
-                        'From: ${tx.fromAddress}\nTo: ${tx.toAddress}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      trailing: Text(
-                        _formatDate(tx.timestamp),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      onTap: () {
-                        context
-                            .read<TransactionBloc>()
-                            .events
-                            .listen((event) {});
-                        // Navigate to detail
-                      },
-                    );
-                  },
-                ),
-              ),
-            TransactionError(:final message) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.error, size: 64, color: Colors.red),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Error: $message',
-                      style: const TextStyle(color: Colors.red),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context
-                            .read<TransactionBloc>()
-                            .onAction(const RefreshTransactionsAction());
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
-            _ => const Center(child: Text('Unknown state')),
-          };
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to create transaction page
-          _showCreateTransactionDialog(context);
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
-  }
-
-  void _showCreateTransactionDialog(BuildContext context) {
-    // Show dialog to create transaction
-    // For demo purposes, creating a sample transaction
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Create Transaction'),
-        content: const Text('Transaction creation form goes here'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Use the BLoC from the parent context
-              context.read<TransactionBloc>().onAction(
-                    const CreateTransactionAction(
-                      fromAddress: '0x123...',
-                      toAddress: '0x456...',
-                      amount: 100.0,
-                      currency: 'USD',
-                    ),
-                  );
-              Navigator.pop(dialogContext);
-            },
-            child: const Text('Create'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatusIcon extends StatelessWidget {
-  final TransactionStatus status;
-
-  const _StatusIcon({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    return switch (status) {
-      TransactionStatus.completed => const Icon(
-          Icons.check_circle,
-          color: Colors.green,
-        ),
-      TransactionStatus.failed => const Icon(
-          Icons.error,
-          color: Colors.red,
-        ),
-      TransactionStatus.pending => const Icon(
-          Icons.pending,
-          color: Colors.orange,
-        ),
-    };
   }
 }
 ```
 
 ---
 
-## Step 5: Dependency Injection
+## X. Step 5: Dependency Injection
 
-### 5.1 Run Code Generation
+Verify that all your classes have proper `@injectable` annotations.
 
-```bash
-# Generate code for Freezed, Json, and Injectable
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-This generates:
-- `transaction_model.freezed.dart`
-- `transaction_model.g.dart`
-- `injection.config.dart` (updated with new dependencies)
-
-### 5.2 Verify DI Registration
-
-Check `lib/di/injection.config.dart` - your dependencies should be auto-registered because you used `@injectable` and `@LazySingleton`.
+1.  **Run build runner:**
+    ```bash
+    flutter pub run build_runner build --delete-conflicting-outputs
+    ```
+    
+2.  **Verify `lib/di/injection.config.dart`** contains your new classes.
 
 ---
 
-## Step 6: Navigation & Integration
+## XI. Step 6: Navigation & Integration
 
-### 6.1 Add Route
+### 1. Add Route to AppRouter
 
-If using named routes:
+**File:** `lib/app_router.dart`
 
 ```dart
-// In main.dart or routes file
-routes: {
-  '/transactions': (context) => const TransactionListPage(),
+@AutoRouterConfig(replaceInRouteName: 'Page,Route')
+class AppRouter extends RootStackRouter {
+  
+  @override
+  List<AutoRoute> get routes => [
+    // ... existing routes
+    AutoRoute(page: TransactionRoute.page, path: '/transaction'),
+  ];
 }
 ```
 
-### 6.2 Navigate to Feature
+### 2. Add Entry Point
+
+Add a button in Home page to navigate to your new feature:
 
 ```dart
-// From any screen
-Navigator.pushNamed(context, '/transactions');
+ElevatedButton(
+  onPressed: () => context.router.push(const TransactionRoute()),
+  child: const Text('Go to Transactions'),
+)
 ```
 
 ---
 
-## Step 7: Testing
+## XII. Step 7: Testing
 
-### 7.1 Test Use Case
+### 1. Unit Tests (Bloc)
 
-**File:** `test/features/transaction/domain/usecases/get_transaction_usecase_test.dart`
+**File:** `test/features/transaction/presentation/transaction_bloc_test.dart`
 
 ```dart
-import 'package:dartz/dartz.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
-class MockTransactionRepository extends Mock implements TransactionRepository {}
+import 'package:mockito/mockito.dart';
+import 'package:dartz/dartz.dart';
+import 'package:your_app/features/transaction/presentation/transaction/transaction_bloc.dart';
 
 void main() {
-  late GetTransactionUseCase useCase;
-  late MockTransactionRepository mockRepository;
+  group('TransactionBloc', () {
+    late TransactionBloc bloc;
+    late MockCreateTransactionUseCase mockCreateTransactionUseCase;
 
-  setUp(() {
-    mockRepository = MockTransactionRepository();
-    useCase = GetTransactionUseCase(mockRepository);
-  });
+    setUp(() {
+      mockCreateTransactionUseCase = MockCreateTransactionUseCase();
+      bloc = TransactionBloc(..., mockCreateTransactionUseCase);
+    });
 
-  final tTransaction = TransactionEntity(
-    id: '1',
-    fromAddress: '0x123',
-    toAddress: '0x456',
-    amount: 100.0,
-    currency: 'USD',
-    timestamp: DateTime.now(),
-    status: TransactionStatus.completed,
-  );
-
-  test('should return transaction when repository succeeds', () async {
-    // Arrange
-    when(() => mockRepository.getTransaction(any()))
-        .thenAnswer((_) async => Right(tTransaction));
-
-    // Act
-    final result = await useCase('1');
-
-    // Assert
-    expect(result, Right(tTransaction));
-    verify(() => mockRepository.getTransaction('1')).called(1);
-  });
-
-  test('should return failure when repository fails', () async {
-    // Arrange
-    when(() => mockRepository.getTransaction(any()))
-        .thenAnswer((_) async => Left(ServerFailure(message: 'Error')));
-
-    // Act
-    final result = await useCase('1');
-
-    // Assert
-    expect(result, Left(ServerFailure(message: 'Error')));
+    blocTest<TransactionBloc, TransactionState>(
+      'emits [Loading, Loaded] when CreateTransaction is added and succeeds',
+      build: () {
+        when(mockCreateTransactionUseCase(...))
+            .thenAnswer((_) async => Right(tTransaction));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const TransactionAction.createTransaction(...)),
+      expect: () => [
+        const TransactionState.loading(),
+        const TransactionState.loaded(transactions: [tTransaction]),
+      ],
+    );
   });
 }
 ```
 
-### 7.2 Test BLoC
+---
 
-```dart
-// Run tests
-flutter test
-```
+## XIII. Common Pitfalls
+
+1.  **Forgetting `@injectable`**: If DI fails, check if you added the annotation.
+2.  **Importing Flutter in Domain**: Check imports in domain layer.
+3.  **Mutable State**: Ensure State classes are immutable (using `@freezed`).
+4.  **Business Logic in UI**: UI should only dispatch Actions and render State.
 
 ---
 
-## Common Pitfalls
+## XIV. Checklist
 
-### ❌ Mistake 1: Importing Flutter in Domain
-
-```dart
-// ❌ WRONG - Domain layer should be pure Dart
-import 'package:flutter/material.dart';
-
-class TransactionEntity {
-  final Color statusColor; // Flutter type!
-}
-```
-
-```dart
-// ✅ CORRECT
-class TransactionEntity {
-  final TransactionStatus status; // Pure Dart enum
-}
-```
-
-### ❌ Mistake 2: Multiple Entry Points
-
-```dart
-// ❌ WRONG
-context.read<TransactionBloc>().add(LoadTransactionsAction());
-context.read<TransactionBloc>().loadTransactions(); // Multiple ways!
-```
-
-```dart
-// ✅ CORRECT - Single entry point
-context.read<TransactionBloc>().onAction(LoadAllTransactionsAction());
-```
-
-### ❌ Mistake 3: Business Logic in View
-
-```dart
-// ❌ WRONG
-if (amount > 0 && fromAddress != toAddress) {
-  bloc.onAction(CreateTransactionAction(...));
-}
-```
-
-```dart
-// ✅ CORRECT - Validation in Use Case
-// Just call the action, validation happens in UseCase
-bloc.onAction(CreateTransactionAction(...));
-```
-
-### ❌ Mistake 4: Using State for Navigation
-
-```dart
-// ❌ WRONG
-class TransactionSuccessState {
-  final bool shouldNavigate;
-}
-```
-
-```dart
-// ✅ CORRECT - Use Events for one-time actions
-class TransactionCreatedSuccessfully extends TransactionEvent {}
-```
-
----
-
-## Checklist
-
-### Before Submitting
-
-- [ ] Domain layer has no Flutter imports
-- [ ] All use cases have `@injectable`
-- [ ] Repository implements Domain interface
-- [ ] Models have `toEntity()` and `fromEntity()`
-- [ ] Data sources handle exceptions properly
-- [ ] BLoC uses single entry point: `onAction()`
-- [ ] Page listens to both State and Events
-- [ ] Code generation ran successfully
-- [ ] Tests written (at least for use cases)
-- [ ] Code formatted: `flutter format .`
-- [ ] **No linter errors: `flutter analyze --no-fatal-infos`**
-- [ ] **Analyzer shows: "No issues found!"**
-
-### 🔍 Critical Double Check Step
-
-**Run these commands before considering the task complete:**
-
-```bash
-# 1. Format all code
-flutter format .
-
-# 2. Run analyzer (MUST show "No issues found!")
-flutter analyze --no-fatal-infos
-
-# Expected output:
-Analyzing bloc_digital_wallet...
-No issues found! (ran in X.Xs)
-
-# 3. If ANY errors, warnings, or info messages:
-#    - Read each message
-#    - Fix the issue
-#    - Run flutter analyze again
-#    - Repeat until "No issues found!"
-
-# 4. Run tests
-flutter test
-```
-
-**Success Criteria:**
-- ✅ `flutter analyze` output: **"No issues found!"**
-- ✅ Exit code: **0**
-- ✅ Tests passing
-- ✅ All files formatted
-
-### Architecture Compliance
-
-- [ ] **Unidirectional Flow:** View → BLoC → UseCase → Repository → DataSource
-- [ ] **Dependency Rule:** Presentation → Domain ← Data
-- [ ] **Single Responsibility:** Each class does one thing
-- [ ] **Pure Domain:** No framework dependencies
-- [ ] **State vs Event:** State is persistent, Event is transient
-- [ ] **Feature-First:** Code organized by feature
-
----
-
-## Summary
-
-**You've learned to:**
-
-1. ✅ Generate feature structure with Mason
-2. ✅ Define pure Domain layer (Entity, Repository, UseCase)
-3. ✅ Implement Data layer (Model, DataSource, Repository)
-4. ✅ Implement Presentation layer (Action, State, Event, BLoC, Page)
-5. ✅ Set up Dependency Injection
-6. ✅ Handle navigation and integration
-7. ✅ Write tests
-
-**Remember:**
-- **Action** = User Input (View → BLoC)
-- **State** = UI Data (BLoC → View, Persistent)
-- **Event** = Side Effect (BLoC → View, One-time)
-- **Single Entry Point** = `onAction(action)`
-- **Pure Domain** = No Flutter imports
-
----
-
-**Need help?** Check:
-- [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - Architecture overview
-- [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md) - Visual diagrams
-- [docs/architecture/CLEAN_MVI_SUMMARY.md](../architecture/CLEAN_MVI_SUMMARY.md) - Quick reference
-
-**Happy coding! 🚀**
+- [ ] Domain entities created (Pure Dart)
+- [ ] Repository interface defined
+- [ ] Use cases implemented and tested
+- [ ] Data models created (DTOs with `fromJson`)
+- [ ] Remote data source implemented
+- [ ] Repository implementation completed
+- [ ] State, Action, Event defined
+- [ ] Bloc implemented with error handling
+- [ ] DI configured and generated
+- [ ] UI implemented using MVI pattern
+- [ ] Navigation route added
