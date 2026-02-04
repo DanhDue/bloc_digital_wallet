@@ -152,48 +152,94 @@ graph LR
 └───────────────────────────────────────────────────────────────────────────┘
 ```
 
-### III. Feature-First Organization
+### III. Modular Architecture (Multi-Package)
+
+This project adopts a **Modular Architecture** where each feature and infrastructure layer is separated into its own standalone package. This follows the official [Flutter Packages & Plugins](https://docs.flutter.dev/packages-and-plugins/developing-packages) guidelines.
+
+#### Why Multi-Package?
+1.  **Decoupling**: Features have strict boundaries and cannot access each other's internals unless explicitly exported.
+2.  **Scalability**: New features can be added as new packages without bloating the main app.
+3.  **Faster Builds**: Changes in one package don't force recompilation of unrelated packages (cached by Melos/BuildRunner).
+4.  **Reusability**: Packages like `ui_kit` or `network` can be reused across different apps or modules.
 
 #### Directory Structure
 
-```
-lib/
+```packages
+lib/                         # Root App Module (The "Glue")
+├── app_router.dart          # Main Router config
+├── main.dart                # Entry point
+└── di/                      # Root Dependency Injection
+    └── injection.dart       # Orchestrates DI for all packages
+
+packages/
 ├── core/                    # Shared infrastructure
-│   ├── architecture/        # MVI base classes (BaseAction, BaseState, MviBloc)
-│   ├── errors/              # Failures & exceptions
-│   ├── network/             # API clients (Dio, interceptors)
-│   └── storage/             # Local storage (Hive, SharedPreferences)
+│   ├── lib/
+│   │   ├── app_initializer/ # Startup logic
+│   │   ├── auth/            # Auth utilities
+│   │   ├── errors/          # Failures & exceptions
+│   │   ├── services/        # Shared services
+│   │   └── utils/           # Helper classes
 │
-├── features/                # Feature modules
-│   └── {feature}/
-│       ├── data/
-│       │   ├── datasources/
-│       │   │   ├── {feature}_local_datasource.dart
-│       │   │   └── {feature}_remote_datasource.dart
-│       │   ├── models/
-│       │   │   └── {feature}_model.dart (+.freezed.dart, +.g.dart)
-│       │   └── repositories/
-│       │       └── {feature}_repository_impl.dart
-│       ├── domain/
-│       │   ├── entities/
-│       │   │   └── {feature}_entity.dart
-│       │   ├── repositories/
-│       │   │   └── {feature}_repository.dart
-│       │   └── usecases/
-│       │       └── get_{feature}_usecase.dart
-│       └── presentation/
-│           ├── models/
-│           │   └── {feature}_ui_model.dart
-│           └── {feature}/
-│               ├── {feature}_action.dart
-│               ├── {feature}_bloc.dart
-│               ├── {feature}_event.dart
-│               ├── {feature}_page.dart
-│               └── {feature}_state.dart
+├── framework/               # Architecture foundation
+│   ├── lib/
+│   │   ├── mixin/           # Safe API call mixins
+│   │   ├── mvi_bloc.dart    # Base MVI BLoC
+│   │   └── mvi_base.dart    # Base Action/State/Event
 │
-├── di/                      # Dependency injection
-└── generated/               # Auto-generated (assets, colors, translations)
+├── network/                 # Network layer
+│   ├── lib/
+│   │   ├── di/              # Network module DI
+│   │   ├── interceptors/    # Dio interceptors
+│   │   ├── ssl/             # SSL Pinning config
+│   │   └── dio_factory.dart # Dio instance factory
+│
+├── ui_kit/                  # Shared UI components
+│   ├── lib/
+│   │   ├── components/      # Reusable widgets
+│   │   ├── theme/           # App themes
+│   │   └── generated/       # Assets, colors, fonts
+│
+├── {feature}/               # Feature modules (e.g., authentication, promo)
+│   ├── lib/
+│   │   ├── data/
+│   │   │   ├── datasources/
+│   │   │   │   ├── {feature}_local_datasource.dart
+│   │   │   │   └── {feature}_remote_datasource.dart
+│   │   │   ├── models/
+│   │   │   │   └── {feature}_model.dart (+.freezed.dart, +.g.dart)
+│   │   │   └── repositories/
+│   │   │       └── {feature}_repository_impl.dart
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   │   └── {feature}_entity.dart
+│   │   │   ├── repositories/
+│   │   │   │   └── {feature}_repository.dart
+│   │   │   └── usecases/
+│   │   │       └── get_{feature}_usecase.dart
+│   │   ├── presentation/
+│   │   │   ├── models/
+│   │   │   │   └── {feature}_ui_model.dart
+│   │   │   └── {subfeature}/
+│   │   │       ├── {subfeature}_action.dart
+│   │   │       ├── {subfeature}_bloc.dart
+│   │   │       ├── {subfeature}_event.dart
+│   │   │       ├── {subfeature}_page.dart
+│   │   │       └── {subfeature}_state.dart
+│   │   ├── {feature}.dart   # Package exports
+│   │   └── {feature}_router.dart # Feature routing
+│
+└── ...                      # Other packages
 ```
+
+#### Infrastructure Packages
+
+| Package | Role | Key Components |
+|---------|------|----------------|
+| **Core** | Shared utilities & Base config | `AppInitializer`, `AuthStreamService`, `Failures`, `EnvironmentConfig` |
+| **Framework** | Architecture Backbone | `MviBloc`, `SafeCallApiMixin`, Base MVI classes |
+| **Network** | Connectivity & API Client | `DioFactory`, `AuthInterceptor`, `SslConfiguration` |
+| **Ui Kit** | Design System & Assets | Shared Widgets, Themes, Generated Assets |
+
 
 #### Architecture Layer Details
 
@@ -221,6 +267,8 @@ lib/
 |----------|-------------|
 | [Quick Start](docs/getting-started/QUICK_START.md) | Setup in 5 minutes |
 | [Quick Reference](docs/getting-started/QUICK_REFERENCE.md) | Cheat sheet with code templates |
+| [Modular Dev Guide](docs/implementation_guide.md) | **Recommended**: High-level module concepts |
+| [Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md) | **Deep Dive**: Step-by-step feature creation |
 
 ### 2. Architecture
 | Document | Description |
