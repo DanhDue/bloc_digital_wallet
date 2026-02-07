@@ -7,7 +7,7 @@ import 'package:auto_route/auto_route.dart';
 /// Common routes for cross-package navigation.
 /// Contains initial/entry routes for each package.
 /// This avoids direct package dependencies for navigation.
-abstract class CommonRoutes {
+abstract class FeaturePublicRoutes {
   // Onboard
   static const String splash = '/splash';
   static const PageRouteInfo splashRoute = _SplashRoute();
@@ -23,6 +23,10 @@ abstract class CommonRoutes {
   // Home
   static const String home = '/home';
   static const PageRouteInfo homeRoute = _HomeRoute();
+
+  // Transaction
+  static const String transaction = '/transaction';
+  static const PageRouteInfo transactionRoute = _TransactionRoute();
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -40,4 +44,8 @@ class _SettingsRoute extends PageRouteInfo<void> {
 
 class _HomeRoute extends PageRouteInfo<void> {
   const _HomeRoute() : super('HomeRoute');
+}
+
+class _TransactionRoute extends PageRouteInfo<void> {
+  const _TransactionRoute() : super('TransactionRoute');
 }
