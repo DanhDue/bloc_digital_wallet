@@ -11,7 +11,7 @@ melos exec --scope="ui_kit" -- fvm flutter pub run build_runner build --delete-c
 melos exec --concurrency=1 --depends-on="build_runner" --ignore="ui_kit" -- fvm flutter pub run build_runner build --delete-conflicting-outputs
 
 # 3. Build Root App
-fvm dart run build_runner build -d
+fvm flutter pub run build_runner build --delete-conflicting-outputs
 
 # 4. Generate Root Assets
 fluttergen -c pubspec.yaml
