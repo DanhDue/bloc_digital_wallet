@@ -97,15 +97,12 @@ void run(HookContext context) async {
 
   // 3. Run Build Runner
   context.logger.info('Running build_runner to clean up routes...');
-  final buildResult = await Process.run(
-      'dart',
-      [
-        'run',
-        'build_runner',
-        'build',
-        '--delete-conflicting-outputs',
-      ],
-      runInShell: true);
+  final buildResult = await Process.run('dart', [
+    'run',
+    'build_runner',
+    'build',
+    '--delete-conflicting-outputs',
+  ], runInShell: true);
   if (buildResult.exitCode == 0) {
     context.logger.success('build_runner completed successfully.');
   } else {

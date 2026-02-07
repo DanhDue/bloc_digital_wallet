@@ -129,7 +129,8 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
   void handleEvent(BuildContext context, SplashEvent event) {
     switch (event) {
       case NavigateToNextEvent():
-        // context.router.replace(const HomeRoute());
+        // Navigate to Settings via CommonRoutes (avoids direct package import)
+        context.router.replace(CommonRoutes.settingsRoute);
         Log.d("NavigateToNextEvent");
         break;
       case ShowErrorMessageEvent(:final message):

@@ -1,4 +1,29 @@
 {
+  "agent.terminal.allowList": [
+    "fvm *",
+    "flutter *",
+    "dart *",
+    "pod *",
+    "gradle *",
+    "./gradlew *",
+    "ls *",
+    "pwd",
+    "git *",
+    "mason *",
+    "melos *",
+    "fluttergen *",
+    "sh .agent/skills/*",
+    "adb *",
+    "npx *",
+    "node *",
+    "cp *",
+    "mkdir *"
+  ],
+  "agent.terminal.denyList": [
+    "rm -rf *",
+    "git push --force",
+    "sudo *"
+  ],
   "[dart]": {
     "editor.formatOnSave": true,
     "editor.formatOnType": true,

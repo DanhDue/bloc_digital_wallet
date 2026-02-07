@@ -91,6 +91,16 @@ All detailed documentation is in `.agent/`:
 
 ---
 
+---
+
+## 📝 Generated Files Protocol
+
+**CRITICAL**: Always include generated files (e.g., `*.g.dart`, `*.config.dart`, `*.freezed.dart`) in your context. 
+- **DO NOT** ignore them even if they are in `.gitignore`.
+- **MANDATORY**: Read `injection.config.dart` to understand the current DI container whenever analyzing dependencies or injection logic.
+
+---
+
 ## Essential Commands
 
 ```bash

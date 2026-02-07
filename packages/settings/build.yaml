@@ -1,0 +1,23 @@
+targets:
+  $default:
+    sources:
+      exclude:
+        - "lib/generated/**"
+        - "lib/gen/**"
+    builders:
+      retrofit_generator:
+        enabled: true
+      injectable_generator:injectable_builder:
+        enabled: true
+      injectable_generator:injectable_config_builder:
+        enabled: true
+      freezed:
+        enabled: true
+      json_serializable:
+        enabled: true
+      auto_route_generator:
+        enabled: true
+      auto_route_generator:auto_router_generator:
+        enabled: true
+      slang_build_runner:
+        enabled: true
