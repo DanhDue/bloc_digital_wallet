@@ -146,6 +146,13 @@
                 "applies_to": [
                     "lib/features/*/domain/"
                 ]
+            },
+            "generated_files_protocol": {
+                "rule": "Always include generated files (e.g., *.g.dart, *.config.dart, *.freezed.dart) in context. Do not ignore them even if they are in .gitignore.",
+                "mandatory": [
+                    "Read injection.config.dart to understand the current DI container whenever analyzing dependencies or injection logic"
+                ],
+                "rationale": "Ensures the agent has full visibility into the derived state of the project, especially for dependency injection and serialized models."
             }
         }
     },

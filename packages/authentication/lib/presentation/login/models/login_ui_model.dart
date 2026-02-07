@@ -3,7 +3,6 @@
 // coverage:ignore-file
 
 /// Contains UI-specific state that may differ from domain entities.
-
 class LoginUiModel {
   final String email;
   final String password;

@@ -12,9 +12,18 @@ melos exec --concurrency=1 --depends-on="build_runner" --ignore="ui_kit" -- fvm 
 
 # 3. Build Root App
 fvm dart run build_runner build -d
+
+# 4. Generate Root Assets
 fluttergen -c pubspec.yaml
+
+# 5. Formatting & License Headers
 melos run dartfmt
 melos run add-header-ignore-flags
 melos run add-license-header
 melos run check-license-header
+
+# 6. Final Analysis
+melos run analyze
+
+# 7. Stage all changes
 git add .

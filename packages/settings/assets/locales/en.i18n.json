@@ -1,0 +1,23 @@
+{
+  "title": "Settings",
+  "account": "Account",
+  "profile": "Edit Profile",
+  "changePassword": "Change Password",
+  "twoFactorAuth": "Two-Factor Auth (2FA)",
+  "twoFactorAuthOn": "On",
+  "twoFactorAuthOff": "Off",
+  "preferences": "Preferences",
+  "currency": "Currency / Units",
+  "language": "Language",
+  "darkMode": "Dark Mode",
+  "developer": "Developer",
+  "debugMode": "Debug Mode",
+  "appInfo": "App Info",
+  "contactSupport": "Contact Support",
+  "aboutApp": "About App",
+  "logout": "Logout",
+  "errorOccurred": "An error occurred",
+  "currencyUsd": "USD (\\$)",
+  "languageEnglish": "English",
+  "defaultVersion": "v2.4.12"
+}

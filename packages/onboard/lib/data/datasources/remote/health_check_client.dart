@@ -9,7 +9,7 @@ part 'health_check_client.g.dart';
 
 @RestApi()
 abstract class HealthCheckClient {
-  factory HealthCheckClient(Dio dio, {String baseUrl}) = _HealthCheckClient;
+  factory HealthCheckClient(Dio dio, {String? baseUrl}) = _HealthCheckClient;
 
   @GET("${AppUri.healthz}/")
   Future<BaseResponseObject<dynamic>> healthCheck();

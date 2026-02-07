@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="settings_bg">#FAFAFA</color>
+    <color name="settings_card_bg">#FFFFFF</color>
+    <color name="settings_card_shadow">#0D000000</color> <!-- 0.05 alpha of #000000 -->
+    
+    <color name="settings_item_blue">#2196F3</color>
+    <color name="settings_item_blue_bg">#1A2196F3</color> <!-- 0.1 alpha of #2196F3 -->
+    
+    <color name="settings_item_purple">#9C27B0</color>
+    <color name="settings_item_purple_bg">#1A9C27B0</color>
+    
+    <color name="settings_item_deep_purple">#673AB7</color>
+    <color name="settings_item_deep_purple_bg">#1A673AB7</color>
+    
+    <color name="settings_item_orange">#FF9800</color>
+    <color name="settings_item_orange_bg">#1AFF9800</color>
+    
+    <color name="settings_item_green">#4CAF50</color>
+    <color name="settings_item_green_bg">#1A4CAF50</color>
+    
+    <color name="settings_item_grey">#424242</color>
+    <color name="settings_item_grey_bg">#EEEEEF</color> <!-- slightly different to distinguish -->
+    
+    <color name="settings_item_light_grey">#757575</color>
+    <color name="settings_item_light_grey_bg">#EEEEEE</color>
+
+    <color name="settings_logout_text">#F44336</color>
+</resources>

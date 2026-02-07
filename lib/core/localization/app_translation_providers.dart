@@ -7,6 +7,7 @@ import '../../generated/translations.dart';
 import 'package:core/core.dart' as core;
 import 'package:authentication/authentication.dart' as auth;
 import 'package:onboard/onboard.dart' as onboard;
+import 'package:settings/settings.dart' as settings;
 
 /// List of all TranslationProviders for the application.
 /// Add new feature providers here.
@@ -20,4 +21,5 @@ final List<Widget Function({required Widget child})> appTranslationProviders = [
   // Features
   ({required child}) => auth.TranslationProvider(child: child),
   ({required child}) => onboard.TranslationProvider(child: child),
+  ({required child}) => settings.TranslationProvider(child: child),
 ];

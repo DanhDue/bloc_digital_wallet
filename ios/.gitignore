@@ -15,18 +15,6 @@ Icon?
 profile
 xcuserdata
 **/.generated/
-Flutter/App.framework
-Flutter/Flutter.framework
-Flutter/Flutter.podspec
-Flutter/Generated.xcconfig
-Flutter/Define.xcconfig
-Flutter/Zeno.xcconfig
-Flutter/Zeno-defaults.xcconfig
-Flutter/ephemeral/
-Flutter/app.flx
-Flutter/app.zip
-Flutter/flutter_assets/
-Flutter/flutter_export_environment.sh
 ServiceDefinitions.json
 Runner/GeneratedPluginRegistrant.*
 

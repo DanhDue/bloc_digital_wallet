@@ -1,0 +1,23 @@
+{
+  "title": "Cài đặt",
+  "account": "Tài khoản",
+  "profile": "Chỉnh sửa hồ sơ",
+  "changePassword": "Đổi mật khẩu",
+  "twoFactorAuth": "Xác thực 2 yếu tố (2FA)",
+  "twoFactorAuthOn": "Bật",
+  "twoFactorAuthOff": "Tắt",
+  "preferences": "Tùy chọn",
+  "currency": "Tiền tệ / Đơn vị",
+  "language": "Ngôn ngữ",
+  "darkMode": "Chế độ tối",
+  "developer": "Nhà phát triển",
+  "debugMode": "Chế độ gỡ lỗi",
+  "appInfo": "Thông tin ứng dụng",
+  "contactSupport": "Liên hệ hỗ trợ",
+  "aboutApp": "Về ứng dụng",
+  "logout": "Đăng xuất",
+  "errorOccurred": "Đã xảy ra lỗi",
+  "currencyUsd": "USD (\\$)",
+  "languageEnglish": "Tiếng Anh",
+  "defaultVersion": "v2.4.12"
+}

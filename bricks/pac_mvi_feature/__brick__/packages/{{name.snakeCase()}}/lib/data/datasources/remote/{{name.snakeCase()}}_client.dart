@@ -12,7 +12,7 @@ part '{{name.snakeCase()}}_client.g.dart';
 
 @RestApi()
 abstract class {{name.pascalCase()}}Client {
-  factory {{name.pascalCase()}}Client(Dio dio, {String baseUrl}) = _{{name.pascalCase()}}Client;
+  factory {{name.pascalCase()}}Client(Dio dio, {String? baseUrl}) = _{{name.pascalCase()}}Client;
 
   @GET('/{{name.snakeCase()}}')
   Future<{{name.pascalCase()}}Model> get{{name.pascalCase()}}();

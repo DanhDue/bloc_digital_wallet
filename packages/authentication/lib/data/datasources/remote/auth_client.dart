@@ -11,7 +11,7 @@ part 'auth_client.g.dart';
 
 @RestApi()
 abstract class AuthClient {
-  factory AuthClient(Dio dio, {String baseUrl}) = _AuthClient;
+  factory AuthClient(Dio dio, {String? baseUrl}) = _AuthClient;
 
   @POST('/${AppUri.login}')
   Future<AuthUserModel> login({
