@@ -22,7 +22,7 @@ scripts:
     description: Generate type-safe accessors for colors from assets/colors/colors.xml.
 
   genLocales:
-    run: get generate locales assets/locales
+    run: fvm dart run slang
     description: Generate localization classes from JSON files in assets/locales.
 
   # Code generation
