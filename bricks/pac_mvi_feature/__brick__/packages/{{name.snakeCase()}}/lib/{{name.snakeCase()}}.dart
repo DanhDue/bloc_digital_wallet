@@ -24,12 +24,3 @@ export 'presentation/{{name.snakeCase()}}/{{name.snakeCase()}}_bloc.dart';
 export 'presentation/{{name.snakeCase()}}/{{name.snakeCase()}}_state.dart';
 export 'presentation/{{name.snakeCase()}}/{{name.snakeCase()}}_event.dart';
 export 'presentation/{{name.snakeCase()}}/{{name.snakeCase()}}_action.dart';
-
-// DI
-export 'di/injection.dart';
-
-// Router
-export '{{name.snakeCase()}}_router.dart';
-
-// Translations
-export 'generated/translations.dart';

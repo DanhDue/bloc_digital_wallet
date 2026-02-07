@@ -3,10 +3,8 @@
 // coverage:ignore-file
 
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_model.dart';
-import 'package:network/network.dart';
 
 part '{{name.snakeCase()}}_client.g.dart';
 

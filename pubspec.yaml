@@ -74,7 +74,7 @@ melos:
       run: fvm flutter pub run build_runner build --delete-conflicting-outputs
       description: Generate type-safe accessors for colors from assets/colors/colors.xml.
     genLocales:
-      run: dart run slang
+      run: fvm dart run slang
       description: Generate localization classes from JSON files in assets/locales.
     build_runner:
       run: fvm flutter pub run build_runner build --delete-conflicting-outputs
