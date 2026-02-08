@@ -19,6 +19,7 @@ workspace:
   - packages/wallet
   - packages/trends
   - packages/scanner
+  - packages/transaction
 dependencies:
   flutter:
     sdk: flutter
@@ -42,6 +43,8 @@ dependencies:
     path: packages/wallet
   trends:
     path: packages/trends
+  transaction:
+    path: packages/transaction
   settings:
     path: packages/settings
   # Dialog Management

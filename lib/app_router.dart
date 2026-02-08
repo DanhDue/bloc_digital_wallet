@@ -6,6 +6,7 @@ import 'package:onboard/onboard.dart' as onboard;
 import 'package:scanner/scanner.dart' as scanner;
 import 'package:trends/trends.dart' as trends;
 import 'package:wallet/wallet.dart' as wallet;
+import 'package:transaction/transaction.dart' as transaction;
 import 'package:settings/settings.dart' as settings;
 
 export 'app_router.gr.dart';
@@ -16,6 +17,7 @@ export 'package:onboard/onboard_router.dart';
 export 'package:scanner/scanner_router.dart';
 export 'package:trends/trends_router.dart';
 export 'package:wallet/wallet_router.dart';
+export 'package:transaction/transaction_router.dart';
 export 'package:settings/settings_router.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
@@ -24,6 +26,7 @@ class AppRouter extends RootStackRouter {
   final _scannerRouter = scanner.ScannerRouter();
   final _trendsRouter = trends.TrendsRouter();
   final _walletRouter = wallet.WalletRouter();
+  final _transactionRouter = transaction.TransactionRouter();
   final _settingsRouter = settings.SettingsRouter();
   @override
   List<AutoRoute> get routes => [
@@ -32,6 +35,7 @@ class AppRouter extends RootStackRouter {
     ..._scannerRouter.routes,
     ..._trendsRouter.routes,
     ..._walletRouter.routes,
+    ..._transactionRouter.routes,
     ..._settingsRouter.routes,
   ];
 }

@@ -10,6 +10,7 @@ import 'package:onboard/onboard.dart' as onboard;
 import 'package:scanner/scanner.dart' as scanner;
 import 'package:trends/trends.dart' as trends;
 import 'package:wallet/wallet.dart' as wallet;
+import 'package:transaction/transaction.dart' as transaction;
 import 'package:settings/settings.dart' as settings;
 
 /// List of all TranslationProviders for the application.
@@ -27,5 +28,6 @@ final List<Widget Function({required Widget child})> appTranslationProviders = [
   ({required child}) => scanner.TranslationProvider(child: child),
   ({required child}) => trends.TranslationProvider(child: child),
   ({required child}) => wallet.TranslationProvider(child: child),
+  ({required child}) => transaction.TranslationProvider(child: child),
   ({required child}) => settings.TranslationProvider(child: child),
 ];
