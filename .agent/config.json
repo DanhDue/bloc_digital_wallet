@@ -29,6 +29,24 @@
                 "sudo"
             ]
         },
+        "generated_files_access": {
+            "description": "AI agents do NOT need to ask for permission to access generated files during a task",
+            "rules": [
+                "Access translation files (*.g.dart, *_translations.dart) without asking",
+                "Access router files (*.gr.dart, app_router.dart) without asking",
+                "Access freezed files (*.freezed.dart) without asking",
+                "Access JSON serializable files (*.g.dart) without asking",
+                "Access asset files (*.gen.dart) without asking"
+            ],
+            "auto_access_patterns": [
+                "**/*.g.dart",
+                "**/*.freezed.dart",
+                "**/*.gr.dart",
+                "**/translations/**",
+                "**/generated/**",
+                "**/*.gen.dart"
+            ]
+        },
         "skill_modification_policy": {
             "description": "AI agents MUST NOT edit files in .agent/skills/ unless explicitly requested by the user",
             "rules": [

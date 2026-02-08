@@ -43,6 +43,17 @@
 
 **Refer to the [Skills Index](.agent/README.md) for the complete list of available skills and their triggers.**
 
+### 📂 Generated Files Access: NO PERMISSION REQUIRED
+
+**CRITICAL RULE**: AI agents do NOT need to ask permission to access generated files during a task:
+- ✅ Access translation files (`*.g.dart`, `*_translations.dart`) without asking
+- ✅ Access router files (`*.gr.dart`, `app_router.dart`) without asking
+- ✅ Access freezed files (`*.freezed.dart`) without asking
+- ✅ Access JSON serializable files (`*.g.dart`) without asking
+- ✅ Access asset files (`*.gen.dart`) without asking
+
+**Auto-access patterns**: `**/*.g.dart`, `**/*.freezed.dart`, `**/*.gr.dart`, `**/translations/**`, `**/generated/**`, `**/*.gen.dart`
+
 ## 🪝 Manual Hooks Protocol
 
 **Execute these actions AUTOMATICALLY when triggers are met:**

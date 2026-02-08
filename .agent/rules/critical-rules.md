@@ -46,3 +46,10 @@
     *   ✅ **ONLY** edit skills when user explicitly says "update skill X" or "modify skill Y"
     *   **Reason**: Skills are carefully crafted instructions. Unsolicited changes can break agent behavior.
 7.  **SHELL ALIASES** - Commands **MUST** use the aliases defined in `.agent/config.json` > `project_settings` > `shell_aliases` (e.g., use `fvm flutter` instead of `flutter`).
+8.  **GENERATED FILES ACCESS** - 🤖 **AI agents do NOT need to ask permission to access generated files during a task.**
+    *   ✅ Access translation files (`*.g.dart`, `*_translations.dart`) without asking
+    *   ✅ Access router files (`*.gr.dart`, `app_router.dart`) without asking
+    *   ✅ Access freezed files (`*.freezed.dart`) without asking
+    *   ✅ Access JSON serializable files (`*.g.dart`) without asking
+    *   ✅ Access asset files (`*.gen.dart`) without asking
+    *   **Patterns**: `**/*.g.dart`, `**/*.freezed.dart`, `**/*.gr.dart`, `**/translations/**`, `**/generated/**`, `**/*.gen.dart`
