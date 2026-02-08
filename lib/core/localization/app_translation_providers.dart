@@ -8,6 +8,7 @@ import 'package:core/core.dart' as core;
 import 'package:authentication/authentication.dart' as auth;
 import 'package:onboard/onboard.dart' as onboard;
 import 'package:trends/trends.dart' as trends;
+import 'package:wallet/wallet.dart' as wallet;
 import 'package:settings/settings.dart' as settings;
 
 /// List of all TranslationProviders for the application.
@@ -23,5 +24,6 @@ final List<Widget Function({required Widget child})> appTranslationProviders = [
   ({required child}) => auth.TranslationProvider(child: child),
   ({required child}) => onboard.TranslationProvider(child: child),
   ({required child}) => trends.TranslationProvider(child: child),
+  ({required child}) => wallet.TranslationProvider(child: child),
   ({required child}) => settings.TranslationProvider(child: child),
 ];

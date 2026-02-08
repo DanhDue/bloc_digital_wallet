@@ -5,6 +5,7 @@ import 'package:network/network.dart' as network;
 import 'package:core/core.dart' as core;
 import 'package:onboard/onboard.dart' as onboard;
 import 'package:trends/trends.dart' as trends;
+import 'package:wallet/wallet.dart' as wallet;
 import 'package:settings/settings.dart' as settings;
 
 import 'injection.config.dart';
@@ -18,6 +19,7 @@ void configureDependencies() {
   network.configureModuleDependencies(getIt);
   onboard.configureModuleDependencies(getIt);
   trends.configureModuleDependencies(getIt);
+  wallet.configureModuleDependencies(getIt);
   settings.configureModuleDependencies(getIt);
 
   // we need to call $initGetIt after all modules are configured

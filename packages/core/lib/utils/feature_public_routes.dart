@@ -27,6 +27,10 @@ abstract class FeaturePublicRoutes {
   // Trends
   static const String trends = '/trends';
   static const PageRouteInfo trendsRoute = _TrendsRoute();
+
+  // Wallet
+  static const String wallet = '/wallet';
+  static const PageRouteInfo walletRoute = _WalletRoute();
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -48,4 +52,8 @@ class _HomeRoute extends PageRouteInfo<void> {
 
 class _TrendsRoute extends PageRouteInfo<void> {
   const _TrendsRoute() : super('TrendsRoute');
+}
+
+class _WalletRoute extends PageRouteInfo<void> {
+  const _WalletRoute() : super('WalletRoute');
 }

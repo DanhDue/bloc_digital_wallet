@@ -16,6 +16,7 @@ workspace:
   - packages/onboard
   - packages/ui_kit
   - packages/settings
+  - packages/wallet
   - packages/trends
 dependencies:
   flutter:
@@ -34,6 +35,8 @@ dependencies:
     path: packages/framework
   onboard:
     path: packages/onboard
+  wallet:
+    path: packages/wallet
   trends:
     path: packages/trends
   settings:
