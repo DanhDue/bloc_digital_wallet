@@ -1,0 +1,26 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+
+// Domain Layer
+export 'domain/entities/wallet_entity.dart';
+export 'domain/repositories/wallet_repository.dart';
+export 'domain/usecases/get_wallet_usecase.dart';
+
+// DI
+export 'di/injection.dart';
+
+// Router
+export 'wallet_router.dart';
+
+// Translations
+export 'generated/translations.dart';
+export 'wallet_strings.dart';
+
+// Presentation Layer
+export 'presentation/wallet/models/wallet_ui_model.dart';
+export 'presentation/wallet/wallet_page.dart';
+export 'presentation/wallet/wallet_bloc.dart';
+export 'presentation/wallet/wallet_state.dart';
+export 'presentation/wallet/wallet_event.dart';
+export 'presentation/wallet/wallet_action.dart';

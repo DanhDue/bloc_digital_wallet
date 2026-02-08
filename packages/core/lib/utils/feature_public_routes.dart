@@ -24,9 +24,15 @@ abstract class FeaturePublicRoutes {
   static const String home = '/home';
   static const PageRouteInfo homeRoute = _HomeRoute();
 
+<<<<<<< HEAD
   // Trends
   static const String trends = '/trends';
   static const PageRouteInfo trendsRoute = _TrendsRoute();
+=======
+  // Wallet
+  static const String wallet = '/wallet';
+  static const PageRouteInfo walletRoute = _WalletRoute();
+>>>>>>> 393e7bf (add template for the wallet feature.)
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -46,6 +52,11 @@ class _HomeRoute extends PageRouteInfo<void> {
   const _HomeRoute() : super('HomeRoute');
 }
 
+<<<<<<< HEAD
 class _TrendsRoute extends PageRouteInfo<void> {
   const _TrendsRoute() : super('TrendsRoute');
+=======
+class _WalletRoute extends PageRouteInfo<void> {
+  const _WalletRoute() : super('WalletRoute');
+>>>>>>> 393e7bf (add template for the wallet feature.)
 }
