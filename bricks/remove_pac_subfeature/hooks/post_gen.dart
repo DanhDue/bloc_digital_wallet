@@ -11,24 +11,20 @@ Future<void> run(HookContext context) async {
 
   final snakePackage = packageName.snakeCase;
   final snakeSubfeature = subfeatureName.snakeCase;
+  final pascalPackage = packageName.pascalCase;
   final pascalSubfeature = subfeatureName.pascalCase;
   final camelSubfeature = subfeatureName.camelCase;
-  final pascalPackage = packageName.pascalCase;
 
   final progress = context.logger.progress(
     'Removing subfeature $subfeatureName from $packageName...',
   );
 
   try {
-    // 1. Delete Files and Directories
+    // 1. Delete subfeature-specific files (NOT separate repository/datasource/client)
     final filesToDelete = [
       'packages/$snakePackage/lib/presentation/$snakeSubfeature',
-      'packages/$snakePackage/lib/data/datasources/remote/${snakeSubfeature}_client.dart',
-      'packages/$snakePackage/lib/data/datasources/remote/${snakeSubfeature}_remote_datasource.dart',
       'packages/$snakePackage/lib/data/models/${snakeSubfeature}_model.dart',
-      'packages/$snakePackage/lib/data/repositories/${snakeSubfeature}_repository_impl.dart',
       'packages/$snakePackage/lib/domain/entities/${snakeSubfeature}_entity.dart',
-      'packages/$snakePackage/lib/domain/repositories/${snakeSubfeature}_repository.dart',
       'packages/$snakePackage/lib/domain/usecases/get_${snakeSubfeature}_usecase.dart',
     ];
 
@@ -42,10 +38,37 @@ Future<void> run(HookContext context) async {
       }
     }
 
-    // 2. Remove Exports from {package}.dart
+    // 2. Remove method from parent's repository interface
+    await _removeFromRepositoryInterface(
+      snakePackage,
+      snakeSubfeature,
+      pascalPackage,
+      pascalSubfeature,
+    );
+
+    // 3. Remove method from parent's repository implementation
+    await _removeFromRepositoryImpl(
+      snakePackage,
+      snakeSubfeature,
+      pascalPackage,
+      pascalSubfeature,
+    );
+
+    // 4. Remove method from parent's remote datasource
+    await _removeFromRemoteDataSource(
+      snakePackage,
+      snakeSubfeature,
+      pascalPackage,
+      pascalSubfeature,
+    );
+
+    // 5. Remove endpoint from parent's client
+    await _removeFromClient(snakePackage, snakeSubfeature, pascalPackage, pascalSubfeature);
+
+    // 6. Remove Exports from {package}.dart
     await _removeExports(snakePackage, snakeSubfeature);
 
-    // 3. Remove Route from {package}_router.dart
+    // 7. Remove Route from {package}_router.dart
     await _removeRoute(
       snakePackage,
       snakeSubfeature,
@@ -68,6 +91,193 @@ Future<void> run(HookContext context) async {
   }
 }
 
+/// Remove method from parent's repository interface
+Future<void> _removeFromRepositoryInterface(
+  String snakePackage,
+  String snakeSubfeature,
+  String pascalPackage,
+  String pascalSubfeature,
+) async {
+  final file = File(
+    'packages/$snakePackage/lib/domain/repositories/${snakePackage}_repository.dart',
+  );
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  final lines = content.split('\n');
+  final updatedLines = <String>[];
+
+  final importPattern =
+      "import 'package:$snakePackage/domain/entities/${snakeSubfeature}_entity.dart';";
+  final methodPattern = 'get$pascalSubfeature()';
+
+  for (final line in lines) {
+    if (line.contains(importPattern)) continue;
+    if (line.contains(methodPattern)) continue;
+    updatedLines.add(line);
+  }
+
+  await file.writeAsString(updatedLines.join('\n'));
+}
+
+/// Remove method from parent's repository implementation
+Future<void> _removeFromRepositoryImpl(
+  String snakePackage,
+  String snakeSubfeature,
+  String pascalPackage,
+  String pascalSubfeature,
+) async {
+  final file = File(
+    'packages/$snakePackage/lib/data/repositories/${snakePackage}_repository_impl.dart',
+  );
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  final lines = content.split('\n');
+  final updatedLines = <String>[];
+
+  final importPattern =
+      "import 'package:$snakePackage/domain/entities/${snakeSubfeature}_entity.dart';";
+  final methodPattern = 'get$pascalSubfeature()';
+
+  var skipUntilBrace = false;
+  var braceCount = 0;
+
+  for (var i = 0; i < lines.length; i++) {
+    final line = lines[i];
+
+    // Skip import line
+    if (line.contains(importPattern)) continue;
+
+    // Skip method declaration and body
+    if (line.contains('@override') &&
+        i + 1 < lines.length &&
+        lines[i + 1].contains(methodPattern)) {
+      skipUntilBrace = true;
+      braceCount = 0;
+      continue;
+    }
+
+    if (line.contains(methodPattern) && !skipUntilBrace) {
+      skipUntilBrace = true;
+      braceCount = 0;
+    }
+
+    if (skipUntilBrace) {
+      braceCount += '{'.allMatches(line).length;
+      braceCount -= '}'.allMatches(line).length;
+      if (braceCount <= 0 && line.contains('}')) {
+        skipUntilBrace = false;
+        continue;
+      }
+      continue;
+    }
+
+    updatedLines.add(line);
+  }
+
+  await file.writeAsString(updatedLines.join('\n'));
+}
+
+/// Remove method from parent's remote datasource
+Future<void> _removeFromRemoteDataSource(
+  String snakePackage,
+  String snakeSubfeature,
+  String pascalPackage,
+  String pascalSubfeature,
+) async {
+  final file = File(
+    'packages/$snakePackage/lib/data/datasources/remote/${snakePackage}_remote_datasource.dart',
+  );
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  final lines = content.split('\n');
+  final updatedLines = <String>[];
+
+  final modelImportPattern =
+      "import 'package:$snakePackage/data/models/${snakeSubfeature}_model.dart';";
+  final entityImportPattern =
+      "import 'package:$snakePackage/domain/entities/${snakeSubfeature}_entity.dart';";
+  final methodPattern = 'get$pascalSubfeature()';
+
+  var skipUntilBrace = false;
+  var braceCount = 0;
+
+  for (final line in lines) {
+    // Skip import lines
+    if (line.contains(modelImportPattern)) continue;
+    if (line.contains(entityImportPattern)) continue;
+
+    // Skip method declaration and body
+    if (line.contains(methodPattern) && !skipUntilBrace) {
+      skipUntilBrace = true;
+      braceCount = 0;
+    }
+
+    if (skipUntilBrace) {
+      braceCount += '{'.allMatches(line).length;
+      braceCount -= '}'.allMatches(line).length;
+      if (braceCount <= 0 && line.contains('}')) {
+        skipUntilBrace = false;
+        continue;
+      }
+      continue;
+    }
+
+    updatedLines.add(line);
+  }
+
+  await file.writeAsString(updatedLines.join('\n'));
+}
+
+/// Remove endpoint from parent's client
+Future<void> _removeFromClient(
+  String snakePackage,
+  String snakeSubfeature,
+  String pascalPackage,
+  String pascalSubfeature,
+) async {
+  final file = File(
+    'packages/$snakePackage/lib/data/datasources/remote/${snakePackage}_client.dart',
+  );
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  final lines = content.split('\n');
+  final updatedLines = <String>[];
+
+  final modelImportPattern =
+      "import 'package:$snakePackage/data/models/${snakeSubfeature}_model.dart';";
+  final methodPattern = 'get$pascalSubfeature()';
+  final getAnnotationPattern = "@GET('/$snakeSubfeature')";
+
+  var skipNextLine = false;
+
+  for (final line in lines) {
+    // Skip import line
+    if (line.contains(modelImportPattern)) continue;
+
+    // Skip @GET annotation - will skip the method on next iteration
+    if (line.contains(getAnnotationPattern)) {
+      skipNextLine = true;
+      continue;
+    }
+
+    if (skipNextLine) {
+      skipNextLine = false;
+      continue;
+    }
+
+    // Skip method if not already skipped
+    if (line.contains(methodPattern)) continue;
+
+    updatedLines.add(line);
+  }
+
+  await file.writeAsString(updatedLines.join('\n'));
+}
+
 Future<void> _removeExports(String snakePackage, String snakeSubfeature) async {
   final file = File('packages/$snakePackage/lib/$snakePackage.dart');
   if (!file.existsSync()) return;
@@ -76,12 +286,16 @@ Future<void> _removeExports(String snakePackage, String snakeSubfeature) async {
   final lines = content.split('\n');
   final updatedLines = <String>[];
 
-  final exportPattern = "/$snakeSubfeature/"; // Matches any export containing the subfeature path
+  // Patterns to remove - both presentation and domain exports
+  final presentationPattern = "/$snakeSubfeature/";
+  final entityPattern = "/${snakeSubfeature}_entity.dart";
+  final usecasePattern = "/get_${snakeSubfeature}_usecase.dart";
 
   for (final line in lines) {
-    if (!line.contains(exportPattern)) {
-      updatedLines.add(line);
-    }
+    if (line.contains(presentationPattern)) continue;
+    if (line.contains(entityPattern)) continue;
+    if (line.contains(usecasePattern)) continue;
+    updatedLines.add(line);
   }
 
   await file.writeAsString(updatedLines.join('\n'));
@@ -103,12 +317,7 @@ Future<void> _removeRoute(
 
   // Patterns to remove
   final importPattern = "presentation/$snakeSubfeature/${snakeSubfeature}_page.dart";
-  final routePattern = "path: ${pascalPackage}Routes.$camelSubfeature";
-  // Note: routePattern might be partial, checking for usage of the constant is safer
-  // Or checking for the AutoRoute definition that uses the page
   final pagePattern = "${pascalSubfeature}Route.page";
-
-  // Constant pattern in Routes class
   final constantPattern = "static const String $camelSubfeature =";
 
   for (final line in lines) {
@@ -117,8 +326,6 @@ Future<void> _removeRoute(
     if (line.contains(constantPattern)) continue;
     updatedLines.add(line);
   }
-
-  // Clean up empty Routes class if needed? Likely not worth the complexity yet.
 
   await file.writeAsString(updatedLines.join('\n'));
 }
