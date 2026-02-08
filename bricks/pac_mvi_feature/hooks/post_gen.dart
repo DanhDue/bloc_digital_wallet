@@ -34,11 +34,8 @@ Future<void> run(HookContext context) async {
     progress.update('Running melos bootstrap...');
     await _runCommand('melos', ['bootstrap'], context.logger);
 
-    progress.update('Waiting for bootstrap to cool down...');
-    await Future.delayed(const Duration(seconds: 10));
-
-    progress.update('Running melos genAlls...');
-    await _runCommand('melos', ['genAlls'], context.logger);
+    progress.update('Running scoped code generation...');
+    await _runCommand('./scripts/genFeature.sh', [snakeCaseName], context.logger);
 
     progress.complete('Package $name integrated successfully!');
   } catch (e) {
@@ -234,8 +231,7 @@ Future<void> _updateCommonRoutes(String snakeName, String pascalName, String cam
     final lastBrace = content.lastIndexOf('}', insertionPoint);
 
     if (lastBrace != -1) {
-      final newRouteConsts = '''
-  // $pascalName
+      final newRouteConsts = '''\n\n// $pascalName
   static const String $camelName = '/$camelName';
   static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
 
@@ -286,10 +282,10 @@ Future<void> _updateFeaturePublicRoutes(
 
     if (lastBrace != -1) {
       final newRouteConsts = '''
+
   // $pascalName
   static const String $camelName = '/$camelName';
   static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
-
 ''';
       content = content.substring(0, lastBrace) + newRouteConsts + content.substring(lastBrace);
       updated = true;
@@ -300,8 +296,8 @@ Future<void> _updateFeaturePublicRoutes(
   if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
     final newRouteClass = '''
 
-class _\${pascalName}Route extends PageRouteInfo<void> {
-  const _\${pascalName}Route() : super('\${pascalName}Route');
+class _${pascalName}Route extends PageRouteInfo<void> {
+  const _${pascalName}Route() : super('${pascalName}Route');
 }
 ''';
     content += newRouteClass;

@@ -23,10 +23,6 @@ abstract class FeaturePublicRoutes {
   // Home
   static const String home = '/home';
   static const PageRouteInfo homeRoute = _HomeRoute();
-
-  // Transaction
-  static const String transaction = '/transaction';
-  static const PageRouteInfo transactionRoute = _TransactionRoute();
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -44,8 +40,4 @@ class _SettingsRoute extends PageRouteInfo<void> {
 
 class _HomeRoute extends PageRouteInfo<void> {
   const _HomeRoute() : super('HomeRoute');
-}
-
-class _TransactionRoute extends PageRouteInfo<void> {
-  const _TransactionRoute() : super('TransactionRoute');
 }
