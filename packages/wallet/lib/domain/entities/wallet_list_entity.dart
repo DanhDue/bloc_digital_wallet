@@ -10,12 +10,9 @@ part 'wallet_list_entity.g.dart';
 
 @freezed
 abstract class WalletListEntity with _$WalletListEntity {
-  const factory WalletListEntity({
-    @JsonKey(name: 'id') required String id,
-  }) = _WalletListEntity;
+  const factory WalletListEntity({@JsonKey(name: 'id') required String id}) = _WalletListEntity;
 
   const WalletListEntity._();
 
-  factory WalletListEntity.fromJson(Map<String, dynamic> json) =>
-      _$WalletListEntityFromJson(json);
+  factory WalletListEntity.fromJson(Map<String, dynamic> json) => _$WalletListEntityFromJson(json);
 }

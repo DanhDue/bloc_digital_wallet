@@ -15,10 +15,7 @@ class WalletListBloc extends MviBloc<WalletListAction, WalletListState, WalletLi
     on<WalletListAction>(_onAction);
   }
 
-  Future<void> _onAction(
-    WalletListAction action,
-    Emitter<WalletListState> emit,
-  ) async {
+  Future<void> _onAction(WalletListAction action, Emitter<WalletListState> emit) async {
     await action.when(
       started: () async {
         emit(state.copyWith(status: WalletListStatus.loading));

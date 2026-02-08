@@ -9,7 +9,5 @@ part 'wallet_list_ui_model.freezed.dart';
 
 @freezed
 abstract class WalletListUiModel with _$WalletListUiModel {
-  const factory WalletListUiModel({
-    @Default('') String title,
-  }) = _WalletListUiModel;
+  const factory WalletListUiModel({@Default('') String title}) = _WalletListUiModel;
 }

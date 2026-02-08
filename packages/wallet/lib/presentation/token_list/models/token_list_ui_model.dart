@@ -9,7 +9,5 @@ part 'token_list_ui_model.freezed.dart';
 
 @freezed
 abstract class TokenListUiModel with _$TokenListUiModel {
-  const factory TokenListUiModel({
-    @Default('') String title,
-  }) = _TokenListUiModel;
+  const factory TokenListUiModel({@Default('') String title}) = _TokenListUiModel;
 }

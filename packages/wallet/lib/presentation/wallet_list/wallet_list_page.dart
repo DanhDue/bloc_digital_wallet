@@ -35,14 +35,10 @@ class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, Wallet
 
   @override
   void handleEvent(BuildContext context, WalletListEvent event) {
-    event.when(
-      initial: () {},
-    );
+    event.when(initial: () {});
   }
 
   Widget _buildContent(BuildContext context, WalletListState state) {
-    return Center(
-      child: Text('Wallet List Subfeature'),
-    );
+    return Center(child: Text('Wallet List Subfeature'));
   }
 }

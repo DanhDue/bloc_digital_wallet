@@ -35,14 +35,10 @@ class TokenListPage extends BaseMviPage<TokenListBloc, TokenListState, TokenList
 
   @override
   void handleEvent(BuildContext context, TokenListEvent event) {
-    event.when(
-      initial: () {},
-    );
+    event.when(initial: () {});
   }
 
   Widget _buildContent(BuildContext context, TokenListState state) {
-    return Center(
-      child: Text('Token List Subfeature'),
-    );
+    return Center(child: Text('Token List Subfeature'));
   }
 }

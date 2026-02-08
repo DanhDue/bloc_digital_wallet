@@ -10,12 +10,9 @@ part 'token_list_entity.g.dart';
 
 @freezed
 abstract class TokenListEntity with _$TokenListEntity {
-  const factory TokenListEntity({
-    @JsonKey(name: 'id') required String id,
-  }) = _TokenListEntity;
+  const factory TokenListEntity({@JsonKey(name: 'id') required String id}) = _TokenListEntity;
 
   const TokenListEntity._();
 
-  factory TokenListEntity.fromJson(Map<String, dynamic> json) =>
-      _$TokenListEntityFromJson(json);
+  factory TokenListEntity.fromJson(Map<String, dynamic> json) => _$TokenListEntityFromJson(json);
 }

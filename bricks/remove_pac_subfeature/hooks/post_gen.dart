@@ -81,18 +81,21 @@ Future<void> run(HookContext context) async {
 
     // Only rebuild the affected package
     context.logger.info('Rebuilding $snakePackage package...');
-    final packageResult = await Process.run('melos', [
-      'exec',
-      '--scope=$snakePackage',
-      '--',
-      'fvm',
-      'flutter',
-      'pub',
-      'run',
-      'build_runner',
-      'build',
-      '--delete-conflicting-outputs',
-    ], runInShell: true);
+    final packageResult = await Process.run(
+        'melos',
+        [
+          'exec',
+          '--scope=$snakePackage',
+          '--',
+          'fvm',
+          'flutter',
+          'pub',
+          'run',
+          'build_runner',
+          'build',
+          '--delete-conflicting-outputs',
+        ],
+        runInShell: true);
     if (packageResult.exitCode == 0) {
       context.logger.success('Rebuild completed successfully.');
     } else {

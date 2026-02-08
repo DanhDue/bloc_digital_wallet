@@ -15,10 +15,7 @@ class TokenListBloc extends MviBloc<TokenListAction, TokenListState, TokenListEv
     on<TokenListAction>(_onAction);
   }
 
-  Future<void> _onAction(
-    TokenListAction action,
-    Emitter<TokenListState> emit,
-  ) async {
+  Future<void> _onAction(TokenListAction action, Emitter<TokenListState> emit) async {
     await action.when(
       started: () async {
         emit(state.copyWith(status: TokenListStatus.loading));

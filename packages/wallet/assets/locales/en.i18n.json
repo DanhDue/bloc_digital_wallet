@@ -4,5 +4,11 @@
     "selectNetwork": "Select network",
     "search": "Search",
     "error": "An error occurred"
+  },
+  "nftsList": {
+    "title": "NFTs",
+    "notFoundMessage": "No NFTs Found",
+    "addNft": "Add NFT",
+    "error": "An error occurred"
   }
 }

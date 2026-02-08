@@ -12,18 +12,13 @@ part 'token_list_model.g.dart';
 
 @freezed
 abstract class TokenListModel with _$TokenListModel {
-  const factory TokenListModel({
-    @JsonKey(name: 'id') required String id,
-  }) = _TokenListModel;
+  const factory TokenListModel({@JsonKey(name: 'id') required String id}) = _TokenListModel;
 
   const TokenListModel._();
 
-  factory TokenListModel.fromJson(Map<String, dynamic> json) =>
-      _$TokenListModelFromJson(json);
+  factory TokenListModel.fromJson(Map<String, dynamic> json) => _$TokenListModelFromJson(json);
 
   TokenListEntity toEntity() {
-    return TokenListEntity(
-      id: id,
-    );
+    return TokenListEntity(id: id);
   }
 }
