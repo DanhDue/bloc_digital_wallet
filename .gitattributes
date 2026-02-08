@@ -1,0 +1,5 @@
+lib/core/localization/app_translation_providers.dart merge=union
+lib/di/injection.dart merge=union
+lib/app_router.dart merge=union
+pubspec.yaml merge=union
+packages/core/lib/utils/feature_public_routes.dart merge=union

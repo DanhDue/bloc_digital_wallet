@@ -17,5 +17,9 @@
     "addToken": "Add Token",
     "error": "An error occurred",
     "hiddenBalance": "****"
+  },
+  "walletList": {
+    "account": "Account",
+    "copied": "Wallet address copied and will be cleared in 30 seconds"
   }
 }

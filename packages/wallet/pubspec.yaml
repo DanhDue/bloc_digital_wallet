@@ -28,6 +28,14 @@ dependencies:
   slang: ^4.0.0
   slang_flutter: ^4.0.0
 
+
+  
+  # UI
+  card_swiper: ^3.0.1
+  pretty_qr_code: ^3.5.0
+  shimmer: ^3.0.0
+  flutter_smart_dialog: ^4.9.8+9
+  animated_visibility: ^0.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

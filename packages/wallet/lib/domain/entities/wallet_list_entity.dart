@@ -4,13 +4,17 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wallet/domain/entities/wallet_entity.dart';
 
 part 'wallet_list_entity.freezed.dart';
 part 'wallet_list_entity.g.dart';
 
 @freezed
 abstract class WalletListEntity with _$WalletListEntity {
-  const factory WalletListEntity({@JsonKey(name: 'id') required String id}) = _WalletListEntity;
+  const factory WalletListEntity({
+    @JsonKey(name: 'id') required String id,
+    @Default([]) List<WalletEntity> wallets,
+  }) = _WalletListEntity;
 
   const WalletListEntity._();
 

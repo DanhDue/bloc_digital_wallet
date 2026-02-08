@@ -15,6 +15,9 @@ abstract class WalletModel with _$WalletModel {
     @JsonKey(name: 'id') required String id,
     @JsonKey(name: 'name') required String name,
     @JsonKey(name: 'description') String? description,
+    @JsonKey(name: 'address') String? address,
+    @JsonKey(name: 'balance') double? balance,
+    @JsonKey(name: 'daily_change') double? dailyChange,
   }) = _WalletModel;
 
   factory WalletModel.fromJson(Map<String, dynamic> json) => _$WalletModelFromJson(json);
@@ -22,6 +25,13 @@ abstract class WalletModel with _$WalletModel {
 
 extension WalletModelX on WalletModel {
   WalletEntity toEntity() {
-    return WalletEntity(id: id, name: name, description: description);
+    return WalletEntity(
+      id: id,
+      name: name,
+      description: description,
+      address: address,
+      balance: balance,
+      dailyChange: dailyChange,
+    );
   }
 }

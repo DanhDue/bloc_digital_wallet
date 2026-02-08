@@ -11,6 +11,7 @@ part 'wallet_list_action.freezed.dart';
 @freezed
 abstract class WalletListAction extends BaseAction with _$WalletListAction {
   const factory WalletListAction.started() = _Started;
+  const factory WalletListAction.toggleBalanceVisibility() = _ToggleBalanceVisibility;
 
   const WalletListAction._();
 }

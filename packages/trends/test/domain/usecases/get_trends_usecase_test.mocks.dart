@@ -26,8 +26,7 @@ import 'package:trends/domain/repositories/trends_repository.dart' as _i3;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
-  _FakeEither_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeEither_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
 /// A class which mocks [TrendsRepository].
@@ -42,13 +41,12 @@ class MockTrendsRepository extends _i1.Mock implements _i3.TrendsRepository {
   _i4.Future<_i2.Either<_i2.Failure, _i5.TrendsEntity>> getTrends() =>
       (super.noSuchMethod(
             Invocation.method(#getTrends, []),
-            returnValue:
-                _i4.Future<_i2.Either<_i2.Failure, _i5.TrendsEntity>>.value(
-                  _FakeEither_0<_i2.Failure, _i5.TrendsEntity>(
-                    this,
-                    Invocation.method(#getTrends, []),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i5.TrendsEntity>>.value(
+              _FakeEither_0<_i2.Failure, _i5.TrendsEntity>(
+                this,
+                Invocation.method(#getTrends, []),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, _i5.TrendsEntity>>);
 }

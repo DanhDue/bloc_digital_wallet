@@ -6,11 +6,11 @@ import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
 
 import '../entities/wallet_list_entity.dart';
-import '../repositories/wallet_list_repository.dart';
+import '../repositories/wallet_repository.dart';
 
 @injectable
 class GetWalletListUseCase {
-  final WalletListRepository _repository;
+  final WalletRepository _repository;
 
   GetWalletListUseCase(this._repository);
 
