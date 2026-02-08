@@ -42,6 +42,9 @@ Future<void> run(HookContext context) async {
     // 5. Update lib/app_router.dart - remove lines
     await _cleanAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
+    // 6. Update packages/core/lib/utils/feature_public_routes.dart - remove lines
+    await _cleanFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
+
     // 6. Update pubspec.yaml workspace - remove package from workspace list
     await _cleanPubspecWorkspace(snakeCaseName);
 
@@ -56,11 +59,24 @@ Future<void> run(HookContext context) async {
     progress.update('Running melos bootstrap...');
     await _runCommand('melos', ['bootstrap'], context.logger);
 
-    progress.update('Waiting for bootstrap to cool down...');
-    await Future.delayed(const Duration(seconds: 10));
+    progress.update('Running code generation on root app...');
+    await _runCommand(
+        'fvm',
+        [
+          'flutter',
+          'pub',
+          'run',
+          'build_runner',
+          'build',
+          '--delete-conflicting-outputs',
+        ],
+        context.logger);
 
-    progress.update('Running melos genAlls...');
-    await _runCommand('melos', ['genAlls'], context.logger);
+    progress.update('Running formatting and analysis...');
+    await _runCommand('melos', ['run', 'dartfmt'], context.logger);
+    await _runCommand('melos', ['run', 'add-header-ignore-flags'], context.logger);
+    await _runCommand('melos', ['run', 'add-license-header'], context.logger);
+    await _runCommand('melos', ['run', 'analyze'], context.logger);
 
     progress.complete('Package $name removed successfully!');
   } catch (e) {
@@ -198,4 +214,33 @@ Future<void> _runCommand(String command, List<String> args, Logger logger) async
   } else {
     logger.detail(result.stdout.toString());
   }
+}
+
+Future<void> _cleanFeaturePublicRoutes(
+  String snakeName,
+  String pascalName,
+  String camelName,
+) async {
+  final file = File('packages/core/lib/utils/feature_public_routes.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+
+  // Remove public constants
+  final publicRoutePattern = RegExp('''
+  // $pascalName
+  static const String $camelName = '/$camelName';
+  static const PageRouteInfo ${camelName}Route = _${pascalName}Route\\(\\);
+''', multiLine: true);
+  content = content.replaceAll(publicRoutePattern, '');
+
+  // Remove private class
+  final privateClassPattern = RegExp('''
+class _${pascalName}Route extends PageRouteInfo<void> \\{
+  const _${pascalName}Route\\(\\) : super\\('${pascalName}Route'\\);
+\\}
+''', multiLine: true);
+  content = content.replaceAll(privateClassPattern, '');
+
+  await file.writeAsString(content);
 }

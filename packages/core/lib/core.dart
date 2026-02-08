@@ -22,7 +22,7 @@ export 'extensions/widget_extensions.dart';
 
 export 'utils/log.dart';
 export 'utils/route_utils.dart';
-export 'utils/common_routes.dart';
+export 'utils/feature_public_routes.dart';
 export 'utils/secure_clipboard.dart';
 export 'auth/auth_local_datasource.dart';
 export 'auth/token_refresher.dart';

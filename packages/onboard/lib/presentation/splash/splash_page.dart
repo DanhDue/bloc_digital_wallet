@@ -4,6 +4,7 @@
 
 import 'package:animated_visibility/animated_visibility.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:core/utils/feature_public_routes.dart';
 import 'package:core/core.dart';
 
 import 'package:onboard/generated/translations.dart';
@@ -129,8 +130,8 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
   void handleEvent(BuildContext context, SplashEvent event) {
     switch (event) {
       case NavigateToNextEvent():
-        // Navigate to Settings via CommonRoutes (avoids direct package import)
-        context.router.replace(CommonRoutes.settingsRoute);
+        // Navigate to Transaction via FeaturePublicRoutes (avoids direct package import)
+        context.router.replace(FeaturePublicRoutes.loginRoute);
         Log.d("NavigateToNextEvent");
         break;
       case ShowErrorMessageEvent(:final message):

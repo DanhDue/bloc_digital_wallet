@@ -26,15 +26,16 @@ Future<void> run(HookContext context) async {
     // 4. Update lib/app_router.dart
     await _updateAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 5. Run Melos commands
+    // 5. Update FeaturePublicRoutes
+    progress.update('Updating FeaturePublicRoutes...');
+    await _updateFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
+
+    // 6. Run Melos commands
     progress.update('Running melos bootstrap...');
     await _runCommand('melos', ['bootstrap'], context.logger);
 
-    progress.update('Waiting for bootstrap to cool down...');
-    await Future.delayed(const Duration(seconds: 10));
-
-    progress.update('Running melos genAlls...');
-    await _runCommand('melos', ['genAlls'], context.logger);
+    progress.update('Running scoped code generation...');
+    await _runCommand('./scripts/genFeature.sh', [snakeCaseName], context.logger);
 
     progress.complete('Package $name integrated successfully!');
   } catch (e) {
@@ -209,6 +210,103 @@ Future<void> _updateAppRouter(String snakeName, String pascalName, String camelN
   }
 
   await file.writeAsString(content);
+}
+
+Future<void> _updateCommonRoutes(String snakeName, String pascalName, String camelName) async {
+  // Use relative path from root since post_gen runs from project root
+  final file = File('packages/core/lib/utils/common_routes.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  var updated = false;
+
+  // Add route constant inside CommonRoutes class
+  // We locate the closing brace of CommonRoutes class by finding subsequent private class definition
+  // or just append before the last closing brace of the main block if we assume standard formatting.
+  // A safer bet given the file structure is looking for the comment block of private routes.
+  final privateRoutesMarker = '// Private route classes';
+  if (content.contains(privateRoutesMarker) &&
+      !content.contains('static const String $camelName')) {
+    final insertionPoint = content.indexOf(privateRoutesMarker);
+    final lastBrace = content.lastIndexOf('}', insertionPoint);
+
+    if (lastBrace != -1) {
+      final newRouteConsts = '''\n\n// $pascalName
+  static const String $camelName = '/$camelName';
+  static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
+
+''';
+      content = content.substring(0, lastBrace) + newRouteConsts + content.substring(lastBrace);
+      updated = true;
+    }
+  }
+
+  // Add private route class at the end of file
+  if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
+    final newRouteClass = '''
+
+class _${pascalName}Route extends PageRouteInfo<void> {
+  const _${pascalName}Route() : super('${pascalName}Route');
+}
+''';
+    content += newRouteClass;
+    updated = true;
+  }
+
+  if (updated) {
+    await file.writeAsString(content);
+  }
+}
+
+Future<void> _updateFeaturePublicRoutes(
+  String snakeName,
+  String pascalName,
+  String camelName,
+) async {
+  // Use relative path from root since post_gen runs from project root
+  final file = File('packages/core/lib/utils/feature_public_routes.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  var updated = false;
+
+  // Add route constant inside FeaturePublicRoutes class
+  // We locate the closing brace of FeaturePublicRoutes class by finding subsequent private class definition
+  // or just append before the last closing brace of the main block if we assume standard formatting.
+  // A safer bet given the file structure is looking for the comment block of private routes.
+  final privateRoutesMarker = '// Private route classes';
+  if (content.contains(privateRoutesMarker) &&
+      !content.contains('static const String $camelName')) {
+    final insertionPoint = content.indexOf(privateRoutesMarker);
+    final lastBrace = content.lastIndexOf('}', insertionPoint);
+
+    if (lastBrace != -1) {
+      final newRouteConsts = '''
+
+  // $pascalName
+  static const String $camelName = '/$camelName';
+  static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
+''';
+      content = content.substring(0, lastBrace) + newRouteConsts + content.substring(lastBrace);
+      updated = true;
+    }
+  }
+
+  // Add private route class at the end of file
+  if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
+    final newRouteClass = '''
+
+class _${pascalName}Route extends PageRouteInfo<void> {
+  const _${pascalName}Route() : super('${pascalName}Route');
+}
+''';
+    content += newRouteClass;
+    updated = true;
+  }
+
+  if (updated) {
+    await file.writeAsString(content);
+  }
 }
 
 Future<void> _runCommand(String command, List<String> args, Logger logger) async {
