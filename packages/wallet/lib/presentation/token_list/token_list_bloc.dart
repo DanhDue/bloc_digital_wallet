@@ -2,26 +2,37 @@
 
 // coverage:ignore-file
 
-import 'package:framework/framework.dart';
-import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
-import 'package:wallet/presentation/token_list/token_list_action.dart';
-import 'package:wallet/presentation/token_list/token_list_event.dart';
-import 'package:wallet/presentation/token_list/token_list_state.dart';
+import 'package:ui_kit/ui_kit.dart';
+import 'package:wallet/domain/usecases/get_token_accounts_usecase.dart';
 
+import 'models/token_list_ui_model.dart';
+
+/// TokenListBloc using BaseInfiniteListBloc for paginated token loading
 @injectable
-class TokenListBloc extends MviBloc<TokenListAction, TokenListState, TokenListEvent> {
-  TokenListBloc() : super(const TokenListState()) {
-    on<TokenListAction>(_onAction);
+class TokenListBloc extends BaseInfiniteListBloc<TokenListUiModel> {
+  final GetTokenAccountsUseCase _getTokenAccountsUseCase;
+
+  String? _walletAddress;
+
+  TokenListBloc(this._getTokenAccountsUseCase);
+
+  void updateWalletAddress(String address) {
+    _walletAddress = address;
+    add(const InfiniteListFetchFirstPage());
   }
 
-  Future<void> _onAction(TokenListAction action, Emitter<TokenListState> emit) async {
-    await action.when(
-      started: () async {
-        emit(state.copyWith(status: TokenListStatus.loading));
-        // TODO: Add logic here
-        emit(state.copyWith(status: TokenListStatus.success));
-      },
+  @override
+  Future<List<TokenListUiModel>> fetchItems({required int page, required int limit}) async {
+    // For now, return data on first page only (API returns all tokens at once)
+    if (page > 0) return [];
+
+    if (_walletAddress == null || _walletAddress!.isEmpty) return [];
+
+    final result = await _getTokenAccountsUseCase(_walletAddress!);
+    return result.fold(
+      (failure) => throw Exception(failure.message),
+      (tokens) => tokens.map(TokenListUiModel.fromEntity).toList(),
     );
   }
 }

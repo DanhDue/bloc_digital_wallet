@@ -10,5 +10,12 @@
     "notFoundMessage": "Không tìm thấy NFT",
     "addNft": "Thêm NFT",
     "error": "Đã có lỗi xảy ra"
+  },
+  "tokenList": {
+    "title": "Tokens",
+    "notFoundMessage": "Không tìm thấy Token",
+    "addToken": "Thêm Token",
+    "error": "Đã có lỗi xảy ra",
+    "hiddenBalance": "****"
   }
 }

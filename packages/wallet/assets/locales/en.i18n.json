@@ -10,5 +10,12 @@
     "notFoundMessage": "No NFTs Found",
     "addNft": "Add NFT",
     "error": "An error occurred"
+  },
+  "tokenList": {
+    "title": "Tokens",
+    "notFoundMessage": "No Tokens Found",
+    "addToken": "Add Token",
+    "error": "An error occurred",
+    "hiddenBalance": "****"
   }
 }

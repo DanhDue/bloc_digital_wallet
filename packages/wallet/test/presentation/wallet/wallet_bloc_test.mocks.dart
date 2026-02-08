@@ -26,7 +26,8 @@ import 'package:wallet/domain/usecases/get_wallet_usecase.dart' as _i3;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
-  _FakeEither_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
+  _FakeEither_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [GetWalletUseCase].
@@ -41,9 +42,13 @@ class MockGetWalletUseCase extends _i1.Mock implements _i3.GetWalletUseCase {
   _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>> call() =>
       (super.noSuchMethod(
             Invocation.method(#call, []),
-            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>>.value(
-              _FakeEither_0<_i2.Failure, _i5.WalletEntity>(this, Invocation.method(#call, [])),
-            ),
+            returnValue:
+                _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>>.value(
+                  _FakeEither_0<_i2.Failure, _i5.WalletEntity>(
+                    this,
+                    Invocation.method(#call, []),
+                  ),
+                ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>>);
 }
