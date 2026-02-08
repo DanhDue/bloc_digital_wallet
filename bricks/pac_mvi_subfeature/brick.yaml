@@ -1,5 +1,5 @@
 name: pac_mvi_subfeature
-description: Creates a new subfeature (presentation layer) inside an existing pac_mvi_feature package.
+description: Creates a new subfeature inside an existing pac_mvi_feature package. Reuses parent's repository, datasource, and client - only adds new methods to them.
 version: 0.1.0+1
 environment:
   mason: ">=0.1.0-dev.26 <1.0.0"

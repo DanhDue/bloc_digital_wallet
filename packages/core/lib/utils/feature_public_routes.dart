@@ -23,6 +23,10 @@ abstract class FeaturePublicRoutes {
   // Home
   static const String home = '/home';
   static const PageRouteInfo homeRoute = _HomeRoute();
+
+  // Trends
+  static const String trends = '/trends';
+  static const PageRouteInfo trendsRoute = _TrendsRoute();
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -40,4 +44,8 @@ class _SettingsRoute extends PageRouteInfo<void> {
 
 class _HomeRoute extends PageRouteInfo<void> {
   const _HomeRoute() : super('HomeRoute');
+}
+
+class _TrendsRoute extends PageRouteInfo<void> {
+  const _TrendsRoute() : super('TrendsRoute');
 }

@@ -16,6 +16,7 @@ workspace:
   - packages/onboard
   - packages/ui_kit
   - packages/settings
+  - packages/trends
 dependencies:
   flutter:
     sdk: flutter
@@ -33,6 +34,8 @@ dependencies:
     path: packages/framework
   onboard:
     path: packages/onboard
+  trends:
+    path: packages/trends
   settings:
     path: packages/settings
   # Dialog Management
