@@ -1,3 +1,8 @@
 {
-  "title": "Wallet Feature"
+  "title": "Wallet Feature",
+  "networkSelection": {
+    "selectNetwork": "Select network",
+    "search": "Search",
+    "error": "An error occurred"
+  }
 }

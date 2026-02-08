@@ -16,6 +16,5 @@ abstract class WalletEntity with _$WalletEntity {
     @JsonKey(name: 'description') String? description,
   }) = _WalletEntity;
 
-  factory WalletEntity.fromJson(Map<String, dynamic> json) =>
-      _$WalletEntityFromJson(json);
+  factory WalletEntity.fromJson(Map<String, dynamic> json) => _$WalletEntityFromJson(json);
 }

@@ -11,8 +11,7 @@ import 'wallet_event.dart';
 import 'wallet_state.dart';
 
 @RoutePage()
-class WalletPage
-    extends BaseMviPage<WalletBloc, WalletState, WalletEvent> {
+class WalletPage extends BaseMviPage<WalletBloc, WalletState, WalletEvent> {
   const WalletPage({super.key});
 
   @override

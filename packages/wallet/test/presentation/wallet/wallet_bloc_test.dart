@@ -26,11 +26,7 @@ void main() {
     bloc = WalletBloc(mockUseCase);
   });
 
-  const tWalletEntity = WalletEntity(
-    id: '1',
-    name: 'Test',
-    description: 'Description',
-  );
+  const tWalletEntity = WalletEntity(id: '1', name: 'Test', description: 'Description');
 
   test('initial state should be initial', () {
     expect(bloc.state.status, WalletStatus.initial);

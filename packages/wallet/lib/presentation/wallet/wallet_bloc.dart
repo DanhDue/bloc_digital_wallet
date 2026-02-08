@@ -19,9 +19,7 @@ class WalletBloc extends MviBloc<WalletAction, WalletState, WalletEvent> {
 
   WalletBloc(this._getWalletUseCase) : super(const WalletState()) {
     on<WalletAction>((action, emit) {
-      action.when(
-        started: () => _onStarted(emit),
-      );
+      action.when(started: () => _onStarted(emit));
     });
   }
 

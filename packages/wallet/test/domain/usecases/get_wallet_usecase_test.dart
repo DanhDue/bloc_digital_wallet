@@ -31,8 +31,7 @@ void main() {
 
   test('should get wallet from the repository', () async {
     // arrange
-    when(mockRepository.getWallet())
-        .thenAnswer((_) async => Right(tWalletEntity));
+    when(mockRepository.getWallet()).thenAnswer((_) async => Right(tWalletEntity));
 
     // act
     final result = await useCase();
