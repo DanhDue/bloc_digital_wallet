@@ -11,14 +11,27 @@ import 'package:wallet/data/models/wallet_model.dart';
 
 @lazySingleton
 class WalletLocalDataSource {
+  static const _walletListAssetPath = 'packages/wallet/assets/jsons/test_wallets.json';
+  static const _localWalletListId = 'local_wallet_list';
+
   Future<WalletListModel> getWalletList() async {
-    final String response = await rootBundle.loadString(
-      'packages/wallet/assets/jsons/test_wallets.json',
-    );
-    final List<dynamic> data = jsonDecode(response);
+    try {
+      final String response = await rootBundle.loadString(_walletListAssetPath);
+      final List<dynamic> data = jsonDecode(response);
 
-    final wallets = data.map((e) => WalletModel.fromJson(e as Map<String, dynamic>)).toList();
+      final wallets = data.map((e) {
+        if (e is Map<String, dynamic>) {
+          return WalletModel.fromJson(e);
+        }
+        throw const FormatException('Invalid wallet format');
+      }).toList();
 
-    return WalletListModel(id: 'local_wallet_list', wallets: wallets);
+      return WalletListModel(id: _localWalletListId, wallets: wallets);
+    } catch (e) {
+      // In a real app, we might want to throw a custom Failure here
+      // For now, rethrowing or returning an empty list based on requirements.
+      // Given the signature returns a Model, we throw.
+      throw Exception('Failed to load local wallet list: $e');
+    }
   }
 }

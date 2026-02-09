@@ -15,6 +15,10 @@ void main() {
     bloc = WalletBloc();
   });
 
+  tearDown(() {
+    bloc.close();
+  });
+
   test('initial state should be initial', () {
     expect(bloc.state.status, WalletStatus.initial);
   });

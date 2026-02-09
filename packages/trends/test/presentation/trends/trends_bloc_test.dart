@@ -26,6 +26,10 @@ void main() {
     bloc = TrendsBloc(mockUseCase);
   });
 
+  tearDown(() {
+    bloc.close();
+  });
+
   const tTrendsEntity = TrendsEntity(id: '1', name: 'Test', description: 'Description');
 
   test('initial state should be initial', () {
