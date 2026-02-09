@@ -6,12 +6,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:framework/framework.dart';
 import 'package:flutter/material.dart';
 
+import 'trends_action.dart';
 import 'trends_bloc.dart';
 import 'trends_event.dart';
 import 'trends_state.dart';
 
 @RoutePage()
-class TrendsPage extends BaseMviPage<TrendsBloc, TrendsState, TrendsEvent> {
+class TrendsPage extends BaseMviPage<TrendsBloc, TrendsAction, TrendsState, TrendsEvent> {
   const TrendsPage({super.key});
 
   @override

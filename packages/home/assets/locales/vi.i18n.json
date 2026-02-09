@@ -1,3 +1,6 @@
 {
-  "title": "Tính năng Home"
+  "home": {
+    "title": "Trang chủ",
+    "hello": "Xin chào Home"
+  }
 }

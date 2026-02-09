@@ -7,7 +7,7 @@ import 'dart:async' as _i4;
 
 import 'package:core/core.dart' as _i2;
 import 'package:home/domain/entities/home_entity.dart' as _i5;
-import 'package:home/domain/usecases/get_home_usecase.dart' as _i3;
+import 'package:home/domain/usecases/get_all_homes_usecase.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -29,21 +29,21 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
   _FakeEither_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
-/// A class which mocks [GetHomeUseCase].
+/// A class which mocks [GetAllHomesUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetHomeUseCase extends _i1.Mock implements _i3.GetHomeUseCase {
-  MockGetHomeUseCase() {
+class MockGetAllHomesUseCase extends _i1.Mock implements _i3.GetAllHomesUseCase {
+  MockGetAllHomesUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, _i5.HomeEntity>> call() =>
+  _i4.Future<_i2.Either<_i2.Failure, List<_i5.HomeEntity>>> call() =>
       (super.noSuchMethod(
             Invocation.method(#call, []),
-            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i5.HomeEntity>>.value(
-              _FakeEither_0<_i2.Failure, _i5.HomeEntity>(this, Invocation.method(#call, [])),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.HomeEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i5.HomeEntity>>(this, Invocation.method(#call, [])),
             ),
           )
-          as _i4.Future<_i2.Either<_i2.Failure, _i5.HomeEntity>>);
+          as _i4.Future<_i2.Either<_i2.Failure, List<_i5.HomeEntity>>>);
 }

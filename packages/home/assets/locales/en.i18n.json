@@ -1,3 +1,6 @@
 {
-  "title": "Home Feature"
+  "home": {
+    "title": "Home",
+    "hello": "Hello Home"
+  }
 }

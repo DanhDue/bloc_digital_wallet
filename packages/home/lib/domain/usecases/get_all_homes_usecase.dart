@@ -8,12 +8,12 @@ import '../entities/home_entity.dart';
 import '../repositories/home_repository.dart';
 
 @injectable
-class GetHomeUseCase {
+class GetAllHomesUseCase {
   final HomeRepository _homeRepository;
 
-  GetHomeUseCase(this._homeRepository);
+  GetAllHomesUseCase(this._homeRepository);
 
-  Future<Either<Failure, HomeEntity>> call(String params) {
-    return _homeRepository.getHome(params);
+  Future<Either<Failure, List<HomeEntity>>> call() {
+    return _homeRepository.getAllHomes();
   }
 }

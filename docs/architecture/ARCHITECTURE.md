@@ -559,71 +559,49 @@ class WalletBloc extends MviBloc<WalletAction, WalletState, WalletEvent> {
 
 ### 3. View Implementation
 
+Using `BaseMviPage` (or `BaseMviStatefulPage`) simplifies BLoC provision and event listening.
+
 ```dart
-class WalletPage extends StatelessWidget {
+@RoutePage()
+class WalletPage extends BaseMviPage<WalletBloc, WalletAction, WalletState, WalletEvent> {
   final String address;
   const WalletPage({super.key, required this.address});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<WalletBloc>()
-        ..onAction(LoadWalletAction(address)),
-      child: const _WalletView(),
-    );
-  }
-}
-
-class _WalletView extends StatelessWidget {
-  const _WalletView();
+  WalletAction? get initialAction => LoadWalletAction(address);
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildPage(BuildContext context, WalletState state) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.t.walletTitle)), // ✅ Use context.t
-      body: BlocConsumer<WalletBloc, WalletState>(
-        // 1. Listen to EVENTS (Side Effects)
-        listener: (context, state) {
-          context.read<WalletBloc>().events.listen((event) {
-            switch (event) {
-              case ShowSuccessMessageEvent(:final message):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(message)),
-                );
-              case NavigateToDetailEvent(:final address):
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => DetailPage(address: address),
-                ));
-            }
-          });
-        },
-        // 2. Build UI based on STATE
-        builder: (context, state) {
-          return switch (state) {
-            WalletLoading() => const Center(child: CircularProgressIndicator()),
-            WalletLoaded(:final wallet) => _buildContent(context, wallet),
-            WalletError(:final message) => Center(child: Text('Error: $message')),
-            _ => const SizedBox(),
-          };
-        },
-      ),
+      appBar: AppBar(title: Text(context.t.walletTitle)),
+      body: switch (state) {
+        WalletLoading() => const Center(child: CircularProgressIndicator()),
+        WalletLoaded(:final wallet) => _buildContent(context, wallet),
+        WalletError(:final message) => Center(child: Text('Error: $message')),
+        _ => const SizedBox(),
+      },
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // 3. Send ACTION when User interacts
-          context.read<WalletBloc>().onAction(const RefreshWalletAction());
-        },
+        onPressed: () => onAction(context, const RefreshWalletAction()),
         child: const Icon(Icons.refresh),
       ),
     );
   }
 
+  @override
+  void onEvent(BuildContext context, WalletEvent event) {
+    switch (event) {
+      case ShowSuccessMessageEvent(:final message):
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      case NavigateToDetailEvent(:final address):
+        context.router.push(DetailRoute(address: address));
+    }
+  }
+
   Widget _buildContent(BuildContext context, WalletEntity wallet) {
     return Column(
       children: [
-        Text('Balance: ${wallet.balance}',
-            style: context.appThemes.headlineSmall), // ✅ Use context.appThemes
-        Text('Address: ${wallet.address}',
-            style: context.appThemes.bodyMedium),
+        Text('Balance: ${wallet.balance}', style: context.appThemes.headlineSmall),
+        Text('Address: ${wallet.address}', style: context.appThemes.bodyMedium),
       ],
     );
   }

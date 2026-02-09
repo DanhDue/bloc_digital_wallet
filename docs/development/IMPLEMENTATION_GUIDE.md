@@ -497,7 +497,7 @@ Add to `assets/locales/en.i18n.json` and `assets/locales/vi.i18n.json`:
 Edit `lib/features/{module}/presentation/pages/{subfeature}_page.dart` to implement your UI using:
 - ✅ `context.t` for translations
 - ✅ `context.appThemes` for styling
-- ✅ BlocBuilder/BlocProvider for state management
+- ✅ `BaseMviPage` or `BaseMviStatefulPage` for clean MVI integration
 
 ### 9. Add Route
 
@@ -1023,6 +1023,58 @@ class TransactionBloc extends MviBloc<TransactionAction, TransactionState, Trans
           },
         );
       },
+    );
+  }
+}
+```
+
+### 4.5 Implement Page UI
+
+Use `BaseMviPage` to connect your BLoC to the UI. Specifies the Bloc, Action, State, and Event types as generic arguments.
+
+**File:** `lib/features/transaction/presentation/transaction/transaction_page.dart`
+
+```dart
+import 'package:auto_route/annotations.dart';
+import 'package:flutter/material.dart';
+import 'package:framework/framework.dart'; // import BaseMviPage
+import 'transaction_bloc.dart';
+import 'transaction_action.dart';
+import 'transaction_state.dart';
+import 'transaction_event.dart';
+
+@RoutePage()
+class TransactionPage extends BaseMviPage<TransactionBloc, TransactionAction, TransactionState, TransactionEvent> {
+  const TransactionPage({super.key});
+
+  @override
+  TransactionAction? get initialAction => const TransactionAction.loadTransactions();
+
+  @override
+  Widget buildPage(BuildContext context, TransactionState state) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Transactions')),
+      body: state.when(
+        initial: () => const SizedBox(),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (message) => Center(child: Text('Error: $message')),
+        loaded: (transactions) => ListView.builder(
+          itemCount: transactions.length,
+          itemBuilder: (context, index) => ListTile(
+            title: Text(transactions[index].id),
+            subtitle: Text('${transactions[index].amount} ${transactions[index].currency}'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void onEvent(BuildContext context, TransactionEvent event) {
+    event.when(
+      showSuccess: (message) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message))),
+      showError: (message) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red)),
+      navigateToDetails: (id) => context.router.push(TransactionDetailsRoute(id: id)),
     );
   }
 }

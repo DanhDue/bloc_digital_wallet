@@ -22,7 +22,7 @@ import 'login_state.dart';
 /// ============================================================================
 
 @RoutePage()
-class LoginPage extends BaseMviPage<LoginBloc, LoginState, LoginEvent> {
+class LoginPage extends BaseMviPage<LoginBloc, LoginAction, LoginState, LoginEvent> {
   const LoginPage({super.key});
 
   @override

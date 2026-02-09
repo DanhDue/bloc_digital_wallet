@@ -16,14 +16,15 @@ import 'wallet_list_event.dart';
 import 'wallet_list_state.dart';
 
 @RoutePage()
-class WalletListPage extends BaseMviPage<WalletListBloc, WalletListState, WalletListEvent> {
+class WalletListPage
+    extends BaseMviPage<WalletListBloc, WalletListAction, WalletListState, WalletListEvent> {
   final void Function(WalletEntity)? onWalletChanged;
   final WalletEntity? selectedWallet;
 
   const WalletListPage({super.key, this.onWalletChanged, this.selectedWallet});
 
   @override
-  BaseAction? get initialAction => const WalletListAction.started();
+  WalletListAction? get initialAction => const WalletListAction.started();
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;

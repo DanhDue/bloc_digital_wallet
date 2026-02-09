@@ -132,7 +132,7 @@ Presentation Layer (UI):
     - State extends BaseState (persistent UI data)
     - Event extends BaseEvent (one-time side effects)
     - BLoC extends MviBloc<Action, State, Event>
-    - Page uses BlocProvider + BlocConsumer
+    - Page extends BaseMviPage (or BaseMviStatefulPage) for automatic Bloc provision and event listening.
 
 Core:
   - Architecture: lib/core/architecture/ (MVI base classes)
@@ -525,7 +525,7 @@ Event (formerly SideEffect):
   - Properties: sealed class, const constructors
 
 MviBloc:
-  - Base: MviBloc<Action, State, Event>
+  - Base: MviBloc<Action extends BaseAction, State extends BaseState, Event extends BaseEvent>
   - Entry Point: onAction(action) - ONLY method View should call
   - State Updates: emit(newState)
   - Event Emission: emitEvent(event)

@@ -10,10 +10,9 @@ part 'home_ui_model.freezed.dart';
 
 @freezed
 abstract class HomeUiModel with _$HomeUiModel {
-  const factory HomeUiModel({required String id, required String name, String? description}) =
-      _HomeUiModel;
+  const factory HomeUiModel({required String id, required String name}) = _HomeUiModel;
 
   factory HomeUiModel.fromEntity(HomeEntity entity) {
-    return HomeUiModel(id: entity.id, name: entity.name, description: entity.description);
+    return HomeUiModel(id: entity.id, name: entity.name);
   }
 }
