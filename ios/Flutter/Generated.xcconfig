@@ -1,8 +1,8 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/Users/danhdue/fvm/versions/3.38.7
-FLUTTER_APPLICATION_PATH=/Users/danhdue/AllProjects/sample/insight88
+FLUTTER_APPLICATION_PATH=/Users/danhdue/AllProjects/sample/brother
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=/Users/danhdue/AllProjects/sample/insight88/lib/main.dart
+FLUTTER_TARGET=/Users/danhdue/AllProjects/sample/brother/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
@@ -12,5 +12,5 @@ DART_DEFINES=QVBQX05BTUU9WmVubyhkZXYp,QVBQX0lEX1NVRkZJWD0uZGV2,QVBQX1NVRkZJWD1kZ
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=/Users/danhdue/AllProjects/sample/insight88/.dart_tool/package_config.json
+PACKAGE_CONFIG=/Users/danhdue/AllProjects/sample/brother/.dart_tool/package_config.json
 FLAVOR=dev

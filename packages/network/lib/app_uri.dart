@@ -16,6 +16,7 @@ class AppUri {
   static const String network = 'network';
   static const String trends = 'trends';
   static const String settings = 'settings';
+  static const String scanner = 'scanner';
   static const String baseUrl = 'baseUrl';
 }
 

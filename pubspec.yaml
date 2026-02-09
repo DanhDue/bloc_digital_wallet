@@ -18,6 +18,7 @@ workspace:
   - packages/settings
   - packages/wallet
   - packages/trends
+  - packages/scanner
 dependencies:
   flutter:
     sdk: flutter
@@ -35,6 +36,8 @@ dependencies:
     path: packages/framework
   onboard:
     path: packages/onboard
+  scanner:
+    path: packages/scanner
   wallet:
     path: packages/wallet
   trends:
