@@ -45,6 +45,9 @@ Future<void> run(HookContext context) async {
     // 6. Update packages/core/lib/utils/feature_public_routes.dart - remove lines
     await _cleanFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
 
+    // 7. Update packages/network/lib/app_uri.dart - remove constant
+    await _cleanAppUri(snakeCaseName, camelCaseName);
+
     // 6. Update pubspec.yaml workspace - remove package from workspace list
     await _cleanPubspecWorkspace(snakeCaseName);
 
@@ -60,17 +63,14 @@ Future<void> run(HookContext context) async {
     await _runCommand('melos', ['bootstrap'], context.logger);
 
     progress.update('Running code generation on root app...');
-    await _runCommand(
-        'fvm',
-        [
-          'flutter',
-          'pub',
-          'run',
-          'build_runner',
-          'build',
-          '--delete-conflicting-outputs',
-        ],
-        context.logger);
+    await _runCommand('fvm', [
+      'flutter',
+      'pub',
+      'run',
+      'build_runner',
+      'build',
+      '--delete-conflicting-outputs',
+    ], context.logger);
 
     progress.update('Running formatting and analysis...');
     await _runCommand('melos', ['run', 'dartfmt'], context.logger);
@@ -241,6 +241,22 @@ class _${pascalName}Route extends PageRouteInfo<void> \\{
 \\}
 ''', multiLine: true);
   content = content.replaceAll(privateClassPattern, '');
+
+  await file.writeAsString(content);
+}
+
+Future<void> _cleanAppUri(String snakeName, String camelName) async {
+  final file = File('packages/network/lib/app_uri.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+
+  // Remove constant line: static const String myFeature = 'my_feature';
+  final pattern = RegExp(
+    '^\\s*static const String $camelName = \'$snakeName\';\\s*\\n',
+    multiLine: true,
+  );
+  content = content.replaceAll(pattern, '');
 
   await file.writeAsString(content);
 }

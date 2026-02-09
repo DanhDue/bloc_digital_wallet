@@ -6,17 +6,19 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../domain/entities/token_list_entity.dart';
 
+import 'mint_token_model.dart';
+
 part 'token_list_model.freezed.dart';
 part 'token_list_model.g.dart';
 
 @freezed
 abstract class TokenListModel with _$TokenListModel {
   const factory TokenListModel({
-    @JsonKey(name: 'id') required String id,
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'symbol') String? symbol,
-    @JsonKey(name: 'logo') String? logo,
-    @JsonKey(name: 'balance') double? balance,
+    @JsonKey(name: 'address') String? address,
+    @JsonKey(name: 'owner') String? owner,
+    @JsonKey(name: 'amount') double? amount,
+    @JsonKey(name: 'mint_token') MintTokenModel? mintToken,
+    @JsonKey(name: 'account_owner') String? accountOwner,
   }) = _TokenListModel;
 
   const TokenListModel._();
@@ -24,6 +26,12 @@ abstract class TokenListModel with _$TokenListModel {
   factory TokenListModel.fromJson(Map<String, dynamic> json) => _$TokenListModelFromJson(json);
 
   TokenListEntity toEntity() {
-    return TokenListEntity(id: id, name: name, symbol: symbol, logo: logo, balance: balance);
+    return TokenListEntity(
+      id: address ?? '',
+      name: mintToken?.name,
+      symbol: mintToken?.symbol,
+      logo: mintToken?.logo,
+      balance: amount,
+    );
   }
 }

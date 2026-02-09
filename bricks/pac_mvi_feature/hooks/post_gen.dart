@@ -30,12 +30,15 @@ Future<void> run(HookContext context) async {
     progress.update('Updating FeaturePublicRoutes...');
     await _updateFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 6. Run Melos commands
+    // 6. Update AppUri (for Network Module)
+    await _updateAppUri(snakeCaseName, camelCaseName);
+
+    // 7. Run Melos commands
     progress.update('Running melos bootstrap...');
     await _runCommand('melos', ['bootstrap'], context.logger);
 
     progress.update('Running scoped code generation...');
-    await _runCommand('./scripts/genFeature.sh', [snakeCaseName], context.logger);
+    await _runCommand('./scripts/integrateFeatureToApp.sh', [snakeCaseName], context.logger);
 
     progress.complete('Package $name integrated successfully!');
   } catch (e) {
@@ -231,7 +234,8 @@ Future<void> _updateCommonRoutes(String snakeName, String pascalName, String cam
     final lastBrace = content.lastIndexOf('}', insertionPoint);
 
     if (lastBrace != -1) {
-      final newRouteConsts = '''\n\n// $pascalName
+      final newRouteConsts =
+          '''\n\n// $pascalName
   static const String $camelName = '/$camelName';
   static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
 
@@ -243,7 +247,8 @@ Future<void> _updateCommonRoutes(String snakeName, String pascalName, String cam
 
   // Add private route class at the end of file
   if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
-    final newRouteClass = '''
+    final newRouteClass =
+        '''
 
 class _${pascalName}Route extends PageRouteInfo<void> {
   const _${pascalName}Route() : super('${pascalName}Route');
@@ -281,7 +286,8 @@ Future<void> _updateFeaturePublicRoutes(
     final lastBrace = content.lastIndexOf('}', insertionPoint);
 
     if (lastBrace != -1) {
-      final newRouteConsts = '''
+      final newRouteConsts =
+          '''
 
   // $pascalName
   static const String $camelName = '/$camelName';
@@ -294,7 +300,8 @@ Future<void> _updateFeaturePublicRoutes(
 
   // Add private route class at the end of file
   if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
-    final newRouteClass = '''
+    final newRouteClass =
+        '''
 
 class _${pascalName}Route extends PageRouteInfo<void> {
   const _${pascalName}Route() : super('${pascalName}Route');
@@ -306,6 +313,36 @@ class _${pascalName}Route extends PageRouteInfo<void> {
 
   if (updated) {
     await file.writeAsString(content);
+  }
+}
+
+Future<void> _updateAppUri(String snakeName, String camelName) async {
+  // Use relative path from root since post_gen runs from project root
+  final file = File('packages/network/lib/app_uri.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+
+  if (!content.contains('static const String \$camelName')) {
+    // Insert before baseUrl which is usually at the end of the list
+    final baseUrlMarker = "static const String baseUrl = 'baseUrl';";
+    if (content.contains(baseUrlMarker)) {
+      content = content.replaceFirst(
+        baseUrlMarker,
+        "static const String \$camelName = '\$snakeName';\n  \$baseUrlMarker",
+      );
+      await file.writeAsString(content);
+    } else {
+      // Fallback: append after class start if baseUrl not found (unlikely)
+      final classMarker = "class AppUri {";
+      if (content.contains(classMarker)) {
+        content = content.replaceFirst(
+          classMarker,
+          "\$classMarker\n  static const String \$camelName = '\$snakeName';",
+        );
+        await file.writeAsString(content);
+      }
+    }
   }
 }
 

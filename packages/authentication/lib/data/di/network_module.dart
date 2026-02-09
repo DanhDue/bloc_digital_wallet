@@ -13,5 +13,6 @@ import 'package:authentication/data/datasources/remote/auth_client.dart';
 @module
 abstract class NetworkModule {
   @lazySingleton
-  AuthClient authClient(Dio dio) => AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
+  AuthClient authClient(@Named('refreshDio') Dio dio) =>
+      AuthClient(dio, baseUrl: AppUri.users.buildAppUri()!);
 }

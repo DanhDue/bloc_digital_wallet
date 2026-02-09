@@ -13,9 +13,25 @@ scripts:
     run: ./scripts/genAlls.sh
     description: Generate all models, APIs, themes, assets, and localization.
 
+  genFeature:
+    run: ./scripts/genFeature.sh $1
+    description: "Package gen: slang → build_runner → format. Usage: melos genFeature wallet"
+
+  rebuildAndFormat:
+    run: ./scripts/rebuildAndFormat.sh
+    description: "Root app gen: build_runner → format. Usage: melos rebuildAndFormat"
+
+  integrateFeatureToApp:
+    run: ./scripts/integrateFeatureToApp.sh $1
+    description: "Full feature integration: genScope → root build_runner → fluttergen → dartfmt → license → analyze → git add. Usage: melos integrateFeatureToApp wallet"
+
   genImages:
     run: melos build_runner
     description: Generate type-safe accessors for images.
+
+  genTheme:
+    run: melos build_runner
+    description: Generate theme classes with theme_tailor.
 
   genColors:
     run: melos build_runner

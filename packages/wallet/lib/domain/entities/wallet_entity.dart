@@ -17,6 +17,9 @@ abstract class WalletEntity with _$WalletEntity {
     String? address,
     double? balance,
     double? dailyChange,
+    @Default(true) bool isValid,
+    String? privateKey,
+    String? bs58PrivateKey,
   }) = _WalletEntity;
 
   factory WalletEntity.fromJson(Map<String, dynamic> json) => _$WalletEntityFromJson(json);

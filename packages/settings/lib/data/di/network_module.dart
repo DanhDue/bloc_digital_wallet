@@ -5,10 +5,12 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:network/network.dart';
 import 'package:settings/data/datasources/remote/settings_client.dart';
 
 @module
 abstract class SettingsNetworkModule {
   @lazySingleton
-  SettingsClient settingsClient(Dio dio) => SettingsClient(dio);
+  SettingsClient settingsClient(Dio dio) =>
+      SettingsClient(dio, baseUrl: AppUri.settings.buildAppUri());
 }

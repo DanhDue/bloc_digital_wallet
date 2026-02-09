@@ -2,12 +2,14 @@
 
 // coverage:ignore-file
 
-import 'package:wallet/presentation/wallet_list/wallet_list_page.dart';
-import 'package:wallet/presentation/token_list/token_list_page.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:wallet/domain/entities/wallet_entity.dart';
 import 'package:wallet/presentation/nfts_list/nfts_list_page.dart';
 import 'package:wallet/presentation/network_selection/network_selection_page.dart';
-import 'package:auto_route/auto_route.dart';
+import 'package:wallet/presentation/token_list/token_list_page.dart';
 import 'package:wallet/presentation/wallet/wallet_page.dart';
+import 'package:wallet/presentation/wallet_list/wallet_list_page.dart';
 
 part 'wallet_router.gr.dart';
 

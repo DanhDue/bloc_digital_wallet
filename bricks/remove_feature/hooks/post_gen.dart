@@ -71,41 +71,13 @@ void run(HookContext context) async {
     }
   }
 
-  // 3. Run Build Runner
-  context.logger.info('Running build_runner to clean up routes...');
-  final buildResult = await Process.run(
-      'fvm',
-      [
-        'dart',
-        'run',
-        'build_runner',
-        'build',
-        '--delete-conflicting-outputs',
-      ],
-      runInShell: true);
+  // 3. Rebuild root app
+  context.logger.info('Rebuilding root app...');
+  final buildResult = await Process.run('./scripts/rebuildAndFormat.sh', [], runInShell: true);
   if (buildResult.exitCode == 0) {
-    context.logger.success('build_runner completed successfully.');
+    context.logger.success('Root app rebuild completed successfully.');
   } else {
-    context.logger.err('build_runner failed: ${buildResult.stderr}');
+    context.logger.err('Root app rebuild failed: ${buildResult.stderr}');
     context.logger.detail(buildResult.stdout as String);
-  }
-
-  // 4. Run Dart Format
-  context.logger.info('Running dart format...');
-  final fmtResult = await Process.run(
-      'fvm',
-      [
-        'dart',
-        'format',
-        'lib/',
-        '-l',
-        '99',
-      ],
-      runInShell: true);
-  if (fmtResult.exitCode == 0) {
-    context.logger.success('dart format completed successfully.');
-  } else {
-    context.logger.err('dart format failed: ${fmtResult.stderr}');
-    context.logger.detail(fmtResult.stdout as String);
   }
 }

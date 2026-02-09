@@ -14,6 +14,8 @@ class AppUri {
   static const String refreshToken = 'refresh';
   static const String accounts = 'accounts';
   static const String network = 'network';
+  static const String trends = 'trends';
+  static const String settings = 'settings';
   static const String baseUrl = 'baseUrl';
 }
 
