@@ -69,73 +69,79 @@ class _WalletPageState extends BaseMviPageState<WalletBloc, WalletState, WalletE
   }
 
   Widget _buildSuccess(BuildContext context, WalletState state) {
-    return Column(
-      children: [
-        _buildTopBar(context, state.selectedNetwork),
-        const SizedBox(height: 16),
-        SizedBox(
-          child: WalletListPage(
-            selectedWallet: state.selectedWallet,
-            onWalletChanged: (wallet) {
-              context.read<WalletBloc>().add(WalletAction.selectWallet(wallet));
-            },
-          ),
-        ),
-        const SizedBox(height: 16),
-        _buildActionButtons(context),
-        const SizedBox(height: 16),
-        Container(
-          height: 44,
-          decoration: BoxDecoration(
-            color: context.appThemes.white,
-            borderRadius: .circular(8),
-            border: Border.all(color: context.appThemes.trueBlue100),
-          ),
-          child: TabBar(
-            indicatorSize: .tab,
-            labelPadding: const .symmetric(vertical: 0),
-            indicatorPadding: const .symmetric(vertical: 4),
-            splashFactory: NoSplash.splashFactory,
-            overlayColor: .all(context.appThemes.transparent),
-            dividerColor: context.appThemes.transparent,
-            labelColor: context.appThemes.white,
-            unselectedLabelColor: context.appThemes.ink40,
-            labelStyle: context.appThemes.titleSmall.copyWith(fontWeight: FontWeight.bold),
-            unselectedLabelStyle: context.appThemes.titleSmall.copyWith(
-              fontWeight: FontWeight.bold,
+    return SafeArea(
+      top: true,
+      bottom: false,
+      child: Scaffold(
+        body: Column(
+          children: [
+            _buildTopBar(context, state.selectedNetwork),
+            const SizedBox(height: 16),
+            SizedBox(
+              child: WalletListPage(
+                selectedWallet: state.selectedWallet,
+                onWalletChanged: (wallet) {
+                  context.read<WalletBloc>().add(WalletAction.selectWallet(wallet));
+                },
+              ),
             ),
-            indicator: RectangularIndicator(
-              color: context.appThemes.trueBlue,
-              bottomLeftRadius: 6,
-              bottomRightRadius: 6,
-              topLeftRadius: 6,
-              topRightRadius: 6,
-              horizontalPadding: 0,
-              verticalPadding: 0,
-              paintingStyle: .fill,
-            ),
-            controller: _tabController,
-            tabs: <Widget>[
-              Tab(text: WalletStrings.t.tokenList.title),
-              Tab(text: WalletStrings.t.nftsList.title),
-            ],
-          ).paddingSymmetric(horizontal: 5.0),
-        ).marginSymmetric(horizontal: 16),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              KeepAliveWidget(
-                child: TokenListPage(
-                  key: ValueKey(state.selectedWallet?.address),
-                  walletAddress: state.selectedWallet?.address,
+            const SizedBox(height: 16),
+            _buildActionButtons(context),
+            const SizedBox(height: 16),
+            Container(
+              height: 44,
+              decoration: BoxDecoration(
+                color: context.appThemes.white,
+                borderRadius: .circular(8),
+                border: Border.all(color: context.appThemes.trueBlue100),
+              ),
+              child: TabBar(
+                indicatorSize: .tab,
+                labelPadding: const .symmetric(vertical: 0),
+                indicatorPadding: const .symmetric(vertical: 4),
+                splashFactory: NoSplash.splashFactory,
+                overlayColor: .all(context.appThemes.transparent),
+                dividerColor: context.appThemes.transparent,
+                labelColor: context.appThemes.white,
+                unselectedLabelColor: context.appThemes.ink40,
+                labelStyle: context.appThemes.titleSmall.copyWith(fontWeight: FontWeight.bold),
+                unselectedLabelStyle: context.appThemes.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-              ).paddingSymmetric(horizontal: 16.0),
-              const KeepAliveWidget(child: NftsListPage()).paddingSymmetric(horizontal: 16.0),
-            ],
-          ),
+                indicator: RectangularIndicator(
+                  color: context.appThemes.trueBlue,
+                  bottomLeftRadius: 6,
+                  bottomRightRadius: 6,
+                  topLeftRadius: 6,
+                  topRightRadius: 6,
+                  horizontalPadding: 0,
+                  verticalPadding: 0,
+                  paintingStyle: .fill,
+                ),
+                controller: _tabController,
+                tabs: <Widget>[
+                  Tab(text: WalletStrings.t.tokenList.title),
+                  Tab(text: WalletStrings.t.nftsList.title),
+                ],
+              ).paddingSymmetric(horizontal: 5.0),
+            ).marginSymmetric(horizontal: 16),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  KeepAliveWidget(
+                    child: TokenListPage(
+                      key: ValueKey(state.selectedWallet?.address),
+                      walletAddress: state.selectedWallet?.address,
+                    ),
+                  ).paddingSymmetric(horizontal: 16.0),
+                  const KeepAliveWidget(child: NftsListPage()).paddingSymmetric(horizontal: 16.0),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 

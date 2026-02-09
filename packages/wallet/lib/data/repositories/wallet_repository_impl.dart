@@ -9,11 +9,14 @@ import 'package:wallet/domain/entities/wallet_entity.dart';
 import 'package:wallet/domain/entities/wallet_list_entity.dart';
 import 'package:wallet/domain/repositories/wallet_repository.dart';
 
+import 'package:wallet/data/datasources/local/wallet_local_datasource.dart';
+
 @LazySingleton(as: WalletRepository)
 class WalletRepositoryImpl implements WalletRepository {
   final WalletRemoteDataSource _remoteDataSource;
+  final WalletLocalDataSource _localDataSource;
 
-  WalletRepositoryImpl(this._remoteDataSource);
+  WalletRepositoryImpl(this._remoteDataSource, this._localDataSource);
 
   @override
   Future<Either<Failure, WalletEntity>> getWallet() {
@@ -39,10 +42,10 @@ class WalletRepositoryImpl implements WalletRepository {
   @override
   Future<Either<Failure, WalletListEntity>> getWalletList() async {
     try {
-      final model = await _remoteDataSource.getWalletList();
+      final model = await _localDataSource.getWalletList();
       return Right(model.toEntity());
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(CacheFailure(message: e.toString()));
     }
   }
 }

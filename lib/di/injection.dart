@@ -7,6 +7,7 @@ import 'package:onboard/onboard.dart' as onboard;
 import 'package:trends/trends.dart' as trends;
 import 'package:wallet/wallet.dart' as wallet;
 import 'package:settings/settings.dart' as settings;
+import 'package:authentication/authentication.dart' as authentication;
 
 import 'injection.config.dart';
 
@@ -18,6 +19,7 @@ void configureDependencies() {
   core.configureModuleDependencies(getIt);
   network.configureModuleDependencies(getIt);
   onboard.configureModuleDependencies(getIt);
+  authentication.configureModuleDependencies(getIt);
   trends.configureModuleDependencies(getIt);
   wallet.configureModuleDependencies(getIt);
   settings.configureModuleDependencies(getIt);

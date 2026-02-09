@@ -8,7 +8,6 @@ import 'package:bloc_digital_wallet/core/app_initializer/bloc_observer_initializ
 import 'package:bloc_digital_wallet/core/app_initializer/environment_initializer.dart';
 import 'package:bloc_digital_wallet/core/app_initializer/localization_initializer.dart';
 import 'package:bloc_digital_wallet/core/app_initializer/logging_initializer.dart';
-import 'package:get_it/get_it.dart';
 
 @module
 abstract class AppModule {
@@ -49,7 +48,4 @@ abstract class AppModule {
       authNavigationInitializer,
     ]);
   }
-
-  @injectable
-  TokenRefresher get tokenRefresher => GetIt.instance<TokenRefresher>();
 }

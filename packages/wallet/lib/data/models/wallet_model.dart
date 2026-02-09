@@ -12,12 +12,15 @@ part 'wallet_model.g.dart';
 @freezed
 abstract class WalletModel with _$WalletModel {
   const factory WalletModel({
-    @JsonKey(name: 'id') required String id,
-    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'id') String? id,
+    @JsonKey(name: 'name') String? name,
     @JsonKey(name: 'description') String? description,
     @JsonKey(name: 'address') String? address,
     @JsonKey(name: 'balance') double? balance,
     @JsonKey(name: 'daily_change') double? dailyChange,
+    @JsonKey(name: 'isValid') @Default(true) bool isValid,
+    @JsonKey(name: 'privateKey') String? privateKey,
+    @JsonKey(name: 'bs58PrivateKey') String? bs58PrivateKey,
   }) = _WalletModel;
 
   factory WalletModel.fromJson(Map<String, dynamic> json) => _$WalletModelFromJson(json);
@@ -26,12 +29,15 @@ abstract class WalletModel with _$WalletModel {
 extension WalletModelX on WalletModel {
   WalletEntity toEntity() {
     return WalletEntity(
-      id: id,
-      name: name,
+      id: id ?? address ?? '',
+      name: name ?? 'Unknown Wallet',
       description: description,
       address: address,
       balance: balance,
       dailyChange: dailyChange,
+      isValid: isValid,
+      privateKey: privateKey,
+      bs58PrivateKey: bs58PrivateKey,
     );
   }
 }

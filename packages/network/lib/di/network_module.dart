@@ -36,4 +36,13 @@ abstract class NetworkModule {
     baseUrl: EnvironmentConfig.apiBaseUrl,
     enableLogging: EnvironmentConfig.enableLogging,
   ).dio;
+
+  @singleton
+  @Named('refreshDio')
+  Dio provideRefreshDio(SslConfiguration sslConfiguration, Talker talker) => DioFactory(
+    talker,
+    sslConfiguration: sslConfiguration,
+    baseUrl: EnvironmentConfig.apiBaseUrl,
+    enableLogging: EnvironmentConfig.enableLogging,
+  ).dio;
 }
