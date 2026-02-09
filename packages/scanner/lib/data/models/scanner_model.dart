@@ -1,6 +1,7 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,6 +14,7 @@ part 'scanner_model.g.dart';
 abstract class ScannerModel with _$ScannerModel {
   const ScannerModel._();
 
+  @JsonSerializable(includeIfNull: false)
   const factory ScannerModel({
     @JsonKey(name: 'id') required String id,
     @JsonKey(name: 'name') required String name,
@@ -20,9 +22,7 @@ abstract class ScannerModel with _$ScannerModel {
   }) = _ScannerModel;
 
   factory ScannerModel.fromJson(Map<String, dynamic> json) => _$ScannerModelFromJson(json);
-}
 
-extension ScannerModelX on ScannerModel {
   ScannerEntity toEntity() {
     return ScannerEntity(id: id, name: name, description: description);
   }

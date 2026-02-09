@@ -1074,7 +1074,12 @@ class TransactionPage extends BaseMviPage<TransactionBloc, TransactionAction, Tr
     event.when(
       showSuccess: (message) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message))),
       showError: (message) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red)),
-      navigateToDetails: (id) => context.router.push(TransactionDetailsRoute(id: id)),
+      navigateToDetails: (id) {
+        // Using SnackBar as a placeholder for navigation
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Navigate to transaction: $id')),
+        );
+      },
     );
   }
 }

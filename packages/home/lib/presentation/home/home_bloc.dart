@@ -6,18 +6,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/usecases/get_all_homes_usecase.dart';
-import 'home_action.dart';
-import 'home_event.dart';
-import 'home_state.dart';
+import 'package:home/domain/usecases/get_all_homes_usecase.dart';
+import 'package:home/presentation/home/home_action.dart';
+import 'package:home/presentation/home/home_event.dart';
+import 'package:home/presentation/home/home_state.dart';
 
 @injectable
 class HomeBloc extends MviBloc<HomeAction, HomeState, HomeEvent> {
   final GetAllHomesUseCase _getAllHomesUseCase;
 
   HomeBloc(this._getAllHomesUseCase) : super(const HomeState()) {
-    on<HomeAction>((event, emit) {
-      event.map(
+    on<HomeAction>((event, emit) async {
+      await event.map(
         started: (_) => _onStarted(emit),
         onRefresh: (_) => _onRefresh(emit),
         onHomeItemClicked: (e) => _onHomeItemClicked(e.id, emit),

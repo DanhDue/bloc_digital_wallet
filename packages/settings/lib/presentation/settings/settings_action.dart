@@ -9,8 +9,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'settings_action.freezed.dart';
 
 @freezed
-sealed class SettingsAction extends BaseAction with _$SettingsAction {
-  const SettingsAction._() : super();
+abstract class SettingsAction extends BaseAction with _$SettingsAction {
+  const SettingsAction._();
 
   const factory SettingsAction.started() = SettingsActionStarted;
   const factory SettingsAction.toggleDarkMode({required bool isEnabled}) =

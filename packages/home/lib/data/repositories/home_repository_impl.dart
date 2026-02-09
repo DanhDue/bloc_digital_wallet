@@ -4,9 +4,9 @@ import 'package:core/core.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/entities/home_entity.dart';
-import '../../domain/repositories/home_repository.dart';
-import '../datasources/home_remote_datasource.dart';
+import 'package:home/domain/entities/home_entity.dart';
+import 'package:home/domain/repositories/home_repository.dart';
+import 'package:home/data/datasources/home_remote_datasource.dart';
 
 @Injectable(as: HomeRepository)
 class HomeRepositoryImpl implements HomeRepository {

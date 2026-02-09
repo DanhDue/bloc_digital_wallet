@@ -4,8 +4,8 @@ import 'package:core/core.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../entities/home_entity.dart';
-import '../repositories/home_repository.dart';
+import 'package:home/domain/entities/home_entity.dart';
+import 'package:home/domain/repositories/home_repository.dart';
 
 @injectable
 class GetAllHomesUseCase {

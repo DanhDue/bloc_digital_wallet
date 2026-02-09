@@ -1,7 +1,7 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:core/core.dart';
-import '../entities/home_entity.dart';
+import 'package:home/domain/entities/home_entity.dart';
 
 import 'package:dartz/dartz.dart';
 

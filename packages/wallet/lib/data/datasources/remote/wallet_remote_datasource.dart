@@ -11,7 +11,6 @@ import 'package:wallet/data/datasources/remote/wallet_client.dart';
 import 'package:wallet/data/models/nfts_list_model.dart';
 import 'package:wallet/data/models/token_list_model.dart';
 import 'package:wallet/data/models/wallet_list_model.dart';
-import 'package:wallet/data/models/wallet_model.dart';
 import 'package:wallet/domain/entities/wallet_entity.dart';
 
 @lazySingleton

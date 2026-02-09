@@ -3,7 +3,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:framework/framework.dart';
 
-import '../../domain/entities/home_entity.dart';
+import 'package:home/domain/entities/home_entity.dart';
 
 part 'home_state.freezed.dart';
 

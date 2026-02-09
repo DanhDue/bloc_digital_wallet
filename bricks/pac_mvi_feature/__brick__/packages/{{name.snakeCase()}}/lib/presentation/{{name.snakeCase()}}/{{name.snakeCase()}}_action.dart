@@ -10,6 +10,7 @@ part '{{name.snakeCase()}}_action.freezed.dart';
 
 @freezed
 abstract class {{name.pascalCase()}}Action extends BaseAction with _${{name.pascalCase()}}Action {
+  const {{name.pascalCase()}}Action._();
+
   const factory {{name.pascalCase()}}Action.started() = _Started;
-  const {{name.pascalCase()}}Action._() : super();
 }

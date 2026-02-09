@@ -10,6 +10,8 @@ part '{{name.snakeCase()}}_ui_model.freezed.dart';
 
 @freezed
 abstract class {{name.pascalCase()}}UiModel with _${{name.pascalCase()}}UiModel {
+  const {{name.pascalCase()}}UiModel._();
+
   const factory {{name.pascalCase()}}UiModel({
     required String id,
     required String name,

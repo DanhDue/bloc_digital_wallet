@@ -2,13 +2,14 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:home/generated/translations.dart';
 import 'package:framework/framework.dart';
 
-import 'home_bloc.dart';
-import 'home_action.dart';
-import 'home_event.dart';
-import 'home_state.dart';
+import 'package:home/presentation/home/home_bloc.dart';
+import 'package:home/presentation/home/home_action.dart';
+import 'package:home/presentation/home/home_event.dart';
+import 'package:home/presentation/home/home_state.dart';
 
 @RoutePage()
 class HomePage extends BaseMviPage<HomeBloc, HomeAction, HomeState, HomeEvent> {
@@ -33,12 +34,7 @@ class HomePage extends BaseMviPage<HomeBloc, HomeAction, HomeState, HomeEvent> {
                   title: Text(home.name),
                   subtitle: Text(home.id),
                   onTap: () {
-                    // We need to resolve the Bloc to dispatch action
-                    // But in BaseMviPage we don't have direct access to bloc in handleState easily without context.read
-                    // Actually BaseMviPage structure suggests UI triggers actions via context.read<B>().onAction(...)
-                    // checks: MviConsumer provides 'bloc' in context? Yes via BlocProvider.
-                    // So we can use extension or context.read
-                    // context.read<HomeBloc>().onAction(HomeAction.onHomeItemClicked(home.id));
+                    context.read<HomeBloc>().onAction(HomeAction.onHomeItemClicked(home.id));
                   },
                 );
               },
@@ -50,6 +46,7 @@ class HomePage extends BaseMviPage<HomeBloc, HomeAction, HomeState, HomeEvent> {
   void handleEvent(BuildContext context, HomeEvent event) {
     event.map(
       navigateToDetails: (e) {
+        // TODO: Implement actual navigation when the route is ready
         // AutoRouter.of(context).push...
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Navigate to ${e.id}')));
       },

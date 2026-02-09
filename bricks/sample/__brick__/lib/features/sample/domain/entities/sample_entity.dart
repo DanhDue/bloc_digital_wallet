@@ -1,17 +1,19 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:equatable/equatable.dart';
+// coverage:ignore-file
 
-class SampleEntity extends Equatable {
-  final String id;
-  final String name;
-  // TODO: Add your entity properties here
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const SampleEntity({
-    required this.id,
-    required this.name,
-  });
+part 'sample_entity.freezed.dart';
 
-  @override
-  List<Object?> get props => [id, name];
+@freezed
+abstract class SampleEntity with _$SampleEntity {
+  const SampleEntity._();
+
+  const factory SampleEntity({
+    required String id,
+    required String name,
+    // TODO: Add your entity properties here
+  }) = _SampleEntity;
 }

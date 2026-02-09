@@ -1,10 +1,11 @@
 // Copyright (c) {{year}}, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/{{{feature_name.snakeCase()}}}_entity.dart';
+import 'package:bloc_digital_wallet/features/{{{feature_name.snakeCase()}}}/domain/entities/{{{feature_name.snakeCase()}}}_entity.dart';
 
 part '{{feature_name.snakeCase()}}_model.freezed.dart';
 part '{{feature_name.snakeCase()}}_model.g.dart';
