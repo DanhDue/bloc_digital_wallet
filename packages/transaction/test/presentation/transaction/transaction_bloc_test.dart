@@ -1,52 +1,57 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:transaction/domain/entities/transaction_entity.dart';
-import 'package:transaction/domain/usecases/get_transaction_usecase.dart';
+import 'package:transaction/domain/usecases/get_transactions_by_owner_usecase.dart';
 import 'package:transaction/presentation/transaction/transaction_action.dart';
-import 'package:transaction/presentation/transaction/transaction_bloc.dart';
+import 'package:transaction/presentation/transaction/bloc/transaction_bloc.dart';
 import 'package:transaction/presentation/transaction/transaction_state.dart';
-import 'package:core/core.dart' hide test;
 
 import 'transaction_bloc_test.mocks.dart';
 
-@GenerateMocks([GetTransactionUseCase])
+@GenerateMocks([GetTransactionsByOwnerUseCase])
 void main() {
   late TransactionBloc bloc;
-  late MockGetTransactionUseCase mockUseCase;
+  late MockGetTransactionsByOwnerUseCase mockUseCase;
 
   setUp(() {
-    mockUseCase = MockGetTransactionUseCase();
+    mockUseCase = MockGetTransactionsByOwnerUseCase();
     bloc = TransactionBloc(mockUseCase);
   });
 
-  const tTransactionEntity = TransactionEntity(id: '1', name: 'Test', description: 'Description');
+  tearDown(() {
+    bloc.close();
+  });
+
+  const tTransaction = TransactionEntity(signature: 'sig1');
+  final tTransactions = [tTransaction];
 
   test('initial state should be initial', () {
-    expect(bloc.state.status, TransactionStatus.initial);
+    expect(bloc.state, const TransactionState());
   });
 
   blocTest<TransactionBloc, TransactionState>(
-    'emits [loading, success] when started is added and usecase returns success',
+    'emits [loading, success] with items when started is added',
     build: () {
-      when(mockUseCase()).thenAnswer((_) async => const Right(tTransactionEntity));
+      when(
+        mockUseCase(any, limit: anyNamed('limit'), before: anyNamed('before')),
+      ).thenAnswer((_) async => Right(tTransactions));
       return bloc;
     },
     act: (bloc) => bloc.add(const TransactionAction.started()),
     expect: () => [
-      const TransactionState(status: TransactionStatus.loading),
+      const TransactionState(isLoading: true, items: []),
       isA<TransactionState>()
-          .having((s) => s.status, 'status', TransactionStatus.success)
-          .having((s) => s.uiModel, 'uiModel', isNotNull),
+          .having((s) => s.isLoading, 'isLoading', false)
+          .having((s) => s.items, 'items', isNotEmpty)
+          .having((s) => s.hasReachedMax, 'hasReachedMax', true),
     ],
     verify: (_) {
-      verify(mockUseCase());
+      verify(mockUseCase(any, limit: anyNamed('limit'), before: anyNamed('before'))).called(1);
     },
   );
 }

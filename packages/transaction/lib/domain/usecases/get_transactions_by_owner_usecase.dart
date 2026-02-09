@@ -3,17 +3,23 @@
 // coverage:ignore-file
 
 import 'package:core/core.dart';
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:transaction/domain/entities/transaction_entity.dart';
 import 'package:transaction/domain/repositories/transaction_repository.dart';
 
 @injectable
-class GetTransactionUseCase {
+class GetTransactionsByOwnerUseCase {
   final TransactionRepository _repository;
 
-  GetTransactionUseCase(this._repository);
+  GetTransactionsByOwnerUseCase(this._repository);
 
-  Future<Either<Failure, TransactionEntity>> call() {
-    return _repository.getTransaction();
+  Future<Either<Failure, List<TransactionEntity>>> call(
+    String owner, {
+    int? limit,
+    String? before,
+    String? until,
+  }) {
+    return _repository.getTransactionByOwner(owner, limit: limit, before: before, until: until);
   }
 }

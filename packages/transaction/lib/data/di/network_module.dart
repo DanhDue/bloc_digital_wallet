@@ -11,5 +11,5 @@ import 'package:transaction/data/datasources/remote/transaction_client.dart';
 abstract class TransactionNetworkModule {
   @lazySingleton
   TransactionClient transactionClient(Dio dio) =>
-      TransactionClient(dio, baseUrl: AppUri.transactions.buildAppUri());
+      TransactionClient(dio, baseUrl: AppUri.transactions.buildAppUri()!);
 }

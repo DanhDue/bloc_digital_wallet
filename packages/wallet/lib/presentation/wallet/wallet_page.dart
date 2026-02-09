@@ -74,6 +74,7 @@ class _WalletPageState
       top: true,
       bottom: false,
       child: Scaffold(
+        backgroundColor: context.appThemes.white,
         body: Column(
           children: [
             _buildTopBar(context, state.selectedNetwork),

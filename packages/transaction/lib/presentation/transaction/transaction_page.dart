@@ -3,13 +3,18 @@
 // coverage:ignore-file
 
 import 'package:auto_route/auto_route.dart';
-import 'package:framework/framework.dart';
 import 'package:flutter/material.dart';
-
-import 'transaction_action.dart';
-import 'transaction_bloc.dart';
-import 'transaction_event.dart';
-import 'transaction_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:framework/framework.dart';
+import 'package:transaction/presentation/transaction/bloc/transaction_bloc.dart';
+import 'package:transaction/presentation/transaction/transaction_action.dart';
+import 'package:transaction/presentation/transaction/transaction_event.dart';
+import 'package:transaction/presentation/transaction/transaction_state.dart';
+import 'package:transaction/presentation/transaction/ui_models/transaction_list_item.dart';
+import 'package:transaction/presentation/transaction/widgets/filter_toggle_widget.dart';
+import 'package:transaction/presentation/transaction/widgets/transaction_header_widget.dart';
+import 'package:transaction/presentation/transaction/widgets/transaction_item_widget.dart';
+import 'package:transaction/presentation/transaction/widgets/wallet_selector_widget.dart';
 
 @RoutePage()
 class TransactionPage
@@ -17,15 +22,88 @@ class TransactionPage
   const TransactionPage({super.key});
 
   @override
-  Widget handleState(BuildContext context, TransactionState state) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Transaction')),
-      body: const Center(child: Text('Transaction Feature')),
-    );
-  }
+  TransactionAction? get initialAction => const TransactionAction.started();
 
   @override
-  void handleEvent(BuildContext context, TransactionEvent event) {
-    // TODO: Handle side-effect events (navigation, toasts, etc.)
+  Widget handleState(BuildContext context, TransactionState state) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        top: true,
+        child: Column(
+          children: [
+            const WalletSelectorWidget(),
+            const SizedBox(height: 24),
+            // We need a BlocBuilder here for filter toggle to change independently if we want?
+            // But handleState rebuilds on any state change.
+            // Since BaseMviPage uses BlocBuilder<B, S>(builder: handleState),
+            // the whole handleState is rebuilt.
+            // So we don't need nested BlocBuilder unless for optimizing specific parts.
+            // But FilterToggle was using buildWhen.
+            // Optimization:
+            BlocBuilder<TransactionBloc, TransactionState>(
+              buildWhen: (p, c) => p.filterIndex != c.filterIndex,
+              builder: (context, state) {
+                return FilterToggleWidget(
+                  selectedIndex: state.filterIndex,
+                  onFilterChanged: (index) {
+                    context.read<TransactionBloc>().add(TransactionAction.filterChanged(index));
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: Builder(
+                builder: (context) {
+                  // Logic for loading/error/list
+                  if (state.isLoading && state.items.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state.error != null && state.items.isEmpty) {
+                    return Center(child: Text(state.error!));
+                  }
+
+                  if (state.items.isEmpty && !state.isLoading) {
+                    return const Center(child: Text("No Data"));
+                  }
+
+                  return RefreshIndicator(
+                    onRefresh: () async =>
+                        context.read<TransactionBloc>().add(const TransactionAction.refresh()),
+                    child: ListView.separated(
+                      padding: EdgeInsets.zero,
+                      itemCount: state.items.length + (state.hasReachedMax ? 0 : 1),
+                      separatorBuilder: (_, _) => const SizedBox.shrink(),
+                      itemBuilder: (context, index) {
+                        if (index >= state.items.length) {
+                          context.read<TransactionBloc>().add(const TransactionAction.loadMore());
+                          return const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+
+                        final item = state.items[index];
+                        return item.map(
+                          header: (h) => TransactionHeaderWidget(title: h.title),
+                          transaction: (t) => TransactionItemWidget(
+                            transaction: t.transaction,
+                            onTap: () => context.read<TransactionBloc>().add(
+                              TransactionAction.openTransactionDetail(t.transaction),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

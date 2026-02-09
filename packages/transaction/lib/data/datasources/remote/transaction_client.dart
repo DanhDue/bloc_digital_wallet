@@ -3,15 +3,28 @@
 // coverage:ignore-file
 
 import 'package:dio/dio.dart';
+import 'package:network/network.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:transaction/data/models/transaction_model.dart';
+import 'package:transaction/data/models/transaction_response_object.dart';
 
 part 'transaction_client.g.dart';
 
 @RestApi()
 abstract class TransactionClient {
-  factory TransactionClient(Dio dio, {String? baseUrl}) = _TransactionClient;
+  factory TransactionClient(Dio dio, {String baseUrl}) = _TransactionClient;
 
-  @GET('/transaction')
-  Future<TransactionModel> getTransaction();
+  @GET(UriPathParameters.signature)
+  Future<BaseResponseObject<TransactionResponseObject?>?> getTransactionBySignature(
+    @Path("signature") String signature,
+    @Query("parsed_json") bool? parsedJson,
+    @Query("owners") List<String>? owners,
+  );
+
+  @GET("")
+  Future<BaseResponseObject<List<TransactionResponseObject?>?>?> getTransactionByOwner(
+    @Query("owner") String owner,
+    @Query("limit") int? limit,
+    @Query("before") String? before,
+    @Query("until") String? until,
+  );
 }

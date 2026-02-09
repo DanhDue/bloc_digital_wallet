@@ -5,7 +5,7 @@
 // Domain Layer
 export 'domain/entities/transaction_entity.dart';
 export 'domain/repositories/transaction_repository.dart';
-export 'domain/usecases/get_transaction_usecase.dart';
+export 'domain/usecases/get_transactions_by_owner_usecase.dart';
 
 // DI
 export 'di/injection.dart';
@@ -18,9 +18,9 @@ export 'generated/translations.dart';
 export 'transaction_strings.dart';
 
 // Presentation Layer
-export 'presentation/transaction/models/transaction_ui_model.dart';
+export 'presentation/transaction/ui_models/transaction_list_item.dart';
 export 'presentation/transaction/transaction_page.dart';
-export 'presentation/transaction/transaction_bloc.dart';
+export 'presentation/transaction/bloc/transaction_bloc.dart';
 export 'presentation/transaction/transaction_state.dart';
 export 'presentation/transaction/transaction_event.dart';
 export 'presentation/transaction/transaction_action.dart';

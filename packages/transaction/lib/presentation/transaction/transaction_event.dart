@@ -2,14 +2,16 @@
 
 // coverage:ignore-file
 
-import 'package:flutter/foundation.dart';
-import 'package:framework/framework.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:framework/framework.dart';
+import 'package:transaction/domain/entities/transaction_entity.dart';
 
 part 'transaction_event.freezed.dart';
 
 @freezed
-abstract class TransactionEvent extends BaseEvent with _$TransactionEvent {
-  const factory TransactionEvent.initial() = _Initial;
-  const TransactionEvent._() : super();
+class TransactionEvent extends BaseEvent with _$TransactionEvent {
+  const TransactionEvent._();
+  const factory TransactionEvent.navigateToDetail(TransactionEntity transaction) =
+      _NavigateToDetail;
+  const factory TransactionEvent.showError(String message) = _ShowError;
 }
