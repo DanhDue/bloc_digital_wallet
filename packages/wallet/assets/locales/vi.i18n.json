@@ -1,21 +1,31 @@
 {
-  "title": "Tính năng Wallet",
+  "title": "Tính năng Ví",
+  "wallet": {
+    "actionSend": "Gửi",
+    "actionReceive": "Nhận",
+    "actionBuy": "Mua",
+    "actionStaking": "Staking"
+  },
   "networkSelection": {
-    "selectNetwork": "Chọn mạng",
+    "selectNetwork": "Tất cả mạng",
     "search": "Tìm kiếm",
-    "error": "Đã có lỗi xảy ra"
+    "error": "Đã xảy ra lỗi"
   },
   "nftsList": {
     "title": "NFTs",
     "notFoundMessage": "Không tìm thấy NFT",
     "addNft": "Thêm NFT",
-    "error": "Đã có lỗi xảy ra"
+    "error": "Đã xảy ra lỗi"
   },
   "tokenList": {
     "title": "Tokens",
     "notFoundMessage": "Không tìm thấy Token",
     "addToken": "Thêm Token",
-    "error": "Đã có lỗi xảy ra",
+    "error": "Đã xảy ra lỗi",
     "hiddenBalance": "****"
+  },
+  "walletList": {
+    "account": "Tài khoản",
+    "copied": "Đã sao chép địa chỉ ví và sẽ được xóa sau 30 giây"
   }
 }

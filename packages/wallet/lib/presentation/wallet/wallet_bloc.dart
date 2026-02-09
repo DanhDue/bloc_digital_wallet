@@ -2,12 +2,12 @@
 
 // coverage:ignore-file
 
-import 'package:framework/framework.dart';
 import 'package:core/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wallet/domain/usecases/get_wallet_usecase.dart';
 import 'package:wallet/presentation/wallet/models/wallet_ui_model.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'wallet_action.dart';
 import 'wallet_event.dart';
@@ -19,7 +19,11 @@ class WalletBloc extends MviBloc<WalletAction, WalletState, WalletEvent> {
 
   WalletBloc(this._getWalletUseCase) : super(const WalletState()) {
     on<WalletAction>((action, emit) {
-      action.when(started: () => _onStarted(emit));
+      action.when(
+        started: () => _onStarted(emit),
+        selectNetwork: (network) => emit(state.copyWith(selectedNetwork: network)),
+        selectWallet: (wallet) => emit(state.copyWith(selectedWallet: wallet)),
+      );
     });
   }
 

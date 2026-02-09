@@ -1,7 +1,13 @@
 {
   "title": "Wallet Feature",
+  "wallet": {
+    "actionSend": "Send",
+    "actionReceive": "Receive",
+    "actionBuy": "Buy",
+    "actionStaking": "Staking"
+  },
   "networkSelection": {
-    "selectNetwork": "Select network",
+    "selectNetwork": "All Networks",
     "search": "Search",
     "error": "An error occurred"
   },

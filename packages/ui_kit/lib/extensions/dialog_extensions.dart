@@ -26,6 +26,10 @@ extension DialogExtensions on BuildContext {
     );
   }
 
+  void showCommingSoon({RouteSettings? routeSettings}) async {
+    showWrapBottomSheet(const CommingSoonModalView(), routeSettings: routeSettings);
+  }
+
   void showAlertDialog({String? title, String? message, Function? onAction, String? actionTitle}) {
     showWrapBottomSheet(
       AlertDialog(
