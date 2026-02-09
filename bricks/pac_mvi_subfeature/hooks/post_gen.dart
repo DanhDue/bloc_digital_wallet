@@ -55,21 +55,18 @@ Future<void> run(HookContext context) async {
 
     // Only rebuild the affected package
     context.logger.info('Rebuilding $snakePackage package...');
-    final result = await Process.run(
-        'melos',
-        [
-          'exec',
-          '--scope=$snakePackage',
-          '--',
-          'fvm',
-          'flutter',
-          'pub',
-          'run',
-          'build_runner',
-          'build',
-          '--delete-conflicting-outputs',
-        ],
-        runInShell: true);
+    final result = await Process.run('melos', [
+      'exec',
+      '--scope=$snakePackage',
+      '--',
+      'fvm',
+      'flutter',
+      'pub',
+      'run',
+      'build_runner',
+      'build',
+      '--delete-conflicting-outputs',
+    ], runInShell: true);
     if (result.exitCode == 0) {
       context.logger.success('Rebuild completed successfully.');
     } else {
@@ -104,7 +101,8 @@ Future<void> _updateRepositoryInterface(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -148,7 +146,8 @@ Future<void> _updateRepositoryImpl(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -159,7 +158,8 @@ Future<void> _updateRepositoryImpl(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newMethod = '''
+      final newMethod =
+          '''
 
   @override
   Future<Either<Failure, ${pascalSubfeature}Entity>> get$pascalSubfeature() {
@@ -199,7 +199,8 @@ Future<void> _updateRemoteDataSource(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$modelImport' +
           content.substring(endOfImport + 1);
     }
@@ -209,7 +210,8 @@ Future<void> _updateRemoteDataSource(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -220,7 +222,8 @@ Future<void> _updateRemoteDataSource(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newMethod = '''
+      final newMethod =
+          '''
 
   Future<Either<Failure, ${pascalSubfeature}Entity>> get$pascalSubfeature() async {
     final result = await safeApiCall(() => _client.get$pascalSubfeature());
@@ -257,7 +260,8 @@ Future<void> _updateClient(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$modelImport' +
           content.substring(endOfImport + 1);
     }
@@ -268,7 +272,8 @@ Future<void> _updateClient(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newEndpoint = '''
+      final newEndpoint =
+          '''
 
   @GET('/$snakeSubfeature')
   Future<${pascalSubfeature}Model> get$pascalSubfeature();
@@ -292,6 +297,18 @@ Future<void> _updateRouter(
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();
+
+  // Add flutter/material.dart import for Key type (required by generated router args)
+  if (!content.contains("package:flutter/material.dart")) {
+    final importMarker = RegExp(r"import 'package:");
+    final match = importMarker.firstMatch(content);
+    if (match != null) {
+      content = content.replaceFirst(
+        match.group(0)!,
+        "import 'package:flutter/material.dart';\n${match.group(0)}",
+      );
+    }
+  }
 
   // Add import for subfeature page
   if (!content.contains("${snakeSubfeature}_page.dart")) {
