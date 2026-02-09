@@ -420,14 +420,98 @@ assert(() {
 
 ---
 
-### 13. Code Quality
+### 13. Freezed Standards
+
+> [!IMPORTANT]
+> Verify all freezed models follow the project's strict conventions. These are mandatory for all data classes.
+
+#### Structure Requirements
+
+| Rule | Requirement | Example |
+|------|-------------|---------|
+| **Abstract Class** | MUST use `abstract class` for all freezed models | `abstract class UserModel with _$UserModel` |
+| **Private Constructor** | MUST include `const ClassName._();` | `const UserModel._();` |
+| **@JsonSerializable** | SHOULD use `@JsonSerializable(includeIfNull: false)` | On factory constructor |
+| **@JsonKey on ALL fields** | MUST use `@JsonKey(name: 'field_name')` for EVERY field | Even when names match |
+| **Nullable Fields** | PREFER nullable types (`String?`, `int?`) | For optional API fields |
+| **One Object, One File** | MUST have each class in its own dedicated file | Never multiple classes per file |
+
+#### Required Imports
+
+| Import | Purpose |
+|--------|---------|
+| `package:flutter/foundation.dart` | Required for `debugFillProperties` support |
+| `package:freezed_annotation/freezed_annotation.dart` | Freezed annotations |
+
+#### File Organization
+
+```dart
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
+
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part '{model_name}.freezed.dart';
+part '{model_name}.g.dart';
+
+@freezed
+abstract class ModelName with _$ModelName {
+  const ModelName._();  // ← REQUIRED: Private constructor
+
+  @JsonSerializable(includeIfNull: false)
+  const factory ModelName({
+    @JsonKey(name: 'field_name') String? fieldName,  // ← @JsonKey on ALL fields
+    @JsonKey(name: 'count') int? count,
+  }) = _ModelName;
+
+  factory ModelName.fromJson(Map<String, Object?> json) =>
+      _$ModelNameFromJson(json);
+}
+```
+
+#### Examples
+
+```dart
+// ❌ BAD - Missing abstract, private constructor, and @JsonKey
+@freezed
+class UserModel with _$UserModel {
+  const factory UserModel({
+    required String id,       // Missing @JsonKey
+    required String name,
+  }) = _UserModel;
+}
+
+// ✅ GOOD - Complete freezed implementation
+@freezed
+abstract class UserModel with _$UserModel {
+  const UserModel._();  // Private constructor
+
+  @JsonSerializable(includeIfNull: false)
+  const factory UserModel({
+    @JsonKey(name: 'id') required String id,
+    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'email') String? email,
+  }) = _UserModel;
+
+  factory UserModel.fromJson(Map<String, Object?> json) =>
+      _$UserModelFromJson(json);
+}
+```
+
+---
+
+### 14. Code Quality
 
 | Aspect | Verification |
 |--------|--------------|
-| **Freezed Models** | All entities and models use `@freezed` with proper `@JsonKey` annotations |
+| **Freezed Models** | All entities and models follow Freezed Standards (Section 13) |
 | **Import Convention** | Always use **full package paths** (e.g., `import 'package:bloc_digital_wallet/...'`) instead of relative imports |
 | **Boilerplate** | Identify code that could be generated using Mason Bricks (`mvi_feature`, `mvi_subfeature`) |
 | **Testing Coverage** | New logic is accompanied by Unit Tests for UseCases/BLoCs |
+| **One Object, One File** | Each freezed class MUST have its own dedicated `.dart` file |
 
 ---
 

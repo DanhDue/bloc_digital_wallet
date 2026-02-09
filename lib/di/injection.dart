@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:network/network.dart' as network;
 import 'package:core/core.dart' as core;
 import 'package:onboard/onboard.dart' as onboard;
+import 'package:scanner/scanner.dart' as scanner;
 import 'package:trends/trends.dart' as trends;
 import 'package:wallet/wallet.dart' as wallet;
 import 'package:settings/settings.dart' as settings;
@@ -19,6 +20,7 @@ void configureDependencies() {
   core.configureModuleDependencies(getIt);
   network.configureModuleDependencies(getIt);
   onboard.configureModuleDependencies(getIt);
+  scanner.configureModuleDependencies(getIt);
   authentication.configureModuleDependencies(getIt);
   trends.configureModuleDependencies(getIt);
   wallet.configureModuleDependencies(getIt);
