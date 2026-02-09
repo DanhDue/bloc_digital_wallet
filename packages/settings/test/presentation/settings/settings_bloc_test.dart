@@ -48,6 +48,10 @@ void main() {
     bloc = SettingsBloc(/* mockUseCase, */ mockAppInfoService);
   });
 
+  tearDown(() {
+    bloc.close();
+  });
+
   /*
   const tSettingsEntity = SettingsEntity(
     id: '1',

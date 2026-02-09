@@ -227,7 +227,7 @@ Future<void> _updateCommonRoutes(String snakeName, String pascalName, String cam
   // We locate the closing brace of CommonRoutes class by finding subsequent private class definition
   // or just append before the last closing brace of the main block if we assume standard formatting.
   // A safer bet given the file structure is looking for the comment block of private routes.
-  final privateRoutesMarker = '// Private route classes';
+  const privateRoutesMarker = '// Private route classes';
   if (content.contains(privateRoutesMarker) &&
       !content.contains('static const String $camelName')) {
     final insertionPoint = content.indexOf(privateRoutesMarker);
@@ -323,13 +323,13 @@ Future<void> _updateAppUri(String snakeName, String camelName) async {
 
   var content = await file.readAsString();
 
-  if (!content.contains('static const String \$camelName')) {
+  if (!content.contains('static const String $camelName')) {
     // Insert before baseUrl which is usually at the end of the list
     final baseUrlMarker = "static const String baseUrl = 'baseUrl';";
     if (content.contains(baseUrlMarker)) {
       content = content.replaceFirst(
         baseUrlMarker,
-        "static const String \$camelName = '\$snakeName';\n  \$baseUrlMarker",
+        "static const String $camelName = '$snakeName';\n  $baseUrlMarker",
       );
       await file.writeAsString(content);
     } else {
@@ -338,7 +338,7 @@ Future<void> _updateAppUri(String snakeName, String camelName) async {
       if (content.contains(classMarker)) {
         content = content.replaceFirst(
           classMarker,
-          "\$classMarker\n  static const String \$camelName = '\$snakeName';",
+          "$classMarker\n  static const String $camelName = '$snakeName';",
         );
         await file.writeAsString(content);
       }
