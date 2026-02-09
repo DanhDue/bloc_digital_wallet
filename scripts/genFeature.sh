@@ -1,33 +1,29 @@
 #!/bin/bash
 set -e
 
-PACKAGE_NAME=$1
+# Usage: ./scripts/genFeature.sh <package_name>
+# Example: ./scripts/genFeature.sh wallet
+
+PACKAGE_NAME=${1:-}
 
 if [ -z "$PACKAGE_NAME" ]; then
-  echo "Usage: genFeature.sh <package_name>"
+  echo "Usage: ./scripts/genFeature.sh <package_name>"
+  echo "Example: ./scripts/genFeature.sh wallet"
   exit 1
 fi
 
-# 1. Generate Translations for the new package only
-melos exec --scope="$PACKAGE_NAME" --file-exists="slang.yaml" -- fvm dart run slang
+echo "🔄 Generating for package: $PACKAGE_NAME"
 
-# 2. Build the new package (if it uses build_runner)
-melos exec --scope="$PACKAGE_NAME" --depends-on="build_runner" -- fvm flutter pub run build_runner build --delete-conflicting-outputs
+# 1. Generate translations (if slang.yaml exists)
+echo "📝 Step 1/3: Generating translations..."
+melos exec --scope="$PACKAGE_NAME" --file-exists="slang.yaml" -- fvm dart run slang || true
 
-# 3. Build Root App (needed for router, injection, etc.)
-fvm flutter pub run build_runner build --delete-conflicting-outputs
+# 2. Run build_runner (freezed, retrofit, etc.)
+echo "🏗️  Step 2/3: Running build_runner..."
+melos exec --scope="$PACKAGE_NAME" -- fvm flutter pub run build_runner build --delete-conflicting-outputs
 
-# 4. Generate Root Assets
-fluttergen -c pubspec.yaml
+# 3. Format
+echo "✨ Step 3/3: Formatting..."
+melos exec --scope="$PACKAGE_NAME" -- dart format lib -l 99
 
-# 5. Formatting & License Headers
-melos run dartfmt
-melos run add-header-ignore-flags
-melos run add-license-header
-melos run check-license-header
-
-# 6. Final Analysis
-melos run analyze
-
-# 7. Stage all changes
-git add .
+echo "✅ Done generating for package: $PACKAGE_NAME"

@@ -16,15 +16,15 @@ part 'wallet_client.g.dart';
 abstract class WalletClient {
   factory WalletClient(Dio dio, {String? baseUrl}) = _WalletClient;
 
-  @GET('/wallet')
+  @GET('')
   Future<WalletModel> getWallet();
 
-  @GET('/api/v1/network_selection')
+  @GET('/network_selection')
   Future<BaseResponseObject<NetworkSelectionModel>> getNetworkSelection();
 
-  @GET('/api/v1/nfts_list')
+  @GET('/nfts_list')
   Future<BaseResponseObject<NftsListModel>> getNftsList();
 
-  @GET('/api/v1/wallet_list')
+  @GET('/wallet_list')
   Future<BaseResponseObject<WalletListModel>> getWalletList();
 }

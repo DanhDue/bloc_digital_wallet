@@ -2,10 +2,13 @@
 
 // coverage:ignore-file
 
+import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network/di/network_module.config.dart';
+import 'package:network/dio_factory.dart';
 import 'package:network/ssl/ssl.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -25,4 +28,12 @@ abstract class NetworkModule {
       settings: TalkerLoggerSettings(enableColors: false),
     ),
   );
+
+  @singleton
+  Dio provideDio(SslConfiguration sslConfiguration, Talker talker) => DioFactory(
+    talker,
+    sslConfiguration: sslConfiguration,
+    baseUrl: EnvironmentConfig.apiBaseUrl,
+    enableLogging: EnvironmentConfig.enableLogging,
+  ).dio;
 }

@@ -70,14 +70,23 @@ melos:
     genAlls:
       run: ./scripts/genAlls.sh
       description: Generate all models, APIs, themes, assets, and localization.
-    genTheme:
-      run: fvm flutter pub run build_runner build --delete-conflicting-outputs
-      description: Generate theme classes with theme_tailor.
+    genFeature:
+      run: ./scripts/genFeature.sh $1
+      description: "Package gen: slang → build_runner → format. Usage: melos genFeature wallet"
+    rebuildAndFormat:
+      run: ./scripts/rebuildAndFormat.sh
+      description: "Root app gen: build_runner → format. Usage: melos rebuildAndFormat"
+    integrateFeatureToApp:
+      run: ./scripts/integrateFeatureToApp.sh $1
+      description: "Full feature integration: genScope → root build_runner → fluttergen → dartfmt → license → analyze → git add. Usage: melos integrateFeatureToApp wallet"
     genImages:
-      run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      run: melos build_runner
       description: Generate type-safe accessors for images.
+    genTheme:
+      run: melos build_runner
+      description: Generate theme classes with theme_tailor.
     genColors:
-      run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      run: melos build_runner
       description: Generate type-safe accessors for colors from assets/colors/colors.xml.
     genLocales:
       run: fvm dart run slang
@@ -153,6 +162,22 @@ melos:
       run: mason make mvi_subfeature
       description: Generate a subfeature within an existing module.
 
+    mason_make_pac_feature:
+      run: mason make pac_mvi_feature
+      description: Generate a new feature package using Clean Architecture + MVI.
+
+    mason_make_pac_subfeature:
+      run: mason make pac_mvi_subfeature
+      description: Creates a new subfeature (presentation layer) inside an existing feature package.
+
+    mason_remove_pac_feature:
+      run: mason make remove_pac_feature
+      description: Removes a feature package created by pac_mvi_feature.
+
+    mason_remove_pac_subfeature:
+      run: mason make remove_pac_subfeature
+      description: Remove a subfeature from a package following Clean Architecture + MVI.
+
     mason_list:
       run: mason list
       description: List all available Mason bricks.
@@ -168,6 +193,8 @@ melos:
     disableSingleTouches:
       run: defaults write com.apple.iphonesimulator ShowSingleTouches 0
       description: Disable single touches in iOS Simulator.
+
+
 
 theme_tailor:
   input_folder: lib/config/theme

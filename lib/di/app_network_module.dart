@@ -24,34 +24,31 @@ abstract class AppNetworkModule {
   /// - AuthLocalDataSource & AuthStreamService from core
   /// - TokenRefresher from authentication
   @singleton
-  Dio provideDio(
-    Talker talker,
+  @Named('refreshDio')
+  Dio provideRefreshDio(SslConfiguration sslConfiguration, Talker talker) => DioFactory(
+    talker,
+    sslConfiguration: sslConfiguration,
+    baseUrl: EnvironmentConfig.apiBaseUrl,
+    enableLogging: EnvironmentConfig.enableLogging,
+  ).dio;
+
+  @singleton
+  AuthClient provideAuthClient(@Named('refreshDio') Dio refreshDio) =>
+      AuthClient(refreshDio, baseUrl: AppUri.users.buildAppUri()!);
+
+  @singleton
+  AuthTokenRefresher provideTokenRefresher(AuthClient authClient) =>
+      AuthTokenRefresher(authClient);
+
+  @singleton
+  AuthInterceptor provideAuthInterceptor(
+    Dio dio,
     AuthLocalDataSource localDataSource,
+    AuthTokenRefresher tokenRefresher,
+    Talker talker,
     AuthStreamService authStreamService,
-    SslConfiguration sslConfiguration,
   ) {
-    final dio = DioFactory(
-      talker,
-      sslConfiguration: sslConfiguration,
-      baseUrl: EnvironmentConfig.apiBaseUrl,
-      enableLogging: EnvironmentConfig.enableLogging,
-    ).dio;
-
-    // Create a separate basic Dio for the AuthClient used inside the interceptor
-    // to avoid circular dependency and infinite loops during refresh.
-    final refreshDio = DioFactory(
-      talker,
-      sslConfiguration: sslConfiguration,
-      baseUrl: EnvironmentConfig.apiBaseUrl,
-      enableLogging: EnvironmentConfig.enableLogging,
-    ).dio;
-
-    // AuthClient for refresh logic (uses separate Dio without AuthInterceptor)
-    final authClient = AuthClient(refreshDio, baseUrl: AppUri.users.buildAppUri()!);
-
-    // TokenRefresher adapter that wraps AuthClient (DIP: core depends on abstraction)
-    final tokenRefresher = AuthTokenRefresher(authClient);
-
+    // We inject the Dio instance provided by NetworkModule here just to configure it
     final authInterceptor = AuthInterceptor(
       dio,
       localDataSource,
@@ -59,8 +56,8 @@ abstract class AppNetworkModule {
       talker,
       authStreamService,
     );
+    // Add the interceptor to the global Dio instance
     dio.interceptors.add(authInterceptor);
-
-    return dio;
+    return authInterceptor;
   }
 }

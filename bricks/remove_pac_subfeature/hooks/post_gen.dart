@@ -79,23 +79,12 @@ Future<void> run(HookContext context) async {
 
     progress.complete('Removed subfeature $subfeatureName from $packageName!');
 
-    // Only rebuild the affected package
+    // Only rebuild the affected package using genFeature
     context.logger.info('Rebuilding $snakePackage package...');
-    final packageResult = await Process.run(
-        'melos',
-        [
-          'exec',
-          '--scope=$snakePackage',
-          '--',
-          'fvm',
-          'flutter',
-          'pub',
-          'run',
-          'build_runner',
-          'build',
-          '--delete-conflicting-outputs',
-        ],
-        runInShell: true);
+    final packageResult = await Process.run('melos', [
+      'genFeature',
+      snakePackage,
+    ], runInShell: true);
     if (packageResult.exitCode == 0) {
       context.logger.success('Rebuild completed successfully.');
     } else {
