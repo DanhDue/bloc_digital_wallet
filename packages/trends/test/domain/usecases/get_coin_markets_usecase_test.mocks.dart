@@ -27,8 +27,7 @@ import 'package:trends/domain/repositories/trends_repository.dart' as _i3;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
-  _FakeEither_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeEither_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
 /// A class which mocks [TrendsRepository].
@@ -40,8 +39,7 @@ class MockTrendsRepository extends _i1.Mock implements _i3.TrendsRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>
-  getCoinMarkets({
+  _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>> getCoinMarkets({
     int? page = 1,
     int? limit = 20,
     String? convert,
@@ -56,46 +54,39 @@ class MockTrendsRepository extends _i1.Mock implements _i3.TrendsRepository {
               #sort: sort,
               #sortDir: sortDir,
             }),
-            returnValue:
-                _i4.Future<
-                  _i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>
-                >.value(
-                  _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
-                    this,
-                    Invocation.method(#getCoinMarkets, [], {
-                      #page: page,
-                      #limit: limit,
-                      #convert: convert,
-                      #sort: sort,
-                      #sortDir: sortDir,
-                    }),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
+                this,
+                Invocation.method(#getCoinMarkets, [], {
+                  #page: page,
+                  #limit: limit,
+                  #convert: convert,
+                  #sort: sort,
+                  #sortDir: sortDir,
+                }),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>);
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, Map<String, _i5.CoinMarketEntity>>>
-  getCoinInfo({required String? symbol}) =>
+  _i4.Future<_i2.Either<_i2.Failure, Map<String, _i5.CoinMarketEntity>>> getCoinInfo({
+    required String? symbol,
+  }) =>
       (super.noSuchMethod(
             Invocation.method(#getCoinInfo, [], {#symbol: symbol}),
             returnValue:
-                _i4.Future<
-                  _i2.Either<_i2.Failure, Map<String, _i5.CoinMarketEntity>>
-                >.value(
+                _i4.Future<_i2.Either<_i2.Failure, Map<String, _i5.CoinMarketEntity>>>.value(
                   _FakeEither_0<_i2.Failure, Map<String, _i5.CoinMarketEntity>>(
                     this,
                     Invocation.method(#getCoinInfo, [], {#symbol: symbol}),
                   ),
                 ),
           )
-          as _i4.Future<
-            _i2.Either<_i2.Failure, Map<String, _i5.CoinMarketEntity>>
-          >);
+          as _i4.Future<_i2.Either<_i2.Failure, Map<String, _i5.CoinMarketEntity>>>);
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, _i5.CoinMarketEntity>>
-  getCoinPriceConversion({
+  _i4.Future<_i2.Either<_i2.Failure, _i5.CoinMarketEntity>> getCoinPriceConversion({
     required String? symbol,
     required double? amount,
     String? convert,
@@ -106,34 +97,29 @@ class MockTrendsRepository extends _i1.Mock implements _i3.TrendsRepository {
               #amount: amount,
               #convert: convert,
             }),
-            returnValue:
-                _i4.Future<_i2.Either<_i2.Failure, _i5.CoinMarketEntity>>.value(
-                  _FakeEither_0<_i2.Failure, _i5.CoinMarketEntity>(
-                    this,
-                    Invocation.method(#getCoinPriceConversion, [], {
-                      #symbol: symbol,
-                      #amount: amount,
-                      #convert: convert,
-                    }),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i5.CoinMarketEntity>>.value(
+              _FakeEither_0<_i2.Failure, _i5.CoinMarketEntity>(
+                this,
+                Invocation.method(#getCoinPriceConversion, [], {
+                  #symbol: symbol,
+                  #amount: amount,
+                  #convert: convert,
+                }),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, _i5.CoinMarketEntity>>);
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>
-  getGlobalMetrics() =>
+  _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>> getGlobalMetrics() =>
       (super.noSuchMethod(
             Invocation.method(#getGlobalMetrics, []),
-            returnValue:
-                _i4.Future<
-                  _i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>
-                >.value(
-                  _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
-                    this,
-                    Invocation.method(#getGlobalMetrics, []),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
+                this,
+                Invocation.method(#getGlobalMetrics, []),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>);
 
@@ -141,46 +127,29 @@ class MockTrendsRepository extends _i1.Mock implements _i3.TrendsRepository {
   _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>> getMaps() =>
       (super.noSuchMethod(
             Invocation.method(#getMaps, []),
-            returnValue:
-                _i4.Future<
-                  _i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>
-                >.value(
-                  _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
-                    this,
-                    Invocation.method(#getMaps, []),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
+                this,
+                Invocation.method(#getMaps, []),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>);
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, Map<String, _i6.CoinMarketOhlcvEntity>>>
-  getOhlcv({required String? symbol, required String? interval}) =>
+  _i4.Future<_i2.Either<_i2.Failure, Map<String, _i6.CoinMarketOhlcvEntity>>> getOhlcv({
+    required String? symbol,
+    required String? interval,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#getOhlcv, [], {
-              #symbol: symbol,
-              #interval: interval,
-            }),
+            Invocation.method(#getOhlcv, [], {#symbol: symbol, #interval: interval}),
             returnValue:
-                _i4.Future<
-                  _i2.Either<
-                    _i2.Failure,
-                    Map<String, _i6.CoinMarketOhlcvEntity>
-                  >
-                >.value(
-                  _FakeEither_0<
-                    _i2.Failure,
-                    Map<String, _i6.CoinMarketOhlcvEntity>
-                  >(
+                _i4.Future<_i2.Either<_i2.Failure, Map<String, _i6.CoinMarketOhlcvEntity>>>.value(
+                  _FakeEither_0<_i2.Failure, Map<String, _i6.CoinMarketOhlcvEntity>>(
                     this,
-                    Invocation.method(#getOhlcv, [], {
-                      #symbol: symbol,
-                      #interval: interval,
-                    }),
+                    Invocation.method(#getOhlcv, [], {#symbol: symbol, #interval: interval}),
                   ),
                 ),
           )
-          as _i4.Future<
-            _i2.Either<_i2.Failure, Map<String, _i6.CoinMarketOhlcvEntity>>
-          >);
+          as _i4.Future<_i2.Either<_i2.Failure, Map<String, _i6.CoinMarketOhlcvEntity>>>);
 }

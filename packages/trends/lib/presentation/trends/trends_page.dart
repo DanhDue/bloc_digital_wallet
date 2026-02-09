@@ -6,13 +6,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
-
 import 'package:trends/presentation/trends/trends_action.dart';
 import 'package:trends/presentation/trends/trends_bloc.dart';
 import 'package:trends/presentation/trends/trends_event.dart';
 import 'package:trends/presentation/trends/trends_state.dart';
 import 'package:trends/presentation/trends/widgets/coin_market_item.dart';
 import 'package:trends/presentation/trends/widgets/trends_search_bar.dart';
+import 'package:trends/trends_strings.dart';
 
 @RoutePage()
 class TrendsPage extends BaseMviPage<TrendsBloc, TrendsAction, TrendsState, TrendsEvent> {
@@ -67,11 +67,11 @@ class TrendsPage extends BaseMviPage<TrendsBloc, TrendsAction, TrendsState, Tren
       child: Column(
         mainAxisAlignment: .center,
         children: [
-          Text(state.errorMessage ?? 'An error occurred'),
+          Text(state.errorMessage ?? TrendsStrings.l10n.trendsError),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.read<TrendsBloc>().add(const TrendsAction.started()),
-            child: const Text('Retry'),
+            child: Text(TrendsStrings.l10n.trendsRetry),
           ),
         ],
       ),
@@ -82,7 +82,7 @@ class TrendsPage extends BaseMviPage<TrendsBloc, TrendsAction, TrendsState, Tren
     final coins = state.filteredCoins;
 
     if (coins.isEmpty) {
-      return const Center(child: Text('No coins found'));
+      return Center(child: Text(TrendsStrings.l10n.trendsNoCoinsFound));
     }
 
     return NotificationListener<ScrollNotification>(

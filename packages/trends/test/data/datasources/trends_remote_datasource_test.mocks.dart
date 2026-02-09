@@ -27,20 +27,17 @@ import 'package:trends/data/models/coin_market_response.dart' as _i2;
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeCoinMarketResponse_0 extends _i1.SmartFake
-    implements _i2.CoinMarketResponse {
+class _FakeCoinMarketResponse_0 extends _i1.SmartFake implements _i2.CoinMarketResponse {
   _FakeCoinMarketResponse_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeCoinMarketModel_1 extends _i1.SmartFake
-    implements _i3.CoinMarketModel {
+class _FakeCoinMarketModel_1 extends _i1.SmartFake implements _i3.CoinMarketModel {
   _FakeCoinMarketModel_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeTalkerSettings_2 extends _i1.SmartFake
-    implements _i4.TalkerSettings {
+class _FakeTalkerSettings_2 extends _i1.SmartFake implements _i4.TalkerSettings {
   _FakeTalkerSettings_2(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
@@ -85,9 +82,7 @@ class MockTrendsClient extends _i1.Mock implements _i5.TrendsClient {
           as _i6.Future<_i2.CoinMarketResponse>);
 
   @override
-  _i6.Future<Map<String, _i3.CoinMarketModel>> getCoinInfo({
-    required String? symbol,
-  }) =>
+  _i6.Future<Map<String, _i3.CoinMarketModel>> getCoinInfo({required String? symbol}) =>
       (super.noSuchMethod(
             Invocation.method(#getCoinInfo, [], {#symbol: symbol}),
             returnValue: _i6.Future<Map<String, _i3.CoinMarketModel>>.value(
@@ -125,9 +120,7 @@ class MockTrendsClient extends _i1.Mock implements _i5.TrendsClient {
   _i6.Future<List<_i3.CoinMarketModel>> getGlobalMetrics() =>
       (super.noSuchMethod(
             Invocation.method(#getGlobalMetrics, []),
-            returnValue: _i6.Future<List<_i3.CoinMarketModel>>.value(
-              <_i3.CoinMarketModel>[],
-            ),
+            returnValue: _i6.Future<List<_i3.CoinMarketModel>>.value(<_i3.CoinMarketModel>[]),
           )
           as _i6.Future<List<_i3.CoinMarketModel>>);
 
@@ -135,9 +128,7 @@ class MockTrendsClient extends _i1.Mock implements _i5.TrendsClient {
   _i6.Future<List<_i3.CoinMarketModel>> getMaps() =>
       (super.noSuchMethod(
             Invocation.method(#getMaps, []),
-            returnValue: _i6.Future<List<_i3.CoinMarketModel>>.value(
-              <_i3.CoinMarketModel>[],
-            ),
+            returnValue: _i6.Future<List<_i3.CoinMarketModel>>.value(<_i3.CoinMarketModel>[]),
           )
           as _i6.Future<List<_i3.CoinMarketModel>>);
 
@@ -147,14 +138,10 @@ class MockTrendsClient extends _i1.Mock implements _i5.TrendsClient {
     required String? interval,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#getOhlcv, [], {
-              #symbol: symbol,
-              #interval: interval,
-            }),
-            returnValue:
-                _i6.Future<Map<String, _i7.CoinMarketOhlcvModel>>.value(
-                  <String, _i7.CoinMarketOhlcvModel>{},
-                ),
+            Invocation.method(#getOhlcv, [], {#symbol: symbol, #interval: interval}),
+            returnValue: _i6.Future<Map<String, _i7.CoinMarketOhlcvModel>>.value(
+              <String, _i7.CoinMarketOhlcvModel>{},
+            ),
           )
           as _i6.Future<Map<String, _i7.CoinMarketOhlcvModel>>);
 }
@@ -171,10 +158,7 @@ class MockTalker extends _i1.Mock implements _i4.Talker {
   _i4.TalkerSettings get settings =>
       (super.noSuchMethod(
             Invocation.getter(#settings),
-            returnValue: _FakeTalkerSettings_2(
-              this,
-              Invocation.getter(#settings),
-            ),
+            returnValue: _FakeTalkerSettings_2(this, Invocation.getter(#settings)),
           )
           as _i4.TalkerSettings);
 
@@ -188,17 +172,12 @@ class MockTalker extends _i1.Mock implements _i4.Talker {
 
   @override
   List<_i4.TalkerData> get history =>
-      (super.noSuchMethod(
-            Invocation.getter(#history),
-            returnValue: <_i4.TalkerData>[],
-          )
+      (super.noSuchMethod(Invocation.getter(#history), returnValue: <_i4.TalkerData>[])
           as List<_i4.TalkerData>);
 
   @override
-  set settings(_i4.TalkerSettings? value) => super.noSuchMethod(
-    Invocation.setter(#settings, value),
-    returnValueForMissingStub: null,
-  );
+  set settings(_i4.TalkerSettings? value) =>
+      super.noSuchMethod(Invocation.setter(#settings, value), returnValueForMissingStub: null);
 
   @override
   void configure({
@@ -208,16 +187,14 @@ class MockTalker extends _i1.Mock implements _i4.Talker {
     filter,
     _i4.TalkerErrorHandler? errorHandler,
     _i4.TalkerHistory? history,
-  }) => throw UnsupportedError(
-    r'"configure" cannot be used without a mockito fallback generator.',
-  );
+  }) =>
+      throw UnsupportedError(r'"configure" cannot be used without a mockito fallback generator.');
 
   @override
-  void handle(Object? exception, [StackTrace? stackTrace, dynamic msg]) =>
-      super.noSuchMethod(
-        Invocation.method(#handle, [exception, stackTrace, msg]),
-        returnValueForMissingStub: null,
-      );
+  void handle(Object? exception, [StackTrace? stackTrace, dynamic msg]) => super.noSuchMethod(
+    Invocation.method(#handle, [exception, stackTrace, msg]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void log(
@@ -230,85 +207,64 @@ class MockTalker extends _i1.Mock implements _i4.Talker {
     Invocation.method(
       #log,
       [message],
-      {
-        #logLevel: logLevel,
-        #exception: exception,
-        #stackTrace: stackTrace,
-        #pen: pen,
-      },
+      {#logLevel: logLevel, #exception: exception, #stackTrace: stackTrace, #pen: pen},
     ),
     returnValueForMissingStub: null,
   );
 
   @override
-  void logTyped(_i4.TalkerLog? log) => super.noSuchMethod(
-    Invocation.method(#logTyped, [log]),
+  void logTyped(_i4.TalkerLog? log) =>
+      super.noSuchMethod(Invocation.method(#logTyped, [log]), returnValueForMissingStub: null);
+
+  @override
+  void logCustom(_i4.TalkerLog? log) =>
+      super.noSuchMethod(Invocation.method(#logCustom, [log]), returnValueForMissingStub: null);
+
+  @override
+  void critical(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#critical, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void logCustom(_i4.TalkerLog? log) => super.noSuchMethod(
-    Invocation.method(#logCustom, [log]),
+  void debug(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#debug, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void critical(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#critical, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void debug(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#debug, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void error(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#error, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void info(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#info, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void verbose(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#verbose, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void warning(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#warning, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void cleanHistory() => super.noSuchMethod(
-    Invocation.method(#cleanHistory, []),
+  void error(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#error, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void enable() => super.noSuchMethod(
-    Invocation.method(#enable, []),
+  void info(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#info, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void disable() => super.noSuchMethod(
-    Invocation.method(#disable, []),
+  void verbose(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#verbose, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
+
+  @override
+  void warning(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#warning, [msg, exception, stackTrace]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void cleanHistory() =>
+      super.noSuchMethod(Invocation.method(#cleanHistory, []), returnValueForMissingStub: null);
+
+  @override
+  void enable() =>
+      super.noSuchMethod(Invocation.method(#enable, []), returnValueForMissingStub: null);
+
+  @override
+  void disable() =>
+      super.noSuchMethod(Invocation.method(#disable, []), returnValueForMissingStub: null);
 }
