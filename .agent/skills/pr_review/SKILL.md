@@ -675,11 +675,13 @@ Check that the code adheres to project-specific quality standards:
 If changes affect core functionality, verify the build succeeds:
 
 ```bash
-# For specific package
-melos run build --scope=package_name
+# For code generation (freezed, retrofit, etc.)
+melos build_runner
 
-# Or full app build
+# For full app build
 flutter build apk --debug
+# or
+melos build_apk
 ```
 
 > [!CAUTION]

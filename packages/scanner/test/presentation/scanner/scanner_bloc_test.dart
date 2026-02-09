@@ -26,11 +26,7 @@ void main() {
     bloc = ScannerBloc(mockUseCase);
   });
 
-  const tScannerEntity = ScannerEntity(
-    id: '1',
-    name: 'Test',
-    description: 'Description',
-  );
+  const tScannerEntity = ScannerEntity(id: '1', name: 'Test', description: 'Description');
 
   test('initial state should be initial', () {
     expect(bloc.state.status, ScannerStatus.initial);
