@@ -49,16 +49,6 @@ class TrendsRepositoryImpl implements TrendsRepository {
   }
 
   @override
-  Future<Either<Failure, List<CoinMarketEntity>>> getGlobalMetrics() {
-    return _remoteDataSource.getGlobalMetrics();
-  }
-
-  @override
-  Future<Either<Failure, List<CoinMarketEntity>>> getMaps() {
-    return _remoteDataSource.getMaps();
-  }
-
-  @override
   Future<Either<Failure, Map<String, CoinMarketOhlcvEntity>>> getOhlcv({
     required String symbol,
     required String interval,

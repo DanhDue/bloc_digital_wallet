@@ -42,7 +42,7 @@ abstract class CoinMarketUiModel with _$CoinMarketUiModel {
     );
   }
 
-  /// Display rank with fallback to cmcRank
+  /// Display rank preferring cmcRank, falling back to rank
   int? get displayRank => cmcRank ?? rank;
 
   /// Check if price change is negative

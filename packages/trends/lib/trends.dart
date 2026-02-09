@@ -8,7 +8,6 @@ export 'domain/repositories/trends_repository.dart';
 export 'domain/usecases/get_coin_markets_usecase.dart';
 
 // Data Layer
-export 'data/models/coin_market_model.dart';
 
 // DI
 export 'di/injection.dart';
@@ -26,6 +25,5 @@ export 'presentation/trends/trends_page.dart';
 export 'presentation/trends/trends_bloc.dart';
 export 'presentation/trends/trends_state.dart';
 export 'presentation/trends/trends_event.dart';
-export 'presentation/trends/trends_action.dart';
 export 'presentation/trends/widgets/trends_search_bar.dart';
 export 'presentation/trends/widgets/coin_market_item.dart';

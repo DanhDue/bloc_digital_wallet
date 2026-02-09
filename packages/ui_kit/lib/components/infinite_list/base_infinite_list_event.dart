@@ -4,7 +4,7 @@
 
 import 'package:equatable/equatable.dart';
 
-sealed class BaseInfiniteListEvent extends Equatable {
+abstract class BaseInfiniteListEvent extends Equatable {
   const BaseInfiniteListEvent();
 
   @override

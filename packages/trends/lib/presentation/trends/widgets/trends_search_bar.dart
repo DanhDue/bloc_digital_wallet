@@ -13,6 +13,7 @@ class TrendsSearchBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String)? onHistoryTap;
   final List<String>? history;
   final Function(bool)? onFocusChanged;
+  final Function(String)? onSubmitted;
 
   const TrendsSearchBar({
     super.key,
@@ -22,6 +23,7 @@ class TrendsSearchBar extends StatefulWidget implements PreferredSizeWidget {
     this.onHistoryTap,
     this.history,
     this.onFocusChanged,
+    this.onSubmitted,
   });
 
   @override
@@ -31,7 +33,7 @@ class TrendsSearchBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(76);
 }
 
-class _TrendsSearchBarState extends State<TrendsSearchBar> with SingleTickerProviderStateMixin {
+class _TrendsSearchBarState extends State<TrendsSearchBar> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
 
@@ -98,6 +100,7 @@ class _TrendsSearchBarState extends State<TrendsSearchBar> with SingleTickerProv
                         controller: _controller,
                         focusNode: _focusNode,
                         onChanged: widget.onChanged,
+                        onSubmitted: widget.onSubmitted,
                         onTap: widget.onSearchTap,
                         decoration: InputDecoration(
                           hintText: TrendsStrings.l10n.trendsSearchHint,

@@ -99,36 +99,6 @@ void main() {
     });
   });
 
-  group('getGlobalMetrics', () {
-    test('should return list of CoinMarketEntity when successful', () async {
-      // Arrange
-      when(
-        mockRemoteDataSource.getGlobalMetrics(),
-      ).thenAnswer((_) async => Right(tCoinMarketList));
-
-      // Act
-      final result = await repository.getGlobalMetrics();
-
-      // Assert
-      expect(result.isRight(), true);
-      verify(mockRemoteDataSource.getGlobalMetrics());
-    });
-  });
-
-  group('getMaps', () {
-    test('should return list of CoinMarketEntity when successful', () async {
-      // Arrange
-      when(mockRemoteDataSource.getMaps()).thenAnswer((_) async => Right(tCoinMarketList));
-
-      // Act
-      final result = await repository.getMaps();
-
-      // Assert
-      expect(result.isRight(), true);
-      verify(mockRemoteDataSource.getMaps());
-    });
-  });
-
   group('getOhlcv', () {
     test('should return Map<String, CoinMarketOhlcvEntity> when successful', () async {
       // Arrange

@@ -14,7 +14,6 @@ import 'package:trends/domain/entities/coin_market_ohlcv_entity.dart';
 @lazySingleton
 class TrendsRemoteDataSource with SafeCallApiMixin {
   final TrendsClient _client;
-  static const int _itemsPerPage = 20;
 
   TrendsRemoteDataSource(this._client);
 
@@ -25,7 +24,7 @@ class TrendsRemoteDataSource with SafeCallApiMixin {
     String? sort,
     String? sortDir,
   }) async {
-    final start = (page - 1) * _itemsPerPage + 1;
+    final start = (page - 1) * limit + 1;
     final result = await safeApiCall(
       () => _client.getCoinMarkets(
         start: start,
@@ -42,7 +41,9 @@ class TrendsRemoteDataSource with SafeCallApiMixin {
     required String symbol,
   }) async {
     final result = await safeApiCall(() => _client.getCoinInfo(symbol: symbol));
-    return result.map((map) => map.map((key, value) => MapEntry(key, value.toEntity())));
+    return result.map(
+      (response) => response.data.map((key, value) => MapEntry(key, value.toEntity())),
+    );
   }
 
   Future<Either<Failure, CoinMarketEntity>> getCoinPriceConversion({
@@ -53,17 +54,7 @@ class TrendsRemoteDataSource with SafeCallApiMixin {
     final result = await safeApiCall(
       () => _client.getCoinPriceConversion(symbol: symbol, amount: amount, convert: convert),
     );
-    return result.map((model) => model.toEntity());
-  }
-
-  Future<Either<Failure, List<CoinMarketEntity>>> getGlobalMetrics() async {
-    final result = await safeApiCall(() => _client.getGlobalMetrics());
-    return result.map((models) => models.map((model) => model.toEntity()).toList());
-  }
-
-  Future<Either<Failure, List<CoinMarketEntity>>> getMaps() async {
-    final result = await safeApiCall(() => _client.getMaps());
-    return result.map((models) => models.map((model) => model.toEntity()).toList());
+    return result.map((response) => response.data.toEntity());
   }
 
   Future<Either<Failure, Map<String, CoinMarketOhlcvEntity>>> getOhlcv({
@@ -71,6 +62,8 @@ class TrendsRemoteDataSource with SafeCallApiMixin {
     required String interval,
   }) async {
     final result = await safeApiCall(() => _client.getOhlcv(symbol: symbol, interval: interval));
-    return result.map((map) => map.map((key, value) => MapEntry(key, value.toEntity())));
+    return result.map(
+      (response) => response.data.map((key, value) => MapEntry(key, value.toEntity())),
+    );
   }
 }

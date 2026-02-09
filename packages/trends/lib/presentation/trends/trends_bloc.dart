@@ -3,101 +3,79 @@
 // coverage:ignore-file
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 import 'package:trends/domain/usecases/get_coin_markets_usecase.dart';
 import 'package:trends/presentation/trends/models/coin_market_ui_model.dart';
-
-import 'package:trends/presentation/trends/trends_action.dart';
 import 'package:trends/presentation/trends/trends_event.dart';
 import 'package:trends/presentation/trends/trends_state.dart';
+import 'package:ui_kit/components/infinite_list/base_infinite_list_bloc.dart';
+import 'package:ui_kit/components/infinite_list/base_infinite_list_state.dart';
 
 @injectable
-class TrendsBloc extends MviBloc<TrendsAction, TrendsState, TrendsEvent> {
+class TrendsBloc extends BaseInfiniteListBloc<CoinMarketUiModel> {
+  static const _maxSearchHistorySize = 10;
   final GetCoinMarketsUseCase _getCoinMarketsUseCase;
-  static const int _itemsPerPage = 20;
 
-  TrendsBloc(this._getCoinMarketsUseCase) : super(const TrendsState()) {
-    on<TrendsAction>((action, emit) async {
-      await action.when(
-        started: () => _onStarted(emit),
-        loadMore: () => _onLoadMore(emit),
-        search: (keyword) async => _onSearch(emit, keyword),
-        searchFocusChanged: (isFocused) async => _onSearchFocusChanged(emit, isFocused),
-        historyTap: (keyword) async => _onHistoryTap(emit, keyword),
-        micTap: () async => _onMicTap(emit),
-      );
-    });
+  TrendsBloc(this._getCoinMarketsUseCase) : super(initialState: const TrendsState()) {
+    // Register custom search event handlers
+    on<TrendsSearch>(_onSearch);
+    on<TrendsSearchFocusChanged>(_onSearchFocusChanged);
+    on<TrendsHistoryTap>(_onHistoryTap);
+    on<TrendsMicTap>(_onMicTap);
+    on<TrendsSearchSubmitted>(_onSearchSubmitted);
   }
 
-  Future<void> _onStarted(Emitter<TrendsState> emit) async {
-    emit(state.copyWith(status: TrendsStatus.loading, currentPage: 1));
-    await _fetchCoinMarkets(emit, page: 1, isRefresh: true);
-  }
+  /// Returns the state cast to TrendsState for access to search-specific fields.
+  TrendsState get trendsState => state as TrendsState;
 
-  Future<void> _onLoadMore(Emitter<TrendsState> emit) async {
-    if (state.status == TrendsStatus.loadingMore || state.hasReachedEnd) return;
+  @override
+  Future<List<CoinMarketUiModel>> fetchItems({required int page, required int limit}) async {
+    final result = await _getCoinMarketsUseCase(page: page + 1, limit: limit);
 
-    emit(state.copyWith(status: TrendsStatus.loadingMore));
-    await _fetchCoinMarkets(emit, page: state.currentPage + 1);
-  }
-
-  Future<void> _fetchCoinMarkets(
-    Emitter<TrendsState> emit, {
-    required int page,
-    bool isRefresh = false,
-  }) async {
-    final result = await _getCoinMarketsUseCase(page: page, limit: _itemsPerPage);
-
-    result.fold(
-      (failure) {
-        emit(state.copyWith(status: TrendsStatus.failure, errorMessage: failure.message));
-        emitEvent(const TrendsEvent.initial());
-      },
-      (entities) {
-        final newCoins = entities.map(CoinMarketUiModel.fromEntity).toList();
-        final allCoins = isRefresh ? newCoins : [...state.coins, ...newCoins];
-        final filteredCoins = _filterCoins(allCoins, state.searchKeyword);
-
-        emit(
-          state.copyWith(
-            status: TrendsStatus.success,
-            coins: allCoins,
-            filteredCoins: filteredCoins,
-            currentPage: page,
-            hasReachedEnd: newCoins.length < _itemsPerPage,
-          ),
-        );
-      },
+    return result.fold(
+      (failure) => throw Exception(failure.message),
+      (entities) => entities.map(CoinMarketUiModel.fromEntity).toList(),
     );
   }
 
-  void _onSearch(Emitter<TrendsState> emit, String keyword) {
-    final filteredCoins = _filterCoins(state.coins, keyword);
-    emit(state.copyWith(searchKeyword: keyword, filteredCoins: filteredCoins));
+  void _onSearch(TrendsSearch event, Emitter<BaseInfiniteListState<CoinMarketUiModel>> emit) {
+    emit(trendsState.copyWith(searchKeyword: event.keyword));
   }
 
-  void _onSearchFocusChanged(Emitter<TrendsState> emit, bool isFocused) {
-    emit(state.copyWith(isSearchFocused: isFocused));
+  void _onSearchFocusChanged(
+    TrendsSearchFocusChanged event,
+    Emitter<BaseInfiniteListState<CoinMarketUiModel>> emit,
+  ) {
+    emit(trendsState.copyWith(isSearchFocused: event.isFocused));
   }
 
-  void _onHistoryTap(Emitter<TrendsState> emit, String keyword) {
-    _onSearch(emit, keyword);
+  void _onHistoryTap(
+    TrendsHistoryTap event,
+    Emitter<BaseInfiniteListState<CoinMarketUiModel>> emit,
+  ) {
+    emit(trendsState.copyWith(searchKeyword: event.keyword));
   }
 
-  void _onMicTap(Emitter<TrendsState> emit) {
+  void _onMicTap(TrendsMicTap event, Emitter<BaseInfiniteListState<CoinMarketUiModel>> emit) {
     // Future: trigger voice search
-    emitEvent(const TrendsEvent.initial());
   }
 
-  List<CoinMarketUiModel> _filterCoins(List<CoinMarketUiModel> coins, String keyword) {
-    if (keyword.isEmpty) return coins;
+  void _onSearchSubmitted(
+    TrendsSearchSubmitted event,
+    Emitter<BaseInfiniteListState<CoinMarketUiModel>> emit,
+  ) {
+    if (event.keyword.isEmpty) return;
 
-    final query = keyword.toLowerCase();
-    return coins.where((coin) {
-      final symbol = coin.symbol.toLowerCase();
-      final name = coin.name.toLowerCase();
-      return symbol.contains(query) || name.contains(query);
-    }).toList();
+    final currentHistory = List<String>.from(trendsState.searchHistory);
+    // Remove if exists to move to top
+    currentHistory.remove(event.keyword);
+    // Add to top
+    currentHistory.insert(0, event.keyword);
+    // Limit to 10
+    if (currentHistory.length > _maxSearchHistorySize) {
+      currentHistory.removeLast();
+    }
+
+    emit(trendsState.copyWith(searchHistory: currentHistory));
   }
 }

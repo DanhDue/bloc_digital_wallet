@@ -11,7 +11,10 @@ import 'package:trends/data/datasources/remote/trends_remote_datasource.dart';
 import 'package:trends/data/models/coin_market_model.dart';
 import 'package:trends/data/models/coin_market_ohlcv_model.dart';
 
+import 'package:trends/data/models/coin_info_response.dart';
 import 'package:trends/data/models/coin_market_response.dart';
+import 'package:trends/data/models/coin_ohlcv_response.dart';
+import 'package:trends/data/models/coin_price_conversion_response.dart';
 
 import 'trends_remote_datasource_test.mocks.dart';
 
@@ -110,7 +113,8 @@ void main() {
     test('should return Map<String, CoinMarketEntity> when successful', () async {
       // Arrange
       final tMap = <String, CoinMarketModel>{'BTC': tCoinMarketModel};
-      when(mockClient.getCoinInfo(symbol: 'BTC')).thenAnswer((_) async => tMap);
+      final tResponse = CoinInfoResponse(data: tMap, status: null);
+      when(mockClient.getCoinInfo(symbol: 'BTC')).thenAnswer((_) async => tResponse);
 
       // Act
       final result = await dataSource.getCoinInfo(symbol: 'BTC');
@@ -132,7 +136,9 @@ void main() {
           amount: anyNamed('amount'),
           convert: anyNamed('convert'),
         ),
-      ).thenAnswer((_) async => tCoinMarketModel);
+      ).thenAnswer(
+        (_) async => const CoinPriceConversionResponse(data: tCoinMarketModel, status: null),
+      );
 
       // Act
       final result = await dataSource.getCoinPriceConversion(
@@ -149,27 +155,12 @@ void main() {
     });
   });
 
-  group('getMaps', () {
-    test('should return list of CoinMarketEntity when successful', () async {
-      // Arrange
-      when(mockClient.getMaps()).thenAnswer((_) async => tCoinMarketList);
-
-      // Act
-      final result = await dataSource.getMaps();
-
-      // Assert
-      expect(result.isRight(), true);
-      result.fold((failure) => fail('Expected success'), (entities) {
-        expect(entities.length, 1);
-      });
-    });
-  });
-
   group('getOhlcv', () {
     test('should return Map<String, CoinMarketOhlcvEntity> when successful', () async {
       // Arrange
       final tMap = <String, CoinMarketOhlcvModel>{'BTC': tOhlcvModel};
-      when(mockClient.getOhlcv(symbol: 'BTC', interval: '1d')).thenAnswer((_) async => tMap);
+      final tResponse = CoinOhlcvResponse(data: tMap, status: null);
+      when(mockClient.getOhlcv(symbol: 'BTC', interval: '1d')).thenAnswer((_) async => tResponse);
 
       // Act
       final result = await dataSource.getOhlcv(symbol: 'BTC', interval: '1d');
@@ -178,22 +169,6 @@ void main() {
       expect(result.isRight(), true);
       result.fold((failure) => fail('Expected success'), (map) {
         expect(map['BTC']?.close, 105.0);
-      });
-    });
-  });
-
-  group('getGlobalMetrics', () {
-    test('should return list of CoinMarketEntity when successful', () async {
-      // Arrange
-      when(mockClient.getGlobalMetrics()).thenAnswer((_) async => tCoinMarketList);
-
-      // Act
-      final result = await dataSource.getGlobalMetrics();
-
-      // Assert
-      expect(result.isRight(), true);
-      result.fold((failure) => fail('Expected success'), (entities) {
-        expect(entities.length, 1);
       });
     });
   });

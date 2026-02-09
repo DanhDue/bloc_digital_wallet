@@ -111,32 +111,6 @@ class MockTrendsRepository extends _i1.Mock implements _i3.TrendsRepository {
           as _i4.Future<_i2.Either<_i2.Failure, _i5.CoinMarketEntity>>);
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>> getGlobalMetrics() =>
-      (super.noSuchMethod(
-            Invocation.method(#getGlobalMetrics, []),
-            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>.value(
-              _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
-                this,
-                Invocation.method(#getGlobalMetrics, []),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>);
-
-  @override
-  _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>> getMaps() =>
-      (super.noSuchMethod(
-            Invocation.method(#getMaps, []),
-            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>.value(
-              _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
-                this,
-                Invocation.method(#getMaps, []),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>);
-
-  @override
   _i4.Future<_i2.Either<_i2.Failure, Map<String, _i6.CoinMarketOhlcvEntity>>> getOhlcv({
     required String? symbol,
     required String? interval,

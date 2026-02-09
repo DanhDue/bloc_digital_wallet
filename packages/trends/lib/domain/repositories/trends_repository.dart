@@ -24,10 +24,6 @@ abstract class TrendsRepository {
     String? convert,
   });
 
-  Future<Either<Failure, List<CoinMarketEntity>>> getGlobalMetrics();
-
-  Future<Either<Failure, List<CoinMarketEntity>>> getMaps();
-
   Future<Either<Failure, Map<String, CoinMarketOhlcvEntity>>> getOhlcv({
     required String symbol,
     required String interval,

@@ -4,10 +4,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:trends/data/models/coin_market_model.dart';
-import 'package:trends/data/models/coin_market_ohlcv_model.dart';
 
+import 'package:trends/data/models/coin_info_response.dart';
 import 'package:trends/data/models/coin_market_response.dart';
+import 'package:trends/data/models/coin_ohlcv_response.dart';
+import 'package:trends/data/models/coin_price_conversion_response.dart';
 
 part 'trends_client.g.dart';
 
@@ -25,23 +26,17 @@ abstract class TrendsClient {
   });
 
   @GET('/info')
-  Future<Map<String, CoinMarketModel>> getCoinInfo({@Query('symbol') required String symbol});
+  Future<CoinInfoResponse> getCoinInfo({@Query('symbol') required String symbol});
 
   @GET('/price')
-  Future<CoinMarketModel> getCoinPriceConversion({
+  Future<CoinPriceConversionResponse> getCoinPriceConversion({
     @Query('symbol') required String symbol,
     @Query('amount') required double amount,
     @Query('convert') String? convert,
   });
 
-  @GET('/metrics')
-  Future<List<CoinMarketModel>> getGlobalMetrics();
-
-  @GET('/maps')
-  Future<List<CoinMarketModel>> getMaps();
-
   @GET('/ohlcv')
-  Future<Map<String, CoinMarketOhlcvModel>> getOhlcv({
+  Future<CoinOhlcvResponse> getOhlcv({
     @Query('symbol') required String symbol,
     @Query('interval') required String interval,
   });
