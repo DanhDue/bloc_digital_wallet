@@ -418,6 +418,62 @@ assert(() {
 | **Self-Validating** | Clear Boolean output (Pass/Fail) |
 | **Timely** | Write tests alongside or before code (TDD mindset) |
 
+#### Bloc/Cubit Testing Requirements
+
+> [!IMPORTANT]
+> **Resource Cleanup**: All Blocs and Cubits MUST be closed in the `tearDown()` method to prevent stream/subscription leaks.
+
+| Rule | Requirement | Reason |
+|------|-------------|--------|
+| **Close in tearDown** | MUST call `bloc.close()` or `cubit.close()` in `tearDown()` | Prevents memory leaks from unclosed streams/subscriptions |
+| **Setup/TearDown Pattern** | Create bloc in `setUp()`, close in `tearDown()` | Ensures proper lifecycle management |
+| **Late Variables** | Use `late` keyword for bloc/cubit declarations | Allows initialization in `setUp()` |
+
+**Example:**
+
+```dart
+// ❌ BAD - Bloc never closed, causes resource leak
+void main() {
+  late TransactionBloc bloc;
+  late MockGetTransactionUseCase mockUseCase;
+
+  setUp(() {
+    mockUseCase = MockGetTransactionUseCase();
+    bloc = TransactionBloc(mockUseCase);
+  });
+  // Missing tearDown - RESOURCE LEAK!
+
+  test('should emit success state', () {
+    // test code...
+  });
+}
+
+// ✅ GOOD - Bloc properly closed in tearDown
+void main() {
+  late TransactionBloc bloc;
+  late MockGetTransactionUseCase mockUseCase;
+
+  setUp(() {
+    mockUseCase = MockGetTransactionUseCase();
+    bloc = TransactionBloc(mockUseCase);
+  });
+
+  tearDown(() {
+    bloc.close();  // ← REQUIRED: Close bloc to prevent leaks
+  });
+
+  test('should emit success state', () {
+    // test code...
+  });
+}
+```
+
+**Why This Matters:**
+- Blocs/Cubits create streams and subscriptions
+- Unclosed streams leak memory across test runs
+- Can cause flaky tests and CI failures
+- Proper cleanup ensures test independence (F.I.R.S.T principle)
+
 ---
 
 ### 13. Freezed Standards
@@ -445,10 +501,14 @@ assert(() {
 
 #### File Organization
 
+> [!NOTE]
+> The `// coverage:ignore-file` comment is **ONLY** for generated files and freezed models.
+> **DO NOT** add `// coverage:ignore-file` to test files (files in `test/` directories).
+
 ```dart
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
+// coverage:ignore-file  ← ONLY for generated/model files, NOT for test files
 // ignore_for_file: invalid_annotation_target
 
 import 'package:flutter/foundation.dart';
@@ -567,11 +627,74 @@ Copy the output and paste into your review request.
 
 ---
 
+## INITIAL QUALITY CHECKS
+
+> [!IMPORTANT]
+> **MANDATORY FIRST STEP**: Before reviewing any code changes, you MUST perform these quality checks in order.
+
+### Step 1: Generate Source Code & Apply Standards
+
+Run `melos genAlls` to ensure all generated code is up-to-date and license headers are applied:
+
+```bash
+melos genAlls
+```
+
+This command will:
+- Run `build_runner` to generate freezed models, JSON serialization, and other code-generated files
+- Apply license headers to all source files
+- Format code according to project standards
+
+### Step 2: Static Analysis
+
+Run `fvm dart analyze` to detect code quality issues, lints, and potential bugs:
+
+```bash
+fvm dart analyze
+```
+
+Review the output for:
+- Lint violations
+- Type errors
+- Unused imports or variables
+- Deprecated API usage
+- Potential null safety issues
+
+### Step 3: Verify Quality Rules
+
+Check that the code adheres to project-specific quality standards:
+
+- **Import Paths**: All `lib/` files use package imports (not relative imports)
+- **Freezed Models**: All data classes use `@freezed` with `@JsonKey` annotations
+- **Line Length**: Code is formatted to 99 characters max
+- **Retrofit Clients**: All clients have explicit `baseUrl` parameters
+- **Dart Shorthands**: Use `.infinity`, `.maxFinite`, `.zero` where applicable
+
+### Step 4: Build Verification (Optional)
+
+If changes affect core functionality, verify the build succeeds:
+
+```bash
+# For code generation (freezed, retrofit, etc.)
+melos build_runner
+
+# For full app build
+flutter build apk --debug
+# or
+melos build_apk
+```
+
+> [!CAUTION]
+> If any of these checks fail, **STOP** and fix the issues before proceeding with the PR review. Do not review code that doesn't pass basic quality gates.
+
+---
+
 ### Workflow
 
-1. **Provide the Diff**: Use one of the options above to provide code changes.
-2. **Analyze**: Agent reviews each file according to the guidelines.
-3. **Report**: Agent generates the structured output format.
+1. **Run Initial Quality Checks**: Execute Steps 1-4 above before analyzing code changes.
+2. **Provide the Diff**: Use one of the options below to provide code changes.
+3. **Analyze**: Agent reviews each file according to the guidelines.
+4. **Report**: Agent generates the structured output format.
 
 ---
 

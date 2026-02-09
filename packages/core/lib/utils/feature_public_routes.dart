@@ -35,6 +35,9 @@ abstract class FeaturePublicRoutes {
   // Scanner
   static const String scanner = '/scanner';
   static const PageRouteInfo scannerRoute = _ScannerRoute();
+  // Transaction
+  static const String transaction = '/transaction';
+  static const PageRouteInfo transactionRoute = _TransactionRoute();
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -60,6 +63,10 @@ class _TrendsRoute extends PageRouteInfo<void> {
 
 class _WalletRoute extends PageRouteInfo<void> {
   const _WalletRoute() : super('WalletRoute');
+}
+
+class _TransactionRoute extends PageRouteInfo<void> {
+  const _TransactionRoute() : super('TransactionRoute');
 }
 
 class _ScannerRoute extends PageRouteInfo<void> {

@@ -31,8 +31,7 @@ void main() {
 
   test('should get scanner from the repository', () async {
     // arrange
-    when(mockRepository.getScanner())
-        .thenAnswer((_) async => Right(tScannerEntity));
+    when(mockRepository.getScanner()).thenAnswer((_) async => Right(tScannerEntity));
 
     // act
     final result = await useCase();
