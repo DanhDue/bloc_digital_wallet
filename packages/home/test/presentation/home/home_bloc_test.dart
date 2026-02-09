@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:home/domain/entities/home_entity.dart';
-import 'package:home/domain/usecases/get_home_usecase.dart';
+import 'package:home/domain/usecases/get_all_homes_usecase.dart';
 import 'package:home/presentation/home/home_action.dart';
 import 'package:home/presentation/home/home_bloc.dart';
 import 'package:home/presentation/home/home_state.dart';
@@ -16,34 +16,32 @@ import 'package:core/core.dart' hide test;
 
 import 'home_bloc_test.mocks.dart';
 
-@GenerateMocks([GetHomeUseCase])
+@GenerateMocks([GetAllHomesUseCase])
 void main() {
   late HomeBloc bloc;
-  late MockGetHomeUseCase mockUseCase;
+  late MockGetAllHomesUseCase mockUseCase;
 
   setUp(() {
-    mockUseCase = MockGetHomeUseCase();
+    mockUseCase = MockGetAllHomesUseCase();
     bloc = HomeBloc(mockUseCase);
   });
 
-  const tHomeEntity = HomeEntity(id: '1', name: 'Test', description: 'Description');
+  const tHomeEntity = HomeEntity(id: '1', name: 'Test');
 
   test('initial state should be initial', () {
-    expect(bloc.state.status, HomeStatus.initial);
+    expect(bloc.state, const HomeState());
   });
 
   blocTest<HomeBloc, HomeState>(
     'emits [loading, success] when started is added and usecase returns success',
     build: () {
-      when(mockUseCase()).thenAnswer((_) async => const Right(tHomeEntity));
+      when(mockUseCase()).thenAnswer((_) async => const Right([tHomeEntity]));
       return bloc;
     },
     act: (bloc) => bloc.add(const HomeAction.started()),
     expect: () => [
-      const HomeState(status: HomeStatus.loading),
-      isA<HomeState>()
-          .having((s) => s.status, 'status', HomeStatus.success)
-          .having((s) => s.uiModel, 'uiModel', isNotNull),
+      const HomeState(isLoading: true),
+      const HomeState(isLoading: false, homes: [tHomeEntity]),
     ],
     verify: (_) {
       verify(mockUseCase());

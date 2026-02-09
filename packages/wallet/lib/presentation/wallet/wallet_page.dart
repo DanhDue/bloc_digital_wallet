@@ -22,15 +22,16 @@ import 'wallet_event.dart';
 import 'wallet_state.dart';
 
 @RoutePage()
-class WalletPage extends BaseMviStatefulPage<WalletBloc, WalletState, WalletEvent> {
+class WalletPage extends BaseMviStatefulPage<WalletBloc, WalletAction, WalletState, WalletEvent> {
   const WalletPage({super.key});
 
   @override
-  BaseMviPageState<WalletBloc, WalletState, WalletEvent, WalletPage> createState() =>
+  BaseMviPageState<WalletBloc, WalletAction, WalletState, WalletEvent, WalletPage> createState() =>
       _WalletPageState();
 }
 
-class _WalletPageState extends BaseMviPageState<WalletBloc, WalletState, WalletEvent, WalletPage>
+class _WalletPageState
+    extends BaseMviPageState<WalletBloc, WalletAction, WalletState, WalletEvent, WalletPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 

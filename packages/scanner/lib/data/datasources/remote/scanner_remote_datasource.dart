@@ -6,7 +6,6 @@ import 'package:core/core.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 import 'package:scanner/data/datasources/remote/scanner_client.dart';
-import 'package:scanner/data/models/scanner_model.dart';
 import 'package:scanner/domain/entities/scanner_entity.dart';
 
 @lazySingleton

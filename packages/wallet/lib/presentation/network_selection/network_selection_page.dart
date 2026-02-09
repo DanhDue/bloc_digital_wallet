@@ -15,11 +15,17 @@ import 'network_selection_state.dart';
 
 @RoutePage()
 class NetworkSelectionPage
-    extends BaseMviPage<NetworkSelectionBloc, NetworkSelectionState, NetworkSelectionEvent> {
+    extends
+        BaseMviPage<
+          NetworkSelectionBloc,
+          NetworkSelectionAction,
+          NetworkSelectionState,
+          NetworkSelectionEvent
+        > {
   const NetworkSelectionPage({super.key});
 
   @override
-  BaseAction? get initialAction => const NetworkSelectionAction.load();
+  NetworkSelectionAction? get initialAction => const NetworkSelectionAction.load();
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;

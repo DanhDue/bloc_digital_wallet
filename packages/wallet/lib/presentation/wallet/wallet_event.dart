@@ -10,6 +10,7 @@ part 'wallet_event.freezed.dart';
 
 @freezed
 abstract class WalletEvent extends BaseEvent with _$WalletEvent {
+  const WalletEvent._();
+
   const factory WalletEvent.initial() = _Initial;
-  const WalletEvent._() : super();
 }

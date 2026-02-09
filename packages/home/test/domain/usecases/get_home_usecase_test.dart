@@ -23,18 +23,19 @@ void main() {
     useCase = GetHomeUseCase(mockRepository);
   });
 
-  const tHomeEntity = HomeEntity(id: '1', name: 'Test Home', description: 'Test Description');
+  const tHomeId = '1';
+  const tHomeEntity = HomeEntity(id: tHomeId, name: 'Test Home');
 
   test('should get home from the repository', () async {
     // arrange
-    when(mockRepository.getHome()).thenAnswer((_) async => Right(tHomeEntity));
+    when(mockRepository.getHome(any)).thenAnswer((_) async => const Right(tHomeEntity));
 
     // act
-    final result = await useCase();
+    final result = await useCase(tHomeId);
 
     // assert
-    expect(result, Right(tHomeEntity));
-    verify(mockRepository.getHome());
+    expect(result, const Right(tHomeEntity));
+    verify(mockRepository.getHome(tHomeId));
     verifyNoMoreInteractions(mockRepository);
   });
 }

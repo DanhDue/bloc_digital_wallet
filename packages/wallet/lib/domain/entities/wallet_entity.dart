@@ -6,10 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'wallet_entity.freezed.dart';
-part 'wallet_entity.g.dart';
 
 @freezed
 abstract class WalletEntity with _$WalletEntity {
+  const WalletEntity._();
+
   const factory WalletEntity({
     required String id,
     required String name,
@@ -21,6 +22,4 @@ abstract class WalletEntity with _$WalletEntity {
     String? privateKey,
     String? bs58PrivateKey,
   }) = _WalletEntity;
-
-  factory WalletEntity.fromJson(Map<String, dynamic> json) => _$WalletEntityFromJson(json);
 }

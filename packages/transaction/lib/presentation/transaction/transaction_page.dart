@@ -6,12 +6,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:framework/framework.dart';
 import 'package:flutter/material.dart';
 
+import 'transaction_action.dart';
 import 'transaction_bloc.dart';
 import 'transaction_event.dart';
 import 'transaction_state.dart';
 
 @RoutePage()
-class TransactionPage extends BaseMviPage<TransactionBloc, TransactionState, TransactionEvent> {
+class TransactionPage
+    extends BaseMviPage<TransactionBloc, TransactionAction, TransactionState, TransactionEvent> {
   const TransactionPage({super.key});
 
   @override

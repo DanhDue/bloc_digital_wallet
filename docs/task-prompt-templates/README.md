@@ -219,6 +219,7 @@ COMPONENTS:
 - State: Persistent UI data (NounAdjective) - sealed class with Equatable
 - Event: One-time effects (ShowX, NavigateX) - sealed class
 - BLoC: Extends MviBloc<Action, State, Event>
+- Page: Extends BaseMviPage or BaseMviStatefulPage for clean lifecycle and event management.
 
 SINGLE ENTRY POINT:
 ✅ bloc.onAction(const LoadDataAction())

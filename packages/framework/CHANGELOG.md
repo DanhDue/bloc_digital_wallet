@@ -1,3 +1,5 @@
-## 0.0.1
+## 0.0.1+1
 
-* TODO: Describe initial release.
+* Refactored `MviBloc`, `BaseMviPage`, and `BaseMviStatefulPage` to require generic `Action` type parameter.
+* Added `BaseAction`, `BaseState`, and `BaseEvent` constraints to `MviBloc`.
+* Simplified MVI page implementation with automatic BLoC provision and event listening.

@@ -6,13 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'nfts_list_entity.freezed.dart';
-part 'nfts_list_entity.g.dart';
 
 @freezed
 abstract class NftsListEntity with _$NftsListEntity {
-  const factory NftsListEntity({@JsonKey(name: 'id') required String id}) = _NftsListEntity;
-
   const NftsListEntity._();
 
-  factory NftsListEntity.fromJson(Map<String, dynamic> json) => _$NftsListEntityFromJson(json);
+  const factory NftsListEntity({required String id}) = _NftsListEntity;
 }

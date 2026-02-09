@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tHome
 enum_name: HomeAppLocale
 class_name: HomeTranslations
+translation_class_visibility: public

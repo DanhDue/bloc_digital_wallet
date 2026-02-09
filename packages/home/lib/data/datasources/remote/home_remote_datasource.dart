@@ -6,7 +6,7 @@ import 'package:core/core.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 import 'package:home/data/datasources/remote/home_client.dart';
-import 'package:home/data/models/home_model.dart';
+
 import 'package:home/domain/entities/home_entity.dart';
 
 @lazySingleton

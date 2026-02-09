@@ -27,7 +27,7 @@ import 'splash_state.dart';
 /// ============================================================================
 
 @RoutePage()
-class SplashPage extends BaseMviPage<SplashBloc, SplashState, SplashEvent> {
+class SplashPage extends BaseMviPage<SplashBloc, SplashAction, SplashState, SplashEvent> {
   const SplashPage({super.key});
 
   @override

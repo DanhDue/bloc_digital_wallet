@@ -6,12 +6,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:framework/framework.dart';
 import 'package:flutter/material.dart';
 
+import 'scanner_action.dart';
 import 'scanner_bloc.dart';
 import 'scanner_event.dart';
 import 'scanner_state.dart';
 
 @RoutePage()
-class ScannerPage extends BaseMviPage<ScannerBloc, ScannerState, ScannerEvent> {
+class ScannerPage extends BaseMviPage<ScannerBloc, ScannerAction, ScannerState, ScannerEvent> {
   const ScannerPage({super.key});
 
   @override

@@ -13,11 +13,12 @@ import 'nfts_list_event.dart';
 import 'nfts_list_state.dart';
 
 @RoutePage()
-class NftsListPage extends BaseMviPage<NftsListBloc, NftsListState, NftsListEvent> {
+class NftsListPage
+    extends BaseMviPage<NftsListBloc, NftsListAction, NftsListState, NftsListEvent> {
   const NftsListPage({super.key});
 
   @override
-  BaseAction? get initialAction => const NftsListAction.started();
+  NftsListAction? get initialAction => const NftsListAction.started();
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;

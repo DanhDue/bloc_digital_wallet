@@ -18,7 +18,6 @@ export 'generated/translations.dart';
 export 'home_strings.dart';
 
 // Presentation Layer
-export 'presentation/home/models/home_ui_model.dart';
 export 'presentation/home/home_page.dart';
 export 'presentation/home/home_bloc.dart';
 export 'presentation/home/home_state.dart';

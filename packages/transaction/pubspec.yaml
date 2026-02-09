@@ -20,7 +20,7 @@ dependencies:
   ui_kit:
     path: ../ui_kit
   framework:
-     path: ../framework
+    path: ../framework
   
   # Dependencies
   json_annotation: ^4.9.0

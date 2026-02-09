@@ -38,12 +38,25 @@ class MockHomeRepository extends _i1.Mock implements _i3.HomeRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, _i5.HomeEntity>> getHome() =>
+  _i4.Future<_i2.Either<_i2.Failure, _i5.HomeEntity>> getHome(String? id) =>
       (super.noSuchMethod(
-            Invocation.method(#getHome, []),
+            Invocation.method(#getHome, [id]),
             returnValue: _i4.Future<_i2.Either<_i2.Failure, _i5.HomeEntity>>.value(
-              _FakeEither_0<_i2.Failure, _i5.HomeEntity>(this, Invocation.method(#getHome, [])),
+              _FakeEither_0<_i2.Failure, _i5.HomeEntity>(this, Invocation.method(#getHome, [id])),
             ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, _i5.HomeEntity>>);
+
+  @override
+  _i4.Future<_i2.Either<_i2.Failure, List<_i5.HomeEntity>>> getAllHomes() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllHomes, []),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.HomeEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i5.HomeEntity>>(
+                this,
+                Invocation.method(#getAllHomes, []),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i2.Failure, List<_i5.HomeEntity>>>);
 }

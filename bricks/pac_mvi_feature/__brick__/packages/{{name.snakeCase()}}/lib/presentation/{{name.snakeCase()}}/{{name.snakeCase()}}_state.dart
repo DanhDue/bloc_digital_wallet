@@ -13,11 +13,11 @@ enum {{name.pascalCase()}}Status { initial, loading, success, failure }
 
 @freezed
 abstract class {{name.pascalCase()}}State extends BaseState with _${{name.pascalCase()}}State {
+  const {{name.pascalCase()}}State._();
+
   const factory {{name.pascalCase()}}State({
     @Default({{name.pascalCase()}}Status.initial) {{name.pascalCase()}}Status status,
     {{name.pascalCase()}}UiModel? uiModel,
     String? errorMessage,
   }) = _{{name.pascalCase()}}State;
-
-  const {{name.pascalCase()}}State._() : super();
 }

@@ -9,6 +9,8 @@ part '{{subfeature_name.snakeCase()}}_ui_model.freezed.dart';
 
 @freezed
 abstract class {{subfeature_name.pascalCase()}}UiModel with _${{subfeature_name.pascalCase()}}UiModel {
+  const {{subfeature_name.pascalCase()}}UiModel._();
+
   const factory {{subfeature_name.pascalCase()}}UiModel({
     @Default('') String title,
   }) = _{{subfeature_name.pascalCase()}}UiModel;

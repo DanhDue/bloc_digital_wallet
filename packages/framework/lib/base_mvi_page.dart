@@ -11,7 +11,12 @@ import 'mvi_bloc.dart';
 /// MviConsumer - Internal widget for MVI event/state handling
 /// ============================================================================
 /// Combines BlocConsumer with MVI event stream listening.
-class _MviConsumer<B extends MviBloc<dynamic, S, E>, S extends BaseState, E extends BaseEvent>
+class _MviConsumer<
+  B extends MviBloc<A, S, E>,
+  A extends BaseAction,
+  S extends BaseState,
+  E extends BaseEvent
+>
     extends HookWidget {
   const _MviConsumer({required this.builder, required this.onEvent});
 
@@ -46,7 +51,7 @@ class _MviConsumer<B extends MviBloc<dynamic, S, E>, S extends BaseState, E exte
 /// Usage:
 /// ```dart
 /// @RoutePage()
-/// class StartPage extends BaseMviPage<StartBloc, StartState, StartEvent> {
+/// class StartPage extends BaseMviPage<StartBloc, StartAction, StartState, StartEvent> {
 ///   const StartPage({super.key});
 ///
 ///   @override
@@ -71,7 +76,8 @@ class _MviConsumer<B extends MviBloc<dynamic, S, E>, S extends BaseState, E exte
 /// }
 /// ```
 abstract class BaseMviPage<
-  B extends MviBloc<dynamic, S, E>,
+  B extends MviBloc<A, S, E>,
+  A extends BaseAction,
   S extends BaseState,
   E extends BaseEvent
 >
@@ -83,7 +89,7 @@ abstract class BaseMviPage<
   void Function(B bloc)? get onBlocCreated => null;
 
   /// Override to return an initial action to dispatch when the BLoC is created.
-  BaseAction? get initialAction => null;
+  A? get initialAction => null;
 
   /// Override to provide an app bar. Return null for no app bar.
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;
@@ -98,7 +104,7 @@ abstract class BaseMviPage<
 
   /// Optional: Override to customize the Scaffold body wrapper.
   Widget buildBody(BuildContext context) {
-    return _MviConsumer<B, S, E>(onEvent: handleEvent, builder: handleState);
+    return _MviConsumer<B, A, S, E>(onEvent: handleEvent, builder: handleState);
   }
 
   /// Optional: Override for additional Scaffold properties (FAB, drawer, etc.)

@@ -1,6 +1,7 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 // coverage:ignore-file
+// ignore_for_file: invalid_annotation_target
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,6 +12,9 @@ part 'wallet_model.g.dart';
 
 @freezed
 abstract class WalletModel with _$WalletModel {
+  const WalletModel._();
+
+  @JsonSerializable(includeIfNull: false)
   const factory WalletModel({
     @JsonKey(name: 'id') String? id,
     @JsonKey(name: 'name') String? name,
@@ -24,9 +28,7 @@ abstract class WalletModel with _$WalletModel {
   }) = _WalletModel;
 
   factory WalletModel.fromJson(Map<String, dynamic> json) => _$WalletModelFromJson(json);
-}
 
-extension WalletModelX on WalletModel {
   WalletEntity toEntity() {
     return WalletEntity(
       id: id ?? address ?? '',

@@ -18,11 +18,12 @@ import 'package:settings/presentation/settings/widgets/settings_item_widget.dart
 import 'package:settings/presentation/settings/widgets/settings_section_widget.dart';
 
 @RoutePage()
-class SettingsPage extends BaseMviPage<SettingsBloc, SettingsState, SettingsEvent> {
+class SettingsPage
+    extends BaseMviPage<SettingsBloc, SettingsAction, SettingsState, SettingsEvent> {
   const SettingsPage({super.key});
 
   @override
-  BaseAction? get initialAction => const SettingsAction.started();
+  SettingsAction? get initialAction => const SettingsAction.started();
 
   @override
   Widget handleState(BuildContext context, SettingsState state) {

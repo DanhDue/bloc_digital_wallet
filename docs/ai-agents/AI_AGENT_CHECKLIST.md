@@ -107,6 +107,9 @@
     [ ] Add @injectable
     [ ] Inject Use Cases in constructor
     [ ] Implement onAction() with switch
+[ ] Implement Page (presentation/{name}/{name}_page.dart)
+    [ ] Extend BaseMviPage (or BaseMviStatefulPage) for automatic Bloc provision and event listening
+    [ ] Use @RoutePage()
     [ ] Use emit() for states
     [ ] Use emitEvent() for events
 [ ] Create Page (presentation/{name}/{name}_page.dart)

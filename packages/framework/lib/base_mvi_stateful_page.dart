@@ -14,7 +14,8 @@ import 'mvi_bloc.dart';
 /// _MviStatefulConsumer - Internal widget for MVI state handling in Stateful Pages
 /// ============================================================================
 class _MviStatefulConsumer<
-  B extends MviBloc<dynamic, S, E>,
+  B extends MviBloc<A, S, E>,
+  A extends BaseAction,
   S extends BaseState,
   E extends BaseEvent
 >
@@ -43,15 +44,15 @@ class _MviStatefulConsumer<
 /// Usage:
 /// ```dart
 /// @RoutePage()
-/// class DetailPage extends BaseMviStatefulPage<DetailBloc, DetailState, DetailEvent> {
+/// class DetailPage extends BaseMviStatefulPage<DetailBloc, DetailAction, DetailState, DetailEvent> {
 ///   const DetailPage({super.key});
 ///
 ///   @override
-///   BaseMviPageState<DetailBloc, DetailState, DetailEvent, DetailPage> createState() =>
+///   BaseMviPageState<DetailBloc, DetailAction, DetailState, DetailEvent, DetailPage> createState() =>
 ///       _DetailPageState();
 /// }
 ///
-/// class _DetailPageState extends BaseMviPageState<DetailBloc, DetailState, DetailEvent, DetailPage> {
+/// class _DetailPageState extends BaseMviPageState<DetailBloc, DetailAction, DetailState, DetailEvent, DetailPage> {
 ///   @override
 ///   void initState() {
 ///     super.initState();
@@ -76,7 +77,8 @@ class _MviStatefulConsumer<
 /// }
 /// ```
 abstract class BaseMviStatefulPage<
-  B extends MviBloc<dynamic, S, E>,
+  B extends MviBloc<A, S, E>,
+  A extends BaseAction,
   S extends BaseState,
   E extends BaseEvent
 >
@@ -84,14 +86,15 @@ abstract class BaseMviStatefulPage<
   const BaseMviStatefulPage({super.key});
 
   @override
-  BaseMviPageState<B, S, E, BaseMviStatefulPage<B, S, E>> createState();
+  BaseMviPageState<B, A, S, E, BaseMviStatefulPage<B, A, S, E>> createState();
 }
 
 abstract class BaseMviPageState<
-  B extends MviBloc<dynamic, S, E>,
+  B extends MviBloc<A, S, E>,
+  A extends BaseAction,
   S extends BaseState,
   E extends BaseEvent,
-  W extends BaseMviStatefulPage<B, S, E>
+  W extends BaseMviStatefulPage<B, A, S, E>
 >
     extends State<W> {
   late final B bloc;
@@ -135,7 +138,7 @@ abstract class BaseMviPageState<
 
   /// Optional: Override to customize the Scaffold body wrapper.
   Widget buildBody(BuildContext context) {
-    return _MviStatefulConsumer<B, S, E>(builder: handleState);
+    return _MviStatefulConsumer<B, A, S, E>(builder: handleState);
   }
 
   /// Optional: Override for additional Scaffold properties (FAB, drawer, etc.)

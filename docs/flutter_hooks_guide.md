@@ -299,7 +299,7 @@ In our MVI architecture, **Bloc manages business state**, while **hooks manage U
 ### Example: `_MviConsumer` in BaseMviPage
 
 ```dart
-class _MviConsumer<B extends MviBloc<A, S, E>, S, E> extends HookWidget {
+class _MviConsumer<B extends MviBloc<A, S, E>, A extends BaseAction, S, E> extends HookWidget {
   final Widget Function(BuildContext, S) builder;
   final void Function(BuildContext, E) onEvent;
 

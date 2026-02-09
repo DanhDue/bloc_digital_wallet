@@ -15,6 +15,8 @@ enum WalletStatus { initial, loading, success, failure }
 
 @freezed
 abstract class WalletState extends BaseState with _$WalletState {
+  const WalletState._();
+
   const factory WalletState({
     @Default(WalletStatus.initial) WalletStatus status,
     WalletUiModel? uiModel,
@@ -22,6 +24,4 @@ abstract class WalletState extends BaseState with _$WalletState {
     NetworkSelectionEntity? selectedNetwork,
     WalletEntity? selectedWallet,
   }) = _WalletState;
-
-  const WalletState._() : super();
 }

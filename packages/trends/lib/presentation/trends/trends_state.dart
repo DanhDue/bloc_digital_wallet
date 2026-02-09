@@ -13,11 +13,11 @@ enum TrendsStatus { initial, loading, success, failure }
 
 @freezed
 abstract class TrendsState extends BaseState with _$TrendsState {
+  const TrendsState._();
+
   const factory TrendsState({
     @Default(TrendsStatus.initial) TrendsStatus status,
     TrendsUiModel? uiModel,
     String? errorMessage,
   }) = _TrendsState;
-
-  const TrendsState._() : super();
 }

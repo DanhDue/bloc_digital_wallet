@@ -10,6 +10,7 @@ part '{{name.snakeCase()}}_event.freezed.dart';
 
 @freezed
 abstract class {{name.pascalCase()}}Event extends BaseEvent with _${{name.pascalCase()}}Event {
+  const {{name.pascalCase()}}Event._();
+
   const factory {{name.pascalCase()}}Event.initial() = _Initial;
-  const {{name.pascalCase()}}Event._() : super();
 }

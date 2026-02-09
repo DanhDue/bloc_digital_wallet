@@ -6,7 +6,6 @@ import 'package:core/core.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 import 'package:trends/data/datasources/remote/trends_client.dart';
-import 'package:trends/data/models/trends_model.dart';
 import 'package:trends/domain/entities/trends_entity.dart';
 
 @lazySingleton
