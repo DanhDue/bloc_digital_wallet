@@ -11,5 +11,6 @@ part 'home_entity.freezed.dart';
 abstract class HomeEntity with _$HomeEntity {
   const HomeEntity._();
 
-  const factory HomeEntity({required String id, required String name}) = _HomeEntity;
+  const factory HomeEntity({required String id, required String name, String? description}) =
+      _HomeEntity;
 }

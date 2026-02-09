@@ -14,7 +14,10 @@ class TrendsStrings {
   ///
   /// Usage:
   /// ```dart
-  /// Text(TrendsStrings.t.someText)
+  /// Text(TrendsStrings.l10n.trendsSearchHint)
   /// ```
-  static TrendsTranslations get t => LocaleSettings.instance.currentTranslations;
+  static TrendsTranslations get l10n => LocaleSettings.instance.currentTranslations;
+
+  /// Alias for [l10n] for convenience.
+  static TrendsTranslations get t => l10n;
 }

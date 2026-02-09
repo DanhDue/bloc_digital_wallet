@@ -4,16 +4,16 @@
 
 import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
-import 'package:trends/domain/entities/trends_entity.dart';
+import 'package:trends/domain/entities/coin_market_entity.dart';
 import 'package:trends/domain/repositories/trends_repository.dart';
 
 @injectable
-class GetTrendsUseCase {
+class GetCoinMarketsUseCase {
   final TrendsRepository _repository;
 
-  GetTrendsUseCase(this._repository);
+  GetCoinMarketsUseCase(this._repository);
 
-  Future<Either<Failure, TrendsEntity>> call() {
-    return _repository.getTrends();
+  Future<Either<Failure, List<CoinMarketEntity>>> call({int page = 1, int limit = 20}) {
+    return _repository.getCoinMarkets(page: page, limit: limit);
   }
 }

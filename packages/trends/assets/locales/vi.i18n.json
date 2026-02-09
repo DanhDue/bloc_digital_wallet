@@ -1,3 +1,9 @@
 {
-  "title": "Tính năng Trends"
+  "title": "Tính năng Trends",
+  "trendsSearchHint": "Tìm kiếm coins...",
+  "trendsNoRecentSearches": "Không có tìm kiếm gần đây",
+  "trendsRecentSearches": "Tìm Kiếm Gần Đây",
+  "trendsNoCoinsFound": "Không tìm thấy coins",
+  "trendsRetry": "Thử lại",
+  "trendsError": "Đã xảy ra lỗi"
 }
