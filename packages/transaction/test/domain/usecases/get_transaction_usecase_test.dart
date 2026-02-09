@@ -31,8 +31,7 @@ void main() {
 
   test('should get transaction from the repository', () async {
     // arrange
-    when(mockRepository.getTransaction())
-        .thenAnswer((_) async => Right(tTransactionEntity));
+    when(mockRepository.getTransaction()).thenAnswer((_) async => Right(tTransactionEntity));
 
     // act
     final result = await useCase();

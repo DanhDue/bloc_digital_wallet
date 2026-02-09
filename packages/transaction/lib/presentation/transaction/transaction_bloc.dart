@@ -19,9 +19,7 @@ class TransactionBloc extends MviBloc<TransactionAction, TransactionState, Trans
 
   TransactionBloc(this._getTransactionUseCase) : super(const TransactionState()) {
     on<TransactionAction>((action, emit) {
-      action.when(
-        started: () => _onStarted(emit),
-      );
+      action.when(started: () => _onStarted(emit));
     });
   }
 

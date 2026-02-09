@@ -17,10 +17,6 @@ abstract class TransactionUiModel with _$TransactionUiModel {
   }) = _TransactionUiModel;
 
   factory TransactionUiModel.fromEntity(TransactionEntity entity) {
-    return TransactionUiModel(
-      id: entity.id,
-      name: entity.name,
-      description: entity.description,
-    );
+    return TransactionUiModel(id: entity.id, name: entity.name, description: entity.description);
   }
 }

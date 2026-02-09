@@ -11,8 +11,7 @@ import 'transaction_event.dart';
 import 'transaction_state.dart';
 
 @RoutePage()
-class TransactionPage
-    extends BaseMviPage<TransactionBloc, TransactionState, TransactionEvent> {
+class TransactionPage extends BaseMviPage<TransactionBloc, TransactionState, TransactionEvent> {
   const TransactionPage({super.key});
 
   @override

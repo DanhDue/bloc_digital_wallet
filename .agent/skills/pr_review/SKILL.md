@@ -567,11 +567,72 @@ Copy the output and paste into your review request.
 
 ---
 
+## INITIAL QUALITY CHECKS
+
+> [!IMPORTANT]
+> **MANDATORY FIRST STEP**: Before reviewing any code changes, you MUST perform these quality checks in order.
+
+### Step 1: Generate Source Code & Apply Standards
+
+Run `melos genAlls` to ensure all generated code is up-to-date and license headers are applied:
+
+```bash
+melos genAlls
+```
+
+This command will:
+- Run `build_runner` to generate freezed models, JSON serialization, and other code-generated files
+- Apply license headers to all source files
+- Format code according to project standards
+
+### Step 2: Static Analysis
+
+Run `fvm dart analyze` to detect code quality issues, lints, and potential bugs:
+
+```bash
+fvm dart analyze
+```
+
+Review the output for:
+- Lint violations
+- Type errors
+- Unused imports or variables
+- Deprecated API usage
+- Potential null safety issues
+
+### Step 3: Verify Quality Rules
+
+Check that the code adheres to project-specific quality standards:
+
+- **Import Paths**: All `lib/` files use package imports (not relative imports)
+- **Freezed Models**: All data classes use `@freezed` with `@JsonKey` annotations
+- **Line Length**: Code is formatted to 99 characters max
+- **Retrofit Clients**: All clients have explicit `baseUrl` parameters
+- **Dart Shorthands**: Use `.infinity`, `.maxFinite`, `.zero` where applicable
+
+### Step 4: Build Verification (Optional)
+
+If changes affect core functionality, verify the build succeeds:
+
+```bash
+# For specific package
+melos run build --scope=package_name
+
+# Or full app build
+flutter build apk --debug
+```
+
+> [!CAUTION]
+> If any of these checks fail, **STOP** and fix the issues before proceeding with the PR review. Do not review code that doesn't pass basic quality gates.
+
+---
+
 ### Workflow
 
-1. **Provide the Diff**: Use one of the options above to provide code changes.
-2. **Analyze**: Agent reviews each file according to the guidelines.
-3. **Report**: Agent generates the structured output format.
+1. **Run Initial Quality Checks**: Execute Steps 1-4 above before analyzing code changes.
+2. **Provide the Diff**: Use one of the options below to provide code changes.
+3. **Analyze**: Agent reviews each file according to the guidelines.
+4. **Report**: Agent generates the structured output format.
 
 ---
 

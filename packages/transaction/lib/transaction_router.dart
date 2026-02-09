@@ -11,10 +11,7 @@ part 'transaction_router.gr.dart';
 class TransactionRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(
-      page: TransactionRoute.page,
-      path: TransactionRoutes.transaction,
-    ),
+    AutoRoute(page: TransactionRoute.page, path: TransactionRoutes.transaction),
   ];
 }
 

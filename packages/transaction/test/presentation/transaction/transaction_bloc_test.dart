@@ -26,11 +26,7 @@ void main() {
     bloc = TransactionBloc(mockUseCase);
   });
 
-  const tTransactionEntity = TransactionEntity(
-    id: '1',
-    name: 'Test',
-    description: 'Description',
-  );
+  const tTransactionEntity = TransactionEntity(id: '1', name: 'Test', description: 'Description');
 
   test('initial state should be initial', () {
     expect(bloc.state.status, TransactionStatus.initial);

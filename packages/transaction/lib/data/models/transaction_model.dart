@@ -17,16 +17,11 @@ abstract class TransactionModel with _$TransactionModel {
     @JsonKey(name: 'description') String? description,
   }) = _TransactionModel;
 
-  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
-      _$TransactionModelFromJson(json);
+  factory TransactionModel.fromJson(Map<String, dynamic> json) => _$TransactionModelFromJson(json);
 }
 
 extension TransactionModelX on TransactionModel {
   TransactionEntity toEntity() {
-    return TransactionEntity(
-      id: id,
-      name: name,
-      description: description,
-    );
+    return TransactionEntity(id: id, name: name, description: description);
   }
 }

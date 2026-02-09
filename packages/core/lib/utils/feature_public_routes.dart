@@ -63,6 +63,8 @@ class _TrendsRoute extends PageRouteInfo<void> {
 
 class _WalletRoute extends PageRouteInfo<void> {
   const _WalletRoute() : super('WalletRoute');
+}
+
 class _TransactionRoute extends PageRouteInfo<void> {
   const _TransactionRoute() : super('TransactionRoute');
 }
