@@ -124,19 +124,22 @@ else
 fi
 
 # Merge using python3
-python3 -c "
+python3 - "$SOURCE_KEYBINDINGS" "$TARGET_PATH" <<'PYEOF'
 import json
 import sys
 import os
 
 try:
-    with open('$SOURCE_KEYBINDINGS', 'r') as f:
+    # Get paths from command-line arguments
+    source_keybindings = sys.argv[1]
+    target_path = sys.argv[2]
+    
+    with open(source_keybindings, 'r') as f:
         # Strip comments manually since standard json lib doesn't support them
         content = f.read()
         lines = [l for l in content.splitlines() if not l.strip().startswith('//')]
         source_data = json.loads('\n'.join(lines))
 
-    target_path = '$TARGET_PATH'
     if os.path.exists(target_path):
         with open(target_path, 'r') as f:
             content = f.read()
@@ -172,7 +175,7 @@ try:
 except Exception as e:
     print(f'  Error merging keybindings: {e}')
     sys.exit(1)
-"
+PYEOF
 
 echo ""
 echo "✅ Keybindings setup complete!"

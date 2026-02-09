@@ -418,6 +418,62 @@ assert(() {
 | **Self-Validating** | Clear Boolean output (Pass/Fail) |
 | **Timely** | Write tests alongside or before code (TDD mindset) |
 
+#### Bloc/Cubit Testing Requirements
+
+> [!IMPORTANT]
+> **Resource Cleanup**: All Blocs and Cubits MUST be closed in the `tearDown()` method to prevent stream/subscription leaks.
+
+| Rule | Requirement | Reason |
+|------|-------------|--------|
+| **Close in tearDown** | MUST call `bloc.close()` or `cubit.close()` in `tearDown()` | Prevents memory leaks from unclosed streams/subscriptions |
+| **Setup/TearDown Pattern** | Create bloc in `setUp()`, close in `tearDown()` | Ensures proper lifecycle management |
+| **Late Variables** | Use `late` keyword for bloc/cubit declarations | Allows initialization in `setUp()` |
+
+**Example:**
+
+```dart
+// ❌ BAD - Bloc never closed, causes resource leak
+void main() {
+  late TransactionBloc bloc;
+  late MockGetTransactionUseCase mockUseCase;
+
+  setUp(() {
+    mockUseCase = MockGetTransactionUseCase();
+    bloc = TransactionBloc(mockUseCase);
+  });
+  // Missing tearDown - RESOURCE LEAK!
+
+  test('should emit success state', () {
+    // test code...
+  });
+}
+
+// ✅ GOOD - Bloc properly closed in tearDown
+void main() {
+  late TransactionBloc bloc;
+  late MockGetTransactionUseCase mockUseCase;
+
+  setUp(() {
+    mockUseCase = MockGetTransactionUseCase();
+    bloc = TransactionBloc(mockUseCase);
+  });
+
+  tearDown(() {
+    bloc.close();  // ← REQUIRED: Close bloc to prevent leaks
+  });
+
+  test('should emit success state', () {
+    // test code...
+  });
+}
+```
+
+**Why This Matters:**
+- Blocs/Cubits create streams and subscriptions
+- Unclosed streams leak memory across test runs
+- Can cause flaky tests and CI failures
+- Proper cleanup ensures test independence (F.I.R.S.T principle)
+
 ---
 
 ### 13. Freezed Standards
@@ -445,10 +501,14 @@ assert(() {
 
 #### File Organization
 
+> [!NOTE]
+> The `// coverage:ignore-file` comment is **ONLY** for generated files and freezed models.
+> **DO NOT** add `// coverage:ignore-file` to test files (files in `test/` directories).
+
 ```dart
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
+// coverage:ignore-file  ← ONLY for generated/model files, NOT for test files
 // ignore_for_file: invalid_annotation_target
 
 import 'package:flutter/foundation.dart';
