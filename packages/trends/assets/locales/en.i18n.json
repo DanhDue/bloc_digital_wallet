@@ -1,3 +1,9 @@
 {
-  "title": "Trends Feature"
+  "title": "Trends Feature",
+  "trendsSearchHint": "Search coins...",
+  "trendsNoRecentSearches": "No recent searches",
+  "trendsRecentSearches": "Recent Searches",
+  "trendsNoCoinsFound": "No coins found",
+  "trendsRetry": "Retry",
+  "trendsError": "An error occurred"
 }

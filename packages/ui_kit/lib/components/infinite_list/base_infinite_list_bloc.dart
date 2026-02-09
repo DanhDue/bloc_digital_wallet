@@ -19,7 +19,10 @@ abstract class BaseInfiniteListBloc<T>
   static const _throttleDuration = Duration(milliseconds: 100);
   static const int _defaultPageSize = 20;
 
-  BaseInfiniteListBloc() : super(BaseInfiniteListState<T>()) {
+  /// Creates a [BaseInfiniteListBloc] with an optional custom [initialState].
+  /// Subclasses can provide their own extended state type.
+  BaseInfiniteListBloc({BaseInfiniteListState<T>? initialState})
+    : super(initialState ?? BaseInfiniteListState<T>()) {
     on<InfiniteListFetchFirstPage>(_onFetchFirstPage, transformer: restartable());
     on<InfiniteListFetchNextPage>(
       _onFetchNextPage,

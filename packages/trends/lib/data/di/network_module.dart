@@ -10,5 +10,5 @@ import 'package:trends/data/datasources/remote/trends_client.dart';
 @module
 abstract class TrendsNetworkModule {
   @lazySingleton
-  TrendsClient trendsClient(Dio dio) => TrendsClient(dio, baseUrl: AppUri.trends.buildAppUri());
+  TrendsClient trendsClient(Dio dio) => TrendsClient(dio, baseUrl: AppUri.markets.buildAppUri());
 }

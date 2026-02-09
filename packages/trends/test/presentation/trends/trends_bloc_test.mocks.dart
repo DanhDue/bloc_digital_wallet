@@ -7,8 +7,8 @@ import 'dart:async' as _i4;
 
 import 'package:core/core.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:trends/domain/entities/trends_entity.dart' as _i5;
-import 'package:trends/domain/usecases/get_trends_usecase.dart' as _i3;
+import 'package:trends/domain/entities/coin_market_entity.dart' as _i5;
+import 'package:trends/domain/usecases/get_coin_markets_usecase.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -29,21 +29,27 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
   _FakeEither_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
-/// A class which mocks [GetTrendsUseCase].
+/// A class which mocks [GetCoinMarketsUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetTrendsUseCase extends _i1.Mock implements _i3.GetTrendsUseCase {
-  MockGetTrendsUseCase() {
+class MockGetCoinMarketsUseCase extends _i1.Mock implements _i3.GetCoinMarketsUseCase {
+  MockGetCoinMarketsUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, _i5.TrendsEntity>> call() =>
+  _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>> call({
+    int? page = 1,
+    int? limit = 20,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#call, []),
-            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i5.TrendsEntity>>.value(
-              _FakeEither_0<_i2.Failure, _i5.TrendsEntity>(this, Invocation.method(#call, [])),
+            Invocation.method(#call, [], {#page: page, #limit: limit}),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
+                this,
+                Invocation.method(#call, [], {#page: page, #limit: limit}),
+              ),
             ),
           )
-          as _i4.Future<_i2.Either<_i2.Failure, _i5.TrendsEntity>>);
+          as _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>);
 }
