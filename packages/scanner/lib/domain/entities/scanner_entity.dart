@@ -10,6 +10,8 @@ part 'scanner_entity.g.dart';
 
 @freezed
 abstract class ScannerEntity with _$ScannerEntity {
+  const ScannerEntity._();
+
   const factory ScannerEntity({
     @JsonKey(name: 'id') required String id,
     @JsonKey(name: 'name') required String name,

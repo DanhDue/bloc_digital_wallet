@@ -10,6 +10,8 @@ part 'scanner_ui_model.freezed.dart';
 
 @freezed
 abstract class ScannerUiModel with _$ScannerUiModel {
+  const ScannerUiModel._();
+
   const factory ScannerUiModel({required String id, required String name, String? description}) =
       _ScannerUiModel;
 

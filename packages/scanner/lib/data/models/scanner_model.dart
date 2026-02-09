@@ -11,6 +11,8 @@ part 'scanner_model.g.dart';
 
 @freezed
 abstract class ScannerModel with _$ScannerModel {
+  const ScannerModel._();
+
   const factory ScannerModel({
     @JsonKey(name: 'id') required String id,
     @JsonKey(name: 'name') required String name,
