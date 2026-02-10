@@ -12,7 +12,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ui_kit/ui_kit.dart';
-// import 'package:wallet/generated/locales.g.dart'; // TODO: Enable when slang generated
+import 'package:wallet/generated/translations.dart';
 import 'package:wallet/domain/entities/wallet_entity.dart';
 
 class WalletItem extends StatefulWidget {
@@ -90,22 +90,19 @@ class _WalletItemState extends State<WalletItem> {
         return SafeArea(
           bottom: true,
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: context.appThemes.ink60,
-              borderRadius: BorderRadius.circular(16),
-            ),
+            margin: const .symmetric(horizontal: 16),
+            padding: const .symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(color: context.appThemes.ink60, borderRadius: .circular(16)),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: .start,
+              crossAxisAlignment: .center,
+              mainAxisSize: .min,
               children: [
                 Assets.images.icZeno.image(fit: BoxFit.cover, width: 24, height: 24),
                 const SizedBox(width: 8),
                 Flexible(
                   child: Text(
-                    "Wallet address copied and will be cleared in 30 seconds", // t.walletList.copied
+                    tWallet.walletList.copied,
                     style: context.appThemes.bodyLarge.copyWith(color: context.appThemes.white),
                     textAlign: TextAlign.center,
                   ),
@@ -194,7 +191,7 @@ class _WalletItemState extends State<WalletItem> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          "Account ${widget.index + 1}", // t.walletList.account(index: widget.index + 1)
+                          tWallet.walletList.account(index: widget.index + 1),
                           style: context.appThemes.titleMedium.copyWith(
                             color: context.appThemes.white,
                             fontWeight: FontWeight.bold,
@@ -209,9 +206,9 @@ class _WalletItemState extends State<WalletItem> {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: .start,
+                      crossAxisAlignment: .center,
+                      mainAxisSize: .max,
                       children: [
                         widget.isBalanceLoading
                             ? Shimmer.fromColors(
@@ -222,7 +219,7 @@ class _WalletItemState extends State<WalletItem> {
                                   height: 32,
                                   decoration: BoxDecoration(
                                     color: context.appThemes.white,
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius: .circular(4),
                                   ),
                                 ),
                               )
@@ -233,16 +230,16 @@ class _WalletItemState extends State<WalletItem> {
                                   text: "\$ ",
                                   style: context.appThemes.headlineMedium.copyWith(
                                     color: context.appThemes.white,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: .bold,
                                   ),
                                   children: [
                                     TextSpan(
                                       text: widget.isBalanceHidden
-                                          ? "••••••••" // t.tokenList.hiddenBalance
+                                          ? tWallet.tokenList.hiddenBalance
                                           : (widget.wallet.balance ?? 0).toStringAsFixed(2),
                                       style: context.appThemes.headlineMedium.copyWith(
                                         color: context.appThemes.white,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: .bold,
                                       ),
                                     ),
                                   ],
@@ -270,7 +267,7 @@ class _WalletItemState extends State<WalletItem> {
                               height: 20,
                               decoration: BoxDecoration(
                                 color: context.appThemes.white,
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: .circular(4),
                               ),
                             ),
                           )
@@ -282,9 +279,9 @@ class _WalletItemState extends State<WalletItem> {
                                       (widget.wallet.balance ?? 0) == 0)
                                   ? context.appThemes.indigo.withValues(alpha: 0.6)
                                   : context.appThemes.white.withValues(alpha: 0.6),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: .circular(8),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                            padding: const .symmetric(vertical: 3, horizontal: 6),
                             child: Builder(
                               builder: (context) {
                                 final balance = widget.wallet.balance ?? 0;
@@ -317,16 +314,16 @@ class _WalletItemState extends State<WalletItem> {
                           ),
                     const SizedBox(height: 18),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: .start,
+                      crossAxisAlignment: .center,
+                      mainAxisSize: .max,
                       children: [
                         Text(
                           _formatAddress(widget.wallet.address ?? ''),
                           style: context.appThemes.bodyLarge.copyWith(
                             color: context.appThemes.white.withValues(alpha: 0.6),
                           ),
-                          textAlign: TextAlign.start,
+                          textAlign: .start,
                         ),
                         const SizedBox(width: 16),
                         InkWell(

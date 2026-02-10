@@ -15,6 +15,8 @@ import 'wallet_list_bloc.dart';
 import 'wallet_list_event.dart';
 import 'wallet_list_state.dart';
 
+import 'package:wallet/generated/translations.dart';
+
 @RoutePage()
 class WalletListPage
     extends BaseMviPage<WalletListBloc, WalletListAction, WalletListState, WalletListEvent> {
@@ -58,7 +60,7 @@ class WalletListPage
   Widget _buildSuccess(BuildContext context, WalletListState state) {
     final wallets = state.uiModel.wallets;
     if (wallets.isEmpty) {
-      return const Center(child: Text('No wallets found')); // TODO: Localize
+      return Center(child: Text(tWallet.walletList.noWalletsFound));
     }
 
     // Trigger callback for the first item initially if no wallet is selected
@@ -87,7 +89,7 @@ class WalletListPage
       itemCount: wallets.length,
       itemWidth: MediaQuery.of(context).size.width - 32,
       itemHeight: 186,
-      layout: SwiperLayout.STACK,
+      layout: .STACK,
       scale: 0.96,
       loop: false,
       onIndexChanged: (index) {

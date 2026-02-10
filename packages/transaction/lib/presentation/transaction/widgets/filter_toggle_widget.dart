@@ -3,6 +3,8 @@
 // coverage:ignore-file
 
 import 'package:flutter/material.dart';
+import 'package:transaction/transaction_strings.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class FilterToggleWidget extends StatelessWidget {
   final int selectedIndex;
@@ -18,23 +20,23 @@ class FilterToggleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Logic from legacy _buildFilterToggle
     // Using simple/standard UI or copying legacy style if possible
-    final backgroundColor = const Color(0xFFF5F5F5); // context.appThemes.ink5
+    final backgroundColor = context.appThemes.ink5;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(12)),
+      margin: const .symmetric(horizontal: 20),
+      padding: const .all(4),
+      decoration: BoxDecoration(color: backgroundColor, borderRadius: .circular(12)),
       child: Row(
         children: [
           _buildToggleButton(
             context,
-            "Received", // Localization needed
+            TransactionStrings.t.received,
             selectedIndex == 0,
             () => onFilterChanged(0),
           ),
           _buildToggleButton(
             context,
-            "Sent", // Localization needed
+            TransactionStrings.t.sent,
             selectedIndex == 1,
             () => onFilterChanged(1),
           ),
@@ -49,34 +51,34 @@ class FilterToggleWidget extends StatelessWidget {
     bool isActive,
     VoidCallback onTap,
   ) {
-    final activeColor = Colors.blue; // context.appThemes.trueBlue
-    final activeTextColor = Colors.white; // context.appThemes.white
+    final activeColor = context.appThemes.trueBlue;
+    final activeTextColor = context.appThemes.white;
     final inactiveTextColor = activeColor;
 
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const .symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isActive ? activeColor : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
+            color: isActive ? activeColor : context.appThemes.transparent,
+            borderRadius: .circular(10),
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
+                      color: context.appThemes.ink100.withValues(alpha: 0.05),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
                   ]
                 : [],
           ),
-          alignment: Alignment.center,
+          alignment: .center,
           child: Text(
             title,
             style: TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: .w500,
               color: isActive ? activeTextColor : inactiveTextColor,
             ),
           ),

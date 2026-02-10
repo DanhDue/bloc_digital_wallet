@@ -5,6 +5,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:framework/framework.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:wallet/wallet_strings.dart';
 
 import 'nfts_list_action.dart';
@@ -58,17 +59,11 @@ class NftsListPage
             mainAxisSize: .min,
             children: [
               const SizedBox(height: 36),
-              Icon(
-                Icons.image_not_supported_outlined,
-                size: 86,
-                color: Theme.of(context).disabledColor,
-              ),
+              Icon(Icons.image_not_supported_outlined, size: 86, color: context.appThemes.ink40),
               const SizedBox(height: 4),
               Text(
                 WalletStrings.t.nftsList.notFoundMessage,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).disabledColor),
+                style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink40),
               ),
               const SizedBox(height: 16),
               OutlinedButton(

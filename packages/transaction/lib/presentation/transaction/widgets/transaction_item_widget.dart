@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:transaction/domain/entities/transaction_entity.dart';
+import 'package:transaction/transaction_strings.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class TransactionItemWidget extends StatelessWidget {
   final TransactionEntity transaction;
@@ -22,12 +24,10 @@ class TransactionItemWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const .symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
-          color: Colors.white, // context.appThemes.white
-          border: Border(
-            bottom: BorderSide(color: Color(0xFFF5F5F5)), // context.appThemes.ink5
-          ),
+          color: context.appThemes.white,
+          border: Border(bottom: BorderSide(color: context.appThemes.ink5)),
         ),
         child: Row(
           children: [
@@ -35,54 +35,46 @@ class TransactionItemWidget extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isReceived ? const Color(0xFFE8F5E9) : const Color(0xFFE3F2FD),
+                shape: .circle,
+                color: isReceived ? AppColors.materialGreen50 : AppColors.materialBlue50,
               ),
               child: Icon(
                 isReceived ? Icons.arrow_downward : Icons.arrow_upward,
-                color: isReceived ? const Color(0xFF4CAF50) : const Color(0xFF2196F3),
+                color: isReceived ? AppColors.materialGreen500 : AppColors.materialBlue500,
                 size: 24,
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   Text(
-                    isReceived
-                        ? "Received BTC" // Localization needed
-                        : "Sent BTC",
+                    isReceived ? TransactionStrings.t.receivedBtc : TransactionStrings.t.sentBtc,
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87, // context.appThemes.ink100
+                      fontWeight: .w600,
+                      color: context.appThemes.ink100,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    dateStr,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black54, // context.appThemes.ink40
-                    ),
-                  ),
+                  Text(dateStr, style: TextStyle(fontSize: 14, color: context.appThemes.ink40)),
                 ],
               ),
             ),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: .end,
               children: [
                 Text(
                   amountUsd,
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    fontWeight: .bold,
+                    color: context.appThemes.ink100,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(amountCrypto, style: TextStyle(fontSize: 12, color: Colors.black54)),
+                Text(amountCrypto, style: TextStyle(fontSize: 12, color: context.appThemes.ink40)),
               ],
             ),
           ],

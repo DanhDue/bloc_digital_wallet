@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'package:flutter/material.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class TransactionHeaderWidget extends StatelessWidget {
   final String title;
@@ -12,14 +13,8 @@ class TransactionHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12, top: 12),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 14,
-          color: Colors.black54, // context.appThemes.ink40
-        ),
-      ),
+      padding: const .only(left: 16, right: 16, bottom: 12, top: 12),
+      child: Text(title, style: TextStyle(fontSize: 14, color: context.appThemes.ink40)),
     );
   }
 }

@@ -15,6 +15,8 @@ import 'package:transaction/presentation/transaction/widgets/filter_toggle_widge
 import 'package:transaction/presentation/transaction/widgets/transaction_header_widget.dart';
 import 'package:transaction/presentation/transaction/widgets/transaction_item_widget.dart';
 import 'package:transaction/presentation/transaction/widgets/wallet_selector_widget.dart';
+import 'package:ui_kit/ui_kit.dart';
+import 'package:transaction/transaction_strings.dart';
 
 @RoutePage()
 class TransactionPage
@@ -27,7 +29,7 @@ class TransactionPage
   @override
   Widget handleState(BuildContext context, TransactionState state) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.appThemes.white,
       body: SafeArea(
         top: true,
         child: Column(
@@ -66,21 +68,21 @@ class TransactionPage
                   }
 
                   if (state.items.isEmpty && !state.isLoading) {
-                    return const Center(child: Text("No Data"));
+                    return Center(child: Text(TransactionStrings.t.noData));
                   }
 
                   return RefreshIndicator(
                     onRefresh: () async =>
                         context.read<TransactionBloc>().add(const TransactionAction.refresh()),
                     child: ListView.separated(
-                      padding: EdgeInsets.zero,
+                      padding: .zero,
                       itemCount: state.items.length + (state.hasReachedMax ? 0 : 1),
                       separatorBuilder: (_, _) => const SizedBox.shrink(),
                       itemBuilder: (context, index) {
                         if (index >= state.items.length) {
                           context.read<TransactionBloc>().add(const TransactionAction.loadMore());
                           return const Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: .all(16.0),
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }

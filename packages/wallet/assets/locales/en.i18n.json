@@ -25,7 +25,8 @@
     "hiddenBalance": "****"
   },
   "walletList": {
-    "account": "Account",
-    "copied": "Wallet address copied and will be cleared in 30 seconds"
+    "account": "Account $index",
+    "copied": "Wallet address copied and will be cleared in 30 seconds",
+    "noWalletsFound": "No wallets found"
   }
 }
