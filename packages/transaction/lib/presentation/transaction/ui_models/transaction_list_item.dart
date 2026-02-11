@@ -10,5 +10,12 @@ part 'transaction_list_item.freezed.dart';
 @freezed
 abstract class TransactionListItem with _$TransactionListItem {
   const factory TransactionListItem.header(String title) = _Header;
-  const factory TransactionListItem.transaction(TransactionEntity transaction) = _Transaction;
+  const factory TransactionListItem.transaction(
+    TransactionEntity transaction, {
+    @Default(false) bool isLast,
+    @Default(false) bool isReceived,
+    @Default('') String formattedTime,
+    @Default('') String formattedAmount,
+    @Default('') String formattedFiatAmount,
+  }) = _Transaction;
 }

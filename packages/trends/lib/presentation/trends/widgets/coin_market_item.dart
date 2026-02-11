@@ -95,7 +95,7 @@ class CoinMarketItem extends StatelessWidget {
         Text(
           _formatVolume(coin.volume24h),
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: colorScheme.onSurface.withValues(alpha: 0.6),
+            color: colorScheme.onSurface.withOpacity(0.6),
           ),
           textAlign: .start,
           maxLines: 1,

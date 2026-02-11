@@ -13,7 +13,7 @@ abstract class TokenBalanceEntity with _$TokenBalanceEntity {
   const factory TokenBalanceEntity({
     String? address,
     String? token,
-    double? changes,
+    String? changes,
     String? postBalance,
   }) = _TokenBalanceEntity;
 }

@@ -24,6 +24,7 @@ analyzer:
     invalid_annotation_target: ignore
     depend_on_referenced_packages: ignore
     unnecessary_import: ignore
+    deprecated_member_use: ignore
 
 linter:
   # The lint rules applied to this project can be customized in the

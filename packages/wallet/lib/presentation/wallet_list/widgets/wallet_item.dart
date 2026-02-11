@@ -2,6 +2,8 @@
 
 // coverage:ignore-file
 
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 
 import 'package:animated_visibility/animated_visibility.dart';
@@ -212,8 +214,8 @@ class _WalletItemState extends State<WalletItem> {
                       children: [
                         widget.isBalanceLoading
                             ? Shimmer.fromColors(
-                                baseColor: context.appThemes.white.withValues(alpha: 0.4),
-                                highlightColor: context.appThemes.white.withValues(alpha: 0.8),
+                                baseColor: context.appThemes.white.withOpacity(0.4),
+                                highlightColor: context.appThemes.white.withOpacity(0.8),
                                 child: Container(
                                   width: 196,
                                   height: 32,
@@ -260,8 +262,8 @@ class _WalletItemState extends State<WalletItem> {
                     // Trend Info
                     widget.isBalanceLoading
                         ? Shimmer.fromColors(
-                            baseColor: context.appThemes.white.withValues(alpha: 0.4),
-                            highlightColor: context.appThemes.white.withValues(alpha: 0.8),
+                            baseColor: context.appThemes.white.withOpacity(0.4),
+                            highlightColor: context.appThemes.white.withOpacity(0.8),
                             child: Container(
                               width: 169,
                               height: 20,
@@ -277,8 +279,8 @@ class _WalletItemState extends State<WalletItem> {
                                   (widget.isBalanceHidden ||
                                       ((widget.wallet.dailyChange ?? 0) >= 0) ||
                                       (widget.wallet.balance ?? 0) == 0)
-                                  ? context.appThemes.indigo.withValues(alpha: 0.6)
-                                  : context.appThemes.white.withValues(alpha: 0.6),
+                                  ? context.appThemes.indigo.withOpacity(0.6)
+                                  : context.appThemes.white.withOpacity(0.6),
                               borderRadius: .circular(8),
                             ),
                             padding: const .symmetric(vertical: 3, horizontal: 6),
@@ -321,7 +323,7 @@ class _WalletItemState extends State<WalletItem> {
                         Text(
                           _formatAddress(widget.wallet.address ?? ''),
                           style: context.appThemes.bodyLarge.copyWith(
-                            color: context.appThemes.white.withValues(alpha: 0.6),
+                            color: context.appThemes.white.withOpacity(0.6),
                           ),
                           textAlign: .start,
                         ),
@@ -330,7 +332,7 @@ class _WalletItemState extends State<WalletItem> {
                           onTap: _onCopyAddress,
                           child: Icon(
                             Icons.copy,
-                            color: context.appThemes.white.withValues(alpha: 0.7),
+                            color: context.appThemes.white.withOpacity(0.7),
                             size: 20,
                           ),
                         ),

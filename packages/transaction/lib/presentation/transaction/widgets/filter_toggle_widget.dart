@@ -66,7 +66,7 @@ class FilterToggleWidget extends StatelessWidget {
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: context.appThemes.ink100.withValues(alpha: 0.05),
+                      color: context.appThemes.ink100.withOpacity(0.05),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),

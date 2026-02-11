@@ -15,7 +15,6 @@ abstract class TransactionEntity with _$TransactionEntity {
 
   const factory TransactionEntity({
     bool? isLabel,
-    bool? isLast,
     String? signature,
     TransactionOverviewEntity? overview,
     List<AccountInputEntity>? accountInputs,

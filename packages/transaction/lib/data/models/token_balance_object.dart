@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:core/utils/string_or_num_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:transaction/domain/entities/token_balance_entity.dart';
 
@@ -16,8 +17,8 @@ abstract class TokenBalanceObject with _$TokenBalanceObject {
   const factory TokenBalanceObject({
     @JsonKey(name: 'address') String? address,
     @JsonKey(name: 'token') String? token,
-    @JsonKey(name: 'changes') double? changes,
-    @JsonKey(name: 'post_balance') String? postBalance,
+    @JsonKey(name: 'changes') @StringOrNumConverter() String? changes,
+    @JsonKey(name: 'post_balance') @StringOrNumConverter() String? postBalance,
   }) = _TokenBalanceObject;
 
   factory TokenBalanceObject.fromJson(Map<String, dynamic> json) =>

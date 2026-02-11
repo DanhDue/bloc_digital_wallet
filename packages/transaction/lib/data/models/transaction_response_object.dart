@@ -31,7 +31,6 @@ abstract class TransactionResponseObject with _$TransactionResponseObject {
 
   TransactionEntity toEntity() => TransactionEntity(
     isLabel: isLabel,
-    isLast: isLast,
     signature: signature,
     overview: overview?.toEntity(),
     accountInputs: accountInputs?.map((e) => e.toEntity()).toList(),

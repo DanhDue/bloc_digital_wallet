@@ -57,7 +57,7 @@ class RegisterTextField extends StatelessWidget {
             border: Border.all(color: theme.authBorderColor),
             boxShadow: [
               BoxShadow(
-                color: theme.authShadowColor.withValues(alpha: 0.24),
+                color: theme.authShadowColor.withOpacity(0.24),
                 offset: const Offset(0, 1),
                 blurRadius: 2,
               ),
@@ -79,7 +79,7 @@ class RegisterTextField extends StatelessWidget {
             ),
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: TextStyle(color: theme.authTextPrimary.withValues(alpha: 0.4)),
+              hintStyle: TextStyle(color: theme.authTextPrimary.withOpacity(0.4)),
               suffixIcon: suffixIcon,
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),

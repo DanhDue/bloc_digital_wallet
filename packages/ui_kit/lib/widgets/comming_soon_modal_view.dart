@@ -86,7 +86,7 @@ class _CommingSoonModalViewState extends State<CommingSoonModalView> with Dialog
                               borderRadius: BorderRadius.circular(100),
                               boxShadow: [
                                 BoxShadow(
-                                  color: context.appThemes.black.withValues(alpha: 0.05),
+                                  color: context.appThemes.black.withOpacity(0.05),
                                   blurRadius: 20,
                                   offset: const Offset(0, 10),
                                 ),

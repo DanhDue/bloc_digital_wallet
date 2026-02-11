@@ -78,7 +78,7 @@ class _TrendsSearchBarState extends State<TrendsSearchBar> {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.onSurface.withValues(alpha: 0.18),
+              color: colorScheme.onSurface.withOpacity(0.18),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -105,7 +105,7 @@ class _TrendsSearchBarState extends State<TrendsSearchBar> {
                         decoration: InputDecoration(
                           hintText: TrendsStrings.l10n.trendsSearchHint,
                           hintStyle: theme.textTheme.bodyLarge?.copyWith(
-                            color: colorScheme.onSurface.withValues(alpha: 0.4),
+                            color: colorScheme.onSurface.withOpacity(0.4),
                           ),
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -129,7 +129,7 @@ class _TrendsSearchBarState extends State<TrendsSearchBar> {
                           child: Icon(
                             Icons.clear,
                             size: 16,
-                            color: colorScheme.onSurface.withValues(alpha: 0.6),
+                            color: colorScheme.onSurface.withOpacity(0.6),
                           ),
                         ),
                       ),

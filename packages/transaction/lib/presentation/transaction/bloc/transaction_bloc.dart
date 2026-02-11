@@ -55,28 +55,8 @@ class TransactionBloc extends MviBloc<TransactionAction, TransactionState, Trans
   FutureOr<void> _onFilterChanged(int index, Emitter<TransactionState> emit) async {
     if (state.filterIndex == index) return;
     emit(state.copyWith(filterIndex: index));
-    // Re-fetch or re-filter locally? Legacy re-fetched with `isRefresh: true`.
-    // "changeFilter(int index) { ... fetchData(isRefresh: true); }" in legacy controller.
-    // Wait, did legacy controller pass filter index to API?
-    // Step 81: `retrieveDataFromService` uses `selectedFilterIndex`?
-    // No, `getTransactionByOwner` params: `limit: 3, before: ...`. It does NOT use filter index.
-    // Wait, then `selectedFilterIndex` logic in legacy controller does NOT affect API call?
-    // "changeFilter(int index) { if (selectedFilterIndex.value == index) return; selectedFilterIndex.value = index; fetchData(isRefresh: true); }"
-    // It refreshes the list. But if API call is same, then it just reloads same data.
-    // Maybe filtering happens in UI or subsequent processing?
-    // Legacy view: `_buildFilterToggle`.
-    // It seems purely UI or maybe I missed something in `retrieveDataFromService`.
-    // In `retrieveDataFromService` (line 54 step 81), it calls `transactionRepo.getTransactionByOwner`.
-    // It ignores `selectedFilterIndex`.
-    // So filtering seemingly does nothing to the data response?
-    // Maybe the UI uses `selectedFilterIndex` to filter visible items?
-    // Legacy view (step 82): `buildItemViews` -> `_buildItem`.
-    // It doesn't check filter index.
-    // Maybe it's a "fake" filter or incomplete feature in legacy?
-    // Legacy view `_buildFilterToggle` changes `selectedFilterIndex`.
-    // But `TransactionsView` uses `controller.items` (from `BaseInfiniteListController`).
-    // If controller fetches same data, items are same.
-    // I will implement it as refresh for now, as in legacy.
+
+    // Refresh the list when filter changes to ensure UI consistency
     await _loadTransactions(emit, isRefresh: true);
   }
 
@@ -133,9 +113,6 @@ class TransactionBloc extends MviBloc<TransactionAction, TransactionState, Trans
     // This is safer than incremental grouping for Bloc state which usually emits new immutable list.
 
     // Reset state for clean processing if we re-process everything
-    // But wait, `_lastDayInTheList` is stateful for incremental updates.
-    // If I process everything, I don't need `_lastDayInTheList` state, I calculate it on fly.
-
     if (transactions.isEmpty) return [];
 
     final groupedItems = groupBy(
@@ -156,33 +133,63 @@ class TransactionBloc extends MviBloc<TransactionAction, TransactionState, Trans
       final items = entry.value;
 
       // Add Header
-      // Use localized logic for "Today", "Yesterday" etc?
-      // Legacy view handled this in `_buildLabel` > `retrieveGroupLabel`.
-      // Since `TransactionListItem.header` takes a String, I should pre-calculate or let UI handle it.
-      // The legacy controller passed `TransactionResponseObject(isLabel: true, overview: ...)`
-      // So it passed the object.
-      // My `TransactionListItem.header` takes `String title`.
-      // I can format it here or pass a date object.
-      // To be clean, I should format it in UI or passing a Date object to Header.
-      // But user rule: "Use localization texts". Localization needs context?
-      // `Jiffy` can be formatted. Today/Yesterday logic requires `Jiffy.now()`.
-      // I'll format assuming English for now or standard format, or better, change `TransactionListItem.header` to take `DateTime` or `Jiffy` and format in UI.
-      // But sticking to String title for now to match `header(String title)`.
-      // I'll use the logic from `TransactionsView.retrieveGroupLabel` here if possible, but localized string `.tr` needs context? No, `slang` generates global access.
-
-      // I'll skip complex formatting here and just use the key (date string)
-      // OR replicate `retrieveGroupLabel` logic.
-      result.add(TransactionListItem.header(dateLabel)); // Placeholder
+      result.add(TransactionListItem.header(dateLabel));
 
       // Add Items
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        // Handle isLast logic if needed for UI dividers?
-        // Legacy set `isLast` on item.
-        // `TransactionEntity` has `isLast`.
-        // I should set it copyWith?
         final isGroupLast = i == items.length - 1;
-        result.add(TransactionListItem.transaction(item.copyWith(isLast: isGroupLast)));
+
+        // Calculate display/business logic here (ViewModel transformation)
+        // 1. Determine direction and amount
+        // Prioritize TokenBalances (SPL transfers) over AccountInputs (Native SOL changes)
+        // Finding the balance change for the current owner
+
+        final myToken = item.tokenBalances?.firstWhereOrNull((e) => e.address == _ownerAddress);
+        final myInput = item.accountInputs?.firstWhereOrNull((e) => e.address == _ownerAddress);
+
+        double change = 0;
+        String symbol = '';
+
+        if (myToken != null && myToken.changes != null) {
+          // changes is String
+          final rawChange = double.tryParse(myToken.changes!) ?? 0;
+          change = rawChange;
+          // If 'token' is available, use it. It might be mint address, but better than nothing.
+          // In real app, we'd map mint to symbol. For now, show truncated or placeholder.
+          symbol = 'Token';
+        } else if (myInput != null && myInput.changes != null) {
+          // changes is int (lamports)
+          // 1 SOL = 1,000,000,000 lamports
+          change = (myInput.changes ?? 0) / 1000000000;
+          symbol = 'SOL';
+        }
+
+        final isReceived = change > 0;
+        final absChange = change.abs();
+
+        // 2. Format Amount
+        // formatting logic: simple string for now.
+        // If < 0.0001, maybe show < 0.0001?
+        final formattedAmount = '${absChange.toStringAsFixed(absChange < 0.0001 ? 8 : 4)} $symbol';
+
+        // 3. Format Fiat
+        // We don't have fiat rates yet.
+        final formattedFiatAmount = '-';
+
+        // 4. Format Date
+        final formattedTime = item.overview?.timestamp?.yMMMMd ?? '';
+
+        result.add(
+          TransactionListItem.transaction(
+            item,
+            isLast: isGroupLast,
+            isReceived: isReceived,
+            formattedAmount: formattedAmount,
+            formattedFiatAmount: formattedFiatAmount,
+            formattedTime: formattedTime,
+          ),
+        );
       }
     }
 

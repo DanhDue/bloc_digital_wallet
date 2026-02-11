@@ -92,6 +92,11 @@ class TransactionPage
                           header: (h) => TransactionHeaderWidget(title: h.title),
                           transaction: (t) => TransactionItemWidget(
                             transaction: t.transaction,
+                            isLast: t.isLast,
+                            isReceived: t.isReceived,
+                            formattedTime: t.formattedTime,
+                            formattedAmount: t.formattedAmount,
+                            formattedFiatAmount: t.formattedFiatAmount,
                             onTap: () => context.read<TransactionBloc>().add(
                               TransactionAction.openTransactionDetail(t.transaction),
                             ),

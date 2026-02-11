@@ -23,7 +23,7 @@ class WalletSelectorWidget extends StatelessWidget {
             padding: const .all(8),
             decoration: BoxDecoration(
               shape: .circle,
-              color: AppColors.materialOrange500.withValues(alpha: 0.1),
+              color: AppColors.materialOrange500.withOpacity(0.1),
             ),
             child: Icon(Icons.currency_bitcoin, color: AppColors.materialOrange500, size: 24),
           ),
