@@ -2,20 +2,23 @@
 
 // coverage:ignore-file
 
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:transaction/domain/entities/account_input_entity.dart';
+import 'package:transaction/domain/entities/token_balance_entity.dart';
+import 'package:transaction/domain/entities/transaction_overview_entity.dart';
 
 part 'transaction_entity.freezed.dart';
-part 'transaction_entity.g.dart';
 
 @freezed
 abstract class TransactionEntity with _$TransactionEntity {
-  const factory TransactionEntity({
-    @JsonKey(name: 'id') required String id,
-    @JsonKey(name: 'name') required String name,
-    @JsonKey(name: 'description') String? description,
-  }) = _TransactionEntity;
+  const TransactionEntity._();
 
-  factory TransactionEntity.fromJson(Map<String, dynamic> json) =>
-      _$TransactionEntityFromJson(json);
+  const factory TransactionEntity({
+    bool? isLabel,
+    String? signature,
+    TransactionOverviewEntity? overview,
+    List<AccountInputEntity>? accountInputs,
+    List<TokenBalanceEntity>? tokenBalances,
+    String? transactionType,
+  }) = _TransactionEntity;
 }

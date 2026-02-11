@@ -27,6 +27,15 @@ dependencies:
   freezed_annotation: ^3.0.0
   slang: ^4.0.0
   slang_flutter: ^4.0.0
+  jiffy: ^6.4.4
+  auto_route: ^11.1.0
+  injectable: ^2.5.0
+  get_it: ^9.2.0
+  equatable: ^2.0.5
+  retrofit: ^4.4.1
+  dio: ^5.0.0
+  flutter_bloc: ^8.1.0
+  bloc: ^8.1.0
 
 dev_dependencies:
   flutter_test:

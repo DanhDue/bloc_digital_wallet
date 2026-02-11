@@ -43,7 +43,7 @@ class PhoneNumberField extends StatelessWidget {
             border: Border.all(color: theme.authBorderColor),
             boxShadow: [
               BoxShadow(
-                color: theme.authShadowColor.withValues(alpha: 0.24),
+                color: theme.authShadowColor.withOpacity(0.24),
                 offset: const Offset(0, 1),
                 blurRadius: 2,
               ),

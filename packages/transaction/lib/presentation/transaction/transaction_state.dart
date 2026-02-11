@@ -2,22 +2,20 @@
 
 // coverage:ignore-file
 
-import 'package:flutter/foundation.dart';
-import 'package:framework/framework.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:transaction/presentation/transaction/models/transaction_ui_model.dart';
+import 'package:framework/framework.dart';
+import 'package:transaction/presentation/transaction/ui_models/transaction_list_item.dart';
 
 part 'transaction_state.freezed.dart';
 
-enum TransactionStatus { initial, loading, success, failure }
-
 @freezed
 abstract class TransactionState extends BaseState with _$TransactionState {
+  const TransactionState._();
   const factory TransactionState({
-    @Default(TransactionStatus.initial) TransactionStatus status,
-    TransactionUiModel? uiModel,
-    String? errorMessage,
+    @Default(false) bool isLoading,
+    @Default([]) List<TransactionListItem> items,
+    @Default(0) int filterIndex,
+    String? error,
+    @Default(false) bool hasReachedMax,
   }) = _TransactionState;
-
-  const TransactionState._() : super();
 }

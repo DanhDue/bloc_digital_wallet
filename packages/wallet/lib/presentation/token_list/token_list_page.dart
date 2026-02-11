@@ -33,13 +33,11 @@ class TokenListPage extends BaseInfiniteListPage<TokenListBloc, TokenListUiModel
       mainAxisSize: .min,
       children: [
         const SizedBox(height: 36),
-        Icon(Icons.token_outlined, size: 86, color: Theme.of(context).disabledColor),
+        Icon(Icons.token_outlined, size: 86, color: context.appThemes.ink40),
         const SizedBox(height: 4),
         Text(
           WalletStrings.t.tokenList.notFoundMessage,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).disabledColor),
+          style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink40),
         ),
         const SizedBox(height: 16),
         OutlinedButton(

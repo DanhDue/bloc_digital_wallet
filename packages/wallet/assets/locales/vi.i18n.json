@@ -25,7 +25,7 @@
     "hiddenBalance": "****"
   },
   "walletList": {
-    "account": "Tài khoản",
+    "account": "Tài khoản $index",
     "copied": "Đã sao chép địa chỉ ví và sẽ được xóa sau 30 giây"
   }
 }

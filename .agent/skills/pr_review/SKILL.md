@@ -72,6 +72,7 @@ const maxRetry = 3;
 | **Avoid cast()** | Avoid using `.cast()`, prefer type-safe alternatives |
 | **Tear-offs** | Use `list.map(toUpper)` instead of `list.map((s) => toUpper(s))` |
 | **Final Fields** | Prefer `final` for read-only properties |
+| **Avoid Color.withValues** | Use `withOpacity()` instead of `withValues()` for SDK < 3.27.0 compatibility |
 
 **Examples:**
 ```dart
@@ -83,7 +84,14 @@ items.forEach((item) { process(item); });
 // ✅ GOOD
 String? name;
 if (list.isEmpty) {}
+if (list.isEmpty) {}
 for (final item in items) { process(item); }
+
+// ❌ BAD - Requires Flutter 3.27.0+
+color.withValues(alpha: 0.5);
+
+// ✅ GOOD - Compatible with Flutter 3.10.7+
+color.withOpacity(0.5);
 ```
 
 ---

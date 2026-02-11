@@ -131,7 +131,7 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashAction, SplashState, Spla
     switch (event) {
       case NavigateToNextEvent():
         // Navigate to Transaction via FeaturePublicRoutes (avoids direct package import)
-        context.router.replace(FeaturePublicRoutes.trendsRoute);
+        context.router.replace(FeaturePublicRoutes.transactionRoute);
         Log.d("NavigateToNextEvent");
         break;
       case ShowErrorMessageEvent(:final message):

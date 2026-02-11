@@ -136,7 +136,7 @@ class _LoginPageContentState extends State<_LoginPageContent> {
             height: 84,
             width: 84,
             decoration: BoxDecoration(
-              color: theme.primaryColor.withValues(alpha: 0.10),
+              color: theme.primaryColor.withOpacity(0.10),
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.account_circle, color: theme.primaryColor, size: 54),

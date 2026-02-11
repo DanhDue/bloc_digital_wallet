@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../models/token_list_ui_model.dart';
@@ -19,7 +20,7 @@ class TokenItemView extends StatelessWidget {
     return InkWell(
       onTap: onTap ?? () => debugPrint('Token tapped: ${token.name}'),
       child: Padding(
-        padding: const EdgeInsets.only(top: 8),
+        padding: const .only(top: 8),
         child: Row(
           children: [
             // Token Logo
@@ -34,15 +35,15 @@ class TokenItemView extends StatelessWidget {
                 children: [
                   Text(
                     token.name,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500),
+                    style: context.appThemes.titleMedium.copyWith(fontWeight: .w500),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     token.formattedPercentChange,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: token.isPositiveChange ? Colors.green : Colors.red,
+                    style: context.appThemes.bodySmall.copyWith(
+                      color: token.isPositiveChange
+                          ? context.appThemes.trendUpColor
+                          : context.appThemes.errorColor,
                     ),
                   ),
                 ],
@@ -56,16 +57,12 @@ class TokenItemView extends StatelessWidget {
               children: [
                 Text(
                   token.formattedBalance,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500),
+                  style: context.appThemes.titleMedium.copyWith(fontWeight: .w500),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   token.formattedFiatBalance,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: Theme.of(context).disabledColor),
+                  style: context.appThemes.bodySmall.copyWith(color: context.appThemes.ink40),
                 ),
               ],
             ),
@@ -80,7 +77,7 @@ class TokenItemView extends StatelessWidget {
       width: 36,
       height: 36,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: .circular(100),
         child: token.imageUrl.isNotEmpty
             ? Image.network(
                 token.imageUrl,
@@ -96,8 +93,8 @@ class TokenItemView extends StatelessWidget {
 
   Widget _buildPlaceholderIcon(BuildContext context) {
     return Container(
-      color: Theme.of(context).dividerColor,
-      child: Icon(Icons.token, size: 20, color: Theme.of(context).disabledColor),
+      color: context.appThemes.ink10,
+      child: Icon(Icons.token, size: 20, color: context.appThemes.ink40),
     );
   }
 }
