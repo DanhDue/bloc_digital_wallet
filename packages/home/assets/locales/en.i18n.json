@@ -1,6 +1,13 @@
 {
   "home": {
     "title": "Home",
-    "hello": "Hello Home"
+    "nav": {
+      "wallet": "Wallet",
+      "browser": "Browser",
+      "qrScanner": "Scan",
+      "trends": "Trends",
+      "settings": "Settings"
+    },
+    "exitToast": "Press back again to exit"
   }
 }

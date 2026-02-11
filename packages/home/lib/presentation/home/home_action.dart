@@ -9,6 +9,7 @@ part 'home_action.freezed.dart';
 class HomeAction extends BaseAction with _$HomeAction {
   const HomeAction._();
   const factory HomeAction.started() = _Started;
-  const factory HomeAction.onRefresh() = _OnRefresh;
-  const factory HomeAction.onHomeItemClicked(String id) = _OnHomeItemClicked;
+  const factory HomeAction.tabChanged(int index) = _TabChanged;
+  const factory HomeAction.tabDoubleTapped(int index) = _TabDoubleTapped;
+  const factory HomeAction.backPressed() = _BackPressed;
 }

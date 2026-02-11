@@ -21,6 +21,16 @@ dependencies:
     path: ../ui_kit
   framework:
     path: ../framework
+  wallet:
+    path: ../wallet
+  transaction:
+    path: ../transaction
+  scanner:
+    path: ../scanner
+  trends:
+    path: ../trends
+  settings:
+    path: ../settings
   
   # Dependencies
   json_annotation: ^4.9.0

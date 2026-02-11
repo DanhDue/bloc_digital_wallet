@@ -6,48 +6,53 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:home/domain/usecases/get_all_homes_usecase.dart';
 import 'package:home/presentation/home/home_action.dart';
 import 'package:home/presentation/home/home_event.dart';
 import 'package:home/presentation/home/home_state.dart';
 
 @injectable
 class HomeBloc extends MviBloc<HomeAction, HomeState, HomeEvent> {
-  final GetAllHomesUseCase _getAllHomesUseCase;
-
-  HomeBloc(this._getAllHomesUseCase) : super(const HomeState()) {
+  HomeBloc() : super(const HomeState()) {
     on<HomeAction>((event, emit) async {
       await event.map(
         started: (_) => _onStarted(emit),
-        onRefresh: (_) => _onRefresh(emit),
-        onHomeItemClicked: (e) => _onHomeItemClicked(e.id, emit),
+        tabChanged: (e) => _onTabChanged(e.index, emit),
+        tabDoubleTapped: (e) => _onTabDoubleTapped(e.index, emit),
+        backPressed: (_) => _onBackPressed(emit),
       );
     });
   }
+
+  DateTime? _lastBackPressTime;
+  static const _exitTimeWindow = Duration(seconds: 2);
 
   @override
   void onAction(HomeAction action) {
     add(action);
   }
 
-  FutureOr<void> _onStarted(Emitter<HomeState> emit) async {
-    await _loadHomes(emit);
+  FutureOr<void> _onStarted(Emitter<HomeState> emit) {
+    // No-op: home shell has no data to load on start.
   }
 
-  FutureOr<void> _onRefresh(Emitter<HomeState> emit) async {
-    await _loadHomes(emit);
+  FutureOr<void> _onTabChanged(int index, Emitter<HomeState> emit) {
+    emit(state.copyWith(currentTabIndex: index));
   }
 
-  FutureOr<void> _onHomeItemClicked(String id, Emitter<HomeState> emit) {
-    emitEvent(HomeEvent.navigateToDetails(id));
+  FutureOr<void> _onTabDoubleTapped(int index, Emitter<HomeState> emit) {
+    if (state.currentTabIndex != index) {
+      emit(state.copyWith(currentTabIndex: index));
+    }
+    // TODO: Notify child tab to pop to root / scroll to top.
   }
 
-  Future<void> _loadHomes(Emitter<HomeState> emit) async {
-    emit(state.copyWith(isLoading: true, error: null));
-    final result = await _getAllHomesUseCase();
-    result.fold(
-      (failure) => emit(state.copyWith(isLoading: false, error: failure.message)),
-      (success) => emit(state.copyWith(isLoading: false, homes: success)),
-    );
+  FutureOr<void> _onBackPressed(Emitter<HomeState> emit) {
+    final now = DateTime.now();
+    if (_lastBackPressTime == null || now.difference(_lastBackPressTime!) > _exitTimeWindow) {
+      _lastBackPressTime = now;
+      emitEvent(const HomeEvent.showExitToast());
+      return null;
+    }
+    emitEvent(const HomeEvent.exitApp());
   }
 }
