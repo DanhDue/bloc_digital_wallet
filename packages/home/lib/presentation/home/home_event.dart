@@ -8,6 +8,6 @@ part 'home_event.freezed.dart';
 @freezed
 class HomeEvent extends BaseEvent with _$HomeEvent {
   const HomeEvent._();
-  const factory HomeEvent.navigateToDetails(String id) = _NavigateToDetails;
-  const factory HomeEvent.showError(String message) = _ShowError;
+  const factory HomeEvent.showExitToast() = _ShowExitToast;
+  const factory HomeEvent.exitApp() = _ExitApp;
 }

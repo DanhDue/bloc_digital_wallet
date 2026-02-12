@@ -1,6 +1,13 @@
 {
   "home": {
     "title": "Trang chủ",
-    "hello": "Xin chào Home"
+    "nav": {
+      "wallet": "Ví",
+      "browser": "Giao dịch",
+      "qrScanner": "Quét",
+      "trends": "Xu hướng",
+      "settings": "Cài đặt"
+    },
+    "exitToast": "Nhấn lần nữa để thoát"
   }
 }

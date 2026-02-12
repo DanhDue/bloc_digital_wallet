@@ -1,50 +1,86 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
-
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'package:home/domain/entities/home_entity.dart';
-import 'package:home/domain/usecases/get_all_homes_usecase.dart';
 import 'package:home/presentation/home/home_action.dart';
 import 'package:home/presentation/home/home_bloc.dart';
+import 'package:home/presentation/home/home_event.dart';
 import 'package:home/presentation/home/home_state.dart';
-import 'package:core/core.dart' hide test;
 
-import 'home_bloc_test.mocks.dart';
-
-@GenerateMocks([GetAllHomesUseCase])
 void main() {
   late HomeBloc bloc;
-  late MockGetAllHomesUseCase mockUseCase;
+  late List<HomeEvent> events;
 
   setUp(() {
-    mockUseCase = MockGetAllHomesUseCase();
-    bloc = HomeBloc(mockUseCase);
+    bloc = HomeBloc();
+    events = [];
   });
 
-  const tHomeEntity = HomeEntity(id: '1', name: 'Test');
+  tearDown(() {
+    bloc.close();
+  });
 
-  test('initial state should be initial', () {
+  test('initial state should have currentTabIndex == 0', () {
     expect(bloc.state, const HomeState());
+    expect(bloc.state.currentTabIndex, 0);
   });
 
   blocTest<HomeBloc, HomeState>(
-    'emits [loading, success] when started is added and usecase returns success',
+    'emits state with currentTabIndex == 2 when tabChanged(2)',
+    build: () => bloc,
+    act: (bloc) => bloc.add(const HomeAction.tabChanged(2)),
+    expect: () => [const HomeState(currentTabIndex: 2)],
+  );
+
+  blocTest<HomeBloc, HomeState>(
+    'emits state with currentTabIndex == 3 when tabChanged(3)',
+    build: () => bloc,
+    act: (bloc) => bloc.add(const HomeAction.tabChanged(3)),
+    expect: () => [const HomeState(currentTabIndex: 3)],
+  );
+
+  blocTest<HomeBloc, HomeState>(
+    'does not emit new state when tabDoubleTapped on current tab',
+    build: () => bloc,
+    act: (bloc) => bloc.add(const HomeAction.tabDoubleTapped(0)),
+    expect: () => <HomeState>[],
+  );
+
+  blocTest<HomeBloc, HomeState>(
+    'emits state with updated tab when tabDoubleTapped on different tab',
+    build: () => bloc,
+    act: (bloc) => bloc.add(const HomeAction.tabDoubleTapped(4)),
+    expect: () => [const HomeState(currentTabIndex: 4)],
+  );
+
+  blocTest<HomeBloc, HomeState>(
+    'emits showExitToast event on first back press',
     build: () {
-      when(mockUseCase()).thenAnswer((_) async => const Right([tHomeEntity]));
+      // Listen to the event stream to capture side effects
+      bloc.events.listen(events.add);
       return bloc;
     },
-    act: (bloc) => bloc.add(const HomeAction.started()),
-    expect: () => [
-      const HomeState(isLoading: true),
-      const HomeState(isLoading: false, homes: [tHomeEntity]),
-    ],
-    verify: (_) {
-      verify(mockUseCase());
+    act: (bloc) => bloc.add(const HomeAction.backPressed()),
+    expect: () => <HomeState>[],
+    verify: (bloc) {
+      expect(events, equals([const HomeEvent.showExitToast()]));
+    },
+  );
+
+  blocTest<HomeBloc, HomeState>(
+    'emits exitApp event on second back press within 2 seconds',
+    build: () {
+      bloc.events.listen(events.add);
+      return bloc;
+    },
+    act: (bloc) async {
+      bloc.add(const HomeAction.backPressed());
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      bloc.add(const HomeAction.backPressed());
+    },
+    expect: () => <HomeState>[],
+    verify: (bloc) {
+      expect(events, equals([const HomeEvent.showExitToast(), const HomeEvent.exitApp()]));
     },
   );
 }

@@ -61,8 +61,8 @@ class SettingsItemWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         color:
                             iconBackgroundColor ??
-                            (appThemes?.primaryColor ?? AppColors.settingsItemBlue).withOpacity(
-                              0.1,
+                            (appThemes?.primaryColor ?? AppColors.settingsItemBlue).withValues(
+                              alpha: 0.1,
                             ),
                         shape: BoxShape.circle,
                       ),
