@@ -2,6 +2,8 @@
 
 // coverage:ignore-file
 
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,42 +37,42 @@ class HomePage extends BaseMviPage<HomeBloc, HomeAction, HomeState, HomeEvent> {
         if (didPop) return;
         context.read<HomeBloc>().onAction(const HomeAction.backPressed());
       },
-      child: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          return Scaffold(
-            body: SafeArea(
-              top: false,
-              bottom: false,
-              child: IndexedStack(
-                index: state.currentTabIndex,
-                children: const [
-                  WalletPage(),
-                  TransactionPage(),
-                  ScannerPage(),
-                  TrendsPage(),
-                  SettingsPage(),
-                ],
-              ),
-            ),
-            bottomNavigationBar: CustomBottomNavBar(
+      child: Scaffold(
+        body: buildBody(context),
+        bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
+          buildWhen: (previous, current) => previous.currentTabIndex != current.currentTabIndex,
+          builder: (context, state) {
+            return CustomBottomNavBar(
               currentIndex: state.currentTabIndex,
               onTap: (index) {
-                context.read<HomeBloc>().onAction(.tabChanged(index));
+                context.read<HomeBloc>().onAction(HomeAction.tabChanged(index));
               },
               onDoubleTap: (index) {
-                context.read<HomeBloc>().onAction(.tabDoubleTapped(index));
+                context.read<HomeBloc>().onAction(HomeAction.tabDoubleTapped(index));
               },
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
 
   @override
   Widget handleState(BuildContext context, HomeState state) {
-    // Not used — buildScaffold handles everything.
-    return const SizedBox.shrink();
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: IndexedStack(
+        index: state.currentTabIndex,
+        children: const [
+          WalletPage(),
+          TransactionPage(),
+          ScannerPage(),
+          TrendsPage(),
+          SettingsPage(),
+        ],
+      ),
+    );
   }
 
   @override
@@ -85,7 +87,9 @@ class HomePage extends BaseMviPage<HomeBloc, HomeAction, HomeState, HomeEvent> {
         );
       },
       exitApp: (_) {
-        SystemNavigator.pop();
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        }
       },
     );
   }

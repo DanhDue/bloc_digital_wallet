@@ -4,13 +4,16 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:home/presentation/home/home_action.dart';
 import 'package:home/presentation/home/home_bloc.dart';
+import 'package:home/presentation/home/home_event.dart';
 import 'package:home/presentation/home/home_state.dart';
 
 void main() {
   late HomeBloc bloc;
+  late List<HomeEvent> events;
 
   setUp(() {
     bloc = HomeBloc();
+    events = [];
   });
 
   tearDown(() {
@@ -52,12 +55,32 @@ void main() {
 
   blocTest<HomeBloc, HomeState>(
     'emits showExitToast event on first back press',
-    build: () => bloc,
+    build: () {
+      // Listen to the event stream to capture side effects
+      bloc.events.listen(events.add);
+      return bloc;
+    },
     act: (bloc) => bloc.add(const HomeAction.backPressed()),
     expect: () => <HomeState>[],
     verify: (bloc) {
-      // The event stream should have emitted showExitToast.
-      // We verify via bloc.events in integration; here we trust the logic.
+      expect(events, equals([const HomeEvent.showExitToast()]));
+    },
+  );
+
+  blocTest<HomeBloc, HomeState>(
+    'emits exitApp event on second back press within 2 seconds',
+    build: () {
+      bloc.events.listen(events.add);
+      return bloc;
+    },
+    act: (bloc) async {
+      bloc.add(const HomeAction.backPressed());
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      bloc.add(const HomeAction.backPressed());
+    },
+    expect: () => <HomeState>[],
+    verify: (bloc) {
+      expect(events, equals([const HomeEvent.showExitToast(), const HomeEvent.exitApp()]));
     },
   );
 }
