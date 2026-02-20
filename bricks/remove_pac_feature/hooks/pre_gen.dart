@@ -63,17 +63,14 @@ Future<void> run(HookContext context) async {
     await _runCommand('melos', ['bootstrap'], context.logger);
 
     progress.update('Running code generation on root app...');
-    await _runCommand(
-        'fvm',
-        [
-          'flutter',
-          'pub',
-          'run',
-          'build_runner',
-          'build',
-          '--delete-conflicting-outputs',
-        ],
-        context.logger);
+    await _runCommand('fvm', [
+      'flutter',
+      'pub',
+      'run',
+      'build_runner',
+      'build',
+      '--delete-conflicting-outputs',
+    ], context.logger);
 
     progress.update('Running formatting and analysis...');
     await _runCommand('melos', ['run', 'dartfmt'], context.logger);
