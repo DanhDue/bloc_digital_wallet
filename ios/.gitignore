@@ -15,6 +15,7 @@ Icon?
 profile
 xcuserdata
 **/.generated/
+Flutter/*.xcconfig
 ServiceDefinitions.json
 Runner/GeneratedPluginRegistrant.*
 
