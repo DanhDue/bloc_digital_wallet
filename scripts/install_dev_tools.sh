@@ -37,7 +37,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # 2. fluttergen
 # 3. getx cli
 # 4. rbenv => ruby 3++
-# 5. install ruby gems + cocoapods
+# 5. install ruby gems
 # 6. install flutterfire_cli
 
 #show git log in the same terminal window.
@@ -86,10 +86,10 @@ dart pub global activate mason_cli
 # Install ruby gems
 gem install bundler
 
-# Install cocoapods
-gem install cocoapods
+# CocoaPods is no longer needed (migrated to Swift Package Manager)
+# gem install cocoapods
 
-# Run this one before running pod install.
+# Run flutter precache before building.
 fvm flutter precache --ios
 
 # Install flutterfire_cli

@@ -19,11 +19,6 @@ echo -e "\033[0;32mmelos genAlls\033[0m"
 melos genAlls
 
 
-echo -e "\033[0;32mcd ios\033[0m"
-cd ios
-echo -e "\033[0;32mpod install\033[0m"
-pod install
-cd ..
 
 # Build IPA with flavor and dart-define-from-file
 # export method included in the ExportOptions.plist file.

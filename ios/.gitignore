@@ -10,12 +10,18 @@
 **/.vagrant/
 **/DerivedData/
 Icon?
-**/Pods/
 **/.symlinks/
 profile
 xcuserdata
 **/.generated/
 Flutter/*.xcconfig
+Flutter/flutter_export_environment.sh
+Flutter/ephemeral/
+**/Pods/
+Podfile
+Podfile.lock
+Flutter.podspec
+**/*.resolved
 ServiceDefinitions.json
 Runner/GeneratedPluginRegistrant.*
 
