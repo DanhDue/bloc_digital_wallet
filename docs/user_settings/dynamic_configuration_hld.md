@@ -18,6 +18,10 @@ The architecture aims to allow fetching configuration values from the backend dy
   - [4.1 Sequence Diagram](#41-sequence-diagram)
   - [4.2 Theme Tailor Requirements](#42-theme-tailor-requirements)
 
+### Related Documents
+- [Dynamic Configuration API Contract](./dynamic_configuration_api.md) — Client & Admin API endpoints, request/response schemas, mock data
+- [User Preferences Sync API](./user_preferences_sync_api.md) — **NEW**: Per-user preferences, cross-device sync, delta versioning, and enhanced Bootstrap API
+
 ## 1. Architectural Overview
 
 The dynamic configuration flow follows Clean Architecture principles by isolating the network operations into a dedicated `settings` feature module, while the orchestrators that broadcast these changes live in the `core` and `ui_kit` shared packages. The `app` (Main Layer) binds these components together.
