@@ -6,6 +6,3 @@ import 'package:injectable/injectable.dart';
 
 @InjectableInit(initializerName: r'$initModuleGetIt')
 void configureModuleDependencies(GetIt getIt) => getIt.$initModuleGetIt();
-
-@module
-abstract class TransactionNetworkModule {}

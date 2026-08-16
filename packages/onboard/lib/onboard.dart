@@ -15,7 +15,7 @@ export 'presentation/splash/splash_action.dart';
 export 'presentation/splash/models/splash_ui_model.dart';
 
 // DI
-export 'di/onboard_module.dart';
+export 'di/injection.dart';
 
 // Router
 export 'onboard_router.dart';

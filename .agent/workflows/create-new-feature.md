@@ -45,6 +45,10 @@ mason make mvi_subfeature --module_name {{module_name}} --subfeature_name {{subf
   - ⚠️ **IMPORTANT**: All entities and models will use freezed with `@JsonKey` annotations.
 - Implement Remote Data Source (API calls).
 - Implement Repository.
+- **Network DI**: Create `data/di/network_module.dart` with `@module` annotation.
+  - Class name: `{Feature}NetworkModule` (e.g., `SettingsNetworkModule`)
+  - Register Retrofit clients with `@lazySingleton` and explicit `baseUrl`
+  - ⚠️ **IMPORTANT**: Network DI must be in `data/di/`, NOT in `lib/di/`. The `lib/di/injection.dart` should only contain `configureModuleDependencies()`.
 
 ## 5. Implement Presentation Layer (MVI)
 - **Actions**: Define user actions (e.g., `SubmitEmail`, `LoadData`).

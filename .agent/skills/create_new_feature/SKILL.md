@@ -94,8 +94,15 @@ Should I proceed with creating this as a [New Module/Subfeature]?
 
 1.  **Model**: Create `[feature]_model.dart` with `@freezed`, `@JsonKey`, and `json_serializable`.
     - Same pattern as Entity with `abstract class` and `_$ClassName` mixin
-2.  **Remote DataSource**: Implement `[feature]_remote_datasource.dart` (use `SafeCallApiMixin`).
-3.  **Repository Impl**: Implement `[feature]_repository_impl.dart`.
+2.  **Module URI**: Create `data/datasources/remote/[feature]_uri.dart` with endpoint path constants.
+    - Class name: `[Feature]Uri` (e.g., `WalletUri`)
+    - **DO NOT** add constants to global `network/app_uri.dart` — each module owns its own URIs
+3.  **Remote DataSource**: Implement `[feature]_remote_datasource.dart` (use `SafeCallApiMixin`).
+4.  **Repository Impl**: Implement `[feature]_repository_impl.dart`.
+5.  **Network DI**: Create `data/di/network_module.dart` with `@module` annotation.
+    - Class name: `[Feature]NetworkModule` (e.g., `WalletNetworkModule`)
+    - Register Retrofit clients with `@lazySingleton` and explicit `baseUrl` using `[Feature]Uri`
+    - **IMPORTANT**: Network DI must be in `data/di/`, NOT in `lib/di/`. The `lib/di/injection.dart` should only contain `configureModuleDependencies()`.
 
 ## 6. Implement Presentation Layer (MVI)
 

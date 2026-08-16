@@ -23,7 +23,7 @@ mason make mvi_subfeature --module_name <module> --subfeature_name <subfeature>
 ```
 
 ## 3. Registration
-1.  **DI**: Register new BLoC and Repository in `lib/di/`.
+1.  **DI**: The `lib/di/injection.dart` should only contain `configureModuleDependencies()`. Network DI (Retrofit clients) goes in `data/di/network_module.dart` with class name `{Feature}NetworkModule`.
 2.  **Router**: Add entry to `lib/app_router.dart`.
 3.  **Strings**: Add keys to `assets/locales/en.i18n.json`.
 

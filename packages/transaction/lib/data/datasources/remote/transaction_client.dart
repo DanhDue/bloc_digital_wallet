@@ -3,7 +3,8 @@
 // coverage:ignore-file
 
 import 'package:dio/dio.dart';
-import 'package:network/network.dart';
+import 'package:network/base_response_object.dart';
+import 'package:transaction/data/datasources/remote/transaction_uri.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:transaction/data/models/transaction_response_object.dart';
 
@@ -13,7 +14,7 @@ part 'transaction_client.g.dart';
 abstract class TransactionClient {
   factory TransactionClient(Dio dio, {String baseUrl}) = _TransactionClient;
 
-  @GET(UriPathParameters.signature)
+  @GET(TransactionUri.pathSignature)
   Future<BaseResponseObject<TransactionResponseObject?>?> getTransactionBySignature(
     @Path("signature") String signature,
     @Query("parsed_json") bool? parsedJson,

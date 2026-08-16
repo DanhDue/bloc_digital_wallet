@@ -81,10 +81,13 @@ Future<void> run(HookContext context) async {
 
     // Only rebuild the affected package using genFeature
     context.logger.info('Rebuilding $snakePackage package...');
-    final packageResult = await Process.run('melos', [
-      'genFeature',
-      snakePackage,
-    ], runInShell: true);
+    final packageResult = await Process.run(
+        'melos',
+        [
+          'genFeature',
+          snakePackage,
+        ],
+        runInShell: true);
     if (packageResult.exitCode == 0) {
       context.logger.success('Rebuild completed successfully.');
     } else {

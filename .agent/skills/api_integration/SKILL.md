@@ -48,7 +48,7 @@ Use the `json_to_freezed_model` skill guidelines:
 
 ## 3. Network Layer Implementation
 
-1.  **AppUri**: Add endpoint path constants to `lib/core/network/app_uri.dart`.
+1.  **Module URI**: Create or update `data/datasources/remote/{module}_uri.dart` with endpoint path constants. **DO NOT** add constants to the global `network/app_uri.dart` — each module owns its own URI constants.
 2.  **Retrofit Client**:
     - If the prompt specifies a client name (e.g., "token client"), use that: `token_client.dart`.
     - If no client name is specified, use the module name: `{module}_client.dart` (e.g., `wallet_client.dart`).
@@ -56,8 +56,10 @@ Use the `json_to_freezed_model` skill guidelines:
     - Use the `@RestApi()` and `@GET/@POST/etc.` annotations.
     - Wrap responses with `BaseResponseObject<T>`.
 3.  **Dependency Injection**:
-    - Register new clients in `lib/di/network_module.dart` using the `@singleton` or `@LazySingleton` annotation.
-    - **CRITICAL**: Always provide the `baseUrl` explicitly when instantiating the client: `Client(dio, baseUrl: AppUri.service.buildAppUri()!)`. Avoid passing only `dio`.
+    - Register new clients in `data/di/network_module.dart` using the `@module` annotation with `@singleton` or `@lazySingleton`.
+    - The DI module class must follow the naming convention: `{PackageName}NetworkModule` (e.g., `WalletNetworkModule`).
+    - **CRITICAL**: Network DI must be in the **data layer** (`data/di/`), NOT in `lib/di/`. The `lib/di/injection.dart` should only contain `configureModuleDependencies()`.
+    - **CRITICAL**: Always provide the `baseUrl` explicitly using per-module URI: `Client(dio, baseUrl: {Module}Uri.service.buildAppUri()!)`. Import `string_ext.dart` for `buildAppUri()`.
 
 > [!CRITICAL]
 > **BaseUrl & Endpoint Path Analysis**
