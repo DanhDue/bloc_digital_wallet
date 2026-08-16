@@ -58,7 +58,9 @@ class TransactionItemWidget extends StatelessWidget {
                 crossAxisAlignment: .start,
                 children: [
                   Text(
-                    isReceived ? TransactionStrings.t.receivedBtc : TransactionStrings.t.sentBtc,
+                    isReceived
+                        ? TransactionStrings.t.transaction.bitcoin.received
+                        : TransactionStrings.t.transaction.bitcoin.sent,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: .w600,

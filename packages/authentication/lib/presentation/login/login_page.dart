@@ -144,13 +144,13 @@ class _LoginPageContentState extends State<_LoginPageContent> {
         ),
         const SizedBox(height: 18),
         Text(
-          context.tAuth.authWelcomeBack,
+          context.tAuth.authentication.login.welcomeBack,
           textAlign: TextAlign.center,
           style: theme.headlineSmall.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 6),
         Text(
-          context.tAuth.authLoginToContinue,
+          context.tAuth.authentication.login.loginToContinue,
           textAlign: TextAlign.center,
           style: theme.bodyMedium.copyWith(color: theme.textSecondaryColor),
         ),
@@ -161,8 +161,8 @@ class _LoginPageContentState extends State<_LoginPageContent> {
   Widget _buildEmailField(AppThemes theme) {
     return AuthTextField(
       controller: _emailController,
-      label: context.tAuth.authEmail,
-      hintText: context.tAuth.authEnterYourEmail,
+      label: context.tAuth.authentication.login.email,
+      hintText: context.tAuth.authentication.login.enterYourEmail,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       prefixIcon: Icons.email_outlined,
@@ -172,8 +172,8 @@ class _LoginPageContentState extends State<_LoginPageContent> {
   Widget _buildPasswordField(AppThemes theme) {
     return AuthTextField(
       controller: _passwordController,
-      label: context.tAuth.authPassword,
-      hintText: context.tAuth.authEnterYourPassword,
+      label: context.tAuth.authentication.login.password,
+      hintText: context.tAuth.authentication.login.enterYourPassword,
       obscureText: _obscurePassword,
       textInputAction: TextInputAction.done,
       prefixIcon: Icons.lock_outline,
@@ -192,7 +192,7 @@ class _LoginPageContentState extends State<_LoginPageContent> {
         onPressed: () {
           // context.router.push(const ForgotPasswordRoute());
         },
-        child: Text(context.tAuth.authForgotPassword),
+        child: Text(context.tAuth.authentication.forgotPassword.tapped),
       ),
     );
   }
@@ -210,7 +210,7 @@ class _LoginPageContentState extends State<_LoginPageContent> {
               width: 20,
               child: CircularProgressIndicator(strokeWidth: 2, color: theme.surfaceColor),
             )
-          : Text(context.tAuth.authLogin),
+          : Text(context.tAuth.authentication.login.loginButton),
     );
   }
 
@@ -221,7 +221,7 @@ class _LoginPageContentState extends State<_LoginPageContent> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            context.tAuth.authOr,
+            context.tAuth.authentication.login.or,
             style: theme.labelMedium.copyWith(color: theme.textSecondaryColor),
           ),
         ),
@@ -234,32 +234,32 @@ class _LoginPageContentState extends State<_LoginPageContent> {
     return Column(
       children: [
         SocialLoginButton(
-          label: context.tAuth.authContinueWithGoogle,
+          label: context.tAuth.authentication.login.continueWithGoogle,
           icon: Icons.g_mobiledata,
           onPressed: () {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(context.tAuth.authGoogleLoginTapped)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(context.tAuth.authentication.login.googleLoginTapped)),
+            );
           },
         ),
         const SizedBox(height: 10),
         SocialLoginButton(
-          label: context.tAuth.authContinueWithApple,
+          label: context.tAuth.authentication.login.continueWithApple,
           icon: Icons.apple,
           onPressed: () {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(context.tAuth.authAppleLoginTapped)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(context.tAuth.authentication.login.appleLoginTapped)),
+            );
           },
         ),
         const SizedBox(height: 10),
         SocialLoginButton(
-          label: context.tAuth.authContinueWithFacebook,
+          label: context.tAuth.authentication.login.continueWithFacebook,
           icon: Icons.facebook,
           onPressed: () {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(context.tAuth.authFacebookLoginTapped)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(context.tAuth.authentication.login.facebookLoginTapped)),
+            );
           },
         ),
       ],
@@ -270,12 +270,12 @@ class _LoginPageContentState extends State<_LoginPageContent> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(context.tAuth.authDontHaveAccount, style: theme.bodyMedium),
+        Text(context.tAuth.authentication.login.dontHaveAccount, style: theme.bodyMedium),
         TextButton(
           onPressed: () {
             // context.router.push(const RegisterRoute());
           },
-          child: Text(context.tAuth.authSignUp),
+          child: Text(context.tAuth.authentication.login.signUpButton),
         ),
       ],
     );

@@ -38,7 +38,7 @@ class NftsListPage
         NftsListStatus.loading => const Center(child: CircularProgressIndicator()),
         NftsListStatus.success => _buildContent(context, state),
         NftsListStatus.failure => Center(
-          child: Text(state.errorMessage ?? WalletStrings.t.nftsList.error),
+          child: Text(state.errorMessage ?? WalletStrings.t.wallet.nftsList.error),
         ),
       },
     );
@@ -62,13 +62,13 @@ class NftsListPage
               Icon(Icons.image_not_supported_outlined, size: 86, color: context.appThemes.ink40),
               const SizedBox(height: 4),
               Text(
-                WalletStrings.t.nftsList.notFoundMessage,
+                WalletStrings.t.wallet.nftsList.notFoundMessage,
                 style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink40),
               ),
               const SizedBox(height: 16),
               OutlinedButton(
                 onPressed: () => debugPrint('Add NFT'),
-                child: Text(WalletStrings.t.nftsList.addNft),
+                child: Text(WalletStrings.t.wallet.nftsList.addNft),
               ),
             ],
           ),

@@ -29,7 +29,7 @@ class SettingsPage
   Widget handleState(BuildContext context, SettingsState state) {
     final theme = Theme.of(context);
     final appThemes = theme.extension<AppThemes>();
-    final t = context.tSettings;
+    final t = context.tSettings.settings;
 
     return SafeArea(
       top: true,
@@ -45,7 +45,7 @@ class SettingsPage
     BuildContext context,
     SettingsState state,
     AppThemes? appThemes,
-    SettingsTranslations t,
+    SettingsTranslationsSettingsEn t,
   ) {
     if (state.status == SettingsStatus.loading) {
       return const Center(child: CustomLoadingWidget());
@@ -69,11 +69,11 @@ class SettingsPage
         children: [
           // Account Section
           SettingsSectionWidget(
-            title: t.account,
+            title: t.account.title,
             children: [
               SettingsItemWidget(
                 icon: Icons.person_outline,
-                label: t.profile, // "Edit Profile"
+                label: t.account.profile, // "Edit Profile"
                 iconColor: AppColors.settingsItemBlue,
                 iconBackgroundColor: AppColors.settingsItemBlueBg,
                 onTap: () => context.read<SettingsBloc>().onAction(
@@ -82,7 +82,7 @@ class SettingsPage
               ),
               SettingsItemWidget(
                 icon: Icons.lock_outline,
-                label: t.changePassword,
+                label: t.account.changePassword,
                 iconColor: AppColors.settingsItemPurple,
                 iconBackgroundColor: AppColors.settingsItemPurpleBg,
                 onTap: () => context.read<SettingsBloc>().onAction(
@@ -91,12 +91,12 @@ class SettingsPage
               ),
               SettingsItemWidget(
                 icon: Icons.shield_outlined,
-                label: t.twoFactorAuth,
+                label: t.account.twoFactorAuth,
                 showDivider: false,
                 iconColor: AppColors.settingsItemDeepPurple,
                 iconBackgroundColor: AppColors.settingsItemDeepPurpleBg,
                 trailing: SettingsItemTrailing.value,
-                value: t.twoFactorAuthOn, // "On"
+                value: t.account.twoFactorAuthOn, // "On"
                 valueColor: AppColors.settingsItemGreen,
                 onTap: () {
                   // Navigate to 2FA settings
@@ -107,22 +107,22 @@ class SettingsPage
 
           // Preferences Section
           SettingsSectionWidget(
-            title: t.preferences,
+            title: t.preferences.title,
             children: [
               SettingsItemWidget(
                 icon: Icons.attach_money,
-                label: t.currency, // "Currency / Units"
+                label: t.preferences.currency, // "Currency / Units"
                 trailing: SettingsItemTrailing.value,
-                value: t.currencyUsd,
+                value: t.preferences.currencyUsd,
                 iconColor: AppColors.settingsItemOrange,
                 iconBackgroundColor: AppColors.settingsItemOrangeBg,
                 onTap: () => _showCurrencyPicker(context),
               ),
               SettingsItemWidget(
                 icon: Icons.language,
-                label: t.language,
+                label: t.preferences.language,
                 trailing: SettingsItemTrailing.value,
-                value: t.languageEnglish,
+                value: t.preferences.languageEnglish,
                 iconColor: AppColors.settingsItemBlue,
                 iconBackgroundColor: AppColors.settingsItemBlueBg,
                 onTap: () {
@@ -131,7 +131,7 @@ class SettingsPage
               ),
               SettingsItemWidget(
                 icon: Icons.dark_mode_outlined,
-                label: t.darkMode,
+                label: t.preferences.darkMode,
                 trailing: SettingsItemTrailing.toggle,
                 isOn: uiModel?.isDarkModeEnabled ?? false,
                 showDivider: false,
@@ -146,11 +146,11 @@ class SettingsPage
 
           // Developer Section
           SettingsSectionWidget(
-            title: t.developer,
+            title: t.developer.title,
             children: [
               SettingsItemWidget(
                 icon: Icons.bug_report_outlined,
-                label: t.debugMode,
+                label: t.developer.debugMode,
                 trailing: SettingsItemTrailing.toggle,
                 isOn: uiModel?.isDeveloperModeEnabled ?? false,
                 showDivider: false,
@@ -165,11 +165,11 @@ class SettingsPage
 
           // App Info Section
           SettingsSectionWidget(
-            title: t.appInfo,
+            title: t.appInfo.title,
             children: [
               SettingsItemWidget(
                 icon: Icons.headset_mic_outlined,
-                label: t.contactSupport,
+                label: t.appInfo.contactSupport,
                 trailing: SettingsItemTrailing.arrow, // Explicitly arrow as per requirement
                 iconColor: AppColors.settingsItemBlue,
                 iconBackgroundColor: AppColors.settingsItemBlueBg,
@@ -179,10 +179,11 @@ class SettingsPage
               ),
               SettingsItemWidget(
                 icon: Icons.info_outline,
-                label: t.aboutApp,
+                label: t.appInfo.aboutApp,
                 trailing: SettingsItemTrailing.valueOnly,
                 showDivider: false,
-                value: uiModel?.appVersion ?? t.defaultVersion, // Fallback to example version
+                value:
+                    uiModel?.appVersion ?? t.appInfo.defaultVersion, // Fallback to example version
                 iconColor: AppColors.settingsItemLightGrey,
                 iconBackgroundColor: AppColors.settingsItemLightGreyBg,
               ),

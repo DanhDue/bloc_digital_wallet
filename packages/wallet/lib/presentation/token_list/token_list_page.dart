@@ -36,13 +36,13 @@ class TokenListPage extends BaseInfiniteListPage<TokenListBloc, TokenListUiModel
         Icon(Icons.token_outlined, size: 86, color: context.appThemes.ink40),
         const SizedBox(height: 4),
         Text(
-          WalletStrings.t.tokenList.notFoundMessage,
+          WalletStrings.t.wallet.tokenList.notFoundMessage,
           style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink40),
         ),
         const SizedBox(height: 16),
         OutlinedButton(
           onPressed: () => debugPrint('Add Token'),
-          child: Text(WalletStrings.t.tokenList.addToken),
+          child: Text(WalletStrings.t.wallet.tokenList.addToken),
         ),
       ],
     );

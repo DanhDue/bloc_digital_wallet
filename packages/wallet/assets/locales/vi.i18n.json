@@ -1,31 +1,34 @@
 {
-  "title": "Tính năng Ví",
   "wallet": {
-    "actionSend": "Gửi",
-    "actionReceive": "Nhận",
-    "actionBuy": "Mua",
-    "actionStaking": "Staking"
-  },
-  "networkSelection": {
-    "selectNetwork": "Tất cả mạng",
-    "search": "Tìm kiếm",
-    "error": "Đã xảy ra lỗi"
-  },
-  "nftsList": {
-    "title": "NFTs",
-    "notFoundMessage": "Không tìm thấy NFT",
-    "addNft": "Thêm NFT",
-    "error": "Đã xảy ra lỗi"
-  },
-  "tokenList": {
-    "title": "Tokens",
-    "notFoundMessage": "Không tìm thấy Token",
-    "addToken": "Thêm Token",
-    "error": "Đã xảy ra lỗi",
-    "hiddenBalance": "****"
-  },
-  "walletList": {
-    "account": "Tài khoản $index",
-    "copied": "Đã sao chép địa chỉ ví và sẽ được xóa sau 30 giây"
+    "title": "Tính năng Ví",
+    "wallet": {
+      "actionSend": "Gửi",
+      "actionReceive": "Nhận",
+      "actionBuy": "Mua",
+      "actionStaking": "Staking"
+    },
+    "networkSelection": {
+      "selectNetwork": "Tất cả mạng",
+      "search": "Tìm kiếm",
+      "error": "Đã xảy ra lỗi"
+    },
+    "nftsList": {
+      "title": "NFTs",
+      "notFoundMessage": "Không tìm thấy NFT",
+      "addNft": "Thêm NFT",
+      "error": "Đã xảy ra lỗi"
+    },
+    "tokenList": {
+      "title": "Tokens",
+      "notFoundMessage": "Không tìm thấy Token",
+      "addToken": "Thêm Token",
+      "error": "Đã xảy ra lỗi",
+      "hiddenBalance": "****"
+    },
+    "walletList": {
+      "account": "Tài khoản $index",
+      "copied": "Đã sao chép địa chỉ ví và sẽ được xóa sau 30 giây",
+      "noWalletsFound": "Không tìm thấy ví nào"
+    }
   }
 }

@@ -1,13 +1,15 @@
 {
   "home": {
-    "title": "Trang chủ",
+    "main": {
+      "title": "Trang chủ",
+      "exitToast": "Nhấn lần nữa để thoát"
+    },
     "nav": {
       "wallet": "Ví",
       "browser": "Giao dịch",
       "qrScanner": "Quét",
       "trends": "Xu hướng",
       "settings": "Cài đặt"
-    },
-    "exitToast": "Nhấn lần nữa để thoát"
+    }
   }
 }

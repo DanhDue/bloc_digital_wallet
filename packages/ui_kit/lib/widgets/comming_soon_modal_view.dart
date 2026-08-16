@@ -63,14 +63,14 @@ class _CommingSoonModalViewState extends State<CommingSoonModalView> with Dialog
                     Assets.images.icRocketLaunch.svg(width: 153, height: 153, fit: BoxFit.cover),
                     const SizedBox(height: 20),
                     Text(
-                      context.coreT.commingSoon,
+                      context.coreT.core.common.commingSoon,
                       style: context.appThemes.headlineSmall.copyWith(
                         color: context.appThemes.ink100,
                       ),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      context.coreT.commingSoonDescription,
+                      context.coreT.core.common.commingSoonDescription,
                       style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink60),
                       textAlign: TextAlign.center,
                     ),
@@ -95,7 +95,7 @@ class _CommingSoonModalViewState extends State<CommingSoonModalView> with Dialog
                             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
                             child: TextField(
                               decoration: InputDecoration(
-                                hintText: context.coreT.enterYourEmail,
+                                hintText: context.coreT.core.common.enterYourEmail,
                                 hintStyle: context.appThemes.bodyMedium.copyWith(
                                   color: context.appThemes.ink60,
                                 ),
@@ -113,7 +113,7 @@ class _CommingSoonModalViewState extends State<CommingSoonModalView> with Dialog
                         CustomFilledButton(
                           borderRadius: 100,
                           onPressed: () => Navigator.of(context).pop(),
-                          text: context.coreT.subscribe,
+                          text: context.coreT.core.common.subscribe,
                           fullWidth: false,
                         ),
                       ],

@@ -1,32 +1,34 @@
 {
-  "title": "Wallet Feature",
   "wallet": {
-    "actionSend": "Send",
-    "actionReceive": "Receive",
-    "actionBuy": "Buy",
-    "actionStaking": "Staking"
-  },
-  "networkSelection": {
-    "selectNetwork": "All Networks",
-    "search": "Search",
-    "error": "An error occurred"
-  },
-  "nftsList": {
-    "title": "NFTs",
-    "notFoundMessage": "No NFTs Found",
-    "addNft": "Add NFT",
-    "error": "An error occurred"
-  },
-  "tokenList": {
-    "title": "Tokens",
-    "notFoundMessage": "No Tokens Found",
-    "addToken": "Add Token",
-    "error": "An error occurred",
-    "hiddenBalance": "****"
-  },
-  "walletList": {
-    "account": "Account $index",
-    "copied": "Wallet address copied and will be cleared in 30 seconds",
-    "noWalletsFound": "No wallets found"
+    "title": "Wallet Feature",
+    "wallet": {
+      "actionSend": "Send",
+      "actionReceive": "Receive",
+      "actionBuy": "Buy",
+      "actionStaking": "Staking"
+    },
+    "networkSelection": {
+      "selectNetwork": "All Networks",
+      "search": "Search",
+      "error": "An error occurred"
+    },
+    "nftsList": {
+      "title": "NFTs",
+      "notFoundMessage": "No NFTs Found",
+      "addNft": "Add NFT",
+      "error": "An error occurred"
+    },
+    "tokenList": {
+      "title": "Tokens",
+      "notFoundMessage": "No Tokens Found",
+      "addToken": "Add Token",
+      "error": "An error occurred",
+      "hiddenBalance": "****"
+    },
+    "walletList": {
+      "account": "Account $index",
+      "copied": "Wallet address copied and will be cleared in 30 seconds",
+      "noWalletsFound": "No wallets found"
+    }
   }
 }

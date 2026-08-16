@@ -130,7 +130,7 @@ class _TrendsListContentState extends State<_TrendsListContent> {
         final displayItems = trendsState.displayItems;
 
         if (displayItems.isEmpty) {
-          return Center(child: Text(TrendsStrings.l10n.trendsNoCoinsFound));
+          return Center(child: Text(TrendsStrings.t.trends.search.noCoinsFound));
         }
 
         // Hide loader if searching
@@ -184,11 +184,11 @@ class _TrendsListContentState extends State<_TrendsListContent> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(state.errorMessage ?? TrendsStrings.l10n.trendsError),
+          Text(state.errorMessage ?? TrendsStrings.t.trends.error.message),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.read<TrendsBloc>().add(const InfiniteListFetchFirstPage()),
-            child: Text(TrendsStrings.l10n.trendsRetry),
+            child: Text(TrendsStrings.t.trends.error.retry),
           ),
         ],
       ),

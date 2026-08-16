@@ -96,15 +96,15 @@ class _WalletItemState extends State<WalletItem> {
             padding: const .symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(color: context.appThemes.ink60, borderRadius: .circular(16)),
             child: Row(
-              mainAxisAlignment: .start,
-              crossAxisAlignment: .center,
-              mainAxisSize: .min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Assets.images.icZeno.image(fit: BoxFit.cover, width: 24, height: 24),
                 const SizedBox(width: 8),
                 Flexible(
                   child: Text(
-                    tWallet.walletList.copied,
+                    context.tWallet.wallet.walletList.copied,
                     style: context.appThemes.bodyLarge.copyWith(color: context.appThemes.white),
                     textAlign: TextAlign.center,
                   ),
@@ -193,7 +193,7 @@ class _WalletItemState extends State<WalletItem> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          tWallet.walletList.account(index: widget.index + 1),
+                          context.tWallet.wallet.walletList.account(index: widget.index + 1),
                           style: context.appThemes.titleMedium.copyWith(
                             color: context.appThemes.white,
                             fontWeight: FontWeight.bold,
@@ -208,9 +208,9 @@ class _WalletItemState extends State<WalletItem> {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      mainAxisAlignment: .start,
-                      crossAxisAlignment: .center,
-                      mainAxisSize: .max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         widget.isBalanceLoading
                             ? Shimmer.fromColors(
@@ -221,7 +221,7 @@ class _WalletItemState extends State<WalletItem> {
                                   height: 32,
                                   decoration: BoxDecoration(
                                     color: context.appThemes.white,
-                                    borderRadius: .circular(4),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
                               )
@@ -232,16 +232,16 @@ class _WalletItemState extends State<WalletItem> {
                                   text: "\$ ",
                                   style: context.appThemes.headlineMedium.copyWith(
                                     color: context.appThemes.white,
-                                    fontWeight: .bold,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   children: [
                                     TextSpan(
                                       text: widget.isBalanceHidden
-                                          ? tWallet.tokenList.hiddenBalance
+                                          ? context.tWallet.wallet.tokenList.hiddenBalance
                                           : (widget.wallet.balance ?? 0).toStringAsFixed(2),
                                       style: context.appThemes.headlineMedium.copyWith(
                                         color: context.appThemes.white,
-                                        fontWeight: .bold,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],

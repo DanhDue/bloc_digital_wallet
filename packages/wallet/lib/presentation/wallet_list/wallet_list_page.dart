@@ -5,7 +5,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
 import 'package:wallet/domain/entities/wallet_entity.dart';
 import 'package:wallet/presentation/wallet_list/widgets/wallet_item.dart';
@@ -19,14 +18,36 @@ import 'package:wallet/generated/translations.dart';
 
 @RoutePage()
 class WalletListPage
-    extends BaseMviPage<WalletListBloc, WalletListAction, WalletListState, WalletListEvent> {
+    extends
+        BaseMviStatefulPage<WalletListBloc, WalletListAction, WalletListState, WalletListEvent> {
   final void Function(WalletEntity)? onWalletChanged;
   final WalletEntity? selectedWallet;
 
   const WalletListPage({super.key, this.onWalletChanged, this.selectedWallet});
 
   @override
-  WalletListAction? get initialAction => const WalletListAction.started();
+  BaseMviPageState<
+    WalletListBloc,
+    WalletListAction,
+    WalletListState,
+    WalletListEvent,
+    WalletListPage
+  >
+  createState() => _WalletListPageState();
+}
+
+class _WalletListPageState
+    extends
+        BaseMviPageState<
+          WalletListBloc,
+          WalletListAction,
+          WalletListState,
+          WalletListEvent,
+          WalletListPage
+        > {
+  @override
+  void Function(WalletListBloc bloc)? get onBlocCreated =>
+      (bloc) => bloc.onAction(const WalletListAction.started());
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;
@@ -60,30 +81,33 @@ class WalletListPage
   Widget _buildSuccess(BuildContext context, WalletListState state) {
     final wallets = state.uiModel.wallets;
     if (wallets.isEmpty) {
-      return Center(child: Text(tWallet.walletList.noWalletsFound));
+      return Center(child: Text(tWallet.wallet.walletList.noWalletsFound));
     }
 
     // Trigger callback for the first item initially if no wallet is selected
-    if (wallets.isNotEmpty && selectedWallet == null) {
+    if (wallets.isNotEmpty && widget.selectedWallet == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        onWalletChanged?.call(wallets[0]);
+        widget.onWalletChanged?.call(wallets[0]);
       });
     }
 
-    final initialIndex = selectedWallet != null ? wallets.indexOf(selectedWallet!) : 0;
-    // Handle case where selectedWallet is not in list (e.g. network change)
+    final initialIndex = widget.selectedWallet != null
+        ? wallets.indexWhere((w) => w.address == widget.selectedWallet!.address)
+        : 0;
     final safeIndex = initialIndex >= 0 ? initialIndex : 0;
 
     return Swiper(
       index: safeIndex,
       itemBuilder: (BuildContext context, int index) {
         return WalletItem(
+          key: ValueKey(
+            '${wallets[index].address}_${wallets[index].balance}_${state.uiModel.isBalanceLoading}',
+          ),
           wallet: wallets[index],
           index: index,
           isBalanceHidden: state.uiModel.isBalanceHidden,
           isBalanceLoading: state.uiModel.isBalanceLoading,
-          onToggleBalance: () =>
-              context.read<WalletListBloc>().add(const WalletListAction.toggleBalanceVisibility()),
+          onToggleBalance: () => bloc.onAction(const WalletListAction.toggleBalanceVisibility()),
         );
       },
       itemCount: wallets.length,
@@ -93,7 +117,7 @@ class WalletListPage
       scale: 0.96,
       loop: false,
       onIndexChanged: (index) {
-        onWalletChanged?.call(wallets[index]);
+        widget.onWalletChanged?.call(wallets[index]);
       },
     );
   }

@@ -30,13 +30,13 @@ class FilterToggleWidget extends StatelessWidget {
         children: [
           _buildToggleButton(
             context,
-            TransactionStrings.t.received,
+            TransactionStrings.t.transaction.history.received,
             selectedIndex == 0,
             () => onFilterChanged(0),
           ),
           _buildToggleButton(
             context,
-            TransactionStrings.t.sent,
+            TransactionStrings.t.transaction.history.sent,
             selectedIndex == 1,
             () => onFilterChanged(1),
           ),

@@ -45,7 +45,7 @@ class CustomLoadingWidget extends StatelessWidget {
                     children: [
                       const SizedBox(height: 2),
                       Text(
-                        msg ?? context.coreT.processing,
+                        msg ?? context.coreT.core.common.processing,
                         style: context.appThemes.bodySmall.copyWith(
                           color: context.appThemes.textSecondaryColor,
                         ),
