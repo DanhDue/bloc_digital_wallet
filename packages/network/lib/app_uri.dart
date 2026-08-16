@@ -1,33 +1,18 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+/// Infrastructure-level URI constants used by the network package itself.
+/// Feature-specific URIs should be defined in each module's own URI class
+/// (e.g., `WalletUri`, `ScannerUri`) at `data/datasources/remote/{name}_uri.dart`.
 class AppUri {
-  // Service names (path prefixes)
-  static const String auth = 'auth';
-  static const String users = 'users';
-  static const String wallets = 'wallets';
-  static const String tokens = 'tokens';
-  static const String transactions = 'transactions';
-  static const String markets = 'markets';
-  static const String healthz = 'healthz';
+  // Used by auth_interceptor.dart for path matching
   static const String login = 'login';
   static const String register = 'register';
-  static const String refreshToken = 'refresh';
-  static const String accounts = 'accounts';
-  static const String network = 'network';
-  static const String trends = 'trends';
-  static const String settings = 'settings';
-  static const String scanner = 'scanner';
-  static const String home = 'home';
-  static const String baseUrl = 'baseUrl';
+
+  // Used by string_ext.dart for health check special handling
+  static const String healthz = 'healthz';
 }
 
 class UriPaths {
   static const String api = "api";
   static const String apiVersion = "v1";
-}
-
-class UriPathParameters {
-  static const String address = "/{address}";
-  static const String signature = "/{signature}";
-  static const String id = "/{id}";
 }

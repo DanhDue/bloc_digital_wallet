@@ -36,16 +36,23 @@ class Token with _$Token {
 
 ## 3. Networking & DI (Retrofit)
 *   ❌ **Rule**: **NEVER** instantiate a Retrofit client without an explicit `baseUrl`.
-*   ✅ **Correct**: `TokenClient(dio, baseUrl: AppUri.tokenAccounts.buildAppUri()!)`
+*   ✅ **Correct**: `TokenClient(dio, baseUrl: WalletUri.tokens.buildAppUri()!)`
 *   ❌ **Incorrect**: `TokenClient(dio)`
 *   **Reason**: Dio's default `baseUrl` may point to a different microservice. Explicitly setting it in `NetworkModule` ensures the client hits the correct endpoint.
 
-## 4. Dart Syntax Shorthands
+## 4. Decentralized AppUri & Path Parameters
+*   ❌ **Rule**: **NEVER** add feature-specific URI constants or path parameters to the global `network/app_uri.dart`.
+*   ✅ **Correct**: Each module MUST define its own URI class at `data/datasources/remote/{name}_uri.dart` (e.g., `WalletUri`, `ScannerUri`).
+*   ✅ **Correct**: Feature-specific path parameters (like `/{address}` or `/{signature}`) must also be defined in the module's URI class (e.g., `WalletUri.pathAddress`), NOT in a global `UriPathParameters` class.
+*   ❌ **Incorrect**: Adding `static const String myFeature = 'my_feature';` to `AppUri` or adding `static const String id = '/{id}';` to a global `UriPathParameters` class.
+*   **Reason**: `network` package is infrastructure — it must not know about feature modules. Decentralizing AppUri ensures each module owns its URI constants and prevents the `network` package from becoming a bottleneck god class.
+
+## 5. Dart Syntax Shorthands
 *   ❌ **Rule**: Use Dart's dot shorthands where context allows.
 *   ✅ **Correct**: `.infinity`, `.maxFinite`, `.zero`
 *   ❌ **Incorrect**: `double.infinity`, `double.maxFinite`, `Offset.zero` (when type is inferred)
 *   **Reason**: Cleaner, more modern Dart syntax.
-## 5. Formatting Standards
+## 6. Formatting Standards
 *   ❌ **Rule**: **Line Length** MUST be set to **99 characters**.
 *   ✅ **Correct**: `dart format -l 99`
 *   ❌ **Incorrect**: `80` (Standard) or `100+`

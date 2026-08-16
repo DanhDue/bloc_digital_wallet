@@ -2,7 +2,7 @@
 
 // coverage:ignore-file
 
-import 'package:network/network.dart';
+import 'package:authentication/data/datasources/remote/authentication_uri.dart';
 import 'package:authentication/data/models/auth_user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -13,13 +13,13 @@ part 'auth_client.g.dart';
 abstract class AuthClient {
   factory AuthClient(Dio dio, {String? baseUrl}) = _AuthClient;
 
-  @POST('/${AppUri.login}')
+  @POST('/${AuthenticationUri.login}')
   Future<AuthUserModel> login({
     @Field('email') required String email,
     @Field('password') required String password,
   });
 
-  @POST('/${AppUri.register}')
+  @POST('/${AuthenticationUri.register}')
   Future<AuthUserModel> register({
     @Field('email') required String email,
     @Field('password') required String password,
@@ -35,6 +35,6 @@ abstract class AuthClient {
   @POST('/code/verify')
   Future<void> verifyResetCode({@Field('code') required String code});
 
-  @POST('/${AppUri.refreshToken}')
+  @POST('/${AuthenticationUri.refreshToken}')
   Future<AuthUserModel> refreshToken({@Field('refresh') required String refresh});
 }
