@@ -68,7 +68,7 @@ class TransactionPage
                   }
 
                   if (state.items.isEmpty && !state.isLoading) {
-                    return Center(child: Text(TransactionStrings.t.noData));
+                    return Center(child: Text(TransactionStrings.t.transaction.noData));
                   }
 
                   return RefreshIndicator(

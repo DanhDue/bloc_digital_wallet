@@ -1,9 +1,15 @@
 {
-  "title": "Tính năng Trends",
-  "trendsSearchHint": "Tìm kiếm coins...",
-  "trendsNoRecentSearches": "Không có tìm kiếm gần đây",
-  "trendsRecentSearches": "Tìm Kiếm Gần Đây",
-  "trendsNoCoinsFound": "Không tìm thấy coins",
-  "trendsRetry": "Thử lại",
-  "trendsError": "Đã xảy ra lỗi"
+  "trends": {
+    "title": "Tính năng Trends",
+    "search": {
+      "hint": "Tìm kiếm coins...",
+      "noRecentSearches": "Không có tìm kiếm gần đây",
+      "recentSearches": "Tìm Kiếm Gần Đây",
+      "noCoinsFound": "Không tìm thấy coins"
+    },
+    "error": {
+      "retry": "Thử lại",
+      "message": "Đã xảy ra lỗi"
+    }
+  }
 }

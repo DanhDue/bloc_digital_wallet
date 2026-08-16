@@ -51,7 +51,11 @@ class PrettyAnimatedQrViewState extends State<PrettyAnimatedQrView> {
         name: fileNameWithCreatedTime,
       );
       if (result["isSuccess"] == true) {
-        SmartDialog.showToast(coreT.qrCodeIsSaveToGallery, displayTime: ToastDuration.lengthLong);
+        if (!mounted) return;
+        SmartDialog.showToast(
+          context.coreT.core.common.qrCodeIsSaveToGallery,
+          displayTime: ToastDuration.lengthLong,
+        );
       }
     }
   }

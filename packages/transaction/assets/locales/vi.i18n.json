@@ -1,9 +1,15 @@
 {
-  "title": "Tính năng Transaction",
-  "noData": "Không có dữ liệu",
-  "received": "Đã nhận",
-  "sent": "Đã gửi",
-  "bitcoinWallet": "Ví Bitcoin",
-  "receivedBtc": "Đã nhận BTC",
-  "sentBtc": "Đã gửi BTC"
+  "transaction": {
+    "title": "Tính năng Transaction",
+    "noData": "Không có dữ liệu",
+    "history": {
+      "received": "Đã nhận",
+      "sent": "Đã gửi"
+    },
+    "bitcoin": {
+      "wallet": "Ví Bitcoin",
+      "received": "Đã nhận BTC",
+      "sent": "Đã gửi BTC"
+    }
+  }
 }

@@ -62,7 +62,7 @@ class NetworkSelectionPage
       children: [
         const SizedBox(width: 24),
         Text(
-          WalletStrings.t.networkSelection.selectNetwork,
+          WalletStrings.t.wallet.networkSelection.selectNetwork,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
         ),
         InkWell(
@@ -81,7 +81,7 @@ class NetworkSelectionPage
       ),
       child: TextField(
         decoration: InputDecoration(
-          hintText: WalletStrings.t.networkSelection.search,
+          hintText: WalletStrings.t.wallet.networkSelection.search,
           prefixIcon: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Icon(Icons.search, size: 20, color: Theme.of(context).primaryColor),
@@ -101,7 +101,7 @@ class NetworkSelectionPage
         NetworkSelectionStatus.initial ||
         NetworkSelectionStatus.loading => const Center(child: CircularProgressIndicator()),
         NetworkSelectionStatus.failure => Center(
-          child: Text(state.errorMessage ?? WalletStrings.t.networkSelection.error),
+          child: Text(state.errorMessage ?? WalletStrings.t.wallet.networkSelection.error),
         ),
         NetworkSelectionStatus.success => ListView.builder(
           shrinkWrap: true,

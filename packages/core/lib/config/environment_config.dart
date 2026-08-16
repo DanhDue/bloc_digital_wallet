@@ -60,7 +60,13 @@ class EnvironmentConfig {
   static bool get isProduction => environment == 'production';
 
   /// Get full API URL
-  static String get fullApiUrl => '$apiBaseUrl/$apiVersion';
+  static String get fullApiUrl {
+    final base = apiBaseUrl.endsWith('/')
+        ? apiBaseUrl.substring(0, apiBaseUrl.length - 1)
+        : apiBaseUrl;
+    final version = apiVersion.startsWith('/') ? apiVersion.substring(1) : apiVersion;
+    return version.isEmpty ? base : '$base/$version';
+  }
 
   /// Print all environment configurations (for debugging)
   static void printConfig() {

@@ -33,7 +33,7 @@ class WalletSelectorWidget extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Text(
-                  TransactionStrings.t.bitcoinWallet,
+                  TransactionStrings.t.transaction.bitcoin.wallet,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: .w500,

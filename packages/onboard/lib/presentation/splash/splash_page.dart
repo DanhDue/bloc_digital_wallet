@@ -109,7 +109,7 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashAction, SplashState, Spla
           ),
           OffsetText(
             mode: AnimationMode.reverse,
-            text: context.tOnboard.digitalWallet,
+            text: context.tOnboard.onboard.splash.digitalWallet,
             duration: SplashConstants.titleDuration,
             type: AnimationType.letter,
             slideType: SlideAnimationType.leftRight,
@@ -144,8 +144,8 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashAction, SplashState, Spla
 
   Widget _buildStatusText(BuildContext context, bool showRestartWarning) {
     final text = showRestartWarning
-        ? context.tOnboard.restartServiceWarning
-        : context.tOnboard.serviceHealthChecking;
+        ? context.tOnboard.onboard.splash.restartServiceWarning
+        : context.tOnboard.onboard.splash.serviceHealthChecking;
 
     return BlinkText(
       text,

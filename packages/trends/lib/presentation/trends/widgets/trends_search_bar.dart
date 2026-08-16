@@ -103,7 +103,7 @@ class _TrendsSearchBarState extends State<TrendsSearchBar> {
                         onSubmitted: widget.onSubmitted,
                         onTap: widget.onSearchTap,
                         decoration: InputDecoration(
-                          hintText: TrendsStrings.l10n.trendsSearchHint,
+                          hintText: TrendsStrings.t.trends.search.hint,
                           hintStyle: theme.textTheme.bodyLarge?.copyWith(
                             color: colorScheme.onSurface.withOpacity(0.4),
                           ),
@@ -169,9 +169,9 @@ class _TrendsSearchBarState extends State<TrendsSearchBar> {
         child: widget.history == null || widget.history!.isEmpty
             ? Container(
                 height: 100,
-                alignment: .center,
+                alignment: Alignment.center,
                 child: Text(
-                  TrendsStrings.l10n.trendsNoRecentSearches,
+                  TrendsStrings.t.trends.search.noRecentSearches,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.onSurface.withValues(alpha: 0.4),
                   ),
@@ -184,7 +184,7 @@ class _TrendsSearchBarState extends State<TrendsSearchBar> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16, top: 12, bottom: 4),
                     child: Text(
-                      TrendsStrings.l10n.trendsRecentSearches,
+                      TrendsStrings.t.trends.search.recentSearches,
                       style: theme.textTheme.labelMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: colorScheme.onSurface,

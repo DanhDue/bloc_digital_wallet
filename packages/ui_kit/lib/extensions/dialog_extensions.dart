@@ -47,7 +47,7 @@ extension DialogExtensions on BuildContext {
               backgroundColor: appThemes.transparent,
             ),
             child: Text(
-              actionTitle ?? coreT.close,
+              actionTitle ?? coreT.core.common.close,
               style: appThemes.bodyMedium.copyWith(color: appThemes.mainGreen),
             ),
             onPressed: () {

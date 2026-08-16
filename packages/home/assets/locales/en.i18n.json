@@ -1,13 +1,15 @@
 {
   "home": {
-    "title": "Home",
+    "main": {
+      "title": "Home",
+      "exitToast": "Press back again to exit"
+    },
     "nav": {
       "wallet": "Wallet",
       "browser": "Browser",
       "qrScanner": "Scan",
       "trends": "Trends",
       "settings": "Settings"
-    },
-    "exitToast": "Press back again to exit"
+    }
   }
 }

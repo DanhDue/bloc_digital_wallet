@@ -1,9 +1,15 @@
 {
-  "title": "Transaction Feature",
-  "noData": "No Data",
-  "received": "Received",
-  "sent": "Sent",
-  "bitcoinWallet": "Bitcoin Wallet",
-  "receivedBtc": "Received BTC",
-  "sentBtc": "Sent BTC"
+  "transaction": {
+    "title": "Transaction Feature",
+    "noData": "No Data",
+    "history": {
+      "received": "Received",
+      "sent": "Sent"
+    },
+    "bitcoin": {
+      "wallet": "Bitcoin Wallet",
+      "received": "Received BTC",
+      "sent": "Sent BTC"
+    }
+  }
 }

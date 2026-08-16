@@ -2,26 +2,29 @@ import Flutter
 import UIKit
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    
+    let channel = FlutterMethodChannel(
+      name: "com.zeno.app/clipboard",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger()
+    )
       
-    let controller = window?.rootViewController as! FlutterViewController
-    let channel = FlutterMethodChannel(name: "com.zeno.app/clipboard",
-                                     binaryMessenger: controller.binaryMessenger)
-      
-    channel.setMethodCallHandler { (call, result) in
+    channel.setMethodCallHandler { [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) in
       if call.method == "copySensitive" {
-          self.handleCopySensitive(call: call, result: result)
+          self?.handleCopySensitive(call: call, result: result)
       } else {
           result(FlutterMethodNotImplemented)
       }
     }
-
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   private func handleCopySensitive(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -36,7 +39,6 @@ import UIKit
       let pasteboard = UIPasteboard.general
       let item: [String: Any] = ["public.utf8-plain-text": text]
       
-      // The Magic: System-managed expiration
       let expirationDate = Date().addingTimeInterval(expiry)
       pasteboard.setItems([item], options: [.expirationDate: expirationDate])
       

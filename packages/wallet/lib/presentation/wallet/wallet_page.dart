@@ -60,7 +60,9 @@ class _WalletPageState
       WalletStatus.initial => const Center(child: CircularProgressIndicator()),
       WalletStatus.loading => const Center(child: CircularProgressIndicator()),
       WalletStatus.success => _buildSuccess(context, state),
-      WalletStatus.failure => Center(child: Text(state.errorMessage ?? WalletStrings.t.title)),
+      WalletStatus.failure => Center(
+        child: Text(state.errorMessage ?? WalletStrings.t.wallet.title),
+      ),
     };
   }
 
@@ -122,8 +124,8 @@ class _WalletPageState
                 ),
                 controller: _tabController,
                 tabs: <Widget>[
-                  Tab(text: WalletStrings.t.tokenList.title),
-                  Tab(text: WalletStrings.t.nftsList.title),
+                  Tab(text: WalletStrings.t.wallet.tokenList.title),
+                  Tab(text: WalletStrings.t.wallet.nftsList.title),
                 ],
               ).paddingSymmetric(horizontal: 5.0),
             ).marginSymmetric(horizontal: 16),
@@ -223,7 +225,7 @@ class _WalletPageState
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  selectedNetwork?.name ?? WalletStrings.t.networkSelection.selectNetwork,
+                  selectedNetwork?.name ?? WalletStrings.t.wallet.networkSelection.selectNetwork,
                   style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.white),
                 ),
                 const SizedBox(width: 6),
@@ -269,28 +271,28 @@ class _WalletPageState
           onTap: () => context.showCommingSoon(),
           child: TokenActionButton(
             icon: Assets.images.icSend,
-            title: WalletStrings.t.wallet.actionSend,
+            title: WalletStrings.t.wallet.wallet.actionSend,
           ),
         ),
         InkWell(
           onTap: () => context.showCommingSoon(),
           child: TokenActionButton(
             icon: Assets.images.icReceive,
-            title: WalletStrings.t.wallet.actionReceive,
+            title: WalletStrings.t.wallet.wallet.actionReceive,
           ),
         ),
         InkWell(
           onTap: () => context.showCommingSoon(),
           child: TokenActionButton(
             icon: Assets.images.icBuy,
-            title: WalletStrings.t.wallet.actionBuy,
+            title: WalletStrings.t.wallet.wallet.actionBuy,
           ),
         ),
         InkWell(
           onTap: () => context.showCommingSoon(),
           child: TokenActionButton(
             icon: Assets.images.icStaking,
-            title: WalletStrings.t.wallet.actionStaking,
+            title: WalletStrings.t.wallet.wallet.actionStaking,
           ),
         ),
       ],

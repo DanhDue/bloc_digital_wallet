@@ -30,13 +30,14 @@ abstract class TokenListUiModel with _$TokenListUiModel {
     final isPositive = random.nextBool();
     final percentChange = (random.nextDouble() * 14.9) + 0.1;
 
+    final balance = entity.balance ?? 0.0;
     return TokenListUiModel(
       id: entity.id,
       name: entity.name ?? '',
       symbol: entity.symbol ?? '',
       imageUrl: entity.logo ?? '',
-      formattedBalance: '0.00 ${entity.symbol ?? ""}',
-      formattedFiatBalance: '\$0.00',
+      formattedBalance: '${balance.toStringAsFixed(2)} ${entity.symbol ?? ""}',
+      formattedFiatBalance: '\$${balance.toStringAsFixed(2)}',
       formattedPercentChange: '${isPositive ? "+" : "-"}${percentChange.toStringAsFixed(2)}%',
       isPositiveChange: isPositive,
     );

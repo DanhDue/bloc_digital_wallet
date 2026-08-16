@@ -81,7 +81,7 @@ class HomePage extends BaseMviPage<HomeBloc, HomeAction, HomeState, HomeEvent> {
       showExitToast: (_) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(context.tHome.home.exitToast),
+            content: Text(context.tHome.home.main.exitToast),
             duration: const Duration(seconds: 2),
           ),
         );
