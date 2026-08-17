@@ -20,6 +20,10 @@ This document defines the API contracts required from the Backend (BE) to suppor
   - [EN (English)](#en-english)
   - [VI (Vietnamese)](#vi-vietnamese)
 
+### Related Documents
+- [Dynamic Configuration HLD](./dynamic_configuration_hld.md) — Architecture overview, component responsibilities, sequence diagrams
+- [User Preferences Sync API](./user_preferences_sync_api.md) — **NEW**: Per-user preferences, cross-device sync, delta versioning, and enhanced Bootstrap API
+
 ---
 
 ## Versioning & Caching Strategy
