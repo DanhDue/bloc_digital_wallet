@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tAuth
 enum_name: AuthAppLocale
 class_name: AuthTranslations
+translation_overrides: true

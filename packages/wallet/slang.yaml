@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tWallet
 enum_name: WalletAppLocale
 class_name: WalletTranslations
+translation_overrides: true

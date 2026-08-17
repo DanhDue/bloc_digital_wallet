@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tScanner
 enum_name: ScannerAppLocale
 class_name: ScannerTranslations
+translation_overrides: true

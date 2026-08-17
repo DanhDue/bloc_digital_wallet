@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tOnboard
 enum_name: OnboardLocale
 class_name: OnboardTranslations
+translation_overrides: true
