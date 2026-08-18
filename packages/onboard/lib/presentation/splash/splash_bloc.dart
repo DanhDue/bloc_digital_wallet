@@ -11,6 +11,7 @@ import 'package:network/network.dart';
 import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:settings/settings.dart';
 import 'package:onboard/presentation/splash/splash_action.dart';
 import 'package:onboard/presentation/splash/splash_event.dart';
 import 'package:onboard/presentation/splash/splash_state.dart';
@@ -22,8 +23,16 @@ import 'package:onboard/presentation/splash/splash_state.dart';
 @injectable
 class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
   final HealthCheckUseCase _healthCheckUseCase;
+  final BootstrapUseCase _bootstrapUseCase;
+  final LoadBundledFallbackUseCase _loadBundledFallbackUseCase;
+  final FetchTranslationUseCase _fetchTranslationUseCase;
 
-  SplashBloc(this._healthCheckUseCase) : super(const SplashInitial()) {
+  SplashBloc(
+    this._healthCheckUseCase,
+    this._bootstrapUseCase,
+    this._loadBundledFallbackUseCase,
+    this._fetchTranslationUseCase,
+  ) : super(const SplashInitial()) {
     handleActionDroppable<InitSplashAction>(_onInit);
     handleActionDroppable<RetryHealthCheckAction>(_onRetryHealthCheck);
   }
@@ -67,7 +76,7 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
       ),
     );
 
-    await _performHealthCheck(emit);
+    await _performBootstrapAndHealthCheck(emit);
   }
 
   Future<void> _onRetryHealthCheck(
@@ -87,21 +96,55 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
       );
     }
 
-    await _performHealthCheck(emit);
+    await _performBootstrapAndHealthCheck(emit);
   }
 
-  Future<void> _performHealthCheck(Emitter<SplashState> emit) async {
-    // Run health check and minimum delay in parallel
-    // Wait for both to complete before proceeding
+  Future<void> _performBootstrapAndHealthCheck(Emitter<SplashState> emit) async {
+    // 1. Always load bundled fallback first
+    final currentLocale = LocalizationManager.instance.currentLocale.languageCode;
+    final fallbackResult = await _loadBundledFallbackUseCase(currentLocale);
+    if (fallbackResult.isRight()) {
+      final jsonMap = fallbackResult.getOrElse(() => {});
+      await LocalizationManager.instance.applyDynamicTranslations(jsonMap);
+    }
+
+    // 2. Perform bootstrap and health check
     final results = await Future.wait([
+      _bootstrapUseCase().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => const Left(ServerFailure(message: 'Timeout')),
+      ),
       _healthCheckUseCase(),
       Future.delayed(SplashConstants.minSplashDuration),
     ]);
 
-    // Get the health check result (first item in the list)
-    final result = results[0] as Either<Failure, BaseResponseObject<dynamic>>;
+    final bootstrapResult = results[0] as Either<Failure, SyncBootstrapResponse>;
+    final healthResult = results[1] as Either<Failure, BaseResponseObject<dynamic>>;
 
-    result.fold(
+    // Process Bootstrap Result
+    if (bootstrapResult.isRight()) {
+      final response = bootstrapResult.getOrElse(() => throw Exception('unreachable'));
+
+      // Update language if preference exists
+      final selectedLanguage = response.userPreferences?.selectedLanguage;
+      if (selectedLanguage != null) {
+        await LocalizationManager.instance.setLocaleFromCode(selectedLanguage);
+      }
+
+      // Fetch stale translations
+      for (final translationItem in response.translations ?? []) {
+        if (translationItem.isStale) {
+          await _fetchTranslationUseCase(translationItem);
+        }
+      }
+
+      // Note: Purging deleted translation keys logic can be added later
+    } else {
+      // On failure or timeout, just proceed with cached/fallback data.
+      // E.g. we might want to load cached translations if they exist, but fallback is already loaded.
+    }
+
+    healthResult.fold(
       (failure) {
         emit(SplashError(message: failure.message, showRestartWarning: true));
         emitEvent(ShowErrorMessageEvent(failure.message));

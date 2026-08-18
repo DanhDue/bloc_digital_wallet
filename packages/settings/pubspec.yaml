@@ -20,7 +20,7 @@ dependencies:
   ui_kit:
     path: ../ui_kit
   framework:
-     path: ../framework
+    path: ../framework
   
   # Dependencies
   json_annotation: ^4.9.0
@@ -28,6 +28,8 @@ dependencies:
   package_info_plus: ^8.0.0
   slang: ^4.0.0
   slang_flutter: ^4.0.0
+  shared_preferences: ^2.5.5
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:

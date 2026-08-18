@@ -9,6 +9,7 @@ import 'package:framework/framework.dart';
 import 'package:settings/generated/colors.gen.dart';
 import 'package:settings/generated/translations.dart';
 import 'package:ui_kit/ui_kit.dart' hide AppColors;
+import 'package:core/core.dart';
 
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
@@ -122,12 +123,12 @@ class SettingsPage
                 icon: Icons.language,
                 label: t.preferences.language,
                 trailing: SettingsItemTrailing.value,
-                value: t.preferences.languageEnglish,
+                value: LocalizationManager.instance.currentLocale.languageCode == 'vi'
+                    ? 'Tiếng Việt'
+                    : 'English',
                 iconColor: AppColors.settingsItemBlue,
                 iconBackgroundColor: AppColors.settingsItemBlueBg,
-                onTap: () {
-                  // Show language picker
-                },
+                onTap: () => _showLanguagePicker(context, t),
               ),
               SettingsItemWidget(
                 icon: Icons.dark_mode_outlined,
@@ -233,6 +234,59 @@ class SettingsPage
 
   void _showCurrencyPicker(BuildContext context) {
     // TODO: Implement currency picker dialog
+  }
+
+  void _showLanguagePicker(BuildContext context, SettingsTranslationsSettingsEn t) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext bottomSheetContext) {
+        final currentLang = LocalizationManager.instance.currentLocale.languageCode;
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  t.preferences.language,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              ListTile(
+                title: const Text('English'),
+                trailing: currentLang == 'en'
+                    ? const Icon(Icons.check, color: AppColors.settingsItemBlue)
+                    : null,
+                onTap: () {
+                  context.read<SettingsBloc>().onAction(
+                    const SettingsAction.changeLanguage(languageCode: 'en'),
+                  );
+                  Navigator.pop(bottomSheetContext);
+                },
+              ),
+              ListTile(
+                title: const Text('Tiếng Việt'),
+                trailing: currentLang == 'vi'
+                    ? const Icon(Icons.check, color: AppColors.settingsItemBlue)
+                    : null,
+                onTap: () {
+                  context.read<SettingsBloc>().onAction(
+                    const SettingsAction.changeLanguage(languageCode: 'vi'),
+                  );
+                  Navigator.pop(bottomSheetContext);
+                },
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override

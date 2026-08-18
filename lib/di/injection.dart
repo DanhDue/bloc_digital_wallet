@@ -17,7 +17,7 @@ import 'injection.config.dart';
 final getIt = GetIt.instance;
 
 @InjectableInit(initializerName: r'$initGetIt')
-void configureDependencies() {
+Future<void> configureDependencies() async {
   // configureDataDependencies imported from feature_module
   core.configureModuleDependencies(getIt);
   network.configureModuleDependencies(getIt);
@@ -28,7 +28,7 @@ void configureDependencies() {
   trends.configureModuleDependencies(getIt);
   wallet.configureModuleDependencies(getIt);
   transaction.configureModuleDependencies(getIt);
-  settings.configureModuleDependencies(getIt);
+  await settings.configureModuleDependencies(getIt);
 
   // we need to call $initGetIt after all modules are configured
   getIt.$initGetIt();

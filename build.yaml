@@ -20,3 +20,4 @@ targets:
           param_case: camel
           timestamp: true
           translation_class_visibility: public
+          translation_overrides: true

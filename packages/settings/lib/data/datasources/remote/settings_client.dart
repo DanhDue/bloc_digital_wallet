@@ -5,6 +5,9 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:settings/data/models/settings_model.dart';
+import 'package:settings/data/models/sync/sync_bootstrap_request.dart';
+import 'package:settings/data/models/sync/sync_bootstrap_response.dart';
+import 'package:settings/data/datasources/remote/settings_uri.dart';
 
 part 'settings_client.g.dart';
 
@@ -12,6 +15,9 @@ part 'settings_client.g.dart';
 abstract class SettingsClient {
   factory SettingsClient(Dio dio, {String? baseUrl}) = _SettingsClient;
 
-  @GET('/settings')
+  @GET('')
   Future<SettingsModel> getSettings();
+
+  @POST(SettingsUri.bootstrap)
+  Future<SyncBootstrapResponse> bootstrap(@Body() SyncBootstrapRequest request);
 }

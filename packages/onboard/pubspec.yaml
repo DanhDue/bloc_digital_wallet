@@ -24,6 +24,8 @@ dependencies:
     path: ../ui_kit
   framework:
     path: ../framework
+  settings:
+    path: ../settings
 
 dev_dependencies:
   flutter_test:

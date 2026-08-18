@@ -10,6 +10,7 @@ import 'package:mockito/mockito.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 // import 'package:settings/domain/entities/settings_entity.dart';
 // import 'package:settings/domain/usecases/get_settings_usecase.dart';
+import 'package:settings/domain/usecases/update_user_language_usecase.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
@@ -18,11 +19,12 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import 'settings_bloc_test.mocks.dart';
 
-@GenerateMocks([/* GetSettingsUseCase, */ AppInfoService])
+@GenerateMocks([/* GetSettingsUseCase, */ AppInfoService, UpdateUserLanguageUseCase])
 void main() {
   late SettingsBloc bloc;
   // late MockGetSettingsUseCase mockUseCase;
   late MockAppInfoService mockAppInfoService;
+  late MockUpdateUserLanguageUseCase mockUpdateUserLanguageUseCase;
 
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +38,7 @@ void main() {
   setUp(() {
     // mockUseCase = MockGetSettingsUseCase();
     mockAppInfoService = MockAppInfoService();
+    mockUpdateUserLanguageUseCase = MockUpdateUserLanguageUseCase();
     // Default Mock Behavior
     when(mockAppInfoService.getPackageInfo()).thenAnswer(
       (_) async => PackageInfo(
@@ -45,7 +48,11 @@ void main() {
         buildNumber: '1',
       ),
     );
-    bloc = SettingsBloc(/* mockUseCase, */ mockAppInfoService);
+    bloc = SettingsBloc(
+      /* mockUseCase, */
+      mockAppInfoService,
+      mockUpdateUserLanguageUseCase,
+    );
   });
 
   tearDown(() {

@@ -6,4 +6,4 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
 @InjectableInit(initializerName: r'$initModuleGetIt')
-void configureModuleDependencies(GetIt getIt) => getIt.$initModuleGetIt();
+Future<void> configureModuleDependencies(GetIt getIt) async => await getIt.$initModuleGetIt();
