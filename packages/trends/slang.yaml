@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tTrends
 enum_name: TrendsAppLocale
 class_name: TrendsTranslations
+translation_overrides: true

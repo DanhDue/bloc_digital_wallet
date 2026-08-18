@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tTransaction
 enum_name: TransactionAppLocale
 class_name: TransactionTranslations
+translation_overrides: true

@@ -11,3 +11,4 @@ namespaces: false
 translate_var: tSettings
 enum_name: SettingsAppLocale
 class_name: SettingsTranslations
+translation_overrides: true

@@ -4,6 +4,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import '../generated/translations.dart';
 
 /// Manages the application's locale state and provides a stream for updates.
@@ -14,10 +15,32 @@ class LocalizationManager {
   LocalizationManager._();
 
   // Stream controller for locale changes
-  final _localeController = StreamController<Locale>.broadcast();
+  final _localeController = BehaviorSubject<Locale>.seeded(
+    LocaleSettings.currentLocale.flutterLocale,
+  );
 
   /// Stream of locale changes
   Stream<Locale> get localeStream => _localeController.stream;
+
+  Future<void> Function(Map<String, dynamic> json, Locale locale)? _overrideCallback;
+
+  void registerOverrideCallback(
+    Future<void> Function(Map<String, dynamic> json, Locale locale) callback,
+  ) {
+    _overrideCallback = callback;
+  }
+
+  Future<void> applyDynamicTranslations(Map<String, dynamic> mergedJson) async {
+    if (_overrideCallback != null) {
+      await _overrideCallback!(mergedJson, currentLocale);
+      _localeController.add(currentLocale);
+    }
+  }
+
+  Future<void> setLocaleFromCode(String languageCode) async {
+    final locale = Locale(languageCode);
+    await setLocale(locale);
+  }
 
   /// Get current locale
   Locale get currentLocale => LocaleSettings.currentLocale.flutterLocale;

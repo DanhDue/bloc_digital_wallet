@@ -12,3 +12,4 @@ translate_var: coreT
 enum_name: CoreAppLocale
 class_name: CoreTranslations
 translation_class_visibility: public
+translation_overrides: true

@@ -3,10 +3,12 @@
 // coverage:ignore-file
 
 import 'package:core/core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 // import 'package:settings/domain/usecases/get_settings_usecase.dart';
+import 'package:settings/domain/usecases/update_user_language_usecase.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 
 import 'settings_action.dart';
@@ -17,9 +19,13 @@ import 'settings_state.dart';
 class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent> {
   // final GetSettingsUseCase _getSettingsUseCase;
   final AppInfoService _appInfoService;
+  final UpdateUserLanguageUseCase _updateUserLanguageUseCase;
 
-  SettingsBloc(/* this._getSettingsUseCase, */ this._appInfoService)
-    : super(const SettingsState()) {
+  SettingsBloc(
+    /* this._getSettingsUseCase, */
+    this._appInfoService,
+    this._updateUserLanguageUseCase,
+  ) : super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
     on<SettingsActionNavigateToProfile>(_onNavigateToProfile);
     on<SettingsActionNavigateToSecurity>(_onNavigateToSecurity);
@@ -28,6 +34,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     on<SettingsActionToggleNotifications>(_onToggleNotifications);
     on<SettingsActionToggleDeveloperMode>(_onToggleDeveloperMode);
     on<SettingsActionChangeCurrency>(_onChangeCurrency);
+    on<SettingsActionChangeLanguage>(_onChangeLanguage);
   }
 
   Future<void> _onStarted(SettingsActionStarted action, Emitter<SettingsState> emit) async {
@@ -40,6 +47,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
       id: 'local',
       appVersion: packageInfo.version,
       buildNumber: packageInfo.buildNumber,
+      isDarkModeEnabled: ThemeManager.instance.isDarkMode,
     );
 
     // Emit initial state with app info visible immediately
@@ -70,6 +78,9 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   void _onToggleDarkMode(SettingsActionToggleDarkMode action, Emitter<SettingsState> emit) {
     final updatedModel = state.uiModel?.copyWith(isDarkModeEnabled: action.isEnabled);
     emit(state.copyWith(uiModel: updatedModel));
+
+    final themeMode = action.isEnabled ? ThemeMode.dark : ThemeMode.light;
+    ThemeManager.instance.setThemeMode(themeMode);
   }
 
   void _onToggleBiometric(SettingsActionToggleBiometric action, Emitter<SettingsState> emit) {
@@ -96,6 +107,18 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   void _onChangeCurrency(SettingsActionChangeCurrency action, Emitter<SettingsState> emit) {
     final updatedModel = state.uiModel?.copyWith(selectedCurrency: action.currency);
     emit(state.copyWith(uiModel: updatedModel));
+  }
+
+  Future<void> _onChangeLanguage(
+    SettingsActionChangeLanguage action,
+    Emitter<SettingsState> emit,
+  ) async {
+    // Optimistic UI update handled inside the use case (LocalizationManager)
+    // We can also update our UI model if it stores the selected language
+    // final updatedModel = state.uiModel?.copyWith(selectedLanguage: action.languageCode);
+    // emit(state.copyWith(uiModel: updatedModel));
+
+    await _updateUserLanguageUseCase(action.languageCode);
   }
 
   void _onNavigateToProfile(SettingsActionNavigateToProfile action, Emitter<SettingsState> emit) {

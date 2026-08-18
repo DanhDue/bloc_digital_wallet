@@ -17,66 +17,78 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize dependency injection
-  configureDependencies();
+  await configureDependencies();
+
+  // Initialize ThemeManager
+  await core.ThemeManager.instance.init();
 
   // Initialize App (Logging, Localization, Env, Bloc Observer, Auth Nav, etc.)
   await getIt<core.AppInitializer>().init();
 
   runApp(
-    StreamBuilder<Locale>(
-      stream: core.LocalizationManager.instance.localeStream,
-      initialData: LocaleSettings.currentLocale.flutterLocale,
-      builder: (context, snapshot) {
-        final currentLocale = snapshot.data!;
+    StreamBuilder<ThemeMode>(
+      stream: core.ThemeManager.instance.themeModeStream,
+      initialData: core.ThemeManager.instance.currentThemeMode,
+      builder: (context, themeSnapshot) {
+        final currentThemeMode = themeSnapshot.data ?? ThemeMode.system;
 
-        return MultiTranslationProvider(
-          providers: appTranslationProviders,
-          child: MaterialApp.router(
-            routerConfig: getIt<AppRouter>().config(
-              navigatorObservers: () => [
-                FlutterSmartDialog.observer,
-                TalkerRouteObserver(getIt<Talker>()),
-              ],
-            ),
-            title: AppConfig.appName,
-            debugShowCheckedModeBanner: core.EnvironmentConfig.showDebugBanner,
-            locale: currentLocale,
-            supportedLocales: AppLocaleUtils.supportedLocales,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            theme: ThemeData(
-              splashFactory: NoSplash.splashFactory,
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              extensions: [AppThemes.light],
-              colorScheme: ColorScheme.light(
-                primary: AppThemes.light.primaryColor,
-                secondary: AppThemes.light.secondaryColor,
-                surface: AppThemes.light.surfaceColor,
-                error: AppThemes.light.errorColor,
+        return StreamBuilder<Locale>(
+          stream: core.LocalizationManager.instance.localeStream,
+          initialData: LocaleSettings.currentLocale.flutterLocale,
+          builder: (context, snapshot) {
+            final currentLocale = snapshot.data!;
+
+            return MultiTranslationProvider(
+              providers: appTranslationProviders,
+              child: MaterialApp.router(
+                routerConfig: getIt<AppRouter>().config(
+                  navigatorObservers: () => [
+                    FlutterSmartDialog.observer,
+                    TalkerRouteObserver(getIt<Talker>()),
+                  ],
+                ),
+                title: AppConfig.appName,
+                debugShowCheckedModeBanner: core.EnvironmentConfig.showDebugBanner,
+                locale: currentLocale,
+                supportedLocales: AppLocaleUtils.supportedLocales,
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                themeMode: currentThemeMode,
+                theme: ThemeData(
+                  splashFactory: NoSplash.splashFactory,
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  extensions: [AppThemes.light],
+                  colorScheme: ColorScheme.light(
+                    primary: AppThemes.light.primaryColor,
+                    secondary: AppThemes.light.secondaryColor,
+                    surface: AppThemes.light.surfaceColor,
+                    error: AppThemes.light.errorColor,
+                  ),
+                ),
+                darkTheme: ThemeData(
+                  splashFactory: NoSplash.splashFactory,
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  extensions: [AppThemes.dark],
+                  colorScheme: ColorScheme.dark(
+                    primary: AppThemes.dark.primaryColor,
+                    secondary: AppThemes.dark.secondaryColor,
+                    surface: AppThemes.dark.surfaceColor,
+                    error: AppThemes.dark.errorColor,
+                  ),
+                ),
+                builder: FlutterSmartDialog.init(
+                  loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+                ),
               ),
-            ),
-            darkTheme: ThemeData(
-              splashFactory: NoSplash.splashFactory,
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              extensions: [AppThemes.dark],
-              colorScheme: ColorScheme.dark(
-                primary: AppThemes.dark.primaryColor,
-                secondary: AppThemes.dark.secondaryColor,
-                surface: AppThemes.dark.surfaceColor,
-                error: AppThemes.dark.errorColor,
-              ),
-            ),
-            builder: FlutterSmartDialog.init(
-              loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
-            ),
-          ),
+            );
+          },
         );
       },
     ),

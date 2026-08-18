@@ -11,3 +11,4 @@ namespaces: false
 translate_var: t
 enum_name: AppLocale
 class_name: AppTranslations
+translation_overrides: true

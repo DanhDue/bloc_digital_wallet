@@ -11,3 +11,4 @@ namespaces: false
 translate_var: t{{name.pascalCase()}}
 enum_name: {{name.pascalCase()}}AppLocale
 class_name: {{name.pascalCase()}}Translations
+translation_overrides: true

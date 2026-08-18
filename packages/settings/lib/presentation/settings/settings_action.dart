@@ -23,6 +23,8 @@ abstract class SettingsAction extends BaseAction with _$SettingsAction {
       SettingsActionToggleDeveloperMode;
   const factory SettingsAction.changeCurrency({required String currency}) =
       SettingsActionChangeCurrency;
+  const factory SettingsAction.changeLanguage({required String languageCode}) =
+      SettingsActionChangeLanguage;
   const factory SettingsAction.navigateToProfile() = SettingsActionNavigateToProfile;
   const factory SettingsAction.navigateToSecurity() = SettingsActionNavigateToSecurity;
 }

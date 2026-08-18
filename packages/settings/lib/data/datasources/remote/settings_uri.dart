@@ -3,4 +3,5 @@
 /// URI constants for the Settings module.
 class SettingsUri {
   static const String settings = 'settings';
+  static const String bootstrap = '/sync/bootstrap';
 }
