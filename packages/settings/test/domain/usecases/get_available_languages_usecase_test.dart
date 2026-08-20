@@ -1,3 +1,7 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -36,8 +40,9 @@ void main() {
           isActive: true,
         ),
       ];
-      when(mockRepository.getAvailableLanguages())
-          .thenAnswer((_) async => Right<Failure, List<AvailableLanguage>>(languages));
+      when(
+        mockRepository.getAvailableLanguages(),
+      ).thenAnswer((_) async => Right<Failure, List<AvailableLanguage>>(languages));
 
       // Act
       final result = await useCase();

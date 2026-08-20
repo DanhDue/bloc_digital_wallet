@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:settings/domain/entities/settings_entity.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_request.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_response.dart';
+import 'package:settings/data/models/sync/translation_override_response.dart';
 import 'package:settings/data/models/sync/available_language.dart';
 
 abstract class SettingsRepository {
@@ -11,7 +12,10 @@ abstract class SettingsRepository {
 
   Future<Either<Failure, SyncBootstrapResponse>> bootstrap(SyncBootstrapRequest request);
 
-  Future<Either<Failure, Map<String, dynamic>>> fetchTranslationJson(String url);
+  Future<Either<Failure, TranslationOverrideData>> getLocalizationOverrides(
+    String languageCode, {
+    String? sinceVersion,
+  });
 
   Future<Either<Failure, String?>> getCachedTranslationVersion(String languageCode);
   Future<Either<Failure, void>> saveCachedTranslationVersion(String languageCode, String version);

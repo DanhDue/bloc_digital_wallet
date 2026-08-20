@@ -13,6 +13,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings/data/models/sync/available_language.dart';
 import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
 import 'package:settings/domain/usecases/update_user_language_usecase.dart';
+import 'package:settings/domain/usecases/get_dynamic_localization_usecase.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
@@ -21,13 +22,19 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import 'settings_bloc_test.mocks.dart';
 
-@GenerateMocks([/* GetSettingsUseCase, */ AppInfoService, UpdateUserLanguageUseCase, GetAvailableLanguagesUseCase])
+@GenerateMocks([
+  /* GetSettingsUseCase, */ AppInfoService,
+  UpdateUserLanguageUseCase,
+  GetAvailableLanguagesUseCase,
+  GetDynamicLocalizationUseCase,
+])
 void main() {
   late SettingsBloc bloc;
   // late MockGetSettingsUseCase mockUseCase;
   late MockAppInfoService mockAppInfoService;
   late MockUpdateUserLanguageUseCase mockUpdateUserLanguageUseCase;
   late MockGetAvailableLanguagesUseCase mockGetAvailableLanguagesUseCase;
+  late MockGetDynamicLocalizationUseCase mockGetDynamicLocalizationUseCase;
 
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +50,7 @@ void main() {
     mockAppInfoService = MockAppInfoService();
     mockUpdateUserLanguageUseCase = MockUpdateUserLanguageUseCase();
     mockGetAvailableLanguagesUseCase = MockGetAvailableLanguagesUseCase();
+    mockGetDynamicLocalizationUseCase = MockGetDynamicLocalizationUseCase();
     // Default Mock Behavior
     when(mockAppInfoService.getPackageInfo()).thenAnswer(
       (_) async => PackageInfo(
@@ -53,12 +61,15 @@ void main() {
       ),
     );
     when(mockGetAvailableLanguagesUseCase()).thenAnswer((_) async => Right(<AvailableLanguage>[]));
-    
+    when(mockGetDynamicLocalizationUseCase(any)).thenAnswer((_) async => const Right(null));
+    when(mockUpdateUserLanguageUseCase(any)).thenAnswer((_) async => const Right(null));
+
     bloc = SettingsBloc(
       /* mockUseCase, */
       mockAppInfoService,
       mockUpdateUserLanguageUseCase,
       mockGetAvailableLanguagesUseCase,
+      mockGetDynamicLocalizationUseCase,
     );
   });
 

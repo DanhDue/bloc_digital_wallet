@@ -125,11 +125,21 @@ class SettingsPage
                 icon: Icons.language,
                 label: t.preferences.language,
                 trailing: SettingsItemTrailing.value,
-                value: uiModel?.availableLanguages
-                            .where((l) => l.languageCode == LocalizationManager.instance.currentLocale.languageCode)
-                            .firstOrNull
-                            ?.languageName ??
-                        (LocalizationManager.instance.currentLocale.languageCode == 'vi' ? 'Tiếng Việt' : 'English'),
+                value: (() {
+                  final langName =
+                      uiModel?.availableLanguages
+                          .where(
+                            (l) =>
+                                LocalizationManager.instance.resolveLocale(l.languageCode) ==
+                                LocalizationManager.instance.currentLocale,
+                          )
+                          .firstOrNull
+                          ?.languageName ??
+                      (LocalizationManager.instance.currentLocale.languageCode == 'vi'
+                          ? 'Tiếng Việt'
+                          : 'English');
+                  return langName;
+                })(),
                 iconColor: AppColors.settingsItemBlue,
                 iconBackgroundColor: AppColors.settingsItemBlueBg,
                 onTap: () => _showLanguagePicker(context, t, uiModel?.availableLanguages ?? []),
@@ -251,14 +261,24 @@ class SettingsPage
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext bottomSheetContext) {
-        final currentLang = LocalizationManager.instance.currentLocale.languageCode;
-        
+        final currentLocale = LocalizationManager.instance.currentLocale;
+
         // Use fallback if the list is empty
         final languagesToDisplay = availableLanguages.isNotEmpty
             ? availableLanguages
             : [
-                AvailableLanguage(languageCode: 'en', languageName: 'English', isDefault: true, isActive: true),
-                AvailableLanguage(languageCode: 'vi', languageName: 'Tiếng Việt', isDefault: false, isActive: true),
+                AvailableLanguage(
+                  languageCode: 'en',
+                  languageName: 'English',
+                  isDefault: true,
+                  isActive: true,
+                ),
+                AvailableLanguage(
+                  languageCode: 'vi',
+                  languageName: 'Tiếng Việt',
+                  isDefault: false,
+                  isActive: true,
+                ),
               ];
 
         return SafeArea(
@@ -276,8 +296,10 @@ class SettingsPage
               ),
               ...languagesToDisplay.map((lang) {
                 return ListTile(
-                  title: Text(lang.languageName),
-                  trailing: currentLang == lang.languageCode
+                  title: Text(lang.languageName == 'Korean' ? '한국어' : lang.languageName),
+                  trailing:
+                      LocalizationManager.instance.resolveLocale(lang.languageCode) ==
+                          currentLocale
                       ? const Icon(Icons.check, color: AppColors.settingsItemBlue)
                       : null,
                   onTap: () {

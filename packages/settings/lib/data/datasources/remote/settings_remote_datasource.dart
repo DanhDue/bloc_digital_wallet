@@ -2,24 +2,22 @@
 
 // coverage:ignore-file
 
-import 'dart:convert';
-
 import 'package:core/core.dart';
 import 'package:framework/framework.dart';
-import 'package:injectable/injectable.dart';
-import 'package:dio/dio.dart';
 import 'package:settings/data/datasources/remote/settings_client.dart';
+import 'package:settings/data/datasources/remote/translation_client.dart';
 import 'package:settings/data/models/settings_model.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_request.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_response.dart';
+import 'package:settings/data/models/sync/translation_override_response.dart';
 import 'package:settings/domain/entities/settings_entity.dart';
 
 @lazySingleton
 class SettingsRemoteDataSource with SafeCallApiMixin {
   final SettingsClient _client;
-  final Dio _dio;
+  final TranslationClient _translationClient;
 
-  SettingsRemoteDataSource(this._client, this._dio);
+  SettingsRemoteDataSource(this._client, this._translationClient);
 
   Future<Either<Failure, SettingsEntity>> getSettings() async {
     final result = await safeApiCall(() => _client.getSettings());
@@ -27,18 +25,62 @@ class SettingsRemoteDataSource with SafeCallApiMixin {
   }
 
   Future<Either<Failure, SyncBootstrapResponse>> bootstrap(SyncBootstrapRequest request) async {
-    return safeApiCall(() => _client.bootstrap(request));
+    return safeApiCall(() async {
+      final response = await _client.bootstrap(request);
+      if (response.data == null) {
+        throw Exception('Bootstrap response data is null');
+      }
+      return response.data!;
+    });
   }
 
-  Future<Either<Failure, Map<String, dynamic>>> fetchTranslationJson(String url) async {
+  Future<Either<Failure, TranslationOverrideData>> getLocalizationOverrides(
+    String languageCode, {
+    String? sinceVersion,
+  }) async {
     return safeApiCall(() async {
-      final response = await _dio.get(url);
-      if (response.data is Map<String, dynamic>) {
-        return response.data as Map<String, dynamic>;
-      } else if (response.data is String) {
-        return jsonDecode(response.data) as Map<String, dynamic>;
+      // Use TranslationClient (which now returns dynamic) to avoid strict Freezed parsing errors if backend format differs
+      final data = await _translationClient.getLocalizationOverrides(
+        languageCode,
+        sinceVersion: sinceVersion,
+      );
+
+      if (data == null) {
+        throw Exception('Translation override response data is null');
       }
-      throw Exception('Invalid JSON response');
+
+      String version = '1.0.0';
+      Map<String, dynamic> translations = {};
+
+      if (data is Map<String, dynamic>) {
+        if (data.containsKey('success') && data.containsKey('data')) {
+          // It's wrapped in BaseResponseObject
+          final innerData = data['data'];
+          if (innerData is Map<String, dynamic>) {
+            if (innerData.containsKey('version') && innerData.containsKey('translations')) {
+              version = innerData['version'] as String? ?? '1.0.0';
+              translations = innerData['translations'] as Map<String, dynamic>? ?? {};
+            } else {
+              // The inner data is directly the translations map
+              translations = innerData;
+            }
+          }
+        } else if (data.containsKey('version') && data.containsKey('translations')) {
+          // Wrapped in TranslationOverrideData directly (no BaseResponseObject)
+          version = data['version'] as String? ?? '1.0.0';
+          translations = data['translations'] as Map<String, dynamic>? ?? {};
+        } else {
+          // It is the raw translations map directly
+          translations = data;
+        }
+      }
+
+      translations.remove('success');
+      translations.remove('code');
+      translations.remove('message');
+      translations.remove('status');
+
+      return TranslationOverrideData(version: version, translations: translations);
     });
   }
 }

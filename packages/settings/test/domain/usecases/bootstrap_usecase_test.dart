@@ -52,43 +52,62 @@ void main() {
   });
 
   group('BootstrapUseCase', () {
-    test('should merge BE languages with default languages and save (BE returns only 1)', () async {
-      // Arrange
-      // BE returns only English with some updated property, say isActive: false
-      final List<AvailableLanguage> beLanguages = [
-        AvailableLanguage(
-          languageCode: 'en',
-          languageName: 'English (Updated)',
-          isDefault: true,
-          isActive: false,
-        ),
-      ];
-      final response = SyncBootstrapResponse(
-        userPreferences: const BootstrapUserPreferences(selectedLanguage: 'en'),
-        translations: [],
-        availableLanguages: beLanguages,
-      );
+    test(
+      'should merge BE languages with default languages and save (BE returns only 1)',
+      () async {
+        // Arrange
+        // BE returns only English with some updated property, say isActive: false
+        final List<AvailableLanguage> beLanguages = [
+          AvailableLanguage(
+            languageCode: 'en',
+            languageName: 'English (Updated)',
+            isDefault: true,
+            isActive: false,
+          ),
+        ];
+        final response = SyncBootstrapResponse(
+          userPreferences: const BootstrapUserPreferences(selectedLanguage: 'en'),
+          translations: [],
+          availableLanguages: beLanguages,
+        );
 
-      final request = const SyncBootstrapRequest(cachedTranslations: []);
-      when(mockRepository.getAllCachedLanguageCodes()).thenAnswer((_) async => Right<Failure, List<String>>(<String>[]));
-      
-      final expectedMergedLanguages = [
-        AvailableLanguage(languageCode: 'en', languageName: 'English (Updated)', isDefault: true, isActive: false),
-        AvailableLanguage(languageCode: 'vi', languageName: 'Tiếng Việt', isDefault: false, isActive: true),
-      ];
-      
-      when(mockRepository.saveAvailableLanguages(expectedMergedLanguages)).thenAnswer((_) async => Right<Failure, void>(null));
-      when(mockRepository.bootstrap(request)).thenAnswer((_) async => Right<Failure, SyncBootstrapResponse>(response));
+        final request = const SyncBootstrapRequest(cachedTranslations: []);
+        when(
+          mockRepository.getAllCachedLanguageCodes(),
+        ).thenAnswer((_) async => Right<Failure, List<String>>(<String>[]));
 
-      // Act
-      final result = await useCase();
+        final expectedMergedLanguages = [
+          AvailableLanguage(
+            languageCode: 'en',
+            languageName: 'English (Updated)',
+            isDefault: true,
+            isActive: false,
+          ),
+          AvailableLanguage(
+            languageCode: 'vi',
+            languageName: 'Tiếng Việt',
+            isDefault: false,
+            isActive: true,
+          ),
+        ];
 
-      // Assert
-      expect(result.isRight(), true);
-      verify(mockRepository.bootstrap(request)).called(1);
-      verify(mockRepository.saveAvailableLanguages(expectedMergedLanguages)).called(1);
-    });
-    
+        when(
+          mockRepository.saveAvailableLanguages(expectedMergedLanguages),
+        ).thenAnswer((_) async => Right<Failure, void>(null));
+        when(
+          mockRepository.bootstrap(request),
+        ).thenAnswer((_) async => Right<Failure, SyncBootstrapResponse>(response));
+
+        // Act
+        final result = await useCase();
+
+        // Assert
+        expect(result.isRight(), true);
+        verify(mockRepository.bootstrap(request)).called(1);
+        verify(mockRepository.saveAvailableLanguages(expectedMergedLanguages)).called(1);
+      },
+    );
+
     test('should append new language from BE to default languages and save', () async {
       // Arrange
       // BE returns Japanese which is new, and doesn't return default ones (empty or just one)
@@ -107,16 +126,37 @@ void main() {
       );
 
       final request = const SyncBootstrapRequest(cachedTranslations: []);
-      when(mockRepository.getAllCachedLanguageCodes()).thenAnswer((_) async => Right<Failure, List<String>>(<String>[]));
-      
+      when(
+        mockRepository.getAllCachedLanguageCodes(),
+      ).thenAnswer((_) async => Right<Failure, List<String>>(<String>[]));
+
       final expectedMergedLanguages = [
-        AvailableLanguage(languageCode: 'en', languageName: 'English', isDefault: true, isActive: true),
-        AvailableLanguage(languageCode: 'vi', languageName: 'Tiếng Việt', isDefault: false, isActive: true),
-        AvailableLanguage(languageCode: 'ja', languageName: 'Japanese', isDefault: false, isActive: true),
+        AvailableLanguage(
+          languageCode: 'en',
+          languageName: 'English',
+          isDefault: true,
+          isActive: true,
+        ),
+        AvailableLanguage(
+          languageCode: 'vi',
+          languageName: 'Tiếng Việt',
+          isDefault: false,
+          isActive: true,
+        ),
+        AvailableLanguage(
+          languageCode: 'ja',
+          languageName: 'Japanese',
+          isDefault: false,
+          isActive: true,
+        ),
       ];
-      
-      when(mockRepository.saveAvailableLanguages(expectedMergedLanguages)).thenAnswer((_) async => Right<Failure, void>(null));
-      when(mockRepository.bootstrap(request)).thenAnswer((_) async => Right<Failure, SyncBootstrapResponse>(response));
+
+      when(
+        mockRepository.saveAvailableLanguages(expectedMergedLanguages),
+      ).thenAnswer((_) async => Right<Failure, void>(null));
+      when(
+        mockRepository.bootstrap(request),
+      ).thenAnswer((_) async => Right<Failure, SyncBootstrapResponse>(response));
 
       // Act
       final result = await useCase();

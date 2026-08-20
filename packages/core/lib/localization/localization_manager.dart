@@ -4,8 +4,10 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/rxdart.dart';
 import '../generated/translations.dart';
+import 'dynamic_translator.dart';
 
 /// Manages the application's locale state and provides a stream for updates.
 class LocalizationManager {
@@ -23,22 +25,57 @@ class LocalizationManager {
   Stream<Locale> get localeStream => _localeController.stream;
 
   Future<void> Function(Map<String, dynamic> json, Locale locale)? _overrideCallback;
+  Future<void> Function(Locale locale)? _syncLocaleCallback;
 
+  /// Register callback for dynamic translations
   void registerOverrideCallback(
-    Future<void> Function(Map<String, dynamic> json, Locale locale) callback,
-  ) {
+      Future<void> Function(Map<String, dynamic> json, Locale locale) callback) {
     _overrideCallback = callback;
   }
 
-  Future<void> applyDynamicTranslations(Map<String, dynamic> mergedJson) async {
+  /// Register callback to sync locale changes across all packages
+  void registerSyncLocaleCallback(Future<void> Function(Locale locale) callback) {
+    _syncLocaleCallback = callback;
+  }
+
+  Future<void> applyDynamicTranslations(Map<String, dynamic> mergedJson, {String? targetLanguageCode}) async {
+    // Nạp luôn cho Từ điển động (Dùng cho các Dynamic Keys)
+    final dynamicSection = mergedJson['dynamic'] as Map<String, dynamic>? ?? {};
+    DynamicTranslator.updateJson(dynamicSection);
+
+    Locale localeToOverride = currentLocale;
+    if (targetLanguageCode != null) {
+      localeToOverride = resolveLocale(targetLanguageCode);
+    }
+
     if (_overrideCallback != null) {
-      await _overrideCallback!(mergedJson, currentLocale);
+      await _overrideCallback!(mergedJson, localeToOverride);
       _localeController.add(currentLocale);
     }
   }
 
+  Locale resolveLocale(String languageCode) {
+    final code = languageCode.replaceAll('-', '_');
+    final parts = code.split('_');
+    final String targetCode;
+
+    if (AppLocaleUtils.supportedLocalesRaw.contains(code)) {
+      targetCode = code;
+    } else if (parts.isNotEmpty &&
+        AppLocaleUtils.supportedLocalesRaw.contains(parts[0])) {
+      targetCode = parts[0];
+    } else {
+      targetCode = code;
+    }
+
+    final targetParts = targetCode.split('_');
+    return targetParts.length > 1
+        ? Locale(targetParts[0], targetParts[1])
+        : Locale(targetParts[0]);
+  }
+
   Future<void> setLocaleFromCode(String languageCode) async {
-    final locale = Locale(languageCode);
+    final locale = resolveLocale(languageCode);
     await setLocale(locale);
   }
 
@@ -48,9 +85,17 @@ class LocalizationManager {
   /// Set the locale for the application
   Future<void> setLocale(Locale locale) async {
     // This updates the internal state of slang for the core package.
-    // According to slang docs, this should sync across packages if configured correctly,
-    // but we can also manually sync in the UnifiedLocalizationProvider if needed.
-    await LocaleSettings.setLocaleRaw(locale.languageCode);
+    final rawLocale = locale.countryCode != null 
+        ? '${locale.languageCode}_${locale.countryCode}'
+        : locale.languageCode;
+    await LocaleSettings.setLocaleRaw(rawLocale);
+    
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('saved_language_code', rawLocale);
+    
+    if (_syncLocaleCallback != null) {
+      await _syncLocaleCallback!(locale);
+    }
 
     // Notify listeners
     _localeController.add(locale);

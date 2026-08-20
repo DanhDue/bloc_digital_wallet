@@ -133,9 +133,7 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
 
       // Fetch stale translations
       for (final translationItem in response.translations ?? []) {
-        if (translationItem.isStale) {
-          await _fetchTranslationUseCase(translationItem);
-        }
+        await _fetchTranslationUseCase(translationItem);
       }
 
       // Note: Purging deleted translation keys logic can be added later

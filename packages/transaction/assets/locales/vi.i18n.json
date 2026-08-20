@@ -1,4 +1,7 @@
 {
+  "languageCode": "vi",
+  "languageName": "Tiếng Việt",
+  "languageEnglishName": "Vietnamese",
   "transaction": {
     "title": "Tính năng Transaction",
     "noData": "Không có dữ liệu",

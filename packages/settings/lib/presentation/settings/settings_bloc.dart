@@ -11,6 +11,7 @@ import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings/data/models/sync/available_language.dart';
 import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
+import 'package:settings/domain/usecases/get_dynamic_localization_usecase.dart';
 import 'package:settings/domain/usecases/update_user_language_usecase.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 
@@ -24,12 +25,14 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   final AppInfoService _appInfoService;
   final UpdateUserLanguageUseCase _updateUserLanguageUseCase;
   final GetAvailableLanguagesUseCase _getAvailableLanguagesUseCase;
+  final GetDynamicLocalizationUseCase _getDynamicLocalizationUseCase;
 
   SettingsBloc(
     /* this._getSettingsUseCase, */
     this._appInfoService,
     this._updateUserLanguageUseCase,
     this._getAvailableLanguagesUseCase,
+    this._getDynamicLocalizationUseCase,
   ) : super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
     on<SettingsActionNavigateToProfile>(_onNavigateToProfile);
@@ -127,11 +130,19 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     SettingsActionChangeLanguage action,
     Emitter<SettingsState> emit,
   ) async {
-    // Optimistic UI update handled inside the use case (LocalizationManager)
-    // We can also update our UI model if it stores the selected language
-    // final updatedModel = state.uiModel?.copyWith(selectedLanguage: action.languageCode);
-    // emit(state.copyWith(uiModel: updatedModel));
+    // 1. Fetch translation JSON for the new locale and apply dynamic override
+    final result = await _getDynamicLocalizationUseCase(action.languageCode);
 
+    if (result.isRight()) {
+      // 2. Change the locale in the app so UI updates
+      await LocalizationManager.instance.setLocaleFromCode(action.languageCode);
+    } else {
+      final failure = result.fold((l) => l, (r) => null);
+      emitEvent(SettingsEvent.showError(message: failure?.message ?? 'Failed to change language'));
+      return;
+    }
+
+    // 3. Call UpdateUserLanguageUseCase in background to sync preference to server
     await _updateUserLanguageUseCase(action.languageCode);
   }
 

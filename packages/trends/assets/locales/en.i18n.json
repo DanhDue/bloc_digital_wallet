@@ -1,4 +1,7 @@
 {
+  "languageCode": "en",
+  "languageName": "English",
+  "languageEnglishName": "English",
   "trends": {
     "title": "Trends Feature",
     "search": {

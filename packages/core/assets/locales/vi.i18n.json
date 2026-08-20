@@ -1,4 +1,7 @@
 {
+  "languageCode": "vi",
+  "languageName": "Tiếng Việt",
+  "languageEnglishName": "Vietnamese",
   "core": {
     "common": {
       "error": "Đã có lỗi xảy ra. Vui lòng thử lại sau!",

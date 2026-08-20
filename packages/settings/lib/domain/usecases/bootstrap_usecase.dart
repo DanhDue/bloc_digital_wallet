@@ -45,25 +45,37 @@ class BootstrapUseCase {
     // Save available languages to local storage on success
     if (result.isRight()) {
       final response = result.getOrElse(() => throw Exception('unreachable'));
-      
+
       final defaultLanguages = [
-        AvailableLanguage(languageCode: 'en', languageName: 'English', isDefault: true, isActive: true),
-        AvailableLanguage(languageCode: 'vi', languageName: 'Tiếng Việt', isDefault: false, isActive: true),
+        AvailableLanguage(
+          languageCode: 'en_US',
+          languageName: 'English',
+          isDefault: true,
+          isActive: true,
+        ),
+        AvailableLanguage(
+          languageCode: 'vi_VN',
+          languageName: 'Tiếng Việt',
+          isDefault: false,
+          isActive: true,
+        ),
       ];
 
       final beLanguages = response.availableLanguages ?? [];
-      
+
       final mergedLanguages = <AvailableLanguage>[];
       for (final defaultLang in defaultLanguages) {
+        final defaultBase = defaultLang.languageCode.split('_').first;
         final beLang = beLanguages.firstWhere(
-          (l) => l.languageCode == defaultLang.languageCode,
+          (l) => l.languageCode.split('_').first == defaultBase,
           orElse: () => defaultLang,
         );
         mergedLanguages.add(beLang);
       }
-      
+
       for (final beLang in beLanguages) {
-        if (!defaultLanguages.any((l) => l.languageCode == beLang.languageCode)) {
+        final beBase = beLang.languageCode.split('_').first;
+        if (!defaultLanguages.any((l) => l.languageCode.split('_').first == beBase)) {
           mergedLanguages.add(beLang);
         }
       }

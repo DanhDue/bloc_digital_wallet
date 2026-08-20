@@ -1,4 +1,7 @@
 {
+  "languageCode": "vi",
+  "languageName": "Tiếng Việt",
+  "languageEnglishName": "Vietnamese",
   "scanner": {
     "title": "Tính năng Scanner"
   }
