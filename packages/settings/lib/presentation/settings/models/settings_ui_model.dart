@@ -5,6 +5,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:settings/domain/entities/settings_entity.dart';
+import 'package:settings/data/models/sync/available_language.dart';
 
 part 'settings_ui_model.freezed.dart';
 
@@ -21,6 +22,7 @@ abstract class SettingsUiModel with _$SettingsUiModel {
     @Default(false) bool isDeveloperModeEnabled,
     String? appVersion,
     String? buildNumber,
+    @Default([]) List<AvailableLanguage> availableLanguages,
   }) = _SettingsUiModel;
 
   factory SettingsUiModel.fromEntity(SettingsEntity entity) {

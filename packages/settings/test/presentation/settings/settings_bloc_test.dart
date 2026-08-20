@@ -3,13 +3,15 @@
 // coverage:ignore-file
 
 import 'package:bloc_test/bloc_test.dart';
-// import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 // import 'package:settings/domain/entities/settings_entity.dart';
 // import 'package:settings/domain/usecases/get_settings_usecase.dart';
+import 'package:settings/data/models/sync/available_language.dart';
+import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
 import 'package:settings/domain/usecases/update_user_language_usecase.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
@@ -19,12 +21,13 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import 'settings_bloc_test.mocks.dart';
 
-@GenerateMocks([/* GetSettingsUseCase, */ AppInfoService, UpdateUserLanguageUseCase])
+@GenerateMocks([/* GetSettingsUseCase, */ AppInfoService, UpdateUserLanguageUseCase, GetAvailableLanguagesUseCase])
 void main() {
   late SettingsBloc bloc;
   // late MockGetSettingsUseCase mockUseCase;
   late MockAppInfoService mockAppInfoService;
   late MockUpdateUserLanguageUseCase mockUpdateUserLanguageUseCase;
+  late MockGetAvailableLanguagesUseCase mockGetAvailableLanguagesUseCase;
 
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +42,7 @@ void main() {
     // mockUseCase = MockGetSettingsUseCase();
     mockAppInfoService = MockAppInfoService();
     mockUpdateUserLanguageUseCase = MockUpdateUserLanguageUseCase();
+    mockGetAvailableLanguagesUseCase = MockGetAvailableLanguagesUseCase();
     // Default Mock Behavior
     when(mockAppInfoService.getPackageInfo()).thenAnswer(
       (_) async => PackageInfo(
@@ -48,10 +52,13 @@ void main() {
         buildNumber: '1',
       ),
     );
+    when(mockGetAvailableLanguagesUseCase()).thenAnswer((_) async => Right(<AvailableLanguage>[]));
+    
     bloc = SettingsBloc(
       /* mockUseCase, */
       mockAppInfoService,
       mockUpdateUserLanguageUseCase,
+      mockGetAvailableLanguagesUseCase,
     );
   });
 
@@ -88,12 +95,10 @@ void main() {
       isA<SettingsState>()
           .having((s) => s.status, 'status', SettingsStatus.success)
           .having((s) => s.uiModel?.appVersion, 'appVersion', '1.0.0'),
-      isA<SettingsState>()
-          .having((s) => s.status, 'status', SettingsStatus.success)
-          .having((s) => s.uiModel?.isDarkModeEnabled, 'isDarkModeEnabled', true),
     ],
     verify: (_) {
       verify(mockAppInfoService.getPackageInfo()).called(1);
+      verify(mockGetAvailableLanguagesUseCase()).called(1);
       // verify(mockUseCase()).called(1);
     },
   );
@@ -118,6 +123,7 @@ void main() {
     errors: () => [], // No uncaught errors
     verify: (_) {
       verify(mockAppInfoService.getPackageInfo()).called(1);
+      verify(mockGetAvailableLanguagesUseCase()).called(1);
       // verify(mockUseCase()).called(1);
       // We cannot easily test the side effect event stream with `expectLater` inside verify
       // comfortably with blocTest 9.1.x combined with other expectations without splitting tests

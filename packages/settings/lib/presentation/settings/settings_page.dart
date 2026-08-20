@@ -17,6 +17,8 @@ import 'package:settings/presentation/settings/settings_event.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
 import 'package:settings/presentation/settings/widgets/settings_item_widget.dart';
 import 'package:settings/presentation/settings/widgets/settings_section_widget.dart';
+import 'package:settings/data/models/sync/available_language.dart';
+import 'package:collection/collection.dart';
 
 @RoutePage()
 class SettingsPage
@@ -123,12 +125,14 @@ class SettingsPage
                 icon: Icons.language,
                 label: t.preferences.language,
                 trailing: SettingsItemTrailing.value,
-                value: LocalizationManager.instance.currentLocale.languageCode == 'vi'
-                    ? 'Tiếng Việt'
-                    : 'English',
+                value: uiModel?.availableLanguages
+                            .where((l) => l.languageCode == LocalizationManager.instance.currentLocale.languageCode)
+                            .firstOrNull
+                            ?.languageName ??
+                        (LocalizationManager.instance.currentLocale.languageCode == 'vi' ? 'Tiếng Việt' : 'English'),
                 iconColor: AppColors.settingsItemBlue,
                 iconBackgroundColor: AppColors.settingsItemBlueBg,
-                onTap: () => _showLanguagePicker(context, t),
+                onTap: () => _showLanguagePicker(context, t, uiModel?.availableLanguages ?? []),
               ),
               SettingsItemWidget(
                 icon: Icons.dark_mode_outlined,
@@ -236,7 +240,11 @@ class SettingsPage
     // TODO: Implement currency picker dialog
   }
 
-  void _showLanguagePicker(BuildContext context, SettingsTranslationsSettingsEn t) {
+  void _showLanguagePicker(
+    BuildContext context,
+    SettingsTranslationsSettingsEn t,
+    List<AvailableLanguage> availableLanguages,
+  ) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -244,6 +252,15 @@ class SettingsPage
       ),
       builder: (BuildContext bottomSheetContext) {
         final currentLang = LocalizationManager.instance.currentLocale.languageCode;
+        
+        // Use fallback if the list is empty
+        final languagesToDisplay = availableLanguages.isNotEmpty
+            ? availableLanguages
+            : [
+                AvailableLanguage(languageCode: 'en', languageName: 'English', isDefault: true, isActive: true),
+                AvailableLanguage(languageCode: 'vi', languageName: 'Tiếng Việt', isDefault: false, isActive: true),
+              ];
+
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -257,30 +274,20 @@ class SettingsPage
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
-              ListTile(
-                title: const Text('English'),
-                trailing: currentLang == 'en'
-                    ? const Icon(Icons.check, color: AppColors.settingsItemBlue)
-                    : null,
-                onTap: () {
-                  context.read<SettingsBloc>().onAction(
-                    const SettingsAction.changeLanguage(languageCode: 'en'),
-                  );
-                  Navigator.pop(bottomSheetContext);
-                },
-              ),
-              ListTile(
-                title: const Text('Tiếng Việt'),
-                trailing: currentLang == 'vi'
-                    ? const Icon(Icons.check, color: AppColors.settingsItemBlue)
-                    : null,
-                onTap: () {
-                  context.read<SettingsBloc>().onAction(
-                    const SettingsAction.changeLanguage(languageCode: 'vi'),
-                  );
-                  Navigator.pop(bottomSheetContext);
-                },
-              ),
+              ...languagesToDisplay.map((lang) {
+                return ListTile(
+                  title: Text(lang.languageName),
+                  trailing: currentLang == lang.languageCode
+                      ? const Icon(Icons.check, color: AppColors.settingsItemBlue)
+                      : null,
+                  onTap: () {
+                    context.read<SettingsBloc>().onAction(
+                      SettingsAction.changeLanguage(languageCode: lang.languageCode),
+                    );
+                    Navigator.pop(bottomSheetContext);
+                  },
+                );
+              }),
               const SizedBox(height: 16),
             ],
           ),

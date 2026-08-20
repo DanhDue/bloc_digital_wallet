@@ -8,6 +8,7 @@ import 'package:settings/data/models/sync/cached_translation_item.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_request.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_response.dart';
 import 'package:settings/domain/repositories/settings_repository.dart';
+import 'package:settings/data/models/sync/available_language.dart';
 
 @injectable
 class BootstrapUseCase {
@@ -39,6 +40,37 @@ class BootstrapUseCase {
     final request = SyncBootstrapRequest(cachedTranslations: cachedTranslations);
 
     // Call the repository to perform the bootstrap
-    return _repository.bootstrap(request);
+    final result = await _repository.bootstrap(request);
+
+    // Save available languages to local storage on success
+    if (result.isRight()) {
+      final response = result.getOrElse(() => throw Exception('unreachable'));
+      
+      final defaultLanguages = [
+        AvailableLanguage(languageCode: 'en', languageName: 'English', isDefault: true, isActive: true),
+        AvailableLanguage(languageCode: 'vi', languageName: 'Tiếng Việt', isDefault: false, isActive: true),
+      ];
+
+      final beLanguages = response.availableLanguages ?? [];
+      
+      final mergedLanguages = <AvailableLanguage>[];
+      for (final defaultLang in defaultLanguages) {
+        final beLang = beLanguages.firstWhere(
+          (l) => l.languageCode == defaultLang.languageCode,
+          orElse: () => defaultLang,
+        );
+        mergedLanguages.add(beLang);
+      }
+      
+      for (final beLang in beLanguages) {
+        if (!defaultLanguages.any((l) => l.languageCode == beLang.languageCode)) {
+          mergedLanguages.add(beLang);
+        }
+      }
+
+      await _repository.saveAvailableLanguages(mergedLanguages);
+    }
+
+    return result;
   }
 }

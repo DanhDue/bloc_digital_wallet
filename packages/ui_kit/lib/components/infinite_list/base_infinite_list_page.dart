@@ -113,7 +113,7 @@ abstract class BaseInfiniteListPage<B extends BaseInfiniteListBloc<T>, T> extend
 
             // Empty state
             if (state.status == InfiniteListStatus.success && state.items.isEmpty)
-              buildEmpty(context),
+              SizedBox(child: Center(child: buildEmpty(context))),
 
             // List items
             if (state.items.isNotEmpty)

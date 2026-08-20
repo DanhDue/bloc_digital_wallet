@@ -30,6 +30,8 @@ class TokenListPage extends BaseInfiniteListPage<TokenListBloc, TokenListUiModel
   @override
   Widget buildEmpty(BuildContext context) {
     return Column(
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .center,
       mainAxisSize: .min,
       children: [
         const SizedBox(height: 36),
