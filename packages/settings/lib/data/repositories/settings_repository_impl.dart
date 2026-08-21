@@ -32,8 +32,13 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<Either<Failure, TranslationOverrideData>> getLocalizationOverrides(
     String languageCode, {
     String? sinceVersion,
-  }) {
-    return _remoteDataSource.getLocalizationOverrides(languageCode, sinceVersion: sinceVersion);
+    String? eTag,
+  }) async {
+    return _remoteDataSource.getLocalizationOverrides(
+      languageCode,
+      sinceVersion: sinceVersion,
+      eTag: eTag,
+    );
   }
 
   @override

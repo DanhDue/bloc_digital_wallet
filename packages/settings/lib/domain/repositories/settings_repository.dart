@@ -15,6 +15,7 @@ abstract class SettingsRepository {
   Future<Either<Failure, TranslationOverrideData>> getLocalizationOverrides(
     String languageCode, {
     String? sinceVersion,
+    String? eTag,
   });
 
   Future<Either<Failure, String?>> getCachedTranslationVersion(String languageCode);

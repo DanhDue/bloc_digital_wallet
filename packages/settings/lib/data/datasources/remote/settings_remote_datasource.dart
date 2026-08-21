@@ -37,12 +37,14 @@ class SettingsRemoteDataSource with SafeCallApiMixin {
   Future<Either<Failure, TranslationOverrideData>> getLocalizationOverrides(
     String languageCode, {
     String? sinceVersion,
+    String? eTag,
   }) async {
     return safeApiCall(() async {
       // Use TranslationClient (which now returns dynamic) to avoid strict Freezed parsing errors if backend format differs
       final data = await _translationClient.getLocalizationOverrides(
         languageCode,
         sinceVersion: sinceVersion,
+        eTag: eTag,
       );
 
       if (data == null) {

@@ -17,14 +17,34 @@ class GetDynamicLocalizationUseCase {
     final cachedVersionResult = await _repository.getCachedTranslationVersion(languageCode);
     final cachedVersion = cachedVersionResult.fold((l) => null, (r) => r);
 
-    // 2. Fetch JSON from API with sinceVersion
+    // 2. Get cached JSON to compute checksum
+    final cachedJsonResultForChecksum = await _repository.getCachedTranslationJson(languageCode);
+    final cachedJsonForChecksum = cachedJsonResultForChecksum.fold((l) => null, (r) => r);
+    String? checksum;
+    if (cachedJsonForChecksum != null) {
+      checksum = ChecksumUtils.computeSha256(cachedJsonForChecksum);
+    }
+
+    // 3. Fetch localization overrides (full or delta)
     final responseOrFailure = await _repository.getLocalizationOverrides(
       languageCode,
       sinceVersion: cachedVersion,
+      eTag: checksum != null ? '"$checksum"' : null,
     );
 
     if (responseOrFailure.isLeft()) {
-      return Left(responseOrFailure.fold((l) => l, (r) => throw Exception('unreachable')));
+      final failure = responseOrFailure.fold((l) => l, (r) => throw Exception('unreachable'));
+      if (failure is ServerFailure && failure.code == 304) {
+        // 304 Not Modified: Cache is up to date, load from cache and apply
+        final cachedJsonResult = await _repository.getCachedTranslationJson(languageCode);
+        final jsonMap = cachedJsonResult.fold((l) => <String, dynamic>{}, (r) => r ?? <String, dynamic>{});
+        await LocalizationManager.instance.applyDynamicTranslations(
+          jsonMap,
+          targetLanguageCode: languageCode,
+        );
+        return const Right(null);
+      }
+      return Left(failure);
     }
 
     final response = responseOrFailure.getOrElse(() => throw Exception('unreachable'));
@@ -32,17 +52,17 @@ class GetDynamicLocalizationUseCase {
     Map<String, dynamic> jsonMap = response.translations;
     final version = response.version;
 
-    // 3. If the backend returns empty translations or the version matches the cached version, load from local cache
+    // 4. If the backend returns empty translations or the version matches the cached version, load from local cache
     if ((jsonMap.isEmpty || version == cachedVersion) && cachedVersion != null) {
       final cachedJsonResult = await _repository.getCachedTranslationJson(languageCode);
-      jsonMap = cachedJsonResult.fold((l) => {}, (r) => r ?? {});
+      jsonMap = cachedJsonResult.fold((l) => <String, dynamic>{}, (r) => r ?? <String, dynamic>{});
     } else {
       // Save new data to local cache
       await _repository.saveCachedTranslationJson(languageCode, jsonMap);
       await _repository.saveCachedTranslationVersion(languageCode, version);
     }
 
-    // 4. Apply dynamic translations (always do this to ensure memory has it)
+    // 5. Apply dynamic translations (always do this to ensure memory has it)
     await LocalizationManager.instance.applyDynamicTranslations(
       jsonMap,
       targetLanguageCode: languageCode,

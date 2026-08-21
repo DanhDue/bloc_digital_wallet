@@ -15,5 +15,6 @@ abstract class TranslationClient {
   Future<dynamic> getLocalizationOverrides(
     @Path('languageCode') String languageCode, {
     @Query('since_version') String? sinceVersion,
+    @Header('If-None-Match') String? eTag,
   });
 }
