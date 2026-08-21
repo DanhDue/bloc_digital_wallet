@@ -2,12 +2,12 @@
 
 // coverage:ignore-file
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:theme_tailor_annotation/theme_tailor_annotation.dart';
-import 'package:talker_flutter/talker_flutter.dart';
-import 'package:core/core.dart';
-import 'app_text_styles.dart';
 import 'package:ui_kit/generated/colors.gen.dart';
+
+import 'app_text_styles.dart';
 
 part 'app_themes.tailor.dart';
 

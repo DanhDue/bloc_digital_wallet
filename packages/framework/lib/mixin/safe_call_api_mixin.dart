@@ -4,9 +4,8 @@
 
 import 'dart:io';
 
-import 'package:core/core.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:talker_flutter/talker_flutter.dart';
+import 'package:core/core.dart';
 
 /// Mixin for safe API calls with proper error handling.
 /// Following SRP: each error type has its own handler function.

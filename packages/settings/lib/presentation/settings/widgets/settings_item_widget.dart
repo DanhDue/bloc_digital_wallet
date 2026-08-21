@@ -49,7 +49,7 @@ class SettingsItemWidget extends StatelessWidget {
         Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: trailing == SettingsItemTrailing.toggle ? null : onTap,
+            onTap: onTap,
             borderRadius: BorderRadius.circular(8),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

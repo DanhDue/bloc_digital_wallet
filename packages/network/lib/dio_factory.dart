@@ -74,9 +74,12 @@ class DioFactory {
           talker: _talker,
           settings: const TalkerDioLoggerSettings(
             printRequestHeaders: true,
-            printResponseHeaders: false,
+            printResponseHeaders: true,
             printRequestData: true,
             printResponseData: true,
+            printResponseMessage: true,
+            printErrorData: true,
+            printErrorHeaders: true,
           ),
         ),
       );

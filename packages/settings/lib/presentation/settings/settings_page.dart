@@ -168,6 +168,15 @@ class SettingsPage
                 onToggle: (value) => context.read<SettingsBloc>().onAction(
                   SettingsAction.toggleDeveloperMode(isEnabled: value),
                 ),
+                onTap: () {
+                  if (uiModel?.isDeveloperModeEnabled == true) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TalkerScreen(talker: GetIt.I<Talker>()),
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),
