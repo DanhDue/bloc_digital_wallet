@@ -10,7 +10,7 @@
     <color name="theme_secondary">#03DAC6</color>
     <color name="theme_error_light">#B00020</color>
     <color name="theme_error_dark">#CF6679</color>
-    <color name="theme_background_dark">#121212</color>
+    <color name="theme_background_dark">#303030</color>
     <color name="theme_surface_dark">#1E1E1E</color>
     <color name="theme_divider_light">#E0E0E0</color>
     <color name="theme_divider_dark">#2C2C2C</color>

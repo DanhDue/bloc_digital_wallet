@@ -10,8 +10,9 @@ class ThemeManager {
   ThemeManager._();
   static final ThemeManager instance = ThemeManager._();
 
-  final BehaviorSubject<ThemeMode> _themeModeSubject =
-      BehaviorSubject<ThemeMode>.seeded(ThemeMode.system);
+  final BehaviorSubject<ThemeMode> _themeModeSubject = BehaviorSubject<ThemeMode>.seeded(
+    ThemeMode.system,
+  );
 
   Stream<ThemeMode> get themeModeStream => _themeModeSubject.stream;
   ThemeMode get currentThemeMode => _themeModeSubject.value;

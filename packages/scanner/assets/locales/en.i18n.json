@@ -1,4 +1,7 @@
 {
+  "languageCode": "en",
+  "languageName": "English",
+  "languageEnglishName": "English",
   "scanner": {
     "title": "Scanner Feature"
   }

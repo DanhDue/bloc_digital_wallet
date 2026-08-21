@@ -14,7 +14,10 @@ class TransactionHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const .only(left: 16, right: 16, bottom: 12, top: 12),
-      child: Text(title, style: TextStyle(fontSize: 14, color: context.appThemes.ink40)),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 14, color: context.appThemes.textSecondaryColor),
+      ),
     );
   }
 }

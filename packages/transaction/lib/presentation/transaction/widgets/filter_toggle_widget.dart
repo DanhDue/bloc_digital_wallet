@@ -20,7 +20,7 @@ class FilterToggleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Logic from legacy _buildFilterToggle
     // Using simple/standard UI or copying legacy style if possible
-    final backgroundColor = context.appThemes.ink5;
+    final backgroundColor = context.appThemes.dividerColor;
 
     return Container(
       margin: const .symmetric(horizontal: 20),
@@ -66,7 +66,7 @@ class FilterToggleWidget extends StatelessWidget {
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: context.appThemes.ink100.withValues(alpha: 0.05),
+                      color: context.appThemes.shadowColor.withValues(alpha: 0.05),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),

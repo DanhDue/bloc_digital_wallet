@@ -1,4 +1,7 @@
 {
+  "languageCode": "en",
+  "languageName": "English",
+  "languageEnglishName": "English",
   "authentication": {
     "login": {
       "welcomeBack": "Welcome Back",

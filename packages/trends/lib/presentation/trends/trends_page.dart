@@ -16,6 +16,7 @@ import 'package:trends/trends_strings.dart';
 import 'package:ui_kit/components/infinite_list/base_infinite_list_event.dart';
 import 'package:ui_kit/components/infinite_list/base_infinite_list_state.dart';
 import 'package:ui_kit/widgets/custom_loading_widget.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 @RoutePage()
 class TrendsPage extends StatelessWidget {
@@ -30,6 +31,7 @@ class TrendsPage extends StatelessWidget {
         return bloc;
       },
       child: Scaffold(
+        backgroundColor: context.appThemes.backgroundColor,
         body: SafeArea(
           child: GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

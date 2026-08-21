@@ -1,4 +1,7 @@
 {
+  "languageCode": "en",
+  "languageName": "English",
+  "languageEnglishName": "English",
   "transaction": {
     "title": "Transaction Feature",
     "noData": "No Data",

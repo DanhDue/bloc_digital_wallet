@@ -58,6 +58,7 @@ void main() async {
                 ],
                 themeMode: currentThemeMode,
                 theme: ThemeData(
+                  scaffoldBackgroundColor: AppThemes.light.backgroundColor,
                   splashFactory: NoSplash.splashFactory,
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
@@ -71,6 +72,7 @@ void main() async {
                   ),
                 ),
                 darkTheme: ThemeData(
+                  scaffoldBackgroundColor: AppThemes.dark.backgroundColor,
                   splashFactory: NoSplash.splashFactory,
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,

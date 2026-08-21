@@ -5,6 +5,7 @@
 import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:settings/data/models/sync/bootstrap_translation_item.dart';
+import 'package:settings/data/models/sync/translation_override_response.dart';
 import 'package:settings/domain/repositories/settings_repository.dart';
 
 @injectable
@@ -14,52 +15,65 @@ class FetchTranslationUseCase {
   FetchTranslationUseCase(this._repository);
 
   Future<Either<Failure, void>> call(BootstrapTranslationItem item) async {
-    final languageCode = item.languageCode;
+    final languageCode = item.resourceId;
 
-    // Fetch JSON from URL
-    final fetchResult = await _repository.fetchTranslationJson(
-      item.mode == 'full' ? item.fullFetchUrl! : item.fetchUrl!,
+    String? sinceVersion;
+    Map<String, dynamic>? cachedJson;
+
+    if (item.mode == 'delta') {
+      final cachedVersionResult = await _repository.getCachedTranslationVersion(languageCode);
+      sinceVersion = cachedVersionResult.getOrElse(() => null);
+
+      final cachedJsonResult = await _repository.getCachedTranslationJson(languageCode);
+      cachedJson = cachedJsonResult.getOrElse(() => null);
+
+      // If we don't have cached JSON or version, we must do a full fetch (no sinceVersion)
+      if (cachedJson == null || sinceVersion == null) {
+        sinceVersion = null;
+        cachedJson = null;
+      }
+    }
+
+    // Fetch JSON overrides (delta or full)
+    final fetchResult = await _repository.getLocalizationOverrides(
+      languageCode,
+      sinceVersion: sinceVersion,
     );
 
     if (fetchResult.isLeft()) {
       return Left(fetchResult.fold((l) => l, (r) => throw Exception('unreachable')));
     }
 
-    final changes = fetchResult.getOrElse(() => {});
+    final overrideData = fetchResult.getOrElse(
+      () => const TranslationOverrideData(version: '1.0.0', translations: {}),
+    );
+    final changes = overrideData.translations;
 
     Map<String, dynamic> mergedJson;
 
-    if (item.mode == 'full') {
+    if (item.mode == 'full' || cachedJson == null || sinceVersion == null) {
       mergedJson = changes;
     } else {
-      // mode == 'delta'
-      final cachedResult = await _repository.getCachedTranslationJson(languageCode);
-      var cachedJson = cachedResult.getOrElse(() => null);
+      // mode == 'delta' AND we have cache
+      mergedJson = DeepMergeUtils.deepMerge(cachedJson, changes);
+      if (item.deletedKeys != null && item.deletedKeys!.isNotEmpty) {
+        mergedJson = DeepMergeUtils.deleteKeys(mergedJson, item.deletedKeys!);
+      }
 
-      if (cachedJson == null) {
-        // If delta but we don\'t have a cache, we must fetch full
-        final fullFetchResult = await _repository.fetchTranslationJson(item.fullFetchUrl!);
+      // Validate checksum if provided
+      final computedChecksum = ChecksumUtils.computeSha256(mergedJson);
+      if (item.checksum != null && computedChecksum != item.checksum) {
+        // Checksum mismatch -> Delete cache and fallback (fetch full)
+        await _repository.deleteCachedTranslation(languageCode);
+
+        // Fetch full JSON because delta merge failed checksum
+        final fullFetchResult = await _repository.getLocalizationOverrides(languageCode);
         if (fullFetchResult.isLeft()) {
           return Left(fullFetchResult.fold((l) => l, (r) => throw Exception('unreachable')));
         }
-        mergedJson = fullFetchResult.getOrElse(() => {});
-      } else {
-        mergedJson = DeepMergeUtils.deepMerge(cachedJson, changes);
-        if (item.deletedKeys != null && item.deletedKeys!.isNotEmpty) {
-          mergedJson = DeepMergeUtils.deleteKeys(mergedJson, item.deletedKeys!);
-        }
-
-        // Validate checksum
-        final checksum = ChecksumUtils.computeSha256(mergedJson);
-        if (checksum != item.checksum) {
-          // Checksum mismatch -> Delete cache and fetch full
-          await _repository.deleteCachedTranslation(languageCode);
-          final fullFetchResult = await _repository.fetchTranslationJson(item.fullFetchUrl!);
-          if (fullFetchResult.isLeft()) {
-            return Left(fullFetchResult.fold((l) => l, (r) => throw Exception('unreachable')));
-          }
-          mergedJson = fullFetchResult.getOrElse(() => {});
-        }
+        mergedJson = fullFetchResult
+            .getOrElse(() => const TranslationOverrideData(version: '1.0.0', translations: {}))
+            .translations;
       }
     }
 
@@ -67,12 +81,15 @@ class FetchTranslationUseCase {
     await _repository.saveCachedTranslationJson(languageCode, mergedJson);
 
     // Update version
-    await _repository.saveCachedTranslationVersion(languageCode, item.version);
+    await _repository.saveCachedTranslationVersion(languageCode, item.latestVersion);
 
     // Apply dynamic translations via LocalizationManager
     // This will be called outside, or we can inject LocalizationManager
     // The plan says: "Call LocalizationManager.applyDynamicTranslations(mergedJson) after saving."
-    LocalizationManager.instance.applyDynamicTranslations(mergedJson);
+    LocalizationManager.instance.applyDynamicTranslations(
+      mergedJson,
+      targetLanguageCode: languageCode,
+    );
 
     return const Right(null);
   }

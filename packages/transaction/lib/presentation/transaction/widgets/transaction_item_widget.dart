@@ -34,8 +34,10 @@ class TransactionItemWidget extends StatelessWidget {
       child: Container(
         padding: const .symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
-          color: context.appThemes.white,
-          border: isLast ? null : Border(bottom: BorderSide(color: context.appThemes.ink5)),
+          color: context.appThemes.backgroundColor,
+          border: isLast
+              ? null
+              : Border(bottom: BorderSide(color: context.appThemes.dividerColor)),
         ),
         child: Row(
           children: [
@@ -64,13 +66,13 @@ class TransactionItemWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: .w600,
-                      color: context.appThemes.ink100,
+                      color: context.appThemes.textPrimaryColor,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     formattedTime,
-                    style: TextStyle(fontSize: 14, color: context.appThemes.ink40),
+                    style: TextStyle(fontSize: 14, color: context.appThemes.textSecondaryColor),
                   ),
                 ],
               ),
@@ -83,13 +85,13 @@ class TransactionItemWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: .bold,
-                    color: context.appThemes.ink100,
+                    color: context.appThemes.textPrimaryColor,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   formattedAmount,
-                  style: TextStyle(fontSize: 12, color: context.appThemes.ink40),
+                  style: TextStyle(fontSize: 12, color: context.appThemes.textSecondaryColor),
                 ),
               ],
             ),

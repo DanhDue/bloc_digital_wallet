@@ -18,6 +18,9 @@ class TokenListPage extends BaseInfiniteListPage<TokenListBloc, TokenListUiModel
   const TokenListPage({super.key, this.walletAddress});
 
   @override
+  Color? get backgroundColor => Colors.transparent;
+
+  @override
   void onBlocCreated(BuildContext context, TokenListBloc bloc) {
     bloc.updateWalletAddress(walletAddress ?? '');
   }
@@ -30,6 +33,8 @@ class TokenListPage extends BaseInfiniteListPage<TokenListBloc, TokenListUiModel
   @override
   Widget buildEmpty(BuildContext context) {
     return Column(
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .center,
       mainAxisSize: .min,
       children: [
         const SizedBox(height: 36),

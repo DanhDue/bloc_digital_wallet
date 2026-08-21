@@ -3,11 +3,15 @@
 // coverage:ignore-file
 
 import 'package:core/core.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
-// import 'package:settings/domain/usecases/get_settings_usecase.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:settings/data/models/sync/available_language.dart';
+import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
+import 'package:settings/domain/usecases/get_dynamic_localization_usecase.dart';
 import 'package:settings/domain/usecases/update_user_language_usecase.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 
@@ -20,11 +24,15 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   // final GetSettingsUseCase _getSettingsUseCase;
   final AppInfoService _appInfoService;
   final UpdateUserLanguageUseCase _updateUserLanguageUseCase;
+  final GetAvailableLanguagesUseCase _getAvailableLanguagesUseCase;
+  final GetDynamicLocalizationUseCase _getDynamicLocalizationUseCase;
 
   SettingsBloc(
     /* this._getSettingsUseCase, */
     this._appInfoService,
     this._updateUserLanguageUseCase,
+    this._getAvailableLanguagesUseCase,
+    this._getDynamicLocalizationUseCase,
   ) : super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
     on<SettingsActionNavigateToProfile>(_onNavigateToProfile);
@@ -41,13 +49,22 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     // Emit loading state immediately
     emit(state.copyWith(status: SettingsStatus.loading));
 
-    // Get app info immediately
-    final packageInfo = await _appInfoService.getPackageInfo();
+    // Get app info and available languages immediately
+    final results = await Future.wait([
+      _appInfoService.getPackageInfo(),
+      _getAvailableLanguagesUseCase(),
+    ]);
+
+    final packageInfo = results[0] as PackageInfo;
+    final languagesResult = results[1] as Either<Failure, List<AvailableLanguage>>;
+    final availableLanguages = languagesResult.getOrElse(() => <AvailableLanguage>[]);
+
     final initialUiModel = SettingsUiModel(
       id: 'local',
       appVersion: packageInfo.version,
       buildNumber: packageInfo.buildNumber,
       isDarkModeEnabled: ThemeManager.instance.isDarkMode,
+      availableLanguages: availableLanguages,
     );
 
     // Emit initial state with app info visible immediately
@@ -113,11 +130,19 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     SettingsActionChangeLanguage action,
     Emitter<SettingsState> emit,
   ) async {
-    // Optimistic UI update handled inside the use case (LocalizationManager)
-    // We can also update our UI model if it stores the selected language
-    // final updatedModel = state.uiModel?.copyWith(selectedLanguage: action.languageCode);
-    // emit(state.copyWith(uiModel: updatedModel));
+    // 1. Fetch translation JSON for the new locale and apply dynamic override
+    final result = await _getDynamicLocalizationUseCase(action.languageCode);
 
+    if (result.isRight()) {
+      // 2. Change the locale in the app so UI updates
+      await LocalizationManager.instance.setLocaleFromCode(action.languageCode);
+    } else {
+      final failure = result.fold((l) => l, (r) => null);
+      emitEvent(SettingsEvent.showError(message: failure?.message ?? 'Failed to change language'));
+      return;
+    }
+
+    // 3. Call UpdateUserLanguageUseCase in background to sync preference to server
     await _updateUserLanguageUseCase(action.languageCode);
   }
 

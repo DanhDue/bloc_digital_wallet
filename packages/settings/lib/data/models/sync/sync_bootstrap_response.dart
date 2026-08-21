@@ -15,7 +15,7 @@ part 'sync_bootstrap_response.g.dart';
 abstract class SyncBootstrapResponse with _$SyncBootstrapResponse {
   const factory SyncBootstrapResponse({
     @JsonKey(name: 'user_preferences') BootstrapUserPreferences? userPreferences,
-    @JsonKey(name: 'translations') List<BootstrapTranslationItem>? translations,
+    @JsonKey(name: 'stale_translations') List<BootstrapTranslationItem>? translations,
     @JsonKey(name: 'available_languages') List<AvailableLanguage>? availableLanguages,
     @JsonKey(name: 'removed_resources') List<String>? removedResources,
   }) = _SyncBootstrapResponse;

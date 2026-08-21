@@ -61,9 +61,8 @@ class SettingsItemWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         color:
                             iconBackgroundColor ??
-                            (appThemes?.primaryColor ?? AppColors.settingsItemBlue).withValues(
-                              alpha: 0.1,
-                            ),
+                            (iconColor ?? appThemes?.primaryColor ?? AppColors.settingsItemBlue)
+                                .withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -89,7 +88,14 @@ class SettingsItemWidget extends StatelessWidget {
             ),
           ),
         ),
-        if (showDivider) Divider(height: 1, thickness: 0.5, color: appThemes?.dividerColor),
+        if (showDivider)
+          Divider(
+            height: 1,
+            thickness: 0.5,
+            color: theme.brightness == Brightness.dark
+                ? Colors.white.withValues(alpha: 0.1)
+                : appThemes?.dividerColor,
+          ),
       ],
     );
   }

@@ -72,12 +72,12 @@ class _WalletPageState
   }
 
   Widget _buildSuccess(BuildContext context, WalletState state) {
-    return SafeArea(
-      top: true,
-      bottom: false,
-      child: Scaffold(
-        backgroundColor: context.appThemes.white,
-        body: Column(
+    return Scaffold(
+      backgroundColor: context.appThemes.backgroundColor,
+      body: SafeArea(
+        top: true,
+        bottom: false,
+        child: Column(
           children: [
             _buildTopBar(context, state.selectedNetwork),
             const SizedBox(height: 16),
@@ -95,9 +95,13 @@ class _WalletPageState
             Container(
               height: 44,
               decoration: BoxDecoration(
-                color: context.appThemes.white,
+                color: context.appThemes.backgroundColor,
                 borderRadius: .circular(8),
-                border: Border.all(color: context.appThemes.trueBlue100),
+                border: Border.all(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withOpacity(0.1)
+                      : context.appThemes.dividerColor,
+                ),
               ),
               child: TabBar(
                 indicatorSize: .tab,
@@ -107,7 +111,7 @@ class _WalletPageState
                 overlayColor: .all(context.appThemes.transparent),
                 dividerColor: context.appThemes.transparent,
                 labelColor: context.appThemes.white,
-                unselectedLabelColor: context.appThemes.ink40,
+                unselectedLabelColor: context.appThemes.textSecondaryColor,
                 labelStyle: context.appThemes.titleSmall.copyWith(fontWeight: FontWeight.bold),
                 unselectedLabelStyle: context.appThemes.titleSmall.copyWith(
                   fontWeight: FontWeight.bold,

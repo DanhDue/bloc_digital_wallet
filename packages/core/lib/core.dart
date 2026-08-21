@@ -41,3 +41,4 @@ export 'config/environment_config.dart';
 // DI
 export 'di/core_module.dart';
 export 'localization/localization_manager.dart';
+export 'localization/dynamic_translator.dart';

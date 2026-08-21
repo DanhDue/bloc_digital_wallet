@@ -1,4 +1,7 @@
 {
+  "languageCode": "vi",
+  "languageName": "Tiếng Việt",
+  "languageEnglishName": "Vietnamese",
   "common": {
     "appName": "Ví Điện Tử"
   }

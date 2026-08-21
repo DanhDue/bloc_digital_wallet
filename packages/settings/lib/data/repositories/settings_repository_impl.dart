@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_request.dart';
 import 'package:settings/data/models/sync/sync_bootstrap_response.dart';
+import 'package:settings/data/models/sync/translation_override_response.dart';
 import 'package:settings/data/models/sync/available_language.dart';
 import 'package:settings/data/datasources/local/settings_local_datasource.dart';
 import 'package:settings/data/datasources/remote/settings_remote_datasource.dart';
@@ -28,8 +29,11 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> fetchTranslationJson(String url) {
-    return _remoteDataSource.fetchTranslationJson(url);
+  Future<Either<Failure, TranslationOverrideData>> getLocalizationOverrides(
+    String languageCode, {
+    String? sinceVersion,
+  }) {
+    return _remoteDataSource.getLocalizationOverrides(languageCode, sinceVersion: sinceVersion);
   }
 
   @override

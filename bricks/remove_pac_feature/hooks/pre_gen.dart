@@ -39,6 +39,9 @@ Future<void> run(HookContext context) async {
     // 4. Update lib/core/localization/app_translation_providers.dart - remove lines
     await _cleanTranslationProviders(snakeCaseName, camelCaseName);
 
+    // 4.5 Update lib/core/app_initializer/localization_initializer.dart - remove lines
+    await _cleanLocalizationInitializer(snakeCaseName, camelCaseName);
+
     // 5. Update lib/app_router.dart - remove lines
     await _cleanAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
@@ -128,6 +131,35 @@ Future<void> _cleanTranslationProviders(String snakeName, String camelName) asyn
     ),
     '',
   );
+
+  await file.writeAsString(content);
+}
+
+Future<void> _cleanLocalizationInitializer(String snakeName, String camelName) async {
+  final file = File('lib/core/app_initializer/localization_initializer.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+
+  // Remove import
+  content = content.replaceAll(
+    RegExp('^import \'package:$snakeName/generated/translations.dart\'.*\\n', multiLine: true),
+    '',
+  );
+
+  // Remove from _registerSyncLocaleCallback
+  content = content.replaceAll(
+    RegExp('^\\s*$camelName\\.LocaleSettings\\.setLocaleRaw\\(rawLocale\\);\\s*\\n',
+        multiLine: true),
+    '',
+  );
+
+  // Remove from _registerOverrideCallback
+  final overridePattern = RegExp(
+    '^\\s*await $camelName\\.LocaleSettings\\.overrideTranslationsFromMap\\([\\s\\S]*?\\);\\s*\\n',
+    multiLine: true,
+  );
+  content = content.replaceAll(overridePattern, '');
 
   await file.writeAsString(content);
 }

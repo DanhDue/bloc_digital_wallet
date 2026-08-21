@@ -29,7 +29,7 @@ class TransactionPage
   @override
   Widget handleState(BuildContext context, TransactionState state) {
     return Scaffold(
-      backgroundColor: context.appThemes.white,
+      backgroundColor: context.appThemes.backgroundColor,
       body: SafeArea(
         top: true,
         child: Column(

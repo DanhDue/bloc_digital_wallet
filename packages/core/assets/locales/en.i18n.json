@@ -1,4 +1,7 @@
 {
+  "languageCode": "en",
+  "languageName": "English",
+  "languageEnglishName": "English",
   "core": {
     "common": {
       "error": "An error occurred. Please try again later!",

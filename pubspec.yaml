@@ -70,6 +70,7 @@ dev_dependencies:
   bloc_test: ^9.1.5
   mockito: ^5.4.4
   slang: ^4.12.1
+  flutter_native_splash: ^2.4.7
   
 dartfmt: 
   line_length: 99

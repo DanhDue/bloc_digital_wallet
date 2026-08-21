@@ -24,15 +24,10 @@ import 'package:onboard/presentation/splash/splash_state.dart';
 class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
   final HealthCheckUseCase _healthCheckUseCase;
   final BootstrapUseCase _bootstrapUseCase;
-  final LoadBundledFallbackUseCase _loadBundledFallbackUseCase;
   final FetchTranslationUseCase _fetchTranslationUseCase;
 
-  SplashBloc(
-    this._healthCheckUseCase,
-    this._bootstrapUseCase,
-    this._loadBundledFallbackUseCase,
-    this._fetchTranslationUseCase,
-  ) : super(const SplashInitial()) {
+  SplashBloc(this._healthCheckUseCase, this._bootstrapUseCase, this._fetchTranslationUseCase)
+    : super(const SplashInitial()) {
     handleActionDroppable<InitSplashAction>(_onInit);
     handleActionDroppable<RetryHealthCheckAction>(_onRetryHealthCheck);
   }
@@ -100,15 +95,7 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
   }
 
   Future<void> _performBootstrapAndHealthCheck(Emitter<SplashState> emit) async {
-    // 1. Always load bundled fallback first
-    final currentLocale = LocalizationManager.instance.currentLocale.languageCode;
-    final fallbackResult = await _loadBundledFallbackUseCase(currentLocale);
-    if (fallbackResult.isRight()) {
-      final jsonMap = fallbackResult.getOrElse(() => {});
-      await LocalizationManager.instance.applyDynamicTranslations(jsonMap);
-    }
-
-    // 2. Perform bootstrap and health check
+    // Perform bootstrap and health check
     final results = await Future.wait([
       _bootstrapUseCase().timeout(
         const Duration(seconds: 5),
@@ -133,9 +120,7 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
 
       // Fetch stale translations
       for (final translationItem in response.translations ?? []) {
-        if (translationItem.isStale) {
-          await _fetchTranslationUseCase(translationItem);
-        }
+        await _fetchTranslationUseCase(translationItem);
       }
 
       // Note: Purging deleted translation keys logic can be added later

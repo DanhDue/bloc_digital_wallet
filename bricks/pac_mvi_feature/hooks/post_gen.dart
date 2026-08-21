@@ -23,6 +23,9 @@ Future<void> run(HookContext context) async {
     // 3. Update lib/core/localization/app_translation_providers.dart
     await _updateTranslationProviders(snakeCaseName, camelCaseName);
 
+    // 3.5 Update lib/core/app_initializer/localization_initializer.dart
+    await _updateLocalizationInitializer(snakeCaseName, camelCaseName);
+
     // 4. Update lib/app_router.dart
     await _updateAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
@@ -159,6 +162,63 @@ Future<void> _updateTranslationProviders(String snakeName, String camelName) asy
   }
 
   await file.writeAsString(content);
+}
+
+Future<void> _updateLocalizationInitializer(String snakeName, String camelName) async {
+  final file = File('lib/core/app_initializer/localization_initializer.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  var updated = false;
+
+  // 1. Add import
+  if (!content.contains("package:$snakeName/generated/translations.dart")) {
+    final importMarker = "import 'package:onboard/generated/translations.dart' as onboard;";
+    if (content.contains(importMarker)) {
+      content = content.replaceFirst(
+        importMarker,
+        "$importMarker\nimport 'package:$snakeName/generated/translations.dart' as $camelName;",
+      );
+      updated = true;
+    }
+  }
+
+  // 2. Add to _registerSyncLocaleCallback
+  if (!content.contains("$camelName.LocaleSettings.setLocaleRaw(rawLocale);")) {
+    final syncMarker = "onboard.LocaleSettings.setLocaleRaw(rawLocale);";
+    if (content.contains(syncMarker)) {
+      content = content.replaceFirst(
+        syncMarker,
+        "$syncMarker\n      $camelName.LocaleSettings.setLocaleRaw(rawLocale);",
+      );
+      updated = true;
+    }
+  }
+
+  // 3. Add to _registerOverrideCallback
+  if (!content.contains("await $camelName.LocaleSettings.overrideTranslationsFromMap")) {
+    final onboardBlockRegex =
+        RegExp(r"await onboard\.LocaleSettings\.overrideTranslationsFromMap\([\s\S]*?\);");
+    final match = onboardBlockRegex.firstMatch(content);
+    if (match != null) {
+      final newBlock = '''
+      await $camelName.LocaleSettings.overrideTranslationsFromMap(
+        locale: $camelName.AppLocaleUtils.parse(rawLocale),
+        isFlatMap: false,
+        map: {'$snakeName': json['$snakeName'] ?? {}},
+      );''';
+
+      content = content.replaceFirst(
+        match.group(0)!,
+        "\${match.group(0)}\n\$newBlock",
+      );
+      updated = true;
+    }
+  }
+
+  if (updated) {
+    await file.writeAsString(content);
+  }
 }
 
 Future<void> _updateAppRouter(String snakeName, String pascalName, String camelName) async {

@@ -12,8 +12,8 @@ abstract class AvailableLanguage with _$AvailableLanguage {
   const factory AvailableLanguage({
     @JsonKey(name: 'language_code') required String languageCode,
     @JsonKey(name: 'language_name') required String languageName,
-    @JsonKey(name: 'is_default') required bool isDefault,
-    @JsonKey(name: 'is_active') required bool isActive,
+    @JsonKey(name: 'is_default') @Default(false) bool isDefault,
+    @JsonKey(name: 'is_active') @Default(true) bool isActive,
   }) = _AvailableLanguage;
 
   factory AvailableLanguage.fromJson(Map<String, dynamic> json) =>

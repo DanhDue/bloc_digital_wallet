@@ -12,22 +12,41 @@ class GetDynamicLocalizationUseCase {
 
   GetDynamicLocalizationUseCase(this._repository);
 
-  Future<Either<Failure, void>> call(String languageCode, String fetchUrl) async {
-    // This is called on-demand when the user selects a new language.
-    // Fetch JSON from URL
-    final fetchResult = await _repository.fetchTranslationJson(fetchUrl);
+  Future<Either<Failure, void>> call(String languageCode) async {
+    // 1. Get cached version
+    final cachedVersionResult = await _repository.getCachedTranslationVersion(languageCode);
+    final cachedVersion = cachedVersionResult.fold((l) => null, (r) => r);
 
-    if (fetchResult.isLeft()) {
-      return Left(fetchResult.fold((l) => l, (r) => throw Exception('unreachable')));
+    // 2. Fetch JSON from API with sinceVersion
+    final responseOrFailure = await _repository.getLocalizationOverrides(
+      languageCode,
+      sinceVersion: cachedVersion,
+    );
+
+    if (responseOrFailure.isLeft()) {
+      return Left(responseOrFailure.fold((l) => l, (r) => throw Exception('unreachable')));
     }
 
-    final jsonMap = fetchResult.getOrElse(() => {});
+    final response = responseOrFailure.getOrElse(() => throw Exception('unreachable'));
 
-    // Save to local cache
-    await _repository.saveCachedTranslationJson(languageCode, jsonMap);
+    Map<String, dynamic> jsonMap = response.translations;
+    final version = response.version;
 
-    // Apply dynamic translations
-    LocalizationManager.instance.applyDynamicTranslations(jsonMap);
+    // 3. If the backend returns empty translations or the version matches the cached version, load from local cache
+    if ((jsonMap.isEmpty || version == cachedVersion) && cachedVersion != null) {
+      final cachedJsonResult = await _repository.getCachedTranslationJson(languageCode);
+      jsonMap = cachedJsonResult.fold((l) => {}, (r) => r ?? {});
+    } else {
+      // Save new data to local cache
+      await _repository.saveCachedTranslationJson(languageCode, jsonMap);
+      await _repository.saveCachedTranslationVersion(languageCode, version);
+    }
+
+    // 4. Apply dynamic translations (always do this to ensure memory has it)
+    await LocalizationManager.instance.applyDynamicTranslations(
+      jsonMap,
+      targetLanguageCode: languageCode,
+    );
 
     return const Right(null);
   }
