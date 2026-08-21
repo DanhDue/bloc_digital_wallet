@@ -22,6 +22,15 @@ class NftsListPage
   NftsListAction? get initialAction => const NftsListAction.started();
 
   @override
+  Widget buildScaffold(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: buildAppBar(context),
+      body: buildBody(context),
+    );
+  }
+
+  @override
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;
 
   @override

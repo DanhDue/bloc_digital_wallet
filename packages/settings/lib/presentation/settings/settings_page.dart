@@ -38,7 +38,7 @@ class SettingsPage
       top: true,
       bottom: false,
       child: Scaffold(
-        backgroundColor: AppColors.settingsBg,
+        backgroundColor: appThemes?.backgroundColor ?? theme.scaffoldBackgroundColor,
         body: _buildBody(context, state, appThemes, t),
       ),
     );
@@ -64,6 +64,7 @@ class SettingsPage
     }
 
     final uiModel = state.uiModel;
+    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.only(top: 16, bottom: 32),
@@ -78,7 +79,6 @@ class SettingsPage
                 icon: Icons.person_outline,
                 label: t.account.profile, // "Edit Profile"
                 iconColor: AppColors.settingsItemBlue,
-                iconBackgroundColor: AppColors.settingsItemBlueBg,
                 onTap: () => context.read<SettingsBloc>().onAction(
                   const SettingsAction.navigateToProfile(),
                 ),
@@ -87,7 +87,6 @@ class SettingsPage
                 icon: Icons.lock_outline,
                 label: t.account.changePassword,
                 iconColor: AppColors.settingsItemPurple,
-                iconBackgroundColor: AppColors.settingsItemPurpleBg,
                 onTap: () => context.read<SettingsBloc>().onAction(
                   const SettingsAction.navigateToSecurity(), // Reusing security action for now
                 ),
@@ -97,7 +96,6 @@ class SettingsPage
                 label: t.account.twoFactorAuth,
                 showDivider: false,
                 iconColor: AppColors.settingsItemDeepPurple,
-                iconBackgroundColor: AppColors.settingsItemDeepPurpleBg,
                 trailing: SettingsItemTrailing.value,
                 value: t.account.twoFactorAuthOn, // "On"
                 valueColor: AppColors.settingsItemGreen,
@@ -118,7 +116,6 @@ class SettingsPage
                 trailing: SettingsItemTrailing.value,
                 value: t.preferences.currencyUsd,
                 iconColor: AppColors.settingsItemOrange,
-                iconBackgroundColor: AppColors.settingsItemOrangeBg,
                 onTap: () => _showCurrencyPicker(context),
               ),
               SettingsItemWidget(
@@ -141,7 +138,6 @@ class SettingsPage
                   return langName;
                 })(),
                 iconColor: AppColors.settingsItemBlue,
-                iconBackgroundColor: AppColors.settingsItemBlueBg,
                 onTap: () => _showLanguagePicker(context, t, uiModel?.availableLanguages ?? []),
               ),
               SettingsItemWidget(
@@ -151,7 +147,6 @@ class SettingsPage
                 isOn: uiModel?.isDarkModeEnabled ?? false,
                 showDivider: false,
                 iconColor: AppColors.settingsItemGrey,
-                iconBackgroundColor: AppColors.settingsItemGreyBg,
                 onToggle: (value) => context.read<SettingsBloc>().onAction(
                   SettingsAction.toggleDarkMode(isEnabled: value),
                 ),
@@ -170,7 +165,6 @@ class SettingsPage
                 isOn: uiModel?.isDeveloperModeEnabled ?? false,
                 showDivider: false,
                 iconColor: AppColors.settingsItemGreen,
-                iconBackgroundColor: AppColors.settingsItemGreenBg,
                 onToggle: (value) => context.read<SettingsBloc>().onAction(
                   SettingsAction.toggleDeveloperMode(isEnabled: value),
                 ),
@@ -187,7 +181,6 @@ class SettingsPage
                 label: t.appInfo.contactSupport,
                 trailing: SettingsItemTrailing.arrow, // Explicitly arrow as per requirement
                 iconColor: AppColors.settingsItemBlue,
-                iconBackgroundColor: AppColors.settingsItemBlueBg,
                 onTap: () {
                   // Contact support action
                 },
@@ -200,7 +193,6 @@ class SettingsPage
                 value:
                     uiModel?.appVersion ?? t.appInfo.defaultVersion, // Fallback to example version
                 iconColor: AppColors.settingsItemLightGrey,
-                iconBackgroundColor: AppColors.settingsItemLightGreyBg,
               ),
             ],
           ),
@@ -217,22 +209,25 @@ class SettingsPage
                   // TODO: Implement logout action
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.settingsCardBg,
-                  foregroundColor: AppColors.settingsLogoutText,
+                  backgroundColor: appThemes?.surfaceColor ?? theme.cardColor,
+                  foregroundColor: appThemes?.errorColor ?? AppColors.settingsLogoutText,
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  shadowColor: AppColors.settingsCardShadow,
+                  shadowColor: appThemes?.shadowColor ?? theme.shadowColor.withValues(alpha: 0.05),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.logout, color: AppColors.settingsLogoutText),
+                    Icon(
+                      Icons.logout,
+                      color: appThemes?.errorColor ?? AppColors.settingsLogoutText,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       t.logout,
                       style: appThemes?.bodyLarge.copyWith(
-                        color: AppColors.settingsLogoutText,
+                        color: appThemes.errorColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

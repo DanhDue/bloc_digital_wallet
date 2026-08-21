@@ -28,7 +28,7 @@ class GetDynamicLocalizationUseCase {
     }
 
     final response = responseOrFailure.getOrElse(() => throw Exception('unreachable'));
-    
+
     Map<String, dynamic> jsonMap = response.translations;
     final version = response.version;
 

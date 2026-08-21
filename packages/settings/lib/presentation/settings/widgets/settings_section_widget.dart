@@ -3,7 +3,6 @@
 // coverage:ignore-file
 
 import 'package:flutter/material.dart';
-import 'package:settings/generated/colors.gen.dart';
 import 'package:ui_kit/ui_kit.dart' hide AppColors;
 
 /// A settings section container with a header label.
@@ -35,11 +34,11 @@ class SettingsSectionWidget extends StatelessWidget {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: AppColors.settingsCardBg, // Use AppColors
+            color: appThemes?.surfaceColor ?? theme.cardColor,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppColors.settingsCardShadow, // Use AppColors
+                color: appThemes?.shadowColor ?? theme.shadowColor.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),

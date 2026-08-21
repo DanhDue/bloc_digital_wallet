@@ -149,7 +149,8 @@ Future<void> _cleanLocalizationInitializer(String snakeName, String camelName) a
 
   // Remove from _registerSyncLocaleCallback
   content = content.replaceAll(
-    RegExp('^\\s*$camelName\\.LocaleSettings\\.setLocaleRaw\\(rawLocale\\);\\s*\\n', multiLine: true),
+    RegExp('^\\s*$camelName\\.LocaleSettings\\.setLocaleRaw\\(rawLocale\\);\\s*\\n',
+        multiLine: true),
     '',
   );
 
@@ -162,7 +163,6 @@ Future<void> _cleanLocalizationInitializer(String snakeName, String camelName) a
 
   await file.writeAsString(content);
 }
-
 
 Future<void> _cleanAppRouter(String snakeName, String pascalName, String camelName) async {
   final file = File('lib/app_router.dart');

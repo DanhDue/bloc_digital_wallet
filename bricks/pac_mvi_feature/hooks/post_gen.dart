@@ -197,7 +197,8 @@ Future<void> _updateLocalizationInitializer(String snakeName, String camelName) 
 
   // 3. Add to _registerOverrideCallback
   if (!content.contains("await $camelName.LocaleSettings.overrideTranslationsFromMap")) {
-    final onboardBlockRegex = RegExp(r"await onboard\.LocaleSettings\.overrideTranslationsFromMap\([\s\S]*?\);");
+    final onboardBlockRegex =
+        RegExp(r"await onboard\.LocaleSettings\.overrideTranslationsFromMap\([\s\S]*?\);");
     final match = onboardBlockRegex.firstMatch(content);
     if (match != null) {
       final newBlock = '''
@@ -206,7 +207,7 @@ Future<void> _updateLocalizationInitializer(String snakeName, String camelName) 
         isFlatMap: false,
         map: {'$snakeName': json['$snakeName'] ?? {}},
       );''';
-      
+
       content = content.replaceFirst(
         match.group(0)!,
         "\${match.group(0)}\n\$newBlock",

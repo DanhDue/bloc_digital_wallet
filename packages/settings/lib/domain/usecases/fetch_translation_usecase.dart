@@ -86,7 +86,10 @@ class FetchTranslationUseCase {
     // Apply dynamic translations via LocalizationManager
     // This will be called outside, or we can inject LocalizationManager
     // The plan says: "Call LocalizationManager.applyDynamicTranslations(mergedJson) after saving."
-    LocalizationManager.instance.applyDynamicTranslations(mergedJson, targetLanguageCode: languageCode);
+    LocalizationManager.instance.applyDynamicTranslations(
+      mergedJson,
+      targetLanguageCode: languageCode,
+    );
 
     return const Right(null);
   }

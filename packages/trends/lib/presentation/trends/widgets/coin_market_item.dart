@@ -16,13 +16,10 @@ class CoinMarketItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: colorScheme.surface,
+        color: Colors.transparent,
         width: .infinity,
         padding: EdgeInsets.only(left: 16, right: 16, top: isFirst ? 0 : 12, bottom: 12),
         child: IntrinsicHeight(

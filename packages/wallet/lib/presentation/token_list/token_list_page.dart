@@ -18,6 +18,9 @@ class TokenListPage extends BaseInfiniteListPage<TokenListBloc, TokenListUiModel
   const TokenListPage({super.key, this.walletAddress});
 
   @override
+  Color? get backgroundColor => Colors.transparent;
+
+  @override
   void onBlocCreated(BuildContext context, TokenListBloc bloc) {
     bloc.updateWalletAddress(walletAddress ?? '');
   }

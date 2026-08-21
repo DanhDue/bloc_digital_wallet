@@ -21,7 +21,7 @@ class TokenActionButton extends StatelessWidget {
         icon.image(width: 53, height: 80, fit: BoxFit.cover).paddingOnly(bottom: 6),
         Text(
           title,
-          style: context.appThemes.titleMedium.copyWith(color: context.appThemes.greenVogue),
+          style: context.appThemes.titleMedium.copyWith(color: context.appThemes.textPrimaryColor),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,

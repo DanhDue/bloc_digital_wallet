@@ -14,8 +14,8 @@ class WalletSelectorWidget extends StatelessWidget {
     return Container(
       padding: const .all(16),
       decoration: BoxDecoration(
-        color: context.appThemes.white,
-        border: Border(bottom: BorderSide(color: context.appThemes.ink5)),
+        color: context.appThemes.transparent,
+        border: Border(bottom: BorderSide(color: context.appThemes.dividerColor)),
       ),
       child: Row(
         children: [
@@ -37,17 +37,17 @@ class WalletSelectorWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: .w500,
-                    color: context.appThemes.ink100,
+                    color: context.appThemes.textPrimaryColor,
                   ),
                 ),
                 Text(
                   "US\$53,727.78 USD",
-                  style: TextStyle(fontSize: 14, color: context.appThemes.ink40),
+                  style: TextStyle(fontSize: 14, color: context.appThemes.textSecondaryColor),
                 ),
               ],
             ),
           ),
-          Icon(Icons.keyboard_arrow_down, color: context.appThemes.ink40),
+          Icon(Icons.keyboard_arrow_down, color: context.appThemes.textSecondaryColor),
         ],
       ),
     );

@@ -110,12 +110,14 @@ class LocalizationInitializer implements AppInitializer {
   }
 
   Future<void> _loadSavedLocale() async {
+    Log.d('LocalizationInitializer._loadSavedLocale: Starting');
     final prefs = await SharedPreferences.getInstance();
     final savedLanguageCode = prefs.getString('saved_language_code');
 
     if (savedLanguageCode != null) {
+      Log.d('LocalizationInitializer._loadSavedLocale: savedLanguageCode = $savedLanguageCode');
       await LocalizationManager.instance.setLocaleFromCode(savedLanguageCode);
-      
+
       // Load cached dynamic translations if available
       try {
         final settingsRepo = getIt<SettingsRepository>();
@@ -123,13 +125,32 @@ class LocalizationInitializer implements AppInitializer {
         if (jsonResult.isRight()) {
           final json = jsonResult.getOrElse(() => null);
           if (json != null) {
-            await LocalizationManager.instance.applyDynamicTranslations(json, targetLanguageCode: savedLanguageCode);
+            Log.d(
+              'LocalizationInitializer._loadSavedLocale: Found cached JSON, applying dynamic translations',
+            );
+            await LocalizationManager.instance.applyDynamicTranslations(
+              json,
+              targetLanguageCode: savedLanguageCode,
+            );
+          } else {
+            Log.d('LocalizationInitializer._loadSavedLocale: Cached JSON is null');
           }
+        } else {
+          Log.d(
+            'LocalizationInitializer._loadSavedLocale: getCachedTranslationJson returned Left',
+          );
         }
-      } catch (_) {
-        // Ignore if dependency not found or cache read fails
+      } catch (e, st) {
+        Log.e(
+          'LocalizationInitializer._loadSavedLocale: Error applying dynamic translations',
+          error: e,
+          stackTrace: st,
+        );
       }
     } else {
+      Log.d(
+        'LocalizationInitializer._loadSavedLocale: No savedLanguageCode found, using default locale',
+      );
       // Initialize slang translations fallback
       LocaleSettings.useDeviceLocale();
       // Ensure sync runs even for device locale
