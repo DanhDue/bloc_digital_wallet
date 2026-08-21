@@ -34,14 +34,25 @@ class FetchTranslationUseCase {
       }
     }
 
+    String? checksum;
+    if (cachedJson != null) {
+      checksum = ChecksumUtils.computeSha256(cachedJson);
+    }
+
     // Fetch JSON overrides (delta or full)
     final fetchResult = await _repository.getLocalizationOverrides(
       languageCode,
       sinceVersion: sinceVersion,
+      eTag: checksum != null ? '"$checksum"' : null,
     );
 
     if (fetchResult.isLeft()) {
-      return Left(fetchResult.fold((l) => l, (r) => throw Exception('unreachable')));
+      final failure = fetchResult.fold((l) => l, (r) => throw Exception('unreachable'));
+      if (failure is ServerFailure && failure.code == 304) {
+        // 304 Not Modified: Cache is up to date, nothing to do.
+        return const Right(null);
+      }
+      return Left(failure);
     }
 
     final overrideData = fetchResult.getOrElse(
