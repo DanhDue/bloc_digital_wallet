@@ -30,8 +30,23 @@ check() {
   echo "PASS: $description"
 }
 
+# Runs the real script from inside a throwaway git repo that has no
+# secureFiles/, so REPO_ROOT resolves there (via --git-common-dir) and the
+# secureFiles/ precondition branch is exercised for real.
+run_in_repo_without_secure_files() {
+  local tmp_repo
+  tmp_repo="$(mktemp -d "${TMPDIR:-/tmp}/bootstrap-worktree-test-XXXXXX")"
+  git init --quiet "$tmp_repo" >/dev/null 2>&1
+  mkdir -p "$tmp_repo/fake-worktree"
+  (cd "$tmp_repo" && "$SCRIPT" "$tmp_repo/fake-worktree")
+  local status=$?
+  rm -rf "$tmp_repo"
+  return $status
+}
+
 check "no arguments" "Usage:" "$SCRIPT"
 check "nonexistent worktree path" "does not exist" "$SCRIPT" "/tmp/definitely-does-not-exist-xyz-$$"
+check "missing secureFiles/ at repo root" "secureFiles" run_in_repo_without_secure_files
 
 if [ "$FAILURES" -ne 0 ]; then
   echo "$FAILURES check(s) failed"

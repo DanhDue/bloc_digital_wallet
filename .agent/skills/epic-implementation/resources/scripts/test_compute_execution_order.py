@@ -9,7 +9,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from compute_execution_order import compute_layers, load_tasks, parse_blockers, parse_soft_notes
+from compute_execution_order import compute_layers, load_tasks, parse_blockers, parse_soft_notes, scan_tasks
 
 
 def write_task(directory: Path, filename: str, *, epic: str, priority: str, title: str, dependencies_body: str) -> None:
@@ -60,6 +60,34 @@ class ParseSoftNotesTests(unittest.TestCase):
 
     def test_no_note_when_absent(self):
         self.assertEqual(parse_soft_notes("- **Dependencies**: Blocked by [Task 1](task_1.md)."), [])
+
+
+class ScanTasksTests(unittest.TestCase):
+    """The scan report is what stops an unparseable task file from vanishing silently."""
+
+    def test_reports_scanned_matched_and_skipped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            write_task(directory, "task_1_a.md", epic="demo", priority="high", title="Task 1: A",
+                       dependencies_body="- **Dependencies**: None.")
+            write_task(directory, "task_9_other.md", epic="other-epic", priority="high", title="Task 9: Other",
+                       dependencies_body="- **Dependencies**: None.")
+            (directory / "task_2_broken.md").write_text("no frontmatter at all\n# Task 2: Broken\n")
+
+            tasks, scanned, skipped = scan_tasks(directory, "demo")
+            self.assertEqual(list(tasks.keys()), ["task_1_a"])
+            self.assertEqual(len(scanned), 3)
+            self.assertEqual(
+                sorted(p.name for p in skipped),
+                ["task_2_broken.md", "task_9_other.md"],
+            )
+
+    def test_load_tasks_matches_scan_tasks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            write_task(directory, "task_1_a.md", epic="demo", priority="high", title="Task 1: A",
+                       dependencies_body="- **Dependencies**: None.")
+            self.assertEqual(load_tasks(directory, "demo"), scan_tasks(directory, "demo")[0])
 
 
 class ComputeLayersTests(unittest.TestCase):

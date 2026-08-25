@@ -10,11 +10,16 @@ epic-designer's own task template prescribes), and prints:
   1. Tasks grouped into layers. Tasks in the same layer have no dependency
      on each other -- they could technically run in parallel, though
      epic-implementation runs them sequentially (see the design spec).
-  2. Any "Recommended ..." notes found in that section -- these are NOT
-     treated as hard blockers, so review them manually; the computed
+  2. Any soft notes found in that section -- currently lines containing
+     "Recommended" or "New dependency" (see SOFT_NOTE_MARKERS). These are
+     NOT treated as hard blockers, so review them manually; the computed
      layer for that task may be earlier than the note suggests.
   3. One flattened sequential order: earlier layers first, and within a
      layer, higher priority first, then lower task number first.
+
+It also prints a scan summary (how many `task_*.md` files were seen, how
+many matched the epic, how many were skipped) so a task file with broken
+or missing frontmatter is never silently dropped.
 """
 import argparse
 import re
@@ -71,12 +76,24 @@ def extract_title(text: str) -> str:
     return match.group(1).strip() if match else "Untitled"
 
 
-def load_tasks(features_dir: Path, epic: str) -> dict[str, dict]:
+def scan_tasks(features_dir: Path, epic: str) -> tuple[dict[str, dict], list[Path], list[Path]]:
+    """Load the epic's tasks AND report what was skipped.
+
+    Returns (tasks, scanned_paths, skipped_paths). A file lands in
+    `skipped_paths` when its frontmatter is missing/unparseable (so
+    `epic:` reads as None) or names a different epic -- both look
+    identical from the graph's point of view, which is exactly why the
+    CLI reports the count instead of dropping them silently.
+    """
     tasks: dict[str, dict] = {}
+    scanned: list[Path] = []
+    skipped: list[Path] = []
     for path in sorted(Path(features_dir).glob("task_*.md")):
+        scanned.append(path)
         text = path.read_text()
         fm = parse_frontmatter(text)
         if fm.get("epic") != epic:
+            skipped.append(path)
             continue
         section = parse_dependencies_section(text)
         task_id = fm.get("id", path.stem)
@@ -89,6 +106,11 @@ def load_tasks(features_dir: Path, epic: str) -> dict[str, dict]:
             "soft_notes": parse_soft_notes(section),
             "title": extract_title(text),
         }
+    return tasks, scanned, skipped
+
+
+def load_tasks(features_dir: Path, epic: str) -> dict[str, dict]:
+    tasks, _scanned, _skipped = scan_tasks(features_dir, epic)
     return tasks
 
 
@@ -132,13 +154,28 @@ def main(argv: list[str] | None = None) -> int:
                          help="Directory containing task_*.md files (default: .devtool/features)")
     args = parser.parse_args(argv)
 
-    tasks = load_tasks(Path(args.features_dir), args.epic)
+    tasks, scanned, skipped = scan_tasks(Path(args.features_dir), args.epic)
+    scan_summary = (
+        f"Scanned {len(scanned)} task_*.md files; {len(tasks)} matched epic '{args.epic}'; "
+        f"{len(skipped)} had no parseable frontmatter or a different epic."
+    )
     if not tasks:
+        print(scan_summary, file=sys.stderr)
         print(f"No tasks found for epic '{args.epic}' in {args.features_dir}", file=sys.stderr)
         return 1
 
-    layers = compute_layers(tasks)
+    try:
+        layers = compute_layers(tasks)
+    except ValueError as error:
+        print(scan_summary, file=sys.stderr)
+        print(f"Cannot compute an execution order: {error}", file=sys.stderr)
+        return 1
 
+    print(scan_summary)
+    if skipped:
+        for path in skipped:
+            print(f"  skipped: {path}")
+    print()
     print(f"Execution plan for epic '{args.epic}' ({len(tasks)} tasks):\n")
     flattened: list[str] = []
     for i, layer in enumerate(layers):

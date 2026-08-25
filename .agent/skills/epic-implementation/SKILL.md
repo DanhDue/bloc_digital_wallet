@@ -1,6 +1,6 @@
 ---
 name: epic-implementation
-description: Use when an epic already has an approved HLD and Kanban task files (`.devtool/epic/<name>/` + `.devtool/features/task_*.md`) and you need to actually execute those tasks against the codebase, in the right order, inside an isolated worktree.
+description: Use when an epic already has an approved HLD and Kanban task files (`.devtool/epic/<epic_dir>/` + `.devtool/features/task_*.md`) and you need to actually execute those tasks against the codebase, in the right order, inside an isolated worktree.
 ---
 
 # Epic Implementation
@@ -11,13 +11,24 @@ Runs an already-approved epic's Kanban tasks end-to-end: reload the epic's own d
 
 **Core principle:** One worktree, one task at a time, one commit per task, docs stay truthful.
 
-**Announce at start:** "I'm using the epic-implementation skill to implement the `<epic_name>` epic."
+**Announce at start:** "I'm using the epic-implementation skill to implement the `<epic_slug>` epic."
 
 **Full rationale:** [2026-08-26-epic-implementation-design.md](../../../docs/superpowers/specs/2026-08-26-epic-implementation-design.md)
 
+## Two Placeholders, Not One
+
+This skill uses two distinct placeholders, and **they are usually different strings** — do not substitute one for the other:
+
+| Placeholder | What it is | Where it appears | Worked example |
+|-------------|-----------|------------------|----------------|
+| `<epic_dir>` | The epic's directory name on disk | `.devtool/epic/<epic_dir>/<epic_dir>.en.md`, the worktree directory name | `logging_refactor` (underscores) |
+| `<epic_slug>` | The epic's frontmatter `epic:` value | The calculator's CLI arg, matching `epic:` in `task_*.md`, the `epic/<epic_slug>` branch name, the `[EPIC_NAME]` commit prefix | `logging-refactor` (hyphens) |
+
+This repo's real epic is the concrete case: the directory is `.devtool/epic/logging_refactor/` while every task file's frontmatter says `epic: "logging-refactor"`. Read both values off disk at the start — never derive one from the other by guessing the separator.
+
 ## When to Use
 
-- The epic has a `.devtool/epic/<epic_name>/<epic_name>.en.md` HLD and one or more `.devtool/features/task_*.md` files with `epic: "<epic_name>"` in frontmatter, and a human has already approved that design.
+- The epic has a `.devtool/epic/<epic_dir>/<epic_dir>.en.md` HLD and one or more `.devtool/features/task_*.md` files with `epic: "<epic_slug>"` in frontmatter, and a human has already approved that design.
 - You are about to implement more than one task from that epic in this session.
 
 **Don't use when:** the epic/tasks don't exist yet (use `superpowers:brainstorming` then `epic-designer` first), or you're implementing a single one-off task with no epic context (just use `superpowers:subagent-driven-development` directly).
@@ -27,50 +38,64 @@ Runs an already-approved epic's Kanban tasks end-to-end: reload the epic's own d
 ### Phase 0 — Context Reload (once, not per task)
 
 Read, in full:
-- `.devtool/epic/<epic_name>/<epic_name>.en.md` (the canonical HLD — never `.vi.md` for decisions, that's a synced translation).
-- Every `.devtool/features/task_*.md` whose frontmatter `epic:` matches `<epic_name>`.
+- `.devtool/epic/<epic_dir>/<epic_dir>.en.md` (the canonical HLD — never `.vi.md` for decisions, that's a synced translation).
+- Every `.devtool/features/task_*.md` whose frontmatter `epic:` matches `<epic_slug>`.
 - Any spec file(s) linked from the HLD's Meta Data section.
 
 This is an autonomous read-and-internalize pass, not a re-run of the interactive `superpowers:brainstorming` skill — the design is already approved; there is nothing left to ask the user about the architecture itself.
 
 ### Phase 1 — Execution Plan
 
-1. Run:
+1. Run (note: the argument is the **slug**, not the directory name):
    ```bash
-   python3 .agent/skills/epic-implementation/resources/scripts/compute_execution_order.py <epic_name>
+   python3 .agent/skills/epic-implementation/resources/scripts/compute_execution_order.py <epic_slug>
    ```
+   Check the scan summary line it prints first (`Scanned N task_*.md files; M matched epic ...; K had no parseable frontmatter or a different epic.`). If `M` is smaller than the number of tasks you read in Phase 0, a task file has broken frontmatter or the wrong `epic:` value — fix that before going any further, or the epic will silently run short a task.
 2. Read the "Manual review advised" section of the output (if any) and cross-check it against what you read in Phase 0 — a task's own prose may recommend a later placement than its strict dependency layer allows (this happened for `logging-refactor`'s Task 7: graph-eligible right after Task 2, but its own file recommends doing it after Tasks 1-4). Adjust the flattened order by hand if the prose note should win.
 3. **Checkpoint:** present the final order (with any manual adjustment explained) to the user and get confirmation before creating any worktree or dispatching any subagent.
 
-### Worktree Bootstrap (once, after the order is confirmed)
+#### Phase 1 (continued) — Worktree Bootstrap, once the order is confirmed
 
-1. Follow `superpowers:using-git-worktrees` to create one worktree named for the epic (e.g. branch `epic/<epic_name>`), from `develop`.
-2. Run:
+These are Phase 1's closing steps, not a separate phase — they run after the step 3 checkpoint and before any Phase 2 subagent.
+
+4. Create one worktree for the whole epic, following `superpowers:using-git-worktrees`. That skill's own command is `git worktree add "$path" -b "$BRANCH_NAME"` **with no base ref**, which branches from whatever HEAD you happen to be on. Do not use it bare here — spell the base ref out explicitly:
+   ```bash
+   git worktree add .worktrees/<epic_dir> -b epic/<epic_slug> develop
+   ```
+   The trailing `develop` is **not optional**. Omit it and, if you are currently on some other branch, the epic worktree silently branches from the wrong place and every task's commit lands on top of unrelated work.
+5. Bootstrap the worktree so it can actually build:
    ```bash
    .agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh <worktree_path>
    ```
-   Run this with your current working directory at the checkout you want treated as `REPO_ROOT` (typically the main checkout) — not from inside a different worktree — otherwise `secureFiles/` and other repo-root-relative lookups resolve against the wrong tree.
-   This copies `secureFiles/` in, places platform config via `copy_secure_configurations`, and runs `melos bootstrap`. It does **not** run `pod install` — this project uses Swift Package Manager, not CocoaPods.
-3. Do not copy or symlink `.dart_tool/`, `/build/`, `ios/Flutter/ephemeral/Packages/`, or any `android/**/.cxx/` directory from another checkout into this worktree — these embed the source checkout's absolute paths and will silently corrupt the build from a different path.
+   This can be run from any checkout of the repo — it resolves the main checkout via git's shared common dir, so being inside the new worktree (where `superpowers:using-git-worktrees` leaves you) is fine. It copies `secureFiles/` in, places platform config via `copy_secure_configurations`, and runs `melos bootstrap`. It does **not** run `pod install` — this project uses Swift Package Manager, not CocoaPods. It exits non-zero if `copy_secure_configurations` reported any missing file, rather than claiming success for a worktree that cannot build.
+6. **Verify the bootstrap actually worked** before dispatching any subagent — the script's own success message is necessary, not sufficient:
+   ```bash
+   ls <worktree_path>/android/app/src/dev/google-services.json   # placed by copy_secure_configurations
+   ls <worktree_path>/.dart_tool/package_config.json             # written by melos bootstrap
+   ```
+   Check `.dart_tool/package_config.json` at the **worktree root only**. This repo uses Dart pub workspaces, so only the root gets a `package_config.json` — `packages/core/.dart_tool/package_config.json` legitimately does not exist and is the wrong thing to check.
+7. Do not copy or symlink `.dart_tool/`, `/build/`, `ios/Flutter/ephemeral/Packages/`, or any `android/**/.cxx/` directory from another checkout into this worktree — these embed the source checkout's absolute paths and will silently corrupt the build from a different path.
 
 ### Phase 2 — Sequential Task Execution
 
-For each task in the confirmed order, follow `superpowers:subagent-driven-development` almost exactly, with two differences:
+For each task in the confirmed order, follow `superpowers:subagent-driven-development` almost exactly. **The two differences from the base skill are (a) step 1 — the implementer does not commit, and (b) step 4 — you make exactly one commit yourself, after both reviews pass, staging the code and the task file together.** Everything else is the base skill unchanged.
 
-1. Dispatch implementer subagent with the full task file text. It follows `superpowers:test-driven-development`, self-reviews, but does **not** commit yet.
+1. **(Difference a)** Dispatch implementer subagent with the full task file text. It follows `superpowers:test-driven-development`, self-reviews, but does **not** commit yet.
 2. Dispatch spec-compliance reviewer, then code-quality reviewer, same as the base skill. Fix loops as needed — still uncommitted.
-3. Only once both reviews pass, make exactly one commit:
+3. Only once both reviews pass, update that task's frontmatter in `.devtool/features/task_<n>.md`: `status: "done"`, `completedAt: "<ISO-8601 now>"`. Do this **before** committing — `.devtool/features/task_*.md` is tracked, so updating it after the commit would leave the tree dirty and force a second commit.
+4. **(Difference b)** Make exactly one commit, staging both the code changes and the updated task file together:
    ```bash
+   git status                                    # check nothing unrelated is pending
+   git add -A                                    # code changes + .devtool/features/task_<n>.md
    git commit -m "[EPIC_NAME] <task_title>"
    ```
-   `EPIC_NAME` is the epic slug upper-cased with hyphens (e.g. `LOGGING-REFACTOR`). `<task_title>` is the task's `# Task N: <Title>` heading with the `Task N:` prefix stripped.
-4. Update that task's frontmatter: `status: "done"`, `completedAt: "<ISO-8601 now>"`.
-5. If the implementer or a reviewer flags that the implementation diverged from the HLD, go to Doc Sync below before starting the next task.
+   `EPIC_NAME` is `<epic_slug>` upper-cased, hyphens kept (e.g. `LOGGING-REFACTOR`). `<task_title>` is the task's `# Task N: <Title>` heading with the `Task N:` prefix stripped. Confirm `git status` is clean afterwards — anything left over means the "one commit per task" rule is already broken.
+5. If the implementer or a reviewer flags that the implementation diverged from the HLD, go to Phase 3 before starting the next task.
 
-### Doc Sync on Divergence
+### Phase 3 — Doc Sync on Divergence
 
 Only when Phase 2 step 5 flags divergence:
-1. Update the epic's Mermaid diagrams in **both** `.en.md` and `.vi.md` — never let one drift from the other.
+1. Update the epic's Mermaid diagrams in **both** `.devtool/epic/<epic_dir>/<epic_dir>.en.md` and `.vi.md` — never let one drift from the other.
 2. Update the affected task file(s)' own prose if it was inaccurate.
 3. Commit separately:
    ```bash
@@ -80,25 +105,36 @@ Only when Phase 2 step 5 flags divergence:
 
 ### Phase 4 — End of Epic
 
-1. Once every task is `done`, run the full test suite once more on the epic worktree.
+1. Once every task is `done`, run the full test suite and analyzer once more on the epic worktree:
+   ```bash
+   melos run test
+   melos run analyze
+   ```
 2. Use `superpowers:finishing-a-development-branch` on the epic branch (base = `develop`). Never merge to `develop` outside of that skill's flow.
 
 ## Quick Reference
 
 | Step | Tool |
 |------|------|
-| Compute execution order | `resources/scripts/compute_execution_order.py <epic_name>` |
-| Create the epic worktree | `superpowers:using-git-worktrees` |
+| Compute execution order | `resources/scripts/compute_execution_order.py <epic_slug>` |
+| Create the epic worktree | `superpowers:using-git-worktrees` + `git worktree add .worktrees/<epic_dir> -b epic/<epic_slug> develop` |
 | Bootstrap the worktree | `resources/scripts/bootstrap_worktree.sh <worktree_path>` |
 | Run each task | `superpowers:subagent-driven-development` |
 | Per-task TDD | `superpowers:test-driven-development` |
+| End-of-epic verification | `melos run test` + `melos run analyze` |
 | Finish the epic branch | `superpowers:finishing-a-development-branch` |
 
 ## Common Mistakes
 
-**Trusting the computed layer blindly** — a task's own prose can carry a softer "Recommended to do after..." note the parser doesn't treat as a hard blocker. Always read the "Manual review advised" output before confirming the order.
+**Confusing `<epic_dir>` with `<epic_slug>`** — passing the directory name (`logging_refactor`) to the calculator makes it find zero tasks; passing the slug (`logging-refactor`) as a path makes the HLD read fail. See "Two Placeholders, Not One" above.
 
-**Copying build caches to "speed up" a new worktree** — `.dart_tool/`, `ios/Flutter/ephemeral/Packages/`, and native `.cxx/` directories hard-code the source checkout's absolute path; copying them corrupts the build in a different worktree path. Let them regenerate — the dependency-level caches (`~/.pub-cache`, `~/.gradle/caches`, Swift Package Manager's cache) are already global and make regeneration fast.
+**Creating the epic worktree without an explicit base ref** — `superpowers:using-git-worktrees` branches from current HEAD. Always pass `develop` explicitly.
+
+**Trusting the computed layer blindly** — a task's own prose can carry softer notes the parser deliberately does not treat as hard blockers (currently lines containing "Recommended" or "New dependency"). Always read the "Manual review advised" output before confirming the order.
+
+**Committing before updating the task file's frontmatter** — `.devtool/features/task_*.md` is tracked, so this leaves the tree dirty and forces either a second commit or a leak into the next task's commit. Update the frontmatter first, then commit both together.
+
+**Copying build caches to "speed up" a new worktree** — `.dart_tool/`, `/build/`, `ios/Flutter/ephemeral/Packages/`, and native `.cxx/` directories hard-code the source checkout's absolute path; copying them corrupts the build in a different worktree path. Let them regenerate — the dependency-level caches (`~/.pub-cache`, `~/.gradle/caches`, Swift Package Manager's cache) are already global and make regeneration fast.
 
 **Running `pod install`** — this project migrated to Swift Package Manager; there is no `Podfile` tracked in git.
 
@@ -110,13 +146,17 @@ Only when Phase 2 step 5 flags divergence:
 - Create a worktree per task or dispatch concurrent implementation subagents (rejected in the spec — file/merge conflicts).
 - Skip the Phase 1 confirmation checkpoint before touching git.
 - Merge to `develop` without going through `superpowers:finishing-a-development-branch`.
-- Treat a "Recommended..." note as equivalent to "Blocked by..." without telling the user you're overriding the computed order.
+- Treat a soft note ("Recommended...", "New dependency...") as equivalent to "Blocked by..." without telling the user you're overriding the computed order.
+- Ignore a non-zero `bootstrap_worktree.sh` exit, or a calculator `matched` count lower than the number of tasks you read in Phase 0. (A non-zero `skipped` count is normal — other epics' task files live in the same directory.)
 
 ## Integration
 
 **Required workflow skills:**
-- **superpowers:using-git-worktrees** — creates the epic worktree.
+- **superpowers:using-git-worktrees** — creates the epic worktree (pass `develop` as the explicit base ref).
 - **superpowers:subagent-driven-development** — runs each task.
 - **superpowers:test-driven-development** — used by each task's implementer subagent.
 - **superpowers:finishing-a-development-branch** — completes the epic branch.
 - **copy_secure_configurations** — invoked by `bootstrap_worktree.sh`.
+
+**Optional prerequisite:**
+- **check_secure_files** — documents what the gitignored `secureFiles/` directory must contain. Only needed if the main checkout's `secureFiles/` is missing or incomplete, which `bootstrap_worktree.sh` will tell you about explicitly.

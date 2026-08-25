@@ -54,7 +54,7 @@ This is an autonomous read-and-internalize pass, not a re-invocation of the inte
 2. Build a dependency graph; compute topological layers (a task's layer = 1 + max layer of its blockers; no blockers = layer 0).
 3. Within a layer, order by priority (high → medium → low), then by task number as a final tiebreak.
 4. Flatten all layers into one strict sequential execution order.
-5. Report the computed order, annotating which tasks share a layer (i.e. *could* have run in parallel) — informational only, does not change execution. For `logging-refactor` today, this should surface Tasks 4/5/6 as one such layer (all depend only on Task 3).
+5. Report the computed order, annotating which tasks share a layer (i.e. *could* have run in parallel) — informational only, does not change execution. For `logging-refactor` today, this surfaces two such layers: Tasks 3/5/7 (all blocked only by Task 2) and Tasks 4/6 (both blocked only by Task 3).
 6. **Checkpoint**: present this order for user confirmation before creating any worktree or dispatching any subagent — mirrors `epic-designer`'s own task-breakdown checkpoint.
 
 ### Phase 2 — Sequential Task Execution
@@ -78,13 +78,13 @@ Only runs when Phase 2 step 6 flags divergence:
 
 ## Alternatives Considered
 
-**True multi-worktree parallel execution** (one worktree per task within an independent layer, concurrent subagents, sequential merge-back into the epic branch) was designed in full detail, then rejected. For `logging-refactor`, the only real parallel opportunity is Tasks 4/5/6 (all depend only on Task 3) — a modest win — while the added risk is real: managing multiple worktrees, coordinating merge order, and a genuine chance that 4/5/6 all touch the same DI/bootstrap file, causing merge conflicts. The existing, proven `subagent-driven-development` pattern already explicitly prohibits concurrent implementation subagents for exactly this reason ("Dispatch multiple implementation subagents in parallel (conflicts)"). Sequential-with-dependency-analysis captures the planning value without the new risk surface; true parallelism can be revisited later, on a larger epic, once this simpler version is validated.
+**True multi-worktree parallel execution** (one worktree per task within an independent layer, concurrent subagents, sequential merge-back into the epic branch) was designed in full detail, then rejected. For `logging-refactor`, the only real parallel opportunities are Tasks 3/5/7 and Tasks 4/6 — a modest win — while the added risk is real: managing multiple worktrees, coordinating merge order, and a genuine chance that tasks in the same layer all touch the same DI/bootstrap file, causing merge conflicts. The existing, proven `subagent-driven-development` pattern already explicitly prohibits concurrent implementation subagents for exactly this reason ("Dispatch multiple implementation subagents in parallel (conflicts)"). Sequential-with-dependency-analysis captures the planning value without the new risk surface; true parallelism can be revisited later, on a larger epic, once this simpler version is validated.
 
 **Copying/symlinking build caches between worktrees** (to speed up bootstrap) was considered and rejected — see Non-Goals for the concrete evidence found in this repo.
 
 ## Testing Strategy
 This skill's output is a process/documentation artifact, not application code, so verification is scenario-based:
-- Dry-run the dependency-graph computation against `logging-refactor`'s actual 8 tasks; confirm the computed order matches manual analysis (1 → 2 → 3 → {4, 5, 6} → 7 → 8, with 7 additionally still valid after 4 per its own "recommended after 1-4" note).
+- Dry-run the dependency-graph computation against `logging-refactor`'s actual 8 tasks; confirm the computed order matches manual analysis. Verified against the real task files: the layering is `{1} → {2} → {3, 5, 7} → {4, 6} → {8}` (Task 5 and Task 7 are both blocked by Task 2, not Task 3), which is what the calculator produces and what `RealLoggingRefactorEpicTests` pins. Task 7 is graph-eligible in layer 2 but its own file recommends doing it after Tasks 1-4 — surfaced as a soft note for manual review, never silently applied.
 - Verify the worktree bootstrap steps end-to-end against this repo's actual `secureFiles/` copy, `melos bootstrap`, and a first iOS build's automatic SPM resolution — confirm a freshly created worktree can actually run the app.
 - After a real run, inspect `git log` on the epic branch to confirm exactly one commit per task (plus doc-sync commits only where divergence genuinely occurred).
 
