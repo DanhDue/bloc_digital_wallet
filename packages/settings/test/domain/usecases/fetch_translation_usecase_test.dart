@@ -5,10 +5,8 @@
 import 'package:core/core.dart' hide test;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:settings/domain/repositories/settings_repository.dart';
-import 'package:settings/domain/usecases/fetch_translation_usecase.dart';
 import 'package:settings/data/models/sync/bootstrap_translation_item.dart';
-import 'package:settings/data/models/sync/translation_override_response.dart';
+import 'package:settings/domain/usecases/fetch_translation_usecase.dart';
 
 import 'get_settings_usecase_test.mocks.dart';
 
@@ -19,7 +17,7 @@ void main() {
   setUp(() {
     mockRepository = MockSettingsRepository();
     useCase = FetchTranslationUseCase(mockRepository);
-    
+
     // Reset singleton if it was modified
     // LocalizationManager.instance is a singleton, we assume it doesn't crash during applyDynamicTranslations in test
     if (!GetIt.instance.isRegistered<Talker>()) {
@@ -41,25 +39,29 @@ void main() {
       final cachedJson = {'hello': 'world'};
       final expectedChecksum = ChecksumUtils.computeSha256(cachedJson);
 
-      when(mockRepository.getCachedTranslationVersion(languageCode))
-          .thenAnswer((_) async => Right<Failure, String?>('1.0.0'));
-          
-      when(mockRepository.getCachedTranslationJson(languageCode))
-          .thenAnswer((_) async => Right<Failure, Map<String, dynamic>?>(cachedJson));
+      when(
+        mockRepository.getCachedTranslationVersion(languageCode),
+      ).thenAnswer((_) async => Right<Failure, String?>('1.0.0'));
+
+      when(
+        mockRepository.getCachedTranslationJson(languageCode),
+      ).thenAnswer((_) async => Right<Failure, Map<String, dynamic>?>(cachedJson));
 
       // Simulate a 304 ServerFailure
-      when(mockRepository.getLocalizationOverrides(
-        languageCode,
-        sinceVersion: '1.0.0',
-        eTag: '"$expectedChecksum"',
-      )).thenAnswer((_) async => const Left(ServerFailure(message: 'Not Modified', code: 304)));
+      when(
+        mockRepository.getLocalizationOverrides(
+          languageCode,
+          sinceVersion: '1.0.0',
+          eTag: '"$expectedChecksum"',
+        ),
+      ).thenAnswer((_) async => const Left(ServerFailure(message: 'Not Modified', code: 304)));
 
       // Act
       final result = await useCase(item);
 
       // Assert
       expect(result.isRight(), true);
-      
+
       // Verify that no saving happened because it was 304
       verifyNever(mockRepository.saveCachedTranslationJson(languageCode, any));
       verifyNever(mockRepository.saveCachedTranslationVersion(languageCode, any));

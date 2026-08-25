@@ -69,7 +69,7 @@ This document extends the existing Dynamic Configuration API Contract with three
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Mobile App (Device A, B, C...)               │
 │                                                                 │
-│  App Startup → POST /sync/bootstrap                             │
+│  App Startup → POST /settings/sync/bootstrap                             │
 │  User changes pref → PUT /users/me/preferences                  │
 │  Receives push → re-fetch changed config                        │
 └─────────────────────────────────────────────────────────────────┘
@@ -755,7 +755,7 @@ Same as defined in [dynamic_configuration_api.md §1.2](./dynamic_configuration_
 
 ### 3.5 Bulk Config Sync (Bootstrap)
 
-`POST /api/v1/sync/bootstrap`
+`POST /api/v1/settings/sync/bootstrap`
 
 **NEW API** — The single entry point for the mobile app on every cold start. Returns the user's preferences and version info for all active configs, so the app knows what to re-fetch.
 
@@ -1072,7 +1072,7 @@ sequenceDiagram
     participant BE as Backend
     participant DB as Database
 
-    App->>BE: POST /api/v1/sync/bootstrap<br/>{cached_versions, device_info}
+    App->>BE: POST /api/v1/settings/sync/bootstrap<br/>{cached_versions, device_info}
     BE->>DB: Get user preferences by JWT user_id
     BE->>DB: Get all active translations & themes versions
     DB-->>BE: Return data
@@ -1111,7 +1111,7 @@ sequenceDiagram
     BE-->>DevA: 200 OK {selected_language: "vi", ...}
 
     Note over DevB: Next cold start
-    DevB->>BE: POST /api/v1/sync/bootstrap
+    DevB->>BE: POST /api/v1/settings/sync/bootstrap
     BE-->>DevB: {user_preferences: {selected_language: "vi"}}
     DevB->>DevB: Detect local="en" ≠ server="vi"
     DevB->>DevB: Apply "vi" + fetch translation if needed
@@ -1291,7 +1291,7 @@ Use this checklist to track Backend implementation progress.
 ### Phase 3: Client Sync
 - [ ] `GET /api/v1/translations` — List available languages (client)
 - [ ] `GET /api/v1/translations/{language_code}` — Get translation with ETag support
-- [ ] `POST /api/v1/sync/bootstrap` — Bulk config sync endpoint
+- [ ] `POST /api/v1/settings/sync/bootstrap` — Bulk config sync endpoint
 - [ ] ETag / `304 Not Modified` caching for translations and themes
 
 ### Phase 4: Push Notifications
