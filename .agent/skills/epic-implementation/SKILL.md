@@ -49,6 +49,7 @@ This is an autonomous read-and-internalize pass, not a re-run of the interactive
    ```bash
    .agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh <worktree_path>
    ```
+   Run this with your current working directory at the checkout you want treated as `REPO_ROOT` (typically the main checkout) — not from inside a different worktree — otherwise `secureFiles/` and other repo-root-relative lookups resolve against the wrong tree.
    This copies `secureFiles/` in, places platform config via `copy_secure_configurations`, and runs `melos bootstrap`. It does **not** run `pod install` — this project uses Swift Package Manager, not CocoaPods.
 3. Do not copy or symlink `.dart_tool/`, `/build/`, `ios/Flutter/ephemeral/Packages/`, or any `android/**/.cxx/` directory from another checkout into this worktree — these embed the source checkout's absolute paths and will silently corrupt the build from a different path.
 
