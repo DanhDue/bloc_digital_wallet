@@ -1,4 +1,4 @@
-# Executing Epic Tasks — Design Spec
+# Epic Implementation — Design Spec
 
 ## Status
 Approved — ready for writing-plans.
@@ -6,7 +6,7 @@ Approved — ready for writing-plans.
 ## Background
 The `logging-refactor` epic now has an approved HLD (`.devtool/epic/logging_refactor/logging_refactor.en.md`/`.vi.md`) and 8 Kanban task files (`.devtool/features/task_*.md`). There is currently no automated way to actually execute these tasks: a human has to manually invoke `subagent-driven-development` per task, manually set up a worktree that can actually run/build this project, and manually keep the HLD's diagrams in sync when implementation reveals the design was wrong — exactly what happened in this same epic's own design process, when Task 7's reference integration point (`packages/native_security`) turned out to be an `dart:ffi` plugin instead of the Pigeon-based plugin the epic assumed.
 
-This spec designs a new skill, `executing-epic-tasks`, that automates the full lifecycle for any epic that follows this project's `.devtool/epic/<name>/` + `.devtool/features/task_*.md` convention: reload context from the epic's own docs, compute a dependency-respecting execution order, run each task through the existing `subagent-driven-development` pattern inside one dedicated worktree, enforce a strict one-commit-per-task convention, keep docs in sync when implementation diverges from the HLD, and hand off to `finishing-a-development-branch` at the end.
+This spec designs a new skill, `epic-implementation`, that automates the full lifecycle for any epic that follows this project's `.devtool/epic/<name>/` + `.devtool/features/task_*.md` convention: reload context from the epic's own docs, compute a dependency-respecting execution order, run each task through the existing `subagent-driven-development` pattern inside one dedicated worktree, enforce a strict one-commit-per-task convention, keep docs in sync when implementation diverges from the HLD, and hand off to `finishing-a-development-branch` at the end.
 
 ## Goals
 - Given an epic name, read its HLD + all its task files once (context reload) before touching any code or git state.
@@ -37,7 +37,7 @@ develop
 ### Worktree Bootstrap (runs once, right after `using-git-worktrees` creates the worktree)
 1. `cp -R secureFiles <worktree_path>/secureFiles` — required because `secureFiles/` is gitignored; `git worktree add` only checks out tracked content, so it never brings this along.
 2. Run `copy_secure_configurations`'s script from inside the new worktree to place files into `android/app/src/<flavor>/` and `ios/Runner/Firebase/`.
-3. Run `melos bootstrap` explicitly (do **not** rely on `using-git-worktrees`'s own generic project-setup auto-detection — that step's current auto-detect list only covers Node/Rust/Python/Go, not Flutter/melos monorepos; `executing-epic-tasks` runs this itself regardless). Fast, since `~/.pub-cache` is global and already warm.
+3. Run `melos bootstrap` explicitly (do **not** rely on `using-git-worktrees`'s own generic project-setup auto-detection — that step's current auto-detect list only covers Node/Rust/Python/Go, not Flutter/melos monorepos; `epic-implementation` runs this itself regardless). Fast, since `~/.pub-cache` is global and already warm.
 4. No manual iOS dependency-install step is needed — this project uses Swift Package Manager, not CocoaPods (see Non-Goals). SPM package resolution happens automatically the first time `flutter build ios`/`xcodebuild` runs in the new worktree, materializing `ios/Flutter/ephemeral/Packages/` fresh. The underlying package sources resolve from Swift Package Manager's own global cache (`~/Library/Caches/org.swift.swiftpm/`), already shared across worktrees on this machine the same way `~/.pub-cache` and `~/.gradle/caches` are — so this first build pays a one-time resolution/indexing cost, not a re-download cost.
 5. Do **not** attempt to copy or symlink `.dart_tool/`, `/build/`, `ios/Flutter/ephemeral/Packages/`, or any `android/**/.cxx/` directory from another checkout — see Non-Goals.
 
