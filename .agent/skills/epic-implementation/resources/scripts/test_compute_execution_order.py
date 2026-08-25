@@ -49,6 +49,15 @@ class ParseSoftNotesTests(unittest.TestCase):
         self.assertEqual(len(notes), 1)
         self.assertIn("Recommended to do after the core Flutter-side tasks (1-4)", notes[0])
 
+    def test_new_dependency_note_captured(self):
+        section = (
+            "- **New dependency**: the exact `shared_preferences` key/encoding "
+            "[Task 6](task_6_settings_ui.md) uses for `logging.appender_toggles` must be confirmed."
+        )
+        notes = parse_soft_notes(section)
+        self.assertEqual(len(notes), 1)
+        self.assertIn("New dependency", notes[0])
+
     def test_no_note_when_absent(self):
         self.assertEqual(parse_soft_notes("- **Dependencies**: Blocked by [Task 1](task_1.md)."), [])
 
@@ -99,6 +108,15 @@ class ComputeLayersTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 compute_layers(tasks)
 
+    def test_missing_dependency_raises(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            write_task(directory, "task_1_a.md", epic="demo", priority="high", title="Task 1: A",
+                       dependencies_body="- **Dependencies**: Blocked by [Task 9](task_9_missing.md).")
+            tasks = load_tasks(directory, "demo")
+            with self.assertRaises(ValueError):
+                compute_layers(tasks)
+
 
 class RealLoggingRefactorEpicTests(unittest.TestCase):
     """Integration test against this repo's actual logging-refactor tasks.
@@ -129,6 +147,11 @@ class RealLoggingRefactorEpicTests(unittest.TestCase):
         tasks = load_tasks(self.FEATURES_DIR, "logging-refactor")
         notes = tasks["task_7_native_bridge"]["soft_notes"]
         self.assertTrue(any("Recommended to do after the core Flutter-side tasks (1-4)" in n for n in notes))
+
+    def test_task_7_new_dependency_note_is_captured(self):
+        tasks = load_tasks(self.FEATURES_DIR, "logging-refactor")
+        notes = tasks["task_7_native_bridge"]["soft_notes"]
+        self.assertTrue(any("New dependency" in n for n in notes))
 
 
 if __name__ == "__main__":

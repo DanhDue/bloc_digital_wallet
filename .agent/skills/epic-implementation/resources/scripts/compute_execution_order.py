@@ -22,6 +22,10 @@ import sys
 from pathlib import Path
 
 PRIORITY_RANK = {"high": 0, "medium": 1, "low": 2}
+# Soft-note markers: keyword list used to surface advisory content that isn't a hard blocker.
+# These are small, documented keywords — not a general sentence parser. Phase 0 (full task text)
+# in the operating skill is the actual safety net for anything these markers miss.
+SOFT_NOTE_MARKERS = ("Recommended", "New dependency")
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 SECTION_RE = re.compile(r"##\s*Dependencies\s*&\s*Blockers\s*\n(.*?)(\n##|\Z)", re.DOTALL)
 LINK_RE = re.compile(r"\]\(([^)]+\.md)\)")
@@ -58,7 +62,8 @@ def parse_blockers(section: str) -> list[str]:
 
 
 def parse_soft_notes(section: str) -> list[str]:
-    return [line.strip().lstrip("-").strip() for line in section.splitlines() if "Recommended" in line]
+    return [line.strip().lstrip("-").strip() for line in section.splitlines()
+            if any(marker in line for marker in SOFT_NOTE_MARKERS)]
 
 
 def extract_title(text: str) -> str:
@@ -88,6 +93,12 @@ def load_tasks(features_dir: Path, epic: str) -> dict[str, dict]:
 
 
 def compute_layers(tasks: dict[str, dict]) -> list[list[str]]:
+    # Validate that all blockers reference existing tasks
+    for task_id, task in tasks.items():
+        for blocker in task["blockers"]:
+            if blocker not in tasks:
+                raise ValueError(f"Task '{task_id}' is blocked by unknown task '{blocker}'")
+
     remaining = dict(tasks)
     resolved: set[str] = set()
     layers: list[list[str]] = []
@@ -102,10 +113,10 @@ def compute_layers(tasks: dict[str, dict]) -> list[list[str]]:
         current_layer = [
             task_id
             for task_id, task in remaining.items()
-            if all(b in resolved or b not in tasks for b in task["blockers"])
+            if all(b in resolved for b in task["blockers"])
         ]
         if not current_layer:
-            raise ValueError(f"Cycle or missing dependency among: {sorted(remaining)}")
+            raise ValueError(f"Cycle detected among: {sorted(remaining)}")
         current_layer.sort(key=sort_key)
         layers.append(current_layer)
         resolved.update(current_layer)
