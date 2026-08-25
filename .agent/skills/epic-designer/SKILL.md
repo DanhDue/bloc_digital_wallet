@@ -19,11 +19,11 @@ This skill transforms high-level product or technical requirements into a struct
 This skill can start from either:
 
 1. **A raw high-level requirement** given directly by the user (standalone use).
-2. **An approved spec from the `brainstorming` skill**, at `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` (preferred entry point — the spec has already been through clarifying questions, alternatives, and user approval).
+2. **An approved spec from the `brainstorming` skill** (preferred entry point — the spec has already been through clarifying questions, alternatives, and user approval). For epic-scale work, `brainstorming` relocates the spec file into this epic's own directory, `.devtool/epic/<epic_name>/<same-filename>.md`, before invoking this skill — so the spec already lives alongside the HLD and task files this skill generates.
 
 When invoked with an approved spec, **treat it as the source of truth for scope and decisions already made** — do not re-litigate architecture choices or trade-offs the user already approved. Your job is to *formalize* it: translate its architecture/components/data-flow into the Mermaid diagrams and structured sections below, and break it into Kanban tasks. If the spec is missing something this skill requires (e.g., a rollout strategy), fill the gap, but don't override decisions the spec already made.
 
-Record the link back to the source in the Epic's **Meta Data** section, e.g. `Source Spec: [<topic>-design.md](../../../docs/superpowers/specs/<file>.md)`, so the HLD and the original spec stay traceable to each other. If there is no source spec (standalone use), omit this field.
+Record the link back to the source in the Epic's **Meta Data** section, e.g. `Source Spec: [<topic>-design.md](<file>.md)` — a same-directory link, since the spec already lives in this epic's directory — so the HLD and the original spec stay traceable to each other without leaving `.devtool/epic/<epic_name>/`. If there is no source spec (standalone use), omit this field.
 
 If the original brainstorming request was decomposed into multiple sub-project specs, each spec maps to **its own separate epic** — never merge multiple specs into one epic directory.
 

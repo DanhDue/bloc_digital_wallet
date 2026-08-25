@@ -8,6 +8,7 @@
    - [4.1. Kiến trúc Tổng quan](#41-kiến-trúc-tổng-quan)
    - [4.2. Sơ đồ Use Cases](#42-sơ-đồ-use-cases)
    - [4.3. Sơ đồ Sequence](#43-sơ-đồ-sequence)
+   - [4.4. Native Bridge — Logging Headless](#44-native-bridge--logging-headless)
 5. [Chiến lược Rollout & Giảm thiểu Rủi ro](#5-chiến-lược-rollout--giảm-thiểu-rủi-ro)
 6. [Phân rã Kanban Tasks](#6-phân-rã-kanban-tasks)
 
@@ -17,7 +18,8 @@
 - **Epic**: `logging-refactor`
 - **Status**: Planning
 - **Target Release**: v1.x
-- **Source Spec**: [2026-08-25-logging-module-design.md](../../../docs/superpowers/specs/2026-08-25-logging-module-design.md)
+- **Source Spec**: [2026-08-25-logging-module-design.md](2026-08-25-logging-module-design.md)
+- **Spec liên quan (cập nhật Task 7)**: [2026-08-26-logger-native-bridge-headless-design.md](2026-08-26-logger-native-bridge-headless-design.md) — thiết kế lại `packages/logger_native_bridge` theo hướng headless-first, thay thế scope 1-channel ban đầu của Task 7.
 
 ---
 
@@ -27,7 +29,7 @@ Hệ thống log hiện tại (`packages/core/lib/utils/log.dart`) là 1 static 
 - **Tập trung & Coupled**: Đổi hoặc thêm 1 backend telemetry (Datadog, OpenTelemetry) buộc phải sửa trực tiếp `packages/core`.
 - **Không cô lập theo module**: Log từ mọi feature (Wallet, Authentication, Network...) đổ chung vào 1 màn hình Talker, gây quá tải thông tin.
 - **Thiếu khả năng truy vết**: Log record không mang theo bất kỳ liên kết nào ngoài message thuần — không thể dựng lại trình tự nhân-quả của các bước đứng sau 1 hành động người dùng hay 1 API call.
-- **Giới hạn ở Native**: Code native (vd Swift plugin của `packages/native_security`) không có đường nào để đẩy log vào Flutter debug console, và không có cách nào giữ phần "ống dẫn" này tránh xa các module hoàn toàn không có native code.
+- **Giới hạn ở Native**: Code native (vd Swift plugin của `packages/native_security`) không có đường nào để đẩy log vào Flutter debug console, và không có cách nào giữ phần "ống dẫn" này tránh xa các module hoàn toàn không có native code. Giới hạn này còn gắt hơn tưởng tượng ban đầu: code native còn có thể chạy hoàn toàn **headless** — 1 `WorkManager`/foreground `Service` trên Android, hoặc 1 task `BGTaskScheduler` trên iOS — không hề có `FlutterEngine` nào tồn tại, 1 trường hợp mà bridge phụ thuộc Dart isolate không thể chạm tới. Xem [4.4](#44-native-bridge--logging-headless).
 
 Epic này thay thế hoàn toàn 1 bản nháp `logging_refactor` trước đó — bản nháp đó đã đi đúng hướng chung (core pluggable, module toggle, package native bridge riêng) nhưng sơ đồ kiến trúc của nó lại nối trực tiếp logic manager của core với `TalkerAppender`/`DataDogAppender`/`OtelAppender`, điều này sẽ phá vỡ chính mục tiêu "đổi backend không đụng core" khi thực thi thật. Toàn bộ nội dung bên dưới (overview và tasks) là viết lại hoàn toàn, không phải patch tăng dần trên bản nháp cũ.
 
@@ -41,11 +43,14 @@ Epic này thay thế hoàn toàn 1 bản nháp `logging_refactor` trước đó 
 - Bật/tắt theo từng appender (từng backend) tại runtime, độc lập với toggle module — để việc mute 1 module cho mục đích debug local không bao giờ làm mù telemetry production.
 - Có thể truy vết trình tự nhân-quả giữa các log record qua `traceId`/`spanId`/`parentSpanId` (mô hình W3C Trace Context / OpenTelemetry span), dựng lại được cả trong UI debug tại app lẫn bởi các backend APM thật.
 - 1 package native bridge (`packages/logger_native_bridge`) tách riêng, hoàn toàn opt-in để các module không có native code không phải trả chi phí cho nó.
+- Code native có thể đẩy log lên backend telemetry theo thời gian thực ngay cả khi chạy hoàn toàn headless (không có Flutter engine), và log đó vẫn xuất hiện trên TalkerScreen qua cơ chế replay best-effort vào lần app được mở lại tiếp theo — xem [4.4](#44-native-bridge--logging-headless).
 
 ### Ngoài phạm vi
 - Lưu log dưới dạng file cục bộ (SDK Datadog đã tự lo offline caching).
 - Thay đổi logic nghiệp vụ ví/wallet.
 - Xây dựng màn hình timeline trực quan đầy đủ trong app — `buildTraceTree` được xây như 1 pure function tái sử dụng được; việc dựng UI timeline trực quan phong phú trên nền đó nằm ngoài phạm vi epic này.
+- Publish phần code native của `logger_native_bridge` thành 1 package/pipeline riêng ngoài pub — 1 package pub duy nhất chứa cả native core hỗ trợ headless lẫn Flutter shim (xem [4.4](#44-native-bridge--logging-headless)).
+- Tích hợp OpenTelemetry native mobile SDK ngay ở vòng đầu — SDK native của Datadog được tích hợp trước; lớp trừu tượng appender native là thứ giúp việc thêm OTel sau này không phá vỡ gì.
 
 ---
 
@@ -138,6 +143,34 @@ sequenceDiagram
     end
 ```
 
+### 4.4. Native Bridge — Logging Headless
+`packages/logger_native_bridge` được tách làm 2 lớp: **native core** (Kotlin/Swift thuần, không import Flutter/Pigeon — gọi được từ bất kỳ code native nào, có engine hay không) và **lớp Flutter shim mỏng** (code sinh bởi Pigeon, chỉ liên quan khi có engine đính kèm). Backend native cụ thể (vd `DatadogNativeAppender`) sống trong code native của chính module tiêu thụ (`native_security`), được đăng ký lúc bootstrap native — cùng nguyên tắc "core không phụ thuộc SDK cụ thể, appender sống ở tầng app" mà epic này đã áp dụng cho `packages/logger`, áp dụng đối xứng sang phía native.
+
+```mermaid
+sequenceDiagram
+    participant W as Android WorkManager Worker / iOS BGTask handler
+    participant DNL as D3NexusNativeLogger (native core)
+    participant TS as NativeAppenderToggleStore
+    participant DA as DatadogNativeAppender (native, app-layer)
+    participant Q as NativeLogQueue (SharedPreferences/UserDefaults)
+
+    W->>DNL: d(tag, message)
+    DNL->>TS: isEnabled("datadog")?
+    alt bị tắt bởi kill switch
+        DNL-->>W: bỏ qua DatadogNativeAppender
+    else đang bật
+        DNL->>DA: append(entry)
+        DA->>DatadogServer: upload do SDK tự quản lý (batching/offline cache)
+    end
+    DNL->>Q: enqueue(entry)  // luôn luôn, để replay lên Talker sau này
+```
+
+Không có Dart, không Pigeon, không `FlutterEngine` nào trong luồng này. Kill switch (`setAppenderEnabled`) chạm tới được nhánh headless này mà không cần thêm channel nào mới: `packages/settings` đã lưu `logging.appender_toggles` qua `shared_preferences`, được backing bởi Android `SharedPreferences` / iOS `UserDefaults` — 1 file trên đĩa, độc lập với engine. `NativeAppenderToggleStore` đọc thẳng file đó.
+
+Log bị dồn lại lúc headless sẽ xuất hiện trên TalkerScreen vào lần engine kế tiếp được đính kèm, replay đúng thứ tự gốc kèm timestamp gốc, rồi bị xoá — best-effort và at-most-once, vì việc gửi lên BE đã xảy ra chắc chắn ở bước trên rồi; replay chỉ phục vụ mục đích quan sát của dev.
+
+Toàn bộ lý do thiết kế, cấu trúc package, chiến lược test: [2026-08-26-logger-native-bridge-headless-design.md](2026-08-26-logger-native-bridge-headless-design.md).
+
 ---
 
 ## 5. Chiến lược Rollout & Giảm thiểu Rủi ro
@@ -149,7 +182,7 @@ sequenceDiagram
 4. **Phase 4**: Xoá wrapper `Log` cũ, chuyển dependency `talker_flutter`/`talker_dio_logger`/`talker_bloc_logger` ra khỏi `packages/core`/`packages/network`, đưa hẳn vào tầng appender ở app.
 
 **Giảm thiểu rủi ro (Risk Plan)**:
-Mỗi phase có thể revert độc lập; shim delegate ở Phase 2 giúp Phase 3/4 rollback được mà không cần đụng lại call site. Nếu appender Datadog/Otel gặp sự cố ở production (tốn quota, lỗi ingest), dùng `setAppenderEnabled(id, false)` như 1 kill switch tức thời tại runtime thay vì phải release lại app.
+Mỗi phase có thể revert độc lập; shim delegate ở Phase 2 giúp Phase 3/4 rollback được mà không cần đụng lại call site. Nếu appender Datadog/Otel gặp sự cố ở production (tốn quota, lỗi ingest), dùng `setAppenderEnabled(id, false)` như 1 kill switch tức thời tại runtime thay vì phải release lại app — switch này giờ cũng chặn luôn nhánh push native headless (xem [4.4](#44-native-bridge--logging-headless)), chứ không chỉ log Dart trong app.
 
 ---
 
@@ -162,5 +195,5 @@ Sử dụng plugin **LachyFS's Kanban Markdown** để quản lý tiến độ. 
 - [Task 4: App-Layer Appenders & Tích hợp DI](../../features/task_4_appenders_di.md)
 - [Task 5: Truyền Trace qua Network (traceparent)](../../features/task_5_network_tracing.md)
 - [Task 6: Settings UI — Toggle Module & Appender](../../features/task_6_settings_ui.md)
-- [Task 7: Tạo Package `logger_native_bridge`](../../features/task_7_native_bridge.md)
+- [Task 7: Tạo Package `logger_native_bridge` — Push Native Headless + Replay Talker](../../features/task_7_native_bridge.md)
 - [Task 8: Refactor Codebase Hiện tại sang D3NexusLogger](../../features/task_8_refactor_codebase.md)
