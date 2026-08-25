@@ -43,5 +43,5 @@ Relevant project skills: `frontend-developer` and `mobile-uiux-promax` (`.agent/
 - **Dependencies**: Blocked by [Task 3](task_3_log_manager.md) (`setModuleEnabled`/`setAppenderEnabled` must exist on `D3NexusLogger`).
 
 ## References & Rollback
-- **References**: Epic HLD — [Module Enable/Disable & Appender Enable/Disable sections](../../../docs/superpowers/specs/2026-08-25-logging-module-design.md).
+- **References**: Epic HLD — [Module Enable/Disable & Appender Enable/Disable sections](../epic/logging_refactor/2026-08-25-logging-module-design.md).
 - **Rollback Plan**: Revert this task's commit; toggles simply won't be user-facing yet, `D3NexusLogger` still defaults every module/appender to enabled.

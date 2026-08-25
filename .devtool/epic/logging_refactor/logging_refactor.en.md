@@ -8,6 +8,7 @@
    - [4.1. High-Level Architecture](#41-high-level-architecture)
    - [4.2. Use Cases Diagram](#42-use-cases-diagram)
    - [4.3. Sequence Diagram](#43-sequence-diagram)
+   - [4.4. Native Bridge — Headless Logging](#44-native-bridge--headless-logging)
 5. [Rollout Strategy & Mitigation](#5-rollout-strategy--mitigation)
 6. [Kanban Tasks Breakdown](#6-kanban-tasks-breakdown)
 
@@ -17,7 +18,8 @@
 - **Epic**: `logging-refactor`
 - **Status**: Planning
 - **Target Release**: v1.x
-- **Source Spec**: [2026-08-25-logging-module-design.md](../../../docs/superpowers/specs/2026-08-25-logging-module-design.md)
+- **Source Spec**: [2026-08-25-logging-module-design.md](2026-08-25-logging-module-design.md)
+- **Related Spec (Task 7 update)**: [2026-08-26-logger-native-bridge-headless-design.md](2026-08-26-logger-native-bridge-headless-design.md) — headless-first redesign of `packages/logger_native_bridge`, superseding Task 7's original single-channel scope.
 
 ---
 
@@ -27,7 +29,7 @@ The current logging system (`packages/core/lib/utils/log.dart`) is a static `Log
 - **Centralized & Coupled**: Switching or adding a telemetry backend (Datadog, OpenTelemetry) requires touching `packages/core` directly.
 - **No Module Isolation**: Every log from every feature (Wallet, Authentication, Network, ...) dumps into a single Talker screen, causing information overload.
 - **Lack of Traceability**: Log records carry no correlation beyond a bare message — it is impossible to reconstruct the causal sequence of steps behind one user action or API call.
-- **Native Limitations**: Native platform code (e.g. `packages/native_security`'s Swift plugin) has no path to push logs into the Flutter debug console, and there's no way to keep that plumbing out of modules that have no native code at all.
+- **Native Limitations**: Native platform code (e.g. `packages/native_security`'s Swift plugin) has no path to push logs into the Flutter debug console, and there's no way to keep that plumbing out of modules that have no native code at all. This limitation is sharper than it first appears: native code can also run fully **headless** — an Android `WorkManager`/foreground `Service` or an iOS `BGTaskScheduler` task, with no `FlutterEngine` instance at all — a case a Dart-isolate-dependent bridge cannot reach. See [4.4](#44-native-bridge--headless-logging).
 
 This epic supersedes an earlier draft of `logging_refactor` that explored the same problem but coupled the core logic manager directly to `TalkerAppender`/`DataDogAppender`/`OtelAppender` in its architecture diagram — which would have broken the "swap backend without touching core" goal in practice. All content below (overview and tasks) is a full rewrite, not an incremental patch of that draft.
 
@@ -41,11 +43,14 @@ This epic supersedes an earlier draft of `logging_refactor` that explored the sa
 - Per-appender (per-backend) enable/disable at runtime, independent of module toggles — so muting a module for local debugging never blinds production telemetry.
 - Trace-able causal sequence across log records via `traceId`/`spanId`/`parentSpanId` (W3C Trace Context / OpenTelemetry span model), reconstructable both in the in-app debug UI and by real APM backends.
 - A separate, strictly opt-in native bridge package (`packages/logger_native_bridge`) so modules without native platform code never pay for it.
+- Native code can push logs to a telemetry backend in realtime even when running fully headless (no Flutter engine attached), and those logs still surface on TalkerScreen via best-effort replay the next time the app is foregrounded — see [4.4](#44-native-bridge--headless-logging).
 
 ### Non-Goals (Out of Scope)
 - Local file-based log persistence (Datadog SDK's own offline caching covers this).
 - Changes to wallet/business logic.
 - A full in-app trace timeline visualization screen — `buildTraceTree` is built as a pure, reusable function; a rich visual timeline UI on top of it is out of scope for this epic.
+- Publishing `logger_native_bridge`'s native code as a separate non-pub package/pipeline — one pub package holds both the headless-capable native core and the Flutter shim (see [4.4](#44-native-bridge--headless-logging)).
+- An OpenTelemetry native mobile SDK integration in the first iteration — Datadog's native SDK ships first; the native appender abstraction is what makes adding OTel later a non-breaking addition.
 
 ---
 
@@ -138,6 +143,34 @@ sequenceDiagram
     end
 ```
 
+### 4.4. Native Bridge — Headless Logging
+`packages/logger_native_bridge` is split into a **native core** (plain Kotlin/Swift, zero Flutter/Pigeon import — callable from any native code, engine or no engine) and a **thin Flutter shim** (Pigeon-generated glue, relevant only when an engine is attached). Concrete native backends (e.g. `DatadogNativeAppender`) live in the consuming module's own native code (`native_security`), registered at native bootstrap — the same "core has zero concrete-SDK dependency, appenders live at the app layer" rule this epic already applies to `packages/logger`, applied symmetrically on the native side.
+
+```mermaid
+sequenceDiagram
+    participant W as Android WorkManager Worker / iOS BGTask handler
+    participant DNL as D3NexusNativeLogger (native core)
+    participant TS as NativeAppenderToggleStore
+    participant DA as DatadogNativeAppender (native, app-layer)
+    participant Q as NativeLogQueue (SharedPreferences/UserDefaults)
+
+    W->>DNL: d(tag, message)
+    DNL->>TS: isEnabled("datadog")?
+    alt disabled by kill switch
+        DNL-->>W: skip DatadogNativeAppender
+    else enabled
+        DNL->>DA: append(entry)
+        DA->>DatadogServer: SDK-managed upload (batching/offline cache)
+    end
+    DNL->>Q: enqueue(entry)  // always, for later Talker replay
+```
+
+No Dart, no Pigeon, no `FlutterEngine` anywhere in this flow. The kill switch (`setAppenderEnabled`) reaches this headless path with no new channel: `packages/settings` already persists `logging.appender_toggles` via `shared_preferences`, which is backed by Android `SharedPreferences` / iOS `UserDefaults` — a file on disk independent of any engine. `NativeAppenderToggleStore` reads that same file directly.
+
+Logs queued while headless surface on TalkerScreen the next time the engine attaches, replayed in original order with original timestamps, then cleared — best-effort and at-most-once, since durable BE delivery already happened above; replay only serves developer visibility.
+
+Full rationale, package layout, and testing strategy: [2026-08-26-logger-native-bridge-headless-design.md](2026-08-26-logger-native-bridge-headless-design.md).
+
 ---
 
 ## 5. Rollout Strategy & Mitigation
@@ -149,7 +182,7 @@ sequenceDiagram
 4. **Phase 4**: Remove the old `Log` wrapper and move `talker_flutter`/`talker_dio_logger`/`talker_bloc_logger` dependencies out of `packages/core`/`packages/network` and into the app-layer appenders.
 
 **Mitigation (Risk Plan)**:
-Each phase is independently revertible; Phase 2's delegation shim means Phase 3/4 can be rolled back without touching call sites again. If a Datadog/Otel appender misbehaves in production (quota burn, ingestion errors), use `setAppenderEnabled(id, false)` as an immediate runtime kill switch instead of a release.
+Each phase is independently revertible; Phase 2's delegation shim means Phase 3/4 can be rolled back without touching call sites again. If a Datadog/Otel appender misbehaves in production (quota burn, ingestion errors), use `setAppenderEnabled(id, false)` as an immediate runtime kill switch instead of a release — this now also stops the headless native push path (see [4.4](#44-native-bridge--headless-logging)), not just in-app Dart logging.
 
 ---
 
@@ -162,5 +195,5 @@ Please use the **LachyFS's Kanban Markdown** Plugin to manage progress. The foll
 - [Task 4: App-Layer Appenders & DI Integration](../../features/task_4_appenders_di.md)
 - [Task 5: Network Trace Propagation (traceparent)](../../features/task_5_network_tracing.md)
 - [Task 6: Settings UI — Module & Appender Toggles](../../features/task_6_settings_ui.md)
-- [Task 7: Create `logger_native_bridge` Package](../../features/task_7_native_bridge.md)
+- [Task 7: Create `logger_native_bridge` Package — Headless Native Push + Talker Replay](../../features/task_7_native_bridge.md)
 - [Task 8: Refactor Existing Codebase to D3NexusLogger](../../features/task_8_refactor_codebase.md)
