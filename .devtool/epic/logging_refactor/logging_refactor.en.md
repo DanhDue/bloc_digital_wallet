@@ -1,0 +1,166 @@
+# Epic HLD: D3NexusLogger — Pluggable Logging & Tracing System
+
+## Table of Contents
+1. [Meta Data](#1-meta-data)
+2. [Background](#2-background)
+3. [Goals & Non-Goals](#3-goals--non-goals)
+4. [Architecture & Technical Design](#4-architecture--technical-design)
+   - [4.1. High-Level Architecture](#41-high-level-architecture)
+   - [4.2. Use Cases Diagram](#42-use-cases-diagram)
+   - [4.3. Sequence Diagram](#43-sequence-diagram)
+5. [Rollout Strategy & Mitigation](#5-rollout-strategy--mitigation)
+6. [Kanban Tasks Breakdown](#6-kanban-tasks-breakdown)
+
+---
+
+## 1. Meta Data
+- **Epic**: `logging-refactor`
+- **Status**: Planning
+- **Target Release**: v1.x
+- **Source Spec**: [2026-08-25-logging-module-design.md](../../../docs/superpowers/specs/2026-08-25-logging-module-design.md)
+
+---
+
+## 2. Background
+The current logging system (`packages/core/lib/utils/log.dart`) is a static `Log` wrapper hard-coupled to `talker_flutter`, with `talker_dio_logger`/`talker_bloc_logger` pulled directly into `packages/network`. This creates four concrete problems:
+
+- **Centralized & Coupled**: Switching or adding a telemetry backend (Datadog, OpenTelemetry) requires touching `packages/core` directly.
+- **No Module Isolation**: Every log from every feature (Wallet, Authentication, Network, ...) dumps into a single Talker screen, causing information overload.
+- **Lack of Traceability**: Log records carry no correlation beyond a bare message — it is impossible to reconstruct the causal sequence of steps behind one user action or API call.
+- **Native Limitations**: Native platform code (e.g. `packages/native_security`'s Swift plugin) has no path to push logs into the Flutter debug console, and there's no way to keep that plumbing out of modules that have no native code at all.
+
+This epic supersedes an earlier draft of `logging_refactor` that explored the same problem but coupled the core logic manager directly to `TalkerAppender`/`DataDogAppender`/`OtelAppender` in its architecture diagram — which would have broken the "swap backend without touching core" goal in practice. All content below (overview and tasks) is a full rewrite, not an incremental patch of that draft.
+
+---
+
+## 3. Goals & Non-Goals
+
+### Goals
+- A pure-Dart logging core (`packages/logger`) with zero dependency on any concrete telemetry SDK (Talker, Datadog, Otel).
+- Per-module enable/disable at runtime, without a rebuild.
+- Per-appender (per-backend) enable/disable at runtime, independent of module toggles — so muting a module for local debugging never blinds production telemetry.
+- Trace-able causal sequence across log records via `traceId`/`spanId`/`parentSpanId` (W3C Trace Context / OpenTelemetry span model), reconstructable both in the in-app debug UI and by real APM backends.
+- A separate, strictly opt-in native bridge package (`packages/logger_native_bridge`) so modules without native platform code never pay for it.
+
+### Non-Goals (Out of Scope)
+- Local file-based log persistence (Datadog SDK's own offline caching covers this).
+- Changes to wallet/business logic.
+- A full in-app trace timeline visualization screen — `buildTraceTree` is built as a pure, reusable function; a rich visual timeline UI on top of it is out of scope for this epic.
+
+---
+
+## 4. Architecture & Technical Design
+
+### 4.1. High-Level Architecture
+Concrete appenders (Talker/Datadog/Otel) live in the **app layer**, registered into `D3NexusLogger` via DI at bootstrap — never inside `packages/logger` and never as one pub package per appender. `ILogAppender` is the boundary that delivers "swap backend without touching core"; the native bridge is the only piece that gets its own package, because it is the one genuinely opt-in, per-module concern (Pigeon-generated platform code).
+
+```mermaid
+graph TD
+    subgraph Settings_UI
+    A[Settings Screen] -->|setModuleEnabled / setAppenderEnabled| B(D3NexusLogger Facade)
+    end
+
+    subgraph Core_Package["packages/logger (pure Dart)"]
+    B --> C{LogManagerImpl}
+    C -->|module+appender toggle check| D[Dispatch to registered ILogAppender]
+    end
+
+    subgraph App_Layer["lib/logging/appenders (app layer)"]
+    D --> E[TalkerAppender]
+    D --> F[DatadogAppender]
+    D --> G[OtelAppender]
+    end
+
+    subgraph Talker_UI
+    E -->|buildTraceTree by traceId| H[TalkerScreen Filters/Tabs]
+    end
+
+    subgraph Native_Bridge["packages/logger_native_bridge (opt-in)"]
+    I[Kotlin/Swift, e.g. native_security] -.->|Pigeon FlutterApi| J[NativeLogBridge]
+    J --> B
+    end
+
+    subgraph Network["packages/network"]
+    K[Dio Interceptor] -->|inject traceparent header| L[Backend / APM]
+    B -.->|traceId/spanId| K
+    end
+```
+
+### 4.2. Use Cases Diagram
+```mermaid
+flowchart LR
+    QA([QA / Tester])
+    Dev([Developer])
+    Ops([Ops / SRE])
+    Native([Native Module])
+    APM([Telemetry Backend])
+
+    UC1(Toggle Module Debug Logs at Runtime)
+    UC2(View Logs on TalkerScreen Grouped by Trace Tree)
+    UC3(Log with traceId/spanId for Sequence Debugging)
+    UC4(Enable/Disable a Telemetry Backend at Runtime)
+    UC5(Push Native Crash/Debug Logs into Flutter UI)
+    UC6(Propagate traceparent to Backend for APM Correlation)
+
+    QA --> UC1
+    QA --> UC4
+    Dev --> UC2
+    Dev --> UC3
+    Ops --> UC4
+
+    Native --> UC5
+    UC3 --> UC6
+    UC6 -.-> APM
+    UC4 -.-> APM
+```
+
+### 4.3. Sequence Diagram
+```mermaid
+sequenceDiagram
+    participant App as Flutter App (Wallet)
+    participant DL as D3NexusLogger
+    participant LM as LogManagerImpl
+    participant TA as TalkerAppender
+    participant DD as DatadogAppender
+
+    App->>DL: getLogger('Wallet').withSpan().d('API Error')
+    DL->>LM: log(LogRecord(module, level, traceId, spanId, parentSpanId))
+    LM->>LM: check appenderToggles[appender.id]
+    LM->>LM: check moduleToggles[module] && appender.respectsModuleToggle
+
+    alt appender disabled by appenderToggles
+        LM-->>App: skip this appender
+    else appender enabled
+        LM->>TA: append(record)
+        TA->>TalkerUI: render via buildTraceTree(traceId)
+        LM->>DD: append(record)
+        DD->>DatadogServer: upload (only gated by appenderToggles, never by module mute)
+    end
+```
+
+---
+
+## 5. Rollout Strategy & Mitigation
+
+**Phased Rollout Strategy**:
+1. **Phase 1**: Build and unit-test `packages/logger` fully in isolation (`LogManagerImpl` dispatch logic, `buildTraceTree`, `LogRecord`).
+2. **Phase 2**: Mark the existing `Log` (`packages/core/lib/utils/log.dart`) `@Deprecated` and have it delegate to `D3NexusLogger` internally, so existing call sites keep working unmodified.
+3. **Phase 3**: On a dedicated branch, refactor all existing call sites (`Log.d/i/w/e`, ~10 today) to `D3NexusLogger.getLogger(module).d/i/w/e`.
+4. **Phase 4**: Remove the old `Log` wrapper and move `talker_flutter`/`talker_dio_logger`/`talker_bloc_logger` dependencies out of `packages/core`/`packages/network` and into the app-layer appenders.
+
+**Mitigation (Risk Plan)**:
+Each phase is independently revertible; Phase 2's delegation shim means Phase 3/4 can be rolled back without touching call sites again. If a Datadog/Otel appender misbehaves in production (quota burn, ingestion errors), use `setAppenderEnabled(id, false)` as an immediate runtime kill switch instead of a release.
+
+---
+
+## 6. Kanban Tasks Breakdown
+Please use the **LachyFS's Kanban Markdown** Plugin to manage progress. The following task cards are stored in the `.devtool/features/` directory:
+
+- [Task 1: Create `logger` Package (Pure Dart)](../../features/task_1_create_package.md)
+- [Task 2: Define Core Interfaces & LogRecord](../../features/task_2_core_interfaces.md)
+- [Task 3: Implement LogManagerImpl & Trace Tree](../../features/task_3_log_manager.md)
+- [Task 4: App-Layer Appenders & DI Integration](../../features/task_4_appenders_di.md)
+- [Task 5: Network Trace Propagation (traceparent)](../../features/task_5_network_tracing.md)
+- [Task 6: Settings UI — Module & Appender Toggles](../../features/task_6_settings_ui.md)
+- [Task 7: Create `logger_native_bridge` Package](../../features/task_7_native_bridge.md)
+- [Task 8: Refactor Existing Codebase to D3NexusLogger](../../features/task_8_refactor_codebase.md)

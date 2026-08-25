@@ -46,8 +46,8 @@ This document outlines the main tasks that the Backend (BE) team needs to implem
 - [ ] Implement `@client_router.get("/translations/{language_code}")` with `since_version` Query param and `If-None-Match` Header support. Include `checksum`.
 - [ ] Implement `@client_router.get("/themes")` (List available themes for client).
 - [ ] Implement `@client_router.get("/themes/{theme_id}")` with `since_version` Query param. Include `checksum`.
-- [ ] Implement `@client_router.post("/sync/bootstrap")`. Must calculate stale resources using ORM queries and return `user_preferences`.
-- [ ] **Guest User Support**: Ensure `POST /sync/bootstrap` uses `auth=None` in Django Ninja or gracefully handles missing auth tokens to return `null` for `user_preferences`.
+- [ ] Implement `@client_router.post("/settings/sync/bootstrap")`. Must calculate stale resources using ORM queries and return `user_preferences`.
+- [ ] **Guest User Support**: Ensure `POST /settings/sync/bootstrap` uses `auth=None` in Django Ninja or gracefully handles missing auth tokens to return `null` for `user_preferences`.
 
 ## 5. User Preferences APIs
 - [ ] Use Django Ninja's `@router.get("/users/me/preferences", auth=api_auth)` to retrieve preferences.

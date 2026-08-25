@@ -29,7 +29,7 @@ You MUST create a task for each of these items and complete them in order:
 6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
 7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
 8. **User reviews written spec** — ask user to review the spec file before proceeding
-9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+9. **Route to the next skill** — if the spec is epic-scale, invoke epic-designer with the spec path; otherwise invoke writing-plans (see Routing After Approval below)
 
 ## Process Flow
 
@@ -45,6 +45,8 @@ digraph brainstorming {
     "Write design doc" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
     "User reviews spec?" [shape=diamond];
+    "Epic-scale spec?" [shape=diamond];
+    "Invoke epic-designer skill" [shape=doublecircle];
     "Invoke writing-plans skill" [shape=doublecircle];
 
     "Explore project context" -> "Visual questions ahead?";
@@ -59,11 +61,24 @@ digraph brainstorming {
     "Write design doc" -> "Spec self-review\n(fix inline)";
     "Spec self-review\n(fix inline)" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
-    "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
+    "User reviews spec?" -> "Epic-scale spec?" [label="approved"];
+    "Epic-scale spec?" -> "Invoke epic-designer skill" [label="yes"];
+    "Epic-scale spec?" -> "Invoke writing-plans skill" [label="no"];
 }
 ```
 
-**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+**The terminal state is invoking either epic-designer or writing-plans — never both, and never any other implementation skill.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill directly from brainstorming.
+
+### Routing After Approval
+
+Once the spec is approved (and has passed self-review), decide which skill picks it up next:
+
+- **Invoke `epic-designer`** (pass the spec's file path as input) when the approved spec describes epic-scale work: multiple independent components/services, a design that will need Kanban task breakdown and architecture/use-case/sequence diagrams, or the user explicitly called it an "epic" or large feature.
+- **Invoke `writing-plans`** (as before) for everything else — a single-component feature, bugfix, or small enough scope that one implementation plan covers it without a separate HLD.
+
+When in doubt, ask the user which they want rather than guessing.
+
+If brainstorming decomposed the original request into multiple sub-project specs, route **each spec independently** — do not merge multiple specs into a single epic-designer invocation. Each spec keeps its own spec → design → implementation lineage.
 
 ## The Process
 
@@ -135,8 +150,8 @@ Wait for the user's response. If they request changes, make them and re-run the 
 
 **Implementation:**
 
-- Invoke the writing-plans skill to create a detailed implementation plan
-- Do NOT invoke any other skill. writing-plans is the next step.
+- Apply the Routing After Approval rule above to pick the next skill: `epic-designer` (pass the spec's file path) for epic-scale specs, or `writing-plans` for everything else.
+- Do NOT invoke any other skill — these two are the only valid next steps.
 
 ## Key Principles
 
