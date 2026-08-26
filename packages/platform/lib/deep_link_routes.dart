@@ -7,7 +7,7 @@ import 'package:auto_route/auto_route.dart';
 /// Common routes for cross-package navigation.
 /// Contains initial/entry routes for each package.
 /// This avoids direct package dependencies for navigation.
-abstract class FeaturePublicRoutes {
+abstract class DeepLinkRoutes {
   // Onboard
   static const String splash = '/splash';
   static const PageRouteInfo splashRoute = _SplashRoute();

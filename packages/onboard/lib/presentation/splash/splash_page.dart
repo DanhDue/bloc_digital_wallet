@@ -4,7 +4,7 @@
 
 import 'package:animated_visibility/animated_visibility.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:core/utils/feature_public_routes.dart';
+import 'package:app_platform/platform.dart';
 import 'package:core/core.dart';
 import 'package:logger/d3nexus_logger.dart';
 
@@ -131,8 +131,8 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashAction, SplashState, Spla
   void handleEvent(BuildContext context, SplashEvent event) {
     switch (event) {
       case NavigateToNextEvent():
-        // Navigate to Transaction via FeaturePublicRoutes (avoids direct package import)
-        context.router.replace(FeaturePublicRoutes.homeRoute);
+        // Navigate to Transaction via DeepLinkRoutes (avoids direct package import)
+        context.router.replace(DeepLinkRoutes.homeRoute);
         D3NexusLogger.getLogger('Onboard').d("NavigateToNextEvent");
         break;
       case ShowErrorMessageEvent(:final message):

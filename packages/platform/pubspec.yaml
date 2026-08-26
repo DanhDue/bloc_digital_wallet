@@ -1,0 +1,21 @@
+name: app_platform
+description: Shared cross-feature platform infrastructure (deep-link routing) for the Bloc Digital Wallet.
+version: 0.1.0
+resolution: workspace
+publish_to: none
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auto_route: ^11.1.0
+  get_it: ^9.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:

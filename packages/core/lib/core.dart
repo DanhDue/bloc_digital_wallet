@@ -22,7 +22,6 @@ export 'extensions/widget_extensions.dart';
 
 export 'package:talker_flutter/talker_flutter.dart';
 export 'utils/route_utils.dart';
-export 'utils/feature_public_routes.dart';
 export 'utils/deep_merge_utils.dart';
 export 'utils/checksum_utils.dart';
 export 'utils/secure_clipboard.dart';

@@ -20,6 +20,8 @@ dependencies:
     path: ../core
   network:
     path: ../network
+  app_platform:
+    path: ../platform
   ui_kit:
     path: ../ui_kit
   framework:

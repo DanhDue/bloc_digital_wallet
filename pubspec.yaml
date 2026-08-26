@@ -16,6 +16,7 @@ workspace:
   - packages/native_security
   - packages/network
   - packages/onboard
+  - packages/platform
   - packages/ui_kit
   - packages/settings
   - packages/wallet
@@ -36,6 +37,8 @@ dependencies:
     path: packages/logger_native_bridge
   network:
     path: packages/network
+  app_platform:
+    path: packages/platform
   ui_kit:
     path: packages/ui_kit
   authentication:
