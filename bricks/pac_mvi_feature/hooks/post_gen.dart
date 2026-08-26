@@ -29,8 +29,8 @@ Future<void> run(HookContext context) async {
     // 4. Update lib/app_router.dart
     await _updateAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 5. Update FeaturePublicRoutes
-    progress.update('Updating FeaturePublicRoutes...');
+    // 5. Update DeepLinkRoutes
+    progress.update('Updating DeepLinkRoutes...');
     await _updateFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
 
     // 6. Update AppUri (for Network Module)
@@ -327,13 +327,13 @@ Future<void> _updateFeaturePublicRoutes(
   String camelName,
 ) async {
   // Use relative path from root since post_gen runs from project root
-  final file = File('packages/core/lib/utils/feature_public_routes.dart');
+  final file = File('packages/platform/lib/deep_link_routes.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();
   var updated = false;
 
-  // Add route constant inside FeaturePublicRoutes class
+  // Add route constant inside DeepLinkRoutes class
   // We locate the closing brace of FeaturePublicRoutes class by finding subsequent private class definition
   // or just append before the last closing brace of the main block if we assume standard formatting.
   // A safer bet given the file structure is looking for the comment block of private routes.

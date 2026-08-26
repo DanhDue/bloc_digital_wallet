@@ -49,13 +49,13 @@ Should I proceed with creating this as a [New Module/Subfeature]?
 
 **Goal**: Generate the boilerplate structure.
 
-- **If New Module**:
+- **If New Module** (generates a standalone `packages/<name>` workspace package — this is the live, current pattern; `mvi_feature` is deprecated, targets the unused `lib/features/` layout):
   ```bash
-  mason make mvi_feature --feature_name [feature_name]
+  mason make pac_mvi_feature --name [feature_name]
   ```
-- **If Subfeature**:
+- **If Subfeature** (adds to an existing `packages/<package_name>` package — `mvi_subfeature` is deprecated, same reason):
   ```bash
-  mason make mvi_subfeature --module_name [module_name] --subfeature_name [subfeature_name]
+  mason make pac_mvi_subfeature --package_name [module_name] --subfeature_name [subfeature_name]
   ```
 
 ## 4. Implement Domain Layer
