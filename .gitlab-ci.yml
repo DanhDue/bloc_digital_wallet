@@ -15,11 +15,16 @@ CIChecking:
   dependencies: []
   stage: CIChecking
   cache:
+    key:
+      files:
+        - pubspec.lock
     paths:
       - ./.gradle
       - ./build
       - ./app/build
       - ./build-caches
+      - ./.dart_tool
+      - ./packages/*/.dart_tool
   artifacts:
     paths:
       - .ci-reports
