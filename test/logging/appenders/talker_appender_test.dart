@@ -8,6 +8,7 @@ import 'package:logger/d3nexus_logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:talker_flutter/talker_flutter.dart' hide LogLevel;
+import 'package:talker_flutter/talker_flutter.dart' as talker_pkg show LogLevel;
 
 import 'talker_appender_test.mocks.dart';
 
@@ -21,9 +22,14 @@ void main() {
     appender = TalkerAppender(talker);
   });
 
-  LogRecord recordWith(LogLevel level, {Object? error, StackTrace? stackTrace}) {
+  LogRecord recordWith(
+    LogLevel level, {
+    String module = 'Wallet',
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
     return LogRecord(
-      module: 'wallet',
+      module: module,
       level: level,
       message: 'hello world',
       timestamp: DateTime(2026, 1, 1),
@@ -34,6 +40,12 @@ void main() {
     );
   }
 
+  TalkerLog captureLoggedEntry() {
+    final captured = verify(talker.logCustom(captureAny)).captured;
+    expect(captured, hasLength(1));
+    return captured.single as TalkerLog;
+  }
+
   test('id is talker', () {
     expect(appender.id, 'talker');
   });
@@ -42,30 +54,51 @@ void main() {
     expect(appender.respectsModuleToggle, isTrue);
   });
 
-  test('append forwards verbose records to Talker.verbose', () {
-    appender.append(recordWith(LogLevel.verbose));
-    verify(talker.verbose('hello world', null, null)).called(1);
+  test('append tags the Talker entry title with the record module, so Talker\'s '
+      'own filter chips become per-module (Talker filters by entry title)', () {
+    appender.append(recordWith(LogLevel.info, module: 'Network'));
+    final entry = captureLoggedEntry();
+    expect(entry.title, 'Network');
   });
 
-  test('append forwards debug records to Talker.debug', () {
-    appender.append(recordWith(LogLevel.debug));
-    verify(talker.debug('hello world', null, null)).called(1);
+  test('append maps every LogLevel to the matching talker LogLevel', () {
+    final expectedMapping = {
+      LogLevel.verbose: talker_pkg.LogLevel.verbose,
+      LogLevel.debug: talker_pkg.LogLevel.debug,
+      LogLevel.info: talker_pkg.LogLevel.info,
+      LogLevel.warning: talker_pkg.LogLevel.warning,
+      LogLevel.error: talker_pkg.LogLevel.error,
+    };
+
+    for (final entry in expectedMapping.entries) {
+      final freshTalker = MockTalker();
+      final freshAppender = TalkerAppender(freshTalker);
+      freshAppender.append(recordWith(entry.key));
+      final captured = verify(freshTalker.logCustom(captureAny)).captured;
+      final loggedEntry = captured.single as TalkerLog;
+      expect(loggedEntry.logLevel, entry.value, reason: 'for ${entry.key}');
+    }
   });
 
-  test('append forwards info records to Talker.info', () {
+  test('append forwards the message', () {
     appender.append(recordWith(LogLevel.info));
-    verify(talker.info('hello world', null, null)).called(1);
+    final entry = captureLoggedEntry();
+    expect(entry.message, 'hello world');
   });
 
-  test('append forwards warning records to Talker.warning', () {
-    appender.append(recordWith(LogLevel.warning));
-    verify(talker.warning('hello world', null, null)).called(1);
-  });
-
-  test('append forwards error records, including error and stackTrace, to Talker.error', () {
+  test('append forwards error records, including error and stackTrace', () {
     final error = Exception('boom');
     final stackTrace = StackTrace.current;
     appender.append(recordWith(LogLevel.error, error: error, stackTrace: stackTrace));
-    verify(talker.error('hello world', error, stackTrace)).called(1);
+    final entry = captureLoggedEntry();
+    expect(entry.exception, error);
+    expect(entry.stackTrace, stackTrace);
+  });
+
+  test('append omits exception/stackTrace when the record has none', () {
+    appender.append(recordWith(LogLevel.debug));
+    final entry = captureLoggedEntry();
+    expect(entry.exception, isNull);
+    expect(entry.stackTrace, isNull);
   });
 }

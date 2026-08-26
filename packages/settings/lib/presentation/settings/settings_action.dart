@@ -27,12 +27,4 @@ abstract class SettingsAction extends BaseAction with _$SettingsAction {
       SettingsActionChangeLanguage;
   const factory SettingsAction.navigateToProfile() = SettingsActionNavigateToProfile;
   const factory SettingsAction.navigateToSecurity() = SettingsActionNavigateToSecurity;
-  const factory SettingsAction.toggleModuleLogging({
-    required String module,
-    required bool isEnabled,
-  }) = SettingsActionToggleModuleLogging;
-  const factory SettingsAction.toggleAppenderLogging({
-    required String appenderId,
-    required bool isEnabled,
-  }) = SettingsActionToggleAppenderLogging;
 }

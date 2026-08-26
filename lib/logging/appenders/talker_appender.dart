@@ -2,6 +2,7 @@
 
 import 'package:logger/d3nexus_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart' hide LogLevel;
+import 'package:talker_flutter/talker_flutter.dart' as talker_pkg show LogLevel;
 
 /// [ILogAppender] adapter that forwards [LogRecord]s to a [Talker]
 /// instance.
@@ -11,6 +12,12 @@ import 'package:talker_flutter/talker_flutter.dart' hide LogLevel;
 /// reduction is silenced here too -- unlike the production telemetry
 /// appenders ([ILogAppender]s such as `DatadogAppender`/`OtelAppender`)
 /// which never honor module toggles.
+///
+/// Logs via [Talker.logCustom] rather than the level-named methods
+/// (`.debug()`/`.info()`/etc.), tagging each entry's `title` with
+/// [LogRecord.module]. Talker's own console screen derives its filter
+/// chips from each entry's title, so this is what makes per-module
+/// filtering ("Wallet", "Network", ...) show up there automatically.
 class TalkerAppender implements ILogAppender {
   TalkerAppender(this._talker);
 
@@ -24,17 +31,29 @@ class TalkerAppender implements ILogAppender {
 
   @override
   void append(LogRecord record) {
-    switch (record.level) {
+    _talker.logCustom(
+      TalkerLog(
+        record.message,
+        title: record.module,
+        logLevel: _toTalkerLevel(record.level),
+        exception: record.error,
+        stackTrace: record.stackTrace,
+      ),
+    );
+  }
+
+  talker_pkg.LogLevel _toTalkerLevel(LogLevel level) {
+    switch (level) {
       case LogLevel.verbose:
-        _talker.verbose(record.message, record.error, record.stackTrace);
+        return talker_pkg.LogLevel.verbose;
       case LogLevel.debug:
-        _talker.debug(record.message, record.error, record.stackTrace);
+        return talker_pkg.LogLevel.debug;
       case LogLevel.info:
-        _talker.info(record.message, record.error, record.stackTrace);
+        return talker_pkg.LogLevel.info;
       case LogLevel.warning:
-        _talker.warning(record.message, record.error, record.stackTrace);
+        return talker_pkg.LogLevel.warning;
       case LogLevel.error:
-        _talker.error(record.message, record.error, record.stackTrace);
+        return talker_pkg.LogLevel.error;
     }
   }
 }

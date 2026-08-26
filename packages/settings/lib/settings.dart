@@ -43,5 +43,4 @@ export 'presentation/settings/settings_event.dart';
 export 'presentation/settings/settings_action.dart';
 export 'presentation/settings/widgets/settings_section_widget.dart';
 export 'presentation/settings/widgets/settings_item_widget.dart';
-export 'presentation/settings/widgets/module_logging_section_widget.dart';
-export 'presentation/settings/widgets/telemetry_section_widget.dart';
+export 'presentation/settings/talker_console_settings.dart';
