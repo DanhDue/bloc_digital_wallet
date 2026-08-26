@@ -12,6 +12,7 @@ workspace:
   - packages/core
   - packages/framework
   - packages/logger
+  - packages/logger_native_bridge
   - packages/native_security
   - packages/network
   - packages/onboard
@@ -31,6 +32,8 @@ dependencies:
     path: packages/core
   logger:
     path: packages/logger
+  logger_native_bridge:
+    path: packages/logger_native_bridge
   network:
     path: packages/network
   ui_kit:

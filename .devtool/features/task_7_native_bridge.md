@@ -1,13 +1,13 @@
 ---
 id: "task_7_native_bridge"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "logging-refactor"
 dueDate: null
 created: "2026-08-25T19:00:00.000Z"
-modified: "2026-08-26T00:00:00.000Z"
-completedAt: null
+modified: "2026-08-26T12:02:27.000Z"
+completedAt: "2026-08-26T12:02:27.000Z"
 labels: ["native", "plugin", "tdd", "headless"]
 order: "a7"
 ---

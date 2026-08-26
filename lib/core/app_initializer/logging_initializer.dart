@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'package:logger/d3nexus_logger.dart';
+import 'package:logger_native_bridge/logger_native_bridge.dart';
 import 'package:settings/settings.dart' show SettingsLocalDataSource;
 import 'package:talker_flutter/talker_flutter.dart' hide LogLevel;
 import '../../di/injection.dart';
@@ -43,5 +44,27 @@ class LoggingInitializer implements AppInitializer {
     }
 
     D3NexusLogger.initialize(manager);
+
+    // Wire the headless native-log replay channel. NativeLogBridgePlugin
+    // (Kotlin/Swift) attaches during FlutterActivity.onCreate/AppDelegate
+    // engine setup -- strictly BEFORE Dart's main() (and therefore this
+    // call) can possibly run -- so its attach-time auto-drain cannot be
+    // relied on to find a Dart handler already installed; it races this
+    // app's own startup and loses on every real cold start.
+    // registerNativeLogBridge() itself installs the Dart handler
+    // (NativeLogFlutterApi.setUp) and THEN explicitly requests a flush
+    // (NativeLogHostApi().triggerFlush()) -- see that function's doc
+    // comment for the full failure mode this avoids. Because Dart drives
+    // the drain itself, replay is reliable regardless of the attach-time
+    // race, as long as this call happens after D3NexusLogger.initialize()
+    // above (NativeLogBridge forwards into D3NexusLogger.getLogger(...)).
+    //
+    // Note: this only wires the DART-side replay listener. The native-side
+    // production bootstrap (e.g. registering a real `DatadogNativeAppender`
+    // from `Application.onCreate`/`AppDelegate`, outside of tests) remains
+    // a deliberate future step, not an oversight -- no native bootstrap
+    // hook exists yet for `native_security` today (see Task 7's design
+    // spec), and creating one is a separate, out-of-scope concern.
+    registerNativeLogBridge();
   }
 }

@@ -13,6 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   ffi: ^2.1.2
+  logger_native_bridge:
+    path: ../logger_native_bridge
 
 dev_dependencies:
   flutter_test:
