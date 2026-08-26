@@ -1,12 +1,12 @@
 ---
 id: "task_9_create_platform_package"
-status: "backlog"
+status: "todo"
 priority: "high"
 assignee: null
 epic: "super_app_governance"
 dueDate: null
 created: "2026-08-26T10:00:00.000Z"
-modified: "2026-08-26T10:00:00.000Z"
+modified: "2026-08-26T16:51:29.000Z"
 completedAt: null
 labels: ["architecture", "platform", "routing"]
 order: "a9"

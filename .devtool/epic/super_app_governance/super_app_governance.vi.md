@@ -2,7 +2,7 @@
 
 ## Meta Data
 - **Tên Epic**: super_app_governance
-- **Trạng thái**: Xếp hàng chờ (backlog) — đứng sau `logging-refactor` (đang active: task 4/6/7/8 đang `in-progress`/`todo`). Chuyển task của epic này từ `backlog` sang `todo` khi `logging-refactor` đạt `done`.
+- **Trạng thái**: Đang active — `logging-refactor` đã merge vào `develop` (PR #31); toàn bộ 8 task đã chuyển từ `backlog` sang `todo`, sẵn sàng cho `epic-implementation`.
 - **Target Release**: TBD — kích hoạt phụ thuộc vào việc `logging-refactor` hoàn thành, không phải một mốc thời gian cụ thể.
 - **Source Spec**: [2026-08-26-super-app-governance-design.md](2026-08-26-super-app-governance-design.md)
 

@@ -1,12 +1,12 @@
 ---
 id: "task_14_migrate_settings_pilot"
-status: "backlog"
+status: "todo"
 priority: "high"
 assignee: null
 epic: "super_app_governance"
 dueDate: null
 created: "2026-08-26T10:00:00.000Z"
-modified: "2026-08-26T10:00:00.000Z"
+modified: "2026-08-26T16:51:29.000Z"
 completedAt: null
 labels: ["migration", "pilot", "settings", "onboard"]
 order: "a14"

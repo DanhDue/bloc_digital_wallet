@@ -2,7 +2,7 @@
 
 ## Meta Data
 - **Epic Name**: super_app_governance
-- **Status**: Queued (backlog) — behind `logging-refactor` (currently active: tasks 4/6/7/8 are `in-progress`/`todo`). Move this epic's tasks from `backlog` to `todo` once `logging-refactor` reaches `done`.
+- **Status**: Active — `logging-refactor` merged to `develop` (PR #31); all 8 tasks moved from `backlog` to `todo`, ready for `epic-implementation`.
 - **Target Release**: TBD — activation gated on `logging-refactor` completion, not a calendar date.
 - **Source Spec**: [2026-08-26-super-app-governance-design.md](2026-08-26-super-app-governance-design.md)
 
