@@ -15,8 +15,10 @@ import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_event.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
+import 'package:settings/presentation/settings/widgets/module_logging_section_widget.dart';
 import 'package:settings/presentation/settings/widgets/settings_item_widget.dart';
 import 'package:settings/presentation/settings/widgets/settings_section_widget.dart';
+import 'package:settings/presentation/settings/widgets/telemetry_section_widget.dart';
 import 'package:settings/data/models/sync/available_language.dart';
 import 'package:collection/collection.dart';
 
@@ -179,6 +181,32 @@ class SettingsPage
                 },
               ),
             ],
+          ),
+
+          // Module Logging Section (debug convenience — muting a module
+          // here never affects whether a telemetry backend receives
+          // records; see the Telemetry section below for that).
+          ModuleLoggingSectionWidget(
+            title: t.developer.moduleLogging.title,
+            moduleToggles: uiModel?.moduleToggles ?? const {},
+            onToggle: (module, isEnabled) => context.read<SettingsBloc>().onAction(
+              SettingsAction.toggleModuleLogging(module: module, isEnabled: isEnabled),
+            ),
+          ),
+
+          // Telemetry Section (production-impacting kill switch per
+          // appender — kept visually distinct from Module Logging above).
+          TelemetrySectionWidget(
+            title: t.telemetry.title,
+            appenderLabels: {
+              'talker': t.telemetry.appenders.talker,
+              'datadog': t.telemetry.appenders.datadog,
+              'otel': t.telemetry.appenders.otel,
+            },
+            appenderToggles: uiModel?.appenderToggles ?? const {},
+            onToggle: (appenderId, isEnabled) => context.read<SettingsBloc>().onAction(
+              SettingsAction.toggleAppenderLogging(appenderId: appenderId, isEnabled: isEnabled),
+            ),
           ),
 
           // App Info Section

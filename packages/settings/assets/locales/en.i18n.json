@@ -22,7 +22,20 @@
     },
     "developer": {
       "title": "Developer",
-      "debugMode": "Debug Mode"
+      "debugMode": "Debug Mode",
+      "moduleLogging": {
+        "title": "Module Logging",
+        "description": "Mute a noisy module's local logs on the debug console. Does not affect telemetry backends."
+      }
+    },
+    "telemetry": {
+      "title": "Telemetry",
+      "description": "Disable a telemetry backend at runtime. This is production-impacting.",
+      "appenders": {
+        "talker": "Talker (Debug Console)",
+        "datadog": "Datadog",
+        "otel": "OpenTelemetry"
+      }
     },
     "appInfo": {
       "title": "App Info",

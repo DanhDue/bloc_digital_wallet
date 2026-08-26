@@ -18,6 +18,8 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   static const _translationVersionPrefix = 'translation_version_';
   static const _availableLanguagesKey = 'available_languages';
   static const _cachedLanguageCodesKey = 'cached_language_codes';
+  static const _moduleTogglesKey = 'logging.module_toggles';
+  static const _appenderTogglesKey = 'logging.appender_toggles';
 
   SettingsLocalDataSourceImpl(this._sharedPreferences);
 
@@ -139,6 +141,38 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     }
 
     return combinedJson;
+  }
+
+  @override
+  Future<Map<String, bool>> getModuleToggles() async {
+    return _getToggleMap(_moduleTogglesKey);
+  }
+
+  @override
+  Future<void> saveModuleToggles(Map<String, bool> toggles) async {
+    await _sharedPreferences.setString(_moduleTogglesKey, jsonEncode(toggles));
+  }
+
+  @override
+  Future<Map<String, bool>> getAppenderToggles() async {
+    return _getToggleMap(_appenderTogglesKey);
+  }
+
+  @override
+  Future<void> saveAppenderToggles(Map<String, bool> toggles) async {
+    await _sharedPreferences.setString(_appenderTogglesKey, jsonEncode(toggles));
+  }
+
+  Map<String, bool> _getToggleMap(String key) {
+    final jsonString = _sharedPreferences.getString(key);
+    if (jsonString == null) return {};
+
+    try {
+      final decoded = jsonDecode(jsonString) as Map<String, dynamic>;
+      return decoded.map((key, value) => MapEntry(key, value as bool));
+    } catch (e) {
+      return {};
+    }
   }
 
   Future<File> _getTranslationFile(String languageCode) async {

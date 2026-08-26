@@ -22,7 +22,20 @@
     },
     "developer": {
       "title": "Nhà phát triển",
-      "debugMode": "Chế độ gỡ lỗi"
+      "debugMode": "Chế độ gỡ lỗi",
+      "moduleLogging": {
+        "title": "Ghi log theo module",
+        "description": "Tắt tiếng log cục bộ của một module gây nhiễu trên màn hình debug. Không ảnh hưởng đến các nền tảng telemetry."
+      }
+    },
+    "telemetry": {
+      "title": "Telemetry",
+      "description": "Tắt một nền tảng telemetry khi ứng dụng đang chạy. Thao tác này ảnh hưởng đến production.",
+      "appenders": {
+        "talker": "Talker (Màn hình Debug)",
+        "datadog": "Datadog",
+        "otel": "OpenTelemetry"
+      }
     },
     "appInfo": {
       "title": "Thông tin ứng dụng",

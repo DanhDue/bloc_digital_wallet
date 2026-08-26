@@ -23,6 +23,8 @@ abstract class SettingsUiModel with _$SettingsUiModel {
     String? appVersion,
     String? buildNumber,
     @Default([]) List<AvailableLanguage> availableLanguages,
+    @Default({}) Map<String, bool> moduleToggles,
+    @Default({}) Map<String, bool> appenderToggles,
   }) = _SettingsUiModel;
 
   factory SettingsUiModel.fromEntity(SettingsEntity entity) {

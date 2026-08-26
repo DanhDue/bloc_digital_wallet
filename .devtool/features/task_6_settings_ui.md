@@ -1,13 +1,13 @@
 ---
 id: "task_6_settings_ui"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "logging-refactor"
 dueDate: null
 created: "2026-08-25T19:00:00.000Z"
-modified: "2026-08-25T19:00:00.000Z"
-completedAt: null
+modified: "2026-08-26T06:57:34.000Z"
+completedAt: "2026-08-26T06:57:34.000Z"
 labels: ["ui", "settings", "tdd"]
 order: "a6"
 ---

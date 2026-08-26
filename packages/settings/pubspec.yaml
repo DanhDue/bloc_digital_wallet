@@ -21,7 +21,9 @@ dependencies:
     path: ../ui_kit
   framework:
     path: ../framework
-  
+  logger:
+    path: ../logger
+
   # Dependencies
   json_annotation: ^4.9.0
   freezed_annotation: ^3.0.0

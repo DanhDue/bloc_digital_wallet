@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/d3nexus_logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:settings/data/datasources/local/settings_local_datasource.dart';
 import 'package:settings/data/models/sync/available_language.dart';
 import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
 import 'package:settings/domain/usecases/get_dynamic_localization_usecase.dart';
@@ -26,6 +28,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   final UpdateUserLanguageUseCase _updateUserLanguageUseCase;
   final GetAvailableLanguagesUseCase _getAvailableLanguagesUseCase;
   final GetDynamicLocalizationUseCase _getDynamicLocalizationUseCase;
+  final SettingsLocalDataSource _settingsLocalDataSource;
 
   SettingsBloc(
     /* this._getSettingsUseCase, */
@@ -33,6 +36,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     this._updateUserLanguageUseCase,
     this._getAvailableLanguagesUseCase,
     this._getDynamicLocalizationUseCase,
+    this._settingsLocalDataSource,
   ) : super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
     on<SettingsActionNavigateToProfile>(_onNavigateToProfile);
@@ -43,21 +47,28 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     on<SettingsActionToggleDeveloperMode>(_onToggleDeveloperMode);
     on<SettingsActionChangeCurrency>(_onChangeCurrency);
     on<SettingsActionChangeLanguage>(_onChangeLanguage);
+    on<SettingsActionToggleModuleLogging>(_onToggleModuleLogging);
+    on<SettingsActionToggleAppenderLogging>(_onToggleAppenderLogging);
   }
 
   Future<void> _onStarted(SettingsActionStarted action, Emitter<SettingsState> emit) async {
     // Emit loading state immediately
     emit(state.copyWith(status: SettingsStatus.loading));
 
-    // Get app info and available languages immediately
+    // Get app info, available languages, and persisted logging toggles
+    // immediately.
     final results = await Future.wait([
       _appInfoService.getPackageInfo(),
       _getAvailableLanguagesUseCase(),
+      _settingsLocalDataSource.getModuleToggles(),
+      _settingsLocalDataSource.getAppenderToggles(),
     ]);
 
     final packageInfo = results[0] as PackageInfo;
     final languagesResult = results[1] as Either<Failure, List<AvailableLanguage>>;
     final availableLanguages = languagesResult.getOrElse(() => <AvailableLanguage>[]);
+    final moduleToggles = results[2] as Map<String, bool>;
+    final appenderToggles = results[3] as Map<String, bool>;
 
     final initialUiModel = SettingsUiModel(
       id: 'local',
@@ -65,6 +76,8 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
       buildNumber: packageInfo.buildNumber,
       isDarkModeEnabled: ThemeManager.instance.isDarkMode,
       availableLanguages: availableLanguages,
+      moduleToggles: moduleToggles,
+      appenderToggles: appenderToggles,
     );
 
     // Emit initial state with app info visible immediately
@@ -144,6 +157,34 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
 
     // 3. Call UpdateUserLanguageUseCase in background to sync preference to server
     await _updateUserLanguageUseCase(action.languageCode);
+  }
+
+  Future<void> _onToggleModuleLogging(
+    SettingsActionToggleModuleLogging action,
+    Emitter<SettingsState> emit,
+  ) async {
+    final updatedToggles = Map<String, bool>.from(state.uiModel?.moduleToggles ?? {});
+    updatedToggles[action.module] = action.isEnabled;
+
+    final updatedModel = state.uiModel?.copyWith(moduleToggles: updatedToggles);
+    emit(state.copyWith(uiModel: updatedModel));
+
+    D3NexusLogger.setModuleEnabled(action.module, action.isEnabled);
+    await _settingsLocalDataSource.saveModuleToggles(updatedToggles);
+  }
+
+  Future<void> _onToggleAppenderLogging(
+    SettingsActionToggleAppenderLogging action,
+    Emitter<SettingsState> emit,
+  ) async {
+    final updatedToggles = Map<String, bool>.from(state.uiModel?.appenderToggles ?? {});
+    updatedToggles[action.appenderId] = action.isEnabled;
+
+    final updatedModel = state.uiModel?.copyWith(appenderToggles: updatedToggles);
+    emit(state.copyWith(uiModel: updatedModel));
+
+    D3NexusLogger.setAppenderEnabled(action.appenderId, action.isEnabled);
+    await _settingsLocalDataSource.saveAppenderToggles(updatedToggles);
   }
 
   void _onNavigateToProfile(SettingsActionNavigateToProfile action, Emitter<SettingsState> emit) {
