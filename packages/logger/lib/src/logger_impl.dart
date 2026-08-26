@@ -57,7 +57,7 @@ class LoggerImpl implements ILogger {
     String? traceId,
     String? spanId,
     this.parentSpanId,
-  }) : traceId = traceId ?? generateCorrelationId(),
+  }) : traceId = traceId ?? generateCorrelationId(byteLength: 16),
        spanId = spanId ?? generateCorrelationId();
 
   /// Name of the module this logger emits records for.
@@ -68,9 +68,17 @@ class LoggerImpl implements ILogger {
 
   /// Identifier correlating this logger's records with the rest of its
   /// trace. Stable across [withSpan] calls.
+  ///
+  /// 16 bytes (32 lowercase hex characters), matching the W3C Trace
+  /// Context `trace-id` length (https://www.w3.org/TR/trace-context/).
+  @override
   final String traceId;
 
   /// Identifier of this logger's current span.
+  ///
+  /// 8 bytes (16 lowercase hex characters), matching the W3C Trace Context
+  /// `parent-id` length (https://www.w3.org/TR/trace-context/).
+  @override
   final String spanId;
 
   /// Identifier of the span this logger's span was created from, if any.

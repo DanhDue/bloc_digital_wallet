@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+import 'interceptors/trace_context_interceptor.dart';
 import 'ssl/ssl.dart';
 
 class DioFactory {
@@ -67,6 +68,12 @@ class DioFactory {
         responseType: ResponseType.json,
       ),
     );
+
+    // Self-contained (reads only `options.extra`, no external dependencies)
+    // so it's registered directly here rather than via DI, unlike
+    // AuthInterceptor. Safe no-op when no trace context is set on a
+    // request's `extra`.
+    dioInstance.interceptors.add(TraceContextInterceptor());
 
     if (_enableLogging) {
       dioInstance.interceptors.add(

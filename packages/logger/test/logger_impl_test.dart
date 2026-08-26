@@ -70,6 +70,16 @@ void main() {
       expect(appender.received.single.parentSpanId, isNull);
     });
 
+    test('generated traceId is 32 hex chars and spanId is 16 hex chars, '
+        'per the W3C Trace Context trace-id/parent-id lengths', () {
+      final logger = manager.getLogger('wallet');
+
+      expect(logger.traceId, hasLength(32));
+      expect(logger.traceId, matches(RegExp(r'^[0-9a-f]{32}$')));
+      expect(logger.spanId, hasLength(16));
+      expect(logger.spanId, matches(RegExp(r'^[0-9a-f]{16}$')));
+    });
+
     test('two loggers for different modules get distinct traceIds', () {
       manager.getLogger('wallet').i('a');
       manager.getLogger('scanner').i('b');

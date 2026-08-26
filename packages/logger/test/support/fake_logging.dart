@@ -26,8 +26,13 @@ class FakeLogger implements ILogger {
   }) : records = records ?? <LogRecord>[];
 
   final String module;
+
+  @override
   final String traceId;
+
+  @override
   final String spanId;
+
   final String? parentSpanId;
 
   /// Every record emitted by this logger or any span derived from it.

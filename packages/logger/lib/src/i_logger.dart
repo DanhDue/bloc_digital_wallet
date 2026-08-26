@@ -6,6 +6,21 @@
 /// (`packages/core/lib/utils/log.dart`) so existing call sites can migrate
 /// to `ILogger` with no semantic changes.
 abstract interface class ILogger {
+  /// Identifier correlating this logger's records with the rest of its
+  /// trace. Stable across [withSpan] calls.
+  ///
+  /// 16 bytes (32 lowercase hex characters), matching the W3C Trace
+  /// Context `trace-id` length (https://www.w3.org/TR/trace-context/).
+  /// Network-boundary callers (e.g. a Dio interceptor building a
+  /// `traceparent` header) read this to propagate the active trace.
+  String get traceId;
+
+  /// Identifier of this logger's current span.
+  ///
+  /// 8 bytes (16 lowercase hex characters), matching the W3C Trace Context
+  /// `parent-id` length (https://www.w3.org/TR/trace-context/).
+  String get spanId;
+
   /// Logs a debug-level message.
   void d(String message, {Object? error, StackTrace? stackTrace});
 

@@ -1,13 +1,13 @@
 ---
 id: "task_5_network_tracing"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "logging-refactor"
 dueDate: null
 created: "2026-08-25T19:00:00.000Z"
-modified: "2026-08-25T19:00:00.000Z"
-completedAt: null
+modified: "2026-08-26T02:49:05.000Z"
+completedAt: "2026-08-26T02:49:05.000Z"
 labels: ["network", "tracing", "tdd"]
 order: "a5"
 ---
