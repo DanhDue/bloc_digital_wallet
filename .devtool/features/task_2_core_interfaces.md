@@ -1,13 +1,13 @@
 ---
 id: "task_2_core_interfaces"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "logging-refactor"
 dueDate: null
 created: "2026-08-25T19:00:00.000Z"
-modified: "2026-08-25T19:00:00.000Z"
-completedAt: null
+modified: "2026-08-26T02:21:01.000Z"
+completedAt: "2026-08-26T02:21:01.000Z"
 labels: ["interfaces", "architecture", "tdd"]
 order: "a2"
 ---
