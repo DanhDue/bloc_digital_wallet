@@ -14,9 +14,6 @@ class LoggingInitializer implements AppInitializer {
   Future<void> init() async {
     final talker = getIt<Talker>();
 
-    // Initialize Log with Talker instance from DI
-    Log.init(talker);
-
     // Initialize D3NexusLogger (backend-agnostic logging facade) with the
     // environment-appropriate appender set. See
     // `appendersForEnvironment` for the dev vs. staging/production split.

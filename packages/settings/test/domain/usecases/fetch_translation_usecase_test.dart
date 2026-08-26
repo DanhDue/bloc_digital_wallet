@@ -4,6 +4,7 @@
 
 import 'package:core/core.dart' hide test;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:logger/d3nexus_logger.dart';
 import 'package:mockito/mockito.dart';
 import 'package:settings/data/models/sync/bootstrap_translation_item.dart';
 import 'package:settings/domain/usecases/fetch_translation_usecase.dart';
@@ -23,8 +24,13 @@ void main() {
     if (!GetIt.instance.isRegistered<Talker>()) {
       final talker = Talker();
       GetIt.instance.registerSingleton<Talker>(talker);
-      Log.init(talker);
     }
+
+    // LocalizationManager.applyDynamicTranslations (exercised via
+    // FetchTranslationUseCase) logs through D3NexusLogger; wire it to a
+    // no-op manager (no appenders registered) so the static facade isn't
+    // left uninitialized in this test isolate.
+    D3NexusLogger.initialize(LogManagerImpl());
   });
 
   group('FetchTranslationUseCase HTTP Caching (304)', () {

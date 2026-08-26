@@ -1635,7 +1635,7 @@ packages:
     source: hosted
     version: "4.9.3"
   talker_bloc_logger:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: talker_bloc_logger
       sha256: c14510bfb36af5d1648683a2707bb5bbb2858e3cabd549e363262db100bae374
@@ -1643,7 +1643,7 @@ packages:
     source: hosted
     version: "4.6.4"
   talker_dio_logger:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: talker_dio_logger
       sha256: dcf784f1841e248c270ef741f8a07ca9cf562c6424ee43fc6e598c4eb7f18238

@@ -90,7 +90,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     result.fold(
       (failure) {
         // Log the error, show snackbar, and update state status
-        Log.e('Failed to load settings: ${failure.message}');
+        D3NexusLogger.getLogger('Settings').e('Failed to load settings: ${failure.message}');
         emitEvent(SettingsEvent.showError(message: failure.message));
         emit(state.copyWith(status: SettingsStatus.failure, errorMessage: failure.message));
       },

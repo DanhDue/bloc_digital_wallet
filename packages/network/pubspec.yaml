@@ -17,7 +17,6 @@ dependencies:
   logger:
     path: ../logger
   # Network-specific dependencies
-  talker_dio_logger: ^4.0.0
   json_annotation: ^4.9.0
   crypto: ^3.0.3
 

@@ -21,7 +21,6 @@ export 'errors/failures.dart';
 export 'extensions/widget_extensions.dart';
 
 export 'package:talker_flutter/talker_flutter.dart';
-export 'utils/log.dart';
 export 'utils/route_utils.dart';
 export 'utils/feature_public_routes.dart';
 export 'utils/deep_merge_utils.dart';

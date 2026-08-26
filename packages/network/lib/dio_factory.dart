@@ -3,7 +3,6 @@
 // coverage:ignore-file
 
 import 'package:dio/dio.dart';
-import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'interceptors/trace_context_interceptor.dart';
@@ -17,13 +16,15 @@ class DioFactory {
   Duration _receiveTimeout = const Duration(seconds: 30);
 
   final String _baseUrl;
-  final bool _enableLogging;
 
   /// Creates a DioFactory with optional SSL configuration.
   ///
   /// [talker] - Logger instance for debugging
   /// [baseUrl] - The base URL for the API
-  /// [enableLogging] - Whether to enable logging (default: false)
+  /// [enableLogging] - Unused here; TalkerDioLogger registration now lives
+  /// in the app layer (see `lib/di/app_network_module.dart`), gated on
+  /// `core.EnvironmentConfig.enableLogging` directly. Kept as a parameter
+  /// for API stability with existing callers (e.g. `NetworkModule`).
   /// [sslConfiguration] - SSL pinning strategy (default: AutoSslConfiguration)
   ///
   /// Available strategies:
@@ -33,10 +34,10 @@ class DioFactory {
   DioFactory(
     this._talker, {
     required String baseUrl,
+    // ignore: avoid_unused_constructor_parameters
     bool enableLogging = false,
     SslConfiguration sslConfiguration = const AutoSslConfiguration(),
   }) : _baseUrl = baseUrl,
-       _enableLogging = enableLogging,
        _sslConfiguration = sslConfiguration;
 
   DioFactory withConnectTimeout(Duration timeout) {
@@ -75,22 +76,10 @@ class DioFactory {
     // request's `extra`.
     dioInstance.interceptors.add(TraceContextInterceptor());
 
-    if (_enableLogging) {
-      dioInstance.interceptors.add(
-        TalkerDioLogger(
-          talker: _talker,
-          settings: const TalkerDioLoggerSettings(
-            printRequestHeaders: true,
-            printResponseHeaders: true,
-            printRequestData: true,
-            printResponseData: true,
-            printResponseMessage: true,
-            printErrorData: true,
-            printErrorHeaders: true,
-          ),
-        ),
-      );
-    }
+    // TalkerDioLogger is added from the app layer (see
+    // lib/di/app_network_module.dart), not here, per the logging-refactor
+    // epic's Phase 4 (move talker_dio_logger out of packages/network into
+    // the app-layer appenders).
 
     // AuthInterceptor is added via Dependency Injection in NetworkModule
 

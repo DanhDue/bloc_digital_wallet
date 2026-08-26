@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   core:
     path: ../core
+  logger:
+    path: ../logger
   # Framework-specific dependencies
   bloc_concurrency: ^0.2.0
   modal_bottom_sheet: ^3.0.0
