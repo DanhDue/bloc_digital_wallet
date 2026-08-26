@@ -1,12 +1,12 @@
 ---
 id: "task_13_gen_changed_and_ci_cache"
-status: "todo"
+status: "in-progress"
 priority: "medium"
 assignee: null
 epic: "super_app_governance"
 dueDate: null
 created: "2026-08-26T10:00:00.000Z"
-modified: "2026-08-26T16:51:29.000Z"
+modified: "2026-08-26T18:13:38.000Z"
 completedAt: null
 labels: ["tooling", "ci", "build-performance"]
 order: "a13"
@@ -29,7 +29,7 @@ Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.e
 
 ## TDD Adaptation
 Tooling/config change, no application business logic:
-1. Stage an uncommitted change in one package's source; run `genChanged.sh`; confirm only that package and its transitive dependents (via `--include-dependents`) regenerate.
+1. Make a throwaway local commit changing one package's source (`melos exec --diff=<ref>` resolves to a commit-to-commit `git diff`, so a merely staged/uncommitted change won't be picked up — verify this the first time you hit it, don't assume); run `genChanged.sh`; confirm only that package and its transitive dependents (via `--include-dependents`) regenerate; then discard the throwaway commit.
 2. Run the CI pipeline twice on the same commit; confirm the second run cache-hits `.dart_tool/` and completes faster than the first.
 3. Bump a dependency version in `pubspec.lock`; confirm the CI cache key changes and the next run is a cache miss (not silently reusing stale generated code against new dependency versions).
 4. Confirm `scripts/githooks/pre-commit` is unmodified and still runs full `genAlls`.
