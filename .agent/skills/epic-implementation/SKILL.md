@@ -78,23 +78,24 @@ These are Phase 1's closing steps, not a separate phase — they run after the s
 
 ### Phase 2 — Sequential Task Execution
 
-For each task in the confirmed order, follow `superpowers:subagent-driven-development` almost exactly. **The two differences from the base skill are (a) step 1 — the implementer does not commit, and (b) step 4 — you make exactly one commit yourself, after both reviews pass, staging the code and the task file together.** Everything else is the base skill unchanged.
+For each task in the confirmed order, follow `superpowers:subagent-driven-development` almost exactly. **This differs from the base skill in two ways: (a) the task's Kanban `status` is kept live on disk (uncommitted) while work is ongoing, so the dashboard reflects real progress instead of jumping straight from `todo` to `done`; (b) the implementer does not commit — you make exactly one commit yourself, after both reviews pass, staging the code and the task file's final status together.** Everything else is the base skill unchanged.
 
-1. **(Difference a)** Dispatch implementer subagent with the full task file text. It follows `superpowers:test-driven-development`, self-reviews, but does **not** commit yet.
+1. **(Difference a)** Before dispatching, edit — **do not commit** — that task's frontmatter in `.devtool/features/task_<n>.md` to `status: "in-progress"`. This is a live, uncommitted change purely for the Kanban dashboard (most markdown-Kanban plugins, including this one, read the file straight off disk); it gets overwritten by the final `status: "done"` update in step 4, so it never produces a commit of its own. Then dispatch the implementer subagent with the full task file text. It follows `superpowers:test-driven-development`, self-reviews, but does **not** commit yet.
 2. Dispatch spec-compliance reviewer, then code-quality reviewer, same as the base skill. Fix loops as needed — still uncommitted.
-3. Only once both reviews pass, update that task's frontmatter in `.devtool/features/task_<n>.md`: `status: "done"`, `completedAt: "<ISO-8601 now>"`. Do this **before** committing — `.devtool/features/task_*.md` is tracked, so updating it after the commit would leave the tree dirty and force a second commit.
-4. **(Difference b)** Make exactly one commit, staging both the code changes and the updated task file together:
+3. **(Difference a, continued)** If the implementer reports `BLOCKED`/`NEEDS_CONTEXT` and you need to escalate or pause rather than immediately re-dispatch, edit the frontmatter to `status: "blocked"` (still uncommitted) so the dashboard reflects the stall. Set it back to `status: "in-progress"` once you resume the task. Only `todo | in-progress | blocked | done` are valid values here — do not invent a new one (e.g. no `in-review`; the review/fix loop is still `in-progress` as far as the dashboard is concerned).
+4. Only once both reviews pass, update that task's frontmatter: `status: "done"`, `completedAt: "<ISO-8601 now>"`. Do this **before** committing — `.devtool/features/task_*.md` is tracked, so updating it after the commit would leave the tree dirty and force a second commit.
+5. **(Difference b)** Make exactly one commit, staging both the code changes and the updated task file together:
    ```bash
    git status                                    # check nothing unrelated is pending
    git add -A                                    # code changes + .devtool/features/task_<n>.md
    git commit -m "[EPIC_NAME] <task_title>"
    ```
    `EPIC_NAME` is `<epic_slug>` upper-cased, hyphens kept (e.g. `LOGGING-REFACTOR`). `<task_title>` is the task's `# Task N: <Title>` heading with the `Task N:` prefix stripped. Confirm `git status` is clean afterwards — anything left over means the "one commit per task" rule is already broken.
-5. If the implementer or a reviewer flags that the implementation diverged from the HLD, go to Phase 3 before starting the next task.
+6. If the implementer or a reviewer flags that the implementation diverged from the HLD, go to Phase 3 before starting the next task.
 
 ### Phase 3 — Doc Sync on Divergence
 
-Only when Phase 2 step 5 flags divergence:
+Only when Phase 2 step 6 flags divergence:
 1. Update the epic's Mermaid diagrams in **both** `.devtool/epic/<epic_dir>/<epic_dir>.en.md` and `.vi.md` — never let one drift from the other.
 2. Update the affected task file(s)' own prose if it was inaccurate.
 3. Commit separately:
@@ -139,6 +140,8 @@ Only when Phase 2 step 5 flags divergence:
 **Running `pod install`** — this project migrated to Swift Package Manager; there is no `Podfile` tracked in git.
 
 **Folding a doc-sync into the task's code commit** — keep them separate so `git log` always shows a clean one-commit-per-task history, with doc-sync commits clearly labeled as such.
+
+**Leaving `status` at `todo` while a task is actually running** — the dashboard should show `in-progress` (and `blocked` if you had to pause/escalate) the moment you dispatch the implementer, updated live on disk with no commit of its own; only the final `done` flip rides along with the task's single commit. Do not invent a 5th status value (e.g. `in-review`) — this repo's Kanban plugin only recognizes `todo | in-progress | blocked | done`.
 
 ## Red Flags
 
