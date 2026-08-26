@@ -15,7 +15,10 @@ import 'src/i_logger.dart';
 export 'src/i_log_appender.dart';
 export 'src/i_log_manager.dart';
 export 'src/i_logger.dart';
+export 'src/log_manager_impl.dart';
 export 'src/log_record.dart';
+export 'src/logger_impl.dart';
+export 'src/trace_tree.dart';
 
 /// Static facade over the D3Nexus logging system.
 ///
@@ -39,14 +42,35 @@ abstract final class D3NexusLogger {
   ///
   /// Throws a [StateError] if called before [initialize].
   static ILogger getLogger(String module) {
+    return _requireManager().getLogger(module);
+  }
+
+  /// Enables or disables dispatch for [module], delegating to the
+  /// [ILogManager] supplied via [initialize].
+  ///
+  /// Throws a [StateError] if called before [initialize].
+  static void setModuleEnabled(String module, bool enabled) {
+    _requireManager().setModuleEnabled(module, enabled);
+  }
+
+  /// Enables or disables dispatch to the appender identified by
+  /// [appenderId], delegating to the [ILogManager] supplied via
+  /// [initialize].
+  ///
+  /// Throws a [StateError] if called before [initialize].
+  static void setAppenderEnabled(String appenderId, bool enabled) {
+    _requireManager().setAppenderEnabled(appenderId, enabled);
+  }
+
+  static ILogManager _requireManager() {
     final manager = _manager;
     if (manager == null) {
       throw StateError(
-        'D3NexusLogger.initialize() must be called before '
-        'D3NexusLogger.getLogger(). Call D3NexusLogger.initialize() once '
-        'during app startup.',
+        'D3NexusLogger.initialize() must be called before using '
+        'D3NexusLogger. Call D3NexusLogger.initialize() once during app '
+        'startup.',
       );
     }
-    return manager.getLogger(module);
+    return manager;
   }
 }

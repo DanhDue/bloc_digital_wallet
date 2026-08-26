@@ -77,4 +77,20 @@ void main() {
 
     expect(manager.appenders, contains(appender));
   });
+
+  group('setModuleEnabled', () {
+    test('delegates to the ILogManager supplied via initialize', () {
+      D3NexusLogger.setModuleEnabled('wallet', false);
+
+      expect(manager.moduleToggles['wallet'], isFalse);
+    });
+  });
+
+  group('setAppenderEnabled', () {
+    test('delegates to the ILogManager supplied via initialize', () {
+      D3NexusLogger.setAppenderEnabled('console', false);
+
+      expect(manager.appenderToggles['console'], isFalse);
+    });
+  });
 }

@@ -97,6 +97,15 @@ class FakeLogManager implements ILogManager {
   /// Appenders registered via [registerAppender], in registration order.
   final List<ILogAppender> appenders = <ILogAppender>[];
 
+  /// Records passed to [log].
+  final List<LogRecord> logged = <LogRecord>[];
+
+  /// Module toggles set via [setModuleEnabled].
+  final Map<String, bool> moduleToggles = <String, bool>{};
+
+  /// Appender toggles set via [setAppenderEnabled].
+  final Map<String, bool> appenderToggles = <String, bool>{};
+
   @override
   ILogger getLogger(String module) {
     return _loggers.putIfAbsent(
@@ -108,6 +117,21 @@ class FakeLogManager implements ILogManager {
   @override
   void registerAppender(ILogAppender appender) {
     appenders.add(appender);
+  }
+
+  @override
+  void log(LogRecord record) {
+    logged.add(record);
+  }
+
+  @override
+  void setModuleEnabled(String module, bool enabled) {
+    moduleToggles[module] = enabled;
+  }
+
+  @override
+  void setAppenderEnabled(String appenderId, bool enabled) {
+    appenderToggles[appenderId] = enabled;
   }
 }
 

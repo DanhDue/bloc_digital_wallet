@@ -1,13 +1,13 @@
 ---
 id: "task_3_log_manager"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "logging-refactor"
 dueDate: null
 created: "2026-08-25T19:00:00.000Z"
-modified: "2026-08-25T19:00:00.000Z"
-completedAt: null
+modified: "2026-08-26T02:38:45.000Z"
+completedAt: "2026-08-26T02:38:45.000Z"
 labels: ["core", "tdd"]
 order: "a3"
 ---
