@@ -33,6 +33,9 @@ When invoked, you MUST strictly follow this exact 2-step workflow to organize th
 
 ### Step 1: Create the Epic Overview Document (HLD/RFC)
 Generate the Epic Overview documents inside a dedicated directory: `.devtool/epic/<epic_name>/`.
+
+**Self-sufficiency check (source spec placement)**: if this epic has a source spec and it is not already inside `.devtool/epic/<epic_name>/` — e.g. it is still at `docs/superpowers/specs/<file>.md` because `brainstorming`'s Routing After Approval relocation step was skipped, or this skill was invoked directly with a spec path outside the epic directory — relocate it now, before writing anything else: `git mv` the file into `.devtool/epic/<epic_name>/<same-filename>`, then check every relative link inside it (e.g. links into `packages/`, `lib/`) still resolves from the new location and fix any that don't (the depth from repo root usually stays the same when moving from `docs/superpowers/specs/` to `.devtool/epic/<epic_name>/`, but verify rather than assume). Commit this move on its own, before generating the HLD. Never leave a source spec split across `docs/` and `.devtool/epic/`.
+
 You MUST generate two language variants for the overview document:
 - English: `.devtool/epic/<epic_name>/<epic_name>.en.md`
 - Vietnamese: `.devtool/epic/<epic_name>/<epic_name>.vi.md`
@@ -54,6 +57,14 @@ Each document MUST contain the following sections:
 ### Checkpoint: Confirm Task Breakdown Before Writing Task Files
 Before generating any task file, list the proposed tasks as a short numbered summary (title + one-line scope each) and ask the user to confirm the breakdown and granularity. This is a lightweight check, not a full brainstorming dialogue — the architecture is already approved (from the spec or from this skill's own Step 1); only the *task split* is new and unapproved. Only proceed to write task files once the user confirms or adjusts the list.
 
+### Concurrent-Epic Backlog Rule
+Before writing any task file, check `.devtool/features/*.md` (excluding the `done/` and `archived/` subfolders) for a task whose `epic:` frontmatter field names a *different* epic and whose `status` is `todo`, `in-progress`, or `review` — that means another epic is actively being worked on right now. If so:
+- Set every task this run generates for the new epic to `status: "backlog"` instead of the usual default `"todo"`, so it's queued rather than shown as ready-to-pick-up while the other epic is still active.
+- Note in the new Epic Overview's Meta Data **Status** field that the epic is queued behind the other epic by name (e.g. `Status: Queued (backlog) — behind logging-refactor`).
+- This skill does not flip tasks from `backlog` to `todo` itself later — that's a human call once the blocking epic's tasks all reach `done`.
+
+If no other epic has any active (`todo`/`in-progress`/`review`) task, generate tasks with the normal default `status: "todo"` as usual.
+
 ### Step 2: Generate LachyFS Kanban Tasks
 Break the Epic down into granular implementation tasks. **Crucially, the task breakdown and implementation checklists MUST be structured around the Test-Driven Development (TDD) process** wherever the task produces testable behavior (see the TDD Adaptation note below for tasks that don't). For each task, generate a Markdown file located at `.devtool/features/task_<number>_<name>.md`.
 
@@ -65,7 +76,7 @@ Each task file MUST adhere to this exact structure:
    ```yaml
    ---
    id: "task_<number>_<name>"
-   status: "todo"          # one of: backlog | todo | in-progress | review | done
+   status: "todo"          # one of: backlog | todo | in-progress | review | done — see Concurrent-Epic Backlog Rule above
    priority: "high"        # one of: low | medium | high
    assignee: null
    epic: "<epic_name>"
@@ -112,6 +123,8 @@ Finally, update the Epic's **Status** field if the overall epic phase has change
 - Writing task files before the user has confirmed the task breakdown checkpoint.
 - Generating tasks without a TDD checklist or an explicit, stated TDD Adaptation.
 - Creating the Epic overview in the project root instead of `.devtool/epic/<epic_name>/`.
+- Generating the Epic Overview while its source spec still lives in `docs/superpowers/specs/` instead of `.devtool/epic/<epic_name>/`.
+- Defaulting new tasks to `status: "todo"` without checking for another epic's active tasks first (see Concurrent-Epic Backlog Rule).
 - Generating Kanban tasks without the LachyFS YAML Frontmatter.
 - Skipping the Mermaid diagrams in the Epic Overview.
 - Adding a task that changes architecture/data flow/actors without updating the Epic Overview's Mermaid diagrams to match.
