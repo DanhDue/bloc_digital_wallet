@@ -24,6 +24,7 @@ CIChecking:
     paths:
       - .ci-reports
   script:
+    - ./scripts/check_module_boundaries.sh
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - cp secureFiles/dev/google-services.json android/app/src/dev/google-services.json
     - cp secureFiles/stg/google-services.json android/app/src/stg/google-services.json
