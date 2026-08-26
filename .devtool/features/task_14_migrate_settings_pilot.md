@@ -20,7 +20,7 @@ Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.e
 
 ## Relevant Files & Context Pointers
 - `packages/onboard/lib/presentation/splash/splash_page.dart` — already uses `DeepLinkRoutes`/`FeaturePublicRoutes` for splash routing per Task 9; locate and update its post-onboarding navigation call to `settings` to also go through `DeepLinkRoutes.settingsRoute` instead of any direct `settings` package import.
-- `packages/onboard/pubspec.yaml` — remove the `settings` dependency once no direct import remains (keep `platform` if not already present from Task 9's onboard usage).
+- `packages/onboard/pubspec.yaml` — remove the `settings` dependency once no direct import remains (`app_platform: {path: ../platform}` is already present from Task 9's onboard usage — see Task 9's naming ruling: pubspec key is `app_platform`, imported `as platform`).
 - `scripts/module_boundary_whitelist.txt` — remove the `onboard→settings` line.
 - `packages/settings/` — no structural change expected; only the caller side changes.
 

@@ -58,6 +58,8 @@ flowchart TD
     Platform --> Infra
 ```
 
+**Lưu ý về tên gói (phát hiện trong lúc làm Task 9):** thư mục vẫn là `packages/platform/`, nhưng `name:` trong pubspec là `app_platform` — package thật `platform` trên pub.dev đã là transitive dependency sẵn có của workspace, và Dart pub không thể alias 1 package local trùng tên với 1 package hosted. Mọi dependency trỏ vào nó dùng key `app_platform:`; code import nó với alias `as platform`. Xem source spec để biết chi tiết đầy đủ.
+
 ### Use Cases
 ```mermaid
 flowchart LR

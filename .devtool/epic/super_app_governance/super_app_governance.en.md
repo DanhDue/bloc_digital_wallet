@@ -58,6 +58,8 @@ flowchart TD
     Platform --> Infra
 ```
 
+**Naming note (discovered during Task 9):** the directory is `packages/platform/`, but its pubspec `name:` is `app_platform` — the real pub.dev package `platform` is already a transitive dependency of this workspace, and Dart pub can't alias a local package against a same-named hosted one. Every dependency on it uses the key `app_platform:`; code imports it aliased `as platform`. See the source spec for full detail.
+
 ### Use Cases
 ```mermaid
 flowchart LR
