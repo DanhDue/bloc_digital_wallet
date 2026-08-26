@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/logging/module_gated_interceptor.dart';
 import 'package:core/core.dart';
 import 'package:network/network.dart';
 
@@ -42,6 +43,17 @@ abstract class AppNetworkModule {
   /// logging-refactor epic's Phase 4 (talker_dio_logger no longer lives in
   /// packages/network). Mirrors how [provideAuthInterceptor] configures the
   /// same Dio instance it is handed.
+  ///
+  /// `TalkerDioLogger` writes directly to the shared `Talker` instance --
+  /// it is a third-party Dio interceptor, not an `ILogAppender`, so it
+  /// never goes through `D3NexusLogger`/`LogManagerImpl`'s dispatch and the
+  /// "Talker" appender toggle in Settings has no effect on it. The "Network"
+  /// module toggle is what gates it instead: wrapped in
+  /// [ModuleGatedInterceptor], which checks `D3NexusLogger.isModuleEnabled`
+  /// live on every request/response/error, so toggling "Network" in the
+  /// Talker console takes effect on the very next HTTP call -- no app
+  /// restart required (unlike deciding once, at registration time, whether
+  /// to add the interceptor at all).
   @singleton
   TalkerDioLogger provideTalkerDioLogger(Dio dio, Talker talker) {
     final talkerDioLogger = TalkerDioLogger(
@@ -57,7 +69,9 @@ abstract class AppNetworkModule {
       ),
     );
     if (EnvironmentConfig.enableLogging) {
-      dio.interceptors.add(talkerDioLogger);
+      dio.interceptors.add(
+        ModuleGatedInterceptor(module: 'Network', delegate: talkerDioLogger),
+      );
     }
     return talkerDioLogger;
   }

@@ -77,6 +77,9 @@ class LogManagerImpl implements ILogManager {
   }
 
   @override
+  bool isModuleEnabled(String module) => _isModuleEnabled(module);
+
+  @override
   void setAppenderEnabled(String appenderId, bool enabled) {
     _appenderToggles[appenderId] = enabled;
   }

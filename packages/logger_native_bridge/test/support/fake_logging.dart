@@ -122,6 +122,9 @@ class FakeLogManager implements ILogManager {
   }
 
   @override
+  bool isModuleEnabled(String module) => moduleToggles[module] ?? true;
+
+  @override
   void setAppenderEnabled(String appenderId, bool enabled) {
     appenderToggles[appenderId] = enabled;
   }

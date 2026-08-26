@@ -53,6 +53,18 @@ abstract final class D3NexusLogger {
     _requireManager().setModuleEnabled(module, enabled);
   }
 
+  /// The current, live value of [module]'s toggle, delegating to the
+  /// [ILogManager] supplied via [initialize].
+  ///
+  /// For callers that want to gate their own behavior on a module's toggle
+  /// in real time (e.g. an interceptor deciding per-call whether to log),
+  /// rather than reading it once at startup.
+  ///
+  /// Throws a [StateError] if called before [initialize].
+  static bool isModuleEnabled(String module) {
+    return _requireManager().isModuleEnabled(module);
+  }
+
   /// Enables or disables dispatch to the appender identified by
   /// [appenderId], delegating to the [ILogManager] supplied via
   /// [initialize].

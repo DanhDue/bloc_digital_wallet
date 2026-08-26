@@ -39,6 +39,15 @@ abstract interface class ILogManager {
   /// default until this is called.
   void setModuleEnabled(String module, bool enabled);
 
+  /// The current, live value of [module]'s toggle — `true` if it has never
+  /// been toggled or was last set to `true`, `false` if it was last set to
+  /// `false` via [setModuleEnabled].
+  ///
+  /// For callers outside the [log] dispatch path that want to gate their
+  /// own behavior on a module's toggle in real time (e.g. an interceptor
+  /// deciding per-call whether to log, rather than once at startup).
+  bool isModuleEnabled(String module);
+
   /// Enables or disables dispatch to the appender identified by
   /// [appenderId].
   ///

@@ -86,6 +86,22 @@ void main() {
     });
   });
 
+  group('isModuleEnabled', () {
+    test('delegates to the ILogManager supplied via initialize', () {
+      manager.setModuleEnabled('wallet', false);
+
+      expect(D3NexusLogger.isModuleEnabled('wallet'), isFalse);
+    });
+
+    test('reflects a value flipped back to true live', () {
+      D3NexusLogger.setModuleEnabled('wallet', false);
+      expect(D3NexusLogger.isModuleEnabled('wallet'), isFalse);
+
+      D3NexusLogger.setModuleEnabled('wallet', true);
+      expect(D3NexusLogger.isModuleEnabled('wallet'), isTrue);
+    });
+  });
+
   group('setAppenderEnabled', () {
     test('delegates to the ILogManager supplied via initialize', () {
       D3NexusLogger.setAppenderEnabled('console', false);

@@ -162,4 +162,28 @@ void main() {
       expect(appender.received.single.module, 'wallet');
     });
   });
+
+  group('isModuleEnabled', () {
+    test('a module never toggled defaults to enabled', () {
+      expect(manager.isModuleEnabled('wallet'), isTrue);
+    });
+
+    test('reflects the current value immediately after setModuleEnabled(false)', () {
+      manager.setModuleEnabled('wallet', false);
+      expect(manager.isModuleEnabled('wallet'), isFalse);
+    });
+
+    test('reflects a value flipped back to true, live, with no restart concept involved', () {
+      manager.setModuleEnabled('wallet', false);
+      expect(manager.isModuleEnabled('wallet'), isFalse);
+
+      manager.setModuleEnabled('wallet', true);
+      expect(manager.isModuleEnabled('wallet'), isTrue);
+    });
+
+    test('toggling one module does not affect another', () {
+      manager.setModuleEnabled('wallet', false);
+      expect(manager.isModuleEnabled('network'), isTrue);
+    });
+  });
 }

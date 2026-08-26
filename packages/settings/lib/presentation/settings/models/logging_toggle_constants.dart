@@ -13,6 +13,7 @@
 /// match this monorepo's package/feature names — the same `<Module>` names
 /// used when migrating real call sites to `D3NexusLogger.getLogger`.
 const List<String> kKnownLoggingModules = [
+  'App',
   'Core',
   'Framework',
   'Network',
