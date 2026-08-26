@@ -49,7 +49,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     // Emit loading state immediately
     emit(state.copyWith(status: SettingsStatus.loading));
 
-    // Get app info and available languages immediately
+    // Get app info and available languages immediately.
     final results = await Future.wait([
       _appInfoService.getPackageInfo(),
       _getAvailableLanguagesUseCase(),
@@ -77,7 +77,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     result.fold(
       (failure) {
         // Log the error, show snackbar, and update state status
-        Log.e('Failed to load settings: ${failure.message}');
+        D3NexusLogger.getLogger('Settings').e('Failed to load settings: ${failure.message}');
         emitEvent(SettingsEvent.showError(message: failure.message));
         emit(state.copyWith(status: SettingsStatus.failure, errorMessage: failure.message));
       },

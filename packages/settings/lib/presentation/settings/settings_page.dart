@@ -6,15 +6,19 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
+import 'package:logger/d3nexus_logger.dart';
 import 'package:settings/generated/colors.gen.dart';
 import 'package:settings/generated/translations.dart';
 import 'package:ui_kit/ui_kit.dart' hide AppColors;
 import 'package:core/core.dart';
 
+import 'package:settings/data/datasources/local/settings_local_datasource.dart';
+import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_event.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
+import 'package:settings/presentation/settings/talker_console_settings.dart';
 import 'package:settings/presentation/settings/widgets/settings_item_widget.dart';
 import 'package:settings/presentation/settings/widgets/settings_section_widget.dart';
 import 'package:settings/data/models/sync/available_language.dart';
@@ -168,15 +172,7 @@ class SettingsPage
                 onToggle: (value) => context.read<SettingsBloc>().onAction(
                   SettingsAction.toggleDeveloperMode(isEnabled: value),
                 ),
-                onTap: () {
-                  if (uiModel?.isDeveloperModeEnabled == true) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => TalkerScreen(talker: GetIt.I<Talker>()),
-                      ),
-                    );
-                  }
-                },
+                onTap: () => _openTalkerConsole(context, uiModel, t),
               ),
             ],
           ),
@@ -252,6 +248,52 @@ class SettingsPage
 
   void _showCurrencyPicker(BuildContext context) {
     // TODO: Implement currency picker dialog
+  }
+
+  /// Opens Talker's console screen, with the "Module Logging" and
+  /// "Telemetry" toggle sections wired into its ⚙️ settings panel
+  /// (`customSettings`) instead of living on this page — see
+  /// [buildLoggingCustomSettings].
+  Future<void> _openTalkerConsole(
+    BuildContext context,
+    SettingsUiModel? uiModel,
+    SettingsTranslationsSettingsEn t,
+  ) async {
+    if (uiModel?.isDeveloperModeEnabled != true) return;
+
+    final dataSource = GetIt.I<SettingsLocalDataSource>();
+    final moduleToggles = await dataSource.getModuleToggles();
+    final appenderToggles = await dataSource.getAppenderToggles();
+    if (!context.mounted) return;
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => TalkerScreen(
+          talker: GetIt.I<Talker>(),
+          customSettings: buildLoggingCustomSettings(
+            moduleToggles: moduleToggles,
+            appenderToggles: appenderToggles,
+            appenderLabels: {
+              'talker': t.telemetry.appenders.talker,
+              'datadog': t.telemetry.appenders.datadog,
+              'otel': t.telemetry.appenders.otel,
+            },
+            moduleLoggingTitle: t.developer.moduleLogging.title,
+            telemetryTitle: t.telemetry.title,
+            onModuleToggle: (module, isEnabled) async {
+              D3NexusLogger.setModuleEnabled(module, isEnabled);
+              final current = await dataSource.getModuleToggles();
+              await dataSource.saveModuleToggles({...current, module: isEnabled});
+            },
+            onAppenderToggle: (appenderId, isEnabled) async {
+              D3NexusLogger.setAppenderEnabled(appenderId, isEnabled);
+              final current = await dataSource.getAppenderToggles();
+              await dataSource.saveAppenderToggles({...current, appenderId: isEnabled});
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   void _showLanguagePicker(

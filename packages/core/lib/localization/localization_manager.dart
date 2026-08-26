@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:core/generated/translations.dart';
 import 'package:core/localization/dynamic_translator.dart';
-import 'package:core/utils/log.dart';
+import 'package:logger/d3nexus_logger.dart';
 
 /// Manages the application's locale state and provides a stream for updates.
 class LocalizationManager {
@@ -16,6 +16,8 @@ class LocalizationManager {
   static final LocalizationManager instance = LocalizationManager._();
 
   LocalizationManager._();
+
+  static final _logger = D3NexusLogger.getLogger('Core');
 
   // Stream controller for locale changes
   final _localeController = BehaviorSubject<Locale>.seeded(
@@ -44,7 +46,7 @@ class LocalizationManager {
     Map<String, dynamic> mergedJson, {
     String? targetLanguageCode,
   }) async {
-    Log.d('LocalizationManager.applyDynamicTranslations: targetLanguageCode=$targetLanguageCode');
+    _logger.d('LocalizationManager.applyDynamicTranslations: targetLanguageCode=$targetLanguageCode');
     // Nạp luôn cho Từ điển động (Dùng cho các Dynamic Keys)
     final dynamicSection = mergedJson['dynamic'] as Map<String, dynamic>? ?? {};
     DynamicTranslator.updateJson(dynamicSection);
@@ -55,12 +57,12 @@ class LocalizationManager {
     }
 
     if (_overrideCallback != null) {
-      Log.d(
+      _logger.d(
         'LocalizationManager.applyDynamicTranslations: Calling _overrideCallback for $localeToOverride',
       );
       await _overrideCallback!(mergedJson, localeToOverride);
       _localeController.add(currentLocale);
-      Log.d('LocalizationManager.applyDynamicTranslations: Overrides applied and UI notified');
+      _logger.d('LocalizationManager.applyDynamicTranslations: Overrides applied and UI notified');
     }
   }
 
@@ -84,7 +86,7 @@ class LocalizationManager {
   }
 
   Future<void> setLocaleFromCode(String languageCode) async {
-    Log.d('LocalizationManager.setLocaleFromCode: $languageCode');
+    _logger.d('LocalizationManager.setLocaleFromCode: $languageCode');
     final locale = resolveLocale(languageCode);
     await setLocale(locale, originalCode: languageCode);
   }
@@ -94,7 +96,7 @@ class LocalizationManager {
 
   /// Set the locale for the application
   Future<void> setLocale(Locale locale, {String? originalCode}) async {
-    Log.d('LocalizationManager.setLocale: locale=$locale, originalCode=$originalCode');
+    _logger.d('LocalizationManager.setLocale: locale=$locale, originalCode=$originalCode');
     // This updates the internal state of slang for the core package.
     final rawLocale = locale.countryCode != null
         ? '${locale.languageCode}_${locale.countryCode}'
@@ -105,13 +107,13 @@ class LocalizationManager {
     await prefs.setString('saved_language_code', originalCode ?? rawLocale);
 
     if (_syncLocaleCallback != null) {
-      Log.d('LocalizationManager.setLocale: Calling _syncLocaleCallback');
+      _logger.d('LocalizationManager.setLocale: Calling _syncLocaleCallback');
       await _syncLocaleCallback!(locale);
     }
 
     // Notify listeners
     _localeController.add(locale);
-    Log.d('LocalizationManager.setLocale: Completed for $locale');
+    _logger.d('LocalizationManager.setLocale: Completed for $locale');
   }
 
   /// Get supported locales

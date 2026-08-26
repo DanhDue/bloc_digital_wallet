@@ -2,16 +2,23 @@ group 'com.danhdue.native_security'
 version '1.0-SNAPSHOT'
 
 buildscript {
+    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.13.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 apply plugin: 'com.android.library'
+// Kotlin source (DatadogNativeAppender.kt, registered against
+// logger_native_bridge's D3NexusNativeLogger) sits alongside the existing
+// CMake/NDK build below -- this package is both an ffiPlugin (the C++
+// key-storage library) and, as of Task 7, a Kotlin appender registrant.
+apply plugin: 'kotlin-android'
 
 android {
     if (project.android.hasProperty("namespace")) {
@@ -29,9 +36,31 @@ android {
         targetCompatibility JavaVersion.VERSION_21
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_21.toString()
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
         }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    dependencies {
+        // Flutter's tooling registers sibling plugin modules by their pub
+        // package name in the generated app-level settings.gradle, so this
+        // resolves the same way any other federated-plugin-to-plugin
+        // Android dependency does.
+        implementation project(':logger_native_bridge')
+        testImplementation 'junit:junit:4.13.2'
     }
 }

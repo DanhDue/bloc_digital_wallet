@@ -917,14 +917,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
-  logger:
-    dependency: transitive
-    description:
-      name: logger
-      sha256: a7967e31b703831a893bbc3c3dd11db08126fe5f369b5c648a36f821979f5be3
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.2"
   logging:
     dependency: transitive
     description:
@@ -1221,6 +1213,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  pigeon:
+    dependency: transitive
+    description:
+      name: pigeon
+      sha256: "2a4bfd279fac52b115818e93f5409d07955f7b3718d303fd5f100981be4de386"
+      url: "https://pub.dev"
+    source: hosted
+    version: "26.3.2"
   platform:
     dependency: transitive
     description:
@@ -1643,7 +1643,7 @@ packages:
     source: hosted
     version: "4.9.3"
   talker_bloc_logger:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: talker_bloc_logger
       sha256: c14510bfb36af5d1648683a2707bb5bbb2858e3cabd549e363262db100bae374
@@ -1651,7 +1651,7 @@ packages:
     source: hosted
     version: "4.6.4"
   talker_dio_logger:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: talker_dio_logger
       sha256: dcf784f1841e248c270ef741f8a07ca9cf562c6424ee43fc6e598c4eb7f18238
@@ -1915,5 +1915,5 @@ packages:
     source: hosted
     version: "2.2.3"
 sdks:
-  dart: ">=3.10.7 <4.0.0"
+  dart: ">=3.11.0 <4.0.0"
   flutter: ">=3.38.4"

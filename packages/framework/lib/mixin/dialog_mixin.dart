@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:core/core.dart';
+import 'package:logger/d3nexus_logger.dart';
 
 mixin DialogMixin {
   static final Expando<bool> _loadingState = Expando();
+  static final _logger = D3NexusLogger.getLogger('Framework');
 
   bool get loadingDialogIsShown => _loadingState[this] ?? false;
   set loadingDialogIsShown(bool value) => _loadingState[this] = value;
@@ -30,9 +31,9 @@ mixin DialogMixin {
   }
 
   void showLoadingDialog(BuildContext context) {
-    Log.d('showLoadingDialog()');
+    _logger.d('showLoadingDialog()');
     if (loadingDialogIsShown) {
-      Log.w('Loading dialog already shown, skipping...');
+      _logger.w('Loading dialog already shown, skipping...');
       return;
     }
     loadingDialogIsShown = true;
@@ -49,13 +50,13 @@ mixin DialogMixin {
       );
     } catch (e) {
       loadingDialogIsShown = false;
-      Log.e('Failed to show loading dialog', error: e);
+      _logger.e('Failed to show loading dialog', error: e);
       rethrow;
     }
   }
 
   void hideLoadingDialog(BuildContext context) {
-    Log.d("hideLoadingDialog()");
+    _logger.d("hideLoadingDialog()");
     if (loadingDialogIsShown) {
       loadingDialogIsShown = false;
       Navigator.of(context).pop();

@@ -18,4 +18,24 @@ abstract class SettingsLocalDataSource {
   Future<List<AvailableLanguage>> getAvailableLanguages();
 
   Future<Map<String, dynamic>> loadBundledFallback(String languageCode);
+
+  /// Explicit module-logging overrides, keyed by module name. A module
+  /// absent from the returned map means "use default: enabled", matching
+  /// `LogManagerImpl`'s own `?? true` default. Returns an empty map when
+  /// nothing has been persisted yet.
+  Future<Map<String, bool>> getModuleToggles();
+
+  /// Persists [toggles] (module name -> explicit enabled override) under
+  /// the `logging.module_toggles` key.
+  Future<void> saveModuleToggles(Map<String, bool> toggles);
+
+  /// Explicit appender-logging overrides, keyed by appender id
+  /// (`'talker'`/`'datadog'`/`'otel'`). An appender absent from the
+  /// returned map means "use default: enabled". Returns an empty map when
+  /// nothing has been persisted yet.
+  Future<Map<String, bool>> getAppenderToggles();
+
+  /// Persists [toggles] (appender id -> explicit enabled override) under
+  /// the `logging.appender_toggles` key.
+  Future<void> saveAppenderToggles(Map<String, bool> toggles);
 }

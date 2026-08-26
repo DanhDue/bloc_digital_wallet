@@ -17,6 +17,9 @@ A reusable native security module using Dart FFI for secure key storage.
   # static_framework ensures symbols are compiled into the main executable
   s.static_framework = true
   s.dependency 'Flutter'
+  # DatadogNativeAppender.swift (Task 7) registers itself against
+  # logger_native_bridge's D3NexusNativeLogger.
+  s.dependency 'logger_native_bridge'
 
   s.pod_target_xcconfig = { 
     'DEFINES_MODULE' => 'YES', 

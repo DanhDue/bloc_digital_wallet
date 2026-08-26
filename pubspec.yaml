@@ -11,6 +11,8 @@ workspace:
   - packages/authentication
   - packages/core
   - packages/framework
+  - packages/logger
+  - packages/logger_native_bridge
   - packages/native_security
   - packages/network
   - packages/onboard
@@ -28,6 +30,10 @@ dependencies:
     path: packages/native_security
   core:
     path: packages/core
+  logger:
+    path: packages/logger
+  logger_native_bridge:
+    path: packages/logger_native_bridge
   network:
     path: packages/network
   ui_kit:
@@ -54,6 +60,8 @@ dependencies:
   flutter_smart_dialog: ^4.9.8+9
   # Logging
   talker_flutter: ^4.0.0
+  talker_dio_logger: ^4.0.0
+  talker_bloc_logger: ^4.0.0
   slang_flutter: ^4.12.1
 
 dev_dependencies:

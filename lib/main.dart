@@ -5,6 +5,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 import 'app_router.dart';
+import 'logging/module_gated_route_observer.dart';
 import 'package:core/core.dart' as core;
 import 'di/injection.dart';
 import 'generated/translations.dart';
@@ -44,7 +45,10 @@ void main() async {
                 routerConfig: getIt<AppRouter>().config(
                   navigatorObservers: () => [
                     FlutterSmartDialog.observer,
-                    TalkerRouteObserver(getIt<Talker>()),
+                    ModuleGatedRouteObserver(
+                      module: 'App',
+                      delegate: TalkerRouteObserver(getIt<Talker>()),
+                    ),
                   ],
                 ),
                 title: AppConfig.appName,

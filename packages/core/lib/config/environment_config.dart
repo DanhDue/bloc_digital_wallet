@@ -1,6 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:logger/logger.dart';
+import 'package:flutter/foundation.dart';
 
 /// Environment Configuration
 ///
@@ -8,17 +8,6 @@ import 'package:logger/logger.dart';
 /// Usage: EnvironmentConfig.apiBaseUrl, EnvironmentConfig.enableLogging, etc.
 class EnvironmentConfig {
   EnvironmentConfig._();
-
-  static final _logger = Logger(
-    printer: PrettyPrinter(
-      methodCount: 0,
-      errorMethodCount: 5,
-      lineLength: 80,
-      colors: false,
-      printEmojis: true,
-      dateTimeFormat: DateTimeFormat.none,
-    ),
-  );
 
   /// Environment name (development, staging, production)
   static const String environment = String.fromEnvironment(
@@ -72,7 +61,8 @@ class EnvironmentConfig {
   static void printConfig() {
     if (!enableLogging) return;
 
-    _logger.i('''
+    // TODO(logging-refactor): Use new logger package once available
+    debugPrint('''
 ═══════════════════════════════════════════
 🔧 Environment Configuration
 ═══════════════════════════════════════════

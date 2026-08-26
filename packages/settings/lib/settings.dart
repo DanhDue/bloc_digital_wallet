@@ -2,6 +2,9 @@
 
 // coverage:ignore-file
 
+// Data Layer
+export 'data/datasources/local/settings_local_datasource.dart';
+
 // Domain Layer
 export 'domain/entities/settings_entity.dart';
 export 'domain/repositories/settings_repository.dart';
@@ -32,6 +35,7 @@ export 'settings_strings.dart';
 
 // Presentation Layer
 export 'presentation/settings/models/settings_ui_model.dart';
+export 'presentation/settings/models/logging_toggle_constants.dart';
 export 'presentation/settings/settings_page.dart';
 export 'presentation/settings/settings_bloc.dart';
 export 'presentation/settings/settings_state.dart';
@@ -39,3 +43,4 @@ export 'presentation/settings/settings_event.dart';
 export 'presentation/settings/settings_action.dart';
 export 'presentation/settings/widgets/settings_section_widget.dart';
 export 'presentation/settings/widgets/settings_item_widget.dart';
+export 'presentation/settings/talker_console_settings.dart';

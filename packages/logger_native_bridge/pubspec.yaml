@@ -1,0 +1,44 @@
+name: logger_native_bridge
+description: >-
+  Headless native-to-Dart logging bridge. Lets plain Kotlin/Swift code
+  (Android WorkManager Workers, iOS BGTask handlers, or any native code with
+  no FlutterEngine attached) push logs to native telemetry appenders and
+  queues them for best-effort replay into D3NexusLogger/Talker the next
+  time the Flutter engine attaches.
+version: 0.0.1
+resolution: workspace
+publish_to: 'none'
+homepage:
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  logger:
+    path: ../logger
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  # Pinned (not ^28.0.0, the latest at time of writing): pigeon >=27.3.1
+  # requires analyzer >=13.0.0, which conflicts with this workspace's
+  # ui_kit -> theme_tailor ^3.1.1 -> analyzer <11.0.0 constraint. 26.3.2 is
+  # the newest pigeon release compatible with that ceiling.
+  pigeon: 26.3.2
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.danhdue.logger_native_bridge
+        pluginClass: NativeLogBridgePlugin
+      ios:
+        pluginClass: NativeLogBridgePlugin

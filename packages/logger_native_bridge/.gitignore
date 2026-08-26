@@ -1,0 +1,40 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
+/pubspec.lock
+**/doc/api/
+.dart_tool/
+.flutter-plugins-dependencies
+/build/
+/coverage/
+
+# The root .gitignore's `*.g.dart` rule exists for build_runner output,
+# which regenerates automatically. lib/src/messages.g.dart is Pigeon
+# output instead -- Pigeon is not a build_runner builder, nothing
+# regenerates this file automatically, and logger_native_bridge.dart
+# imports/exports it directly. It MUST be committed, or the package fails
+# to build on a fresh checkout (regenerate via `dart run pigeon --input
+# pigeon/schema.dart` if it's ever out of sync with pigeon/schema.dart).
+!lib/src/messages.g.dart

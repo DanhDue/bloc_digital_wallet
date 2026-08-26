@@ -6,6 +6,7 @@ import 'package:animated_visibility/animated_visibility.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:core/utils/feature_public_routes.dart';
 import 'package:core/core.dart';
+import 'package:logger/d3nexus_logger.dart';
 
 import 'package:onboard/generated/translations.dart';
 
@@ -132,7 +133,7 @@ class SplashPage extends BaseMviPage<SplashBloc, SplashAction, SplashState, Spla
       case NavigateToNextEvent():
         // Navigate to Transaction via FeaturePublicRoutes (avoids direct package import)
         context.router.replace(FeaturePublicRoutes.homeRoute);
-        Log.d("NavigateToNextEvent");
+        D3NexusLogger.getLogger('Onboard').d("NavigateToNextEvent");
         break;
       case ShowErrorMessageEvent(:final message):
         ScaffoldMessenger.of(context).showSnackBar(

@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:bloc_digital_wallet/logging/module_gated_bloc_observer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -11,12 +12,19 @@ import 'package:core/core.dart';
 class BlocObserverInitializer implements AppInitializer {
   @override
   Future<void> init() async {
-    // Initialize Bloc Observer
-    Bloc.observer = TalkerBlocObserver(
-      talker: getIt<Talker>(),
-      settings: const TalkerBlocLoggerSettings(
-        printStateFullData: false,
-        printEventFullData: false,
+    // Initialize Bloc Observer, gated live by the "Framework" module
+    // toggle (same pattern as ModuleGatedInterceptor for Dio) -- see
+    // ModuleGatedBlocObserver's own doc comment for why TalkerBlocObserver
+    // needs this wrapper at all (it writes directly to Talker, bypassing
+    // D3NexusLogger's own always-live dispatch).
+    Bloc.observer = ModuleGatedBlocObserver(
+      module: 'Framework',
+      delegate: TalkerBlocObserver(
+        talker: getIt<Talker>(),
+        settings: const TalkerBlocLoggerSettings(
+          printStateFullData: false,
+          printEventFullData: false,
+        ),
       ),
     );
   }

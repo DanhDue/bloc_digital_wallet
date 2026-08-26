@@ -18,7 +18,6 @@ import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
 import 'package:core/core.dart' hide test;
-import 'package:talker_flutter/talker_flutter.dart';
 
 import 'settings_bloc_test.mocks.dart';
 
@@ -38,11 +37,6 @@ void main() {
 
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
-    try {
-      Log.init(Talker());
-    } catch (_) {
-      // Already initialized
-    }
   });
 
   setUp(() {
@@ -51,6 +45,7 @@ void main() {
     mockUpdateUserLanguageUseCase = MockUpdateUserLanguageUseCase();
     mockGetAvailableLanguagesUseCase = MockGetAvailableLanguagesUseCase();
     mockGetDynamicLocalizationUseCase = MockGetDynamicLocalizationUseCase();
+
     // Default Mock Behavior
     when(mockAppInfoService.getPackageInfo()).thenAnswer(
       (_) async => PackageInfo(

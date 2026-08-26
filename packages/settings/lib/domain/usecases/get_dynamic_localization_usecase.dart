@@ -37,7 +37,10 @@ class GetDynamicLocalizationUseCase {
       if (failure is ServerFailure && failure.code == 304) {
         // 304 Not Modified: Cache is up to date, load from cache and apply
         final cachedJsonResult = await _repository.getCachedTranslationJson(languageCode);
-        final jsonMap = cachedJsonResult.fold((l) => <String, dynamic>{}, (r) => r ?? <String, dynamic>{});
+        final jsonMap = cachedJsonResult.fold(
+          (l) => <String, dynamic>{},
+          (r) => r ?? <String, dynamic>{},
+        );
         await LocalizationManager.instance.applyDynamicTranslations(
           jsonMap,
           targetLanguageCode: languageCode,

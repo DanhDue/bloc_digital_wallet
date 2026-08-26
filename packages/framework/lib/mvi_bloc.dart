@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:core/core.dart';
+import 'package:logger/d3nexus_logger.dart';
 import 'mvi_base.dart';
 
 /// Base BLoC for MVI pattern
@@ -22,6 +23,8 @@ abstract class MviBloc<Action extends BaseAction, State extends BaseState, Event
 
   late final StreamController<Event> _eventController;
 
+  static final _logger = D3NexusLogger.getLogger('Framework');
+
   /// Stream of events (one-time side effects like Navigation, Toast, Dialog)
   /// Similar to Android's Channel of Event
   Stream<Event> get events => _eventController.stream;
@@ -30,7 +33,7 @@ abstract class MviBloc<Action extends BaseAction, State extends BaseState, Event
   /// This is the ONLY method View should call
   /// Similar to Android's: fun onAction(action: Action)
   void onAction(Action action) {
-    Log.i('onAction: $action');
+    _logger.i('onAction: $action');
     add(action);
   }
 

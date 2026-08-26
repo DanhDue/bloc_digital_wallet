@@ -5,6 +5,7 @@
 import 'package:bloc_digital_wallet/generated/translations.dart';
 import 'package:core/core.dart' hide LocaleSettings, AppLocaleUtils;
 import 'package:core/generated/translations.dart' as core;
+import 'package:logger/d3nexus_logger.dart';
 import 'package:authentication/generated/translations.dart' as auth;
 import 'package:onboard/generated/translations.dart' as onboard;
 import 'package:home/generated/translations.dart' as home;
@@ -18,6 +19,8 @@ import 'package:settings/domain/repositories/settings_repository.dart';
 import 'package:bloc_digital_wallet/di/injection.dart';
 
 class LocalizationInitializer implements AppInitializer {
+  static final _logger = D3NexusLogger.getLogger('App');
+
   @override
   Future<void> init() async {
     // 1. Register sync callbacks so any locale change syncs to all packages
@@ -110,12 +113,12 @@ class LocalizationInitializer implements AppInitializer {
   }
 
   Future<void> _loadSavedLocale() async {
-    Log.d('LocalizationInitializer._loadSavedLocale: Starting');
+    _logger.d('LocalizationInitializer._loadSavedLocale: Starting');
     final prefs = await SharedPreferences.getInstance();
     final savedLanguageCode = prefs.getString('saved_language_code');
 
     if (savedLanguageCode != null) {
-      Log.d('LocalizationInitializer._loadSavedLocale: savedLanguageCode = $savedLanguageCode');
+      _logger.d('LocalizationInitializer._loadSavedLocale: savedLanguageCode = $savedLanguageCode');
       await LocalizationManager.instance.setLocaleFromCode(savedLanguageCode);
 
       // Load cached dynamic translations if available
@@ -125,7 +128,7 @@ class LocalizationInitializer implements AppInitializer {
         if (jsonResult.isRight()) {
           final json = jsonResult.getOrElse(() => null);
           if (json != null) {
-            Log.d(
+            _logger.d(
               'LocalizationInitializer._loadSavedLocale: Found cached JSON, applying dynamic translations',
             );
             await LocalizationManager.instance.applyDynamicTranslations(
@@ -133,22 +136,22 @@ class LocalizationInitializer implements AppInitializer {
               targetLanguageCode: savedLanguageCode,
             );
           } else {
-            Log.d('LocalizationInitializer._loadSavedLocale: Cached JSON is null');
+            _logger.d('LocalizationInitializer._loadSavedLocale: Cached JSON is null');
           }
         } else {
-          Log.d(
+          _logger.d(
             'LocalizationInitializer._loadSavedLocale: getCachedTranslationJson returned Left',
           );
         }
       } catch (e, st) {
-        Log.e(
+        _logger.e(
           'LocalizationInitializer._loadSavedLocale: Error applying dynamic translations',
           error: e,
           stackTrace: st,
         );
       }
     } else {
-      Log.d(
+      _logger.d(
         'LocalizationInitializer._loadSavedLocale: No savedLanguageCode found, using default locale',
       );
       // Initialize slang translations fallback

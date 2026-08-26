@@ -31,11 +31,9 @@ dependencies:
   # Routing
   auto_route: ^11.1.0
   # Utilities
-  logger: ^2.5.0
   connectivity_plus: ^7.0.0
   intl: ^0.20.1
   flutter_secure_storage: ^10.0.0
-  talker_flutter: ^4.0.0
   # Reactive & Streams
   rxdart: ^0.28.0
   stream_transform: ^2.1.1
@@ -49,12 +47,11 @@ dependencies:
   permission_handler: ^12.0.1
   # Date Utils
   jiffy: ^6.4.4
-  # Logging
-  talker_dio_logger: ^4.0.0
-  talker_bloc_logger: ^4.0.0
   # Crypto
   crypto: ^3.0.3
   package_info_plus: ^8.1.2
+  logger:
+    path: ../logger
 
 dev_dependencies:
   flutter_test:

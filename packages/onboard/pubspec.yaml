@@ -26,6 +26,8 @@ dependencies:
     path: ../framework
   settings:
     path: ../settings
+  logger:
+    path: ../logger
 
 dev_dependencies:
   flutter_test:
