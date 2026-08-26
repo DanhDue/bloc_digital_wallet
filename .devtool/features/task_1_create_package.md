@@ -1,13 +1,13 @@
 ---
 id: "task_1_create_package"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "logging-refactor"
 dueDate: null
 created: "2026-08-25T19:00:00.000Z"
-modified: "2026-08-25T19:00:00.000Z"
-completedAt: null
+modified: "2026-08-26T02:09:48.000Z"
+completedAt: "2026-08-26T02:09:48.000Z"
 labels: ["package", "core"]
 order: "a1"
 ---

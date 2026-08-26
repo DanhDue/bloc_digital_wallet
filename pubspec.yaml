@@ -11,6 +11,7 @@ workspace:
   - packages/authentication
   - packages/core
   - packages/framework
+  - packages/logger
   - packages/native_security
   - packages/network
   - packages/onboard
