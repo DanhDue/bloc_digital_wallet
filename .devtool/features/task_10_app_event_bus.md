@@ -1,13 +1,13 @@
 ---
 id: "task_10_app_event_bus"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_governance"
 dueDate: null
 created: "2026-08-26T10:00:00.000Z"
-modified: "2026-08-26T16:51:29.000Z"
-completedAt: null
+modified: "2026-08-26T18:40:41.000Z"
+completedAt: "2026-08-26T18:40:41.000Z"
 labels: ["architecture", "platform", "event-bus"]
 order: "a10"
 ---

@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 export 'deep_link_routes.dart';
+export 'app_event_bus.dart';
 
 // DI
 export 'di/injection.dart';
