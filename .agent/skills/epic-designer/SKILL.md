@@ -65,7 +65,7 @@ Each task file MUST adhere to this exact structure:
    ```yaml
    ---
    id: "task_<number>_<name>"
-   status: "todo"          # one of: todo | in-progress | blocked | done
+   status: "todo"          # one of: backlog | todo | in-progress | review | done
    priority: "high"        # one of: low | medium | high
    assignee: null
    epic: "<epic_name>"
