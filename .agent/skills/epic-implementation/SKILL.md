@@ -35,6 +35,38 @@ This repo's real epic is the concrete case: the directory is `.devtool/epic/logg
 
 ## Process
 
+This diagram shows which skill runs at each phase and in what order — it stops at `superpowers:subagent-driven-development`'s own boundary rather than redrawing its internal implementer/reviewer/fix-loop mechanics, which live in that skill's own diagram.
+
+```dot
+digraph epic_implementation_workflow {
+    rankdir=TB;
+
+    prereq [label="Prerequisite (already done):\nsuperpowers:brainstorming -> epic-designer", shape=box, style=dashed];
+    phase0 [label="Phase 0: Context Reload\n(read docs directly, no skill)", shape=box];
+    phase1a [label="Phase 1: compute_execution_order.py\n(script, no skill)", shape=box];
+    checkpoint [label="Checkpoint:\nuser confirms order?", shape=diamond];
+    phase1b [label="Phase 1 (cont'd): Worktree Bootstrap\nsuperpowers:using-git-worktrees\n+ bootstrap_worktree.sh", shape=box];
+    phase2 [label="Phase 2: one task\nsuperpowers:subagent-driven-development\n(its implementer uses\nsuperpowers:test-driven-development)", shape=box];
+    diverged [label="Divergence\nfrom the HLD?", shape=diamond];
+    phase3 [label="Phase 3: Doc Sync\n(direct edits, no skill)", shape=box];
+    moretasks [label="More tasks\nin the order?", shape=diamond];
+    phase4 [label="Phase 4: End of Epic\nmelos test/analyze ->\nsuperpowers:finishing-a-development-branch", shape=box, style=filled, fillcolor=lightgreen];
+
+    prereq -> phase0;
+    phase0 -> phase1a;
+    phase1a -> checkpoint;
+    checkpoint -> phase1a [label="adjust order"];
+    checkpoint -> phase1b [label="confirmed"];
+    phase1b -> phase2 [label="first task"];
+    phase2 -> diverged;
+    diverged -> phase3 [label="yes"];
+    diverged -> moretasks [label="no"];
+    phase3 -> moretasks;
+    moretasks -> phase2 [label="yes, next task"];
+    moretasks -> phase4 [label="no, epic done"];
+}
+```
+
 ### Phase 0 — Context Reload (once, not per task)
 
 Read, in full:
