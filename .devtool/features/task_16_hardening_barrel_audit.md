@@ -16,13 +16,13 @@ order: "a16"
 Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.en.md)
 
 ## Requirement Analysis
-By the end of Task 15, all known cross-feature-import violations are resolved and `scripts/module_boundary_whitelist.txt` should be empty. This closing task hardens what's left: confirm every feature package's public barrel still only exports `domain/**`/`presentation/**`/DI-init/router (never `data/**`/`*_impl.dart`), tighten the CI Gate's deep-import check accordingly, and remove the now-empty whitelist file so the gate becomes unconditional.
+By the end of Task 15, most known cross-feature-import violations are resolved — **except `onboard→settings`, which Task 14 found does NOT fit this epic's scope** (it's a business-logic/DTO dependency, not navigation-shaped; see Task 14's redefined scope and the epic ledger). So `scripts/module_boundary_whitelist.txt` will have exactly **one** remaining entry, not zero, at the start of this task. This closing task hardens what's left: confirm every feature package's public barrel still only exports `domain/**`/`presentation/**`/DI-init/router (never `data/**`/`*_impl.dart`), tighten the CI Gate's deep-import check accordingly, and **keep** the whitelist file (with its one remaining, documented entry) rather than deleting it — the gate's whitelist-lookup mechanism itself is still needed and correct, it just isn't empty.
 
 ## Relevant Files & Context Pointers
 - Every feature package's barrel: `packages/{authentication,onboard,wallet,transaction,trends,scanner,settings}/lib/{name}.dart`.
-- `scripts/check_module_boundaries.sh` — remove the whitelist-lookup branch once the file is empty, so any deep-import or cross-feature import fails unconditionally.
-- `scripts/module_boundary_whitelist.txt` — delete once confirmed empty.
-- `.gitlab-ci.yml` — no structural change, just confirm the (now-simplified) script still runs in `CIChecking`.
+- `scripts/check_module_boundaries.sh` — do NOT remove the whitelist-lookup branch (still needed for the remaining `onboard→settings` entry); only tighten/verify the deep-import check.
+- `scripts/module_boundary_whitelist.txt` — confirm it contains exactly `onboard→settings` (and nothing else) at the start of this task; add a comment above that line noting it's an accepted, out-of-epic-scope exception (reference Task 14's ledger entry), not forgotten cleanup. Do not delete this file.
+- `.gitlab-ci.yml` — no structural change, just confirm the script still runs in `CIChecking`.
 
 ## Design Rationale
 This is the "close the loop" task from the source spec's Phase 3 — it doesn't migrate any new package (that already happened via Tasks 14 and 15), it audits and locks in what's already true. See the source spec's "DI / export discipline" section for the exact rule being enforced.
@@ -30,18 +30,18 @@ This is the "close the loop" task from the source spec's Phase 3 — it doesn't 
 ## TDD Adaptation
 Audit + config-tightening, not new behavior:
 1. For each of the 7 feature packages, `grep` its barrel file for any export path under `data/` or matching `*_impl.dart` — must find none.
-2. Confirm `scripts/module_boundary_whitelist.txt` is empty; delete it.
-3. Simplify `check_module_boundaries.sh` to drop the whitelist-lookup branch (any match is now an unconditional failure).
-4. Re-run the fixture tests from Task 11 against the simplified script to confirm they still pass.
+2. Confirm `scripts/module_boundary_whitelist.txt` contains exactly one entry, `onboard→settings` — not zero, per Task 14's redefined scope. Add a documenting comment above it.
+3. Leave the whitelist-lookup branch in `check_module_boundaries.sh` in place (still functionally needed); only verify/tighten the deep-import check path.
+4. Re-run the fixture tests from Task 11 against the script to confirm they still pass unchanged.
 
 ## Definition of Done (DoD)
 - [ ] All 7 feature package barrels confirmed clean (no `data/**`/`*_impl.dart` exports).
-- [ ] `scripts/module_boundary_whitelist.txt` deleted.
-- [ ] `check_module_boundaries.sh` simplified to unconditional failure on any match; Task 11's fixture tests still pass against it.
-- [ ] CI pipeline green on the current `develop` with the simplified gate.
+- [ ] `scripts/module_boundary_whitelist.txt` contains exactly `onboard→settings`, with a comment explaining it's an accepted out-of-epic-scope exception (not stale/forgotten).
+- [ ] `check_module_boundaries.sh`'s whitelist mechanism intact and still correctly gates only that one entry; Task 11's fixture tests still pass against it.
+- [ ] CI pipeline green on the current `develop` with the gate as-is.
 
 ## Dependencies & Blockers
-Blocked by [Task 14](task_14_migrate_settings_pilot.md) and [Task 15](task_15_relocate_shell.md) — the whitelist must actually be empty before this task's removal step makes sense.
+Blocked by [Task 14](task_14_migrate_settings_pilot.md) (redefined — confirmed `onboard→settings` stays whitelisted, not resolved by this epic) and [Task 15](task_15_relocate_shell.md) (must resolve the five `home→*` entries before this task's audit).
 
 ## References & Rollback
 - Source spec: [Phase 3 — Remaining packages](../epic/super_app_governance/2026-08-26-super-app-governance-design.md#migration-plan-incremental).
