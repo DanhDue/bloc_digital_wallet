@@ -9,6 +9,7 @@
    - [4.2. Sơ đồ Use Cases](#42-sơ-đồ-use-cases)
    - [4.3. Sơ đồ Sequence](#43-sơ-đồ-sequence)
    - [4.4. Native Bridge — Logging Headless](#44-native-bridge--logging-headless)
+   - [4.5. Áp dụng Toggle Tức thời — Mẫu Wrapper ModuleGated*](#45-áp-dụng-toggle-tức-thời--mẫu-wrapper-modulegated)
 5. [Chiến lược Rollout & Giảm thiểu Rủi ro](#5-chiến-lược-rollout--giảm-thiểu-rủi-ro)
 6. [Phân rã Kanban Tasks](#6-phân-rã-kanban-tasks)
 
@@ -41,6 +42,7 @@ Epic này thay thế hoàn toàn 1 bản nháp `logging_refactor` trước đó 
 - 1 core logging thuần Dart (`packages/logger`) không phụ thuộc bất kỳ SDK telemetry cụ thể nào (Talker, Datadog, Otel).
 - Bật/tắt theo từng module tại runtime, không cần rebuild app.
 - Bật/tắt theo từng appender (từng backend) tại runtime, độc lập với toggle module — để việc mute 1 module cho mục đích debug local không bao giờ làm mù telemetry production.
+- Mọi toggle đều áp dụng **tức thời** — ngay từ lần log kế tiếp sau khi bật/tắt, không cần restart app — cho toàn bộ đường log trong app, kể cả các plugin Talker bên thứ ba nằm ngoài dispatch của `D3NexusLogger` (log Dio, log BLoC, log điều hướng route). Xem [4.5](#45-áp-dụng-toggle-tức-thời--mẫu-wrapper-modulegated).
 - Có thể truy vết trình tự nhân-quả giữa các log record qua `traceId`/`spanId`/`parentSpanId` (mô hình W3C Trace Context / OpenTelemetry span), dựng lại được cả trong UI debug tại app lẫn bởi các backend APM thật.
 - 1 package native bridge (`packages/logger_native_bridge`) tách riêng, hoàn toàn opt-in để các module không có native code không phải trả chi phí cho nó.
 - Code native có thể đẩy log lên backend telemetry theo thời gian thực ngay cả khi chạy hoàn toàn headless (không có Flutter engine), và log đó vẫn xuất hiện trên TalkerScreen qua cơ chế replay best-effort vào lần app được mở lại tiếp theo — xem [4.4](#44-native-bridge--logging-headless).
@@ -61,8 +63,8 @@ Các appender cụ thể (Talker/Datadog/Otel) sống ở **tầng app**, đư�
 
 ```mermaid
 graph TD
-    subgraph Settings_UI
-    A[Settings Screen] -->|setModuleEnabled / setAppenderEnabled| B(D3NexusLogger Facade)
+    subgraph Talker_Console_Settings["Panel ⚙ trong Talker Console (packages/settings)"]
+    A[Hàng toggle Module Logging / Telemetry] -->|setModuleEnabled / setAppenderEnabled| B(D3NexusLogger Facade)
     end
 
     subgraph Core_Package["packages/logger (pure Dart)"]
@@ -171,6 +173,38 @@ Log bị dồn lại lúc headless sẽ xuất hiện trên TalkerScreen vào l�
 
 Toàn bộ lý do thiết kế, cấu trúc package, chiến lược test: [2026-08-26-logger-native-bridge-headless-design.md](2026-08-26-logger-native-bridge-headless-design.md).
 
+### 4.5. Áp dụng Toggle Tức thời — Mẫu Wrapper ModuleGated*
+`LogManagerImpl` vốn đã tức thời ngay từ thiết kế ban đầu: `log()` luôn check lại `appenderToggles`/`moduleToggles` mới nhất ở mỗi lần gọi, nên `TalkerAppender`/`DatadogAppender`/`OtelAppender` (Task 4) chưa bao giờ cần xử lý riêng. Kiểm tra sau khi launch phát hiện 3 ngoại lệ — các plugin Talker bên thứ ba ghi **thẳng vào instance `Talker` dùng chung**, bỏ qua hoàn toàn dispatch của `D3NexusLogger`/`LogManagerImpl`:
+
+- `TalkerDioLogger` (interceptor request/response của Dio, nối trong `lib/di/app_network_module.dart`)
+- `TalkerBlocObserver` (`Bloc.observer` toàn cục, nối trong `lib/core/app_initializer/bloc_observer_initializer.dart`)
+- `TalkerRouteObserver` (`NavigatorObserver`, nối trong `lib/main.dart`)
+
+Bản fix đầu tiên gate việc *đăng ký* `TalkerDioLogger` một lần duy nhất lúc bootstrap dựa trên toggle đã lưu — đúng về mặt chức năng nhưng không tức thời: bật/tắt toggle chỉ có hiệu lực ở lần mở app kế tiếp. Bản fix chính thức thay vào đó thêm `ILogManager.isModuleEnabled(String module) -> bool` (1 hàm query tức thời, đối xứng với setter `setModuleEnabled` đã có sẵn) và 1 nhóm wrapper `ModuleGated*` nhỏ, check hàm này ở mỗi callback, chỉ forward sang delegate Talker thật khi module sở hữu đang được bật:
+
+- `ModuleGatedInterceptor extends Interceptor` — module `Network`, bọc `TalkerDioLogger`.
+- `ModuleGatedBlocObserver extends BlocObserver` — module `Framework`, bọc `TalkerBlocObserver`.
+- `ModuleGatedRouteObserver extends NavigatorObserver` — module `App`, bọc `TalkerRouteObserver`.
+
+```mermaid
+sequenceDiagram
+    participant Caller as Dio / Bloc / Navigator
+    participant Gated as Wrapper ModuleGated*
+    participant DL as D3NexusLogger.isModuleEnabled
+    participant Delegate as TalkerDioLogger / TalkerBlocObserver / TalkerRouteObserver
+
+    Caller->>Gated: onRequest / onChange / didPush
+    Gated->>DL: isModuleEnabled(module)
+    alt module đang tắt
+        Gated-->>Caller: bỏ qua, không ghi vào Talker
+    else module đang bật
+        Gated->>Delegate: forward lời gọi
+        Delegate->>TalkerUI: ghi vào instance Talker dùng chung
+    end
+```
+
+Mỗi wrapper tương đương `respectsModuleToggle`-luôn-true theo thiết kế (check là vô điều kiện, không cấu hình được theo appender), vì 3 plugin này vốn không có cờ `ILogAppender.respectsModuleToggle` nào để đọc. `kKnownLoggingModules` trong `packages/settings/lib/presentation/settings/models/logging_toggle_constants.dart` gồm cả `'Framework'` và `'App'` bên cạnh tên các module feature, để cả 2 đều toggle được từ UI mô tả bên dưới.
+
 ---
 
 ## 5. Chiến lược Rollout & Giảm thiểu Rủi ro
@@ -194,6 +228,6 @@ Sử dụng plugin **LachyFS's Kanban Markdown** để quản lý tiến độ. 
 - [Task 3: Implement LogManagerImpl & Trace Tree](../../features/task_3_log_manager.md)
 - [Task 4: App-Layer Appenders & Tích hợp DI](../../features/task_4_appenders_di.md)
 - [Task 5: Truyền Trace qua Network (traceparent)](../../features/task_5_network_tracing.md)
-- [Task 6: Settings UI — Toggle Module & Appender](../../features/task_6_settings_ui.md)
+- [Task 6: Settings UI — Toggle Module & Appender](../../features/task_6_settings_ui.md) — cập nhật sau triển khai: đã chuyển từ màn hình Settings vào panel ⚙ của Talker console; xem mục Post-Implementation Update trong task file và [4.5](#45-áp-dụng-toggle-tức-thời--mẫu-wrapper-modulegated).
 - [Task 7: Tạo Package `logger_native_bridge` — Push Native Headless + Replay Talker](../../features/task_7_native_bridge.md)
 - [Task 8: Refactor Codebase Hiện tại sang D3NexusLogger](../../features/task_8_refactor_codebase.md)

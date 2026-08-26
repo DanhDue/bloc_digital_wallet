@@ -9,6 +9,7 @@
    - [4.2. Use Cases Diagram](#42-use-cases-diagram)
    - [4.3. Sequence Diagram](#43-sequence-diagram)
    - [4.4. Native Bridge — Headless Logging](#44-native-bridge--headless-logging)
+   - [4.5. Live Toggle Application — ModuleGated* Wrapper Pattern](#45-live-toggle-application--modulegated-wrapper-pattern)
 5. [Rollout Strategy & Mitigation](#5-rollout-strategy--mitigation)
 6. [Kanban Tasks Breakdown](#6-kanban-tasks-breakdown)
 
@@ -41,6 +42,7 @@ This epic supersedes an earlier draft of `logging_refactor` that explored the sa
 - A pure-Dart logging core (`packages/logger`) with zero dependency on any concrete telemetry SDK (Talker, Datadog, Otel).
 - Per-module enable/disable at runtime, without a rebuild.
 - Per-appender (per-backend) enable/disable at runtime, independent of module toggles — so muting a module for local debugging never blinds production telemetry.
+- Every toggle applies **live** — the very next log call after a switch, with no app restart — for every logging path in the app, including third-party Talker plugins that sit outside `D3NexusLogger`'s own dispatch (Dio, BLoC, and route-navigation logging). See [4.5](#45-live-toggle-application--modulegated-wrapper-pattern).
 - Trace-able causal sequence across log records via `traceId`/`spanId`/`parentSpanId` (W3C Trace Context / OpenTelemetry span model), reconstructable both in the in-app debug UI and by real APM backends.
 - A separate, strictly opt-in native bridge package (`packages/logger_native_bridge`) so modules without native platform code never pay for it.
 - Native code can push logs to a telemetry backend in realtime even when running fully headless (no Flutter engine attached), and those logs still surface on TalkerScreen via best-effort replay the next time the app is foregrounded — see [4.4](#44-native-bridge--headless-logging).
@@ -61,8 +63,8 @@ Concrete appenders (Talker/Datadog/Otel) live in the **app layer**, registered i
 
 ```mermaid
 graph TD
-    subgraph Settings_UI
-    A[Settings Screen] -->|setModuleEnabled / setAppenderEnabled| B(D3NexusLogger Facade)
+    subgraph Talker_Console_Settings["Talker Console ⚙ panel (packages/settings)"]
+    A[Module Logging / Telemetry toggle rows] -->|setModuleEnabled / setAppenderEnabled| B(D3NexusLogger Facade)
     end
 
     subgraph Core_Package["packages/logger (pure Dart)"]
@@ -171,6 +173,38 @@ Logs queued while headless surface on TalkerScreen the next time the engine atta
 
 Full rationale, package layout, and testing strategy: [2026-08-26-logger-native-bridge-headless-design.md](2026-08-26-logger-native-bridge-headless-design.md).
 
+### 4.5. Live Toggle Application — ModuleGated* Wrapper Pattern
+`LogManagerImpl` was always live by construction: `log()` re-checks `appenderToggles`/`moduleToggles` fresh on every call, so `TalkerAppender`/`DatadogAppender`/`OtelAppender` (Task 4) never needed special treatment. Post-launch verification found three exceptions — third-party Talker plugins that write **directly to the shared `Talker` instance**, entirely bypassing `D3NexusLogger`/`LogManagerImpl`'s dispatch:
+
+- `TalkerDioLogger` (Dio request/response interceptor, wired in `lib/di/app_network_module.dart`)
+- `TalkerBlocObserver` (global `Bloc.observer`, wired in `lib/core/app_initializer/bloc_observer_initializer.dart`)
+- `TalkerRouteObserver` (`NavigatorObserver`, wired in `lib/main.dart`)
+
+An earlier fix gated `TalkerDioLogger`'s *registration* once at bootstrap from a persisted toggle read — functionally correct but not live: flipping the toggle only took effect on the next app start. The shipped fix instead adds `ILogManager.isModuleEnabled(String module) -> bool` (a live query, mirroring the existing `setModuleEnabled` setter) and a small `ModuleGated*` wrapper family that checks it on every callback, forwarding to a real Talker delegate only when the owning module is currently enabled:
+
+- `ModuleGatedInterceptor extends Interceptor` — module `Network`, wraps `TalkerDioLogger`.
+- `ModuleGatedBlocObserver extends BlocObserver` — module `Framework`, wraps `TalkerBlocObserver`.
+- `ModuleGatedRouteObserver extends NavigatorObserver` — module `App`, wraps `TalkerRouteObserver`.
+
+```mermaid
+sequenceDiagram
+    participant Caller as Dio / Bloc / Navigator
+    participant Gated as ModuleGated* wrapper
+    participant DL as D3NexusLogger.isModuleEnabled
+    participant Delegate as TalkerDioLogger / TalkerBlocObserver / TalkerRouteObserver
+
+    Caller->>Gated: onRequest / onChange / didPush
+    Gated->>DL: isModuleEnabled(module)
+    alt module disabled
+        Gated-->>Caller: pass through, no Talker write
+    else module enabled
+        Gated->>Delegate: forward the call
+        Delegate->>TalkerUI: write to shared Talker instance
+    end
+```
+
+Each wrapper is `respectsModuleToggle`-equivalent by construction (the check is unconditional, not appender-configurable), since these three plugins have no `ILogAppender.respectsModuleToggle` flag to read in the first place. `packages/settings/lib/presentation/settings/models/logging_toggle_constants.dart`'s `kKnownLoggingModules` includes `'Framework'` and `'App'` alongside the feature-module names so both are toggleable from the UI described below.
+
 ---
 
 ## 5. Rollout Strategy & Mitigation
@@ -194,6 +228,6 @@ Please use the **LachyFS's Kanban Markdown** Plugin to manage progress. The foll
 - [Task 3: Implement LogManagerImpl & Trace Tree](../../features/task_3_log_manager.md)
 - [Task 4: App-Layer Appenders & DI Integration](../../features/task_4_appenders_di.md)
 - [Task 5: Network Trace Propagation (traceparent)](../../features/task_5_network_tracing.md)
-- [Task 6: Settings UI — Module & Appender Toggles](../../features/task_6_settings_ui.md)
+- [Task 6: Settings UI — Module & Appender Toggles](../../features/task_6_settings_ui.md) — post-implementation: relocated from the Settings screen into the Talker console's own ⚙ panel; see the task file's Post-Implementation Update and [4.5](#45-live-toggle-application--modulegated-wrapper-pattern).
 - [Task 7: Create `logger_native_bridge` Package — Headless Native Push + Talker Replay](../../features/task_7_native_bridge.md)
 - [Task 8: Refactor Existing Codebase to D3NexusLogger](../../features/task_8_refactor_codebase.md)

@@ -45,3 +45,9 @@ Relevant project skills: `frontend-developer` and `mobile-uiux-promax` (`.agent/
 ## References & Rollback
 - **References**: Epic HLD — [Module Enable/Disable & Appender Enable/Disable sections](../epic/logging_refactor/2026-08-25-logging-module-design.md).
 - **Rollback Plan**: Revert this task's commit; toggles simply won't be user-facing yet, `D3NexusLogger` still defaults every module/appender to enabled.
+
+## Post-Implementation Update
+Two changes landed after this task's original commit, both user-directed follow-ups:
+
+1. **UI relocated into the Talker console.** The two Settings-screen sections this task built (`ModuleLoggingSectionWidget`, `TelemetrySectionWidget`) were removed; their toggle rows now live in `TalkerScreen.customSettings`, built by `packages/settings/lib/presentation/settings/talker_console_settings.dart`'s `buildLoggingCustomSettings()`, reached via the Settings screen's Debug Mode entry (⚙ gear icon on the Talker console itself). `SettingsBloc` no longer owns module/appender toggle state — each row's `onModuleToggle`/`onAppenderToggle` callback calls `D3NexusLogger.setModuleEnabled`/`setAppenderEnabled` and `SettingsLocalDataSource.saveModuleToggles`/`saveAppenderToggles` directly.
+2. **Toggles now apply live everywhere**, including the three Talker plugins that bypass `D3NexusLogger` dispatch (Dio, BLoC, route observers) — see epic HLD [4.5](../epic/logging_refactor/logging_refactor.en.md#45-live-toggle-application--modulegated-wrapper-pattern).
