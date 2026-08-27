@@ -8,9 +8,4 @@
 # Entries are deleted here as each package's migration lands (see epic
 # super_app_governance, Tasks 14-16 / Migration Plan Phase 1-2). Deleting an
 # entry and then reintroducing the same import will correctly fail CI.
-home→wallet
-home→transaction
-home→scanner
-home→trends
-home→settings
 onboard→settings

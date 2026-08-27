@@ -1,13 +1,13 @@
 ---
 id: "task_15_relocate_shell"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_governance"
 dueDate: null
 created: "2026-08-26T10:00:00.000Z"
-modified: "2026-08-26T16:51:29.000Z"
-completedAt: null
+modified: "2026-08-27T00:59:28.000Z"
+completedAt: "2026-08-27T07:50:00.000Z"
 labels: ["migration", "shell", "architecture"]
 order: "a15"
 ---

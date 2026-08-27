@@ -4,5 +4,18 @@
   "languageEnglishName": "English",
   "common": {
     "appName": "Digital Wallet"
+  },
+  "home": {
+    "main": {
+      "title": "Home",
+      "exitToast": "Press back again to exit"
+    },
+    "nav": {
+      "wallet": "Wallet",
+      "browser": "Browser",
+      "qrScanner": "Scan",
+      "trends": "Trends",
+      "settings": "Settings"
+    }
   }
 }

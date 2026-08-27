@@ -20,12 +20,14 @@ set -e
 # not just feature packages.
 #
 # Scan roots: packages/{authentication,onboard,wallet,transaction,trends,
-# scanner,settings}/lib/**/*.dart. `home`/`platform` and the infra packages
-# (core, network, ui_kit, framework, native_security) are exempt from the
+# scanner,settings}/lib/**/*.dart. `platform` and the infra packages (core,
+# network, ui_kit, framework, native_security) are exempt from the
 # feature-to-feature check (Check 1) — see the epic design doc's CI Gate
-# section for why (home's tab-shell imports are relocated to the Host in a
-# later phase; platform/infra legitimately depend on features or are relied
-# on by them).
+# section for why (platform/infra legitimately depend on features or are
+# relied on by them). The former `home` package's tab-shell imports of
+# wallet/transaction/scanner/trends/settings were relocated to the Host's
+# own lib/shell/ (Task 15); `home` no longer exists, so it was never a scan
+# root here and needs no exemption of its own.
 #
 # Usage: ./scripts/check_module_boundaries.sh [packages_dir] [whitelist_file]
 #   packages_dir   defaults to <repo_root>/packages

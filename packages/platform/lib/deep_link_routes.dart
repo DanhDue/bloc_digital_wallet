@@ -20,9 +20,11 @@ abstract class DeepLinkRoutes {
   static const String settings = '/settings';
   static const PageRouteInfo settingsRoute = _SettingsRoute();
 
-  // Home
+  // Home (Shell — the tab-shell landing page, relocated to the Host's own
+  // lib/shell/ as ShellPage/ShellRoute; kept named "home" here as the
+  // generic cross-package concept name).
   static const String home = '/home';
-  static const PageRouteInfo homeRoute = _HomeRoute();
+  static const PageRouteInfo homeRoute = _ShellRoute();
 
   // Trends
   static const String trends = '/trends';
@@ -53,8 +55,8 @@ class _SettingsRoute extends PageRouteInfo<void> {
   const _SettingsRoute() : super('SettingsRoute');
 }
 
-class _HomeRoute extends PageRouteInfo<void> {
-  const _HomeRoute() : super('HomeRoute');
+class _ShellRoute extends PageRouteInfo<void> {
+  const _ShellRoute() : super('ShellRoute');
 }
 
 class _TrendsRoute extends PageRouteInfo<void> {
