@@ -1,13 +1,13 @@
 ---
 id: "task_16_hardening_barrel_audit"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "super_app_governance"
 dueDate: null
 created: "2026-08-26T10:00:00.000Z"
-modified: "2026-08-26T16:51:29.000Z"
-completedAt: null
+modified: "2026-08-27T01:14:18.000Z"
+completedAt: "2026-08-27T01:14:18.000Z"
 labels: ["governance", "hardening", "ci"]
 order: "a16"
 ---

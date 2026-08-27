@@ -3,6 +3,10 @@
 // coverage:ignore-file
 
 // Data Layer
+// SettingsLocalDataSource is exported here as a deliberate, documented
+// exception: the root app's lib/core/app_initializer/logging_initializer.dart
+// resolves it via getIt<SettingsLocalDataSource>() to apply saved
+// module/appender logging toggles during app bootstrap.
 export 'data/datasources/local/settings_local_datasource.dart';
 
 // Domain Layer
@@ -16,11 +20,9 @@ export 'domain/usecases/load_bundled_fallback_usecase.dart';
 export 'domain/usecases/update_user_language_usecase.dart';
 
 // Sync Models
-export 'data/models/sync/available_language.dart';
-export 'data/models/sync/bootstrap_translation_item.dart';
-export 'data/models/sync/bootstrap_user_preferences.dart';
-export 'data/models/sync/cached_translation_item.dart';
-export 'data/models/sync/sync_bootstrap_request.dart';
+// SyncBootstrapResponse is exported here as a deliberate, documented exception:
+// onboard's splash_bloc.dart consumes it directly (whitelisted onboard→settings
+// coupling; see scripts/module_boundary_whitelist.txt and Task 14's ruling).
 export 'data/models/sync/sync_bootstrap_response.dart';
 
 // DI
