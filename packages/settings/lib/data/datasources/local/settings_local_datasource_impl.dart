@@ -5,6 +5,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:core/core.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,12 +26,23 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
   @override
   Future<String?> getCachedTranslationVersion(String languageCode) async {
-    return _sharedPreferences.getString('$_translationVersionPrefix$languageCode');
+    final meta = _readVersionMeta(languageCode);
+    return meta?.version;
   }
 
   @override
-  Future<void> saveCachedTranslationVersion(String languageCode, String version) async {
-    await _sharedPreferences.setString('$_translationVersionPrefix$languageCode', version);
+  Future<void> saveCachedTranslationVersion(
+    String languageCode,
+    String version,
+    String checksum,
+  ) async {
+    // Version and checksum are written as a single value under one key so
+    // they can never independently desync from a crash between two separate
+    // writes.
+    await _sharedPreferences.setString(
+      '$_translationVersionPrefix$languageCode',
+      jsonEncode({'version': version, 'checksum': checksum}),
+    );
 
     // Update the list of cached language codes
     final codes = await getAllCachedLanguageCodes();
@@ -48,9 +60,39 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     }
     try {
       final jsonString = await file.readAsString();
-      return jsonDecode(jsonString) as Map<String, dynamic>;
+      final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
+
+      final expectedChecksum = _readVersionMeta(languageCode)?.checksum;
+      if (expectedChecksum != null && ChecksumUtils.computeSha256(jsonMap) != expectedChecksum) {
+        // The cached file's content no longer matches the checksum saved
+        // alongside its version - the two writes desynced (e.g. a crash
+        // between saving the file and saving the version+checksum).
+        // Treat as corrupt rather than silently serving stale/wrong content
+        // or feeding a wrong base into the next delta merge.
+        await deleteCachedTranslation(languageCode);
+        return null;
+      }
+
+      return jsonMap;
     } catch (e) {
       return null;
+    }
+  }
+
+  /// Reads and parses the combined version+checksum value for [languageCode].
+  /// Returns `null` if nothing is cached yet, or if the value predates
+  /// checksum tracking (a bare version string) - in which case `checksum`
+  /// is also `null`, and callers should treat the cache as unverifiable
+  /// rather than corrupt.
+  _VersionMeta? _readVersionMeta(String languageCode) {
+    final raw = _sharedPreferences.getString('$_translationVersionPrefix$languageCode');
+    if (raw == null) return null;
+    try {
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      return _VersionMeta(decoded['version'] as String?, decoded['checksum'] as String?);
+    } catch (_) {
+      // Legacy format: a bare version string saved before checksum tracking existed.
+      return _VersionMeta(raw, null);
     }
   }
 
@@ -184,4 +226,11 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     }
     return File('$path/$languageCode.json');
   }
+}
+
+class _VersionMeta {
+  final String? version;
+  final String? checksum;
+
+  const _VersionMeta(this.version, this.checksum);
 }

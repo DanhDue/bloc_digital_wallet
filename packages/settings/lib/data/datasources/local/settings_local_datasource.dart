@@ -6,7 +6,12 @@ import 'package:settings/data/models/sync/available_language.dart';
 
 abstract class SettingsLocalDataSource {
   Future<String?> getCachedTranslationVersion(String languageCode);
-  Future<void> saveCachedTranslationVersion(String languageCode, String version);
+
+  /// Persists [version] together with [checksum] in a single write, so the
+  /// two can never independently desync from a crash between two separate
+  /// writes. [checksum] is validated against the cached JSON's own checksum
+  /// on every [getCachedTranslationJson] read.
+  Future<void> saveCachedTranslationVersion(String languageCode, String version, String checksum);
 
   Future<Map<String, dynamic>?> getCachedTranslationJson(String languageCode);
   Future<void> saveCachedTranslationJson(String languageCode, Map<String, dynamic> json);

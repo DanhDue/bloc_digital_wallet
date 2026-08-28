@@ -62,7 +62,11 @@ class GetDynamicLocalizationUseCase {
     } else {
       // Save new data to local cache
       await _repository.saveCachedTranslationJson(languageCode, jsonMap);
-      await _repository.saveCachedTranslationVersion(languageCode, version);
+      await _repository.saveCachedTranslationVersion(
+        languageCode,
+        version,
+        ChecksumUtils.computeSha256(jsonMap),
+      );
     }
 
     // 5. Apply dynamic translations (always do this to ensure memory has it)

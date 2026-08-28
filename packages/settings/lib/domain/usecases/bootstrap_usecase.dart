@@ -48,13 +48,13 @@ class BootstrapUseCase {
 
       final defaultLanguages = [
         AvailableLanguage(
-          languageCode: 'en_US',
+          languageCode: 'en',
           languageName: 'English',
           isDefault: true,
           isActive: true,
         ),
         AvailableLanguage(
-          languageCode: 'vi_VN',
+          languageCode: 'vi',
           languageName: 'Tiếng Việt',
           isDefault: false,
           isActive: true,

@@ -43,8 +43,8 @@ class LoginPage extends BaseMviPage<LoginBloc, LoginAction, LoginState, LoginEve
   void handleEvent(BuildContext context, LoginEvent event) {
     switch (event) {
       case NavigateToHome():
-        // Replace login screen with home (can't go back)
-        // context.router.replaceAll([const HomeRoute()]);
+        // Replace login screen with home/shell (can't go back)
+        // context.router.replaceAll([const ShellRoute()]);
         break;
       case ShowLoginSuccessMessage(:final message):
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));

@@ -4,5 +4,18 @@
   "languageEnglishName": "Vietnamese",
   "common": {
     "appName": "Ví Điện Tử"
+  },
+  "home": {
+    "main": {
+      "title": "Trang chủ",
+      "exitToast": "Nhấn lần nữa để thoát"
+    },
+    "nav": {
+      "wallet": "Ví",
+      "browser": "Giao dịch",
+      "qrScanner": "Quét",
+      "trends": "Xu hướng",
+      "settings": "Cài đặt"
+    }
   }
 }

@@ -21,7 +21,9 @@ dependencies:
     path: ../ui_kit
   framework:
      path: ../framework
-  
+  app_platform:
+    path: ../platform
+
   # Dependencies
   json_annotation: ^4.9.0
   freezed_annotation: ^3.0.0

@@ -1,5 +1,5 @@
 name: mvi_feature
-description: MVI feature with BaseMviPage - Initial state only, skeleton layers for expansion
+description: "[DEPRECATED — use pac_mvi_feature/pac_mvi_subfeature instead] MVI feature with BaseMviPage - Initial state only, skeleton layers for expansion"
 version: 1.0.0+1
 
 environment:

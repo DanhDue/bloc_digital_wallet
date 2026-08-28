@@ -91,8 +91,14 @@ class FetchTranslationUseCase {
     // Save the new merged json to cache
     await _repository.saveCachedTranslationJson(languageCode, mergedJson);
 
-    // Update version
-    await _repository.saveCachedTranslationVersion(languageCode, item.latestVersion);
+    // Persist version + checksum together so a later read can detect the two
+    // ever having desynced (e.g. a crash between this call and the file
+    // write above).
+    await _repository.saveCachedTranslationVersion(
+      languageCode,
+      item.latestVersion,
+      ChecksumUtils.computeSha256(mergedJson),
+    );
 
     // Apply dynamic translations via LocalizationManager
     // This will be called outside, or we can inject LocalizationManager

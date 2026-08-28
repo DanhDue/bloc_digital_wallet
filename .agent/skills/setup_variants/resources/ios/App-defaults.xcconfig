@@ -1,3 +1,4 @@
-// Default values for Dart Defines
+// Fallback DART_DEFINES_APP_NAME for the plain Debug/Release/Profile configs (no flavor).
+// The dev/stg/prd flavor configs set their own identity in Flutter/<Mode>-<flavor>.xcconfig,
+// generated from secureFiles/<flavor>/environment-configs.json by ios/scripts/setup_ios_flavors.py.
 DART_DEFINES_APP_NAME = Zeno
-DART_DEFINES_APP_ID_SUFFIX =

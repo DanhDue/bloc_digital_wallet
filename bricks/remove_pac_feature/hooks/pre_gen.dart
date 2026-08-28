@@ -45,7 +45,7 @@ Future<void> run(HookContext context) async {
     // 5. Update lib/app_router.dart - remove lines
     await _cleanAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 6. Update packages/core/lib/utils/feature_public_routes.dart - remove lines
+    // 6. Update packages/platform/lib/deep_link_routes.dart - remove lines
     await _cleanFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
 
     // 7. Update packages/network/lib/app_uri.dart - remove constant
@@ -256,7 +256,7 @@ Future<void> _cleanFeaturePublicRoutes(
   String pascalName,
   String camelName,
 ) async {
-  final file = File('packages/core/lib/utils/feature_public_routes.dart');
+  final file = File('packages/platform/lib/deep_link_routes.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();

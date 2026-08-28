@@ -130,16 +130,24 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     SettingsActionChangeLanguage action,
     Emitter<SettingsState> emit,
   ) async {
-    // 1. Fetch translation JSON for the new locale and apply dynamic override
-    final result = await _getDynamicLocalizationUseCase(action.languageCode);
+    // 1. Switch the locale immediately (optimistic UI update) using whatever
+    // bundled/cached translations are already available. Do NOT gate this on
+    // the backend fetch below - a language whose dynamic content isn't
+    // fetchable yet must still visibly switch in the UI.
+    await LocalizationManager.instance.setLocaleFromCode(action.languageCode);
 
-    if (result.isRight()) {
-      // 2. Change the locale in the app so UI updates
-      await LocalizationManager.instance.setLocaleFromCode(action.languageCode);
-    } else {
+    // 2. Fetch translation JSON for the new locale and apply dynamic override
+    // in the background. A failure here means the dynamic overrides didn't
+    // refresh, not that the language switch itself failed - surface a softer
+    // error but keep going.
+    final result = await _getDynamicLocalizationUseCase(action.languageCode);
+    if (result.isLeft()) {
       final failure = result.fold((l) => l, (r) => null);
-      emitEvent(SettingsEvent.showError(message: failure?.message ?? 'Failed to change language'));
-      return;
+      emitEvent(
+        SettingsEvent.showError(
+          message: failure?.message ?? 'Failed to refresh language content',
+        ),
+      );
     }
 
     // 3. Call UpdateUserLanguageUseCase in background to sync preference to server

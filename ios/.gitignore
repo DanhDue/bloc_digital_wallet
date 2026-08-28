@@ -14,12 +14,10 @@ Icon?
 profile
 xcuserdata
 **/.generated/
-Flutter/*.xcconfig
+Flutter/Generated.xcconfig
 Flutter/flutter_export_environment.sh
 Flutter/ephemeral/
 **/Pods/
-Podfile
-Podfile.lock
 Flutter.podspec
 **/*.resolved
 ServiceDefinitions.json

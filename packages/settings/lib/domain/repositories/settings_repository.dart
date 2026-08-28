@@ -19,7 +19,16 @@ abstract class SettingsRepository {
   });
 
   Future<Either<Failure, String?>> getCachedTranslationVersion(String languageCode);
-  Future<Either<Failure, void>> saveCachedTranslationVersion(String languageCode, String version);
+
+  /// Persists [version] together with [checksum] (the SHA-256 of the cached
+  /// translation JSON, via [ChecksumUtils.computeSha256]) so that a later
+  /// read can detect the two ever having desynced - e.g. a crash between
+  /// this call and [saveCachedTranslationJson].
+  Future<Either<Failure, void>> saveCachedTranslationVersion(
+    String languageCode,
+    String version,
+    String checksum,
+  );
   Future<Either<Failure, Map<String, dynamic>?>> getCachedTranslationJson(String languageCode);
   Future<Either<Failure, void>> saveCachedTranslationJson(
     String languageCode,

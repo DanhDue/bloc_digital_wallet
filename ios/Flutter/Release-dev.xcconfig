@@ -1,2 +1,7 @@
-#include "Zeno.xcconfig"
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release-dev.xcconfig"
+#include "Generated.xcconfig"
+
+// CFBundleDisplayName for the 'dev' flavor - mirrored from
+// secureFiles/dev/environment-configs.json.
+// Regenerate: python3 ios/scripts/setup_ios_flavors.py
+DART_DEFINES_APP_NAME = Zeno(dev)

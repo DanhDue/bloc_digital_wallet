@@ -5,9 +5,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:logger/d3nexus_logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:settings/domain/entities/settings_entity.dart';
 // import 'package:settings/domain/usecases/get_settings_usecase.dart';
 import 'package:settings/data/models/sync/available_language.dart';
@@ -40,6 +42,13 @@ void main() {
   });
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
+
+    // LocalizationManager.setLocaleFromCode (exercised by changeLanguage
+    // tests) logs through D3NexusLogger; wire it to a no-op manager so the
+    // static facade isn't left uninitialized in this test isolate.
+    D3NexusLogger.initialize(LogManagerImpl());
+
     // mockUseCase = MockGetSettingsUseCase();
     mockAppInfoService = MockAppInfoService();
     mockUpdateUserLanguageUseCase = MockUpdateUserLanguageUseCase();
@@ -142,4 +151,46 @@ void main() {
       // We will assume state verification is sufficient for now, or use a workaround if needed.
     },
   );
+
+  group('changeLanguage', () {
+    blocTest<SettingsBloc, SettingsState>(
+      'switches the locale immediately (optimistic update) even when the '
+      'dynamic translation fetch fails, per the documented optimistic-UI '
+      'design in localization_management.en.md section 2.2',
+      build: () {
+        when(mockGetDynamicLocalizationUseCase('ko')).thenAnswer(
+          (_) async => const Left(ServerFailure(message: 'Language content not available yet')),
+        );
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ko')),
+      wait: const Duration(milliseconds: 10),
+      verify: (_) {
+        // The UI-facing locale must switch even though the background fetch failed -
+        // this is the bug: gating the switch on fetch success meant a language whose
+        // dynamic content wasn't fetchable would never visibly change in the app.
+        expect(LocalizationManager.instance.currentLocale.languageCode, 'ko');
+        // The background sync to the server must still happen; a failed fetch must
+        // not short-circuit the rest of the flow.
+        verify(mockUpdateUserLanguageUseCase('ko')).called(1);
+      },
+    );
+
+    blocTest<SettingsBloc, SettingsState>(
+      'switches the locale and syncs the preference when the dynamic '
+      'translation fetch succeeds',
+      build: () {
+        when(
+          mockGetDynamicLocalizationUseCase('ja'),
+        ).thenAnswer((_) async => const Right(null));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ja')),
+      wait: const Duration(milliseconds: 10),
+      verify: (_) {
+        expect(LocalizationManager.instance.currentLocale.languageCode, 'ja');
+        verify(mockUpdateUserLanguageUseCase('ja')).called(1);
+      },
+    );
+  });
 }

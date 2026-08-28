@@ -1,0 +1,53 @@
+PODS:
+  - animated_item (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - image_gallery_saver_plus (0.0.1):
+    - Flutter
+  - logger_native_bridge (0.0.1):
+    - Flutter
+  - native_security (0.0.1):
+    - Flutter
+    - logger_native_bridge
+  - permission_handler_apple (9.3.0):
+    - Flutter
+  - pretty_animated_text (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - animated_item (from `.symlinks/plugins/animated_item/ios`)
+  - Flutter (from `Flutter`)
+  - image_gallery_saver_plus (from `.symlinks/plugins/image_gallery_saver_plus/ios`)
+  - logger_native_bridge (from `.symlinks/plugins/logger_native_bridge/ios`)
+  - native_security (from `.symlinks/plugins/native_security/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - pretty_animated_text (from `.symlinks/plugins/pretty_animated_text/ios`)
+
+EXTERNAL SOURCES:
+  animated_item:
+    :path: ".symlinks/plugins/animated_item/ios"
+  Flutter:
+    :path: Flutter
+  image_gallery_saver_plus:
+    :path: ".symlinks/plugins/image_gallery_saver_plus/ios"
+  logger_native_bridge:
+    :path: ".symlinks/plugins/logger_native_bridge/ios"
+  native_security:
+    :path: ".symlinks/plugins/native_security/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  pretty_animated_text:
+    :path: ".symlinks/plugins/pretty_animated_text/ios"
+
+SPEC CHECKSUMS:
+  animated_item: 084ee2ea6acd303168dbcd18929b984e2a363633
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  image_gallery_saver_plus: e597bf65a7846979417a3eae0763b71b6dfec6c3
+  logger_native_bridge: 4dd6297ef7f176e1b43740518dc3a35dfec0828a
+  native_security: c549f4dba4e835f106a88892f0381b411d512b2a
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
+  pretty_animated_text: cc861d9e60db9165c80a914de16b43d514992942
+
+PODFILE CHECKSUM: f5caed4e1a435b54a07a968bcb2f0dd5ed18c560
+
+COCOAPODS: 1.16.2
