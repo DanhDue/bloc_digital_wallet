@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/d3nexus_logger.dart';
 import 'package:mockito/mockito.dart';
 import 'package:settings/data/models/sync/bootstrap_translation_item.dart';
+import 'package:settings/data/models/sync/translation_override_response.dart';
 import 'package:settings/domain/usecases/fetch_translation_usecase.dart';
 
 import 'get_settings_usecase_test.mocks.dart';
@@ -70,7 +71,49 @@ void main() {
 
       // Verify that no saving happened because it was 304
       verifyNever(mockRepository.saveCachedTranslationJson(languageCode, any));
-      verifyNever(mockRepository.saveCachedTranslationVersion(languageCode, any));
+      verifyNever(mockRepository.saveCachedTranslationVersion(languageCode, any, any));
     });
+  });
+
+  group('FetchTranslationUseCase version/checksum persistence', () {
+    test(
+      'saves the checksum of the merged JSON alongside the version, so a later '
+      'read can detect the two ever having desynced (e.g. a crash between '
+      'the file write and the version write)',
+      () async {
+        // Arrange: a full fetch (no cache yet).
+        const languageCode = 'en';
+        final item = BootstrapTranslationItem(
+          resourceId: languageCode,
+          mode: 'full',
+          latestVersion: '2.0.0',
+        );
+        final translations = <String, dynamic>{'hello': 'world'};
+
+        when(
+          mockRepository.getLocalizationOverrides(languageCode, sinceVersion: null, eTag: null),
+        ).thenAnswer(
+          (_) async =>
+              Right(TranslationOverrideData(version: '2.0.0', translations: translations)),
+        );
+        when(
+          mockRepository.saveCachedTranslationJson(languageCode, any),
+        ).thenAnswer((_) async => const Right(null));
+        when(
+          mockRepository.saveCachedTranslationVersion(languageCode, any, any),
+        ).thenAnswer((_) async => const Right(null));
+
+        // Act
+        final result = await useCase(item);
+
+        // Assert
+        expect(result.isRight(), true);
+
+        final expectedChecksum = ChecksumUtils.computeSha256(translations);
+        verify(
+          mockRepository.saveCachedTranslationVersion(languageCode, '2.0.0', expectedChecksum),
+        ).called(1);
+      },
+    );
   });
 }

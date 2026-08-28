@@ -63,7 +63,7 @@ void main() {
 
         // Because it returned 304, it shouldn't save new translations to cache
         verifyNever(mockRepository.saveCachedTranslationJson(languageCode, any));
-        verifyNever(mockRepository.saveCachedTranslationVersion(languageCode, any));
+        verifyNever(mockRepository.saveCachedTranslationVersion(languageCode, any, any));
       },
     );
   });

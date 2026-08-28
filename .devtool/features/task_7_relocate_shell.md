@@ -1,5 +1,5 @@
 ---
-id: "task_15_relocate_shell"
+id: "task_7_relocate_shell"
 status: "done"
 priority: "high"
 assignee: null
@@ -9,9 +9,9 @@ created: "2026-08-26T10:00:00.000Z"
 modified: "2026-08-27T00:59:28.000Z"
 completedAt: "2026-08-27T07:50:00.000Z"
 labels: ["migration", "shell", "architecture"]
-order: "a15"
+order: "a7"
 ---
-# Task 15: Relocate Shell out of `home`
+# Task 7: Relocate Shell out of `home`
 
 Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.en.md)
 
@@ -44,7 +44,7 @@ This is a structural move of already-tested code (existing `home` package has it
 - [ ] `melos bootstrap` and `flutter analyze` both clean.
 
 ## Dependencies & Blockers
-Blocked by [Task 9](task_9_create_platform_package.md) (root app / Shell may reference `platform` conventions going forward) and independently should land after [Task 14](task_14_migrate_settings_pilot.md) so the pilot pattern is proven before this larger move — not a hard technical blocker, but the intended sequencing per the source spec's Migration Plan.
+Blocked by [Task 1](task_1_create_platform_package.md) (root app / Shell may reference `platform` conventions going forward) and independently should land after [Task 6](task_6_migrate_settings_pilot.md) so the pilot pattern is proven before this larger move — not a hard technical blocker, but the intended sequencing per the source spec's Migration Plan.
 
 ## References & Rollback
 - Source spec: [Phase 2 — Shell relocation](../epic/super_app_governance/2026-08-26-super-app-governance-design.md#migration-plan-incremental).

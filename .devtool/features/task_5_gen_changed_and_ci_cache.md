@@ -1,5 +1,5 @@
 ---
-id: "task_13_gen_changed_and_ci_cache"
+id: "task_5_gen_changed_and_ci_cache"
 status: "done"
 priority: "medium"
 assignee: null
@@ -9,9 +9,9 @@ created: "2026-08-26T10:00:00.000Z"
 modified: "2026-08-26T18:28:15.000Z"
 completedAt: "2026-08-26T18:28:15.000Z"
 labels: ["tooling", "ci", "build-performance"]
-order: "a13"
+order: "a5"
 ---
-# Task 13: `genChanged.sh` + `.dart_tool/` CI cache
+# Task 5: `genChanged.sh` + `.dart_tool/` CI cache
 
 Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.en.md)
 
@@ -42,7 +42,7 @@ Tooling/config change, no application business logic:
 - [ ] `scripts/githooks/pre-commit` and `scripts/genAlls.sh` are unchanged.
 
 ## Dependencies & Blockers
-None — independent of Tasks 9–12, Phase 0 work.
+None — independent of Tasks 1–4, Phase 0 work.
 
 ## References & Rollback
 - Source spec: [Dev Scripts & Build Caching section](../epic/super_app_governance/2026-08-26-super-app-governance-design.md#dev-scripts--build-caching), [Approach E — rejected](../epic/super_app_governance/2026-08-26-super-app-governance-design.md#alternatives-considered).

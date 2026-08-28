@@ -1,5 +1,5 @@
 ---
-id: "task_9_create_platform_package"
+id: "task_1_create_platform_package"
 status: "done"
 priority: "high"
 assignee: null
@@ -9,9 +9,9 @@ created: "2026-08-26T10:00:00.000Z"
 modified: "2026-08-26T17:49:38.000Z"
 completedAt: "2026-08-26T17:49:38.000Z"
 labels: ["architecture", "platform", "routing"]
-order: "a9"
+order: "a1"
 ---
-# Task 9: Create `platform` package — DeepLinkRoutes relocation
+# Task 1: Create `platform` package — DeepLinkRoutes relocation
 
 Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.en.md)
 

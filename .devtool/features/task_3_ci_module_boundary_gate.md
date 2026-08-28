@@ -1,5 +1,5 @@
 ---
-id: "task_11_ci_module_boundary_gate"
+id: "task_3_ci_module_boundary_gate"
 status: "done"
 priority: "high"
 assignee: null
@@ -9,9 +9,9 @@ created: "2026-08-26T10:00:00.000Z"
 modified: "2026-08-26T18:13:20.000Z"
 completedAt: "2026-08-26T18:13:20.000Z"
 labels: ["ci", "governance", "tooling"]
-order: "a11"
+order: "a3"
 ---
-# Task 11: CI Gate — module boundary script
+# Task 3: CI Gate — module boundary script
 
 Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.en.md)
 
@@ -41,7 +41,7 @@ This is a standalone shell script, not app business logic, but it has clear pass
 - [ ] A deliberately reintroduced non-whitelisted violation makes the CI stage fail (verified once, then reverted).
 
 ## Dependencies & Blockers
-None — independent of Tasks 9/10, can be done in parallel with them (both are Phase 0 foundation work).
+None — independent of Tasks 1/2, can be done in parallel with them (both are Phase 0 foundation work).
 
 ## References & Rollback
 - Source spec: [CI Gate section](../epic/super_app_governance/2026-08-26-super-app-governance-design.md#ci-gate).

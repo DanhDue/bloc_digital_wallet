@@ -210,7 +210,7 @@ Future<void> _updateLocalizationInitializer(String snakeName, String camelName) 
 
       content = content.replaceFirst(
         match.group(0)!,
-        "\${match.group(0)}\n\$newBlock",
+        "${match.group(0)}\n$newBlock",
       );
       updated = true;
     }

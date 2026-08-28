@@ -1,5 +1,5 @@
 ---
-id: "task_12_mason_bricks_platform"
+id: "task_4_mason_bricks_platform"
 status: "done"
 priority: "medium"
 assignee: null
@@ -9,16 +9,16 @@ created: "2026-08-26T10:00:00.000Z"
 modified: "2026-08-26T19:11:27.000Z"
 completedAt: "2026-08-26T19:11:27.000Z"
 labels: ["mason", "tooling", "governance"]
-order: "a12"
+order: "a4"
 ---
-# Task 12: Update Mason bricks for `platform`
+# Task 4: Update Mason bricks for `platform`
 
 Epic: [super_app_governance](../epic/super_app_governance/super_app_governance.en.md)
 
 ## Requirement Analysis
-The `pac_mvi_feature` brick's `post_gen.dart` hook currently writes each new feature's public route into `packages/core/lib/utils/feature_public_routes.dart`. After Task 9 relocates that mechanism to `packages/platform/lib/deep_link_routes.dart`, every newly-scaffolded package must be wired into the new location and dependency by default — otherwise this epic's own tooling would keep regenerating the pattern it's trying to retire. The four orphaned bricks targeting the unused `lib/features/` pattern (`mvi_feature`, `mvi_subfeature`, `remove_feature`, `remove_subfeature`) are kept per explicit user decision, but marked deprecated so `mason list` warns contributors away from them.
+The `pac_mvi_feature` brick's `post_gen.dart` hook currently writes each new feature's public route into `packages/core/lib/utils/feature_public_routes.dart`. After Task 1 relocates that mechanism to `packages/platform/lib/deep_link_routes.dart`, every newly-scaffolded package must be wired into the new location and dependency by default — otherwise this epic's own tooling would keep regenerating the pattern it's trying to retire. The four orphaned bricks targeting the unused `lib/features/` pattern (`mvi_feature`, `mvi_subfeature`, `remove_feature`, `remove_subfeature`) are kept per explicit user decision, but marked deprecated so `mason list` warns contributors away from them.
 
-**Naming note (Task 9 ruling — read before editing pubspec templates):** the package's pubspec `name:` is `app_platform`, not `platform` — a real pub.dev package named `platform` is already a transitive dependency (via `settings → path_provider → path_provider_platform_interface`), and Dart pub has no name-aliasing for a local `path:` package colliding with a hosted one. The **directory** is still `packages/platform/`. Every pubspec dependency line this task generates must use the key `app_platform:` (e.g. `app_platform: {path: ../platform}`), while generated Dart code that imports it should alias `as platform` so call sites still read `platform.someName` as originally designed. See Task 9's report (`.superpowers/sdd/super_app_governance.en/task-9-report.md`) and the epic ledger for the full rationale.
+**Naming note (Task 1 ruling — read before editing pubspec templates):** the package's pubspec `name:` is `app_platform`, not `platform` — a real pub.dev package named `platform` is already a transitive dependency (via `settings → path_provider → path_provider_platform_interface`), and Dart pub has no name-aliasing for a local `path:` package colliding with a hosted one. The **directory** is still `packages/platform/`. Every pubspec dependency line this task generates must use the key `app_platform:` (e.g. `app_platform: {path: ../platform}`), while generated Dart code that imports it should alias `as platform` so call sites still read `platform.someName` as originally designed. See Task 1's report (`.superpowers/sdd/super_app_governance.en/task-9-report.md`) and the epic ledger for the full rationale.
 
 ## Relevant Files & Context Pointers
 - `bricks/pac_mvi_feature/hooks/post_gen.dart` — `_updateFeaturePublicRoutes` function, retarget its file path to `packages/platform/lib/deep_link_routes.dart`.
@@ -45,7 +45,7 @@ Brick template edits — verification is generation-based, not unit tests:
 - [ ] No remaining reference to the old `core/utils/feature_public_routes.dart` path anywhere in `bricks/`.
 
 ## Dependencies & Blockers
-Blocked by [Task 9](task_9_create_platform_package.md) — the brick must target a `platform` package that already exists.
+Blocked by [Task 1](task_1_create_platform_package.md) — the brick must target a `platform` package that already exists.
 
 ## References & Rollback
 - Source spec: [Mason / Bricks changes section](../epic/super_app_governance/2026-08-26-super-app-governance-design.md#mason--bricks-changes).

@@ -20,8 +20,10 @@ mixin SafeCallApiMixin {
       final result = await call();
       return Right(result);
     } on DioException catch (e) {
-      final talker = GetIt.instance<Talker>();
-      talker.handle(e, StackTrace.current, 'Dio API Error');
+      if (e.response?.statusCode != HttpStatus.notModified) {
+        final talker = GetIt.instance<Talker>();
+        talker.handle(e, StackTrace.current, 'Dio API Error');
+      }
       return Left(_handleDioError(e));
     } on SocketException catch (e) {
       return Left(NetworkFailure(message: e.message, exception: e));

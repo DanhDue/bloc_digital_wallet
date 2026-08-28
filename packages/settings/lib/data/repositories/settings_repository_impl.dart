@@ -55,9 +55,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<Either<Failure, void>> saveCachedTranslationVersion(
     String languageCode,
     String version,
+    String checksum,
   ) async {
     try {
-      await _localDataSource.saveCachedTranslationVersion(languageCode, version);
+      await _localDataSource.saveCachedTranslationVersion(languageCode, version, checksum);
       return const Right(null);
     } catch (e) {
       return Left(CacheFailure(message: e.toString()));
