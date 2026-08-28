@@ -13,6 +13,7 @@ import 'config/app_config.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/localization/multi_translation_provider.dart';
 import 'core/localization/app_translation_providers.dart';
+import 'core/environment_banner.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,7 +53,7 @@ void main() async {
                   ],
                 ),
                 title: AppConfig.appName,
-                debugShowCheckedModeBanner: core.EnvironmentConfig.showDebugBanner,
+                debugShowCheckedModeBanner: false,
                 locale: currentLocale,
                 supportedLocales: AppLocaleUtils.supportedLocales,
                 localizationsDelegates: const [
@@ -89,8 +90,10 @@ void main() async {
                     error: AppThemes.dark.errorColor,
                   ),
                 ),
-                builder: FlutterSmartDialog.init(
-                  loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+                builder: (context, child) => EnvironmentBanner(
+                  child: FlutterSmartDialog.init(
+                    loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+                  )(context, child),
                 ),
               ),
             );
