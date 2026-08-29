@@ -37,34 +37,34 @@ This repo's real epic is the concrete case: the directory is `.devtool/epic/logg
 
 This diagram shows which skill runs at each phase and in what order — it stops at `superpowers:subagent-driven-development`'s own boundary rather than redrawing its internal implementer/reviewer/fix-loop mechanics, which live in that skill's own diagram.
 
-```dot
-digraph epic_implementation_workflow {
-    rankdir=TB;
+```mermaid
+flowchart TB
+    prereq["Prerequisite (already done):\nsuperpowers:brainstorming -> epic-designer"]
+    style prereq stroke-dasharray: 5 5
+    
+    phase0["Phase 0: Context Reload\n(read docs directly, no skill)"]
+    phase1a["Phase 1: compute_execution_order.py\n(script, no skill)"]
+    checkpoint{"Checkpoint:\nuser confirms order?"}
+    phase1b["Phase 1 (cont'd): Worktree Bootstrap\nsuperpowers:using-git-worktrees\n+ bootstrap_worktree.sh"]
+    phase2["Phase 2: one task\nsuperpowers:subagent-driven-development\n(its implementer uses\nsuperpowers:test-driven-development)"]
+    diverged{"Divergence\nfrom the HLD?"}
+    phase3["Phase 3: Doc Sync\n(direct edits, no skill)"]
+    moretasks{"More tasks\nin the order?"}
+    phase4["Phase 4: End of Epic\nmelos test/analyze ->\nsuperpowers:finishing-a-development-branch"]
+    style phase4 fill:green
 
-    prereq [label="Prerequisite (already done):\nsuperpowers:brainstorming -> epic-designer", shape=box, style=dashed];
-    phase0 [label="Phase 0: Context Reload\n(read docs directly, no skill)", shape=box];
-    phase1a [label="Phase 1: compute_execution_order.py\n(script, no skill)", shape=box];
-    checkpoint [label="Checkpoint:\nuser confirms order?", shape=diamond];
-    phase1b [label="Phase 1 (cont'd): Worktree Bootstrap\nsuperpowers:using-git-worktrees\n+ bootstrap_worktree.sh", shape=box];
-    phase2 [label="Phase 2: one task\nsuperpowers:subagent-driven-development\n(its implementer uses\nsuperpowers:test-driven-development)", shape=box];
-    diverged [label="Divergence\nfrom the HLD?", shape=diamond];
-    phase3 [label="Phase 3: Doc Sync\n(direct edits, no skill)", shape=box];
-    moretasks [label="More tasks\nin the order?", shape=diamond];
-    phase4 [label="Phase 4: End of Epic\nmelos test/analyze ->\nsuperpowers:finishing-a-development-branch", shape=box, style=filled, fillcolor=lightgreen];
-
-    prereq -> phase0;
-    phase0 -> phase1a;
-    phase1a -> checkpoint;
-    checkpoint -> phase1a [label="adjust order"];
-    checkpoint -> phase1b [label="confirmed"];
-    phase1b -> phase2 [label="first task"];
-    phase2 -> diverged;
-    diverged -> phase3 [label="yes"];
-    diverged -> moretasks [label="no"];
-    phase3 -> moretasks;
-    moretasks -> phase2 [label="yes, next task"];
-    moretasks -> phase4 [label="no, epic done"];
-}
+    prereq --> phase0
+    phase0 --> phase1a
+    phase1a --> checkpoint
+    checkpoint -- "adjust order" --> phase1a
+    checkpoint -- "confirmed" --> phase1b
+    phase1b -- "first task" --> phase2
+    phase2 --> diverged
+    diverged -- "yes" --> phase3
+    diverged -- "no" --> moretasks
+    phase3 --> moretasks
+    moretasks -- "yes, next task" --> phase2
+    moretasks -- "no, epic done" --> phase4
 ```
 
 ### Phase 0 — Context Reload (once, not per task)
@@ -112,7 +112,37 @@ These are Phase 1's closing steps, not a separate phase — they run after the s
 
 For each task in the confirmed order, follow `superpowers:subagent-driven-development` almost exactly. **This differs from the base skill in two ways: (a) the task's Kanban `status` is kept live on disk (uncommitted) as it moves through `in-progress` and `review` while work is ongoing, so the dashboard reflects real progress instead of jumping straight from `todo` to `done`; (b) the implementer does not commit — you make exactly one commit yourself, after both reviews pass, staging the code and the task file's final status together.** Everything else is the base skill unchanged. The board's real columns are `backlog | todo | in-progress | review | done` — there is no `blocked` column, so a stalled task simply stays at `in-progress` while you resolve it out of band (chat with your human partner, the ledger), rather than moving to a status the board doesn't have.
 
-1. **(Difference a)** Before dispatching, edit — **do not commit** — that task's frontmatter in `.devtool/features/task_<n>.md` to `status: "in-progress"`. This is a live, uncommitted change purely for the Kanban dashboard (most markdown-Kanban plugins, including this one, read the file straight off disk); it gets overwritten by later status edits and finally by `status: "done"` in step 4, so none of these intermediate edits ever produce a commit of their own. Then dispatch the implementer subagent with the full task file text. It follows `superpowers:test-driven-development`, self-reviews, but does **not** commit yet.
+1. **(Difference a)** Before dispatching, edit — **do not commit** — that task's frontmatter in `.devtool/features/task_<n>.md` to `status: "in-progress"`. This is a live, uncommitted change purely for the Kanban dashboard (most markdown-Kanban plugins, including this one, read the file straight off disk); it gets overwritten by later status edits and finally by `status: "done"` in step 4, so none of these intermediate edits ever produce a commit of their own. 
+
+   **CRITICAL DUAL-PERSONA DISPATCH**: When dispatching the implementer subagent, you MUST include the following Dual-Persona instructions along with the task text:
+   
+   > You are a dual-agent system: First, an Expert QA (Red Team). Second, a Principal Mobile Engineer (TDD Master).
+   > Your task is to write strictly TDD Unit Tests for this feature, but you MUST follow these phases sequentially:
+   > 
+   > # PHASE 1: BDD SCENARIOS (The QA Persona)
+   > Before writing any code, identify all possible scenarios using Gherkin syntax (Given - When - Then). 
+   > You MUST exhaustively apply Boundary Value Analysis & Equivalence Partitioning to include:
+   > - Happy paths (Normal data flow).
+   > - Edge cases (Null inputs, empty arrays, malformed JSON, boundary numbers).
+   > - State Transitions (Valid and Invalid state changes for BLoC/MVI).
+   > - Async/Race conditions (e.g., User rapidly triggers the action 3 times -> only the last response should be processed).
+   > - Network & Storage failures (Timeouts, 500 errors, Corrupted local DB).
+   > 
+   > Output this phase in a markdown block titled "### BDD SCENARIOS".
+   > 
+   > # PHASE 2: TDD IMPLEMENTATION (The Dev Persona)
+   > Translate EVERY scenario from Phase 1 into executable Unit Tests.
+   > Constraints:
+   > 1. Target language/framework: Flutter/Dart (or Android/Kotlin if specified).
+   > 2. Use Mocking to simulate API responses with artificial Delays to test Race Conditions.
+   > 3. Verify that Streams/Subscriptions are properly closed/cancelled.
+   > 4. Test the Behavior/State emissions exactly in order, not just the final result.
+   > 5. DO NOT WRITE THE ACTUAL IMPLEMENTATION CODE YET. Write ONLY the Tests and the necessary Interfaces/Mocks.
+   > 
+   > # PHASE 3: RED-GREEN-REFACTOR (Strict Rule)
+   > Ensure the tests are designed to FAIL first (RED). You must explain exactly why they will fail if Race Conditions (like the switchMap/cancellation flaw) are not handled in the upcoming implementation. Only after confirming the RED phase, you can write the minimal implementation code to pass them (GREEN).
+   
+   The subagent will then follow `superpowers:test-driven-development`, self-review, but must **not** commit yet.
 2. **(Difference a, continued)** Once the implementer reports `DONE` (or `DONE_WITH_CONCERNS`), edit the frontmatter to `status: "review"` before dispatching the spec-compliance reviewer, then the code-quality reviewer, same as the base skill.
 3. If a review finds issues, the fix loop begins: edit the frontmatter back to `status: "in-progress"` while the implementer applies fixes, then back to `status: "review"` before each re-review. Repeat for as many rounds as the fix loop takes — every transition is uncommitted, same as step 1.
 
