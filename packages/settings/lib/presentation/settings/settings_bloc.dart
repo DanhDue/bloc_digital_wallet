@@ -144,9 +144,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     if (result.isLeft()) {
       final failure = result.fold((l) => l, (r) => null);
       emitEvent(
-        SettingsEvent.showError(
-          message: failure?.message ?? 'Failed to refresh language content',
-        ),
+        SettingsEvent.showError(message: failure?.message ?? 'Failed to refresh language content'),
       );
     }
 

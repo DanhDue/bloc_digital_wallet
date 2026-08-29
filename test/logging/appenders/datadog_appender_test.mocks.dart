@@ -3,8 +3,7 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:bloc_digital_wallet/logging/appenders/datadog_appender.dart'
-    as _i2;
+import 'package:bloc_digital_wallet/logging/appenders/datadog_appender.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -31,16 +30,9 @@ class MockDatadogLogClient extends _i1.Mock implements _i2.DatadogLogClient {
   }
 
   @override
-  void log(
-    String? message, {
-    required String? status,
-    Map<String, Object?>? attributes,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #log,
-      [message],
-      {#status: status, #attributes: attributes},
-    ),
-    returnValueForMissingStub: null,
-  );
+  void log(String? message, {required String? status, Map<String, Object?>? attributes}) =>
+      super.noSuchMethod(
+        Invocation.method(#log, [message], {#status: status, #attributes: attributes}),
+        returnValueForMissingStub: null,
+      );
 }

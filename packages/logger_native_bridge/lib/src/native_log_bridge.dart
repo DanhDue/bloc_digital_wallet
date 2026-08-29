@@ -64,10 +64,7 @@ class NativeLogBridge implements NativeLogFlutterApi {
   /// (epoch-milliseconds -> UTC ISO-8601), since the forwarded
   /// [LogRecord] itself can't carry it (see this class's doc comment).
   static String _prefixWithOriginalTimestamp(NativeLogMessage message) {
-    final originalTimestamp = DateTime.fromMillisecondsSinceEpoch(
-      message.timestamp,
-      isUtc: true,
-    );
+    final originalTimestamp = DateTime.fromMillisecondsSinceEpoch(message.timestamp, isUtc: true);
     return '[native @ ${originalTimestamp.toIso8601String()}] ${message.message}';
   }
 }

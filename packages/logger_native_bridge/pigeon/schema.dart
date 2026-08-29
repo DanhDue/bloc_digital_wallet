@@ -19,14 +19,12 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/src/messages.g.dart',
-    kotlinOut:
-        'android/src/main/kotlin/com/danhdue/logger_native_bridge/Messages.g.kt',
+    kotlinOut: 'android/src/main/kotlin/com/danhdue/logger_native_bridge/Messages.g.kt',
     kotlinOptions: KotlinOptions(package: 'com.danhdue.logger_native_bridge'),
     swiftOut: 'ios/Classes/Messages.g.swift',
     dartPackageName: 'logger_native_bridge',
   ),
 )
-
 /// Severity of a replayed native log entry. Mirrors `LogLevel` in
 /// `package:logger` (kept as a separate enum here since Pigeon-generated
 /// types must not depend on `package:logger`'s Dart types directly — the

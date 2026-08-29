@@ -66,17 +66,14 @@ Future<void> run(HookContext context) async {
     await _runCommand('melos', ['bootstrap'], context.logger);
 
     progress.update('Running code generation on root app...');
-    await _runCommand(
-        'fvm',
-        [
-          'flutter',
-          'pub',
-          'run',
-          'build_runner',
-          'build',
-          '--delete-conflicting-outputs',
-        ],
-        context.logger);
+    await _runCommand('fvm', [
+      'flutter',
+      'pub',
+      'run',
+      'build_runner',
+      'build',
+      '--delete-conflicting-outputs',
+    ], context.logger);
 
     progress.update('Running formatting and analysis...');
     await _runCommand('melos', ['run', 'dartfmt'], context.logger);
@@ -149,8 +146,10 @@ Future<void> _cleanLocalizationInitializer(String snakeName, String camelName) a
 
   // Remove from _registerSyncLocaleCallback
   content = content.replaceAll(
-    RegExp('^\\s*$camelName\\.LocaleSettings\\.setLocaleRaw\\(rawLocale\\);\\s*\\n',
-        multiLine: true),
+    RegExp(
+      '^\\s*$camelName\\.LocaleSettings\\.setLocaleRaw\\(rawLocale\\);\\s*\\n',
+      multiLine: true,
+    ),
     '',
   );
 

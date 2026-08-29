@@ -7,8 +7,7 @@ import 'log_record.dart';
 /// `parentSpanId` equals this node's `record.spanId`).
 class TraceNode {
   /// Creates a trace node wrapping [record] with the given [children].
-  TraceNode(this.record, {List<TraceNode>? children})
-    : children = children ?? <TraceNode>[];
+  TraceNode(this.record, {List<TraceNode>? children}) : children = children ?? <TraceNode>[];
 
   /// The log record this node represents.
   final LogRecord record;
@@ -57,9 +56,7 @@ List<TraceNode> buildTraceTree(List<LogRecord> records) {
 
   for (final node in nodes) {
     final parentSpanId = node.record.parentSpanId;
-    final parentNode = parentSpanId == null
-        ? null
-        : firstNodeBySpanId[parentSpanId];
+    final parentNode = parentSpanId == null ? null : firstNodeBySpanId[parentSpanId];
 
     if (parentNode == null) {
       // Either a true root (no parentSpanId) or an orphan reference to a

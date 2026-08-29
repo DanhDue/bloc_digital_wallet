@@ -23,8 +23,7 @@ import 'package:talker/talker.dart' as _i2;
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeTalkerSettings_0 extends _i1.SmartFake
-    implements _i2.TalkerSettings {
+class _FakeTalkerSettings_0 extends _i1.SmartFake implements _i2.TalkerSettings {
   _FakeTalkerSettings_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
@@ -37,14 +36,8 @@ class MockTalker extends _i1.Mock implements _i2.Talker {
   _i2.TalkerSettings get settings =>
       (super.noSuchMethod(
             Invocation.getter(#settings),
-            returnValue: _FakeTalkerSettings_0(
-              this,
-              Invocation.getter(#settings),
-            ),
-            returnValueForMissingStub: _FakeTalkerSettings_0(
-              this,
-              Invocation.getter(#settings),
-            ),
+            returnValue: _FakeTalkerSettings_0(this, Invocation.getter(#settings)),
+            returnValueForMissingStub: _FakeTalkerSettings_0(this, Invocation.getter(#settings)),
           )
           as _i2.TalkerSettings);
 
@@ -67,10 +60,8 @@ class MockTalker extends _i1.Mock implements _i2.Talker {
           as List<_i2.TalkerData>);
 
   @override
-  set settings(_i2.TalkerSettings? value) => super.noSuchMethod(
-    Invocation.setter(#settings, value),
-    returnValueForMissingStub: null,
-  );
+  set settings(_i2.TalkerSettings? value) =>
+      super.noSuchMethod(Invocation.setter(#settings, value), returnValueForMissingStub: null);
 
   @override
   void configure({
@@ -80,16 +71,14 @@ class MockTalker extends _i1.Mock implements _i2.Talker {
     filter,
     _i2.TalkerErrorHandler? errorHandler,
     _i2.TalkerHistory? history,
-  }) => throw UnsupportedError(
-    r'"configure" cannot be used without a mockito fallback generator.',
-  );
+  }) =>
+      throw UnsupportedError(r'"configure" cannot be used without a mockito fallback generator.');
 
   @override
-  void handle(Object? exception, [StackTrace? stackTrace, dynamic msg]) =>
-      super.noSuchMethod(
-        Invocation.method(#handle, [exception, stackTrace, msg]),
-        returnValueForMissingStub: null,
-      );
+  void handle(Object? exception, [StackTrace? stackTrace, dynamic msg]) => super.noSuchMethod(
+    Invocation.method(#handle, [exception, stackTrace, msg]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void log(
@@ -102,85 +91,64 @@ class MockTalker extends _i1.Mock implements _i2.Talker {
     Invocation.method(
       #log,
       [message],
-      {
-        #logLevel: logLevel,
-        #exception: exception,
-        #stackTrace: stackTrace,
-        #pen: pen,
-      },
+      {#logLevel: logLevel, #exception: exception, #stackTrace: stackTrace, #pen: pen},
     ),
     returnValueForMissingStub: null,
   );
 
   @override
-  void logTyped(_i2.TalkerLog? log) => super.noSuchMethod(
-    Invocation.method(#logTyped, [log]),
+  void logTyped(_i2.TalkerLog? log) =>
+      super.noSuchMethod(Invocation.method(#logTyped, [log]), returnValueForMissingStub: null);
+
+  @override
+  void logCustom(_i2.TalkerLog? log) =>
+      super.noSuchMethod(Invocation.method(#logCustom, [log]), returnValueForMissingStub: null);
+
+  @override
+  void critical(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#critical, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void logCustom(_i2.TalkerLog? log) => super.noSuchMethod(
-    Invocation.method(#logCustom, [log]),
+  void debug(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#debug, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void critical(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#critical, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void debug(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#debug, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void error(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#error, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void info(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#info, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void verbose(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#verbose, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void warning(dynamic msg, [Object? exception, StackTrace? stackTrace]) =>
-      super.noSuchMethod(
-        Invocation.method(#warning, [msg, exception, stackTrace]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void cleanHistory() => super.noSuchMethod(
-    Invocation.method(#cleanHistory, []),
+  void error(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#error, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void enable() => super.noSuchMethod(
-    Invocation.method(#enable, []),
+  void info(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#info, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void disable() => super.noSuchMethod(
-    Invocation.method(#disable, []),
+  void verbose(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#verbose, [msg, exception, stackTrace]),
     returnValueForMissingStub: null,
   );
+
+  @override
+  void warning(dynamic msg, [Object? exception, StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#warning, [msg, exception, stackTrace]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void cleanHistory() =>
+      super.noSuchMethod(Invocation.method(#cleanHistory, []), returnValueForMissingStub: null);
+
+  @override
+  void enable() =>
+      super.noSuchMethod(Invocation.method(#enable, []), returnValueForMissingStub: null);
+
+  @override
+  void disable() =>
+      super.noSuchMethod(Invocation.method(#disable, []), returnValueForMissingStub: null);
 }

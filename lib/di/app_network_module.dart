@@ -69,9 +69,7 @@ abstract class AppNetworkModule {
       ),
     );
     if (EnvironmentConfig.enableLogging) {
-      dio.interceptors.add(
-        ModuleGatedInterceptor(module: 'Network', delegate: talkerDioLogger),
-      );
+      dio.interceptors.add(ModuleGatedInterceptor(module: 'Network', delegate: talkerDioLogger));
     }
     return talkerDioLogger;
   }

@@ -33,10 +33,7 @@ class LogManagerImpl implements ILogManager {
 
   @override
   ILogger getLogger(String module) {
-    return _loggers.putIfAbsent(
-      module,
-      () => LoggerImpl(module, manager: this),
-    );
+    return _loggers.putIfAbsent(module, () => LoggerImpl(module, manager: this));
   }
 
   @override
@@ -66,8 +63,7 @@ class LogManagerImpl implements ILogManager {
     return true;
   }
 
-  bool _isAppenderEnabled(String appenderId) =>
-      _appenderToggles[appenderId] ?? true;
+  bool _isAppenderEnabled(String appenderId) => _appenderToggles[appenderId] ?? true;
 
   bool _isModuleEnabled(String module) => _moduleToggles[module] ?? true;
 

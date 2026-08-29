@@ -27,11 +27,7 @@ void main() {
     });
 
     test('flat list with no parent produces one root per record', () {
-      final records = [
-        record(spanId: 'a'),
-        record(spanId: 'b'),
-        record(spanId: 'c'),
-      ];
+      final records = [record(spanId: 'a'), record(spanId: 'b'), record(spanId: 'c')];
 
       final tree = buildTraceTree(records);
 
@@ -103,9 +99,7 @@ void main() {
       final rootNode = tree.firstWhere((n) => n.record.spanId == 'a');
       expect(rootNode.children, hasLength(2));
 
-      final childNode = rootNode.children.firstWhere(
-        (n) => n.record.spanId == 'b',
-      );
+      final childNode = rootNode.children.firstWhere((n) => n.record.spanId == 'b');
       expect(childNode.children.single.record.spanId, 'd');
 
       final orphanNode = tree.firstWhere((n) => n.record.spanId == 'z');
@@ -119,11 +113,7 @@ void main() {
       // malformed input. Neither may be silently lost.
       final first = record(spanId: 'shared', message: 'first');
       final second = record(spanId: 'shared', message: 'second');
-      final child = record(
-        spanId: 'child',
-        parentSpanId: 'shared',
-        message: 'child',
-      );
+      final child = record(spanId: 'child', parentSpanId: 'shared', message: 'child');
 
       final tree = buildTraceTree([first, second, child]);
 

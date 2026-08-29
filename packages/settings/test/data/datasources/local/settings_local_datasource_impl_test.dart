@@ -48,44 +48,41 @@ void main() {
       expect(await dataSource.getCachedTranslationJson(languageCode), translations);
     });
 
-    test(
-      'treats the cache as corrupt and returns null when the saved checksum '
-      'does not match the cached JSON content (e.g. a crash desynced the '
-      'file write from the version+checksum write)',
-      () async {
-        await dataSource.saveCachedTranslationJson(languageCode, translations);
-        // Save a version+checksum pair that does NOT match `translations`,
-        // simulating the file and the version metadata having desynced.
-        await dataSource.saveCachedTranslationVersion(languageCode, '1.0.0', 'stale-checksum');
-
-        final result = await dataSource.getCachedTranslationJson(languageCode);
-
-        expect(result, isNull);
-      },
-    );
-
-    test(
-      'deletes the desynced cache entry entirely so the next read is a clean miss',
-      () async {
-        await dataSource.saveCachedTranslationJson(languageCode, translations);
-        await dataSource.saveCachedTranslationVersion(languageCode, '1.0.0', 'stale-checksum');
-
-        await dataSource.getCachedTranslationJson(languageCode);
-
-        expect(await dataSource.getCachedTranslationVersion(languageCode), isNull);
-        expect(await dataSource.getAllCachedLanguageCodes(), isNot(contains(languageCode)));
-      },
-    );
-
-    test('a cache saved before checksum tracking existed (bare version string) is not treated as corrupt', () async {
+    test('treats the cache as corrupt and returns null when the saved checksum '
+        'does not match the cached JSON content (e.g. a crash desynced the '
+        'file write from the version+checksum write)', () async {
       await dataSource.saveCachedTranslationJson(languageCode, translations);
-      // Legacy write path: a bare version string under the same key, with no checksum.
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('translation_version_$languageCode', '0.9.0');
+      // Save a version+checksum pair that does NOT match `translations`,
+      // simulating the file and the version metadata having desynced.
+      await dataSource.saveCachedTranslationVersion(languageCode, '1.0.0', 'stale-checksum');
 
       final result = await dataSource.getCachedTranslationJson(languageCode);
 
-      expect(result, translations);
+      expect(result, isNull);
     });
+
+    test('deletes the desynced cache entry entirely so the next read is a clean miss', () async {
+      await dataSource.saveCachedTranslationJson(languageCode, translations);
+      await dataSource.saveCachedTranslationVersion(languageCode, '1.0.0', 'stale-checksum');
+
+      await dataSource.getCachedTranslationJson(languageCode);
+
+      expect(await dataSource.getCachedTranslationVersion(languageCode), isNull);
+      expect(await dataSource.getAllCachedLanguageCodes(), isNot(contains(languageCode)));
+    });
+
+    test(
+      'a cache saved before checksum tracking existed (bare version string) is not treated as corrupt',
+      () async {
+        await dataSource.saveCachedTranslationJson(languageCode, translations);
+        // Legacy write path: a bare version string under the same key, with no checksum.
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('translation_version_$languageCode', '0.9.0');
+
+        final result = await dataSource.getCachedTranslationJson(languageCode);
+
+        expect(result, translations);
+      },
+    );
   });
 }

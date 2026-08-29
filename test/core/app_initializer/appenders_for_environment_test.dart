@@ -12,7 +12,9 @@ import 'package:talker_flutter/talker_flutter.dart' hide LogLevel;
 
 import 'appenders_for_environment_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<Talker>(unsupportedMembers: {#configure})])
+@GenerateNiceMocks([
+  MockSpec<Talker>(unsupportedMembers: {#configure}),
+])
 void main() {
   late MockTalker talker;
 

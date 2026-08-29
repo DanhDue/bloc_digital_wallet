@@ -180,9 +180,7 @@ void main() {
       'switches the locale and syncs the preference when the dynamic '
       'translation fetch succeeds',
       build: () {
-        when(
-          mockGetDynamicLocalizationUseCase('ja'),
-        ).thenAnswer((_) async => const Right(null));
+        when(mockGetDynamicLocalizationUseCase('ja')).thenAnswer((_) async => const Right(null));
         return bloc;
       },
       act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ja')),

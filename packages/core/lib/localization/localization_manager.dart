@@ -46,7 +46,9 @@ class LocalizationManager {
     Map<String, dynamic> mergedJson, {
     String? targetLanguageCode,
   }) async {
-    _logger.d('LocalizationManager.applyDynamicTranslations: targetLanguageCode=$targetLanguageCode');
+    _logger.d(
+      'LocalizationManager.applyDynamicTranslations: targetLanguageCode=$targetLanguageCode',
+    );
     // Nạp luôn cho Từ điển động (Dùng cho các Dynamic Keys)
     final dynamicSection = mergedJson['dynamic'] as Map<String, dynamic>? ?? {};
     DynamicTranslator.updateJson(dynamicSection);

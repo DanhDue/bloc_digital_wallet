@@ -38,56 +38,41 @@ class _FakeTraceLogger implements ILogger {
 
 void main() {
   group('TraceContextInterceptor', () {
-    test(
-      'adds a W3C-formatted traceparent header when extra["d3nexusLogger"] '
-      'holds an active ILogger',
-      () {
-        final logger = _FakeTraceLogger(
-          traceId: '0af7651916cd43dd8448eb211c80319c',
-          spanId: 'b7ad6b7169203331',
-        );
-        final options = RequestOptions(
-          path: '/wallet',
-          extra: {'d3nexusLogger': logger},
-        );
-        final interceptor = TraceContextInterceptor();
+    test('adds a W3C-formatted traceparent header when extra["d3nexusLogger"] '
+        'holds an active ILogger', () {
+      final logger = _FakeTraceLogger(
+        traceId: '0af7651916cd43dd8448eb211c80319c',
+        spanId: 'b7ad6b7169203331',
+      );
+      final options = RequestOptions(path: '/wallet', extra: {'d3nexusLogger': logger});
+      final interceptor = TraceContextInterceptor();
 
-        interceptor.onRequest(options, RequestInterceptorHandler());
+      interceptor.onRequest(options, RequestInterceptorHandler());
 
-        expect(
-          options.headers['traceparent'],
-          '00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01',
-        );
-      },
-    );
+      expect(
+        options.headers['traceparent'],
+        '00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01',
+      );
+    });
 
-    test(
-      'does not add a traceparent header when extra["d3nexusLogger"] is '
-      'absent',
-      () {
-        final options = RequestOptions(path: '/wallet');
-        final interceptor = TraceContextInterceptor();
+    test('does not add a traceparent header when extra["d3nexusLogger"] is '
+        'absent', () {
+      final options = RequestOptions(path: '/wallet');
+      final interceptor = TraceContextInterceptor();
 
-        interceptor.onRequest(options, RequestInterceptorHandler());
+      interceptor.onRequest(options, RequestInterceptorHandler());
 
-        expect(options.headers.containsKey('traceparent'), isFalse);
-      },
-    );
+      expect(options.headers.containsKey('traceparent'), isFalse);
+    });
 
-    test(
-      'does not add a traceparent header when extra["d3nexusLogger"] is '
-      'present but not an ILogger',
-      () {
-        final options = RequestOptions(
-          path: '/wallet',
-          extra: {'d3nexusLogger': 'not-a-logger'},
-        );
-        final interceptor = TraceContextInterceptor();
+    test('does not add a traceparent header when extra["d3nexusLogger"] is '
+        'present but not an ILogger', () {
+      final options = RequestOptions(path: '/wallet', extra: {'d3nexusLogger': 'not-a-logger'});
+      final interceptor = TraceContextInterceptor();
 
-        interceptor.onRequest(options, RequestInterceptorHandler());
+      interceptor.onRequest(options, RequestInterceptorHandler());
 
-        expect(options.headers.containsKey('traceparent'), isFalse);
-      },
-    );
+      expect(options.headers.containsKey('traceparent'), isFalse);
+    });
   });
 }

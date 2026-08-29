@@ -12,19 +12,10 @@ void main() {
   });
 
   test('D3NexusLogger.setModuleEnabled throws if used before initialize()', () {
-    expect(
-      () => D3NexusLogger.setModuleEnabled('wallet', false),
-      throwsA(isA<StateError>()),
-    );
+    expect(() => D3NexusLogger.setModuleEnabled('wallet', false), throwsA(isA<StateError>()));
   });
 
-  test(
-    'D3NexusLogger.setAppenderEnabled throws if used before initialize()',
-    () {
-      expect(
-        () => D3NexusLogger.setAppenderEnabled('console', false),
-        throwsA(isA<StateError>()),
-      );
-    },
-  );
+  test('D3NexusLogger.setAppenderEnabled throws if used before initialize()', () {
+    expect(() => D3NexusLogger.setAppenderEnabled('console', false), throwsA(isA<StateError>()));
+  });
 }

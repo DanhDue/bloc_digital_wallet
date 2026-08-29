@@ -92,7 +92,8 @@ class AuthInterceptor extends QueuedInterceptor {
             _talker.info(
               'AuthInterceptor: Token refreshed successfully. Retrying original request.',
             );
-            return _retry(err.requestOptions, newAccess, handler);
+            await _retry(err.requestOptions, newAccess, handler);
+            return;
           }
         } catch (e) {
           // ISSUE: Refresh Failed / Session Expired
