@@ -30,7 +30,9 @@ mixin DialogMixin {
     );
   }
 
-  void showLoadingDialog(BuildContext context) {
+  static Widget Function(BuildContext)? defaultLoadingWidgetBuilder;
+
+  void showLoadingDialog(BuildContext context, {Widget? loadingWidget}) {
     _logger.d('showLoadingDialog()');
     if (loadingDialogIsShown) {
       _logger.w('Loading dialog already shown, skipping...');
@@ -38,7 +40,20 @@ mixin DialogMixin {
     }
     loadingDialogIsShown = true;
     try {
-      _showWrapBottomSheet(context, const Center(child: CircularProgressIndicator())).whenComplete(
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => loadingWidget ?? defaultLoadingWidgetBuilder?.call(context) ?? Center(
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: const CircularProgressIndicator(),
+          ),
+        ),
+      ).whenComplete(
         () {
           // Reset state when dialog closes (if manually dismissed)
           // But usually we call hideLoadingDialog() which pops logic.

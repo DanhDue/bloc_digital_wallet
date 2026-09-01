@@ -12,6 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:settings/domain/entities/settings_entity.dart';
 // import 'package:settings/domain/usecases/get_settings_usecase.dart';
+import 'package:settings/domain/usecases/check_language_cached_usecase.dart';
 import 'package:settings/data/models/sync/available_language.dart';
 import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
 import 'package:settings/domain/usecases/update_user_language_usecase.dart';
@@ -24,18 +25,19 @@ import 'package:core/core.dart' hide test;
 import 'settings_bloc_test.mocks.dart';
 
 @GenerateMocks([
-  /* GetSettingsUseCase, */ AppInfoService,
+  AppInfoService,
   UpdateUserLanguageUseCase,
   GetAvailableLanguagesUseCase,
   GetDynamicLocalizationUseCase,
+  CheckLanguageCachedUseCase,
 ])
 void main() {
   late SettingsBloc bloc;
-  // late MockGetSettingsUseCase mockUseCase;
   late MockAppInfoService mockAppInfoService;
   late MockUpdateUserLanguageUseCase mockUpdateUserLanguageUseCase;
   late MockGetAvailableLanguagesUseCase mockGetAvailableLanguagesUseCase;
   late MockGetDynamicLocalizationUseCase mockGetDynamicLocalizationUseCase;
+  late MockCheckLanguageCachedUseCase mockCheckLanguageCachedUseCase;
 
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -43,19 +45,14 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
-
-    // LocalizationManager.setLocaleFromCode (exercised by changeLanguage
-    // tests) logs through D3NexusLogger; wire it to a no-op manager so the
-    // static facade isn't left uninitialized in this test isolate.
     D3NexusLogger.initialize(LogManagerImpl());
 
-    // mockUseCase = MockGetSettingsUseCase();
     mockAppInfoService = MockAppInfoService();
     mockUpdateUserLanguageUseCase = MockUpdateUserLanguageUseCase();
     mockGetAvailableLanguagesUseCase = MockGetAvailableLanguagesUseCase();
     mockGetDynamicLocalizationUseCase = MockGetDynamicLocalizationUseCase();
+    mockCheckLanguageCachedUseCase = MockCheckLanguageCachedUseCase();
 
-    // Default Mock Behavior
     when(mockAppInfoService.getPackageInfo()).thenAnswer(
       (_) async => PackageInfo(
         appName: 'Insight',
@@ -67,13 +64,14 @@ void main() {
     when(mockGetAvailableLanguagesUseCase()).thenAnswer((_) async => Right(<AvailableLanguage>[]));
     when(mockGetDynamicLocalizationUseCase(any)).thenAnswer((_) async => const Right(null));
     when(mockUpdateUserLanguageUseCase(any)).thenAnswer((_) async => const Right(null));
+    when(mockCheckLanguageCachedUseCase(any)).thenAnswer((_) async => true);
 
     bloc = SettingsBloc(
-      /* mockUseCase, */
       mockAppInfoService,
       mockUpdateUserLanguageUseCase,
       mockGetAvailableLanguagesUseCase,
       mockGetDynamicLocalizationUseCase,
+      mockCheckLanguageCachedUseCase,
     );
   });
 
@@ -81,29 +79,13 @@ void main() {
     bloc.close();
   });
 
-  /*
-  const tSettingsEntity = SettingsEntity(
-    id: '1',
-    userName: 'Test User',
-    email: 'test@example.com',
-    isDarkModeEnabled: true,
-    isBiometricEnabled: false,
-    selectedCurrency: 'USD',
-    isNotificationsEnabled: true,
-    isDeveloperModeEnabled: false,
-  );
-  */
-
   test('initial state should be initial', () {
     expect(bloc.state.status, SettingsStatus.initial);
   });
 
   blocTest<SettingsBloc, SettingsState>(
     'emits [loading, success] when started is added and usecase returns success',
-    build: () {
-      // when(mockUseCase()).thenAnswer((_) async => const Right(tSettingsEntity));
-      return bloc;
-    },
+    build: () => bloc,
     act: (bloc) => bloc.add(const SettingsAction.started()),
     expect: () => [
       const SettingsState(status: SettingsStatus.loading),
@@ -114,50 +96,14 @@ void main() {
     verify: (_) {
       verify(mockAppInfoService.getPackageInfo()).called(1);
       verify(mockGetAvailableLanguagesUseCase()).called(1);
-      // verify(mockUseCase()).called(1);
-    },
-  );
-
-  blocTest<SettingsBloc, SettingsState>(
-    'emits [loading, success] and emits error event when started is added and usecase returns failure',
-    build: () {
-      /*
-      when(
-        mockUseCase(),
-      ).thenAnswer((_) async => const Left(ServerFailure(message: 'Server error')));
-      */
-      return bloc;
-    },
-    act: (bloc) => bloc.add(const SettingsAction.started()),
-    expect: () => [
-      const SettingsState(status: SettingsStatus.loading),
-      isA<SettingsState>()
-          .having((s) => s.status, 'status', SettingsStatus.success)
-          .having((s) => s.uiModel?.appVersion, 'appVersion', '1.0.0'),
-    ],
-    errors: () => [], // No uncaught errors
-    verify: (_) {
-      verify(mockAppInfoService.getPackageInfo()).called(1);
-      verify(mockGetAvailableLanguagesUseCase()).called(1);
-      // verify(mockUseCase()).called(1);
-      // We cannot easily test the side effect event stream with `expectLater` inside verify
-      // comfortably with blocTest 9.1.x combined with other expectations without splitting tests
-      // or using a specific pattern.
-      // However, we can assert on the emitted states which is what we did above.
-      // For events, we could try:
-      // expectLater(bloc.events, emits(const SettingsEvent.showError(message: 'Server error')));
-      // But capturing it after `act` might be tricky if it's already emitted.
-      // `blocTest` doesn't support verifying side-effect streams directly in `expect`.
-      // We will assume state verification is sufficient for now, or use a workaround if needed.
     },
   );
 
   group('changeLanguage', () {
     blocTest<SettingsBloc, SettingsState>(
-      'switches the locale immediately (optimistic update) even when the '
-      'dynamic translation fetch fails, per the documented optimistic-UI '
-      'design in localization_management.en.md section 2.2',
+      'switches the locale immediately when language is cached (optimistic update)',
       build: () {
+        when(mockCheckLanguageCachedUseCase('ko')).thenAnswer((_) async => true);
         when(mockGetDynamicLocalizationUseCase('ko')).thenAnswer(
           (_) async => const Left(ServerFailure(message: 'Language content not available yet')),
         );
@@ -166,28 +112,56 @@ void main() {
       act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ko')),
       wait: const Duration(milliseconds: 10),
       verify: (_) {
-        // The UI-facing locale must switch even though the background fetch failed -
-        // this is the bug: gating the switch on fetch success meant a language whose
-        // dynamic content wasn't fetchable would never visibly change in the app.
         expect(LocalizationManager.instance.currentLocale.languageCode, 'ko');
-        // The background sync to the server must still happen; a failed fetch must
-        // not short-circuit the rest of the flow.
         verify(mockUpdateUserLanguageUseCase('ko')).called(1);
       },
     );
 
     blocTest<SettingsBloc, SettingsState>(
-      'switches the locale and syncs the preference when the dynamic '
-      'translation fetch succeeds',
+      'emits [loading, success] and delays UI switch when language is NOT cached',
       build: () {
+        when(mockCheckLanguageCachedUseCase('ja')).thenAnswer((_) async => false);
         when(mockGetDynamicLocalizationUseCase('ja')).thenAnswer((_) async => const Right(null));
         return bloc;
       },
       act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ja')),
       wait: const Duration(milliseconds: 10),
+      expect: () => [
+        const SettingsState(status: SettingsStatus.loading),
+        const SettingsState(status: SettingsStatus.success),
+      ],
       verify: (_) {
         expect(LocalizationManager.instance.currentLocale.languageCode, 'ja');
         verify(mockUpdateUserLanguageUseCase('ja')).called(1);
+      },
+    );
+
+    blocTest<SettingsBloc, SettingsState>(
+      'ignores outdated language requests during rapid switching (race condition fix)',
+      build: () {
+        // 'ja' is not cached, it will take some time
+        when(mockCheckLanguageCachedUseCase('ja')).thenAnswer((_) async => false);
+        when(mockGetDynamicLocalizationUseCase('ja')).thenAnswer((_) async {
+          await Future.delayed(const Duration(milliseconds: 20));
+          return const Right(null);
+        });
+
+        // 'vi' is cached (default), it should execute immediately
+        when(mockCheckLanguageCachedUseCase('vi')).thenAnswer((_) async => true);
+        when(mockGetDynamicLocalizationUseCase('vi')).thenAnswer((_) async => const Right(null));
+        return bloc;
+      },
+      act: (bloc) async {
+        bloc.add(const SettingsAction.changeLanguage(languageCode: 'ja'));
+        await Future.delayed(const Duration(milliseconds: 5));
+        bloc.add(const SettingsAction.changeLanguage(languageCode: 'vi'));
+      },
+      wait: const Duration(milliseconds: 50),
+      verify: (_) {
+        // Ensure that 'vi' won the race
+        expect(LocalizationManager.instance.currentLocale.languageCode, 'vi');
+        verifyNever(mockUpdateUserLanguageUseCase('ja'));
+        verify(mockUpdateUserLanguageUseCase('vi')).called(1);
       },
     );
   });
