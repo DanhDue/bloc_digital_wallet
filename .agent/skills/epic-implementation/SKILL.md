@@ -128,6 +128,8 @@ For each task in the confirmed order, follow `superpowers:subagent-driven-develo
    > - Async/Race conditions (e.g., User rapidly triggers the action 3 times -> only the last response should be processed).
    > - Network & Storage failures (Timeouts, 500 errors, Corrupted local DB).
    > 
+   > After defining the scenarios, you MUST perform a self-review: cross-check these scenarios against the use cases and sequence diagrams defined in the epic's documents. Ensure no requirements are missed before proceeding to Phase 2.
+   > 
    > Output this phase in a markdown block titled "### BDD SCENARIOS".
    > 
    > # PHASE 2: TDD IMPLEMENTATION (The Dev Persona)
