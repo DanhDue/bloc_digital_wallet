@@ -197,21 +197,20 @@ Future<void> _updateLocalizationInitializer(String snakeName, String camelName) 
 
   // 3. Add to _registerOverrideCallback
   if (!content.contains("await $camelName.LocaleSettings.overrideTranslationsFromMap")) {
-    final onboardBlockRegex =
-        RegExp(r"await onboard\.LocaleSettings\.overrideTranslationsFromMap\([\s\S]*?\);");
+    final onboardBlockRegex = RegExp(
+      r"await onboard\.LocaleSettings\.overrideTranslationsFromMap\([\s\S]*?\);",
+    );
     final match = onboardBlockRegex.firstMatch(content);
     if (match != null) {
-      final newBlock = '''
+      final newBlock =
+          '''
       await $camelName.LocaleSettings.overrideTranslationsFromMap(
         locale: $camelName.AppLocaleUtils.parse(rawLocale),
         isFlatMap: false,
         map: {'$snakeName': json['$snakeName'] ?? {}},
       );''';
 
-      content = content.replaceFirst(
-        match.group(0)!,
-        "${match.group(0)}\n$newBlock",
-      );
+      content = content.replaceFirst(match.group(0)!, "${match.group(0)}\n$newBlock");
       updated = true;
     }
   }
@@ -294,7 +293,8 @@ Future<void> _updateCommonRoutes(String snakeName, String pascalName, String cam
     final lastBrace = content.lastIndexOf('}', insertionPoint);
 
     if (lastBrace != -1) {
-      final newRouteConsts = '''\n\n// $pascalName
+      final newRouteConsts =
+          '''\n\n// $pascalName
   static const String $camelName = '/$camelName';
   static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
 
@@ -306,7 +306,8 @@ Future<void> _updateCommonRoutes(String snakeName, String pascalName, String cam
 
   // Add private route class at the end of file
   if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
-    final newRouteClass = '''
+    final newRouteClass =
+        '''
 
 class _${pascalName}Route extends PageRouteInfo<void> {
   const _${pascalName}Route() : super('${pascalName}Route');
@@ -344,7 +345,8 @@ Future<void> _updateFeaturePublicRoutes(
     final lastBrace = content.lastIndexOf('}', insertionPoint);
 
     if (lastBrace != -1) {
-      final newRouteConsts = '''
+      final newRouteConsts =
+          '''
 
   // $pascalName
   static const String $camelName = '/$camelName';
@@ -357,7 +359,8 @@ Future<void> _updateFeaturePublicRoutes(
 
   // Add private route class at the end of file
   if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
-    final newRouteClass = '''
+    final newRouteClass =
+        '''
 
 class _${pascalName}Route extends PageRouteInfo<void> {
   const _${pascalName}Route() : super('${pascalName}Route');

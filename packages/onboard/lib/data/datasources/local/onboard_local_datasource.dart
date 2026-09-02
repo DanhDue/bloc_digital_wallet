@@ -3,6 +3,7 @@
 // coverage:ignore-file
 
 import 'package:injectable/injectable.dart';
+
 // TODO: Uncomment when implementing
 // import '../models/onboard_model.dart';
 

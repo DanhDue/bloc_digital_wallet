@@ -23,8 +23,10 @@ import 'package:logger_native_bridge/logger_native_bridge.dart';
 
 import 'support/fake_logging.dart';
 
-const _triggerFlushChannel = 'dev.flutter.pigeon.logger_native_bridge.NativeLogHostApi.triggerFlush';
-const _onNativeLogChannel = 'dev.flutter.pigeon.logger_native_bridge.NativeLogFlutterApi.onNativeLog';
+const _triggerFlushChannel =
+    'dev.flutter.pigeon.logger_native_bridge.NativeLogHostApi.triggerFlush';
+const _onNativeLogChannel =
+    'dev.flutter.pigeon.logger_native_bridge.NativeLogFlutterApi.onNativeLog';
 
 /// Simulates a message arriving FROM native TO Dart on [channel] -- exactly
 /// what `NativeLogBridgePlugin`'s real `onNativeLog(...)` call does on the
@@ -58,58 +60,55 @@ void main() {
     );
   });
 
-  test(
-    'registerNativeLogBridge installs the onNativeLog handler before '
-    'requesting a native flush, so a drain triggered by that flush reaches '
-    'a live Dart handler instead of racing an unregistered channel',
-    () async {
-      var triggerFlushCallCount = 0;
-      ByteData? onNativeLogReply;
+  test('registerNativeLogBridge installs the onNativeLog handler before '
+      'requesting a native flush, so a drain triggered by that flush reaches '
+      'a live Dart handler instead of racing an unregistered channel', () async {
+    var triggerFlushCallCount = 0;
+    ByteData? onNativeLogReply;
 
-      // Mocks the NATIVE side of triggerFlush(): when Dart calls it, this
-      // simulates NativeLogBridgePlugin.triggerFlush()'s real behavior --
-      // drain the queue by sending a NativeLogMessage back to Dart on the
-      // onNativeLog channel, then reply success.
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        _triggerFlushChannel,
-        (ByteData? message) async {
-          triggerFlushCallCount++;
+    // Mocks the NATIVE side of triggerFlush(): when Dart calls it, this
+    // simulates NativeLogBridgePlugin.triggerFlush()'s real behavior --
+    // drain the queue by sending a NativeLogMessage back to Dart on the
+    // onNativeLog channel, then reply success.
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
+      _triggerFlushChannel,
+      (ByteData? message) async {
+        triggerFlushCallCount++;
 
-          final encodedCall = NativeLogFlutterApi.pigeonChannelCodec.encodeMessage(<Object?>[
-            NativeLogMessage(
-              level: NativeLogLevel.warning,
-              tag: 'HeadlessWorker',
-              message: 'queued while no engine was attached',
-              timestamp: 1700000000000,
-            ),
-          ]);
-          onNativeLogReply = await _simulateIncomingFromNative(_onNativeLogChannel, encodedCall);
+        final encodedCall = NativeLogFlutterApi.pigeonChannelCodec.encodeMessage(<Object?>[
+          NativeLogMessage(
+            level: NativeLogLevel.warning,
+            tag: 'HeadlessWorker',
+            message: 'queued while no engine was attached',
+            timestamp: 1700000000000,
+          ),
+        ]);
+        onNativeLogReply = await _simulateIncomingFromNative(_onNativeLogChannel, encodedCall);
 
-          return NativeLogHostApi.pigeonChannelCodec.encodeMessage(<Object?>[]);
-        },
-      );
+        return NativeLogHostApi.pigeonChannelCodec.encodeMessage(<Object?>[]);
+      },
+    );
 
-      registerNativeLogBridge();
-      // registerNativeLogBridge's triggerFlush() call is intentionally
-      // fire-and-forget (see its doc comment) -- pump the event loop so it
-      // actually runs before asserting on its effects.
-      await Future<void>.delayed(Duration.zero);
-      await Future<void>.delayed(Duration.zero);
+    registerNativeLogBridge();
+    // registerNativeLogBridge's triggerFlush() call is intentionally
+    // fire-and-forget (see its doc comment) -- pump the event loop so it
+    // actually runs before asserting on its effects.
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
 
-      expect(triggerFlushCallCount, 1);
-      expect(
-        onNativeLogReply,
-        isNotNull,
-        reason:
-            'onNativeLog must have reached a live handler when the flush fired -- a null '
-            'reply means no handler was registered yet, reproducing the exact race this '
-            'fix corrects (NativeLogFlutterApi.setUp must run BEFORE triggerFlush() is '
-            'called)',
-      );
+    expect(triggerFlushCallCount, 1);
+    expect(
+      onNativeLogReply,
+      isNotNull,
+      reason:
+          'onNativeLog must have reached a live handler when the flush fired -- a null '
+          'reply means no handler was registered yet, reproducing the exact race this '
+          'fix corrects (NativeLogFlutterApi.setUp must run BEFORE triggerFlush() is '
+          'called)',
+    );
 
-      final logger = D3NexusLogger.getLogger('Native:HeadlessWorker') as FakeLogger;
-      expect(logger.records, hasLength(1));
-      expect(logger.records.single.message, contains('queued while no engine was attached'));
-    },
-  );
+    final logger = D3NexusLogger.getLogger('Native:HeadlessWorker') as FakeLogger;
+    expect(logger.records, hasLength(1));
+    expect(logger.records.single.message, contains('queued while no engine was attached'));
+  });
 }

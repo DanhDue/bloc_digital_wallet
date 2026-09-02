@@ -118,9 +118,12 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
         await LocalizationManager.instance.setLocaleFromCode(selectedLanguage);
       }
 
-      // Fetch stale translations
+      // Fetch stale translations only for the active language to optimize cold start
+      final activeLanguageCode = LocalizationManager.instance.currentLocale.languageCode;
       for (final translationItem in response.translations ?? []) {
-        await _fetchTranslationUseCase(translationItem);
+        if (translationItem.resourceId.startsWith(activeLanguageCode)) {
+          await _fetchTranslationUseCase(translationItem);
+        }
       }
 
       // Note: Purging deleted translation keys logic can be added later

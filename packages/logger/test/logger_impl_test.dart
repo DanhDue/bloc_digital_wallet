@@ -40,9 +40,7 @@ void main() {
       final error = Exception('boom');
       final stackTrace = StackTrace.current;
 
-      manager
-          .getLogger('wallet')
-          .e('error msg', error: error, stackTrace: stackTrace);
+      manager.getLogger('wallet').e('error msg', error: error, stackTrace: stackTrace);
 
       final record = appender.received.single;
       expect(record.level, LogLevel.error);

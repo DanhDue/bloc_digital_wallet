@@ -111,7 +111,9 @@ class LocalizationInitializer implements AppInitializer {
     final savedLanguageCode = prefs.getString('saved_language_code');
 
     if (savedLanguageCode != null) {
-      _logger.d('LocalizationInitializer._loadSavedLocale: savedLanguageCode = $savedLanguageCode');
+      _logger.d(
+        'LocalizationInitializer._loadSavedLocale: savedLanguageCode = $savedLanguageCode',
+      );
       await LocalizationManager.instance.setLocaleFromCode(savedLanguageCode);
 
       // Load cached dynamic translations if available

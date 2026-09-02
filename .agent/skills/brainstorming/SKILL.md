@@ -33,38 +33,23 @@ You MUST create a task for each of these items and complete them in order:
 
 ## Process Flow
 
-```dot
-digraph brainstorming {
-    "Explore project context" [shape=box];
-    "Visual questions ahead?" [shape=diamond];
-    "Offer Visual Companion\n(own message, no other content)" [shape=box];
-    "Ask clarifying questions" [shape=box];
-    "Propose 2-3 approaches" [shape=box];
-    "Present design sections" [shape=box];
-    "User approves design?" [shape=diamond];
-    "Write design doc" [shape=box];
-    "Spec self-review\n(fix inline)" [shape=box];
-    "User reviews spec?" [shape=diamond];
-    "Epic-scale spec?" [shape=diamond];
-    "Invoke epic-designer skill" [shape=doublecircle];
-    "Invoke writing-plans skill" [shape=doublecircle];
-
-    "Explore project context" -> "Visual questions ahead?";
-    "Visual questions ahead?" -> "Offer Visual Companion\n(own message, no other content)" [label="yes"];
-    "Visual questions ahead?" -> "Ask clarifying questions" [label="no"];
-    "Offer Visual Companion\n(own message, no other content)" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Present design sections";
-    "Present design sections" -> "User approves design?";
-    "User approves design?" -> "Present design sections" [label="no, revise"];
-    "User approves design?" -> "Write design doc" [label="yes"];
-    "Write design doc" -> "Spec self-review\n(fix inline)";
-    "Spec self-review\n(fix inline)" -> "User reviews spec?";
-    "User reviews spec?" -> "Write design doc" [label="changes requested"];
-    "User reviews spec?" -> "Epic-scale spec?" [label="approved"];
-    "Epic-scale spec?" -> "Invoke epic-designer skill" [label="yes"];
-    "Epic-scale spec?" -> "Invoke writing-plans skill" [label="no"];
-}
+```mermaid
+flowchart TD
+    A["Explore project context"] --> B{"Visual questions ahead?"}
+    B -->|yes| C["Offer Visual Companion<br>(own message, no other content)"]
+    B -->|no| D["Ask clarifying questions"]
+    C --> D
+    D --> E["Propose 2-3 approaches"]
+    E --> F["Present design sections"]
+    F --> G{"User approves design?"}
+    G -->|no, revise| F
+    G -->|yes| H["Write design doc"]
+    H --> I["Spec self-review<br>(fix inline)"]
+    I --> J{"User reviews spec?"}
+    J -->|changes requested| H
+    J -->|approved| K{"Epic-scale spec?"}
+    K -->|yes| L((("Invoke epic-designer skill")))
+    K -->|no| M((("Invoke writing-plans skill")))
 ```
 
 **The terminal state is invoking either epic-designer or writing-plans — never both, and never any other implementation skill.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill directly from brainstorming.
@@ -80,17 +65,30 @@ When in doubt, ask the user which they want rather than guessing.
 
 If brainstorming decomposed the original request into multiple sub-project specs, route **each spec independently** — do not merge multiple specs into a single epic-designer invocation. Each spec keeps its own spec → design → implementation lineage.
 
+## The Brainstorming Mindset
+
+To ensure this is a true creative collaboration and not just a rigid interrogation, you MUST adopt the following mindset during the session:
+- **No Early Judgment:** Never immediately reject a user's idea as "bad practice". Postpone judgment, accept the idea, and analyze its trade-offs constructively.
+- **The "Yes, and..." Principle:** Build on the user's suggestions. Instead of just replacing their idea with yours, find ways to combine and refine them (e.g., "That's a great approach, AND we could make it even better by...").
+- **Encourage Wild Ideas:** When proposing your 2-3 approaches, do not just offer standard, safe boilerplate solutions. Always include at least one creative, unconventional, or "out-of-the-box" alternative to spark new perspectives.
+- **Reverse Brainstorming:** Use negative/reverse thinking to uncover hidden flaws. Ask yourself or the user: "How could this design fail catastrophically?", "What is the worst possible way to implement this?", or "How could a malicious user exploit this?". Use these counter-weights to bulletproof the final design.
+
 ## The Process
 
 **Understanding the idea:**
 
 - Check out the current project state first (files, docs, recent commits)
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
-- If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
+- If the project is too large for a single spec, help the user **group features into Core Epics/Themes** (e.g., Identity, Payment Gateway, Core Wallet) instead of randomly splitting them. Ask: what are the independent pieces, how do they relate, and what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
 - For appropriately-scoped projects, ask questions one at a time to refine the idea
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
-- Focus on understanding: purpose, constraints, success criteria
+- Apply the **5W1H** framework to shape clarifying questions. Focus on understanding (purpose, constraints, success criteria):
+  - **Who:** Who is the end user? Who will use or be affected by this?
+  - **Why:** Why is this feature needed? What core pain point does it solve?
+  - **What:** What is the expected final outcome? What are the technical or business constraints?
+  - **Where/When:** Where does this live in the system? In what state is it triggered?
+  - **How:** What are the acceptance criteria? How will we know if it is successful?
 
 **Exploring approaches:**
 
@@ -104,6 +102,7 @@ If brainstorming decomposed the original request into multiple sub-project specs
 - Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
 - Ask after each section whether it looks right so far
 - Cover: architecture, components, data flow, error handling, testing
+- **Dependency Mapping:** Explicitly list any assumptions, risks, and cross-feature/cross-team dependencies (e.g., "Does this feature block another one? Does it rely on a third-party API being ready?").
 - Be ready to go back and clarify if something doesn't make sense
 
 **Design for isolation and clarity:**
@@ -139,6 +138,7 @@ After writing the spec document, look at it with fresh eyes:
 2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
 4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+5. **Take a Step Back (Helicopter View):** Review the entire system holistically. Are the component boundaries logical? Do any features belong in a different epic or module? Shuffle them now before implementation begins.
 
 Fix any issues inline. No need to re-review — just fix and move on.
 

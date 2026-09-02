@@ -5,6 +5,14 @@ analyzer:
     depend_on_referenced_packages: ignore
     invalid_annotation_target: ignore
     unnecessary_import: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

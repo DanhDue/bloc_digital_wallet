@@ -10,9 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart' show immutable, protected, visibleForTesting;
 
 Object? _extractReplyValueOrThrow(
-    List<Object?>? replyList,
-    String channelName, {
-    required bool isNullValid,
+  List<Object?>? replyList,
+  String channelName, {
+  required bool isNullValid,
 }) {
   if (replyList == null) {
     throw PlatformException(
@@ -34,7 +34,6 @@ Object? _extractReplyValueOrThrow(
   return replyList.firstOrNull;
 }
 
-
 List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
   if (empty) {
     return <Object?>[];
@@ -44,6 +43,7 @@ List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty
   }
   return <Object?>[error.code, error.message, error.details];
 }
+
 bool _deepEquals(Object? a, Object? b) {
   if (identical(a, b)) {
     return true;
@@ -56,8 +56,7 @@ bool _deepEquals(Object? a, Object? b) {
   }
   if (a is List && b is List) {
     return a.length == b.length &&
-        a.indexed
-            .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
+        a.indexed.every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
   }
   if (a is Map && b is Map) {
     if (a.length != b.length) {
@@ -106,19 +105,12 @@ int _deepHash(Object? value) {
   return value.hashCode;
 }
 
-
 /// Severity of a replayed native log entry. Mirrors `LogLevel` in
 /// `package:logger` (kept as a separate enum here since Pigeon-generated
 /// types must not depend on `package:logger`'s Dart types directly — the
 /// mapping from this enum to `package:logger`'s `LogLevel` happens by hand
 /// in `lib/src/native_log_bridge.dart`).
-enum NativeLogLevel {
-  verbose,
-  debug,
-  info,
-  warning,
-  error,
-}
+enum NativeLogLevel { verbose, debug, info, warning, error }
 
 /// A single native log entry, replayed from `NativeLogQueue` into Dart.
 ///
@@ -146,17 +138,12 @@ class NativeLogMessage {
   String? traceId;
 
   List<Object?> _toList() {
-    return <Object?>[
-      level,
-      tag,
-      message,
-      timestamp,
-      traceId,
-    ];
+    return <Object?>[level, tag, message, timestamp, traceId];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NativeLogMessage decode(Object result) {
     result as List<Object?>;
@@ -178,14 +165,17 @@ class NativeLogMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(level, other.level) && _deepEquals(tag, other.tag) && _deepEquals(message, other.message) && _deepEquals(timestamp, other.timestamp) && _deepEquals(traceId, other.traceId);
+    return _deepEquals(level, other.level) &&
+        _deepEquals(tag, other.tag) &&
+        _deepEquals(message, other.message) &&
+        _deepEquals(timestamp, other.timestamp) &&
+        _deepEquals(traceId, other.traceId);
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
-
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -194,10 +184,10 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is NativeLogLevel) {
+    } else if (value is NativeLogLevel) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is NativeLogMessage) {
+    } else if (value is NativeLogMessage) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
@@ -227,12 +217,18 @@ abstract class NativeLogFlutterApi {
 
   void onNativeLog(NativeLogMessage message);
 
-  static void setUp(NativeLogFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+  static void setUp(
+    NativeLogFlutterApi? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
       final pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.logger_native_bridge.NativeLogFlutterApi.onNativeLog$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+        'dev.flutter.pigeon.logger_native_bridge.NativeLogFlutterApi.onNativeLog$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -244,8 +240,10 @@ abstract class NativeLogFlutterApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
@@ -262,8 +260,10 @@ class NativeLogHostApi {
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   NativeLogHostApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    : pigeonVar_binaryMessenger = binaryMessenger,
+      pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+          ? '.$messageChannelSuffix'
+          : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -271,7 +271,8 @@ class NativeLogHostApi {
   final String pigeonVar_messageChannelSuffix;
 
   Future<void> triggerFlush() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.logger_native_bridge.NativeLogHostApi.triggerFlush$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.logger_native_bridge.NativeLogHostApi.triggerFlush$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -280,11 +281,6 @@ class NativeLogHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 }

@@ -2,20 +2,20 @@
 
 /// A utility class for directly looking up dynamic keys from the API (e.g., Enum statuses from the server)
 /// that were not declared in Slang at compile time.
-/// 
+///
 /// **Usage Guide:**
-/// 
-/// Suppose the server returns a transaction status enum as `COMPLETED`. 
+///
+/// Suppose the server returns a transaction status enum as `COMPLETED`.
 /// You want to get the corresponding translated string from the key `transaction.status.COMPLETED`.
 /// However, this key might be added later via the Dynamic Configuration system,
 /// so Slang cannot generate the `t.transaction.status.COMPLETED` property in advance.
-/// 
+///
 /// Instead, you use `DynamicTranslator` like this:
-/// 
+///
 /// ```dart
 /// // stringKey could be "transaction.status.COMPLETED" (received dynamically from API)
 /// final translatedStr = DynamicTranslator.translate('transaction.status.COMPLETED');
-/// 
+///
 /// // If not found in the dynamic dictionary, the function will return the exact key "transaction.status.COMPLETED"
 /// ```
 class DynamicTranslator {

@@ -46,7 +46,11 @@ void main() {
     appender.append(recordWith(LogLevel.warning));
 
     final captured = verify(
-      client.log(captureAny, status: captureAnyNamed('status'), attributes: captureAnyNamed('attributes')),
+      client.log(
+        captureAny,
+        status: captureAnyNamed('status'),
+        attributes: captureAnyNamed('attributes'),
+      ),
     ).captured;
 
     expect(captured[0], 'hello world');

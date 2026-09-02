@@ -88,41 +88,38 @@ void main() {
     expect(record.message, contains('headless push happened'));
   });
 
+  test('forwarded message text preserves the ORIGINAL native timestamp, not '
+      'replay time (known gap: LogRecord.timestamp itself is replay time -- '
+      'see NativeLogBridge doc comment)', () {
+    final originalTimestampMillis = 1_700_000_000_000;
+    bridge.onNativeLog(buildMessage(timestamp: originalTimestampMillis));
+
+    final record = (D3NexusLogger.getLogger('Native:Wallet') as FakeLogger).records.single;
+    final expectedIso = DateTime.fromMillisecondsSinceEpoch(
+      originalTimestampMillis,
+      isUtc: true,
+    ).toIso8601String();
+
+    expect(record.message, contains(expectedIso));
+    // The known gap, made explicit: LogRecord.timestamp is replay time,
+    // not the original native timestamp (LoggerImpl always stamps
+    // DateTime.now() -- see packages/logger/lib/src/logger_impl.dart).
+    expect(record.timestamp.millisecondsSinceEpoch, isNot(originalTimestampMillis));
+  });
+
   test(
-    'forwarded message text preserves the ORIGINAL native timestamp, not '
-    'replay time (known gap: LogRecord.timestamp itself is replay time -- '
-    'see NativeLogBridge doc comment)',
+    'replays multiple entries in call order (FIFO), matching NativeLogBridgePlugin replay order',
     () {
-      final originalTimestampMillis = 1_700_000_000_000;
-      bridge.onNativeLog(buildMessage(timestamp: originalTimestampMillis));
+      bridge.onNativeLog(buildMessage(message: 'first'));
+      bridge.onNativeLog(buildMessage(message: 'second'));
+      bridge.onNativeLog(buildMessage(message: 'third'));
 
-      final record = (D3NexusLogger.getLogger('Native:Wallet') as FakeLogger).records.single;
-      final expectedIso = DateTime.fromMillisecondsSinceEpoch(
-        originalTimestampMillis,
-        isUtc: true,
-      ).toIso8601String();
-
-      expect(record.message, contains(expectedIso));
-      // The known gap, made explicit: LogRecord.timestamp is replay time,
-      // not the original native timestamp (LoggerImpl always stamps
-      // DateTime.now() -- see packages/logger/lib/src/logger_impl.dart).
-      expect(
-        record.timestamp.millisecondsSinceEpoch,
-        isNot(originalTimestampMillis),
-      );
+      final records = (D3NexusLogger.getLogger('Native:Wallet') as FakeLogger).records;
+      expect(records.map((r) => r.message), [
+        contains('first'),
+        contains('second'),
+        contains('third'),
+      ]);
     },
   );
-
-  test('replays multiple entries in call order (FIFO), matching NativeLogBridgePlugin replay order', () {
-    bridge.onNativeLog(buildMessage(message: 'first'));
-    bridge.onNativeLog(buildMessage(message: 'second'));
-    bridge.onNativeLog(buildMessage(message: 'third'));
-
-    final records = (D3NexusLogger.getLogger('Native:Wallet') as FakeLogger).records;
-    expect(records.map((r) => r.message), [
-      contains('first'),
-      contains('second'),
-      contains('third'),
-    ]);
-  });
 }

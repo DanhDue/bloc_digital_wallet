@@ -6,6 +6,9 @@ targets:
         enabled: true
         options:
           base_locale: en
+          translate_var: t
+          enum_name: AppLocale
+          class_name: AppTranslations
           fallback_strategy: base_locale
           input_directory: assets/locales
           input_file_pattern: .i18n.json
@@ -14,7 +17,7 @@ targets:
           output_format: single_file
           string_interpolation: dart
           translate_var_regex: '{([^}]+)}'
-          flat_map: false
+          flat_map: true
           key_case: null
           key_map_case: camel
           param_case: camel

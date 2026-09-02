@@ -84,12 +84,7 @@ class LoggerImpl implements ILogger {
   /// Identifier of the span this logger's span was created from, if any.
   final String? parentSpanId;
 
-  void _log(
-    LogLevel level,
-    String message, {
-    Object? error,
-    StackTrace? stackTrace,
-  }) {
+  void _log(LogLevel level, String message, {Object? error, StackTrace? stackTrace}) {
     manager.log(
       LogRecord(
         module: module,

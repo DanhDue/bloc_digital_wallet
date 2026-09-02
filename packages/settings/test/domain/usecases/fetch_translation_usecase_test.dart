@@ -76,44 +76,40 @@ void main() {
   });
 
   group('FetchTranslationUseCase version/checksum persistence', () {
-    test(
-      'saves the checksum of the merged JSON alongside the version, so a later '
-      'read can detect the two ever having desynced (e.g. a crash between '
-      'the file write and the version write)',
-      () async {
-        // Arrange: a full fetch (no cache yet).
-        const languageCode = 'en';
-        final item = BootstrapTranslationItem(
-          resourceId: languageCode,
-          mode: 'full',
-          latestVersion: '2.0.0',
-        );
-        final translations = <String, dynamic>{'hello': 'world'};
+    test('saves the checksum of the merged JSON alongside the version, so a later '
+        'read can detect the two ever having desynced (e.g. a crash between '
+        'the file write and the version write)', () async {
+      // Arrange: a full fetch (no cache yet).
+      const languageCode = 'en';
+      final item = BootstrapTranslationItem(
+        resourceId: languageCode,
+        mode: 'full',
+        latestVersion: '2.0.0',
+      );
+      final translations = <String, dynamic>{'hello': 'world'};
 
-        when(
-          mockRepository.getLocalizationOverrides(languageCode, sinceVersion: null, eTag: null),
-        ).thenAnswer(
-          (_) async =>
-              Right(TranslationOverrideData(version: '2.0.0', translations: translations)),
-        );
-        when(
-          mockRepository.saveCachedTranslationJson(languageCode, any),
-        ).thenAnswer((_) async => const Right(null));
-        when(
-          mockRepository.saveCachedTranslationVersion(languageCode, any, any),
-        ).thenAnswer((_) async => const Right(null));
+      when(
+        mockRepository.getLocalizationOverrides(languageCode, sinceVersion: null, eTag: null),
+      ).thenAnswer(
+        (_) async => Right(TranslationOverrideData(version: '2.0.0', translations: translations)),
+      );
+      when(
+        mockRepository.saveCachedTranslationJson(languageCode, any),
+      ).thenAnswer((_) async => const Right(null));
+      when(
+        mockRepository.saveCachedTranslationVersion(languageCode, any, any),
+      ).thenAnswer((_) async => const Right(null));
 
-        // Act
-        final result = await useCase(item);
+      // Act
+      final result = await useCase(item);
 
-        // Assert
-        expect(result.isRight(), true);
+      // Assert
+      expect(result.isRight(), true);
 
-        final expectedChecksum = ChecksumUtils.computeSha256(translations);
-        verify(
-          mockRepository.saveCachedTranslationVersion(languageCode, '2.0.0', expectedChecksum),
-        ).called(1);
-      },
-    );
+      final expectedChecksum = ChecksumUtils.computeSha256(translations);
+      verify(
+        mockRepository.saveCachedTranslationVersion(languageCode, '2.0.0', expectedChecksum),
+      ).called(1);
+    });
   });
 }

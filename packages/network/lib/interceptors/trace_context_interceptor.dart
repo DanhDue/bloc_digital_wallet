@@ -29,10 +29,7 @@ class TraceContextInterceptor extends Interceptor {
   static const String headerName = 'traceparent';
 
   @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final logger = options.extra[traceContextLoggerKey];
     if (logger is ILogger) {
       options.headers[headerName] = _buildTraceParent(logger);

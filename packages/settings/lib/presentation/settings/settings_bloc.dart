@@ -3,16 +3,12 @@
 // coverage:ignore-file
 
 import 'package:core/core.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
-import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings/data/models/sync/available_language.dart';
+import 'package:settings/domain/usecases/change_language_usecase.dart';
 import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
-import 'package:settings/domain/usecases/get_dynamic_localization_usecase.dart';
-import 'package:settings/domain/usecases/update_user_language_usecase.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 
 import 'settings_action.dart';
@@ -23,16 +19,16 @@ import 'settings_state.dart';
 class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent> {
   // final GetSettingsUseCase _getSettingsUseCase;
   final AppInfoService _appInfoService;
-  final UpdateUserLanguageUseCase _updateUserLanguageUseCase;
   final GetAvailableLanguagesUseCase _getAvailableLanguagesUseCase;
-  final GetDynamicLocalizationUseCase _getDynamicLocalizationUseCase;
+  final ChangeLanguageUseCase _changeLanguageUseCase;
+
+  String? _pendingLanguageCode;
 
   SettingsBloc(
     /* this._getSettingsUseCase, */
     this._appInfoService,
-    this._updateUserLanguageUseCase,
     this._getAvailableLanguagesUseCase,
-    this._getDynamicLocalizationUseCase,
+    this._changeLanguageUseCase,
   ) : super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
     on<SettingsActionNavigateToProfile>(_onNavigateToProfile);
@@ -69,27 +65,6 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
 
     // Emit initial state with app info visible immediately
     emit(state.copyWith(status: SettingsStatus.success, uiModel: initialUiModel));
-
-    // Fetch full settings from API in background - DISABLED
-    /*
-    final result = await _getSettingsUseCase();
-
-    result.fold(
-      (failure) {
-        // Log the error, show snackbar, and update state status
-        D3NexusLogger.getLogger('Settings').e('Failed to load settings: ${failure.message}');
-        emitEvent(SettingsEvent.showError(message: failure.message));
-        emit(state.copyWith(status: SettingsStatus.failure, errorMessage: failure.message));
-      },
-      (entity) {
-        // Merge API data with local app info
-        final uiModel = SettingsUiModel.fromEntity(
-          entity,
-        ).copyWith(appVersion: packageInfo.version, buildNumber: packageInfo.buildNumber);
-        emit(state.copyWith(status: SettingsStatus.success, uiModel: uiModel));
-      },
-    );
-    */
   }
 
   void _onToggleDarkMode(SettingsActionToggleDarkMode action, Emitter<SettingsState> emit) {
@@ -130,28 +105,32 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     SettingsActionChangeLanguage action,
     Emitter<SettingsState> emit,
   ) async {
-    // 1. Switch the locale immediately (optimistic UI update) using whatever
-    // bundled/cached translations are already available. Do NOT gate this on
-    // the backend fetch below - a language whose dynamic content isn't
-    // fetchable yet must still visibly switch in the UI.
-    await LocalizationManager.instance.setLocaleFromCode(action.languageCode);
+    final langCode = action.languageCode;
+    _pendingLanguageCode = langCode;
 
-    // 2. Fetch translation JSON for the new locale and apply dynamic override
-    // in the background. A failure here means the dynamic overrides didn't
-    // refresh, not that the language switch itself failed - surface a softer
-    // error but keep going.
-    final result = await _getDynamicLocalizationUseCase(action.languageCode);
-    if (result.isLeft()) {
-      final failure = result.fold((l) => l, (r) => null);
-      emitEvent(
-        SettingsEvent.showError(
-          message: failure?.message ?? 'Failed to refresh language content',
-        ),
-      );
-    }
+    await emit.forEach<LanguageSyncStatus>(
+      _changeLanguageUseCase(langCode),
+      onData: (status) {
+        if (_pendingLanguageCode != langCode) {
+          return state; // Ignore updates if a newer language was clicked
+        }
 
-    // 3. Call UpdateUserLanguageUseCase in background to sync preference to server
-    await _updateUserLanguageUseCase(action.languageCode);
+        switch (status) {
+          case LanguageSyncStatus.loading:
+            return state.copyWith(status: SettingsStatus.loading);
+          case LanguageSyncStatus.cachedApplied:
+          case LanguageSyncStatus.success:
+            return state.copyWith(status: SettingsStatus.success);
+          case LanguageSyncStatus.error:
+            emitEvent(
+              const SettingsEvent.showError(message: 'Failed to refresh language content'),
+            );
+            return state.copyWith(
+              status: SettingsStatus.success,
+            ); // Keep success state for UI but show toast
+        }
+      },
+    );
   }
 
   void _onNavigateToProfile(SettingsActionNavigateToProfile action, Emitter<SettingsState> emit) {

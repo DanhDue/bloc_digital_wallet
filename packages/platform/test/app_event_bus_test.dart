@@ -50,30 +50,23 @@ void main() {
       await subscription.cancel();
     });
 
-    test(
-      'multiple subscribers each independently receive a published event',
-      () async {
-        final receivedFirst = <_TestEventA>[];
-        final receivedSecond = <_TestEventA>[];
-        final subscriptionFirst = bus.on<_TestEventA>().listen(
-          receivedFirst.add,
-        );
-        final subscriptionSecond = bus.on<_TestEventA>().listen(
-          receivedSecond.add,
-        );
+    test('multiple subscribers each independently receive a published event', () async {
+      final receivedFirst = <_TestEventA>[];
+      final receivedSecond = <_TestEventA>[];
+      final subscriptionFirst = bus.on<_TestEventA>().listen(receivedFirst.add);
+      final subscriptionSecond = bus.on<_TestEventA>().listen(receivedSecond.add);
 
-        bus.publish(const _TestEventA(7));
-        await Future<void>.delayed(Duration.zero);
+      bus.publish(const _TestEventA(7));
+      await Future<void>.delayed(Duration.zero);
 
-        expect(receivedFirst, hasLength(1));
-        expect(receivedSecond, hasLength(1));
-        expect(receivedFirst.single.value, 7);
-        expect(receivedSecond.single.value, 7);
+      expect(receivedFirst, hasLength(1));
+      expect(receivedSecond, hasLength(1));
+      expect(receivedFirst.single.value, 7);
+      expect(receivedSecond.single.value, 7);
 
-        await subscriptionFirst.cancel();
-        await subscriptionSecond.cancel();
-      },
-    );
+      await subscriptionFirst.cancel();
+      await subscriptionSecond.cancel();
+    });
 
     test('publishing before any subscription does not throw', () {
       expect(() => bus.publish(const _TestEventA(99)), returnsNormally);
@@ -87,15 +80,12 @@ void main() {
       await getIt.reset();
     });
 
-    test(
-      'is resolvable via getIt after platform.configureModuleDependencies',
-      () {
-        platform.configureModuleDependencies(getIt);
+    test('is resolvable via getIt after platform.configureModuleDependencies', () {
+      platform.configureModuleDependencies(getIt);
 
-        expect(getIt.isRegistered<AppEventBus>(), isTrue);
-        expect(getIt<AppEventBus>(), isA<AppEventBus>());
-      },
-    );
+      expect(getIt.isRegistered<AppEventBus>(), isTrue);
+      expect(getIt<AppEventBus>(), isA<AppEventBus>());
+    });
 
     test('is registered as a singleton', () {
       platform.configureModuleDependencies(getIt);

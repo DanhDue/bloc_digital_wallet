@@ -10,10 +10,8 @@ class UpdateUserLanguageUseCase {
   UpdateUserLanguageUseCase();
 
   Future<Either<Failure, void>> call(String languageCode) async {
-    // 1. Set locale immediately (Optimistic UI update)
-    await LocalizationManager.instance.setLocaleFromCode(languageCode);
-
-    // 2. Call API to update user preferences on the server
+    // 1. SettingsBloc already handles optimistic UI update by calling setLocaleFromCode.
+    // We only need to call API to update user preferences on the server here.
 
     // 3. Sync translation for the new language if needed (using get_dynamic_localization_usecase)
     // Here we might just return success, and let the UI trigger the translation fetch

@@ -1,3 +1,7 @@
+# Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+# coverage:ignore-file
+
 import os
 
 file_path = ".devtool/features/todo/http_caching_etag.md"

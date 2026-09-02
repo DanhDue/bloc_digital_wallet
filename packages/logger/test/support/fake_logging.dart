@@ -40,12 +40,7 @@ class FakeLogger implements ILogger {
 
   int _spanSequence = 0;
 
-  void _log(
-    LogLevel level,
-    String message, {
-    Object? error,
-    StackTrace? stackTrace,
-  }) {
+  void _log(LogLevel level, String message, {Object? error, StackTrace? stackTrace}) {
     records.add(
       LogRecord(
         module: module,

@@ -74,3 +74,5 @@ bricks/**/hooks/.dart_tool/
 bricks/**/hooks/packages/
 .metadata
 mason-lock.json
+# Gradle local cache (per Android/Kotlin native package)
+**/android/.gradle/
