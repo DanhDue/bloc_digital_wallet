@@ -26,11 +26,27 @@ import 'package:collection/collection.dart';
 
 @RoutePage()
 class SettingsPage
-    extends BaseMviPage<SettingsBloc, SettingsAction, SettingsState, SettingsEvent> {
+    extends BaseMviPage<SettingsBloc, SettingsAction, SettingsState, SettingsEvent>
+    with DialogMixin {
   const SettingsPage({super.key});
 
   @override
   SettingsAction? get initialAction => const SettingsAction.started();
+
+  @override
+  Widget buildBody(BuildContext context) {
+    return BlocListener<SettingsBloc, SettingsState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == SettingsStatus.loading) {
+          showLoadingDialog(context, loadingWidget: const CustomLoadingWidget());
+        } else {
+          hideLoadingDialog(context);
+        }
+      },
+      child: super.buildBody(context),
+    );
+  }
 
   @override
   Widget handleState(BuildContext context, SettingsState state) {
@@ -54,10 +70,6 @@ class SettingsPage
     AppThemes? appThemes,
     SettingsTranslationsSettingsEn t,
   ) {
-    if (state.status == SettingsStatus.loading) {
-      return const Center(child: CustomLoadingWidget());
-    }
-
     if (state.status == SettingsStatus.failure) {
       return Center(
         child: Text(

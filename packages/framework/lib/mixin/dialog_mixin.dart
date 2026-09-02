@@ -43,26 +43,30 @@ mixin DialogMixin {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => loadingWidget ?? defaultLoadingWidgetBuilder?.call(context) ?? Center(
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Center(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+              ),
+              child:
+                  loadingWidget ??
+                  defaultLoadingWidgetBuilder?.call(context) ??
+                  const Padding(padding: EdgeInsets.all(24), child: CircularProgressIndicator()),
             ),
-            child: const CircularProgressIndicator(),
           ),
         ),
-      ).whenComplete(
-        () {
-          // Reset state when dialog closes (if manually dismissed)
-          // But usually we call hideLoadingDialog() which pops logic.
-          // We don't auto-reset state here because hideLoadingDialog handles it?
-          // Actually, if user dismisses it by tap outside, we should probably reset?
-          // For now keeping matching logic to what was there (empty whenComplete) but
-          // beware logic if user dismisses manually.
-        },
-      );
+      ).whenComplete(() {
+        // Reset state when dialog closes (if manually dismissed)
+        // But usually we call hideLoadingDialog() which pops logic.
+        // We don't auto-reset state here because hideLoadingDialog handles it?
+        // Actually, if user dismisses it by tap outside, we should probably reset?
+        // For now keeping matching logic to what was there (empty whenComplete) but
+        // beware logic if user dismisses manually.
+      });
     } catch (e) {
       loadingDialogIsShown = false;
       _logger.e('Failed to show loading dialog', error: e);
