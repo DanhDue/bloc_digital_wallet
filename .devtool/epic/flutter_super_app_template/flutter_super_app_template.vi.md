@@ -119,11 +119,11 @@ flowchart TD
     U3 -->|Chạy| B3["mason make pac_native_plugin --name <name> --has_ui <bool>"]
     B3 --> O3["Xuất ra packages/<name>/ với Clean Arch Kotlin/Swift"]
 
-    U4 -->|Chạy| B4["./scripts/add_native_ui.sh <name>"]
-    B4 --> O4["Tự động chèn Compose/SwiftUI + PlatformView"]
+    U4 -->|Chạy| B4["mason make pac_add_native_ui --name <name>"]
+    B4 --> O4["Tự động chèn Compose/SwiftUI + PlatformView qua Mason Hooks"]
 
-    U5 -->|Chạy| S1["./scripts/rename_project.sh <AppName> <pkg> <bundleId>"]
-    S1 --> O5["Đổi tên toàn diện & kiểm tra với melos genAlls"]
+    U5 -->|Chạy| S1["mason make pac_rename_project (hoặc ./scripts/rename_project.sh)"]
+    S1 --> O5["Đổi tên toàn diện đa nền tảng bằng Mason Dart Hook & kiểm tra với melos genAlls"]
 ```
 
 ### Sequence Diagram (Luồng nâng cấp UI)
@@ -131,24 +131,26 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor Dev as Developer
-    participant Script as scripts/add_native_ui.sh
-    participant Mason as pac_add_native_ui Brick
+    participant Mason as Mason CLI (pac_add_native_ui)
+    participant HookPre as Hook pre_gen.dart
     participant PluginDir as packages/<name>/
     participant Android as Android Source
     participant iOS as iOS Source
     participant Dart as Dart Barrel & UI
+    participant HookPost as Hook post_gen.dart
 
-    Dev->>Script: Chạy ./scripts/add_native_ui.sh <name>
-    Script->>PluginDir: Kiểm tra package tồn tại & has_ui là false
-    Script->>Mason: Gọi mason make pac_add_native_ui --name <name>
+    Dev->>Mason: mason make pac_add_native_ui --name <name>
+    Mason->>HookPre: Chạy kiểm tra ban đầu
+    HookPre->>PluginDir: Kiểm tra packages/<name> tồn tại & chưa có presentation/
     Mason->>Android: Bật Compose trong build.gradle.kts
     Mason->>Android: Sinh presentation/ (MviViewModel.kt, Screen.kt, PlatformView.kt)
-    Mason->>Android: Patch *Plugin.kt để đăng ký PlatformViewFactory
     Mason->>iOS: Sinh Presentation/ (MviViewModel.swift, View.swift, PlatformView.swift)
-    Mason->>iOS: Patch *Plugin.swift để đăng ký FlutterPlatformViewFactory
     Mason->>Dart: Sinh lib/src/ui/<name>_native_view.dart (AndroidView/UiKitView)
-    Mason->>Dart: Export view widget trong lib/<name>.dart
-    Script-->>Dev: Nâng cấp hoàn tất (Sẵn sàng code Compose & SwiftUI)
+    Mason->>HookPost: Chạy hoàn thiện & patch mã nguồn
+    HookPost->>Android: Patch *Plugin.kt để đăng ký PlatformViewFactory
+    HookPost->>iOS: Patch *Plugin.swift để đăng ký FlutterPlatformViewFactory
+    HookPost->>Dart: Export view widget trong lib/<name>.dart
+    Mason-->>Dev: Nâng cấp hoàn tất 100% bằng Mason (Sẵn sàng code Compose & SwiftUI)
 ```
 
 ---
@@ -157,14 +159,14 @@ sequenceDiagram
 
 ### Các Giai đoạn Thực thi
 1. **Giai đoạn 1 (Tái cấu trúc thư mục):** Chuyển `packages/settings` và `packages/scanner` sang `features/`. Cập nhật `melos.yaml`, root `pubspec.yaml`, và relative paths. Chạy kiểm tra `melos bootstrap` và `melos genAlls`.
-2. **Giai đoạn 2 (Hệ thống Bricks):** Xây dựng và kiểm thử `pac_mvi_feature`, `pac_library`, `pac_native_plugin`, và `pac_add_native_ui`.
+2. **Giai đoạn 2 (Hệ thống Bricks):** Xây dựng và kiểm thử `pac_mvi_feature`, `pac_library`, `pac_native_plugin`, `pac_add_native_ui`, và `pac_rename_project`.
 3. **Giai đoạn 3 (Cắt gọn Template):** Loại bỏ các package domain ví, dựng lại Shell 3 tab, dọn assets, cập nhật script kiểm tra CI.
-4. **Giai đoạn 4 (Đổi tên & Nghiệm thu):** Thử nghiệm chạy `rename_project.sh` trên branch cách ly, build kiểm thử thành công trên cả Android và iOS.
+4. **Giai đoạn 4 (Đổi tên & Nghiệm thu):** Thử nghiệm chạy `mason make pac_rename_project` trên branch cách ly, build kiểm thử thành công trên cả Android và iOS.
 
 ### Rủi ro & Biện pháp Xử lý
 - **Lỗi đường dẫn tương đối khi chuyển sang `features/`:** Chiều sâu tương đối đến `packages/` đổi thành `../../packages/*`. Biện pháp: Kiểm tra tự động bằng `dart analyze` và `melos run analyze`.
 - **Xung đột phiên bản Pigeon:** Pigeon bản mới xung đột analyzer với `theme_tailor`. Biện pháp: Ghim phiên bản Pigeon `26.3.2` tương thích với workspace.
-- **Lỗi đăng ký plugin khi đổi tên:** Đổi tên nhầm namespace plugin native có thể làm gãy bridge. Biện pháp: Khóa cứng namespace `com.danhdue.*` trong `rename_project.sh`.
+- **Lỗi đăng ký plugin khi đổi tên:** Đổi tên nhầm namespace plugin native có thể làm gãy bridge. Biện pháp: Khóa cứng namespace `com.danhdue.*` trong hook `pac_rename_project`.
 
 ---
 
@@ -176,7 +178,9 @@ sequenceDiagram
 | [Task 2](task_2_pac_mvi_feature_brick.md) | Cập nhật Brick `pac_mvi_feature` | Đích đến `features/{{name}}`, chuyển anchor sang `settings`, cập nhật hooks và bricks con. |
 | [Task 3](task_3_pac_library_brick.md) | Tạo mới Brick `pac_library` | Đích đến `packages/{{name}}`, sinh thư viện thuần Dart/Flutter và đăng ký workspace. |
 | [Task 4](task_4_pac_native_plugin_brick.md) | Tạo mới Brick `pac_native_plugin` | Clean Arch Android (Kotlin) & iOS (Swift); Pigeon cho No-UI, Compose/SwiftUI + MviViewModel cho With-UI. |
-| [Task 5](task_5_pac_add_native_ui_tool.md) | Tạo mới Brick `pac_add_native_ui` & `scripts/add_native_ui.sh` | Công cụ nâng cấp 1 chạm từ No-UI lên With-UI, tự động patch Gradle, Kotlin, Swift, Dart. |
+| [Task 5](task_5_pac_add_native_ui_tool.md) | Tạo mới Brick `pac_add_native_ui` | Brick nâng cấp 1 chạm từ No-UI lên With-UI qua Mason hooks (pre_gen/post_gen), tự động patch Gradle, Kotlin, Swift, Dart. |
 | [Task 6](task_6_template_trimming_and_shell.md) | Cắt gọn Template & Dựng lại Shell Host | Xóa 5 package domain ví, dựng Shell 3 tab (Home stub, Scanner, Settings), dọn assets, cập nhật CI gate. |
 | [Task 7](task_7_obsolete_cleanups.md) | Dọn dẹp Bricks Lỗi thời & Script Cũ | Xóa `sample`, `test_brick`, `native_feature_module`, và các script trích xuất standalone cũ. |
-| [Task 8](task_8_rename_script_and_validation.md) | Tool Đổi tên Dự án & Nghiệm thu Toàn diện | Cung cấp `scripts/rename_project.sh`, test clone/rename, chạy `melos genAlls`, build APK & iOS Runner. |
+| [Task 8](task_8_rename_project_brick_and_validation.md) | Brick `pac_rename_project` & Nghiệm thu Toàn diện | Xây dựng brick `pac_rename_project` (Dart hook cross-platform) + wrapper script, test clone/rename, chạy `melos genAlls`, build APK & iOS Runner. |
+
+

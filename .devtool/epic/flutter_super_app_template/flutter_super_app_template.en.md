@@ -119,11 +119,11 @@ flowchart TD
     U3 -->|Runs| B3["mason make pac_native_plugin --name <name> --has_ui <bool>"]
     B3 --> O3["Outputs to packages/<name>/ with Clean Arch Kotlin/Swift"]
 
-    U4 -->|Runs| B4["./scripts/add_native_ui.sh <name>"]
-    B4 --> O4["Injects Compose/SwiftUI + PlatformView into existing plugin"]
+    U4 -->|Runs| B4["mason make pac_add_native_ui --name <name>"]
+    B4 --> O4["Injects Compose/SwiftUI + PlatformView via Mason Hooks"]
 
-    U5 -->|Runs| S1["./scripts/rename_project.sh <AppName> <pkg> <bundleId>"]
-    S1 --> O5["Full project renamed & validated with melos genAlls"]
+    U5 -->|Runs| S1["mason make pac_rename_project (or ./scripts/rename_project.sh)"]
+    S1 --> O5["Full cross-platform renaming via Mason Dart Hook & validated with melos genAlls"]
 ```
 
 ### Sequence Diagram
@@ -131,24 +131,26 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor Dev as Developer
-    participant Script as scripts/add_native_ui.sh
-    participant Mason as pac_add_native_ui Brick
+    participant Mason as Mason CLI (pac_add_native_ui)
+    participant HookPre as Hook pre_gen.dart
     participant PluginDir as packages/<name>/
     participant Android as Android Source
     participant iOS as iOS Source
     participant Dart as Dart Barrel & UI
+    participant HookPost as Hook post_gen.dart
 
-    Dev->>Script: Run ./scripts/add_native_ui.sh <name>
-    Script->>PluginDir: Verify package exists & has_ui is false
-    Script->>Mason: Invoke mason make pac_add_native_ui --name <name>
+    Dev->>Mason: mason make pac_add_native_ui --name <name>
+    Mason->>HookPre: Run initial validations
+    HookPre->>PluginDir: Verify packages/<name> exists & presentation/ is absent
     Mason->>Android: Enable Compose in build.gradle.kts
     Mason->>Android: Scaffold presentation/ (MviViewModel.kt, Screen.kt, PlatformView.kt)
-    Mason->>Android: Patch *Plugin.kt to register PlatformViewFactory
     Mason->>iOS: Scaffold Presentation/ (MviViewModel.swift, View.swift, PlatformView.swift)
-    Mason->>iOS: Patch *Plugin.swift to register FlutterPlatformViewFactory
     Mason->>Dart: Generate lib/src/ui/<name>_native_view.dart (AndroidView/UiKitView)
-    Mason->>Dart: Export view widget in lib/<name>.dart
-    Script-->>Dev: Upgrade complete (Ready for Compose & SwiftUI UI development)
+    Mason->>HookPost: Finalize and patch source code
+    HookPost->>Android: Patch *Plugin.kt to register PlatformViewFactory
+    HookPost->>iOS: Patch *Plugin.swift to register FlutterPlatformViewFactory
+    HookPost->>Dart: Export view widget in lib/<name>.dart
+    Mason-->>Dev: Upgrade complete 100% via Mason (Ready for Compose & SwiftUI development)
 ```
 
 ---
@@ -157,14 +159,14 @@ sequenceDiagram
 
 ### Phased Migration
 1. **Phase 1 (Directory Migration)**: Move `packages/settings` and `packages/scanner` to `features/`. Update `melos.yaml`, root `pubspec.yaml`, and relative path imports. Validate `melos bootstrap` and `melos genAlls`.
-2. **Phase 2 (Bricks Suite)**: Build and test `pac_mvi_feature`, `pac_library`, `pac_native_plugin`, and `pac_add_native_ui`. Verify output against existing code standards.
+2. **Phase 2 (Bricks Suite)**: Build and test `pac_mvi_feature`, `pac_library`, `pac_native_plugin`, `pac_add_native_ui`, and `pac_rename_project`. Verify output against existing code standards.
 3. **Phase 3 (Template Trimming)**: Remove obsolete wallet domain packages, rebuild Shell 3 tabs, clean assets, update boundary scripts.
-4. **Phase 4 (Validation & Renaming)**: Execute `rename_project.sh` on an isolated branch, verifying compilation across Android and iOS.
+4. **Phase 4 (Validation & Renaming)**: Execute `mason make pac_rename_project` on an isolated branch, verifying compilation across Android and iOS.
 
 ### Risks & Mitigations
 - **Relative Path Breakages during Restructuring**: Moving features from `packages/` to `features/` changes relative import depth to `../../packages/*`. Mitigation: Validate with `dart analyze` and `melos run analyze`.
 - **Pigeon Version Alignment**: Conflicting analyzer constraints when using newer Pigeon releases. Mitigation: Keep Pigeon pinned to compatible workspace ceiling (`26.3.2`).
-- **Vendor Plugin Breakage on Rename**: Renaming native plugins could break FFI/MethodChannel bindings. Mitigation: Lock `com.danhdue.*` namespaces in `rename_project.sh`.
+- **Vendor Plugin Breakage on Rename**: Renaming native plugins could break FFI/MethodChannel bindings. Mitigation: Lock `com.danhdue.*` namespaces in `pac_rename_project` hook.
 
 ---
 
@@ -176,7 +178,8 @@ sequenceDiagram
 | [Task 2](task_2_pac_mvi_feature_brick.md) | Brick `pac_mvi_feature` Update | Target `features/{{name}}`, anchor to `settings`, update hooks and companion bricks. |
 | [Task 3](task_3_pac_library_brick.md) | Brick `pac_library` Creation | Target `packages/{{name}}`, pure Dart/Flutter library scaffolding and workspace registration. |
 | [Task 4](task_4_pac_native_plugin_brick.md) | Brick `pac_native_plugin` Creation | Android (Kotlin) & iOS (Swift) Clean Arch; Pigeon for headless, Compose/SwiftUI + MviViewModel for UI. |
-| [Task 5](task_5_pac_add_native_ui_tool.md) | Brick `pac_add_native_ui` & `scripts/add_native_ui.sh` | One-click headless to UI upgrade, patching Gradle, Kotlin, Swift, and Dart barrel. |
+| [Task 5](task_5_pac_add_native_ui_tool.md) | Brick `pac_add_native_ui` Creation | One-click headless to UI upgrade via Mason hooks (pre_gen/post_gen), patching Gradle, Kotlin, Swift, Dart. |
 | [Task 6](task_6_template_trimming_and_shell.md) | Template Trimming & Shell Reconstitution | Purge wallet packages, rebuild Shell 3 tabs (Home stub, Scanner, Settings), clean assets, update CI gate. |
 | [Task 7](task_7_obsolete_cleanups.md) | Obsolete Bricks & Standalone Scripts Cleanup | Remove legacy `sample`, `test_brick`, `native_feature_module`, and standalone extraction scripts. |
-| [Task 8](task_8_rename_script_and_validation.md) | Project Renaming Tool & Full Validation | Implement `scripts/rename_project.sh`, test clone/rename, run `melos genAlls`, build APK and iOS Runner. |
+| [Task 8](task_8_rename_project_brick_and_validation.md) | Brick `pac_rename_project` & Full Validation | Implement `pac_rename_project` (cross-platform Dart hook) + wrapper script, test clone/rename, run `melos genAlls`, build APK and iOS Runner. |
+

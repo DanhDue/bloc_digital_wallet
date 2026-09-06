@@ -213,24 +213,39 @@ packages/{{name}}/
 
 ### 4.4 Brick 4: `pac_add_native_ui` (Cơ chế Nâng cấp một chạm từ No-UI sang With-UI)
 * **Mục đích:** Nâng cấp một package native đang là Headless (`has_ui: false`) thành có giao diện Native (`has_ui: true`) mà không làm hỏng mã `domain/`, `data/`, hay `pigeons/` đang có.
-* **Cách thực thi:**
+* **Cách thực thi thuần túy qua Mason:**
   ```bash
-  ./scripts/add_native_ui.sh <package_name>
-  # Hoặc trực tiếp qua Mason:
   mason make pac_add_native_ui --name <package_name>
   ```
-* **Các tác vụ tự động:**
-  1. **Android:**
-     - Cập nhật `build.gradle.kts` bổ sung `buildFeatures { compose = true }` và Compose dependencies.
-     - Sinh thư mục `presentation/` (Base `MviViewModel.kt`, Compose Screen, Action/State/Event, PlatformView).
-     - Hook tự động patch file `*Plugin.kt` để đăng ký `PlatformViewFactory`.
-  2. **iOS:**
-     - Sinh thư mục `Presentation/` (Base `MviViewModel.swift`, SwiftUI View, Action/State/Event, FlutterPlatformView).
-     - Hook tự động patch file `*Plugin.swift` để đăng ký `FlutterPlatformViewFactory`.
-  3. **Flutter (Dart):**
+* **Các tác vụ tự động qua Mason Hooks:**
+  1. **Hook `pre_gen.dart`:** Kiểm tra `packages/{{name}}/` tồn tại, kiểm tra chưa có `presentation/` để tránh ghi đè.
+  2. **Template `__brick__/`:**
+     - Sinh `presentation/` trên Android (Base `MviViewModel.kt`, Compose Screen, Action/State/Event, PlatformView).
+     - Sinh `Presentation/` trên iOS (Base `MviViewModel.swift`, SwiftUI View, Action/State/Event, FlutterPlatformView).
      - Sinh `lib/src/ui/{{name}}_native_view.dart` (Widget bọc `AndroidView` và `UiKitView`).
-     - Tự động thêm dòng export vào barrel file `lib/{{name}}.dart`.
-  4. **An toàn & Idempotent:** Báo lỗi nếu package chưa tồn tại; cảnh báo nếu package đã có UI, tuyệt đối không ghi đè mất mát code hiện có.
+  3. **Hook `post_gen.dart`:**
+     - Tự động bổ sung `buildFeatures { compose = true }` vào `build.gradle.kts`.
+     - Patch `*Plugin.kt` đăng ký `PlatformViewFactory`.
+     - Patch `*Plugin.swift` đăng ký `FlutterPlatformViewFactory`.
+     - Thêm dòng export vào barrel file `lib/{{name}}.dart`.
+
+---
+
+### 4.5 Brick 5: `pac_rename_project` (Công cụ Đổi tên Dự án Cross-Platform)
+* **Mục đích:** Đổi tên toàn bộ dự án (package name, app display name, bundle ID, imports) thông qua Dart script trong Mason hook `post_gen.dart` — hoạt động mượt mà trên macOS, Linux, và Windows (tránh lỗi cú pháp `sed` giữa BSD và GNU).
+* **Cách thực thi:**
+  ```bash
+  mason make pac_rename_project --app_name "New App" --package_name "new_app" --bundle_id "com.company.newapp"
+  # Hoặc thông qua wrapper script tiện lợi:
+  ./scripts/rename_project.sh "New App" new_app com.company.newapp
+  ```
+* **Tác vụ tự động:**
+  - Thay đổi tên package và namespace trong `pubspec.yaml` (root), `melos.yaml`.
+  - Thay đổi toàn bộ import `package:bloc_digital_wallet/...` thành `package:<package_name>/...`.
+  - Thay đổi `applicationId` (Android `app/build.gradle.kts`) và Bundle Identifier (iOS `project.pbxproj` / `.xcconfig`).
+  - Thay đổi tên hiển thị app (`AndroidManifest.xml`, `Info.plist`).
+  - **Bảo toàn Vendor Plugin Namespace:** Giữ nguyên `com.danhdue.*` của các plugin native nội bộ (`native_security`, `logger_native_bridge`).
+  - Tự động thực thi `melos genAlls`.
 
 ---
 
@@ -246,23 +261,6 @@ packages/{{name}}/
 3. **Dọn dẹp tài liệu spec:**
    - Hợp nhất và cập nhật spec trong `.devtool/epic/flutter_super_app_template/`.
    - Xóa bỏ các thư mục epic tạm `template_android` và `template_ios`.
-
----
-
-## 6. Script Đổi tên Template (`scripts/rename_project.sh`)
-
-Script đổi tên là điểm vào duy nhất sau khi clone template Flutter:
-1. Nhận tham số: `./scripts/rename_project.sh <NewAppName> <new_package_name> <new.bundle.id>`
-2. Thay đổi tên package và namespace trong:
-   - Root `pubspec.yaml`, `melos.yaml`.
-   - Toàn bộ các câu lệnh import `package:bloc_digital_wallet/...` trong `lib/`, `features/`, `packages/`.
-   - `applicationId` và namespace trong Android `app/build.gradle.kts`.
-   - Bundle Identifier và Display Name trong iOS `project.pbxproj` / `.xcconfig` / `Info.plist`.
-3. **Bảo toàn Vendor Plugin Namespace:**
-   - Giữ nguyên namespace `com.danhdue.*` của các plugin native nội bộ (`native_security`, `logger_native_bridge`) để tránh làm gãy native registration.
-4. Tự động chạy `melos genAlls` để tái sinh toàn bộ router, DI, và slang translations theo tên mới.
-
----
 
 ## 7. Kế hoạch Triển khai (Migration Roadmap)
 
