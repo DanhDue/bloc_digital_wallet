@@ -1,13 +1,13 @@
 ---
 id: "task_5_pac_add_native_ui_tool"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-06T18:05:00.000Z"
-modified: "2026-09-06T18:05:00.000Z"
-completedAt: null
+modified: "2026-09-06T18:45:00.000Z"
+completedAt: "2026-09-06T18:45:00.000Z"
 labels: ["mason", "native", "tooling"]
 order: "a5"
 ---
@@ -46,20 +46,20 @@ Executing 100% of validation and patching inside Dart Mason hooks (`pre_gen.dart
 Applicable skills: `writing-skills`, `systematic-debugging`.
 
 ## TDD Checklist
-- [ ] **RED**:
-  - [ ] Generate a headless plugin: `mason make pac_native_plugin --name demo_upgrade --has_ui false`.
-  - [ ] Assert that `demo_upgrade` lacks `presentation/` and `_native_view.dart`.
-- [ ] **GREEN**:
-  - [ ] Implement `bricks/pac_add_native_ui` (brick.yaml, pre_gen.dart, __brick__, post_gen.dart).
-  - [ ] Register in `mason.yaml` and run `mason get`.
-  - [ ] Run `mason make pac_add_native_ui --name demo_upgrade`.
-  - [ ] Verify `android/` has Compose enabled, `presentation/` created, and `*Plugin.kt` patched.
-  - [ ] Verify `ios/` has `Presentation/` created and `*Plugin.swift` patched.
-  - [ ] Verify `lib/demo_upgrade.dart` exports the new native view widget.
-- [ ] **REFACTOR**:
-  - [ ] Run `dart analyze packages/demo_upgrade` to confirm zero lint errors.
-  - [ ] Test idempotency: re-run `mason make pac_add_native_ui --name demo_upgrade` and assert that `pre_gen.dart` safely rejects overwriting.
-  - [ ] Clean up `packages/demo_upgrade/` and revert `pubspec.yaml`.
+- [x] **RED**:
+  - [x] Generate a headless plugin: `mason make pac_native_plugin --name demo_upgrade --has_ui false`.
+  - [x] Assert that `demo_upgrade` lacks `presentation/` and `_native_view.dart`.
+- [x] **GREEN**:
+  - [x] Implement `bricks/pac_add_native_ui` (brick.yaml, pre_gen.dart, __brick__, post_gen.dart).
+  - [x] Register in `mason.yaml` and run `mason get`.
+  - [x] Run `mason make pac_add_native_ui --name demo_upgrade`.
+  - [x] Verify `android/` has Compose enabled, `presentation/` created, and `*Plugin.kt` patched.
+  - [x] Verify `ios/` has `Presentation/` created and `*Plugin.swift` patched.
+  - [x] Verify `lib/demo_upgrade.dart` exports the new native view widget.
+- [x] **REFACTOR**:
+  - [x] Run `dart analyze packages/demo_upgrade` to confirm zero lint errors.
+  - [x] Test idempotency: re-run `mason make pac_add_native_ui --name demo_upgrade` and assert that `pre_gen.dart` safely rejects overwriting.
+  - [x] Clean up `packages/demo_upgrade/` and revert `pubspec.yaml`.
 
 ## Definition of Done (DoD)
 1. `mason make pac_add_native_ui --name <name>` successfully upgrades a headless package to have native UI.

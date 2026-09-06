@@ -1,0 +1,12 @@
+name: pac_add_native_ui
+description: Upgrades a headless native plugin to include native UI (Jetpack Compose & SwiftUI) with MVI architecture.
+version: 0.1.0+1
+
+environment:
+  mason: ">=0.1.0-dev.26 <1.0.0"
+
+vars:
+  name:
+    type: string
+    description: The name of the native plugin package (e.g. biometric_auth).
+    prompt: What is the plugin package name?
