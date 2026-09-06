@@ -12,11 +12,16 @@ import '{{subfeature_name.snakeCase()}}_event.dart';
 import '{{subfeature_name.snakeCase()}}_state.dart';
 
 @RoutePage()
-class {{subfeature_name.pascalCase()}}Page extends BaseMviPage<{{subfeature_name.pascalCase()}}Bloc, {{subfeature_name.pascalCase()}}State, {{subfeature_name.pascalCase()}}Event> {
+class {{subfeature_name.pascalCase()}}Page extends BaseMviPage<
+  {{subfeature_name.pascalCase()}}Bloc,
+  {{subfeature_name.pascalCase()}}Action,
+  {{subfeature_name.pascalCase()}}State,
+  {{subfeature_name.pascalCase()}}Event
+> {
   const {{subfeature_name.pascalCase()}}Page({super.key});
 
   @override
-  BaseAction? get initialAction => const {{subfeature_name.pascalCase()}}Action.started();
+  {{subfeature_name.pascalCase()}}Action? get initialAction => const {{subfeature_name.pascalCase()}}Action.started();
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {

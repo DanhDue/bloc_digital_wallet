@@ -17,6 +17,6 @@ class {{name.pascalCase()}}RemoteDataSource with SafeCallApiMixin {
 
   Future<Either<Failure, {{name.pascalCase()}}Entity>> get{{name.pascalCase()}}() async {
     final result = await safeApiCall(() => _client.get{{name.pascalCase()}}());
-    return result.map((model) => model.toEntity());
+    return result.map(({{name.pascalCase()}}Model model) => model.toEntity());
   }
 }

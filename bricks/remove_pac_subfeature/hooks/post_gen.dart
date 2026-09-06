@@ -20,12 +20,14 @@ Future<void> run(HookContext context) async {
   );
 
   try {
+    final targetDir = _getTargetDir(snakePackage);
+
     // 1. Delete subfeature-specific files (NOT separate repository/datasource/client)
     final filesToDelete = [
-      'packages/$snakePackage/lib/presentation/$snakeSubfeature',
-      'packages/$snakePackage/lib/data/models/${snakeSubfeature}_model.dart',
-      'packages/$snakePackage/lib/domain/entities/${snakeSubfeature}_entity.dart',
-      'packages/$snakePackage/lib/domain/usecases/get_${snakeSubfeature}_usecase.dart',
+      '$targetDir/lib/presentation/$snakeSubfeature',
+      '$targetDir/lib/data/models/${snakeSubfeature}_model.dart',
+      '$targetDir/lib/domain/entities/${snakeSubfeature}_entity.dart',
+      '$targetDir/lib/domain/usecases/get_${snakeSubfeature}_usecase.dart',
     ];
 
     for (final path in filesToDelete) {
@@ -81,10 +83,13 @@ Future<void> run(HookContext context) async {
 
     // Only rebuild the affected package using genFeature
     context.logger.info('Rebuilding $snakePackage package...');
-    final packageResult = await Process.run('melos', [
-      'genFeature',
-      snakePackage,
-    ], runInShell: true);
+    final packageResult = await Process.run(
+        'melos',
+        [
+          'genFeature',
+          snakePackage,
+        ],
+        runInShell: true);
     if (packageResult.exitCode == 0) {
       context.logger.success('Rebuild completed successfully.');
     } else {
@@ -95,6 +100,13 @@ Future<void> run(HookContext context) async {
   }
 }
 
+String _getTargetDir(String snakePackage) {
+  if (Directory('features/$snakePackage').existsSync()) {
+    return 'features/$snakePackage';
+  }
+  return 'packages/$snakePackage';
+}
+
 /// Remove method from parent's repository interface
 Future<void> _removeFromRepositoryInterface(
   String snakePackage,
@@ -103,7 +115,7 @@ Future<void> _removeFromRepositoryInterface(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/domain/repositories/${snakePackage}_repository.dart',
+    '${_getTargetDir(snakePackage)}/lib/domain/repositories/${snakePackage}_repository.dart',
   );
   if (!file.existsSync()) return;
 
@@ -132,7 +144,7 @@ Future<void> _removeFromRepositoryImpl(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/data/repositories/${snakePackage}_repository_impl.dart',
+    '${_getTargetDir(snakePackage)}/lib/data/repositories/${snakePackage}_repository_impl.dart',
   );
   if (!file.existsSync()) return;
 
@@ -191,7 +203,7 @@ Future<void> _removeFromRemoteDataSource(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/data/datasources/remote/${snakePackage}_remote_datasource.dart',
+    '${_getTargetDir(snakePackage)}/lib/data/datasources/remote/${snakePackage}_remote_datasource.dart',
   );
   if (!file.existsSync()) return;
 
@@ -243,7 +255,7 @@ Future<void> _removeFromClient(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/data/datasources/remote/${snakePackage}_client.dart',
+    '${_getTargetDir(snakePackage)}/lib/data/datasources/remote/${snakePackage}_client.dart',
   );
   if (!file.existsSync()) return;
 
@@ -283,7 +295,7 @@ Future<void> _removeFromClient(
 }
 
 Future<void> _removeExports(String snakePackage, String snakeSubfeature) async {
-  final file = File('packages/$snakePackage/lib/$snakePackage.dart');
+  final file = File('${_getTargetDir(snakePackage)}/lib/$snakePackage.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();
@@ -312,7 +324,7 @@ Future<void> _removeRoute(
   String pascalPackage,
   String camelSubfeature,
 ) async {
-  final file = File('packages/$snakePackage/lib/${snakePackage}_router.dart');
+  final file = File('${_getTargetDir(snakePackage)}/lib/${snakePackage}_router.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();

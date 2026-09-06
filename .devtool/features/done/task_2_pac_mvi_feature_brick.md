@@ -1,13 +1,13 @@
 ---
 id: "task_2_pac_mvi_feature_brick"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-06T18:05:00.000Z"
-modified: "2026-09-06T18:05:00.000Z"
-completedAt: null
+modified: "2026-09-06T18:27:00.000Z"
+completedAt: "2026-09-06T18:27:00.000Z"
 labels: ["mason", "tooling"]
 order: "a2"
 ---

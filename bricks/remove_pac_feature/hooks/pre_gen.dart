@@ -11,21 +11,28 @@ Future<void> run(HookContext context) async {
   final pascalCaseName = name.pascalCase;
   final camelCaseName = name.camelCase;
 
-  final progress = context.logger.progress('Removing package $name...');
+  final progress = context.logger.progress('Removing feature $name...');
 
   try {
-    // 1. Check if package exists
-    final packageDir = Directory('packages/$snakeCaseName');
-    if (!packageDir.existsSync()) {
-      progress.fail('Package packages/$snakeCaseName does not exist!');
-      return;
+    // 1. Check if feature exists in features/ or legacy packages/
+    Directory featureDir = Directory('features/$snakeCaseName');
+    if (!featureDir.existsSync()) {
+      final legacyDir = Directory('packages/$snakeCaseName');
+      if (legacyDir.existsSync()) {
+        featureDir = legacyDir;
+      } else {
+        progress.fail('Feature $name does not exist in features/ or packages/!');
+        return;
+      }
     }
 
-    // 2. Confirm with user
-    final confirm = context.logger.confirm(
-      'Are you sure you want to remove packages/$snakeCaseName and all its registrations?',
-      defaultValue: false,
-    );
+    // 2. Confirm with user if interactive terminal is available
+    final bool confirm = stdout.hasTerminal
+        ? context.logger.confirm(
+            'Are you sure you want to remove ${featureDir.path} and all its registrations?',
+            defaultValue: false,
+          )
+        : true;
 
     if (!confirm) {
       progress.cancel();
@@ -48,32 +55,32 @@ Future<void> run(HookContext context) async {
     // 6. Update packages/platform/lib/deep_link_routes.dart - remove lines
     await _cleanFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 7. Update packages/network/lib/app_uri.dart - remove constant
-    await _cleanAppUri(snakeCaseName, camelCaseName);
-
-    // 6. Update pubspec.yaml workspace - remove package from workspace list
+    // 7. Update pubspec.yaml workspace - remove package from workspace list
     await _cleanPubspecWorkspace(snakeCaseName);
 
-    // Auto-remove from dependencies if present
+    // 8. Auto-remove from dependencies if present
     await _cleanPubspecDependencies(snakeCaseName);
 
-    // 7. Delete the package directory
-    await packageDir.delete(recursive: true);
-    context.logger.info('Deleted packages/$snakeCaseName');
+    // 9. Delete the feature directory
+    await featureDir.delete(recursive: true);
+    context.logger.info('Deleted ${featureDir.path}');
 
-    // 8. Run Melos commands
+    // 10. Run Melos commands
     progress.update('Running melos bootstrap...');
     await _runCommand('melos', ['bootstrap'], context.logger);
 
     progress.update('Running code generation on root app...');
-    await _runCommand('fvm', [
-      'flutter',
-      'pub',
-      'run',
-      'build_runner',
-      'build',
-      '--delete-conflicting-outputs',
-    ], context.logger);
+    await _runCommand(
+        'fvm',
+        [
+          'flutter',
+          'pub',
+          'run',
+          'build_runner',
+          'build',
+          '--delete-conflicting-outputs',
+        ],
+        context.logger);
 
     progress.update('Running formatting and analysis...');
     await _runCommand('melos', ['run', 'dartfmt'], context.logger);
@@ -81,9 +88,9 @@ Future<void> run(HookContext context) async {
     await _runCommand('melos', ['run', 'add-license-header'], context.logger);
     await _runCommand('melos', ['run', 'analyze'], context.logger);
 
-    progress.complete('Package $name removed successfully!');
+    progress.complete('Feature $name removed successfully!');
   } catch (e) {
-    progress.fail('Failed to remove package $name: $e');
+    progress.fail('Failed to remove feature $name: $e');
   }
 }
 
@@ -93,15 +100,14 @@ Future<void> _cleanInjection(String snakeName, String camelName) async {
 
   var content = await file.readAsString();
 
-  // Remove import line: import 'package:promo/promo.dart' as promo;
   content = content.replaceAll(
     RegExp('^import \'package:$snakeName/$snakeName.dart\'.*\\n', multiLine: true),
     '',
   );
 
-  // Remove configuration line: promo.configureModuleDependencies(getIt);
   content = content.replaceAll(
-    RegExp('^\\s*$camelName\\.configureModuleDependencies\\(getIt\\);.*\\n', multiLine: true),
+    RegExp('^\\s*(await\\s+)?($camelName|$snakeName)\\.configureModuleDependencies\\(getIt\\);.*\\n',
+        multiLine: true),
     '',
   );
 
@@ -114,16 +120,14 @@ Future<void> _cleanTranslationProviders(String snakeName, String camelName) asyn
 
   var content = await file.readAsString();
 
-  // Remove import line
   content = content.replaceAll(
     RegExp('^import \'package:$snakeName/$snakeName.dart\'.*\\n', multiLine: true),
     '',
   );
 
-  // Remove provider line: ({required child}) => promo.TranslationProvider(child: child),
   content = content.replaceAll(
     RegExp(
-      '^\\s*\\(\\{required child\\}\\) => $camelName\\.TranslationProvider.*\\n',
+      '^\\s*\\(\\{required child\\}\\) => ($camelName|$snakeName)\\.TranslationProvider.*\\n',
       multiLine: true,
     ),
     '',
@@ -138,24 +142,21 @@ Future<void> _cleanLocalizationInitializer(String snakeName, String camelName) a
 
   var content = await file.readAsString();
 
-  // Remove import
   content = content.replaceAll(
     RegExp('^import \'package:$snakeName/generated/translations.dart\'.*\\n', multiLine: true),
     '',
   );
 
-  // Remove from _registerSyncLocaleCallback
   content = content.replaceAll(
     RegExp(
-      '^\\s*$camelName\\.LocaleSettings\\.setLocaleRaw\\(rawLocale\\);\\s*\\n',
+      '^\\s*($camelName|$snakeName)\\.LocaleSettings\\.setLocaleRaw\\(rawLocale\\);\\s*\\n',
       multiLine: true,
     ),
     '',
   );
 
-  // Remove from _registerOverrideCallback
   final overridePattern = RegExp(
-    '^\\s*await $camelName\\.LocaleSettings\\.overrideTranslationsFromMap\\([\\s\\S]*?\\);\\s*\\n',
+    '^\\s*await ($camelName|$snakeName)\\.LocaleSettings\\.overrideTranslationsFromMap\\([\\s\\S]*?\\);\\s*\\n',
     multiLine: true,
   );
   content = content.replaceAll(overridePattern, '');
@@ -169,28 +170,24 @@ Future<void> _cleanAppRouter(String snakeName, String pascalName, String camelNa
 
   var content = await file.readAsString();
 
-  // Remove import line
   content = content.replaceAll(
     RegExp('^import \'package:$snakeName/$snakeName.dart\'.*\\n', multiLine: true),
     '',
   );
 
-  // Remove export line
   content = content.replaceAll(
     RegExp('^export \'package:$snakeName/${snakeName}_router.dart\'.*\\n', multiLine: true),
     '',
   );
 
-  // Remove router instance line
   content = content.replaceAll(
     RegExp(
-      '^\\s*final _${camelName}Router = $camelName\\.${pascalName}Router\\(\\);.*\\n',
+      '^\\s*final _${camelName}Router = ($camelName|$snakeName)\\.${pascalName}Router\\(\\);.*\\n',
       multiLine: true,
     ),
     '',
   );
 
-  // Remove routes spread line
   content = content.replaceAll(
     RegExp('^\\s*\\.\\.\\._${camelName}Router\\.routes,.*\\n', multiLine: true),
     '',
@@ -205,8 +202,8 @@ Future<void> _cleanPubspecWorkspace(String snakeName) async {
 
   var content = await file.readAsString();
 
-  // Remove workspace entry line: - packages/promo
-  content = content.replaceAll(RegExp('^\\s*- packages/$snakeName\\s*\\n', multiLine: true), '');
+  content = content.replaceAll(
+      RegExp('^\\s*- (features|packages)/$snakeName\\s*\\n', multiLine: true), '');
 
   await file.writeAsString(content);
 }
@@ -217,22 +214,38 @@ Future<void> _cleanPubspecDependencies(String snakeName) async {
 
   var content = await file.readAsString();
 
-  // Remove dependency block:
-  //   promo:
-  //     path: packages/promo
-
-  // Match the key line "  promo:"
-  // and the following path line "    path: packages/promo"
-  // ensuring we handle indentation and newlines strictly.
   final dependencyPattern = RegExp(
-    '^\\s*$snakeName:\\s*\\n\\s*path: packages/$snakeName\\s*\\n',
+    '^\\s*$snakeName:\\s*\\n\\s*path: (features|packages)/$snakeName\\s*\\n',
     multiLine: true,
   );
   content = content.replaceAll(dependencyPattern, '');
 
-  // NOTE: If there was a blank line AFTER this block, it remains, preserving separation.
-  // If there was no blank line and we wanted one, this simple removal might not add it,
-  // but it won't eat the previous newline like \s* did.
+  await file.writeAsString(content);
+}
+
+Future<void> _cleanFeaturePublicRoutes(
+  String snakeName,
+  String pascalName,
+  String camelName,
+) async {
+  final file = File('packages/platform/lib/deep_link_routes.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+
+  final publicRoutePattern = RegExp('''
+  // $pascalName
+  static const String $camelName = '/$camelName';
+  static const PageRouteInfo ${camelName}Route = _${pascalName}Route\\(\\);
+''', multiLine: true);
+  content = content.replaceAll(publicRoutePattern, '');
+
+  final privateClassPattern = RegExp('''
+class _${pascalName}Route extends PageRouteInfo<void> \\{
+  const _${pascalName}Route\\(\\) : super\\('${pascalName}Route'\\);
+\\}
+''', multiLine: true);
+  content = content.replaceAll(privateClassPattern, '');
 
   await file.writeAsString(content);
 }
@@ -248,49 +261,4 @@ Future<void> _runCommand(String command, List<String> args, Logger logger) async
   } else {
     logger.detail(result.stdout.toString());
   }
-}
-
-Future<void> _cleanFeaturePublicRoutes(
-  String snakeName,
-  String pascalName,
-  String camelName,
-) async {
-  final file = File('packages/platform/lib/deep_link_routes.dart');
-  if (!file.existsSync()) return;
-
-  var content = await file.readAsString();
-
-  // Remove public constants
-  final publicRoutePattern = RegExp('''
-  // $pascalName
-  static const String $camelName = '/$camelName';
-  static const PageRouteInfo ${camelName}Route = _${pascalName}Route\\(\\);
-''', multiLine: true);
-  content = content.replaceAll(publicRoutePattern, '');
-
-  // Remove private class
-  final privateClassPattern = RegExp('''
-class _${pascalName}Route extends PageRouteInfo<void> \\{
-  const _${pascalName}Route\\(\\) : super\\('${pascalName}Route'\\);
-\\}
-''', multiLine: true);
-  content = content.replaceAll(privateClassPattern, '');
-
-  await file.writeAsString(content);
-}
-
-Future<void> _cleanAppUri(String snakeName, String camelName) async {
-  final file = File('packages/network/lib/app_uri.dart');
-  if (!file.existsSync()) return;
-
-  var content = await file.readAsString();
-
-  // Remove constant line: static const String myFeature = 'my_feature';
-  final pattern = RegExp(
-    '^\\s*static const String $camelName = \'$snakeName\';\\s*\\n',
-    multiLine: true,
-  );
-  content = content.replaceAll(pattern, '');
-
-  await file.writeAsString(content);
 }

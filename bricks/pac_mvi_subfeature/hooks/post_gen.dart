@@ -66,6 +66,13 @@ Future<void> run(HookContext context) async {
   }
 }
 
+String _getTargetDir(String snakePackage) {
+  if (Directory('features/$snakePackage').existsSync()) {
+    return 'features/$snakePackage';
+  }
+  return 'packages/$snakePackage';
+}
+
 /// Add method to parent's repository interface
 Future<void> _updateRepositoryInterface(
   String snakePackage,
@@ -74,7 +81,7 @@ Future<void> _updateRepositoryInterface(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/domain/repositories/${snakePackage}_repository.dart',
+    '${_getTargetDir(snakePackage)}/lib/domain/repositories/${snakePackage}_repository.dart',
   );
   if (!file.existsSync()) return;
 
@@ -90,8 +97,7 @@ Future<void> _updateRepositoryInterface(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content =
-          content.substring(0, endOfImport + 1) +
+      content = content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -119,7 +125,7 @@ Future<void> _updateRepositoryImpl(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/data/repositories/${snakePackage}_repository_impl.dart',
+    '${_getTargetDir(snakePackage)}/lib/data/repositories/${snakePackage}_repository_impl.dart',
   );
   if (!file.existsSync()) return;
 
@@ -135,8 +141,7 @@ Future<void> _updateRepositoryImpl(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content =
-          content.substring(0, endOfImport + 1) +
+      content = content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -147,8 +152,7 @@ Future<void> _updateRepositoryImpl(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newMethod =
-          '''
+      final newMethod = '''
 
   @override
   Future<Either<Failure, ${pascalSubfeature}Entity>> get$pascalSubfeature() {
@@ -170,7 +174,7 @@ Future<void> _updateRemoteDataSource(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/data/datasources/remote/${snakePackage}_remote_datasource.dart',
+    '${_getTargetDir(snakePackage)}/lib/data/datasources/remote/${snakePackage}_remote_datasource.dart',
   );
   if (!file.existsSync()) return;
 
@@ -188,8 +192,7 @@ Future<void> _updateRemoteDataSource(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content =
-          content.substring(0, endOfImport + 1) +
+      content = content.substring(0, endOfImport + 1) +
           '\n$modelImport' +
           content.substring(endOfImport + 1);
     }
@@ -199,8 +202,7 @@ Future<void> _updateRemoteDataSource(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content =
-          content.substring(0, endOfImport + 1) +
+      content = content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -211,8 +213,7 @@ Future<void> _updateRemoteDataSource(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newMethod =
-          '''
+      final newMethod = '''
 
   Future<Either<Failure, ${pascalSubfeature}Entity>> get$pascalSubfeature() async {
     final result = await safeApiCall(() => _client.get$pascalSubfeature());
@@ -234,7 +235,7 @@ Future<void> _updateClient(
   String pascalSubfeature,
 ) async {
   final file = File(
-    'packages/$snakePackage/lib/data/datasources/remote/${snakePackage}_client.dart',
+    '${_getTargetDir(snakePackage)}/lib/data/datasources/remote/${snakePackage}_client.dart',
   );
   if (!file.existsSync()) return;
 
@@ -249,8 +250,7 @@ Future<void> _updateClient(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content =
-          content.substring(0, endOfImport + 1) +
+      content = content.substring(0, endOfImport + 1) +
           '\n$modelImport' +
           content.substring(endOfImport + 1);
     }
@@ -261,8 +261,7 @@ Future<void> _updateClient(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newEndpoint =
-          '''
+      final newEndpoint = '''
 
   @GET('/$snakeSubfeature')
   Future<${pascalSubfeature}Model> get$pascalSubfeature();
@@ -282,7 +281,7 @@ Future<void> _updateRouter(
   String pascalPackage,
   String camelPackage,
 ) async {
-  final file = File('packages/$snakePackage/lib/${snakePackage}_router.dart');
+  final file = File('${_getTargetDir(snakePackage)}/lib/${snakePackage}_router.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();
@@ -345,7 +344,7 @@ Future<void> _updatePackageExports(
   String snakeSubfeature,
   String pascalSubfeature,
 ) async {
-  final file = File('packages/$snakePackage/lib/$snakePackage.dart');
+  final file = File('${_getTargetDir(snakePackage)}/lib/$snakePackage.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();

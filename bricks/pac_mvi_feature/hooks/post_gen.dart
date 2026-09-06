@@ -11,30 +11,27 @@ Future<void> run(HookContext context) async {
   final pascalCaseName = name.pascalCase;
   final camelCaseName = name.camelCase;
 
-  final progress = context.logger.progress('Integrating package $name...');
+  final progress = context.logger.progress('Integrating feature $name...');
 
   try {
-    // 1. Update root pubspec.yaml
+    // 1. Update root pubspec.yaml (workspace & dependencies)
     await _updateRootPubspec(snakeCaseName);
 
     // 2. Update lib/di/injection.dart
-    await _updateInjection(snakeCaseName, camelCaseName);
+    await _updateInjection(snakeCaseName);
 
     // 3. Update lib/core/localization/app_translation_providers.dart
-    await _updateTranslationProviders(snakeCaseName, camelCaseName);
+    await _updateTranslationProviders(snakeCaseName);
 
-    // 3.5 Update lib/core/app_initializer/localization_initializer.dart
-    await _updateLocalizationInitializer(snakeCaseName, camelCaseName);
+    // 4. Update lib/core/app_initializer/localization_initializer.dart
+    await _updateLocalizationInitializer(snakeCaseName);
 
-    // 4. Update lib/app_router.dart
+    // 5. Update lib/app_router.dart
     await _updateAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 5. Update DeepLinkRoutes
+    // 6. Update DeepLinkRoutes
     progress.update('Updating DeepLinkRoutes...');
     await _updateFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
-
-    // 6. Update AppUri (for Network Module)
-    await _updateAppUri(snakeCaseName, camelCaseName);
 
     // 7. Run Melos commands
     progress.update('Running melos bootstrap...');
@@ -43,9 +40,9 @@ Future<void> run(HookContext context) async {
     progress.update('Running scoped code generation...');
     await _runCommand('./scripts/integrateFeatureToApp.sh', [snakeCaseName], context.logger);
 
-    progress.complete('Package $name integrated successfully!');
+    progress.complete('Feature $name integrated successfully!');
   } catch (e) {
-    progress.fail('Failed to integrate package $name: $e');
+    progress.fail('Failed to integrate feature $name: $e');
   }
 }
 
@@ -56,19 +53,17 @@ Future<void> _updateRootPubspec(String snakeName) async {
   var content = await file.readAsString();
 
   // Add to workspace
-  if (!content.contains("packages/$snakeName")) {
+  if (!content.contains("features/$snakeName")) {
     final workspaceMarker = "workspace:";
     if (content.contains(workspaceMarker)) {
-      // Find the end of the workspace list or just append to the last item found
       final workspaceRegex = RegExp(r'workspace:\s*\n(\s+- .*\n)+');
       final match = workspaceRegex.firstMatch(content);
 
       if (match != null) {
         final currentWorkspaceBlock = match.group(0)!;
-        // Check if there is a newline at the end
         final newWorkspaceBlock = currentWorkspaceBlock.endsWith('\n')
-            ? "${currentWorkspaceBlock}  - packages/$snakeName\n"
-            : "$currentWorkspaceBlock\n  - packages/$snakeName\n";
+            ? "${currentWorkspaceBlock}  - features/$snakeName\n"
+            : "$currentWorkspaceBlock\n  - features/$snakeName\n";
 
         content = content.replaceFirst(currentWorkspaceBlock, newWorkspaceBlock);
       }
@@ -79,19 +74,16 @@ Future<void> _updateRootPubspec(String snakeName) async {
   if (!content.contains("$snakeName:")) {
     final dependenciesMarker = "dependencies:";
     if (content.contains(dependenciesMarker)) {
-      // We want to add it nicely formatted.
-      // Finding a good insertion point: maybe after onboard or just after dependencies:
-      final onboardMarker = "path: packages/onboard";
-      if (content.contains(onboardMarker)) {
+      final settingsMarker = "path: features/settings";
+      if (content.contains(settingsMarker)) {
         content = content.replaceFirst(
-          onboardMarker,
-          "$onboardMarker\n  $snakeName:\n    path: packages/$snakeName",
+          settingsMarker,
+          "$settingsMarker\n  $snakeName:\n    path: features/$snakeName",
         );
       } else {
-        // Fallback: append to dependencies start
         content = content.replaceFirst(
           dependenciesMarker,
-          "$dependenciesMarker\n  $snakeName:\n    path: packages/$snakeName",
+          "$dependenciesMarker\n  $snakeName:\n    path: features/$snakeName",
         );
       }
     }
@@ -100,7 +92,7 @@ Future<void> _updateRootPubspec(String snakeName) async {
   await file.writeAsString(content);
 }
 
-Future<void> _updateInjection(String snakeName, String camelName) async {
+Future<void> _updateInjection(String snakeName) async {
   final file = File('lib/di/injection.dart');
   if (!file.existsSync()) return;
 
@@ -108,28 +100,28 @@ Future<void> _updateInjection(String snakeName, String camelName) async {
 
   // Add import
   if (!content.contains("package:$snakeName/$snakeName.dart")) {
-    final importMarker = "import 'package:onboard/onboard.dart' as onboard;";
+    final importMarker = "import 'package:settings/settings.dart' as settings;";
     if (content.contains(importMarker)) {
       content = content.replaceFirst(
         importMarker,
-        "$importMarker\nimport 'package:$snakeName/$snakeName.dart' as $camelName;",
+        "$importMarker\nimport 'package:$snakeName/$snakeName.dart' as $snakeName;",
       );
     } else {
-      // Fallback if marker not found, try adding after last import
       final lastImport = RegExp(r"import 'package:.*';");
       content = content.replaceFirstMapped(lastImport, (match) {
-        return "${match.group(0)}\nimport 'package:$snakeName/$snakeName.dart' as $camelName;";
+        return "${match.group(0)}\nimport 'package:$snakeName/$snakeName.dart' as $snakeName;";
       });
     }
   }
 
   // Add dependency configuration
-  if (!content.contains("$camelName.configureModuleDependencies(getIt);")) {
-    final configMarker = "onboard.configureModuleDependencies(getIt);";
-    if (content.contains(configMarker)) {
-      content = content.replaceFirst(
+  if (!content.contains("$snakeName.configureModuleDependencies(getIt);")) {
+    final configMarker = RegExp(
+        r'(await\s+settings\.configureModuleDependencies\(getIt\);|settings\.configureModuleDependencies\(getIt\);)');
+    if (configMarker.hasMatch(content)) {
+      content = content.replaceFirstMapped(
         configMarker,
-        "$configMarker\n  $camelName.configureModuleDependencies(getIt);",
+        (match) => "${match.group(0)}\n  $snakeName.configureModuleDependencies(getIt);",
       );
     }
   }
@@ -137,7 +129,7 @@ Future<void> _updateInjection(String snakeName, String camelName) async {
   await file.writeAsString(content);
 }
 
-Future<void> _updateTranslationProviders(String snakeName, String camelName) async {
+Future<void> _updateTranslationProviders(String snakeName) async {
   final file = File('lib/core/localization/app_translation_providers.dart');
   if (!file.existsSync()) return;
 
@@ -145,26 +137,26 @@ Future<void> _updateTranslationProviders(String snakeName, String camelName) asy
 
   // Add import
   if (!content.contains("package:$snakeName/$snakeName.dart")) {
-    final importMarker = "import 'package:onboard/onboard.dart' as onboard;";
+    final importMarker = "import 'package:settings/settings.dart' as settings;";
     content = content.replaceFirst(
       importMarker,
-      "$importMarker\nimport 'package:$snakeName/$snakeName.dart' as $camelName;",
+      "$importMarker\nimport 'package:$snakeName/$snakeName.dart' as $snakeName;",
     );
   }
 
   // Add provider
-  if (!content.contains("$camelName.TranslationProvider")) {
-    final providerMarker = "({required child}) => onboard.TranslationProvider(child: child),";
+  if (!content.contains("$snakeName.TranslationProvider")) {
+    final providerMarker = "({required child}) => settings.TranslationProvider(child: child),";
     content = content.replaceFirst(
       providerMarker,
-      "$providerMarker\n  ({required child}) => $camelName.TranslationProvider(child: child),",
+      "$providerMarker\n  ({required child}) => $snakeName.TranslationProvider(child: child),",
     );
   }
 
   await file.writeAsString(content);
 }
 
-Future<void> _updateLocalizationInitializer(String snakeName, String camelName) async {
+Future<void> _updateLocalizationInitializer(String snakeName) async {
   final file = File('lib/core/app_initializer/localization_initializer.dart');
   if (!file.existsSync()) return;
 
@@ -173,39 +165,38 @@ Future<void> _updateLocalizationInitializer(String snakeName, String camelName) 
 
   // 1. Add import
   if (!content.contains("package:$snakeName/generated/translations.dart")) {
-    final importMarker = "import 'package:onboard/generated/translations.dart' as onboard;";
+    final importMarker = "import 'package:settings/generated/translations.dart' as settings;";
     if (content.contains(importMarker)) {
       content = content.replaceFirst(
         importMarker,
-        "$importMarker\nimport 'package:$snakeName/generated/translations.dart' as $camelName;",
+        "$importMarker\nimport 'package:$snakeName/generated/translations.dart' as $snakeName;",
       );
       updated = true;
     }
   }
 
   // 2. Add to _registerSyncLocaleCallback
-  if (!content.contains("$camelName.LocaleSettings.setLocaleRaw(rawLocale);")) {
-    final syncMarker = "onboard.LocaleSettings.setLocaleRaw(rawLocale);";
+  if (!content.contains("$snakeName.LocaleSettings.setLocaleRaw(rawLocale);")) {
+    final syncMarker = "settings.LocaleSettings.setLocaleRaw(rawLocale);";
     if (content.contains(syncMarker)) {
       content = content.replaceFirst(
         syncMarker,
-        "$syncMarker\n      $camelName.LocaleSettings.setLocaleRaw(rawLocale);",
+        "$syncMarker\n      $snakeName.LocaleSettings.setLocaleRaw(rawLocale);",
       );
       updated = true;
     }
   }
 
   // 3. Add to _registerOverrideCallback
-  if (!content.contains("await $camelName.LocaleSettings.overrideTranslationsFromMap")) {
-    final onboardBlockRegex = RegExp(
-      r"await onboard\.LocaleSettings\.overrideTranslationsFromMap\([\s\S]*?\);",
+  if (!content.contains("await $snakeName.LocaleSettings.overrideTranslationsFromMap")) {
+    final settingsBlockRegex = RegExp(
+      r"await settings\.LocaleSettings\.overrideTranslationsFromMap\([\s\S]*?\);",
     );
-    final match = onboardBlockRegex.firstMatch(content);
+    final match = settingsBlockRegex.firstMatch(content);
     if (match != null) {
-      final newBlock =
-          '''
-      await $camelName.LocaleSettings.overrideTranslationsFromMap(
-        locale: $camelName.AppLocaleUtils.parse(rawLocale),
+      final newBlock = '''
+      await $snakeName.LocaleSettings.overrideTranslationsFromMap(
+        locale: $snakeName.AppLocaleUtils.parse(rawLocale),
         isFlatMap: false,
         map: {'$snakeName': json['$snakeName'] ?? {}},
       );''';
@@ -228,16 +219,16 @@ Future<void> _updateAppRouter(String snakeName, String pascalName, String camelN
 
   // Add import
   if (!content.contains("package:$snakeName/$snakeName.dart")) {
-    final importMarker = "import 'package:onboard/onboard.dart' as onboard;";
+    final importMarker = "import 'package:settings/settings.dart' as settings;";
     content = content.replaceFirst(
       importMarker,
-      "$importMarker\nimport 'package:$snakeName/$snakeName.dart' as $camelName;",
+      "$importMarker\nimport 'package:$snakeName/$snakeName.dart' as $snakeName;",
     );
   }
 
   // Add export
   if (!content.contains("package:$snakeName/${snakeName}_router.dart")) {
-    final exportMarker = "export 'package:onboard/onboard_router.dart';";
+    final exportMarker = "export 'package:settings/settings_router.dart';";
     content = content.replaceFirst(
       exportMarker,
       "$exportMarker\nexport 'package:$snakeName/${snakeName}_router.dart';",
@@ -246,23 +237,18 @@ Future<void> _updateAppRouter(String snakeName, String pascalName, String camelN
 
   // Add router instance
   if (!content.contains("final _${camelName}Router")) {
-    final instanceMarker = "final _authRouter = auth.AuthenticationRouter();";
-    // Note: In previous step logic, it seemed to rely on _authRouter existing.
-    // Since we are fixing the logic, we should try to be consistent with what exists.
-    // However, if the user mentioned _authRouter in original code, we keep it.
-
-    // Improving the logic to find ANY router definition if auth router is missing, but sticking to existing pattern first.
+    final instanceMarker = "final _settingsRouter = settings.SettingsRouter();";
     if (content.contains(instanceMarker)) {
       content = content.replaceFirst(
         instanceMarker,
-        "$instanceMarker\n  final _${camelName}Router = $camelName.${pascalName}Router();",
+        "$instanceMarker\n  final _${camelName}Router = $snakeName.${pascalName}Router();",
       );
     }
   }
 
   // Add routes
   if (!content.contains("..._${camelName}Router.routes")) {
-    final routesMarker = "..._authRouter.routes,";
+    final routesMarker = "..._settingsRouter.routes,";
     if (content.contains(routesMarker)) {
       content = content.replaceFirst(
         routesMarker,
@@ -274,70 +260,17 @@ Future<void> _updateAppRouter(String snakeName, String pascalName, String camelN
   await file.writeAsString(content);
 }
 
-Future<void> _updateCommonRoutes(String snakeName, String pascalName, String camelName) async {
-  // Use relative path from root since post_gen runs from project root
-  final file = File('packages/core/lib/utils/common_routes.dart');
-  if (!file.existsSync()) return;
-
-  var content = await file.readAsString();
-  var updated = false;
-
-  // Add route constant inside CommonRoutes class
-  // We locate the closing brace of CommonRoutes class by finding subsequent private class definition
-  // or just append before the last closing brace of the main block if we assume standard formatting.
-  // A safer bet given the file structure is looking for the comment block of private routes.
-  const privateRoutesMarker = '// Private route classes';
-  if (content.contains(privateRoutesMarker) &&
-      !content.contains('static const String $camelName')) {
-    final insertionPoint = content.indexOf(privateRoutesMarker);
-    final lastBrace = content.lastIndexOf('}', insertionPoint);
-
-    if (lastBrace != -1) {
-      final newRouteConsts =
-          '''\n\n// $pascalName
-  static const String $camelName = '/$camelName';
-  static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
-
-''';
-      content = content.substring(0, lastBrace) + newRouteConsts + content.substring(lastBrace);
-      updated = true;
-    }
-  }
-
-  // Add private route class at the end of file
-  if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
-    final newRouteClass =
-        '''
-
-class _${pascalName}Route extends PageRouteInfo<void> {
-  const _${pascalName}Route() : super('${pascalName}Route');
-}
-''';
-    content += newRouteClass;
-    updated = true;
-  }
-
-  if (updated) {
-    await file.writeAsString(content);
-  }
-}
-
 Future<void> _updateFeaturePublicRoutes(
   String snakeName,
   String pascalName,
   String camelName,
 ) async {
-  // Use relative path from root since post_gen runs from project root
   final file = File('packages/platform/lib/deep_link_routes.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();
   var updated = false;
 
-  // Add route constant inside DeepLinkRoutes class
-  // We locate the closing brace of FeaturePublicRoutes class by finding subsequent private class definition
-  // or just append before the last closing brace of the main block if we assume standard formatting.
-  // A safer bet given the file structure is looking for the comment block of private routes.
   final privateRoutesMarker = '// Private route classes';
   if (content.contains(privateRoutesMarker) &&
       !content.contains('static const String $camelName')) {
@@ -345,8 +278,7 @@ Future<void> _updateFeaturePublicRoutes(
     final lastBrace = content.lastIndexOf('}', insertionPoint);
 
     if (lastBrace != -1) {
-      final newRouteConsts =
-          '''
+      final newRouteConsts = '''
 
   // $pascalName
   static const String $camelName = '/$camelName';
@@ -357,10 +289,8 @@ Future<void> _updateFeaturePublicRoutes(
     }
   }
 
-  // Add private route class at the end of file
   if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
-    final newRouteClass =
-        '''
+    final newRouteClass = '''
 
 class _${pascalName}Route extends PageRouteInfo<void> {
   const _${pascalName}Route() : super('${pascalName}Route');
@@ -372,36 +302,6 @@ class _${pascalName}Route extends PageRouteInfo<void> {
 
   if (updated) {
     await file.writeAsString(content);
-  }
-}
-
-Future<void> _updateAppUri(String snakeName, String camelName) async {
-  // Use relative path from root since post_gen runs from project root
-  final file = File('packages/network/lib/app_uri.dart');
-  if (!file.existsSync()) return;
-
-  var content = await file.readAsString();
-
-  if (!content.contains('static const String $camelName')) {
-    // Insert before baseUrl which is usually at the end of the list
-    final baseUrlMarker = "static const String baseUrl = 'baseUrl';";
-    if (content.contains(baseUrlMarker)) {
-      content = content.replaceFirst(
-        baseUrlMarker,
-        "static const String $camelName = '$snakeName';\n  $baseUrlMarker",
-      );
-      await file.writeAsString(content);
-    } else {
-      // Fallback: append after class start if baseUrl not found (unlikely)
-      final classMarker = "class AppUri {";
-      if (content.contains(classMarker)) {
-        content = content.replaceFirst(
-          classMarker,
-          "$classMarker\n  static const String $camelName = '$snakeName';",
-        );
-        await file.writeAsString(content);
-      }
-    }
   }
 }
 
