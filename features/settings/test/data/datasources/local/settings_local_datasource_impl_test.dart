@@ -84,5 +84,11 @@ void main() {
         expect(result, translations);
       },
     );
+
+    test('saveCachedTranslationJson registers language code into cached language codes', () async {
+      await dataSource.saveCachedTranslationJson(languageCode, translations);
+      final codes = await dataSource.getAllCachedLanguageCodes();
+      expect(codes, contains(languageCode));
+    });
   });
 }

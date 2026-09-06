@@ -103,6 +103,12 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     final tempFile = File('${file.path}.tmp');
     await tempFile.writeAsString(jsonEncode(jsonMap));
     await tempFile.rename(file.path);
+
+    final codes = await getAllCachedLanguageCodes();
+    if (!codes.contains(languageCode)) {
+      codes.add(languageCode);
+      await _sharedPreferences.setStringList(_cachedLanguageCodesKey, codes);
+    }
   }
 
   @override
@@ -146,29 +152,24 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
   @override
   Future<Map<String, dynamic>> loadBundledFallback(String languageCode) async {
-    final List<String> packageNames = ['core', 'scanner', 'settings'];
-
     final Map<String, dynamic> combinedJson = {};
 
-    // Load root app locale
-    try {
-      final rootString = await rootBundle.loadString('assets/locales/$languageCode.i18n.json');
-      final rootJson = jsonDecode(rootString) as Map<String, dynamic>;
-      combinedJson.addAll(rootJson);
-    } catch (_) {
-      // Ignore if not found
-    }
+    final candidatePaths = [
+      'assets/locales/$languageCode.i18n.json',
+      'packages/core/assets/locales/$languageCode.i18n.json',
+      'packages/scanner/assets/locales/$languageCode.i18n.json',
+      'packages/settings/assets/locales/$languageCode.i18n.json',
+      'features/scanner/assets/locales/$languageCode.i18n.json',
+      'features/settings/assets/locales/$languageCode.i18n.json',
+    ];
 
-    // Load packages locales
-    for (final package in packageNames) {
+    for (final path in candidatePaths) {
       try {
-        final packageString = await rootBundle.loadString(
-          'packages/$package/assets/locales/$languageCode.i18n.json',
-        );
-        final packageJson = jsonDecode(packageString) as Map<String, dynamic>;
-        combinedJson.addAll(packageJson);
+        final content = await rootBundle.loadString(path);
+        final jsonMap = jsonDecode(content) as Map<String, dynamic>;
+        combinedJson.addAll(jsonMap);
       } catch (_) {
-        // Ignore if package locale not found
+        // Continue checking fallback candidate paths
       }
     }
 
