@@ -15,6 +15,7 @@ export 'domain/entities/supported_language.dart';
 export 'domain/entities/language_sync_status.dart';
 export 'domain/repositories/settings_repository.dart';
 export 'domain/usecases/get_settings_usecase.dart';
+export 'domain/usecases/get_cached_languages_usecase.dart';
 export 'domain/usecases/bootstrap_usecase.dart';
 export 'domain/usecases/fetch_translation_usecase.dart';
 export 'domain/usecases/get_dynamic_localization_usecase.dart';
