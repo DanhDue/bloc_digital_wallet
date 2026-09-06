@@ -24,15 +24,19 @@ void main() {
       // await tester.enterText(find.byKey(const Key('email_field')), 'test@example.com');
       // ...
 
-      // 2. Navigate to Settings (Assuming there is a bottom nav bar with 'Settings' icon)
-      final settingsTab = find.byIcon(Icons.settings); // Change this to match your actual UI
+      // 2. Navigate to Settings (Bottom nav bar with 'Settings' icon)
+      final settingsTab = find.byWidgetPredicate(
+        (widget) => widget is Icon && (widget.icon == Icons.settings || widget.icon == Icons.settings_outlined),
+      );
       if (settingsTab.evaluate().isNotEmpty) {
-        await tester.tap(settingsTab);
+        await tester.tap(settingsTab.first);
         await tester.pumpAndSettle();
       }
 
       // 3. Find and tap the Language menu item
-      final languageIcon = find.byIcon(Icons.language_outlined);
+      final languageIcon = find.byWidgetPredicate(
+        (widget) => widget is Icon && (widget.icon == Icons.language || widget.icon == Icons.language_outlined),
+      );
       expect(languageIcon, findsOneWidget);
       await tester.tap(languageIcon);
 
