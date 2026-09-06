@@ -23,6 +23,8 @@ dependencies:
     path: ../../packages/framework
   logger:
     path: ../../packages/logger
+  app_platform:
+    path: ../../packages/platform
 
   # Dependencies
   json_annotation: ^4.9.0

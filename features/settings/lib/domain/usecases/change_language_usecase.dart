@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import 'package:app_platform/platform.dart';
 import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:settings/domain/entities/language_sync_status.dart';
@@ -15,12 +16,14 @@ class ChangeLanguageUseCase {
   final CheckLanguageCachedUseCase _checkLanguageCachedUseCase;
   final GetDynamicLocalizationUseCase _getDynamicLocalizationUseCase;
   final UpdateUserLanguageUseCase _updateUserLanguageUseCase;
+  final AppEventBus? _appEventBus;
 
   ChangeLanguageUseCase(
     this._checkLanguageCachedUseCase,
     this._getDynamicLocalizationUseCase,
-    this._updateUserLanguageUseCase,
-  );
+    this._updateUserLanguageUseCase, [
+    this._appEventBus,
+  ]);
 
   Stream<LanguageSyncStatus> call(String languageCode) async* {
     final currentLocale = LocalizationManager.instance.currentLocale;
@@ -39,6 +42,7 @@ class ChangeLanguageUseCase {
     if (isCached) {
       // Optimistic switch
       await LocalizationManager.instance.setLocaleFromCode(languageCode);
+      _appEventBus?.publish(AppLanguageChanged(languageCode: languageCode));
       yield LanguageSyncStatus.cachedApplied(languageCode);
 
       // Silent delta check in background
@@ -57,6 +61,7 @@ class ChangeLanguageUseCase {
       }
 
       await LocalizationManager.instance.setLocaleFromCode(languageCode);
+      _appEventBus?.publish(AppLanguageChanged(languageCode: languageCode));
       yield LanguageSyncStatus.success(languageCode);
     }
 

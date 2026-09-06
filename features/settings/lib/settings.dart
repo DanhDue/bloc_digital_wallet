@@ -21,6 +21,8 @@ export 'domain/usecases/fetch_translation_usecase.dart';
 export 'domain/usecases/get_dynamic_localization_usecase.dart';
 export 'domain/usecases/load_bundled_fallback_usecase.dart';
 export 'domain/usecases/update_user_language_usecase.dart';
+export 'domain/usecases/change_language_usecase.dart';
+export 'domain/usecases/toggle_dark_mode_usecase.dart';
 
 // Sync Models
 // SyncBootstrapResponse is exported here as a deliberate, documented exception:
