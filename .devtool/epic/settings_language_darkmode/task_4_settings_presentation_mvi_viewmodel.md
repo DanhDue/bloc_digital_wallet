@@ -6,8 +6,8 @@ assignee: null
 epic: "settings_language_darkmode"
 dueDate: null
 created: "2026-09-06T02:37:10+07:00"
-modified: "2026-09-06T15:55:00+07:00"
-completedAt: "2026-09-06T02:53:00+07:00"
+modified: "2026-09-06T23:55:00+07:00"
+completedAt: "2026-09-06T23:55:00+07:00"
 labels: ["architecture", "feature"]
 order: "a4"
 ---

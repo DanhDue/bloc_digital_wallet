@@ -3,7 +3,6 @@
 // coverage:ignore-file
 
 import 'package:core/core.dart';
-import 'package:flutter/material.dart';
 import 'package:framework/framework.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings/domain/entities/language_sync_status.dart';
@@ -11,6 +10,7 @@ import 'package:settings/domain/entities/supported_language.dart';
 import 'package:settings/domain/usecases/bootstrap_usecase.dart';
 import 'package:settings/domain/usecases/change_language_usecase.dart';
 import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
+import 'package:settings/domain/usecases/toggle_dark_mode_usecase.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 
 import 'settings_action.dart';
@@ -23,6 +23,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   final GetCachedLanguagesUseCase _getCachedLanguagesUseCase;
   final BootstrapUseCase _bootstrapUseCase;
   final ChangeLanguageUseCase _changeLanguageUseCase;
+  final ToggleDarkModeUseCase _toggleDarkModeUseCase;
 
   String? _pendingLanguageCode;
 
@@ -31,6 +32,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     this._getCachedLanguagesUseCase,
     this._bootstrapUseCase,
     this._changeLanguageUseCase,
+    this._toggleDarkModeUseCase,
   ) : super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
     on<SettingsActionNavigateToProfile>(_onNavigateToProfile);
@@ -90,12 +92,15 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     );
   }
 
-  void _onToggleDarkMode(SettingsActionToggleDarkMode action, Emitter<SettingsState> emit) {
-    final updatedModel = state.uiModel?.copyWith(isDarkModeEnabled: action.isEnabled);
+  Future<void> _onToggleDarkMode(
+    SettingsActionToggleDarkMode action,
+    Emitter<SettingsState> emit,
+  ) async {
+    final currentModel = state.uiModel ?? const SettingsUiModel(id: 'local');
+    final updatedModel = currentModel.copyWith(isDarkModeEnabled: action.isEnabled);
     emit(state.copyWith(uiModel: updatedModel));
 
-    final themeMode = action.isEnabled ? ThemeMode.dark : ThemeMode.light;
-    ThemeManager.instance.setThemeMode(themeMode);
+    await _toggleDarkModeUseCase(isEnabled: action.isEnabled);
   }
 
   void _onToggleBiometric(SettingsActionToggleBiometric action, Emitter<SettingsState> emit) {

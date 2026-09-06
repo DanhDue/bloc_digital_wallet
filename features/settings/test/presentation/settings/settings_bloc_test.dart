@@ -16,6 +16,7 @@ import 'package:settings/domain/entities/supported_language.dart';
 import 'package:settings/domain/usecases/bootstrap_usecase.dart';
 import 'package:settings/domain/usecases/change_language_usecase.dart';
 import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
+import 'package:settings/domain/usecases/toggle_dark_mode_usecase.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
@@ -28,6 +29,7 @@ import 'settings_bloc_test.mocks.dart';
   ChangeLanguageUseCase,
   GetCachedLanguagesUseCase,
   BootstrapUseCase,
+  ToggleDarkModeUseCase,
 ])
 void main() {
   late SettingsBloc bloc;
@@ -35,6 +37,7 @@ void main() {
   late MockChangeLanguageUseCase mockChangeLanguageUseCase;
   late MockGetCachedLanguagesUseCase mockGetCachedLanguagesUseCase;
   late MockBootstrapUseCase mockBootstrapUseCase;
+  late MockToggleDarkModeUseCase mockToggleDarkModeUseCase;
 
   const defaultLanguages = [
     SupportedLanguage(
@@ -65,6 +68,7 @@ void main() {
     mockChangeLanguageUseCase = MockChangeLanguageUseCase();
     mockGetCachedLanguagesUseCase = MockGetCachedLanguagesUseCase();
     mockBootstrapUseCase = MockBootstrapUseCase();
+    mockToggleDarkModeUseCase = MockToggleDarkModeUseCase();
 
     when(mockAppInfoService.getPackageInfo()).thenAnswer(
       (_) async => PackageInfo(
@@ -83,12 +87,16 @@ void main() {
     when(
       mockChangeLanguageUseCase(any),
     ).thenAnswer((_) => Stream.value(const LanguageSyncStatus.success('en')));
+    when(
+      mockToggleDarkModeUseCase.call(isEnabled: anyNamed('isEnabled')),
+    ).thenAnswer((_) async {});
 
     bloc = SettingsBloc(
       mockAppInfoService,
       mockGetCachedLanguagesUseCase,
       mockBootstrapUseCase,
       mockChangeLanguageUseCase,
+      mockToggleDarkModeUseCase,
     );
   });
 
@@ -226,6 +234,18 @@ void main() {
       verify: (_) {
         verify(mockChangeLanguageUseCase('fr')).called(1);
       },
+    );
+
+    blocTest<SettingsBloc, SettingsState>(
+      'emits updated uiModel with isDarkModeEnabled and calls ToggleDarkModeUseCase when toggleDarkMode is added',
+      build: () => bloc,
+      act: (bloc) => bloc.add(const SettingsAction.toggleDarkMode(isEnabled: true)),
+      verify: (_) {
+        verify(mockToggleDarkModeUseCase(isEnabled: true)).called(1);
+      },
+      expect: () => [
+        predicate<SettingsState>((state) => state.uiModel?.isDarkModeEnabled == true),
+      ],
     );
   });
 }
