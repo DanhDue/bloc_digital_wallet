@@ -15,6 +15,7 @@ import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_page.dart';
 import 'package:settings/presentation/settings/widgets/settings_item_widget.dart';
+import 'package:settings/presentation/settings/widgets/settings_section_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -208,5 +209,15 @@ void main() {
               mockSettingsBloc.onAction(const SettingsAction.toggleDeveloperMode(isEnabled: true)),
         )
         .called(1);
+  });
+
+  testWidgets('SettingsPage renders 4 card sections and logout button', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(createWidgetUnderTest());
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SettingsSectionWidget), findsNWidgets(4));
+    expect(find.byType(ElevatedButton), findsWidgets);
   });
 }
