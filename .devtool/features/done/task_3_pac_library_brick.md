@@ -1,13 +1,13 @@
 ---
 id: "task_3_pac_library_brick"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-06T18:05:00.000Z"
-modified: "2026-09-06T18:05:00.000Z"
-completedAt: null
+modified: "2026-09-06T18:30:00.000Z"
+completedAt: "2026-09-06T18:30:00.000Z"
 labels: ["mason", "tooling", "infrastructure"]
 order: "a3"
 ---

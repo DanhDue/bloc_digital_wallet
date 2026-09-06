@@ -1,13 +1,13 @@
 ---
 id: "task_8_rename_project_brick_and_validation"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-06T18:05:00.000Z"
-modified: "2026-09-06T18:05:00.000Z"
-completedAt: null
+modified: "2026-09-06T19:10:00.000Z"
+completedAt: "2026-09-06T19:10:00.000Z"
 labels: ["tooling", "validation", "mason"]
 order: "a8"
 ---
@@ -58,23 +58,23 @@ Applicable skills: `writing-skills`, `verification-before-completion`.
 
 ## TDD Checklist
 *TDD Adaptation:* End-to-end integration and compilation verification in an isolated git worktree.
-- [ ] **IMPLEMENT**:
-  - [ ] Implement `bricks/pac_rename_project` (brick.yaml and post_gen.dart).
-  - [ ] Register in `mason.yaml`.
-  - [ ] Implement `scripts/rename_project.sh` wrapper with executable permissions (`chmod +x`).
-- [ ] **ISOLATED TEST**:
-  - [ ] Create a temporary git worktree or branch `test/template_rename_validation`.
-  - [ ] Execute `mason make pac_rename_project --app_name "Demo App" --package_name "demo_app" --bundle_id "com.example.demoapp"`.
-  - [ ] Assert `pubspec.yaml` has name `demo_app`.
-  - [ ] Assert no dangling `package:bloc_digital_wallet/` imports remain.
-  - [ ] Assert `com.danhdue.native_security` and `com.danhdue.logger_native_bridge` were not altered.
-  - [ ] Run `melos bootstrap && melos genAlls`.
-  - [ ] Run `melos run analyze` -> 0 errors.
-  - [ ] Run `fvm flutter test` -> 100% pass.
-  - [ ] Run `fvm flutter build apk --debug` -> SUCCESS.
-  - [ ] Run `fvm flutter build ios --no-codesign` -> SUCCESS.
-- [ ] **CLEANUP**:
-  - [ ] Delete temporary test worktree/branch after verification.
+- [x] **IMPLEMENT**:
+  - [x] Implement `bricks/pac_rename_project` (brick.yaml and post_gen.dart).
+  - [x] Register in `mason.yaml`.
+  - [x] Implement `scripts/rename_project.sh` wrapper with executable permissions (`chmod +x`).
+- [x] **ISOLATED TEST**:
+  - [x] Create a temporary git worktree or branch `test/template_rename_validation`.
+  - [x] Execute `mason make pac_rename_project --app_name "Demo App" --package_name "demo_app" --bundle_id "com.example.demoapp"`.
+  - [x] Assert `pubspec.yaml` has name `demo_app`.
+  - [x] Assert no dangling `package:bloc_digital_wallet/` imports remain.
+  - [x] Assert `com.danhdue.native_security` and `com.danhdue.logger_native_bridge` were not altered.
+  - [x] Run `melos bootstrap && melos genAlls`.
+  - [x] Run `melos run analyze` -> 0 errors.
+  - [x] Run `fvm flutter test` -> 100% pass.
+  - [x] Run `fvm flutter build apk --debug` -> SUCCESS.
+  - [x] Run `fvm flutter build ios --no-codesign` -> SUCCESS.
+- [x] **CLEANUP**:
+  - [x] Delete temporary test worktree/branch after verification.
 
 ## Definition of Done (DoD)
 1. `pac_rename_project` brick and `scripts/rename_project.sh` are fully functional.

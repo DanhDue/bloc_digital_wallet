@@ -1,13 +1,13 @@
 ---
 id: "task_7_obsolete_cleanups"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-06T18:05:00.000Z"
-modified: "2026-09-06T18:05:00.000Z"
-completedAt: null
+modified: "2026-09-06T18:57:00.000Z"
+completedAt: "2026-09-06T18:57:00.000Z"
 labels: ["cleanup", "tooling"]
 order: "a7"
 ---
@@ -49,14 +49,14 @@ Applicable skill: `systematic-debugging`.
 
 ## TDD Checklist
 *TDD Adaptation:* File removal and configuration synchronization.
-- [ ] **CLEAN**:
-  - [ ] Delete `bricks/sample`, `bricks/remove_sample`, and `bricks/test_brick`.
-  - [ ] Update `mason.yaml` to unregister removed bricks.
-  - [ ] Delete `.devtool/epic/template_android` and `.devtool/epic/template_ios`.
-- [ ] **VERIFY**:
-  - [ ] Run `mason get`.
-  - [ ] Run `mason list` and confirm only active bricks and deprecated legacy bricks are displayed.
-  - [ ] Confirm no broken links or missing references in repository docs.
+- [x] **CLEAN**:
+  - [x] Delete `bricks/sample`, `bricks/remove_sample`, and `bricks/test_brick`.
+  - [x] Update `mason.yaml` to unregister removed bricks.
+  - [x] Delete `.devtool/epic/template_android` and `.devtool/epic/template_ios`.
+- [x] **VERIFY**:
+  - [x] Run `mason get`.
+  - [x] Run `mason list` and confirm only active bricks and deprecated legacy bricks are displayed.
+  - [x] Confirm no broken links or missing references in repository docs.
 
 ## Definition of Done (DoD)
 1. `mason.yaml` contains zero broken or deleted brick references.

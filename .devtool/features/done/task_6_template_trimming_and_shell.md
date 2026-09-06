@@ -1,13 +1,13 @@
 ---
 id: "task_6_template_trimming_and_shell"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-06T18:05:00.000Z"
-modified: "2026-09-06T18:05:00.000Z"
-completedAt: null
+modified: "2026-09-06T18:55:00.000Z"
+completedAt: "2026-09-06T18:55:00.000Z"
 labels: ["architecture", "refactor", "cleanup"]
 order: "a6"
 ---
@@ -56,20 +56,20 @@ Applicable skill: `subagent-driven-development`.
 
 ## TDD Checklist
 *TDD Adaptation:* Mass deletion of domain packages and shell refactoring.
-- [ ] **PRE-CHECK**: Verify tests pass in `settings` and `core` prior to removal.
-- [ ] **TRIM**:
-  - [ ] Delete `packages/{authentication,onboard,wallet,transaction,trends}`.
-  - [ ] Update root `pubspec.yaml` workspace list.
-  - [ ] Update `lib/shell/shell_page.dart` to 3 tabs (Home, Scanner, Settings) with Settings as default.
-  - [ ] Update `lib/app_router.dart` and `lib/di/injection.dart`.
-  - [ ] Remove domain-specific assets while preserving 90 locales.
-  - [ ] Update `scripts/check_module_boundaries.sh` and clear whitelist.
-- [ ] **VERIFY**:
-  - [ ] Run `melos bootstrap`.
-  - [ ] Run `melos genAlls`.
-  - [ ] Run `melos run analyze` -> 0 errors.
-  - [ ] Run `fvm flutter test` across all remaining packages and root host.
-  - [ ] Run `scripts/check_module_boundaries.sh` -> PASS.
+- [x] **PRE-CHECK**: Verify tests pass in `settings` and `core` prior to removal.
+- [x] **TRIM**:
+  - [x] Delete `packages/{authentication,onboard,wallet,transaction,trends}`.
+  - [x] Update root `pubspec.yaml` workspace list.
+  - [x] Update `lib/shell/shell_page.dart` to 3 tabs (Home, Scanner, Settings) with Settings as default.
+  - [x] Update `lib/app_router.dart` and `lib/di/injection.dart`.
+  - [x] Remove domain-specific assets while preserving 90 locales.
+  - [x] Update `scripts/check_module_boundaries.sh` and clear whitelist.
+- [x] **VERIFY**:
+  - [x] Run `melos bootstrap`.
+  - [x] Run `melos genAlls`.
+  - [x] Run `melos run analyze` -> 0 errors.
+  - [x] Run `fvm flutter test` across all remaining packages and root host.
+  - [x] Run `scripts/check_module_boundaries.sh` -> PASS.
 
 ## Definition of Done (DoD)
 1. Repository contains only 8 infrastructure packages in `packages/` and 2 features in `features/` (`settings`, `scanner`).
