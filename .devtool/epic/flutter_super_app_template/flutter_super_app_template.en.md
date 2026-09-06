@@ -1,161 +1,182 @@
-# Epic: Flutter Super App Template — Native Architecture Spec
+# Epic: Flutter Super App Template & Unified Mason Bricks
 
-**Status**: Draft — pending review
-**Companion**: [2026-08-29-flutter-super-app-template-design.md](2026-08-29-flutter-super-app-template-design.md) (full design, Dart/Flutter trimming, task breakdown)
-**References**: `android_digital_wallet` (Android MVI/buildSrc source), `vchat_shield` (native code to *not* repeat)
+## Table of Contents
+1. [Meta Data](#meta-data)
+2. [Background](#background)
+3. [Goals & Non-Goals](#goals--non-goals)
+4. [Architecture & Technical Design](#architecture--technical-design)
+   - [High-Level Architecture](#high-level-architecture)
+   - [Use Cases](#use-cases)
+   - [Sequence Diagram](#sequence-diagram)
+5. [Rollout Strategy & Mitigation](#rollout-strategy--mitigation)
+6. [Kanban Tasks Breakdown](#kanban-tasks-breakdown)
 
-## 1. Goals
+---
 
-| # | Goal |
-|---|---|
-| G1 | Produce a clone-and-rename Flutter template that keeps the existing Clean Architecture + MVI + super-app governance (Dart side — detailed in the companion design doc). |
-| G2 | Standardize native code (Kotlin/Android, Swift/iOS) the same way: one layering convention, one quality-tooling setup, applied to every native module by construction — not left to individual discipline. |
-| G3 | Keep plugin packages DI-framework-agnostic (no forced Hilt) so any Flutter app can depend on them; reserve Hilt/Compose/SwiftUI/`MviViewModel` for code that genuinely owns a native screen. |
-| G4 | Make host-app crashes from OS-triggered native code structurally hard to cause (lesson from `vchat_shield`: business logic inline in `onReceive`/`onScreenCall`/`doWork` crashed the whole host process). |
-| G5 | Support a future third-party native binary (Go via gomobile/cgo, e.g. E2EE) without inventing a new architecture for it. |
-| G6 | Adding new native code should require picking 2 flags, not making architecture decisions. |
+## Meta Data
+- **Epic**: `flutter_super_app_template`
+- **Status**: In-Progress (Designing)
+- **Target Release**: Flutter Super App Template v1.0
+- **Source Spec**: [2026-09-06-flutter-super-app-template-design.md](2026-09-06-flutter-super-app-template-design.md)
+- **Reference Native Templates**:
+  - Android: `/Users/danhdue/AllProjects/digital_wallet/android_digital_wallet/.worktrees/android_super_app_template`
+  - iOS: `/Users/danhdue/AllProjects/digital_wallet/iOSDigitalWallet/.worktrees/ios_super_app_template`
 
-## 2. Use cases that shape the architecture
+---
 
-Two independent axes decide the shape of any native module:
-- **Trigger** — does Dart call in (*passive*), or does the OS call in independently of Flutter (*os_triggered*, e.g. `BroadcastReceiver`/`Service`/`WorkManager`/`CallDirectoryHandler` — may run with no `FlutterEngine` in the process)?
-- **UI** — does this module own a native screen/overlay (*has_ui*)?
+## Background
+The `bloc_digital_wallet` repository is a Flutter monorepo managed with Melos, employing Clean Architecture + MVI. Previously, all packages (core infrastructure, utilities, native bridges, and business mini-apps) were located in a single flat `packages/` directory. Furthermore, previous draft specifications attempted to extract standalone Android native apps directly from the Flutter repository.
 
-Go (or any compiled third-party native library) is **not** a third axis — it is a modifier on the `data/` (or `platform/` for direct JNI/cgo) layer of any of the 4 combinations, with one fixed rule: a Go panic must be recovered and converted to a Kotlin/Swift error at that boundary, never propagated up.
+Because two production-grade native super-app templates already exist independently (`android_super_app_template` and `ios_super_app_template`), the goal is now re-focused:
+1. Re-architect `bloc_digital_wallet` into a reusable **Flutter Super App Template** by separating `packages/` (infrastructure, utilities, and native bridge plugins) from `features/` (mini-apps), achieving 100% architectural parity across Android, iOS, and Flutter.
+2. Develop a clean suite of Mason bricks to generate features, libraries, and native-integrated packages (supporting both headless/no-UI and native-UI with Compose/SwiftUI + MVI).
+3. Provide a one-click UI upgrade mechanism (`pac_add_native_ui` / `scripts/add_native_ui.sh`) to transition headless native packages to UI-enabled packages.
+4. Remove legacy attempts to generate standalone native apps from Flutter.
 
-Realistic, reduced list (from the full 2×2×Go cross-product):
+---
 
-| # | trigger | has_ui | Go | Example |
-|---|---|---|---|---|
-| 1 | — | — | — | Pure Dart feature, no native code (`pac_mvi_feature`) |
-| 2 | passive | no | no | `native_security`, `logger_native_bridge` |
-| 3 | passive | no | yes | E2EE encrypt/decrypt while chat screen is open |
-| 4 | os_triggered | no | no | Background sync worker (à la `vchat_shield`'s `ScamDatabaseSyncWorker`) |
-| 5 | os_triggered | no | yes | Decrypt a push-notification preview while the app/Flutter engine isn't running |
-| 6 | os_triggered | yes | no | Native overlay/call-screening UI independent of Flutter (à la `vchat_shield`) |
-| 7 | passive | yes | no | Native UI embedded in the Flutter widget tree via `PlatformView` (no concrete need yet, architecture must support it) |
+## Goals & Non-Goals
 
-`passive+has_ui+Go` and `os_triggered+has_ui+Go` are valid combinations with no current concrete need — handled by combining row 6/7 with the Go modifier when they arise, no extra design required.
+### Goals
+- **Tri-Platform Monorepo Parity**: Structure repository into `packages/` (infrastructure) and `features/` (mini-apps), mirroring the conventions of `android_super_app_template` and `ios_super_app_template`.
+- **Streamlined Template Package Inventory**: Retain 8 infrastructure packages in `packages/` (`core`, `framework`, `network`, `ui_kit`, `platform`, `logger`, `logger_native_bridge`, `native_security`), 1 complete feature sample (`features/settings`), and 1 minimal scaffold feature (`features/scanner`). Purge wallet-specific domain packages (`wallet`, `transaction`, `trends`, `authentication`, `onboard`).
+- **Shell Reconstitution**: Shell 3 tabs (`Home` stub, `Scanner`, `Settings`), defaulting to Settings tab, bypassing custom onboarding splash.
+- **Mason Bricks Suite**:
+  - `pac_mvi_feature`: Scaffolds pure-Dart feature packages in `features/{{name}}/`, auto-wiring into DI, AutoRoute, and `platform`'s `DeepLinkRoutes`.
+  - `pac_library`: Scaffolds internal utility/infrastructure packages in `packages/{{name}}/`.
+  - `pac_native_plugin`: Scaffolds Flutter plugins in `packages/{{name}}/` with Android (Kotlin) and iOS (Swift) Clean Architecture (`Platform/Domain/Data/Presentation`). Supports Pigeon for headless mode (`has_ui: false`) and Jetpack Compose/SwiftUI + self-contained `MviViewModel` via PlatformView for UI mode (`has_ui: true`).
+  - `pac_add_native_ui` & `scripts/add_native_ui.sh`: Enables one-click upgrade from headless to UI-enabled native package without destroying existing logic.
+- **Project Renaming Tool**: Ship `scripts/rename_project.sh` to automate app cloning, renaming bundle IDs, packages, and imports while preserving vendor plugin namespaces (`com.danhdue.*`).
+- **CI Governance Gate**: Update `scripts/check_module_boundaries.sh` to enforce boundary rules between `features/*` and `packages/*`.
 
-## 3. Solution
+### Non-Goals
+- Generating or extracting standalone Android/iOS native applications from the Flutter codebase (handled by the two independent native repositories).
+- Rewriting runtime dynamic feature module loaders (Flutter packages are compiled into a unified binary).
+- Replacing `auto_route` or `get_it`.
 
-**Foundation, mandatory for every native module regardless of the flags above** — mirrors the Dart-side `core`/`framework` split:
+---
 
-- **native `core`** (always a dependency): `SafeExecution` (exception-handler wrapper, no `ViewModel`/lifecycle required — usable in `domain/`, a `Service`, a `Worker`, or a plain plugin), `DataState<T>` (Success/Error), a `Logger` contract, a `Container` convention for manual DI, `ReplayQueue` (queue-and-replay-on-next-launch, generalized from `logger_native_bridge`).
-- **native `framework`** (dependency only when `has_ui=true`): `MviViewModel`/`MvvmViewModel`/`ViewState`, ported from `android_digital_wallet`, built on `core`. A Swift equivalent is designed from scratch (Combine-based `ObservableObject`, no existing iOS reference) — see companion doc §3.5.
-- **`android/buildSrc`**, ported and trimmed from `android_digital_wallet/buildSrc`: a quality convention plugin (Spotless/ktlint + Detekt, one shared ruleset) applied to **every** native module including plugin packages, and a separate Hilt+Compose convention plugin applied only to modules with `has_ui=true`. This works because Flutter's plugin loader makes every plugin package a subproject of the same root Gradle build as the host app at build time, so the host's `buildSrc` plugin IDs resolve inside plugin packages too. iOS equivalent: shared `.swiftformat`/`.swiftlint.yml`.
-- **One parameterized Mason brick**, `native_package(trigger, has_ui)`, instead of 3–4 separately-maintained bricks. `__brick__/` contains every possible file; `post_gen.dart` deletes what the chosen flags don't need (e.g. `has_ui=false` removes `presentation/`; `trigger=passive` removes the `Receiver`/`Service`/`Worker` template and `ReplayQueue` wiring). One source of truth avoids the 4-bricks-drift-apart failure mode.
-- **Go integration**: not a brick flag (too library-specific, too rare to bake into generation). Standardized instead via a short guide + a copy-paste panic-recovery snippet (`docs/architecture/native-go-binding.md`), manually dropped into `data/` of whichever generated package needs it.
+## Architecture & Technical Design
 
-## 4. Applying it in practice
-
-| Scenario | What to do |
-|---|---|
-| **Pure Flutter feature** | `mason make pac_mvi_feature`. No `android/`/`ios/` touched. |
-| **Native code, no UI** | `mason make native_package` with `has_ui=false`, pick `trigger`. Get `platform/domain/data`, depending on native `core` only, manual DI via `Container`. |
-| **Native code, has UI** | Same brick, `has_ui=true`. Adds `presentation/` (View + `MviViewModel`), pulls in `framework`→`core`, applies Hilt/Compose convention. `trigger=passive` embeds the view in the Flutter tree via `PlatformView`; `trigger=os_triggered` gets its own `Activity`/overlay `Window`/App Extension, independent of any `FlutterEngine`. |
-| **OS-triggered (any UI)** | `trigger=os_triggered`. The generated entry-point (`onReceive`/`onScreenCall`/`doWork`) is pre-wrapped in `core.SafeExecution` — this is non-optional. Then choose how (if at all) it talks to Dart: (a) never — pure native, own storage; (b) queue results via `core.ReplayQueue`, drained by a Dart initializer next time the app opens (à la `logger_native_bridge`); (c) spin up a headless `FlutterEngine` to run an actual Dart callback (à la the `workmanager` package) — only when reusing existing Dart logic is worth the extra machinery. |
-| **Needs a Go binding** | Any of the above, plus follow `docs/architecture/native-go-binding.md` in `data/`. If `trigger=os_triggered`, call Go directly from Kotlin/Swift — do not route through a headless engine just to reach Go. |
-
-### 4.1 An existing no-UI package that later needs UI
-
-Don't regenerate the brick from scratch (it would clobber the existing `platform/domain/data`). Split
-into two, **not** one brick — only the architecturally meaningful part gets tooled; the rest stays a
-manual checklist, since each package can need a different variant and baking it into a brick would be
-needlessly rigid:
-
-- **Tool** — `scripts/native_add_ui_dependency.sh <pkg> <android|ios>`: does exactly one thing — adds the
-  `framework` dependency (pulling in `core`) and applies the Hilt+Compose convention plugin
-  (`commons.android-feature`) to the chosen package's `build.gradle`/podspec, plus a thin Hilt
-  `@Module`/`@Provides` bridging the existing manual `Container` instances into Hilt's graph. This is the
-  step most likely to be forgotten or done wrong (missing convention plugin → a confusing compile error;
-  a bad bridge → duplicate instances), so it's worth tooling.
-- **Manual checklist** (documentation, no generated code):
-  1. Create `presentation/` (View + a `MviViewModel` subclass), following another UI-bearing package as a
-     template.
-  2. `trigger=passive`: register a `PlatformViewFactory` in the existing `*Plugin.kt`/`.swift` + add the
-     Dart-side `AndroidView`/`UiKitView` wrapper.
-  3. `trigger=os_triggered`: declare the new `Activity`/overlay `Window` in `AndroidManifest.xml`; a new
-     iOS App Extension target is done manually in Xcode (not safely auto-generatable from text templates).
-
-`core.SafeExecution`/`ReplayQueue` (if `os_triggered`) are untouched — the crash-boundary and
-Dart-communication strategy chosen at creation time stay valid; adding UI is additive, not a rewrite of
-the trigger layer.
-
-## 5. Diagrams per use case
-
-One diagram per use case (not combined) — each shows only the components involved in that flow.
-
-**Case 1 — Pure Dart, no native**
-
+### High-Level Architecture
 ```mermaid
-graph TB
-    HOST["Host app"] --> FEATURE["Feature package<br/>(pac_mvi_feature)"]
-    FEATURE --> UI_KIT["ui_kit"]
-    FEATURE --> FRAMEWORK["framework"]
-    FEATURE --> NETWORK["network"]
-    FEATURE --> PLATFORM["platform"]
-    UI_KIT --> CORE["core"]
-    FRAMEWORK --> CORE
-    NETWORK --> CORE
+graph TD
+    subgraph HostApp ["Flutter Super App Host (lib/)"]
+        ShellPage["ShellPage (3 Tabs: Home, Scanner, Settings)"]
+        AppRouter["AppRouter (AutoRoute)"]
+        DI["AppInjection (GetIt)"]
+    end
+
+    subgraph Features ["features/ (Mini-Apps / Features)"]
+        Settings["features/settings (Real Sample)"]
+        Scanner["features/scanner (Empty Sample)"]
+        NewFeature["features/{{name}} (via pac_mvi_feature)"]
+    end
+
+    subgraph PlatformPkg ["packages/platform (Governance)"]
+        DeepLink["DeepLinkRoutes (Decoupled Navigation)"]
+        EventBus["AppEventBus (Decoupled Events)"]
+    end
+
+    subgraph InfraPkgs ["packages/ (Core & Infrastructure)"]
+        Core["packages/core"]
+        Framework["packages/framework (MviBloc)"]
+        Network["packages/network (Dio/Retrofit)"]
+        UIKit["packages/ui_kit (Design System)"]
+        Logger["packages/logger"]
+    end
+
+    subgraph NativePlugins ["packages/ (Native Bridges & Plugins)"]
+        NativeSec["packages/native_security (FFI)"]
+        NativeLog["packages/logger_native_bridge (Pigeon)"]
+        NewPlugin["packages/{{plugin}} (via pac_native_plugin)"]
+    end
+
+    ShellPage --> Features
+    AppRouter --> Features
+    DI --> Features
+    Features --> PlatformPkg
+    Features --> InfraPkgs
+    NativePlugins --> Core
+    NewPlugin -.->|PlatformView (UI) or Pigeon (No-UI)| HostApp
 ```
 
-**Case 2/3 — Ô1: passive, no UI (± Go)**
-
+### Use Cases
 ```mermaid
-graph TB
-    FLUTTER["Flutter Layer<br/>(Feature package → network → ... → core — see Case 1 for detail)"] --> WRAPPER["Plugin Dart facade<br/>(e.g. native_security, or a new plugin from native_package)"]
-    WRAPPER -.channel/FFI.-> PLATFORM_N["native platform/"]
-    PLATFORM_N --> DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/<br/>(+ Go adapter if Case 3)"]
-    PLATFORM_N --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-    DATA_N --> CORE_N
+flowchart TD
+    Dev["Developer"] --> U1["Scaffold new Mini-App Feature"]
+    Dev --> U2["Scaffold internal Dart/Flutter library"]
+    Dev --> U3["Scaffold Native Plugin (Headless / With-UI)"]
+    Dev --> U4["Upgrade Headless Plugin to With-UI"]
+    Dev --> U5["Clone Template & Rename App"]
+
+    U1 -->|Runs| B1["mason make pac_mvi_feature --name <name>"]
+    B1 --> O1["Outputs to features/<name>/ & wires DI/Router/DeepLink"]
+
+    U2 -->|Runs| B2["mason make pac_library --name <name>"]
+    B2 --> O2["Outputs to packages/<name>/ & adds to workspace"]
+
+    U3 -->|Runs| B3["mason make pac_native_plugin --name <name> --has_ui <bool>"]
+    B3 --> O3["Outputs to packages/<name>/ with Clean Arch Kotlin/Swift"]
+
+    U4 -->|Runs| B4["./scripts/add_native_ui.sh <name>"]
+    B4 --> O4["Injects Compose/SwiftUI + PlatformView into existing plugin"]
+
+    U5 -->|Runs| S1["./scripts/rename_project.sh <AppName> <pkg> <bundleId>"]
+    S1 --> O5["Full project renamed & validated with melos genAlls"]
 ```
 
-*(The Dart-internal wiring is already fully drawn in Case 1, so it's collapsed into one "Flutter Layer"
-box here — whether a Feature package or `network` is the one calling the plugin's Dart facade makes no
-difference to the native half of this use case.)*
-
-**Case 4/5 — Ô3: OS-triggered, no UI (± Go)**
-
+### Sequence Diagram
 ```mermaid
-graph TB
-    OS(["OS (Android/iOS)"]) --> ENTRY["native platform/<br/>Receiver/Service/Worker entry"]
-    ENTRY -->|"wrapped by core.SafeExecution"| DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/<br/>(+ Go adapter if Case 5)"]
-    DATA_N -.ReplayQueue, drained next launch.-> DART_INIT["Dart initializer<br/>(once FlutterEngine runs)"]
-    ENTRY --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-    DATA_N --> CORE_N
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant Script as scripts/add_native_ui.sh
+    participant Mason as pac_add_native_ui Brick
+    participant PluginDir as packages/<name>/
+    participant Android as Android Source
+    participant iOS as iOS Source
+    participant Dart as Dart Barrel & UI
+
+    Dev->>Script: Run ./scripts/add_native_ui.sh <name>
+    Script->>PluginDir: Verify package exists & has_ui is false
+    Script->>Mason: Invoke mason make pac_add_native_ui --name <name>
+    Mason->>Android: Enable Compose in build.gradle.kts
+    Mason->>Android: Scaffold presentation/ (MviViewModel.kt, Screen.kt, PlatformView.kt)
+    Mason->>Android: Patch *Plugin.kt to register PlatformViewFactory
+    Mason->>iOS: Scaffold Presentation/ (MviViewModel.swift, View.swift, PlatformView.swift)
+    Mason->>iOS: Patch *Plugin.swift to register FlutterPlatformViewFactory
+    Mason->>Dart: Generate lib/src/ui/<name>_native_view.dart (AndroidView/UiKitView)
+    Mason->>Dart: Export view widget in lib/<name>.dart
+    Script-->>Dev: Upgrade complete (Ready for Compose & SwiftUI UI development)
 ```
 
-**Case 6 — Ô4: OS-triggered, has UI**
+---
 
-```mermaid
-graph TB
-    OS(["OS (Android/iOS)"]) --> ENTRY["native platform/<br/>Service/Extension entry"]
-    ENTRY -->|"wrapped by core.SafeExecution"| PRESENT["native presentation/<br/>Activity/overlay/Extension + MviViewModel"]
-    PRESENT --> DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/"]
-    PRESENT --> FRAMEWORK_N["native framework"]
-    FRAMEWORK_N --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-```
+## Rollout Strategy & Mitigation
 
-**Case 7 — Ô2: passive, has UI**
+### Phased Migration
+1. **Phase 1 (Directory Migration)**: Move `packages/settings` and `packages/scanner` to `features/`. Update `melos.yaml`, root `pubspec.yaml`, and relative path imports. Validate `melos bootstrap` and `melos genAlls`.
+2. **Phase 2 (Bricks Suite)**: Build and test `pac_mvi_feature`, `pac_library`, `pac_native_plugin`, and `pac_add_native_ui`. Verify output against existing code standards.
+3. **Phase 3 (Template Trimming)**: Remove obsolete wallet domain packages, rebuild Shell 3 tabs, clean assets, update boundary scripts.
+4. **Phase 4 (Validation & Renaming)**: Execute `rename_project.sh` on an isolated branch, verifying compilation across Android and iOS.
 
-```mermaid
-graph TB
-    FLUTTER["Flutter Layer<br/>(Feature package — see Case 1)"] --> PV["PlatformView widget"]
-    PV -.embeds.-> PRESENT["native presentation/<br/>View + MviViewModel"]
-    PRESENT --> DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/"]
-    PRESENT --> FRAMEWORK_N["native framework"]
-    FRAMEWORK_N --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-```
+### Risks & Mitigations
+- **Relative Path Breakages during Restructuring**: Moving features from `packages/` to `features/` changes relative import depth to `../../packages/*`. Mitigation: Validate with `dart analyze` and `melos run analyze`.
+- **Pigeon Version Alignment**: Conflicting analyzer constraints when using newer Pigeon releases. Mitigation: Keep Pigeon pinned to compatible workspace ceiling (`26.3.2`).
+- **Vendor Plugin Breakage on Rename**: Renaming native plugins could break FFI/MethodChannel bindings. Mitigation: Lock `com.danhdue.*` namespaces in `rename_project.sh`.
 
-Common to every diagram: solid arrows always flow one way, top to bottom, toward `core`/`native core` —
-never the reverse. Dashed arrows are runtime boundaries (channel, `PlatformView`, `ReplayQueue`), not
-build-time dependencies.
+---
+
+## Kanban Tasks Breakdown
+
+| Task ID | Task Title | Scope & Target Files |
+|---|---|---|
+| [Task 1](task_1_monorepo_restructuring.md) | Monorepo Directory Restructuring (Tri-Platform Parity) | Separate `packages/` and `features/`, move `settings` and `scanner`, update `melos.yaml` and workspace root. |
+| [Task 2](task_2_pac_mvi_feature_brick.md) | Brick `pac_mvi_feature` Update | Target `features/{{name}}`, anchor to `settings`, update hooks and companion bricks. |
+| [Task 3](task_3_pac_library_brick.md) | Brick `pac_library` Creation | Target `packages/{{name}}`, pure Dart/Flutter library scaffolding and workspace registration. |
+| [Task 4](task_4_pac_native_plugin_brick.md) | Brick `pac_native_plugin` Creation | Android (Kotlin) & iOS (Swift) Clean Arch; Pigeon for headless, Compose/SwiftUI + MviViewModel for UI. |
+| [Task 5](task_5_pac_add_native_ui_tool.md) | Brick `pac_add_native_ui` & `scripts/add_native_ui.sh` | One-click headless to UI upgrade, patching Gradle, Kotlin, Swift, and Dart barrel. |
+| [Task 6](task_6_template_trimming_and_shell.md) | Template Trimming & Shell Reconstitution | Purge wallet packages, rebuild Shell 3 tabs (Home stub, Scanner, Settings), clean assets, update CI gate. |
+| [Task 7](task_7_obsolete_cleanups.md) | Obsolete Bricks & Standalone Scripts Cleanup | Remove legacy `sample`, `test_brick`, `native_feature_module`, and standalone extraction scripts. |
+| [Task 8](task_8_rename_script_and_validation.md) | Project Renaming Tool & Full Validation | Implement `scripts/rename_project.sh`, test clone/rename, run `melos genAlls`, build APK and iOS Runner. |

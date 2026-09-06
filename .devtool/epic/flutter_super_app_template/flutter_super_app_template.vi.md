@@ -1,178 +1,182 @@
-# Epic: Flutter Super App Template — Đặc tả kiến trúc Native
+# Epic: Flutter Super App Template & Bộ Mason Bricks Chuẩn Hóa
 
-**Trạng thái**: Draft — chờ review
-**Tài liệu liên quan**: [2026-08-29-flutter-super-app-template-design.md](2026-08-29-flutter-super-app-template-design.md) (thiết kế đầy đủ, phần cắt gọn Dart/Flutter, kế hoạch task)
-**Nguồn tham chiếu**: `android_digital_wallet` (nguồn kiến trúc MVI/buildSrc Android), `vchat_shield` (native code cần *tránh lặp lại*)
+## Mục lục
+1. [Meta Data](#meta-data)
+2. [Bối cảnh](#bối-cảnh)
+3. [Mục tiêu & Ngoài phạm vi](#mục-tiêu--ngoài-phạm-vi)
+4. [Kiến trúc & Thiết kế kỹ thuật](#kiến-trúc--thiết-kế-kỹ-thuật)
+   - [Kiến trúc tổng thể](#kiến-trúc-tổng-thể)
+   - [Use Cases](#use-cases)
+   - [Sequence Diagram (Luồng nâng cấp UI)](#sequence-diagram-luồng-nâng-cấp-ui)
+5. [Chiến lược Rollout & Giảm thiểu rủi ro](#chiến-lược-rollout--giảm-thiểu-rủi-ro)
+6. [Phân rã Kanban Tasks](#phân-rã-kanban-tasks)
 
-## 1. Đặc tả yêu cầu (Goals)
+---
 
-| # | Mục tiêu |
-|---|---|
-| G1 | Tạo template Flutter clone-và-đổi-tên, giữ nguyên Clean Architecture + MVI + super-app governance hiện có (phần Dart — chi tiết ở design doc liên quan). |
-| G2 | Chuẩn hoá code native (Kotlin/Android, Swift/iOS) theo cùng cách: 1 quy ước layer, 1 bộ tooling chất lượng, áp dụng cho mọi module native ngay từ cấu trúc — không dựa vào tự giác từng người. |
-| G3 | Plugin package phải trung lập với DI framework (không ép Hilt) để dùng được ở bất kỳ app Flutter nào; Hilt/Compose/SwiftUI/`MviViewModel` chỉ dành cho code thật sự sở hữu 1 màn hình native. |
-| G4 | Khiến crash host-app từ code native do OS trigger khó xảy ra bằng cấu trúc (bài học từ `vchat_shield`: logic nghiệp vụ viết thẳng trong `onReceive`/`onScreenCall`/`doWork` làm crash cả tiến trình host). |
-| G5 | Hỗ trợ tích hợp thư viện native bên thứ 3 trong tương lai (Go qua gomobile/cgo, vd E2EE) mà không cần bày ra kiến trúc mới. |
-| G6 | Thêm code native mới chỉ cần chọn 2 tham số (flag), không cần tự quyết định kiến trúc. |
+## Meta Data
+- **Epic**: `flutter_super_app_template`
+- **Trạng thái**: Đang thực hiện (In-Progress / Designing)
+- **Target Release**: Flutter Super App Template v1.0
+- **Source Spec**: [2026-09-06-flutter-super-app-template-design.md](2026-09-06-flutter-super-app-template-design.md)
+- **Template Native Tham chiếu**:
+  - Android: `/Users/danhdue/AllProjects/digital_wallet/android_digital_wallet/.worktrees/android_super_app_template`
+  - iOS: `/Users/danhdue/AllProjects/digital_wallet/iOSDigitalWallet/.worktrees/ios_super_app_template`
 
-## 2. Use case thực tế ảnh hưởng tới kiến trúc
+---
 
-Có 2 trục độc lập quyết định hình dạng của bất kỳ module native nào:
-- **Trigger** — Dart gọi vào (*passive*), hay OS tự gọi độc lập với Flutter (*os_triggered*, vd
-  `BroadcastReceiver`/`Service`/`WorkManager`/`CallDirectoryHandler` — có thể chạy khi tiến trình chưa
-  có `FlutterEngine` nào)?
-- **UI** — module này có sở hữu màn hình/overlay native không (*has_ui*)?
+## Bối cảnh
+`bloc_digital_wallet` là monorepo Flutter quản lý bằng Melos, tuân thủ Clean Architecture + MVI. Trước đây, toàn bộ các package (hạ tầng dùng chung, tiện ích, native bridges, và các mini-app nghiệp vụ) bị đặt chung trong một thư mục phẳng `packages/`. Thêm vào đó, các bản thảo thiết kế trước đây dự định trích xuất cả một dự án Standalone Native Android ngay từ bên trong repo Flutter.
 
-Go (hay bất kỳ thư viện native bên thứ 3 đã biên dịch) **không phải trục thứ 3** — nó là 1 modifier chèn
-vào lớp `data/` (hoặc `platform/` nếu JNI/cgo gọi trực tiếp) của 1 trong 4 tổ hợp trên, kèm 1 quy tắc cố
-định: panic của Go phải được recover và convert thành lỗi Kotlin/Swift ngay tại biên giới đó, không bao
-giờ để lan lên trên.
+Hiện tại, vì đã có sẵn 2 template native độc lập hoàn chỉnh ([`android_super_app_template`](file:///Users/danhdue/AllProjects/digital_wallet/android_digital_wallet/.worktrees/android_super_app_template) và [`ios_super_app_template`](file:///Users/danhdue/AllProjects/digital_wallet/iOSDigitalWallet/.worktrees/ios_super_app_template)), định hướng được điều chỉnh chuẩn xác:
+1. Tái cấu trúc `bloc_digital_wallet` thành **Flutter Super App Template** chuẩn mực bằng cách phân tách rõ `packages/` (hạ tầng, tiện ích, native plugins) và `features/` (mini-apps), đạt sự đồng nhất 100% (Tri-Platform Parity) với cả Android và iOS.
+2. Xây dựng bộ Mason Bricks tinh gọn để sinh features, thư viện, và packages tích hợp native (hỗ trợ cả No-UI với Pigeon và With-UI với Jetpack Compose/SwiftUI + MviViewModel qua PlatformView).
+3. Bổ sung cơ chế nâng cấp một chạm (`pac_add_native_ui` / `scripts/add_native_ui.sh`) chuyển đổi package từ No-UI sang With-UI mà không ảnh hưởng mã nguồn cũ.
+4. Loại bỏ triệt để các script và brick cũ nhằm sinh standalone native app từ Flutter.
 
-Danh sách rút gọn còn các trường hợp thực tế (từ tổ hợp đầy đủ 2×2×Go):
+---
 
-| # | trigger | has_ui | Go | Ví dụ |
-|---|---|---|---|---|
-| 1 | — | — | — | Feature thuần Dart, không code native (`pac_mvi_feature`) |
-| 2 | passive | không | không | `native_security`, `logger_native_bridge` |
-| 3 | passive | không | có | E2EE encrypt/decrypt lúc màn hình chat đang mở |
-| 4 | os_triggered | không | không | Worker đồng bộ nền (kiểu `ScamDatabaseSyncWorker` của `vchat_shield`) |
-| 5 | os_triggered | không | có | Giải mã preview push-notification khi app/Flutter engine chưa chạy |
-| 6 | os_triggered | có | không | Overlay/call-screening native độc lập Flutter (kiểu `vchat_shield`) |
-| 7 | passive | có | không | UI native nhúng vào cây widget Flutter qua `PlatformView` (chưa có nhu cầu cụ thể, nhưng kiến trúc phải đỡ được) |
+## Mục tiêu & Ngoài phạm vi
 
-`passive+has_ui+Go` và `os_triggered+has_ui+Go` là tổ hợp hợp lệ nhưng chưa có nhu cầu cụ thể — khi phát
-sinh chỉ cần ghép hàng 6/7 với modifier Go, không cần thiết kế thêm.
+### Mục tiêu
+- **Đồng nhất cấu trúc 3 nền tảng (Tri-Platform Parity):** Phân tách cấu trúc thư mục thành `packages/` (hạ tầng) và `features/` (mini-apps), khớp chuẩn với `android_super_app_template` và `ios_super_app_template`.
+- **Cắt gọn danh mục package trong Template:** Giữ 8 package hạ tầng trong `packages/` (`core`, `framework`, `network`, `ui_kit`, `platform`, `logger`, `logger_native_bridge`, `native_security`), 1 feature mẫu thực tế (`features/settings`), và 1 feature khung rỗng (`features/scanner`). Loại bỏ hoàn toàn các package domain ví (`wallet`, `transaction`, `trends`, `authentication`, `onboard`).
+- **Tái cấu trúc Shell Host:** Shell 3 tab (`Home` stub page, `Scanner`, `Settings`), mở app vào thẳng Settings, bỏ splash tùy biến.
+- **Hệ thống Mason Bricks:**
+  - `pac_mvi_feature`: Sinh feature package thuần Dart trong `features/{{name}}/`, tự động đăng ký DI, AutoRoute, và `DeepLinkRoutes` (neo: `settings`).
+  - `pac_library`: Sinh package tiện ích/hạ tầng nội bộ trong `packages/{{name}}/`.
+  - `pac_native_plugin`: Sinh Flutter plugin trong `packages/{{name}}/` với Clean Architecture Android (Kotlin) & iOS (Swift) (`Platform/Domain/Data/Presentation`). Hỗ trợ Pigeon cho `has_ui: false` và Jetpack Compose/SwiftUI + self-contained `MviViewModel` qua PlatformView cho `has_ui: true`.
+  - `pac_add_native_ui` & `scripts/add_native_ui.sh`: Nâng cấp một chạm từ headless sang có UI native an toàn.
+- **Công cụ Đổi tên dự án:** `scripts/rename_project.sh` đổi tên package, app, bundle ID, imports; giữ cố định namespace vendor `com.danhdue.*` của plugin native.
+- **CI Boundary Gate:** Cập nhật `scripts/check_module_boundaries.sh` kiểm tra phân định ranh giới giữa `features/*` và `packages/*`.
 
-## 3. Lựa chọn solution
+### Ngoài phạm vi
+- Tự tạo hoặc trích xuất ứng dụng native Android/iOS độc lập từ repo Flutter (đã do 2 template native độc lập đảm nhiệm).
+- Xây dựng cơ chế tải mã động runtime (Flutter biên dịch thành 1 binary duy nhất).
+- Thay thế `auto_route` hoặc `get_it`.
 
-**Nền tảng bắt buộc cho mọi module native, bất kể chọn flag nào** — mirror cách Dart đã tách `core`/`framework`:
+---
 
-- **native `core`** (luôn là dependency): `SafeExecution` (bọc exception-handler, không cần
-  `ViewModel`/lifecycle — dùng được trong `domain/`, 1 `Service`, 1 `Worker`, hay 1 plugin thường),
-  `DataState<T>` (Success/Error), 1 `Logger` contract, quy ước `Container` cho DI thủ công, `ReplayQueue`
-  (queue-rồi-replay-lúc-mở-app-lại, tổng quát hoá từ `logger_native_bridge`).
-- **native `framework`** (chỉ là dependency khi `has_ui=true`): `MviViewModel`/`MvvmViewModel`/`ViewState`,
-  port từ `android_digital_wallet`, build trên `core`. Bản Swift thiết kế mới hoàn toàn (Combine-based
-  `ObservableObject`, không có reference iOS sẵn) — xem design doc liên quan mục 3.5.
-- **`android/buildSrc`**, port và cắt gọn từ `android_digital_wallet/buildSrc`: 1 convention plugin chất
-  lượng (Spotless/ktlint + Detekt, 1 ruleset dùng chung) áp cho **mọi** module native kể cả plugin
-  package, và 1 convention plugin Hilt+Compose riêng chỉ áp cho module có `has_ui=true`. Khả thi vì cơ
-  chế nạp plugin của Flutter khiến mọi plugin package trở thành subproject của cùng 1 root Gradle build
-  với host app lúc build, nên plugin ID trong `buildSrc` của host phân giải được cả bên trong plugin
-  package. Tương đương iOS: `.swiftformat`/`.swiftlint.yml` dùng chung.
-- **1 brick Mason tham số hoá duy nhất**, `native_package(trigger, has_ui)`, thay vì 3-4 brick bảo trì
-  riêng lẻ. `__brick__/` chứa mọi file có thể có; `post_gen.dart` xoá phần flag đã chọn không cần (vd
-  `has_ui=false` xoá `presentation/`; `trigger=passive` xoá mẫu `Receiver`/`Service`/`Worker` và wiring
-  `ReplayQueue`). 1 nguồn duy nhất tránh được lỗi "4 brick trôi lệch nhau".
-- **Tích hợp Go**: không phải flag của brick (quá đặc thù từng thư viện, quá hiếm để đưa vào generation).
-  Chuẩn hoá bằng 1 guide ngắn + 1 snippet panic-recovery copy-paste được
-  (`docs/architecture/native-go-binding.md`), gắn thủ công vào `data/` của package đã sinh.
+## Kiến trúc & Thiết kế Kỹ thuật
 
-## 4. Cách áp dụng vào thực tế
-
-| Tình huống | Làm gì |
-|---|---|
-| **Feature thuần Flutter** | `mason make pac_mvi_feature`. Không đụng `android/`/`ios/`. |
-| **Code native, không UI** | `mason make native_package` với `has_ui=false`, chọn `trigger`. Có `platform/domain/data`, chỉ phụ thuộc `core` native, DI thủ công qua `Container`. |
-| **Code native, có UI** | Cùng brick, `has_ui=true`. Thêm `presentation/` (View + `MviViewModel`), kéo theo `framework`→`core`, áp convention Hilt/Compose. `trigger=passive` nhúng view vào cây Flutter qua `PlatformView`; `trigger=os_triggered` có `Activity`/overlay `Window`/App Extension riêng, độc lập mọi `FlutterEngine`. |
-| **OS-triggered (có UI hay không)** | `trigger=os_triggered`. Entry-point sinh ra (`onReceive`/`onScreenCall`/`doWork`) đã được bọc sẵn `core.SafeExecution` — bắt buộc, không tuỳ chọn. Sau đó chọn cách (nếu có) nói chuyện với Dart: (a) không bao giờ — thuần native, tự lưu trữ; (b) queue kết quả qua `core.ReplayQueue`, 1 initializer Dart đọc ra lúc app mở lại (kiểu `logger_native_bridge`); (c) tự khởi `FlutterEngine` headless để chạy callback Dart thật (kiểu package `workmanager`) — chỉ khi việc dùng lại logic Dart đáng để thêm cơ chế này. |
-| **Cần binding Go** | Bất kỳ tình huống nào ở trên, cộng thêm làm theo `docs/architecture/native-go-binding.md` trong `data/`. Nếu `trigger=os_triggered`, gọi thẳng Go từ Kotlin/Swift — không đi vòng qua headless engine chỉ để chạm tới Go. |
-
-### 4.1 Package đã có, lúc đầu không UI, sau này cần thêm UI
-
-Không sinh lại brick từ đầu (sẽ đè mất `platform/domain/data` đã viết). Tách làm 2 phần, **không** gộp
-chung 1 brick — chỉ công cụ hoá phần có ý nghĩa kiến trúc, phần còn lại để checklist thủ công vì mỗi
-package có thể cần biến thể khác nhau, brick hoá sẽ cứng nhắc không đáng:
-
-- **Tool** — `scripts/native_add_ui_dependency.sh <pkg> <android|ios>`: chỉ làm đúng 1 việc — thêm
-  dependency `framework` (kéo theo `core`) + áp convention plugin Hilt+Compose (`commons.android-feature`)
-  vào `build.gradle`/podspec của package đã chọn, và thêm 1 Hilt `@Module`/`@Provides` mỏng bắc cầu các
-  instance `Container` thủ công đang có sang graph Hilt. Đây là bước dễ sai/dễ quên nhất (thiếu convention
-  → lỗi biên dịch khó hiểu; bắc cầu sai → duplicate instance), nên đáng để công cụ hoá.
-- **Checklist thủ công** (tài liệu, không sinh code):
-  1. Tạo `presentation/` (View + ViewModel kế thừa `MviViewModel`), theo mẫu 1 package có UI khác.
-  2. `trigger=passive`: đăng ký `PlatformViewFactory` trong `*Plugin.kt`/`.swift` sẵn có + thêm widget
-     `AndroidView`/`UiKitView` phía Dart.
-  3. `trigger=os_triggered`: khai `Activity`/overlay `Window` trong `AndroidManifest.xml`; nếu cần App
-     Extension mới bên iOS thì làm thủ công trong Xcode (không tự sinh được từ template text).
-
-`core.SafeExecution`/`ReplayQueue` (nếu `os_triggered`) giữ nguyên không đổi — crash-boundary và chiến
-lược nói-chuyện-với-Dart đã chọn lúc tạo package vẫn còn hiệu lực; thêm UI là việc cộng thêm, không phải
-viết lại tầng trigger.
-
-## 5. Sơ đồ theo từng use case
-
-Mỗi use case 1 sơ đồ riêng (không gộp chung) — chỉ vẽ đúng component tham gia luồng đó.
-
-**Case 1 — Thuần Dart, không native**
-
+### Kiến trúc Tổng thể
 ```mermaid
-graph TB
-    HOST["Host app"] --> FEATURE["Feature package<br/>(pac_mvi_feature)"]
-    FEATURE --> UI_KIT["ui_kit"]
-    FEATURE --> FRAMEWORK["framework"]
-    FEATURE --> NETWORK["network"]
-    FEATURE --> PLATFORM["platform"]
-    UI_KIT --> CORE["core"]
-    FRAMEWORK --> CORE
-    NETWORK --> CORE
+graph TD
+    subgraph HostApp ["Flutter Super App Host (lib/)"]
+        ShellPage["ShellPage (3 Tabs: Home, Scanner, Settings)"]
+        AppRouter["AppRouter (AutoRoute)"]
+        DI["AppInjection (GetIt)"]
+    end
+
+    subgraph Features ["features/ (Mini-Apps / Features)"]
+        Settings["features/settings (Sample Thực tế)"]
+        Scanner["features/scanner (Sample Khung rỗng)"]
+        NewFeature["features/{{name}} (sinh bởi pac_mvi_feature)"]
+    end
+
+    subgraph PlatformPkg ["packages/platform (Quản trị)"]
+        DeepLink["DeepLinkRoutes (Định tuyến phi phụ thuộc)"]
+        EventBus["AppEventBus (Giao tiếp phi phụ thuộc)"]
+    end
+
+    subgraph InfraPkgs ["packages/ (Hạ tầng Dùng chung)"]
+        Core["packages/core"]
+        Framework["packages/framework (MviBloc)"]
+        Network["packages/network (Dio/Retrofit)"]
+        UIKit["packages/ui_kit (Design System)"]
+        Logger["packages/logger"]
+    end
+
+    subgraph NativePlugins ["packages/ (Native Bridges & Plugins)"]
+        NativeSec["packages/native_security (FFI)"]
+        NativeLog["packages/logger_native_bridge (Pigeon)"]
+        NewPlugin["packages/{{plugin}} (sinh bởi pac_native_plugin)"]
+    end
+
+    ShellPage --> Features
+    AppRouter --> Features
+    DI --> Features
+    Features --> PlatformPkg
+    Features --> InfraPkgs
+    NativePlugins --> Core
+    NewPlugin -.->|PlatformView (UI) hoặc Pigeon (No-UI)| HostApp
 ```
 
-**Case 2/3 — Ô1: passive, không UI (± Go)**
-
+### Use Cases
 ```mermaid
-graph TB
-    FLUTTER["Flutter Layer<br/>(Feature package → network → ... → core — xem chi tiết ở Case 1)"] --> WRAPPER["Plugin Dart facade<br/>(vd native_security, hoặc plugin mới sinh từ native_package)"]
-    WRAPPER -.channel/FFI.-> PLATFORM_N["native platform/"]
-    PLATFORM_N --> DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/<br/>(+ Go adapter nếu Case 3)"]
-    PLATFORM_N --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-    DATA_N --> CORE_N
+flowchart TD
+    Dev["Developer"] --> U1["Sinh Mini-App Feature mới"]
+    Dev --> U2["Sinh Package Thư viện Nội bộ"]
+    Dev --> U3["Sinh Native Plugin (No-UI / With-UI)"]
+    Dev --> U4["Nâng cấp Plugin No-UI lên With-UI"]
+    Dev --> U5["Clone Template & Đổi tên Dự án"]
+
+    U1 -->|Chạy| B1["mason make pac_mvi_feature --name <name>"]
+    B1 --> O1["Xuất ra features/<name>/ & nối DI/Router/DeepLink"]
+
+    U2 -->|Chạy| B2["mason make pac_library --name <name>"]
+    B2 --> O2["Xuất ra packages/<name>/ & thêm vào workspace"]
+
+    U3 -->|Chạy| B3["mason make pac_native_plugin --name <name> --has_ui <bool>"]
+    B3 --> O3["Xuất ra packages/<name>/ với Clean Arch Kotlin/Swift"]
+
+    U4 -->|Chạy| B4["./scripts/add_native_ui.sh <name>"]
+    B4 --> O4["Tự động chèn Compose/SwiftUI + PlatformView"]
+
+    U5 -->|Chạy| S1["./scripts/rename_project.sh <AppName> <pkg> <bundleId>"]
+    S1 --> O5["Đổi tên toàn diện & kiểm tra với melos genAlls"]
 ```
 
-*(Nội bộ Dart đã vẽ đủ ở Case 1 nên gộp chung thành "Flutter Layer" — dù Feature package hay `network` gọi
-vào Plugin Dart facade thì không ảnh hưởng gì tới nửa native của use case này.)*
-
-**Case 4/5 — Ô3: OS-triggered, không UI (± Go)**
-
+### Sequence Diagram (Luồng nâng cấp UI)
 ```mermaid
-graph TB
-    OS(["OS (Android/iOS)"]) --> ENTRY["native platform/<br/>Receiver/Service/Worker entry"]
-    ENTRY -->|"bọc bởi core.SafeExecution"| DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/<br/>(+ Go adapter nếu Case 5)"]
-    DATA_N -.ReplayQueue, đọc lúc app mở lại.-> DART_INIT["Dart initializer<br/>(khi Flutter engine chạy)"]
-    ENTRY --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-    DATA_N --> CORE_N
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant Script as scripts/add_native_ui.sh
+    participant Mason as pac_add_native_ui Brick
+    participant PluginDir as packages/<name>/
+    participant Android as Android Source
+    participant iOS as iOS Source
+    participant Dart as Dart Barrel & UI
+
+    Dev->>Script: Chạy ./scripts/add_native_ui.sh <name>
+    Script->>PluginDir: Kiểm tra package tồn tại & has_ui là false
+    Script->>Mason: Gọi mason make pac_add_native_ui --name <name>
+    Mason->>Android: Bật Compose trong build.gradle.kts
+    Mason->>Android: Sinh presentation/ (MviViewModel.kt, Screen.kt, PlatformView.kt)
+    Mason->>Android: Patch *Plugin.kt để đăng ký PlatformViewFactory
+    Mason->>iOS: Sinh Presentation/ (MviViewModel.swift, View.swift, PlatformView.swift)
+    Mason->>iOS: Patch *Plugin.swift để đăng ký FlutterPlatformViewFactory
+    Mason->>Dart: Sinh lib/src/ui/<name>_native_view.dart (AndroidView/UiKitView)
+    Mason->>Dart: Export view widget trong lib/<name>.dart
+    Script-->>Dev: Nâng cấp hoàn tất (Sẵn sàng code Compose & SwiftUI)
 ```
 
-**Case 6 — Ô4: OS-triggered, có UI**
+---
 
-```mermaid
-graph TB
-    OS(["OS (Android/iOS)"]) --> ENTRY["native platform/<br/>Service/Extension entry"]
-    ENTRY -->|"bọc bởi core.SafeExecution"| PRESENT["native presentation/<br/>Activity/overlay/Extension + MviViewModel"]
-    PRESENT --> DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/"]
-    PRESENT --> FRAMEWORK_N["native framework"]
-    FRAMEWORK_N --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-```
+## Chiến lược Rollout & Giảm thiểu Rủi ro
 
-**Case 7 — Ô2: passive, có UI**
+### Các Giai đoạn Thực thi
+1. **Giai đoạn 1 (Tái cấu trúc thư mục):** Chuyển `packages/settings` và `packages/scanner` sang `features/`. Cập nhật `melos.yaml`, root `pubspec.yaml`, và relative paths. Chạy kiểm tra `melos bootstrap` và `melos genAlls`.
+2. **Giai đoạn 2 (Hệ thống Bricks):** Xây dựng và kiểm thử `pac_mvi_feature`, `pac_library`, `pac_native_plugin`, và `pac_add_native_ui`.
+3. **Giai đoạn 3 (Cắt gọn Template):** Loại bỏ các package domain ví, dựng lại Shell 3 tab, dọn assets, cập nhật script kiểm tra CI.
+4. **Giai đoạn 4 (Đổi tên & Nghiệm thu):** Thử nghiệm chạy `rename_project.sh` trên branch cách ly, build kiểm thử thành công trên cả Android và iOS.
 
-```mermaid
-graph TB
-    FLUTTER["Flutter Layer<br/>(Feature package — xem Case 1)"] --> PV["PlatformView widget"]
-    PV -.nhúng.-> PRESENT["native presentation/<br/>View + MviViewModel"]
-    PRESENT --> DOMAIN_N["native domain/"]
-    DOMAIN_N --> DATA_N["native data/"]
-    PRESENT --> FRAMEWORK_N["native framework"]
-    FRAMEWORK_N --> CORE_N["native core"]
-    DOMAIN_N --> CORE_N
-```
+### Rủi ro & Biện pháp Xử lý
+- **Lỗi đường dẫn tương đối khi chuyển sang `features/`:** Chiều sâu tương đối đến `packages/` đổi thành `../../packages/*`. Biện pháp: Kiểm tra tự động bằng `dart analyze` và `melos run analyze`.
+- **Xung đột phiên bản Pigeon:** Pigeon bản mới xung đột analyzer với `theme_tailor`. Biện pháp: Ghim phiên bản Pigeon `26.3.2` tương thích với workspace.
+- **Lỗi đăng ký plugin khi đổi tên:** Đổi tên nhầm namespace plugin native có thể làm gãy bridge. Biện pháp: Khóa cứng namespace `com.danhdue.*` trong `rename_project.sh`.
 
-Điểm chung ở mọi sơ đồ: mũi tên đặc luôn đi 1 chiều từ trên xuống, về phía `core`/`native core` — không có
-chiều ngược. Đường nét đứt là ranh giới runtime (channel, PlatformView, ReplayQueue), không phải dependency
-lúc build.
+---
+
+## Phân rã Kanban Tasks
+
+| Task ID | Tiêu đề Task | Phạm vi & Tệp tác động |
+|---|---|---|
+| [Task 1](task_1_monorepo_restructuring.md) | Tái cấu trúc Thư mục Monorepo (Tri-Platform Parity) | Phân tách `packages/` và `features/`, chuyển `settings` & `scanner`, cập nhật `melos.yaml` và workspace root. |
+| [Task 2](task_2_pac_mvi_feature_brick.md) | Cập nhật Brick `pac_mvi_feature` | Đích đến `features/{{name}}`, chuyển anchor sang `settings`, cập nhật hooks và bricks con. |
+| [Task 3](task_3_pac_library_brick.md) | Tạo mới Brick `pac_library` | Đích đến `packages/{{name}}`, sinh thư viện thuần Dart/Flutter và đăng ký workspace. |
+| [Task 4](task_4_pac_native_plugin_brick.md) | Tạo mới Brick `pac_native_plugin` | Clean Arch Android (Kotlin) & iOS (Swift); Pigeon cho No-UI, Compose/SwiftUI + MviViewModel cho With-UI. |
+| [Task 5](task_5_pac_add_native_ui_tool.md) | Tạo mới Brick `pac_add_native_ui` & `scripts/add_native_ui.sh` | Công cụ nâng cấp 1 chạm từ No-UI lên With-UI, tự động patch Gradle, Kotlin, Swift, Dart. |
+| [Task 6](task_6_template_trimming_and_shell.md) | Cắt gọn Template & Dựng lại Shell Host | Xóa 5 package domain ví, dựng Shell 3 tab (Home stub, Scanner, Settings), dọn assets, cập nhật CI gate. |
+| [Task 7](task_7_obsolete_cleanups.md) | Dọn dẹp Bricks Lỗi thời & Script Cũ | Xóa `sample`, `test_brick`, `native_feature_module`, và các script trích xuất standalone cũ. |
+| [Task 8](task_8_rename_script_and_validation.md) | Tool Đổi tên Dự án & Nghiệm thu Toàn diện | Cung cấp `scripts/rename_project.sh`, test clone/rename, chạy `melos genAlls`, build APK & iOS Runner. |
