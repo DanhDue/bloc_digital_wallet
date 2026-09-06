@@ -8,12 +8,7 @@ import 'package:settings/domain/usecases/check_language_cached_usecase.dart';
 import 'package:settings/domain/usecases/get_dynamic_localization_usecase.dart';
 import 'package:settings/domain/usecases/update_user_language_usecase.dart';
 
-enum LanguageSyncStatus {
-  loading,
-  cachedApplied,
-  success,
-  error,
-}
+enum LanguageSyncStatus { loading, cachedApplied, success, error }
 
 @injectable
 class ChangeLanguageUseCase {

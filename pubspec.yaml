@@ -18,10 +18,10 @@ workspace:
   - packages/onboard
   - packages/platform
   - packages/ui_kit
-  - packages/settings
+  - features/settings
   - packages/wallet
   - packages/trends
-  - packages/scanner
+  - features/scanner
   - packages/transaction
 dependencies:
   flutter:
@@ -47,7 +47,7 @@ dependencies:
   onboard:
     path: packages/onboard
   scanner:
-    path: packages/scanner
+    path: features/scanner
   wallet:
     path: packages/wallet
   trends:
@@ -55,7 +55,7 @@ dependencies:
   transaction:
     path: packages/transaction
   settings:
-    path: packages/settings
+    path: features/settings
   # Dialog Management
   flutter_smart_dialog: ^4.9.8+9
   # Logging

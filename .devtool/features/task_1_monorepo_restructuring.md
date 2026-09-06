@@ -1,13 +1,13 @@
 ---
 id: "task_1_monorepo_restructuring"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-06T18:05:00.000Z"
-modified: "2026-09-06T18:05:00.000Z"
-completedAt: null
+modified: "2026-09-06T18:15:00.000Z"
+completedAt: "2026-09-06T18:15:00.000Z"
 labels: ["architecture", "monorepo"]
 order: "a1"
 ---

@@ -3,6 +3,7 @@ set -e
 
 # 0. Generate Translations
 melos exec --file-exists="slang.yaml" -- fvm dart run slang
+fvm dart run slang
 
 # 1. Build UI Kit (Assets)
 melos exec --scope="ui_kit" -- fvm flutter pub run build_runner build --delete-conflicting-outputs

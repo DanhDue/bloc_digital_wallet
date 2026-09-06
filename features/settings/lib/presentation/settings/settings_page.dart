@@ -25,8 +25,7 @@ import 'package:settings/data/models/sync/available_language.dart';
 import 'package:collection/collection.dart';
 
 @RoutePage()
-class SettingsPage
-    extends BaseMviPage<SettingsBloc, SettingsAction, SettingsState, SettingsEvent>
+class SettingsPage extends BaseMviPage<SettingsBloc, SettingsAction, SettingsState, SettingsEvent>
     with DialogMixin {
   const SettingsPage({super.key});
 

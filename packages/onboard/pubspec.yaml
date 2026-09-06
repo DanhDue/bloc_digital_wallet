@@ -27,7 +27,7 @@ dependencies:
   framework:
     path: ../framework
   settings:
-    path: ../settings
+    path: ../../features/settings
   logger:
     path: ../logger
 

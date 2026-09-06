@@ -2,6 +2,7 @@ name: bloc_digital_wallet
 
 packages:
   - 'packages/**'
+  - 'features/**'
 
 command:
   bootstrap:

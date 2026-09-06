@@ -14,13 +14,13 @@ dependencies:
 
   # Local Packages
   core:
-    path: ../core
+    path: ../../packages/core
   network:
-    path: ../network
+    path: ../../packages/network
   ui_kit:
-    path: ../ui_kit
+    path: ../../packages/ui_kit
   framework:
-     path: ../framework
+    path: ../../packages/framework
   
   # Dependencies
   json_annotation: ^4.9.0
