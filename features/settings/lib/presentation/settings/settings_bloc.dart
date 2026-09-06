@@ -6,9 +6,11 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:framework/framework.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:settings/data/models/sync/available_language.dart';
+import 'package:settings/domain/entities/language_sync_status.dart';
+import 'package:settings/domain/entities/supported_language.dart';
+import 'package:settings/domain/usecases/bootstrap_usecase.dart';
 import 'package:settings/domain/usecases/change_language_usecase.dart';
-import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
+import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 
 import 'settings_action.dart';
@@ -17,17 +19,17 @@ import 'settings_state.dart';
 
 @injectable
 class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent> {
-  // final GetSettingsUseCase _getSettingsUseCase;
   final AppInfoService _appInfoService;
-  final GetAvailableLanguagesUseCase _getAvailableLanguagesUseCase;
+  final GetCachedLanguagesUseCase _getCachedLanguagesUseCase;
+  final BootstrapUseCase _bootstrapUseCase;
   final ChangeLanguageUseCase _changeLanguageUseCase;
 
   String? _pendingLanguageCode;
 
   SettingsBloc(
-    /* this._getSettingsUseCase, */
     this._appInfoService,
-    this._getAvailableLanguagesUseCase,
+    this._getCachedLanguagesUseCase,
+    this._bootstrapUseCase,
     this._changeLanguageUseCase,
   ) : super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
@@ -42,29 +44,50 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   }
 
   Future<void> _onStarted(SettingsActionStarted action, Emitter<SettingsState> emit) async {
-    // Emit loading state immediately
-    emit(state.copyWith(status: SettingsStatus.loading));
-
-    // Get app info and available languages immediately.
+    // 1. Instant Frame-0: get package info and cached languages
     final results = await Future.wait([
       _appInfoService.getPackageInfo(),
-      _getAvailableLanguagesUseCase(),
+      _getCachedLanguagesUseCase(),
     ]);
 
     final packageInfo = results[0] as PackageInfo;
-    final languagesResult = results[1] as Either<Failure, List<AvailableLanguage>>;
-    final availableLanguages = languagesResult.getOrElse(() => <AvailableLanguage>[]);
+    final languagesResult = results[1] as Either<Failure, List<SupportedLanguage>>;
+    final cachedLanguages = languagesResult.getOrElse(
+      () => GetCachedLanguagesUseCase.defaultBundledLanguages,
+    );
 
     final initialUiModel = SettingsUiModel(
       id: 'local',
       appVersion: packageInfo.version,
       buildNumber: packageInfo.buildNumber,
       isDarkModeEnabled: ThemeManager.instance.isDarkMode,
-      availableLanguages: availableLanguages,
+      availableLanguages: cachedLanguages,
     );
 
-    // Emit initial state with app info visible immediately
+    // Frame-0: Instant render without modal loading dialog
     emit(state.copyWith(status: SettingsStatus.success, uiModel: initialUiModel));
+
+    // 2. Silent background bootstrap
+    await _runBackgroundBootstrap(emit);
+  }
+
+  Future<void> _runBackgroundBootstrap(Emitter<SettingsState> emit) async {
+    final bootstrapResult = await _bootstrapUseCase();
+    await bootstrapResult.fold(
+      (failure) async => null, // Stale cache is fine, silently proceed
+      (response) async {
+        final refreshedLanguagesResult = await _getCachedLanguagesUseCase();
+        refreshedLanguagesResult.fold(
+          (failure) => null,
+          (refreshedLanguages) {
+            if (!isClosed) {
+              final updatedModel = state.uiModel?.copyWith(availableLanguages: refreshedLanguages);
+              emit(state.copyWith(uiModel: updatedModel));
+            }
+          },
+        );
+      },
+    );
   }
 
   void _onToggleDarkMode(SettingsActionToggleDarkMode action, Emitter<SettingsState> emit) {
@@ -116,18 +139,16 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
         }
 
         switch (status) {
-          case LanguageSyncStatus.loading:
+          case LanguageSyncIdle():
+            return state;
+          case LanguageSyncLoading():
             return state.copyWith(status: SettingsStatus.loading);
-          case LanguageSyncStatus.cachedApplied:
-          case LanguageSyncStatus.success:
+          case LanguageSyncCachedApplied():
+          case LanguageSyncSuccess():
             return state.copyWith(status: SettingsStatus.success);
-          case LanguageSyncStatus.error:
-            emitEvent(
-              const SettingsEvent.showError(message: 'Failed to refresh language content'),
-            );
-            return state.copyWith(
-              status: SettingsStatus.success,
-            ); // Keep success state for UI but show toast
+          case LanguageSyncError(:final message):
+            emitEvent(SettingsEvent.showError(message: message));
+            return state.copyWith(status: SettingsStatus.success);
         }
       },
     );

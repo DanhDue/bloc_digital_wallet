@@ -3,31 +3,55 @@
 // coverage:ignore-file
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:core/core.dart' hide test;
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/d3nexus_logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:settings/domain/entities/settings_entity.dart';
-// import 'package:settings/domain/usecases/get_settings_usecase.dart';
+import 'package:settings/data/models/sync/sync_bootstrap_response.dart';
+import 'package:settings/domain/entities/language_sync_status.dart';
+import 'package:settings/domain/entities/supported_language.dart';
+import 'package:settings/domain/usecases/bootstrap_usecase.dart';
 import 'package:settings/domain/usecases/change_language_usecase.dart';
-import 'package:settings/data/models/sync/available_language.dart';
-import 'package:settings/domain/usecases/get_available_languages_usecase.dart';
+import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
-import 'package:core/core.dart' hide test;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'settings_bloc_test.mocks.dart';
 
-@GenerateMocks([AppInfoService, ChangeLanguageUseCase, GetAvailableLanguagesUseCase])
+@GenerateMocks([
+  AppInfoService,
+  ChangeLanguageUseCase,
+  GetCachedLanguagesUseCase,
+  BootstrapUseCase,
+])
 void main() {
   late SettingsBloc bloc;
   late MockAppInfoService mockAppInfoService;
   late MockChangeLanguageUseCase mockChangeLanguageUseCase;
-  late MockGetAvailableLanguagesUseCase mockGetAvailableLanguagesUseCase;
+  late MockGetCachedLanguagesUseCase mockGetCachedLanguagesUseCase;
+  late MockBootstrapUseCase mockBootstrapUseCase;
+
+  const defaultLanguages = [
+    SupportedLanguage(
+      languageCode: 'en',
+      languageName: 'English',
+      isDefault: true,
+      isActive: true,
+      isCached: true,
+    ),
+    SupportedLanguage(
+      languageCode: 'vi',
+      languageName: 'Tiếng Việt',
+      isDefault: false,
+      isActive: true,
+      isCached: true,
+    ),
+  ];
 
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +63,8 @@ void main() {
 
     mockAppInfoService = MockAppInfoService();
     mockChangeLanguageUseCase = MockChangeLanguageUseCase();
-    mockGetAvailableLanguagesUseCase = MockGetAvailableLanguagesUseCase();
+    mockGetCachedLanguagesUseCase = MockGetCachedLanguagesUseCase();
+    mockBootstrapUseCase = MockBootstrapUseCase();
 
     when(mockAppInfoService.getPackageInfo()).thenAnswer(
       (_) async => PackageInfo(
@@ -49,14 +74,20 @@ void main() {
         buildNumber: '1',
       ),
     );
-    when(mockGetAvailableLanguagesUseCase()).thenAnswer((_) async => Right(<AvailableLanguage>[]));
+    when(mockGetCachedLanguagesUseCase()).thenAnswer(
+      (_) async => const Right(defaultLanguages),
+    );
+    when(mockBootstrapUseCase()).thenAnswer(
+      (_) async => const Right(SyncBootstrapResponse(availableLanguages: [])),
+    );
     when(
       mockChangeLanguageUseCase(any),
-    ).thenAnswer((_) => Stream.value(LanguageSyncStatus.success));
+    ).thenAnswer((_) => Stream.value(const LanguageSyncStatus.success('en')));
 
     bloc = SettingsBloc(
       mockAppInfoService,
-      mockGetAvailableLanguagesUseCase,
+      mockGetCachedLanguagesUseCase,
+      mockBootstrapUseCase,
       mockChangeLanguageUseCase,
     );
   });
@@ -70,18 +101,19 @@ void main() {
   });
 
   blocTest<SettingsBloc, SettingsState>(
-    'emits [loading, success] when started is added and usecase returns success',
+    'emits [success] immediately (instant Frame-0) when started is added',
     build: () => bloc,
     act: (bloc) => bloc.add(const SettingsAction.started()),
     expect: () => [
-      const SettingsState(status: SettingsStatus.loading),
       isA<SettingsState>()
           .having((s) => s.status, 'status', SettingsStatus.success)
-          .having((s) => s.uiModel?.appVersion, 'appVersion', '1.0.0'),
+          .having((s) => s.uiModel?.appVersion, 'appVersion', '1.0.0')
+          .having((s) => s.uiModel?.availableLanguages.length, 'availableLanguages length', 2),
     ],
     verify: (_) {
       verify(mockAppInfoService.getPackageInfo()).called(1);
-      verify(mockGetAvailableLanguagesUseCase()).called(1);
+      verify(mockGetCachedLanguagesUseCase()).called(greaterThanOrEqualTo(1));
+      verify(mockBootstrapUseCase()).called(1);
     },
   );
 
@@ -90,8 +122,10 @@ void main() {
       'emits [success] when language is cached (optimistic update)',
       build: () {
         when(mockChangeLanguageUseCase('ko')).thenAnswer(
-          (_) =>
-              Stream.fromIterable([LanguageSyncStatus.cachedApplied, LanguageSyncStatus.success]),
+          (_) => Stream.fromIterable([
+            const LanguageSyncStatus.cachedApplied('ko'),
+            const LanguageSyncStatus.success('ko'),
+          ]),
         );
         return bloc;
       },
@@ -107,7 +141,10 @@ void main() {
       'emits [loading, success] when language is NOT cached',
       build: () {
         when(mockChangeLanguageUseCase('ja')).thenAnswer(
-          (_) => Stream.fromIterable([LanguageSyncStatus.loading, LanguageSyncStatus.success]),
+          (_) => Stream.fromIterable([
+            const LanguageSyncStatus.loading('ja'),
+            const LanguageSyncStatus.success('ja'),
+          ]),
         );
         return bloc;
       },
@@ -126,14 +163,14 @@ void main() {
       'ignores outdated language requests during rapid switching (race condition fix)',
       build: () {
         when(mockChangeLanguageUseCase('ja')).thenAnswer((_) async* {
-          yield LanguageSyncStatus.loading;
+          yield const LanguageSyncStatus.loading('ja');
           await Future.delayed(const Duration(milliseconds: 20));
-          yield LanguageSyncStatus.success;
+          yield const LanguageSyncStatus.success('ja');
         });
 
         when(mockChangeLanguageUseCase('vi')).thenAnswer((_) async* {
-          yield LanguageSyncStatus.cachedApplied;
-          yield LanguageSyncStatus.success;
+          yield const LanguageSyncStatus.cachedApplied('vi');
+          yield const LanguageSyncStatus.success('vi');
         });
         return bloc;
       },
@@ -173,7 +210,10 @@ void main() {
       'emits showError event when usecase yields error',
       build: () {
         when(mockChangeLanguageUseCase('fr')).thenAnswer(
-          (_) => Stream.fromIterable([LanguageSyncStatus.loading, LanguageSyncStatus.error]),
+          (_) => Stream.fromIterable([
+            const LanguageSyncStatus.loading('fr'),
+            const LanguageSyncStatus.error('fr', 'Network error'),
+          ]),
         );
         return bloc;
       },
