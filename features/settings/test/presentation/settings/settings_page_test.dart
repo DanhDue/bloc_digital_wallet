@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/d3nexus_logger.dart';
-import 'package:settings/data/models/sync/available_language.dart';
+import 'package:settings/domain/entities/supported_language.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
@@ -70,17 +70,19 @@ void main() {
             uiModel: SettingsUiModel(
               id: 'mock_settings_ui',
               availableLanguages: [
-                AvailableLanguage(
+                SupportedLanguage(
                   languageCode: 'en',
                   languageName: 'English',
                   isDefault: true,
                   isActive: true,
+                  isCached: true,
                 ),
-                AvailableLanguage(
+                SupportedLanguage(
                   languageCode: 'vi',
                   languageName: 'Tiếng Việt',
                   isDefault: false,
                   isActive: true,
+                  isCached: true,
                 ),
               ],
             ),

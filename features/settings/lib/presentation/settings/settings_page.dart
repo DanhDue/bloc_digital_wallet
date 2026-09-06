@@ -19,9 +19,11 @@ import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_event.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
 import 'package:settings/presentation/settings/talker_console_settings.dart';
+import 'package:settings/presentation/settings/widgets/language_picker_bottom_sheet.dart';
 import 'package:settings/presentation/settings/widgets/settings_item_widget.dart';
 import 'package:settings/presentation/settings/widgets/settings_section_widget.dart';
-import 'package:settings/data/models/sync/available_language.dart';
+import 'package:settings/domain/entities/supported_language.dart';
+import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
 import 'package:collection/collection.dart';
 
 @RoutePage()
@@ -138,19 +140,22 @@ class SettingsPage extends BaseMviPage<SettingsBloc, SettingsAction, SettingsSta
                 label: t.preferences.language,
                 trailing: SettingsItemTrailing.value,
                 value: (() {
-                  final langName =
-                      uiModel?.availableLanguages
-                          .where(
-                            (l) =>
-                                LocalizationManager.instance.resolveLocale(l.languageCode) ==
-                                LocalizationManager.instance.currentLocale,
-                          )
-                          .firstOrNull
-                          ?.languageName ??
-                      (LocalizationManager.instance.currentLocale.languageCode == 'vi'
-                          ? 'Tiếng Việt'
-                          : 'English');
-                  return langName;
+                  final activeLang = (uiModel?.availableLanguages ?? [])
+                      .where(
+                        (l) =>
+                            LocalizationManager.instance.resolveLocale(l.languageCode).languageCode ==
+                            LocalizationManager.instance.currentLocale.languageCode,
+                      )
+                      .firstOrNull;
+                  if (activeLang != null) {
+                    return LanguagePickerBottomSheet.resolveNativeLanguageName(
+                      activeLang.languageCode,
+                      activeLang.languageName,
+                    );
+                  }
+                  return LocalizationManager.instance.currentLocale.languageCode == 'vi'
+                      ? 'Tiếng Việt'
+                      : 'English';
                 })(),
                 iconColor: AppColors.settingsItemBlue,
                 onTap: () => _showLanguagePicker(context, t, uiModel?.availableLanguages ?? []),
@@ -310,66 +315,18 @@ class SettingsPage extends BaseMviPage<SettingsBloc, SettingsAction, SettingsSta
   void _showLanguagePicker(
     BuildContext context,
     SettingsTranslationsSettingsEn t,
-    List<AvailableLanguage> availableLanguages,
+    List<SupportedLanguage> availableLanguages,
   ) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext bottomSheetContext) {
-        final currentLocale = LocalizationManager.instance.currentLocale;
-
-        // Use fallback if the list is empty
-        final languagesToDisplay = availableLanguages.isNotEmpty
-            ? availableLanguages
-            : [
-                AvailableLanguage(
-                  languageCode: 'en',
-                  languageName: 'English',
-                  isDefault: true,
-                  isActive: true,
-                ),
-                AvailableLanguage(
-                  languageCode: 'vi',
-                  languageName: 'Tiếng Việt',
-                  isDefault: false,
-                  isActive: true,
-                ),
-              ];
-
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  t.preferences.language,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              ...languagesToDisplay.map((lang) {
-                return ListTile(
-                  title: Text(lang.languageName == 'Korean' ? '한국어' : lang.languageName),
-                  trailing:
-                      LocalizationManager.instance.resolveLocale(lang.languageCode) ==
-                          currentLocale
-                      ? const Icon(Icons.check, color: AppColors.settingsItemBlue)
-                      : null,
-                  onTap: () {
-                    context.read<SettingsBloc>().onAction(
-                      SettingsAction.changeLanguage(languageCode: lang.languageCode),
-                    );
-                    Navigator.pop(bottomSheetContext);
-                  },
-                );
-              }),
-              const SizedBox(height: 16),
-            ],
-          ),
+    LanguagePickerBottomSheet.show(
+      context,
+      languages: availableLanguages.isNotEmpty
+          ? availableLanguages
+          : GetCachedLanguagesUseCase.defaultBundledLanguages,
+      currentLanguageCode: LocalizationManager.instance.currentLocale.languageCode,
+      title: t.preferences.language,
+      onLanguageSelected: (languageCode) {
+        context.read<SettingsBloc>().onAction(
+          SettingsAction.changeLanguage(languageCode: languageCode),
         );
       },
     );
