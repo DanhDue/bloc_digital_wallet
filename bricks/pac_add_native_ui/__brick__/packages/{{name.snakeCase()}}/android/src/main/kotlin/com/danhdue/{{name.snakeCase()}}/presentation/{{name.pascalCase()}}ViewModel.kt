@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+ */
+
+/*
+ * coverage:ignore-file
+ */
+
 package com.danhdue.{{name.snakeCase()}}.presentation
 
 import com.danhdue.{{name.snakeCase()}}.domain.{{name.pascalCase()}}Repository

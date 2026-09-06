@@ -8,21 +8,16 @@ environment:
   sdk: ^3.10.7
 
 workspace:
-  - packages/authentication
   - packages/core
   - packages/framework
   - packages/logger
   - packages/logger_native_bridge
   - packages/native_security
   - packages/network
-  - packages/onboard
   - packages/platform
   - packages/ui_kit
-  - features/settings
-  - packages/wallet
-  - packages/trends
   - features/scanner
-  - packages/transaction
+  - features/settings
 dependencies:
   flutter:
     sdk: flutter
@@ -40,20 +35,10 @@ dependencies:
     path: packages/platform
   ui_kit:
     path: packages/ui_kit
-  authentication:
-    path: packages/authentication
   framework:
     path: packages/framework
-  onboard:
-    path: packages/onboard
   scanner:
     path: features/scanner
-  wallet:
-    path: packages/wallet
-  trends:
-    path: packages/trends
-  transaction:
-    path: packages/transaction
   settings:
     path: features/settings
   # Dialog Management

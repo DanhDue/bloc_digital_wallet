@@ -5,22 +5,5 @@
 # is pending. Format: one entry per line, "<source-feature>→<target-feature>".
 # Blank lines and lines starting with '#' are ignored.
 #
-# Entries are deleted here as each package's migration lands (see epic
-# super_app_governance, Tasks 14-16 / Migration Plan Phase 1-2). Deleting an
-# entry and then reintroducing the same import will correctly fail CI.
-#
-# onboard→settings is the one exception to the paragraph above: it is not
-# pending migration and is not stale/forgotten cleanup. Task 14 investigated
-# it and found the real coupling (packages/onboard/lib/presentation/splash/
-# splash_bloc.dart's use of settings' BootstrapUseCase/FetchTranslationUseCase
-# and their SyncBootstrapResponse/BootstrapTranslationItem DTOs) is a
-# business-logic/DTO dependency, not the navigation-shaped coupling that
-# DeepLinkRoutes/AppEventBus were built to replace. A real fix (Dependency
-# Inversion, following this codebase's TokenRefresher precedent: an
-# `abstract interface class` in `core`, `@LazySingleton(as: Interface)` impl
-# in `settings`) is a legitimate follow-up, but is a genuine architectural
-# decision (interface placement, logic relocation) out of this epic's scope.
-# This entry therefore stays whitelisted indefinitely by design — see
-# .devtool/features/task_14_migrate_settings_pilot.md and the epic ledger
-# (.superpowers/sdd/super_app_governance.en/progress.md, "Task 14: Ruling").
-onboard→settings
+# All previous violations have been cleanly migrated or purged.
+# New cross-feature imports are strictly prohibited by architecture rules.

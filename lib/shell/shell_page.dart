@@ -16,11 +16,9 @@ import 'package:bloc_digital_wallet/shell/shell_action.dart';
 import 'package:bloc_digital_wallet/shell/shell_event.dart';
 import 'package:bloc_digital_wallet/shell/shell_state.dart';
 import 'package:bloc_digital_wallet/shell/widgets/custom_bottom_nav_bar.dart';
+import 'package:bloc_digital_wallet/shell/home_dashboard_page.dart';
 import 'package:scanner/scanner.dart';
 import 'package:settings/settings.dart';
-import 'package:transaction/transaction.dart';
-import 'package:trends/trends.dart';
-import 'package:wallet/wallet.dart';
 
 @RoutePage()
 class ShellPage extends BaseMviPage<ShellBloc, ShellAction, ShellState, ShellEvent> {
@@ -64,13 +62,7 @@ class ShellPage extends BaseMviPage<ShellBloc, ShellAction, ShellState, ShellEve
       bottom: false,
       child: IndexedStack(
         index: state.currentTabIndex,
-        children: const [
-          WalletPage(),
-          TransactionPage(),
-          ScannerPage(),
-          TrendsPage(),
-          SettingsPage(),
-        ],
+        children: const [HomeDashboardPage(), ScannerPage(), SettingsPage()],
       ),
     );
   }

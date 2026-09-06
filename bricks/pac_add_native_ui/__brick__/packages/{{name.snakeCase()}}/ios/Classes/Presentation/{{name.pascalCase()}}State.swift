@@ -1,3 +1,7 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+
 public struct {{name.pascalCase()}}State: BaseState {
     public var isLoading: Bool = false
     public var title: String = "{{name.pascalCase()}} Native UI"

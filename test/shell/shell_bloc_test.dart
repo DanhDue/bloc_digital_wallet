@@ -20,37 +20,37 @@ void main() {
     bloc.close();
   });
 
-  test('initial state should have currentTabIndex == 0', () {
+  test('initial state should have currentTabIndex == 2 (Settings tab)', () {
     expect(bloc.state, const ShellState());
-    expect(bloc.state.currentTabIndex, 0);
+    expect(bloc.state.currentTabIndex, 2);
   });
 
   blocTest<ShellBloc, ShellState>(
-    'emits state with currentTabIndex == 2 when tabChanged(2)',
+    'emits state with currentTabIndex == 0 when tabChanged(0)',
     build: () => bloc,
-    act: (bloc) => bloc.add(const ShellAction.tabChanged(2)),
-    expect: () => [const ShellState(currentTabIndex: 2)],
+    act: (bloc) => bloc.add(const ShellAction.tabChanged(0)),
+    expect: () => [const ShellState(currentTabIndex: 0)],
   );
 
   blocTest<ShellBloc, ShellState>(
-    'emits state with currentTabIndex == 3 when tabChanged(3)',
+    'emits state with currentTabIndex == 1 when tabChanged(1)',
     build: () => bloc,
-    act: (bloc) => bloc.add(const ShellAction.tabChanged(3)),
-    expect: () => [const ShellState(currentTabIndex: 3)],
+    act: (bloc) => bloc.add(const ShellAction.tabChanged(1)),
+    expect: () => [const ShellState(currentTabIndex: 1)],
   );
 
   blocTest<ShellBloc, ShellState>(
     'does not emit new state when tabDoubleTapped on current tab',
     build: () => bloc,
-    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(0)),
+    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(2)),
     expect: () => <ShellState>[],
   );
 
   blocTest<ShellBloc, ShellState>(
     'emits state with updated tab when tabDoubleTapped on different tab',
     build: () => bloc,
-    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(4)),
-    expect: () => [const ShellState(currentTabIndex: 4)],
+    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(0)),
+    expect: () => [const ShellState(currentTabIndex: 0)],
   );
 
   blocTest<ShellBloc, ShellState>(

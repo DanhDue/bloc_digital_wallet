@@ -106,7 +106,8 @@ Future<void> _cleanInjection(String snakeName, String camelName) async {
   );
 
   content = content.replaceAll(
-    RegExp('^\\s*(await\\s+)?($camelName|$snakeName)\\.configureModuleDependencies\\(getIt\\);.*\\n',
+    RegExp(
+        '^\\s*(await\\s+)?($camelName|$snakeName)\\.configureModuleDependencies\\(getIt\\);.*\\n',
         multiLine: true),
     '',
   );

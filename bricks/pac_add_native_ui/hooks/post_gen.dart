@@ -64,7 +64,9 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
 ''';
         if (content.contains('package com.danhdue.')) {
           final pkgLineEnd = content.indexOf('\n', content.indexOf('package com.danhdue.'));
-          content = content.substring(0, pkgLineEnd + 1) + importBlock + content.substring(pkgLineEnd + 1);
+          content = content.substring(0, pkgLineEnd + 1) +
+              importBlock +
+              content.substring(pkgLineEnd + 1);
         }
 
         // Add registration inside onAttachedToEngine
@@ -75,7 +77,8 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
             ${pascalCaseName}PlatformViewFactory(viewModel)
         )
 ''';
-        if (content.contains('override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {')) {
+        if (content.contains(
+            'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {')) {
           content = content.replaceFirst(
             'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {',
             'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {\n$factoryRegistration',
@@ -95,7 +98,8 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
         let factory = ${pascalCaseName}PlatformViewFactory(viewModel: viewModel)
         registrar.register(factory, withId: "com.danhdue.$snakeCaseName/native_view")
 ''';
-        if (content.contains('public static func register(with registrar: FlutterPluginRegistrar) {')) {
+        if (content
+            .contains('public static func register(with registrar: FlutterPluginRegistrar) {')) {
           content = content.replaceFirst(
             'public static func register(with registrar: FlutterPluginRegistrar) {',
             'public static func register(with registrar: FlutterPluginRegistrar) {\n$factoryRegistration',

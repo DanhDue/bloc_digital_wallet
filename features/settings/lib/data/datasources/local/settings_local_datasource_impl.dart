@@ -146,17 +146,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
   @override
   Future<Map<String, dynamic>> loadBundledFallback(String languageCode) async {
-    final List<String> packageNames = [
-      'core',
-      'authentication',
-      'onboard',
-      'home',
-      'scanner',
-      'trends',
-      'wallet',
-      'transaction',
-      'settings',
-    ];
+    final List<String> packageNames = ['core', 'scanner', 'settings'];
 
     final Map<String, dynamic> combinedJson = {};
 

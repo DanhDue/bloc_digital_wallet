@@ -17,13 +17,7 @@ const List<String> kKnownLoggingModules = [
   'Core',
   'Framework',
   'Network',
-  'Authentication',
-  'Onboard',
-  'Home',
   'Scanner',
-  'Trends',
-  'Wallet',
-  'Transaction',
   'Settings',
 ];
 

@@ -10,7 +10,7 @@ extension AppDialogExtensions on BuildContext {
   void showCommingSoon() async {
     showWrapBottomSheet(
       const CommingSoonModalView(),
-      routeSettings: const RouteSettings(name: AppRoutes.login),
+      routeSettings: const RouteSettings(name: AppRoutes.home),
     );
   }
 }

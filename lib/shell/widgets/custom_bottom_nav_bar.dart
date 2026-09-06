@@ -10,17 +10,12 @@ import 'package:ui_kit/ui_kit.dart';
 class ShellTabIndex {
   const ShellTabIndex._();
 
-  static const int wallet = 0;
-  static const int browser = 1;
-  static const int qrScanner = 2;
-  static const int trends = 3;
-  static const int settings = 4;
+  static const int home = 0;
+  static const int scanner = 1;
+  static const int settings = 2;
 }
 
 /// Custom bottom navigation bar with an elevated center QR Scanner button.
-///
-/// Migrated from the old `CustomBotNavBar` (GetX) to work with BLoC.
-/// Uses [GestureDetector] for tap and double-tap support on each item.
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({
     super.key,
@@ -59,41 +54,21 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: .spaceBetween,
             children: [
               _NavItem(
-                icon: Icons.account_balance_wallet_outlined,
-                activeIcon: Icons.account_balance_wallet,
-                label: context.t.home.nav.wallet,
-                isActive: currentIndex == ShellTabIndex.wallet,
+                icon: Icons.home_outlined,
+                activeIcon: Icons.home,
+                label: 'Home',
+                isActive: currentIndex == ShellTabIndex.home,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () => onTap(ShellTabIndex.wallet),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.wallet),
-              ),
-              _NavItem(
-                icon: Icons.language_outlined,
-                activeIcon: Icons.language,
-                label: context.t.home.nav.browser,
-                isActive: currentIndex == ShellTabIndex.browser,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => onTap(ShellTabIndex.browser),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.browser),
+                onTap: () => onTap(ShellTabIndex.home),
+                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.home),
               ),
               _CenterNavItem(
                 icon: Icons.qr_code_scanner,
-                isActive: currentIndex == ShellTabIndex.qrScanner,
+                isActive: currentIndex == ShellTabIndex.scanner,
                 activeColor: activeColor,
-                onTap: () => onTap(ShellTabIndex.qrScanner),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.qrScanner),
-              ),
-              _NavItem(
-                icon: Icons.trending_up_outlined,
-                activeIcon: Icons.trending_up,
-                label: context.t.home.nav.trends,
-                isActive: currentIndex == ShellTabIndex.trends,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => onTap(ShellTabIndex.trends),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.trends),
+                onTap: () => onTap(ShellTabIndex.scanner),
+                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
               ),
               _NavItem(
                 icon: Icons.settings_outlined,

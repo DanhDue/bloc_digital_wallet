@@ -1,3 +1,7 @@
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+
 import SwiftUI
 
 public struct {{name.pascalCase()}}View: View {
