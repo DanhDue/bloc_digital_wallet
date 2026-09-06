@@ -1,0 +1,15 @@
+name: pac_library
+description: Generates a shared infrastructure Dart or Flutter library in packages/.
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0-dev.26 <1.0.0"
+vars:
+  name:
+    type: string
+    description: The package name (e.g. analytics, cache_manager).
+    prompt: What is the library package name?
+  is_flutter:
+    type: boolean
+    description: Whether this is a Flutter package (true) or pure Dart package (false).
+    default: true
+    prompt: Does this library depend on Flutter?

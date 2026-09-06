@@ -19,3 +19,5 @@ bricks:
     path: bricks/pac_mvi_subfeature
   remove_pac_subfeature:
     path: bricks/remove_pac_subfeature
+  pac_library:
+    path: bricks/pac_library
