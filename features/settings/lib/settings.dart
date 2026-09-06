@@ -11,6 +11,8 @@ export 'data/datasources/local/settings_local_datasource.dart';
 
 // Domain Layer
 export 'domain/entities/settings_entity.dart';
+export 'domain/entities/supported_language.dart';
+export 'domain/entities/language_sync_status.dart';
 export 'domain/repositories/settings_repository.dart';
 export 'domain/usecases/get_settings_usecase.dart';
 export 'domain/usecases/bootstrap_usecase.dart';
