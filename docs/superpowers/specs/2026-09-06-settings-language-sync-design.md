@@ -14,11 +14,12 @@ In the sibling Android template (`android_super_app_template`), the Settings scr
 
 In the Flutter project (`features/settings` and `packages/core`), several localization building blocks already exist (`BootstrapUseCase`, `FetchTranslationUseCase`, `LocalizationManager`), but several critical gaps must be resolved to achieve full tri-platform parity:
 1. **Silent Background Bootstrap (UC-02)**: `BootstrapUseCase` is defined but currently never invoked when opening the Settings screen. Users only receive stale or local-only language lists.
-2. **Instant Frame-0 Cache Retrieval (UC-01)**: If the local cache is empty, the language list must safely and synchronously fallback to bundled languages (`en`, `vi`), preventing empty bottom sheets.
+2. **Instant Frame-0 Cache Retrieval (UC-01)**: Only **English (`en`)** and **Vietnamese (`vi`)** are default bundled languages in development. All other languages (e.g., `ja`, `ko`, `zh`, etc.) are delivered solely Over-The-Air (OTA) from the backend. If the local cache is empty, the language list safely and synchronously defaults to `['en', 'vi']`.
 3. **State-aware Language Switching (UC-03)**:
+   - **Bundled vs Remote OTA Strategy**: Only `en` and `vi` are treated as bundled built-in locales. Any other locale must be downloaded on-demand from the remote backend unless already cached locally.
    - **Same-language skip**: Selecting the currently active language immediately dismisses the bottom sheet without redundant network or state emissions.
    - **Optimistic Switch for Bundled / Cached Locales**: Immediately switch locale in-memory (`LocalizationManager.setLocaleFromCode`) without a blocking loading dialog, and quietly run delta sync in the background.
-   - **OTA Download for Uncached Locales**: Show a modal `LoadingDialog`, fetch remote translations via `GET /api/v1/translations/{code}`, save JSON + version + checksum, apply locale, and dismiss dialog. On failure, preserve the previous active language and emit a soft error snackbar.
+   - **OTA Download for Uncached Remote Locales**: Show a modal `LoadingDialog`, fetch remote translations via `GET /api/v1/translations/{code}`, save JSON + version + checksum, apply locale, and dismiss dialog. On failure, preserve the previous active language and emit a soft error snackbar.
 4. **Componentization & Native Naming (UC-04)**: Extract `LanguagePickerBottomSheet` as a clean, reusable widget displaying native language names (`English`, `Tiếng Việt`, `日本語`, `한국어`) with checkmark selection.
 5. **Monorepo Directory Alignment (UC-05)**: Fix `loadBundledFallback` in `SettingsLocalDataSourceImpl` to load assets from `features/scanner` and `features/settings` rather than legacy `packages/` paths.
 
