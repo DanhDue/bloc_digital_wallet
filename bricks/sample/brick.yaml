@@ -1,7 +1,0 @@
-name: sample
-description: A demo MVI feature brick showing all actions, events, and states for learning purposes
-version: 0.1.0+1
-environment:
-  mason: ^0.1.2
-
-

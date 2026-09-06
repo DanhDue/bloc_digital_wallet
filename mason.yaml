@@ -7,10 +7,6 @@ bricks:
     path: bricks/remove_feature
   remove_subfeature:
     path: bricks/remove_subfeature
-  sample:
-    path: bricks/sample
-  remove_sample:
-    path: bricks/remove_sample
   pac_mvi_feature:
     path: bricks/pac_mvi_feature
   remove_pac_feature:
