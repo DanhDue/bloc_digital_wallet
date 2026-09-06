@@ -6,8 +6,8 @@ assignee: null
 epic: "settings_language_darkmode"
 dueDate: null
 created: "2026-09-06T02:37:10+07:00"
-modified: "2026-09-06T15:55:00+07:00"
-completedAt: "2026-09-06T03:01:30+07:00"
+modified: "2026-09-07T00:00:20+07:00"
+completedAt: "2026-09-07T00:00:20+07:00"
 labels: ["architecture", "feature"]
 order: "a6"
 ---
@@ -17,53 +17,66 @@ order: "a6"
 Epic: [settings_language_darkmode](../epic/settings_language_darkmode/settings_language_darkmode.en.md)
 
 ## Requirement Analysis
-Integrate the entire Settings, Dark Mode, and Localization feature into the application composition root (`:app`):
+Integrate and verify the entire Settings, Dark Mode, and Localization feature in the application root composition:
 1. Root Theme Observation:
-   - In `MainActivity.kt`, inject `AppThemeManager`.
-   - Collect `isDarkMode` reactively: `val isDarkMode by appThemeManager.isDarkMode.collectAsStateWithLifecycle()`.
-   - Pass `isDarkMode` to `AndroidDigitalWalletTheme(darkTheme = isDarkMode)`.
-2. App-wide Dynamic Localization & Fine-Grained Recomposition:
-   - Inject `AppLocalizationManager` into `MainActivity`.
-   - Collect `currentLanguageCode` and `translationsVersion`.
-   - Supply `LocalDynamicStringResolver` via `CompositionLocalProvider(LocalDynamicStringResolver provides remember(currentLanguageCode, translationsVersion) { appLocalizationManager::getString })`.
-   - Provide helper composable function `appStringResource(id: Int, fallbackKey: String? = null)` in `:packages:ui_kit` that resolves remote dynamic overrides via `LocalDynamicStringResolver.current` before falling back to local XML resources.
+   - In `lib/main.dart`, observe `ThemeManager.instance.themeModeStream`.
+   - Pass `currentThemeMode` to `MaterialApp.router(themeMode: currentThemeMode)`.
+   - Configure light theme with `AppThemes.light` and dark theme with `AppThemes.dark`.
+2. App-wide Dynamic Localization & Seamless Recomposition:
+   - Observe `LocalizationManager.instance.localeStream` in `lib/main.dart`.
+   - Wrap the application tree with `MultiTranslationProvider(providers: appTranslationProviders)`.
+   - Ensure dynamic language changes update UI smoothly without tearing down the routing or navigation tree.
 3. Architecture Gate & Code Quality:
-   - Run Konsist tests (`./gradlew :konsist-test:test`) to ensure K1 through K9 rules pass with 0 violations.
-   - Run `./gradlew spotlessCheck` and `./gradlew spotlessApply`.
-   - Verify `./gradlew :app:assembleDebug`.
+   - Run root composition tests verifying reactive updates to theme mode and locale.
+   - Run `melos run analyze` across the entire workspace with 0 issues.
+   - Run test suite across packages and features.
 
 ## Relevant Files & Context Pointers
-- `app/src/main/kotlin/com/danhdue/androiddigitalwallet/ui/MainActivity.kt`
-- `packages/ui_kit/src/main/kotlin/com/danhdue/uikit/theme/Theme.kt`
-- `packages/ui_kit/src/main/kotlin/com/danhdue/uikit/localization/AppStringResource.kt`
-- `packages/platform/src/main/kotlin/com/danhdue/platform/localization/AppLocalizationManager.kt`
-- `konsist-test/src/test/kotlin/com/danhdue/konsist/ArchitectureTest.kt`
+- `lib/main.dart`
+- `lib/core/localization/multi_translation_provider.dart`
+- `packages/core/lib/services/theme_manager.dart`
+- `packages/core/lib/localization/localization_manager.dart`
+- `test/root_composition_test.dart`
 
 ## Design Rationale & Refinements
-- The composition root (`:app`) brings all packaged modules together.
-- `MainActivity` observes the platform theme state and propagates it to the Compose theme without tight coupling to features.
-- Konsist ensures no boundary leaks or forbidden cross-module dependencies occurred during development.
-- **Root Key Destruction Elimination (Critical Bug Fix)**:
-  - *Problem*: Initially, `MainActivity` wrapped the root composable in `key(currentLanguageCode, translationsVersion) { ... }`. When a background delta translation finished downloading and called `applyDynamicTranslations`, `translationsVersion` changed, which completely tore down and recreated the root composition. This caused open Bottom Sheets to abruptly dismiss and violently reopen.
-  - *Solution*: Removed the root `key(...)`. Instead, wired `LocalDynamicStringResolver` providing `appLocalizationManager::getString`. Only individual text composables reading `appStringResource` recompose smoothly in place without restarting Activity or navigation trees.
-- **Frame-0 Cold Start Initialization**:
-  - `MainActivity` reads `appLocalizationManager.currentLanguageCode.value` directly upon creation, ensuring initial Compose rendering aligns with the persisted user locale without any flash or fallback to system locale.
+- The composition root (`lib/main.dart`) brings all packaged modules and features together.
+- `StreamBuilder<ThemeMode>` and `StreamBuilder<Locale>` observe platform state streams without tight coupling to features.
+- No root navigation destruction: `MultiTranslationProvider` propagates locale changes directly down the widget tree without rebuilding `AppRouter`.
+- Frame-0 cold start: `ThemeManager.instance.init()` and `AppInitializer.init()` run before `runApp()`, using `initialData` for seamless initial rendering.
+
+### BDD SCENARIOS
+
+```gherkin
+Feature: Root Composition Theme and Localization Wiring
+  As the digital wallet super app
+  I want the root MaterialApp to reactively observe ThemeManager and LocalizationManager
+  So that changing theme mode and language dynamically updates the app UI seamlessly without tearing down the widget tree
+
+  Scenario: Root reacts to ThemeManager theme mode updates
+    Given the root app is launched with initial theme mode
+    When ThemeManager emits ThemeMode.dark
+    Then MaterialApp updates themeMode to ThemeMode.dark
+
+  Scenario: Root reacts to LocalizationManager locale updates
+    Given the root app is launched with initial locale
+    When LocalizationManager emits Locale('vi')
+    Then MaterialApp updates locale to Locale('vi')
+```
 
 ## TDD Checklist
-- [x] **RED**: Run test verifying theme state changes propagate to the root theme and string overrides apply.
-- [x] **GREEN**: Wire `AppThemeManager` in `MainActivity` and implement dynamic string helper in UI kit.
-- [x] **REFACTOR**: Run `./gradlew :konsist-test:test`, `./gradlew spotlessCheck`, and assemble debug build.
+- [x] **RED**: Write integration test `test/root_composition_test.dart` verifying reactive stream wiring of theme mode and locale.
+- [x] **GREEN**: Ensure `lib/main.dart` stream builders and `MultiTranslationProvider` react cleanly to stream events.
+- [x] **REFACTOR**: Verify `melos run analyze` (0 issues) and full test suite across workspace.
 
 ## Definition of Done (DoD)
-- `./gradlew :konsist-test:test` passes with 0 violations.
-- `./gradlew spotlessCheck` passes.
-- `./gradlew check` passes across all modules.
-- `./gradlew :app:assembleDebug` builds successfully.
-- No destructive root composition recreations during OTA translation sync.
+- Root composition tests pass 100%.
+- `melos run analyze` passes with 0 issues across the monorepo.
+- Monorepo tests run cleanly.
+- No root key destruction or navigation resets during theme or language changes.
 
 ## Dependencies & Blockers
 - Blocked by [Task 5](task_5_settings_card_ui_language_bottom_sheet.md)
 
 ## References & Rollback
 - Epic HLD: [settings_language_darkmode.en.md](../epic/settings_language_darkmode/settings_language_darkmode.en.md)
-- Rollback: Revert `app/src/main/kotlin/com/danhdue/androiddigitalwallet/ui/MainActivity.kt`.
+- Rollback: Revert `lib/main.dart` and `test/root_composition_test.dart`.
