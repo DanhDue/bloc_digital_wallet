@@ -1,0 +1,25 @@
+name: pac_rename_project
+description: Rename the Flutter Super App template (package name, bundle ID, app title, and imports)
+version: 0.1.0+1
+
+environment:
+  mason: ">=0.1.0-dev.26 <1.0.0"
+
+vars:
+  app_name:
+    type: string
+    description: Human-readable display name (e.g. My Super App)
+    prompt: What is the app display name?
+    default: My Super App
+
+  package_name:
+    type: string
+    description: Dart package identifier in snake_case (e.g. my_super_app)
+    prompt: What is the package name (snake_case)?
+    default: my_super_app
+
+  bundle_id:
+    type: string
+    description: Reverse-domain bundle identifier for mobile platforms (e.g. com.company.mysuperapp)
+    prompt: What is the bundle identifier?
+    default: com.example.mysuperapp

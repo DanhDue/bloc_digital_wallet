@@ -21,3 +21,5 @@ bricks:
     path: bricks/pac_native_plugin
   pac_add_native_ui:
     path: bricks/pac_add_native_ui
+  pac_rename_project:
+    path: bricks/pac_rename_project
