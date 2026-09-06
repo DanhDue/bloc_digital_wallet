@@ -34,7 +34,7 @@
   - `class SupportedLanguage extends Equatable { final String languageCode; final String languageName; final String? version; final bool isDefault; final bool isActive; final bool isCached; ... }`
   - `sealed class LanguageSyncStatus extends Equatable { const factory LanguageSyncStatus.idle(); const factory LanguageSyncStatus.loading(String languageCode); const factory LanguageSyncStatus.cachedApplied(String languageCode); const factory LanguageSyncStatus.success(String languageCode); const factory LanguageSyncStatus.error(String languageCode, String message); ... }`
 
-- [ ] **Step 1: Write the failing tests for `SupportedLanguage` and `LanguageSyncStatus`**
+- [x] **Step 1: Write the failing tests for `SupportedLanguage` and `LanguageSyncStatus`**
 
 Create `features/settings/test/domain/entities/supported_language_test.dart`:
 ```dart
@@ -123,7 +123,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run:
 ```bash
@@ -131,7 +131,7 @@ fvm flutter test features/settings/test/domain/entities/supported_language_test.
 ```
 Expected: FAIL (files do not exist yet)
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Create `features/settings/lib/domain/entities/supported_language.dart`:
 ```dart
@@ -245,7 +245,7 @@ class LanguageSyncError extends LanguageSyncStatus {
 
 Export both in `features/settings/lib/settings.dart`.
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run:
 ```bash
@@ -253,7 +253,7 @@ fvm flutter test features/settings/test/domain/entities/supported_language_test.
 ```
 Expected: PASS (All tests passed!)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add features/settings/lib/domain/entities/ features/settings/test/domain/entities/ features/settings/lib/settings.dart
@@ -272,7 +272,7 @@ git commit -m "feat(settings): add SupportedLanguage entity and LanguageSyncStat
 - Consumes: `SettingsRepository.getAvailableLanguages()`, `CheckLanguageCachedUseCase`
 - Produces: `Future<Either<Failure, List<SupportedLanguage>>> call()`
 
-- [ ] **Step 1: Write the failing test for `GetCachedLanguagesUseCase`**
+- [x] **Step 1: Write the failing test for `GetCachedLanguagesUseCase`**
 
 Create `features/settings/test/domain/usecases/get_cached_languages_usecase_test.dart`:
 ```dart
@@ -357,7 +357,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run:
 ```bash
@@ -365,7 +365,7 @@ fvm flutter test features/settings/test/domain/usecases/get_cached_languages_use
 ```
 Expected: FAIL (GetCachedLanguagesUseCase does not exist)
 
-- [ ] **Step 3: Write minimal implementation**
+- [x] **Step 3: Write minimal implementation**
 
 Create `features/settings/lib/domain/usecases/get_cached_languages_usecase.dart`:
 ```dart
@@ -439,7 +439,7 @@ class GetCachedLanguagesUseCase {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run:
 ```bash
@@ -447,7 +447,7 @@ fvm flutter test features/settings/test/domain/usecases/get_cached_languages_use
 ```
 Expected: PASS (All tests passed!)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add features/settings/lib/domain/usecases/get_cached_languages_usecase.dart features/settings/test/domain/usecases/get_cached_languages_usecase_test.dart
@@ -466,7 +466,7 @@ git commit -m "feat(settings): add GetCachedLanguagesUseCase with bundled en and
 - Consumes: AssetBundle / rootBundle, SharedPreferences
 - Produces: `loadBundledFallback(String languageCode)`, `isLanguageCached(String languageCode)`
 
-- [ ] **Step 1: Write test verifying bundled fallback paths and cached language tracking**
+- [x] **Step 1: Write test verifying bundled fallback paths and cached language tracking**
 
 Check/create test in `features/settings/test/data/datasources/local/settings_local_datasource_impl_test.dart`:
 ```dart
@@ -500,7 +500,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run test to verify current state**
+- [x] **Step 2: Run test to verify current state**
 
 Run:
 ```bash
@@ -508,7 +508,7 @@ fvm flutter test features/settings/test/data/datasources/local/settings_local_da
 ```
 Expected: PASS
 
-- [ ] **Step 3: Update `loadBundledFallback` candidate paths in `settings_local_datasource_impl.dart`**
+- [x] **Step 3: Update `loadBundledFallback` candidate paths in `settings_local_datasource_impl.dart`**
 
 Modify `features/settings/lib/data/datasources/local/settings_local_datasource_impl.dart`:
 ```dart
@@ -548,7 +548,7 @@ Also, in `saveCachedTranslationJson`:
     }
 ```
 
-- [ ] **Step 4: Run test to verify passes**
+- [x] **Step 4: Run test to verify passes**
 
 Run:
 ```bash
@@ -556,7 +556,7 @@ fvm flutter test features/settings/test/data/datasources/local/settings_local_da
 ```
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add features/settings/lib/data/datasources/local/settings_local_datasource_impl.dart features/settings/test/data/datasources/local/settings_local_datasource_impl_test.dart
@@ -575,7 +575,7 @@ git commit -m "fix(settings): support features/ path fallbacks and atomic cache 
 - Consumes: `CheckLanguageCachedUseCase`, `GetDynamicLocalizationUseCase`, `UpdateUserLanguageUseCase`, `LocalizationManager`
 - Produces: `Stream<LanguageSyncStatus> call(String languageCode)`
 
-- [ ] **Step 1: Write the updated unit tests for `ChangeLanguageUseCase`**
+- [x] **Step 1: Write the updated unit tests for `ChangeLanguageUseCase`**
 
 Modify `features/settings/test/domain/usecases/change_language_usecase_test.dart` to use the `LanguageSyncStatus` sealed class:
 ```dart
@@ -703,7 +703,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run:
 ```bash
@@ -711,7 +711,7 @@ fvm flutter test features/settings/test/domain/usecases/change_language_usecase_
 ```
 Expected: FAIL (types mismatch with sealed class)
 
-- [ ] **Step 3: Implement `ChangeLanguageUseCase`**
+- [x] **Step 3: Implement `ChangeLanguageUseCase`**
 
 Modify `features/settings/lib/domain/usecases/change_language_usecase.dart`:
 ```dart
@@ -780,7 +780,7 @@ class ChangeLanguageUseCase {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run:
 ```bash
@@ -788,7 +788,7 @@ fvm flutter test features/settings/test/domain/usecases/change_language_usecase_
 ```
 Expected: PASS (All 4 scenarios passed!)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add features/settings/lib/domain/usecases/change_language_usecase.dart features/settings/test/domain/usecases/change_language_usecase_test.dart
@@ -808,7 +808,7 @@ git commit -m "feat(settings): implement ChangeLanguageUseCase with same-languag
 - Consumes: `GetCachedLanguagesUseCase`, `BootstrapUseCase`, `ChangeLanguageUseCase`, `AppInfoService`
 - Produces: `SettingsState` with `SettingsUiModel(availableLanguages: List<SupportedLanguage>)`
 
-- [ ] **Step 1: Write updated tests for `SettingsBloc`**
+- [x] **Step 1: Write updated tests for `SettingsBloc`**
 
 Modify `features/settings/test/presentation/settings/settings_bloc_test.dart`:
 - Mock `GetCachedLanguagesUseCase` returning `[SupportedLanguage('en', 'English'), SupportedLanguage('vi', 'Tiếng Việt')]`.
@@ -816,7 +816,7 @@ Modify `features/settings/test/presentation/settings/settings_bloc_test.dart`:
 - Verify `_onStarted` produces `SettingsStatus.success` with Frame-0 cached languages immediately.
 - Verify `_onChangeLanguage` handles `LanguageSyncLoading` -> `SettingsStatus.loading` and `LanguageSyncError` -> `SettingsEvent.showError`.
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run:
 ```bash
@@ -824,7 +824,7 @@ fvm flutter test features/settings/test/presentation/settings/settings_bloc_test
 ```
 Expected: FAIL (Constructor signature of SettingsBloc changed)
 
-- [ ] **Step 3: Update `SettingsUiModel` and `SettingsBloc`**
+- [x] **Step 3: Update `SettingsUiModel` and `SettingsBloc`**
 
 Update `SettingsUiModel` in `features/settings/lib/presentation/settings/models/settings_ui_model.dart`:
 ```dart
@@ -947,7 +947,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   }
 ```
 
-- [ ] **Step 4: Run build_runner and tests**
+- [x] **Step 4: Run build_runner and tests**
 
 Run:
 ```bash
@@ -956,7 +956,7 @@ fvm flutter test features/settings/test/presentation/settings/settings_bloc_test
 ```
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add features/settings/lib/presentation/settings/ features/settings/test/presentation/settings/
@@ -977,7 +977,7 @@ git commit -m "feat(settings): hydrate SettingsBloc with Frame-0 cached language
 - Produces: `LanguagePickerBottomSheet.show(BuildContext context, {required List<SupportedLanguage> languages, required String currentLanguageCode, required ValueChanged<String> onLanguageSelected, required String title})`
 - Resolves native language names cleanly (`en` -> `English`, `vi` -> `Tiếng Việt`, `ja` -> `日本語`, `ko` -> `한국어`, `zh` -> `中文`, `fr` -> `Français`, `de` -> `Deutsch`).
 
-- [ ] **Step 1: Write test for `LanguagePickerBottomSheet`**
+- [x] **Step 1: Write test for `LanguagePickerBottomSheet`**
 
 Create `features/settings/test/presentation/settings/widgets/language_picker_bottom_sheet_test.dart`:
 ```dart
@@ -1031,7 +1031,7 @@ void main() {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run:
 ```bash
@@ -1039,7 +1039,7 @@ fvm flutter test features/settings/test/presentation/settings/widgets/language_p
 ```
 Expected: FAIL (file does not exist)
 
-- [ ] **Step 3: Implement `LanguagePickerBottomSheet`**
+- [x] **Step 3: Implement `LanguagePickerBottomSheet`**
 
 Create `features/settings/lib/presentation/settings/widgets/language_picker_bottom_sheet.dart`:
 ```dart
@@ -1146,7 +1146,7 @@ class LanguagePickerBottomSheet extends StatelessWidget {
 
 Update `settings_page.dart` to use `LanguagePickerBottomSheet.show(...)`.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run:
 ```bash
@@ -1154,7 +1154,7 @@ fvm flutter test features/settings/test/presentation/settings/widgets/language_p
 ```
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add features/settings/lib/presentation/settings/widgets/language_picker_bottom_sheet.dart features/settings/lib/presentation/settings/settings_page.dart features/settings/test/presentation/settings/
@@ -1171,7 +1171,7 @@ git commit -m "feat(settings): extract LanguagePickerBottomSheet with native lan
 - Test: `melos run analyze`
 - Test: `integration_test/change_language_test.dart`
 
-- [ ] **Step 1: Re-generate DI and Freezed files**
+- [x] **Step 1: Re-generate DI and Freezed files**
 
 Run:
 ```bash
@@ -1179,7 +1179,7 @@ cd features/settings && fvm dart run build_runner build --delete-conflicting-out
 ```
 Expected: Generation succeeds with 0 errors.
 
-- [ ] **Step 2: Run all unit tests in features/settings**
+- [x] **Step 2: Run all unit tests in features/settings**
 
 Run:
 ```bash
@@ -1187,7 +1187,7 @@ fvm flutter test features/settings/test/
 ```
 Expected: 100% tests pass.
 
-- [ ] **Step 3: Run static analysis across monorepo**
+- [x] **Step 3: Run static analysis across monorepo**
 
 Run:
 ```bash
@@ -1195,7 +1195,7 @@ melos run analyze
 ```
 Expected: No issues found!
 
-- [ ] **Step 4: Commit and finalize**
+- [x] **Step 4: Commit and finalize**
 
 ```bash
 git add .
