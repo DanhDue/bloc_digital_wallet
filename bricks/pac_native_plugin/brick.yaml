@@ -1,0 +1,15 @@
+name: pac_native_plugin
+description: Generates a Flutter native plugin package in packages/ supporting headless Pigeon or native UI (Compose/SwiftUI MVI).
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0-dev.26 <1.0.0"
+vars:
+  name:
+    type: string
+    description: The package name (e.g. biometric_auth, camera_scanner).
+    prompt: What is the plugin package name?
+  has_ui:
+    type: boolean
+    description: Whether this plugin provides native UI components (Jetpack Compose & SwiftUI PlatformViews).
+    default: false
+    prompt: Does this plugin provide native UI components?

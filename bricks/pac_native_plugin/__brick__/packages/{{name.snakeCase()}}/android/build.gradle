@@ -1,0 +1,71 @@
+group 'com.danhdue.{{name.snakeCase()}}'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '2.1.0'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.13.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.danhdue.{{name.snakeCase()}}'
+    }
+
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_21.toString()
+    }
+
+    {{#has_ui}}
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
+    {{/has_ui}}
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    dependencies {
+        {{#has_ui}}
+        implementation platform('androidx.compose:compose-bom:2024.09.00')
+        implementation 'androidx.compose.ui:ui'
+        implementation 'androidx.compose.material3:material3'
+        implementation 'androidx.compose.ui:ui-tooling-preview'
+        implementation 'androidx.activity:activity-compose:1.9.2'
+        implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5'
+        {{/has_ui}}
+        testImplementation 'junit:junit:4.13.2'
+    }
+}
