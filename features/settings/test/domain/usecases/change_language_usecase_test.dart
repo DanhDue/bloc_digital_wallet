@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/d3nexus_logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:settings/domain/entities/language_sync_status.dart';
 import 'package:settings/domain/usecases/change_language_usecase.dart';
 import 'package:settings/domain/usecases/check_language_cached_usecase.dart';
 import 'package:settings/domain/usecases/get_dynamic_localization_usecase.dart';
@@ -40,153 +41,86 @@ void main() {
       mockUpdateUserLanguageUseCase,
     );
 
-    // Initialize slang to a default locale for testing
     LocaleSettings.useDeviceLocale();
     await LocalizationManager.instance.setLocaleFromCode('en');
   });
 
   group('ChangeLanguageUseCase', () {
-    test('Scenario 1: Happy Path - Switching to a new language (Cached)', () async {
-      // Arrange
-      when(() => mockCheckLanguageCachedUseCase('ja')).thenAnswer((_) async => true);
-      when(
-        () => mockGetDynamicLocalizationUseCase('ja'),
-      ).thenAnswer((_) async => const Right(null));
-      when(() => mockUpdateUserLanguageUseCase('ja')).thenAnswer((_) async => const Right(null));
-
-      // Act
-      final stream = usecase('ja');
-
-      // Assert
-      await expectLater(
-        stream,
-        emitsInOrder([
-          LanguageSyncStatus.cachedApplied, // Optimistic UI
-          LanguageSyncStatus.success, // After API and backend update
-          emitsDone,
-        ]),
-      );
-    });
-
-    test('Scenario 2: Happy Path - Switching to a new language (Not Cached)', () async {
-      // Arrange
-      when(() => mockCheckLanguageCachedUseCase('vi')).thenAnswer((_) async => false);
-      when(
-        () => mockGetDynamicLocalizationUseCase('vi'),
-      ).thenAnswer((_) async => const Right(null));
-      when(() => mockUpdateUserLanguageUseCase('vi')).thenAnswer((_) async => const Right(null));
-
-      // Act
-      final stream = usecase('vi');
-
-      // Assert
-      await expectLater(
-        stream,
-        emitsInOrder([
-          LanguageSyncStatus.loading, // Needs to show loader
-          LanguageSyncStatus.success, // After API and backend update
-          emitsDone,
-        ]),
-      );
-    });
-
-    test('Scenario 3: Edge Case - Switching to the SAME language', () async {
-      // Arrange
-      // Already 'en' because of setUp
-      when(
-        () => mockGetDynamicLocalizationUseCase('en'),
-      ).thenAnswer((_) async => const Right(null));
-
-      // Act
+    test('Scenario 1: Same Language Selection - Skips silently without emissions', () async {
       final stream = usecase('en');
 
-      // Assert
-      await expectLater(
-        stream,
-        emitsInOrder([
-          // Should NOT emit any UI states (no loading, no cachedApplied, no success)
-          // It silently calls GetDynamicLocalizationUseCase
-          emitsDone,
-        ]),
-      );
+      await expectLater(stream, emitsDone);
 
-      // Verify setLocaleFromCode and UpdateUserLanguageUseCase were skipped
       verifyNever(() => mockUpdateUserLanguageUseCase(any()));
-      // GetDynamicLocalizationUseCase MUST be called to check for delta
-      verify(() => mockGetDynamicLocalizationUseCase('en')).called(1);
+      verifyNever(() => mockGetDynamicLocalizationUseCase(any()));
     });
 
-    test(
-      'ChangeLanguageUseCase Scenario 4: Edge Case - Switching to the SAME language (Network Failure)',
-      () async {
-        // Arrange
-        await LocalizationManager.instance.setLocaleFromCode('en');
-        final usecase = ChangeLanguageUseCase(
-          mockCheckLanguageCachedUseCase,
-          mockGetDynamicLocalizationUseCase,
-          mockUpdateUserLanguageUseCase,
-        );
+    test('Scenario 2: Optimistic switch for bundled or cached language (vi)', () async {
+      when(() => mockCheckLanguageCachedUseCase('vi')).thenAnswer((_) async => true);
+      when(() => mockGetDynamicLocalizationUseCase('vi'))
+          .thenAnswer((_) async => const Right(null));
+      when(() => mockUpdateUserLanguageUseCase('vi'))
+          .thenAnswer((_) async => const Right(null));
 
-        when(
-          () => mockGetDynamicLocalizationUseCase('en'),
-        ).thenAnswer((_) async => const Left(ServerFailure(message: 'Network Error')));
+      final stream = usecase('vi');
 
-        // Act
-        final stream = usecase('en');
-
-        // Assert
-        await expectLater(stream, emitsInOrder([LanguageSyncStatus.error, emitsDone]));
-
-        // Verify setLocaleFromCode and UpdateUserLanguageUseCase were skipped
-        verifyNever(() => mockUpdateUserLanguageUseCase(any()));
-        verify(() => mockGetDynamicLocalizationUseCase('en')).called(1);
-      },
-    );
-
-    test(
-      'ChangeLanguageUseCase Scenario 5: Network Failure - Switching to a new language (Not Cached) fails',
-      () async {
-        // Arrange
-        when(() => mockCheckLanguageCachedUseCase('vi')).thenAnswer((_) async => false);
-        when(
-          () => mockGetDynamicLocalizationUseCase('vi'),
-        ).thenAnswer((_) async => const Left(ServerFailure(message: 'Network Error', code: 500)));
-        when(() => mockUpdateUserLanguageUseCase('vi')).thenAnswer((_) async => const Right(null));
-
-        // Act
-        final stream = usecase('vi');
-
-        // Assert
-        await expectLater(
-          stream,
-          emitsInOrder([LanguageSyncStatus.loading, LanguageSyncStatus.error, emitsDone]),
-        );
-      },
-    );
-
-    test('Scenario 6: Network Failure - Switching to a new language (Cached) fails', () async {
-      // Arrange
-      when(() => mockCheckLanguageCachedUseCase('ja')).thenAnswer((_) async => true);
-      when(
-        () => mockGetDynamicLocalizationUseCase('ja'),
-      ).thenAnswer((_) async => const Left(ServerFailure(message: 'Network Error', code: 500)));
-      when(() => mockUpdateUserLanguageUseCase('ja')).thenAnswer((_) async => const Right(null));
-
-      // Act
-      final stream = usecase('ja');
-
-      // Assert
       await expectLater(
         stream,
         emitsInOrder([
-          LanguageSyncStatus.cachedApplied, // Optimistic UI still happens
-          LanguageSyncStatus.error, // But network fails
+          const LanguageSyncStatus.cachedApplied('vi'),
+          const LanguageSyncStatus.success('vi'),
           emitsDone,
         ]),
       );
 
-      // Verify UpdateUserLanguageUseCase was called
+      expect(LocalizationManager.instance.currentLocale.languageCode, equals('vi'));
+      verify(() => mockUpdateUserLanguageUseCase('vi')).called(1);
+    });
+
+    test('Scenario 3: Uncached remote language (ja) shows loading dialog then succeeds', () async {
+      when(() => mockCheckLanguageCachedUseCase('ja')).thenAnswer((_) async => false);
+      when(() => mockGetDynamicLocalizationUseCase('ja'))
+          .thenAnswer((_) async => const Right(null));
+      when(() => mockUpdateUserLanguageUseCase('ja'))
+          .thenAnswer((_) async => const Right(null));
+
+      final stream = usecase('ja');
+
+      await expectLater(
+        stream,
+        emitsInOrder([
+          const LanguageSyncStatus.loading('ja'),
+          const LanguageSyncStatus.success('ja'),
+          emitsDone,
+        ]),
+      );
+
+      expect(LocalizationManager.instance.currentLocale.languageCode, equals('ja'));
       verify(() => mockUpdateUserLanguageUseCase('ja')).called(1);
+    });
+
+    test('Scenario 4: Uncached remote language network failure rolls back and retains locale', () async {
+      await LocalizationManager.instance.setLocaleFromCode('en');
+      when(() => mockCheckLanguageCachedUseCase('ko')).thenAnswer((_) async => false);
+      when(() => mockGetDynamicLocalizationUseCase('ko')).thenAnswer(
+        (_) async => const Left(ServerFailure(message: 'Connection timeout', code: 504)),
+      );
+      when(() => mockUpdateUserLanguageUseCase('ko'))
+          .thenAnswer((_) async => const Right(null));
+
+      final stream = usecase('ko');
+
+      await expectLater(
+        stream,
+        emitsInOrder([
+          const LanguageSyncStatus.loading('ko'),
+          const LanguageSyncStatus.error('ko', 'Connection timeout'),
+          emitsDone,
+        ]),
+      );
+
+      // Active locale must still be English
+      expect(LocalizationManager.instance.currentLocale.languageCode, equals('en'));
     });
   });
 }
