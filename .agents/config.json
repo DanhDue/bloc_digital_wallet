@@ -1,0 +1,7 @@
+{
+    "rules": [
+        ".agents/rules/CRITICAL_RULES.md"
+    ],
+    "skills_directory": ".agents/skills",
+    "workflows_directory": ".agents/workflows"
+}

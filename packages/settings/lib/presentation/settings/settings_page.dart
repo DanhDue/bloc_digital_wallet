@@ -135,6 +135,7 @@ class SettingsPage
                 onTap: () => _showCurrencyPicker(context),
               ),
               SettingsItemWidget(
+                key: const ValueKey('settings_language_item'),
                 icon: Icons.language,
                 label: t.preferences.language,
                 trailing: SettingsItemTrailing.value,
@@ -354,6 +355,7 @@ class SettingsPage
               ),
               ...languagesToDisplay.map((lang) {
                 return ListTile(
+                  key: ValueKey('language_option_${lang.languageCode}'),
                   title: Text(lang.languageName == 'Korean' ? '한국어' : lang.languageName),
                   trailing:
                       LocalizationManager.instance.resolveLocale(lang.languageCode) ==

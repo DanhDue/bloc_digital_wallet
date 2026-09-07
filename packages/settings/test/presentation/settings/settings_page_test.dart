@@ -3,17 +3,13 @@
 // coverage:ignore-file
 
 import 'package:core/core.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mockito/mockito.dart';
 import 'package:logger/d3nexus_logger.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings/data/models/sync/available_language.dart';
-import 'package:settings/domain/usecases/change_language_usecase.dart';
 import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
@@ -22,11 +18,8 @@ import 'package:settings/presentation/settings/widgets/settings_item_widget.dart
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:ui_kit/ui_kit.dart';
 
 import 'package:settings/generated/translations.dart' as settings_lang;
-
-import 'settings_bloc_test.mocks.dart';
 
 import 'package:mocktail/mocktail.dart' as mocktail;
 class MockLogManager extends mocktail.Mock implements ILogManager {}
