@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print, unnecessary_cast
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:bloc_digital_wallet/generated/translations.dart' as root;
+import 'package:d3_nexus_shield/generated/translations.dart' as root;
 import 'package:core/generated/translations.dart' as core;
 import 'package:flutter/widgets.dart';
 import 'package:settings/generated/translations.dart' as settings;

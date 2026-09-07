@@ -8,7 +8,7 @@ class AppConfig {
   AppConfig._(); // Private constructor to prevent instantiation
 
   /// App display name
-  static const String appName = String.fromEnvironment('APP_NAME', defaultValue: 'Digital Wallet');
+  static const String appName = String.fromEnvironment('APP_NAME', defaultValue: 'D3NexusShield');
 
   /// App suffix for environment (dev, stg, prd)
   static const String appSuffix = String.fromEnvironment('APP_SUFFIX', defaultValue: 'dev');

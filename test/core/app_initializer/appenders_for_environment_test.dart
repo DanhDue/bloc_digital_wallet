@@ -2,10 +2,10 @@
 
 // coverage:ignore-file
 
-import 'package:bloc_digital_wallet/logging/appenders/datadog_appender.dart';
-import 'package:bloc_digital_wallet/logging/appenders/otel_appender.dart';
-import 'package:bloc_digital_wallet/logging/appenders/talker_appender.dart';
-import 'package:bloc_digital_wallet/logging/appenders_for_environment.dart';
+import 'package:d3_nexus_shield/logging/appenders/datadog_appender.dart';
+import 'package:d3_nexus_shield/logging/appenders/otel_appender.dart';
+import 'package:d3_nexus_shield/logging/appenders/talker_appender.dart';
+import 'package:d3_nexus_shield/logging/appenders_for_environment.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:talker_flutter/talker_flutter.dart' hide LogLevel;

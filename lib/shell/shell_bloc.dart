@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:framework/framework.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:bloc_digital_wallet/shell/shell_action.dart';
-import 'package:bloc_digital_wallet/shell/shell_event.dart';
-import 'package:bloc_digital_wallet/shell/shell_state.dart';
+import 'package:d3_nexus_shield/shell/shell_action.dart';
+import 'package:d3_nexus_shield/shell/shell_event.dart';
+import 'package:d3_nexus_shield/shell/shell_state.dart';
 
 @injectable
 class ShellBloc extends MviBloc<ShellAction, ShellState, ShellEvent> {

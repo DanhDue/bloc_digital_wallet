@@ -1,6 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:bloc_digital_wallet/logging/module_gated_route_observer.dart';
+import 'package:d3_nexus_shield/logging/module_gated_route_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/d3nexus_logger.dart';

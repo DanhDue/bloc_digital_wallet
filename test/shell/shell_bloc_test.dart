@@ -2,10 +2,10 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bloc_digital_wallet/shell/shell_action.dart';
-import 'package:bloc_digital_wallet/shell/shell_bloc.dart';
-import 'package:bloc_digital_wallet/shell/shell_event.dart';
-import 'package:bloc_digital_wallet/shell/shell_state.dart';
+import 'package:d3_nexus_shield/shell/shell_action.dart';
+import 'package:d3_nexus_shield/shell/shell_bloc.dart';
+import 'package:d3_nexus_shield/shell/shell_event.dart';
+import 'package:d3_nexus_shield/shell/shell_state.dart';
 
 void main() {
   late ShellBloc bloc;

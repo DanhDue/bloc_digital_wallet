@@ -1,17 +1,17 @@
-# Migration from .agent to .kiro
+# Migration from .agents to .kiro
 
 **Date**: 2026-01-22  
 **Status**: ✅ Complete
 
 ## Overview
 
-This document explains how the `.agent` folder structure has been integrated with Kiro's `.kiro` configuration.
+This document explains how the `.agents` folder structure has been integrated with Kiro's `.kiro` configuration.
 
 ## What Was Migrated
 
 ### 1. Rules → Steering Files
 
-| .agent/rules/ | .kiro/steering/ | Status |
+| .agents/rules/ | .kiro/steering/ | Status |
 |---------------|-----------------|--------|
 | `critical-rules.md` | `project-conventions.md` | ✅ Migrated |
 | `project-conventions.md` | `project-conventions.md` | ✅ Migrated |
@@ -21,7 +21,7 @@ This document explains how the `.agent` folder structure has been integrated wit
 
 ### 2. Workflows → Specs
 
-| .agent/workflows/ | .kiro/specs/ | Status |
+| .agents/workflows/ | .kiro/specs/ | Status |
 |-------------------|--------------|--------|
 | `create-new-feature.md` | `mason-workflows.md` | ✅ Migrated |
 | `session-init.md` | N/A | ⚠️ Agent-specific |
@@ -29,14 +29,14 @@ This document explains how the `.agent` folder structure has been integrated wit
 
 ### 3. Patterns → Architecture Docs
 
-| .agent/patterns/ | .kiro/steering/ | Status |
+| .agents/patterns/ | .kiro/steering/ | Status |
 |------------------|-----------------|--------|
 | `mvi-patterns.md` | `mvi-architecture.md` | ✅ Migrated |
 | `clean-architecture.md` | `mvi-architecture.md` | ✅ Merged |
 
 ### 4. Skills → Workflows
 
-| .agent/skills/ | .kiro/steering/ | Status |
+| .agents/skills/ | .kiro/steering/ | Status |
 |----------------|-----------------|--------|
 | `create_new_feature/` | `mason-workflows.md` | ✅ Migrated |
 | `api_integration/` | `mvi-architecture.md` | ✅ Documented |
@@ -45,12 +45,12 @@ This document explains how the `.agent` folder structure has been integrated wit
 
 ## Key Differences
 
-### .agent Folder (AI Agent Specific)
+### .agents Folder (AI Agent Specific)
 - **Purpose**: AI agent automation and context
 - **Audience**: AI agents (Claude, Jules, etc.)
 - **Format**: Detailed step-by-step instructions
 - **Execution**: Automated workflows and skills
-- **Location**: `.agent/`
+- **Location**: `.agents/`
 
 ### .kiro Folder (Kiro IDE Integration)
 - **Purpose**: Kiro IDE configuration and steering
@@ -62,7 +62,7 @@ This document explains how the `.agent` folder structure has been integrated wit
 ## Steering Files Created
 
 ### 1. project-conventions.md
-**Migrated from**: `.agent/rules/critical-rules.md`, `.agent/rules/project-conventions.md`
+**Migrated from**: `.agents/rules/critical-rules.md`, `.agents/rules/project-conventions.md`
 
 **Contains**:
 - Import conventions (full package paths)
@@ -77,7 +77,7 @@ This document explains how the `.agent` folder structure has been integrated wit
 - Code generation commands
 
 ### 2. mvi-architecture.md
-**Migrated from**: `.agent/patterns/mvi-patterns.md`, `.agent/rules/tech-stack.md`
+**Migrated from**: `.agents/patterns/mvi-patterns.md`, `.agents/rules/tech-stack.md`
 
 **Contains**:
 - MVI flow diagram
@@ -90,7 +90,7 @@ This document explains how the `.agent` folder structure has been integrated wit
 - Testing patterns
 
 ### 3. mason-workflows.md
-**Migrated from**: `.agent/workflows/create-new-feature.md`, `.agent/skills/create_new_feature/`
+**Migrated from**: `.agents/workflows/create-new-feature.md`, `.agents/skills/create_new_feature/`
 
 **Contains**:
 - Available Mason bricks
@@ -108,38 +108,38 @@ This document explains how the `.agent` folder structure has been integrated wit
 - `mvi-architecture.md` (architecture)
 - `mason-workflows.md` (workflows)
 
-## What Stays in .agent
+## What Stays in .agents
 
-The following remain in `.agent` as they are AI agent-specific:
+The following remain in `.agents` as they are AI agent-specific:
 
 ### 1. Agent Context
-- `.agent/contexts/project_state.md` - Project memory
-- `.agent/contexts/active_context.md` - Session scratchpad
+- `.agents/contexts/project_state.md` - Project memory
+- `.agents/contexts/active_context.md` - Session scratchpad
 
 ### 2. Agent Personas
-- `.agent/personas/architect.md` - Design role
-- `.agent/personas/tech_lead.md` - QC role
-- `.agent/personas/qa_engineer.md` - Testing role
+- `.agents/personas/architect.md` - Design role
+- `.agents/personas/tech_lead.md` - QC role
+- `.agents/personas/qa_engineer.md` - Testing role
 
 ### 3. Agent Workflows
-- `.agent/workflows/session-init.md` - Session initialization
-- `.agent/workflows/melos-sync.md` - Melos operations
-- `.agent/workflows/secrets-env.md` - Secrets management
+- `.agents/workflows/session-init.md` - Session initialization
+- `.agents/workflows/melos-sync.md` - Melos operations
+- `.agents/workflows/secrets-env.md` - Secrets management
 
 ### 4. Agent Skills
-- `.agent/skills/api_integration/` - API automation
-- `.agent/skills/json_to_freezed_model/` - JSON parsing
-- `.agent/skills/setup_variants/` - Build variants
-- `.agent/skills/copy_secure_configurations/` - Config copying
+- `.agents/skills/api_integration/` - API automation
+- `.agents/skills/json_to_freezed_model/` - JSON parsing
+- `.agents/skills/setup_variants/` - Build variants
+- `.agents/skills/copy_secure_configurations/` - Config copying
 
 ### 5. Agent Configuration
-- `.agent/config.json` - AI model optimization
-- `.agent/JULES_GUIDE.md` - Master agent index
-- `.agent/skills_manifest.md` - Skills index
+- `.agents/config.json` - AI model optimization
+- `.agents/JULES_GUIDE.md` - Master agent index
+- `.agents/skills_manifest.md` - Skills index
 
 ## Integration Points
 
-### How .agent and .kiro Work Together
+### How .agents and .kiro Work Together
 
 ```
 Developer Request
@@ -153,7 +153,7 @@ Developer Request
    AI Agent (Claude/Jules)
        ↓
    ┌─────────────────┐
-   │ .agent/skills/  │ ← Automation workflows
+   │ .agents/skills/  │ ← Automation workflows
    └─────────────────┘
        ↓
    Code Generation
@@ -166,7 +166,7 @@ Developer Request
    - `project-conventions.md` (rules)
    - `mvi-architecture.md` (patterns)
    - `mason-workflows.md` (generation)
-3. **AI Agent**: Reads `.agent/skills/create_new_feature/`
+3. **AI Agent**: Reads `.agents/skills/create_new_feature/`
 4. **Execution**:
    - Runs `mason make mvi_feature --feature_name wallet`
    - Implements following steering file rules
@@ -182,7 +182,7 @@ Developer Request
 - Learning project structure
 - Implementing features manually
 
-### When to Use .agent
+### When to Use .agents
 - Automating repetitive tasks
 - AI agent-driven development
 - Complex multi-step workflows
@@ -204,7 +204,7 @@ Developer Request
 
 ### 2. Clearer Separation
 - Development rules in `.kiro`
-- Automation in `.agent`
+- Automation in `.agents`
 - No duplication
 
 ### 3. Improved Discoverability
@@ -220,8 +220,8 @@ Developer Request
 
 ## Backward Compatibility
 
-### .agent Files Still Work
-All existing `.agent` files remain functional:
+### .agents Files Still Work
+All existing `.agents` files remain functional:
 - Skills can still be triggered
 - Workflows still execute
 - Personas still available
@@ -239,23 +239,23 @@ All existing `.agent` files remain functional:
 1. Read [.kiro/INDEX.md](.kiro/INDEX.md)
 2. Review [.kiro/QUICK_START.md](.kiro/QUICK_START.md)
 3. Follow steering files for development
-4. Use `.agent` skills for automation
+4. Use `.agents` skills for automation
 
 ### For AI Agents
-1. Read [.agent/JULES_GUIDE.md](../.agent/JULES_GUIDE.md)
+1. Read [.agents/JULES_GUIDE.md](../.agents/JULES_GUIDE.md)
 2. Reference `.kiro/steering/` for rules
-3. Use `.agent/skills/` for automation
-4. Maintain context in `.agent/contexts/`
+3. Use `.agents/skills/` for automation
+4. Maintain context in `.agents/contexts/`
 
 ### For Project Maintenance
-1. Update steering files (not .agent rules)
-2. Keep .agent skills for automation
+1. Update steering files (not .agents rules)
+2. Keep .agents skills for automation
 3. Add new specs to `.kiro/specs/`
 4. Document patterns in steering files
 
 ## Summary
 
-| Aspect | .agent | .kiro |
+| Aspect | .agents | .kiro |
 |--------|--------|-------|
 | **Purpose** | AI automation | IDE configuration |
 | **Audience** | AI agents | Developers + IDE |

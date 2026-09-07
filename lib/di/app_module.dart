@@ -2,11 +2,11 @@
 
 import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
-import 'package:bloc_digital_wallet/app_router.dart';
-import 'package:bloc_digital_wallet/core/app_initializer/bloc_observer_initializer.dart';
-import 'package:bloc_digital_wallet/core/app_initializer/environment_initializer.dart';
-import 'package:bloc_digital_wallet/core/app_initializer/localization_initializer.dart';
-import 'package:bloc_digital_wallet/core/app_initializer/logging_initializer.dart';
+import 'package:d3_nexus_shield/app_router.dart';
+import 'package:d3_nexus_shield/core/app_initializer/bloc_observer_initializer.dart';
+import 'package:d3_nexus_shield/core/app_initializer/environment_initializer.dart';
+import 'package:d3_nexus_shield/core/app_initializer/localization_initializer.dart';
+import 'package:d3_nexus_shield/core/app_initializer/logging_initializer.dart';
 
 @module
 abstract class AppModule {

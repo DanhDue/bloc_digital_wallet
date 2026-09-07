@@ -1,23 +1,23 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:bloc_digital_wallet/di/injection.dart';
+import 'package:d3_nexus_shield/di/injection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:app_platform/platform.dart';
-import 'package:bloc_digital_wallet/app_router.dart';
-import 'package:bloc_digital_wallet/shell/shell_bloc.dart';
+import 'package:d3_nexus_shield/app_router.dart';
+import 'package:d3_nexus_shield/shell/shell_bloc.dart';
 import 'package:core/core.dart' hide test;
 import 'package:scanner/scanner.dart';
 import 'package:settings/settings.dart';
 
 import 'package:flutter/material.dart';
-import 'package:bloc_digital_wallet/shell/shell_page.dart';
+import 'package:d3_nexus_shield/shell/shell_page.dart';
 
 import 'package:ui_kit/ui_kit.dart';
 
-import 'package:bloc_digital_wallet/core/localization/app_translation_providers.dart';
-import 'package:bloc_digital_wallet/core/localization/multi_translation_provider.dart';
+import 'package:d3_nexus_shield/core/localization/app_translation_providers.dart';
+import 'package:d3_nexus_shield/core/localization/multi_translation_provider.dart';
 
 void main() {
   setUp(() async {

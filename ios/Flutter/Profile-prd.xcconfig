@@ -4,4 +4,4 @@
 // CFBundleDisplayName for the 'prd' flavor - mirrored from
 // secureFiles/prd/environment-configs.json.
 // Regenerate: python3 ios/scripts/setup_ios_flavors.py
-DART_DEFINES_APP_NAME = Zeno
+DART_DEFINES_APP_NAME = D3NexusShield

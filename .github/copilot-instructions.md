@@ -6,12 +6,12 @@
 
 ---
 
-## 🤖 CRITICAL: AI Agents Must Scan `.agent/` Directory
+## 🤖 CRITICAL: AI Agents Must Scan `.agents/` Directory
  
- **BEFORE** starting ANY task, AI Agents MUST discover and read documentation from `.agent/`:
+ **BEFORE** starting ANY task, AI Agents MUST discover and read documentation from `.agents/`:
  
  ```
- .agent/
+ .agents/
  ├── README.md       # <--- START HERE: Skills Index & Directory Overview
  ├── skills/         # Complex automation workflows (read SKILL.md)
  ├── rules/          # critical-rules.md (MANDATORY conventions)
@@ -22,15 +22,15 @@
  
  ### Discovery Protocol
  
- 1. **Read `.agent/README.md`**: This is your map. It contains the **Skills Index**.
+ 1. **Read `.agents/README.md`**: This is your map. It contains the **Skills Index**.
  2. **Check the Skills Index**: See if a skill matches the user's request (e.g., `@api_integration`).
- 3. **Read `.agent/rules/critical-rules.md`**: For MANDATORY conventions.
+ 3. **Read `.agents/rules/critical-rules.md`**: For MANDATORY conventions.
  4. **Trigger Skills**: If a skill matches, follow its `SKILL.md` instructions.
- 5. **Follow Workflows**: If no skill applies, check `.agent/workflows/`.
+ 5. **Follow Workflows**: If no skill applies, check `.agents/workflows/`.
  
  ### ⚠️ Skill Execution: NO REVIEW REQUIRED
  
- **CRITICAL RULE**: When ANY skill from `.agent/skills/` is triggered:
+ **CRITICAL RULE**: When ANY skill from `.agents/skills/` is triggered:
  - ❌ **DO NOT** ask for review, confirmation, or approval
  - ❌ **DO NOT** pause for user feedback during execution
  - ❌ **DO NOT** request review of generated files or artifacts
@@ -39,12 +39,12 @@
  - ✅ **DO** run all commands without asking (e.g., `melos genAlls`, `fvm flutter analyze`)
  - ✅ **DO** complete the entire workflow end-to-end
  
- **Refer to the [Skills Index](.agent/README.md) for the complete list of available skills and their triggers.**
+ **Refer to the [Skills Index](.agents/README.md) for the complete list of available skills and their triggers.**
  
  ## 🛠️ Skill Triggers
  
  > [!IMPORTANT]
- > **ALWAYS check `.agent/README.md` for the latest Skills Index.**
+ > **ALWAYS check `.agents/README.md` for the latest Skills Index.**
  
  **Common Triggers:**
  - **API Integration** → `@api_integration` (CURL, JSON response)
@@ -56,14 +56,14 @@
 
 ## Quick Reference
 
-All detailed documentation is in `.agent/`:
+All detailed documentation is in `.agents/`:
 
-- **Rules**: `.agent/rules/critical-rules.md` - All MANDATORY conventions
-- **Patterns**: `.agent/patterns/` - Architecture patterns
-- **Skills**: `.agent/skills/` - Automation workflows
-- **Workflows**: `.agent/workflows/` - Step-by-step procedures
-- **Templates**: `.agent/templates/` - Task-specific guides
-- **Checklists**: `.agent/checklists/` - Verification steps
+- **Rules**: `.agents/rules/critical-rules.md` - All MANDATORY conventions
+- **Patterns**: `.agents/patterns/` - Architecture patterns
+- **Skills**: `.agents/skills/` - Automation workflows
+- **Workflows**: `.agents/workflows/` - Step-by-step procedures
+- **Templates**: `.agents/templates/` - Task-specific guides
+- **Checklists**: `.agents/checklists/` - Verification steps
 
 ---
 
@@ -80,5 +80,5 @@ fvm flutter analyze --no-fatal-infos # Analyze (MUST show "No issues found!")
 ## References
 
 - **Project docs**: `docs/architecture/`, `docs/development/`, `docs/mason/`
-- **AI agent resources**: `.agent/` (PRIMARY SOURCE - skills, workflows, rules, patterns, templates, checklists)
-- **Detailed rules**: `.cursorrules` (pointer to `.agent/`)
+- **AI agent resources**: `.agents/` (PRIMARY SOURCE - skills, workflows, rules, patterns, templates, checklists)
+- **Detailed rules**: `.cursorrules` (pointer to `.agents/`)

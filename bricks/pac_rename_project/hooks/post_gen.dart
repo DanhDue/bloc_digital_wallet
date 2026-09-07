@@ -49,7 +49,8 @@ Future<void> run(HookContext context) async {
 
     // 4. Update Dart package imports in lib/, test/, features/, integration_test/
     // CRITICAL: Strictly preserve packages/ (vendor locked)
-    progress.update('Updating Dart imports from package:$oldPackageName/ to package:$packageName/...');
+    progress
+        .update('Updating Dart imports from package:$oldPackageName/ to package:$packageName/...');
     final scanDirs = ['lib', 'test', 'features', 'integration_test'];
     final oldImportPrefix = 'package:$oldPackageName/';
     final newImportPrefix = 'package:$packageName/';
@@ -201,7 +202,86 @@ Future<void> run(HookContext context) async {
       }
     }
 
-    // 7. Melos bootstrap and code generation
+    // 7. Update lib/config/app_config.dart
+    progress.update('Updating app_config.dart default app name...');
+    final appConfigFile = File('${rootDir.path}/lib/config/app_config.dart');
+    if (appConfigFile.existsSync()) {
+      var appConfigContent = await appConfigFile.readAsString();
+      appConfigContent = appConfigContent.replaceAll(
+        RegExp(r"defaultValue:\s*'[^']*'"),
+        "defaultValue: '$appName'",
+      );
+      await appConfigFile.writeAsString(appConfigContent);
+    }
+
+    // 8. Update environment-configs.json across secureFiles/ and template resources
+    progress.update('Updating secure environment configurations...');
+    final secureConfigDirs = [
+      '${rootDir.path}/secureFiles',
+      '${rootDir.path}/.agents/skills/setup_variants/resources/secureFiles',
+    ];
+    for (final sDir in secureConfigDirs) {
+      for (final env in ['dev', 'stg', 'prd']) {
+        final envFile = File('$sDir/$env/environment-configs.json');
+        if (envFile.existsSync()) {
+          var content = await envFile.readAsString();
+          final suffix = env == 'prd' ? '' : '($env)';
+          content = content.replaceAll(
+            RegExp(r'"APP_NAME":\s*"[^"]*"'),
+            '"APP_NAME": "$appName$suffix"',
+          );
+          await envFile.writeAsString(content);
+        }
+      }
+    }
+
+    // 9. Update launch.json across .vscode/ and template resources
+    progress.update('Updating VS Code launch configurations...');
+    final launchFiles = [
+      '${rootDir.path}/.vscode/launch.json',
+      '${rootDir.path}/.agents/skills/setup_variants/resources/launch.json',
+    ];
+    for (final lPath in launchFiles) {
+      final lFile = File(lPath);
+      if (lFile.existsSync()) {
+        var content = await lFile.readAsString();
+        content = content.replaceAll(
+          RegExp(r'"name":\s*"[^"(]+\(([^)]+)\)"'),
+          '"name": "$appName(\$1)"',
+        );
+        await lFile.writeAsString(content);
+      }
+    }
+
+    // 10. Update .agents/config.json project name
+    final agentConfigFile = File('${rootDir.path}/.agents/config.json');
+    if (agentConfigFile.existsSync()) {
+      progress.update('Updating .agents/config.json project name...');
+      var content = await agentConfigFile.readAsString();
+      content = content.replaceAll(
+        RegExp(r'"project_name":\s*"[^"]*"'),
+        '"project_name": "$packageName"',
+      );
+      await agentConfigFile.writeAsString(content);
+    }
+
+    // 11. Update template bricks (e.g. bricks/mvi_feature, bricks/mvi_subfeature)
+    progress.update('Updating Mason brick templates...');
+    final bricksDir = Directory('${rootDir.path}/bricks');
+    if (bricksDir.existsSync()) {
+      await for (final entity in bricksDir.list(recursive: true)) {
+        if (entity is File && entity.path.endsWith('.dart')) {
+          if (entity.path.contains('pac_rename_project')) continue;
+          final content = await entity.readAsString();
+          if (content.contains(oldImportPrefix)) {
+            final updated = content.replaceAll(oldImportPrefix, newImportPrefix);
+            await entity.writeAsString(updated);
+          }
+        }
+      }
+    }
+
+    // 12. Melos bootstrap and code generation
     progress.update('Running melos bootstrap...');
     final bootstrapResult = await Process.run('melos', ['bootstrap'], runInShell: true);
     if (bootstrapResult.exitCode != 0) {

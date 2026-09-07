@@ -8,15 +8,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc_digital_wallet/generated/translations.dart';
+import 'package:d3_nexus_shield/generated/translations.dart';
 import 'package:framework/framework.dart';
 
-import 'package:bloc_digital_wallet/shell/shell_bloc.dart';
-import 'package:bloc_digital_wallet/shell/shell_action.dart';
-import 'package:bloc_digital_wallet/shell/shell_event.dart';
-import 'package:bloc_digital_wallet/shell/shell_state.dart';
-import 'package:bloc_digital_wallet/shell/widgets/custom_bottom_nav_bar.dart';
-import 'package:bloc_digital_wallet/shell/home_dashboard_page.dart';
+import 'package:d3_nexus_shield/shell/shell_bloc.dart';
+import 'package:d3_nexus_shield/shell/shell_action.dart';
+import 'package:d3_nexus_shield/shell/shell_event.dart';
+import 'package:d3_nexus_shield/shell/shell_state.dart';
+import 'package:d3_nexus_shield/shell/widgets/custom_bottom_nav_bar.dart';
+import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
 import 'package:scanner/scanner.dart';
 import 'package:settings/settings.dart';
 

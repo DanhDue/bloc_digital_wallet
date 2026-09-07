@@ -4,4 +4,4 @@
 // CFBundleDisplayName for the 'dev' flavor - mirrored from
 // secureFiles/dev/environment-configs.json.
 // Regenerate: python3 ios/scripts/setup_ios_flavors.py
-DART_DEFINES_APP_NAME = Zeno(dev)
+DART_DEFINES_APP_NAME = D3NexusShield(dev)

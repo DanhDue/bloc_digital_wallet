@@ -23,8 +23,8 @@
 ## Task 1: Execution-order calculator
 
 **Files:**
-- Create: `.agent/skills/epic-implementation/resources/scripts/compute_execution_order.py`
-- Test: `.agent/skills/epic-implementation/resources/scripts/test_compute_execution_order.py`
+- Create: `.agents/skills/epic-implementation/resources/scripts/compute_execution_order.py`
+- Test: `.agents/skills/epic-implementation/resources/scripts/test_compute_execution_order.py`
 
 **Interfaces:**
 - Produces: `load_tasks(features_dir: Path, epic: str) -> dict[str, dict]` — each value has keys `id`, `path`, `priority`, `status`, `blockers` (`list[str]`), `soft_notes` (`list[str]`), `title`.
@@ -34,13 +34,13 @@
 
 - [ ] **Step 1: Write the failing tests**
 
-Create `.agent/skills/epic-implementation/resources/scripts/test_compute_execution_order.py`:
+Create `.agents/skills/epic-implementation/resources/scripts/test_compute_execution_order.py`:
 
 ```python
 #!/usr/bin/env python3
 """Tests for compute_execution_order.py.
 
-Run: python3 .agent/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v
+Run: python3 .agents/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v
 """
 import sys
 import tempfile
@@ -176,12 +176,12 @@ if __name__ == "__main__":
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `python3 .agent/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v`
+Run: `python3 .agents/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v`
 Expected: FAIL/ERROR — `ModuleNotFoundError: No module named 'compute_execution_order'` (the module doesn't exist yet).
 
 - [ ] **Step 3: Write the implementation**
 
-Create `.agent/skills/epic-implementation/resources/scripts/compute_execution_order.py`:
+Create `.agents/skills/epic-implementation/resources/scripts/compute_execution_order.py`:
 
 ```python
 #!/usr/bin/env python3
@@ -343,18 +343,18 @@ if __name__ == "__main__":
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `python3 .agent/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v`
+Run: `python3 .agents/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v`
 Expected: all tests PASS, including the two `RealLoggingRefactorEpicTests` cases against the real `.devtool/features/` directory.
 
 - [ ] **Step 5: Manually verify the CLI output reads well**
 
-Run: `python3 .agent/skills/epic-implementation/resources/scripts/compute_execution_order.py logging-refactor`
+Run: `python3 .agents/skills/epic-implementation/resources/scripts/compute_execution_order.py logging-refactor`
 Expected output includes `Layer 2: task_3_log_manager (high), task_5_network_tracing (medium), task_7_native_bridge (medium)  -- could run in parallel` and a "Manual review advised" line mentioning Task 7's "Recommended to do after" note.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add .agent/skills/epic-implementation/resources/scripts/compute_execution_order.py .agent/skills/epic-implementation/resources/scripts/test_compute_execution_order.py
+git add .agents/skills/epic-implementation/resources/scripts/compute_execution_order.py .agents/skills/epic-implementation/resources/scripts/test_compute_execution_order.py
 git commit -m "feat: add execution-order calculator for epic-implementation skill"
 ```
 
@@ -363,8 +363,8 @@ git commit -m "feat: add execution-order calculator for epic-implementation skil
 ## Task 2: Worktree bootstrap script
 
 **Files:**
-- Create: `.agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh`
-- Test: `.agent/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`
+- Create: `.agents/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh`
+- Test: `.agents/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`
 
 **Interfaces:**
 - Produces: `bootstrap_worktree.sh <worktree_path>` — exit 0 on success; exit 1 with a message on stderr if called with the wrong number of arguments, a nonexistent worktree path, or a missing `secureFiles/` in the repo root.
@@ -372,7 +372,7 @@ git commit -m "feat: add execution-order calculator for epic-implementation skil
 
 - [ ] **Step 1: Write the failing test**
 
-Create `.agent/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`:
+Create `.agents/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -380,7 +380,7 @@ Create `.agent/skills/epic-implementation/resources/scripts/test_bootstrap_workt
 # actually running melos/copy_secure_configurations (those are exercised
 # for real in Task 4's end-to-end dry run).
 #
-# Run: bash .agent/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh
+# Run: bash .agents/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -419,12 +419,12 @@ echo "All checks passed"
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `bash .agent/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`
+Run: `bash .agents/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`
 Expected: FAIL — `bootstrap_worktree.sh: No such file or directory` (the script doesn't exist yet).
 
 - [ ] **Step 3: Write the implementation**
 
-Create `.agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh`:
+Create `.agents/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -460,7 +460,7 @@ echo "Copying secureFiles/ into worktree (untracked, so 'git worktree add' does 
 cp -R "$REPO_ROOT/secureFiles" "$WORKTREE_PATH/secureFiles"
 
 echo "Placing platform config via copy_secure_configurations..."
-(cd "$WORKTREE_PATH" && sh .agent/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh)
+(cd "$WORKTREE_PATH" && sh .agents/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh)
 
 echo "Running melos bootstrap (fast: ~/.pub-cache is global and already warm)..."
 (cd "$WORKTREE_PATH" && melos bootstrap)
@@ -470,17 +470,17 @@ echo "Note: no 'pod install' needed (Swift Package Manager, not CocoaPods)."
 echo "The first iOS build here will resolve SPM packages automatically (one-time cost)."
 ```
 
-Make it executable: `chmod +x .agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh`
+Make it executable: `chmod +x .agents/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh`
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `bash .agent/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`
+Run: `bash .agents/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh`
 Expected: `PASS: no arguments`, `PASS: nonexistent worktree path`, `All checks passed`.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add .agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh .agent/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh
+git add .agents/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh .agents/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh
 git commit -m "feat: add worktree bootstrap script for epic-implementation skill"
 ```
 
@@ -489,7 +489,7 @@ git commit -m "feat: add worktree bootstrap script for epic-implementation skill
 ## Task 3: Write the `epic-implementation` SKILL.md
 
 **Files:**
-- Create: `.agent/skills/epic-implementation/SKILL.md`
+- Create: `.agents/skills/epic-implementation/SKILL.md`
 
 **Interfaces:**
 - Consumes: `compute_execution_order.py` (Task 1) and `bootstrap_worktree.sh` (Task 2) by exact relative path; `superpowers:using-git-worktrees`, `superpowers:subagent-driven-development`, `superpowers:test-driven-development`, `superpowers:finishing-a-development-branch`, `copy_secure_configurations` by name.
@@ -497,7 +497,7 @@ git commit -m "feat: add worktree bootstrap script for epic-implementation skill
 
 - [ ] **Step 1: Write the skill file**
 
-Create `.agent/skills/epic-implementation/SKILL.md`:
+Create `.agents/skills/epic-implementation/SKILL.md`:
 
 ```markdown
 ---
@@ -539,7 +539,7 @@ This is an autonomous read-and-internalize pass, not a re-run of the interactive
 
 1. Run:
    ```bash
-   python3 .agent/skills/epic-implementation/resources/scripts/compute_execution_order.py <epic_name>
+   python3 .agents/skills/epic-implementation/resources/scripts/compute_execution_order.py <epic_name>
    ```
 2. Read the "Manual review advised" section of the output (if any) and cross-check it against what you read in Phase 0 — a task's own prose may recommend a later placement than its strict dependency layer allows (this happened for `logging-refactor`'s Task 7: graph-eligible right after Task 2, but its own file recommends doing it after Tasks 1-4). Adjust the flattened order by hand if the prose note should win.
 3. **Checkpoint:** present the final order (with any manual adjustment explained) to the user and get confirmation before creating any worktree or dispatching any subagent.
@@ -549,7 +549,7 @@ This is an autonomous read-and-internalize pass, not a re-run of the interactive
 1. Follow `superpowers:using-git-worktrees` to create one worktree named for the epic (e.g. branch `epic/<epic_name>`), from `develop`.
 2. Run:
    ```bash
-   .agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh <worktree_path>
+   .agents/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh <worktree_path>
    ```
    This copies `secureFiles/` in, places platform config via `copy_secure_configurations`, and runs `melos bootstrap`. It does **not** run `pod install` — this project uses Swift Package Manager, not CocoaPods.
 3. Do not copy or symlink `.dart_tool/`, `/build/`, `ios/Flutter/ephemeral/Packages/`, or any `android/**/.cxx/` directory from another checkout into this worktree — these embed the source checkout's absolute paths and will silently corrupt the build from a different path.
@@ -630,7 +630,7 @@ Confirm: frontmatter has only `name`/`description`, description starts with "Use
 - [ ] **Step 3: Commit**
 
 ```bash
-git add .agent/skills/epic-implementation/SKILL.md
+git add .agents/skills/epic-implementation/SKILL.md
 git commit -m "feat: add epic-implementation SKILL.md"
 ```
 
@@ -646,7 +646,7 @@ git commit -m "feat: add epic-implementation SKILL.md"
 
 - [ ] **Step 1: Run the order calculator for real and capture output**
 
-Run: `python3 .agent/skills/epic-implementation/resources/scripts/compute_execution_order.py logging-refactor`
+Run: `python3 .agents/skills/epic-implementation/resources/scripts/compute_execution_order.py logging-refactor`
 Expected: layers exactly as pinned in Task 1's `RealLoggingRefactorEpicTests`, plus a "Manual review advised" line for `task_7_native_bridge`.
 
 - [ ] **Step 2: Create a throwaway worktree via `using-git-worktrees`**
@@ -655,7 +655,7 @@ Follow that skill to create a worktree at `.worktrees/epic-implementation-smoke-
 
 - [ ] **Step 3: Run the bootstrap script against it for real**
 
-Run: `.agent/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh .worktrees/epic-implementation-smoke-test`
+Run: `.agents/skills/epic-implementation/resources/scripts/bootstrap_worktree.sh .worktrees/epic-implementation-smoke-test`
 Expected: exits 0; prints the "Worktree bootstrap complete" line.
 
 - [ ] **Step 4: Verify the worktree can actually see its config and dependencies**
@@ -677,15 +677,15 @@ git branch -D smoke-test/epic-implementation
 - [ ] **Step 6: Run the full test suites for Tasks 1 and 2 one more time together**
 
 ```bash
-python3 .agent/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v
-bash .agent/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh
+python3 .agents/skills/epic-implementation/resources/scripts/test_compute_execution_order.py -v
+bash .agents/skills/epic-implementation/resources/scripts/test_bootstrap_worktree_validation.sh
 ```
 Expected: all pass.
 
 - [ ] **Step 7: Commit** (only if Step 4-6 required any fix; otherwise nothing to commit)
 
 ```bash
-git add .agent/skills/epic-implementation/
+git add .agents/skills/epic-implementation/
 git commit -m "fix: address end-to-end dry run findings for epic-implementation"
 ```
 

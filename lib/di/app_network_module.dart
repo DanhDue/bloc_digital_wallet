@@ -2,7 +2,7 @@
 
 // coverage:ignore-file
 
-import 'package:bloc_digital_wallet/logging/module_gated_interceptor.dart';
+import 'package:d3_nexus_shield/logging/module_gated_interceptor.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';

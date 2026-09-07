@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:core/core.dart';
 import 'package:ui_kit/ui_kit.dart';
-import 'package:bloc_digital_wallet/main.dart' as app;
+import 'package:d3_nexus_shield/main.dart' as app;
 
 /// Reusable helper routines for Language Integration Tests.
 abstract final class LanguageTestHelper {

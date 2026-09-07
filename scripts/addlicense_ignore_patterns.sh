@@ -9,7 +9,7 @@ IGNORE_PATTERNS=(
   "builds/**"
   "android/**"
   "ios/**"
-  ".agent/**"
+  ".agents/**"
   "docs/**"
   ".*/**"
   "**/.*/**"

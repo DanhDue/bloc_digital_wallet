@@ -28,7 +28,7 @@ Concrete backends (Talker, Datadog, Otel) must live outside `packages/logger` so
 ## Design Rationale
 **Appenders as app-layer glue, not separate packages**: each appender is a thin (~30-50 line) adapter implementing `ILogAppender`. Splitting each into its own pub package was considered and rejected — the isolation that matters ("swap backend without touching core") is delivered entirely by the `ILogAppender` interface boundary in `packages/logger`, not by physical package boundaries; three near-single-file packages would only add pubspec/melos/CI overhead in this single-app monorepo. `TalkerAppender.respectsModuleToggle = true`; `DatadogAppender`/`OtelAppender`.`respectsModuleToggle = false` (see Task 3's dispatch logic).
 
-Relevant project skill: `mobile-developer` (`.agent/skills/mobile-developer`) for the DI/bootstrap wiring conventions used elsewhere in this app.
+Relevant project skill: `mobile-developer` (`.agents/skills/mobile-developer`) for the DI/bootstrap wiring conventions used elsewhere in this app.
 
 ## TDD Checklist
 - [ ] **RED**: Write unit tests per appender — `TalkerAppender.append()` forwards to the underlying `Talker` instance with the right level mapping; `DatadogAppender`/`OtelAppender.append()` call their SDK's log/span API with `traceId`/`spanId` mapped correctly. Write a DI-wiring test asserting `D3NexusLogger` resolves with the environment-appropriate appender set (dev vs. staging/prod).

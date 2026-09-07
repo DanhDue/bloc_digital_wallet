@@ -29,7 +29,7 @@ Every module needs a single, backend-agnostic way to emit a log entry that carri
 ## Design Rationale
 **Interface Segregation & Dependency Inversion**: splitting `ILogger`/`ILogAppender`/`ILogManager` keeps each concern replaceable and mockable in isolation. `LogRecord` embeds `traceId`/`spanId`/`parentSpanId` (W3C Trace Context / OpenTelemetry span model) so sequence reconstruction (Task 3) doesn't need to bolt correlation on later. `D3NexusLogger` is a static facade (mirrors the old `Log` static API) so call sites that can't easily use DI still have a simple entry point.
 
-Relevant project skill: `test-driven-development` (`.agent/skills/test-driven-development`) — this task is interface + data-class design and should be driven test-first per that skill's process.
+Relevant project skill: `test-driven-development` (`.agents/skills/test-driven-development`) — this task is interface + data-class design and should be driven test-first per that skill's process.
 
 ## TDD Checklist
 - [ ] **RED**: Write unit tests for `LogRecord` (construction, immutability, `traceId`/`spanId`/`parentSpanId` fields) and for `D3NexusLogger` (throws if used before `initialize()`, `getLogger()` returns a distinct logger per module, `withSpan()` stamps a new `spanId` with `parentSpanId` set to the current span).

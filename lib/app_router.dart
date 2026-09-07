@@ -4,7 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:scanner/scanner.dart' as scanner;
 import 'package:settings/settings.dart' as settings;
 
-import 'package:bloc_digital_wallet/shell/shell_page.dart';
+import 'package:d3_nexus_shield/shell/shell_page.dart';
 
 export 'package:scanner/scanner_router.dart';
 export 'package:settings/settings_router.dart';

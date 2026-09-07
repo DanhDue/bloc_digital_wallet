@@ -30,7 +30,7 @@ Complete the migration from the old static `Log` wrapper to `D3NexusLogger` acro
 ## Design Rationale
 **Phased, revertible migration** (Epic HLD §5): Phase 2 makes `Log` delegate internally to `D3NexusLogger` so nothing breaks while call sites are migrated incrementally; Phase 3 does the actual mass replace on a dedicated branch; Phase 4 deletes the old wrapper and its now-unused dependencies. This ordering means Phase 3/4 can be rolled back without re-touching call sites, since Phase 2's shim is the safety net.
 
-Relevant project skills: `using-git-worktrees` (`.agent/skills/using-git-worktrees`) for isolating the mass-replace branch; `verification-before-completion` (`.agent/skills/verification-before-completion`) before declaring the migration done.
+Relevant project skills: `using-git-worktrees` (`.agents/skills/using-git-worktrees`) for isolating the mass-replace branch; `verification-before-completion` (`.agents/skills/verification-before-completion`) before declaring the migration done.
 
 ## TDD Adaptation
 This is a mass find/replace with no new behavior (call sites keep the same log semantics, just a new API) — RED/GREEN/REFACTOR doesn't apply. Concrete steps instead:

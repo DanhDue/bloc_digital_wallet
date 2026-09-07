@@ -12,7 +12,7 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT" || exit 2
 APP="build/ios/iphoneos/Runner.app"
 PB=/usr/libexec/PlistBuddy
-BASE_ID="com.example.blocDigitalWallet"
+BASE_ID="com.danhdue.d3nexusshield"
 fail=0
 
 check () { # flavor  expect_name  expect_suffix

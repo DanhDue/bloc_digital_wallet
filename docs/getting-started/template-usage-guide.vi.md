@@ -34,7 +34,7 @@ rm -rf .git && git init
 ./scripts/rename_project.sh "My New App" my_new_app com.mycompany.mynewapp
 
 # 3. Đồng bộ cấu hình bảo mật (dev/stg/prd)
-sh .agent/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
+sh .agents/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
 
 # 4. Kiểm tra và chạy ứng dụng
 melos run analyze

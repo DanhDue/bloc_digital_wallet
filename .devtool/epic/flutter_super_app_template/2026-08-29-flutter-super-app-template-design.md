@@ -325,12 +325,12 @@ Toàn bộ mục dưới đây đã chốt qua trao đổi trước, liệt kê 
 
 ### 4.5 Docs / AI-agent config
 
-- `.agent/`: giữ, gỡ tham chiếu `bloc_digital_wallet`, reset `.agent/contexts/*` về rỗng/generic.
+- `.agents/`: giữ, gỡ tham chiếu `bloc_digital_wallet`, reset `.agents/contexts/*` về rỗng/generic.
 - `.devtool/epic/`: chỉ giữ `super_app_governance.en.md`/`.vi.md` (+ epic này) làm tài liệu kiến trúc
   gốc; xoá toàn bộ `task_*.md`, epic `logging_refactor`, `.devtool/features/`.
 - `docs/`: giữ `architecture`, `mason`, `getting-started`, `development`; xoá spec/plan cũ,
   `localization_analysis.md`, `implementation_guide.md`, `ORGANIZATION_PROPOSAL.md`.
-- Gom AI config: xoá `.kiro/`, `.github/copilot-instructions.md`, `.cursorrules`; giữ `.agent/` +
+- Gom AI config: xoá `.kiro/`, `.github/copilot-instructions.md`, `.cursorrules`; giữ `.agents/` +
   `.vscode/` (+ Claude Code config nếu có). `.devcontainer/` giữ (generic, chỉ cần đổi tên).
 
 ### 4.6 CI — quyết định 2026-08-29: giữ nguyên làm mẫu

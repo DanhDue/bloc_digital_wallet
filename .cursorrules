@@ -7,12 +7,12 @@
 
 ---
 
-## 🤖 CRITICAL: AI Agents Must Scan `.agent/` Directory
+## 🤖 CRITICAL: AI Agents Must Scan `.agents/` Directory
 
-**BEFORE** starting ANY task, AI Agents MUST discover and read documentation from `.agent/`:
+**BEFORE** starting ANY task, AI Agents MUST discover and read documentation from `.agents/`:
 
 ```
-.agent/
+.agents/
 ├── README.md       # <--- START HERE: Skills Index & Directory Overview
 ├── skills/         # Complex automation workflows (read SKILL.md)
 ├── rules/          # MANDATORY: tech-stack, coding-standards, security, git
@@ -23,16 +23,16 @@
 
 ### Discovery Protocol (MANDATORY)
 
-1. **Read `.agent/README.md`**: This is your map. It contains the **Skills Index**.
-2. **🧠 MEMORY CHECK (New)**: Read `.agent/contexts/project_state.md` to understand the current architecture and milestones.
+1. **Read `.agents/README.md`**: This is your map. It contains the **Skills Index**.
+2. **🧠 MEMORY CHECK (New)**: Read `.agents/contexts/project_state.md` to understand the current architecture and milestones.
 3. **Check the Skills Index**: See if a skill matches the user's request (e.g., `@api_integration`).
-4. **Read `.agent/rules/critical-rules.md`**: For MANDATORY conventions.
+4. **Read `.agents/rules/critical-rules.md`**: For MANDATORY conventions.
 5. **Trigger Skills**: If a skill matches, follow its `SKILL.md` instructions.
-6. **Follow Workflows**: If no skill applies, check `.agent/workflows/`.
+6. **Follow Workflows**: If no skill applies, check `.agents/workflows/`.
 
 ### ⚠️ Skill Execution: NO REVIEW REQUIRED
 
-**CRITICAL RULE**: When ANY skill from `.agent/skills/` is triggered:
+**CRITICAL RULE**: When ANY skill from `.agents/skills/` is triggered:
 - ❌ **DO NOT** ask for review, confirmation, or approval
 - ❌ **DO NOT** pause for user feedback during execution
 - ❌ **DO NOT** request review of generated files or artifacts
@@ -41,7 +41,7 @@
 - ✅ **DO** run all commands without asking (e.g., `melos genAlls`, `fvm flutter analyze`)
 - ✅ **DO** complete the entire workflow end-to-end
 
-**Refer to the [Skills Index](.agent/README.md) for the complete list of available skills and their triggers.**
+**Refer to the [Skills Index](.agents/README.md) for the complete list of available skills and their triggers.**
 
 ### 📂 Generated Files Access: NO PERMISSION REQUIRED
 
@@ -63,13 +63,13 @@
 | **Edit Model/Entity** | Run `melos genAlls` immediately. |
 | **Edit Assets/Locales** | Run `melos genAlls` immediately. |
 | **New Dependency** | Run `melos bootstrap` immediately. |
-| **"Build Failed"** | Check `.agent/workflows/build-fix.md`. |
-| **"Sync Project"** | Check `.agent/workflows/melos-sync.md`. |
+| **"Build Failed"** | Check `.agents/workflows/build-fix.md`. |
+| **"Sync Project"** | Check `.agents/workflows/melos-sync.md`. |
 
 ## 🛠️ Skill Mapping
 
 > [!IMPORTANT]
-> **ALWAYS check `.agent/README.md` for the latest Skills Index.**
+> **ALWAYS check `.agents/README.md` for the latest Skills Index.**
 
 **Common Triggers:**
 - **API/CURL/JSON** → `@api_integration`
@@ -91,14 +91,14 @@
 
 ## Quick Reference
 
-All detailed documentation is in `.agent/`:
+All detailed documentation is in `.agents/`:
 
-- **Rules**: `.agent/rules/critical-rules.md` - Import conventions, architecture, naming, styling, localization
-- **Patterns**: `.agent/patterns/` - Clean architecture, MVI patterns
-- **Skills**: `.agent/skills/` - Automation for API integration, model generation, feature creation
-- **Workflows**: `.agent/workflows/` - Step-by-step procedures for common tasks
-- **Templates**: `.agent/templates/` - Structured guides for features, bugs, refactoring, UI updates
-- **Checklists**: `.agent/checklists/` - Pre-submission verification
+- **Rules**: `.agents/rules/critical-rules.md` - Import conventions, architecture, naming, styling, localization
+- **Patterns**: `.agents/patterns/` - Clean architecture, MVI patterns
+- **Skills**: `.agents/skills/` - Automation for API integration, model generation, feature creation
+- **Workflows**: `.agents/workflows/` - Step-by-step procedures for common tasks
+- **Templates**: `.agents/templates/` - Structured guides for features, bugs, refactoring, UI updates
+- **Checklists**: `.agents/checklists/` - Pre-submission verification
 
 ---
 
@@ -137,16 +137,16 @@ Project Documentation:
   - docs/ai-agents/AI_AGENT_CONTEXT.md
 
 Agent Resources (PRIMARY SOURCE):
-  - .agent/skills/ - Automation workflows
-  - .agent/workflows/ - Step-by-step procedures
-  - .agent/rules/ - Critical conventions
-  - .agent/patterns/ - Architecture patterns
-  - .agent/templates/ - Task templates
-  - .agent/checklists/ - Verification lists
+  - .agents/skills/ - Automation workflows
+  - .agents/workflows/ - Step-by-step procedures
+  - .agents/rules/ - Critical conventions
+  - .agents/patterns/ - Architecture patterns
+  - .agents/templates/ - Task templates
+  - .agents/checklists/ - Verification lists
 ```
 
 ---
 
 **Last Updated**: 2026-01-20  
-**Version**: 3.0 - Refactored to reference `.agent/` as single source of truth  
+**Version**: 3.0 - Refactored to reference `.agents/` as single source of truth  
 **Status**: Optimized ✅

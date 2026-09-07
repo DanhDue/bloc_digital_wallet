@@ -1,6 +1,6 @@
-# BLOC DIGITAL WALLET
+# D3NexusShield
 
-A modern digital wallet app built with **Flutter**, following **Clean Architecture** and **MVI (Model-View-Intent)** pattern.
+A modern Flutter Super App built with **Clean Architecture** and **MVI (Model-View-Intent)** pattern.
 
 ---
 
@@ -305,13 +305,13 @@ packages/
 ### 7. AI Agent Skills
 | Skill | Description |
 |-------|-------------|
-| [api_integration](.agent/skills/api_integration/SKILL.md) | Automate API request handling from model generation to Data Source integration |
-| [check_secure_files](.agent/skills/check_secure_files/SKILL.md) | Verify required secure config files for all environments (dev, stg, prd) |
-| [copy_secure_configurations](.agent/skills/copy_secure_configurations/SKILL.md) | Copy secure config files to Android and iOS project paths |
-| [create_new_feature](.agent/skills/create_new_feature/SKILL.md) | Create features following Clean Architecture + MVI pattern |
-| [json_to_freezed_model](.agent/skills/json_to_freezed_model/SKILL.md) | Parse JSON and create freezed object classes |
-| [setup_keybindings](.agent/skills/setup_keybindings/SKILL.md) | Merge workspace keybindings into global IDE configuration |
-| [setup_variants](.agent/skills/setup_variants/SKILL.md) | Automate build variants (flavors) setup for Android and iOS |
+| [api_integration](.agents/skills/api_integration/SKILL.md) | Automate API request handling from model generation to Data Source integration |
+| [check_secure_files](.agents/skills/check_secure_files/SKILL.md) | Verify required secure config files for all environments (dev, stg, prd) |
+| [copy_secure_configurations](.agents/skills/copy_secure_configurations/SKILL.md) | Copy secure config files to Android and iOS project paths |
+| [create_new_feature](.agents/skills/create_new_feature/SKILL.md) | Create features following Clean Architecture + MVI pattern |
+| [json_to_freezed_model](.agents/skills/json_to_freezed_model/SKILL.md) | Parse JSON and create freezed object classes |
+| [setup_keybindings](.agents/skills/setup_keybindings/SKILL.md) | Merge workspace keybindings into global IDE configuration |
+| [setup_variants](.agents/skills/setup_variants/SKILL.md) | Automate build variants (flavors) setup for Android and iOS |
 
 ### 8. Task Templates
 | Document | Description |

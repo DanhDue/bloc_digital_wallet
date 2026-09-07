@@ -16,7 +16,7 @@
 - **Nơi làm việc (chốt 2026-08-29)**: toàn bộ công việc làm trên 1 **git worktree của chính repo `bloc_digital_wallet`** (vd `.worktrees/flutter_super_app_template`), không tách sang repo `git init` mới ngay. Việc tách repo độc lập (nếu cần) để quyết định sau, không chặn epic này.
 
 ## 2. Bối cảnh
-`bloc_digital_wallet` là monorepo Clean Architecture + MVI đã trưởng thành, mang theo trọn vẹn 1 sản phẩm digital wallet (7 feature package, 90 locale, asset đặc thù domain, lịch sử `.agent`/`.devtool` lớn). Mục tiêu: 1 template clone-và-đổi-tên — cắt domain digital wallet còn lại đúng 1 feature thật (`settings`) + 1 feature khung rỗng (`scanner`), giữ nguyên mọi tooling dùng lại được (Mason bricks, CI gate, scripts), và thêm 1 cửa vào đổi tên duy nhất để dự án mới chỉ cần clone + chạy 1 script.
+`bloc_digital_wallet` là monorepo Clean Architecture + MVI đã trưởng thành, mang theo trọn vẹn 1 sản phẩm digital wallet (7 feature package, 90 locale, asset đặc thù domain, lịch sử `.agents`/`.devtool` lớn). Mục tiêu: 1 template clone-và-đổi-tên — cắt domain digital wallet còn lại đúng 1 feature thật (`settings`) + 1 feature khung rỗng (`scanner`), giữ nguyên mọi tooling dùng lại được (Mason bricks, CI gate, scripts), và thêm 1 cửa vào đổi tên duy nhất để dự án mới chỉ cần clone + chạy 1 script.
 
 ## 3. Mục tiêu & Không làm gì
 
@@ -25,7 +25,7 @@
 - Dựng lại Host `lib/` quanh Shell 3 tab (home stub, scanner, settings), settings là tab mặc định, bỏ splash tuỳ biến.
 - Giữ nguyên 90 locale và font SF Compact; chỉ xoá asset đặc thù digital-wallet.
 - Giữ `pac_mvi_feature`/`pac_mvi_subfeature`/`remove_pac_feature`/`remove_pac_subfeature` **và** bricks cũ nhắm `lib/features/` (`mvi_feature`, `mvi_subfeature`, `sample`, `remove_feature`, `remove_subfeature`, `remove_sample`, `test_brick`) — giữ lại, không xoá, phòng trường hợp dự án sau này không theo package-first organization. Sửa hook `pac_mvi_feature` để vẫn nối feature mới đúng cách khi `onboard` (neo hiện tại) không còn.
-- Dọn `.agent/`, `.devtool/epic/`, `docs/`, và cấu hình đa-IDE về bộ tối giản, generic.
+- Dọn `.agents/`, `.devtool/epic/`, `docs/`, và cấu hình đa-IDE về bộ tối giản, generic.
 - Chỉ còn đúng 1 `scripts/rename_project.sh` là bước duy nhất cần chạy sau khi clone. Script **không đụng** namespace Kotlin/Swift cố định `com.danhdue.*` của 2 plugin.
 - Giữ nguyên `.gitlab-ci.yml` (kể cả bước Firebase secrets/`buildIPA`) làm mẫu tham khảo, không rút gọn.
 
@@ -45,7 +45,7 @@ Danh sách package giữ/bỏ, layout tab Shell, quyết định locale/asset, v
 | 2 | [Dựng lại Host Shell](../../features/task_2_rebuild_host_shell.md) | Shell 3 tab (home stub/scanner/settings), bỏ splash tuỳ biến, cập nhật `app_router.dart`/`injection.dart`/`AuthNavigationInitializer`. |
 | 3 | [Dọn asset & locale](../../features/task_3_asset_locale_cleanup.md) | Xoá image/lottie/json đặc thù wallet; giữ nguyên 90 locale và font SF Compact. |
 | 4 | [Dọn mason bricks](../../features/task_4_mason_bricks_cleanup.md) | Giữ nguyên bricks cũ thời `lib/features/`; sửa neo `onboard` trong hook `pac_mvi_feature`. |
-| 5 | [Dọn docs & `.agent`](../../features/task_5_docs_agent_cleanup.md) | Gỡ tham chiếu tên project, cắt gọn `.devtool/epic`/`docs/`, gom cấu hình đa-IDE. |
+| 5 | [Dọn docs & `.agents`](../../features/task_5_docs_agent_cleanup.md) | Gỡ tham chiếu tên project, cắt gọn `.devtool/epic`/`docs/`, gom cấu hình đa-IDE. |
 | 6 | [Đồng bộ CI](../../features/task_6_ci_simplification.md) | Giữ nguyên `.gitlab-ci.yml` làm mẫu; đồng bộ `module_boundary_whitelist.txt`/`FEATURE_PACKAGES` theo package đã cắt. |
 | 7 | [Script đổi tên](../../features/task_7_rename_script.md) | `scripts/rename_project.sh` — cửa vào duy nhất khi clone-và-đổi-tên (namespace plugin native giữ cố định). |
 | 8 | [Trích xuất & kiểm thử trên worktree](../../features/task_8_extraction_validation.md) | Dựng 1 git worktree riêng trong repo này; chạy thử toàn bộ vòng rename→build. |

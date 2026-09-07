@@ -11,7 +11,7 @@
 - ✅ **README.md** - Main navigation hub (updated)
 - ✅ **QUICK_START.md** - 5-minute quick start guide
 - ✅ **SETUP_SUMMARY.md** - Original setup documentation
-- ✅ **MIGRATION_FROM_AGENT.md** - Migration guide from .agent folder
+- ✅ **MIGRATION_FROM_AGENT.md** - Migration guide from .agents folder
 - ✅ **KIRO_SETUP_COMPLETE.md** - This file
 
 ### 2. Steering Files (Auto-Included)
@@ -76,14 +76,14 @@ Three-phase workflow for feature development:
 - Property-based test tasks
 - Checkpoint validations
 
-### 3. Integration with .agent Folder
+### 3. Integration with .agents Folder
 Seamless integration between Kiro and AI agent workflows:
 
 ```
 .kiro/steering/          ← Development rules (Kiro)
-.agent/skills/           ← Automation workflows (AI)
-.agent/workflows/        ← Step-by-step procedures (AI)
-.agent/patterns/         ← Code patterns (AI)
+.agents/skills/           ← Automation workflows (AI)
+.agents/workflows/        ← Step-by-step procedures (AI)
+.agents/patterns/         ← Code patterns (AI)
 ```
 
 ## Critical Conventions (Must Follow)
@@ -237,7 +237,7 @@ flutter clean && flutter pub get && melos genAlls
 └── specs/                          # Feature specifications
     └── README.md                   # Specs guide
 
-.agent/                             # AI agent resources
+.agents/                             # AI agent resources
 ├── JULES_GUIDE.md                  # Master agent index
 ├── README.md                       # Agent overview
 ├── rules/                          # Agent rules
@@ -276,13 +276,13 @@ docs/                               # Project documentation
 ### For AI Agents
 
 1. **Read Agent Documentation**
-   - [ ] Read [.agent/JULES_GUIDE.md](../.agent/JULES_GUIDE.md)
-   - [ ] Review [.agent/skills_manifest.md](../.agent/skills_manifest.md)
+   - [ ] Read [.agents/JULES_GUIDE.md](../.agents/JULES_GUIDE.md)
+   - [ ] Review [.agents/skills_manifest.md](../.agents/skills_manifest.md)
 
 2. **Reference Steering Files**
    - [ ] Use `.kiro/steering/` for development rules
-   - [ ] Use `.agent/skills/` for automation
-   - [ ] Maintain context in `.agent/contexts/`
+   - [ ] Use `.agents/skills/` for automation
+   - [ ] Maintain context in `.agents/contexts/`
 
 3. **Execute Workflows**
    - [ ] Follow steering file conventions
@@ -294,7 +294,7 @@ docs/                               # Project documentation
 
 1. **Update Documentation**
    - [ ] Update steering files as patterns evolve
-   - [ ] Keep .agent skills for automation
+   - [ ] Keep .agents skills for automation
    - [ ] Add new specs to `.kiro/specs/`
    - [ ] Document new patterns
 
@@ -311,7 +311,7 @@ docs/                               # Project documentation
 - ✅ Specs framework ready
 - ✅ MCP configuration ready
 - ✅ Documentation complete
-- ✅ Integration with .agent folder
+- ✅ Integration with .agents folder
 - ✅ Migration guide created
 
 ### Development Verification
@@ -382,7 +382,7 @@ The Kiro setup is complete and ready for use. The project now has:
 - Property-based testing guidelines
 
 ✅ **Integration**
-- Seamless .agent folder integration
+- Seamless .agents folder integration
 - AI agent support
 - IDE configuration
 - Automated workflows

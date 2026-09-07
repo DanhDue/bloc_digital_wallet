@@ -1,0 +1,290 @@
+{
+    "project_name": "d3_nexus_shield",
+    "version": "1.2.0",
+    "project_settings": {
+        "shell_aliases": {
+            "flutter": "fvm flutter",
+            "dart": "fvm dart",
+            "pod": "pod"
+        }
+    },
+    "agent": {
+        "terminal": {
+            "policy": "restricted",
+            "allowlist": [
+                "flutter test",
+                "fvm *",
+                "pod *",
+                "gradle *",
+                "./gradlew *",
+                "sh .agents/skills/*",
+                "ls *",
+                "git status",
+                "fluttergen *",
+                "mason *",
+                "melos genAlls"
+            ],
+            "denylist": [
+                "rm -rf *",
+                "sudo"
+            ]
+        },
+        "generated_files_access": {
+            "description": "AI agents do NOT need to ask for permission to access generated files during a task",
+            "rules": [
+                "Access translation files (*.g.dart, *_translations.dart) without asking",
+                "Access router files (*.gr.dart, app_router.dart) without asking",
+                "Access freezed files (*.freezed.dart) without asking",
+                "Access JSON serializable files (*.g.dart) without asking",
+                "Access asset files (*.gen.dart) without asking"
+            ],
+            "auto_access_patterns": [
+                "**/*.g.dart",
+                "**/*.freezed.dart",
+                "**/*.gr.dart",
+                "**/translations/**",
+                "**/generated/**",
+                "**/*.gen.dart"
+            ]
+        },
+        "skill_modification_policy": {
+            "description": "AI agents MUST NOT edit files in .agents/skills/ unless explicitly requested by the user",
+            "rules": [
+                "NEVER modify skill files proactively",
+                "NEVER 'improve' or 'update' skills without direct user instruction",
+                "ONLY edit skills when user explicitly says 'update skill X' or 'modify skill Y'",
+                "Skills are carefully crafted instructions - unsolicited changes can break agent behavior"
+            ],
+            "protected_paths": [
+                ".agents/skills/**/*.md",
+                ".agents/skills/**/*.sh",
+                ".agents/skills/**/resources/**"
+            ]
+        },
+        "critical_rules": {
+            "description": "Mandatory architecture and coding rules for this project",
+            "freezed_everywhere": {
+                "rule": "All data classes MUST use @freezed annotation",
+                "applies_to": [
+                    "Data Models (lib/features/*/data/models/)",
+                    "Domain Entities (lib/features/*/domain/entities/)",
+                    "BLoC States (lib/features/*/presentation/*/*_state.dart)",
+                    "BLoC Events (lib/features/*/presentation/*/*_event.dart)"
+                ],
+                "required_imports": [
+                    "import 'package:flutter/foundation.dart';",
+                    "import 'package:freezed_annotation/freezed_annotation.dart';"
+                ],
+                "rationale": "Ensures immutability, value equality, copyWith support, and debugFillProperties across all layers"
+            },
+            "theme_tailor": {
+                "rule": "ALWAYS use context.appThemes for colors and text styles",
+                "forbidden": [
+                    "Theme.of(context)",
+                    "Colors.*",
+                    "Color(0x...)"
+                ],
+                "correct": [
+                    "context.appThemes.primaryColor",
+                    "context.appThemes.bodyMedium"
+                ]
+            },
+            "localization": {
+                "rule": "ALWAYS use context.t for user-facing strings",
+                "forbidden": [
+                    "Hardcoded strings in Text()"
+                ],
+                "correct": [
+                    "Text(context.t.myKey)"
+                ]
+            },
+            "dot_shorthands": {
+                "rule": "Use dot shorthands for Enums and static members where supported by Dart",
+                "enums_and_static_members": {
+                    "preferred": [
+                        ".contain",
+                        ".srcIn",
+                        ".fixed",
+                        ".start",
+                        ".end",
+                        ".center"
+                    ],
+                    "avoid": [
+                        "BoxFit.contain",
+                        "BlendMode.srcIn",
+                        "BottomNavigationBarType.fixed"
+                    ]
+                },
+                "constructors_and_static_methods": {
+                    "preferred": [
+                        ".mode(...)",
+                        ".only(...)",
+                        ".all(...)",
+                        ".symmetric(...)",
+                        ".circular(...)"
+                    ],
+                    "avoid": [
+                        "ColorFilter.mode(...)",
+                        "EdgeInsets.only(...)",
+                        "EdgeInsets.all(...)",
+                        "BorderRadius.circular(...)"
+                    ]
+                },
+                "rationale": "Reduces verbosity and improves readability"
+            },
+            "color_workflow": {
+                "rule": "Follow 4-step workflow for adding and using colors",
+                "steps": [
+                    "1. Define: Add color to assets/colors/colors.xml",
+                    "2. Expose: Add color field to AppThemes in lib/config/theme/app_themes.dart",
+                    "3. Generate: Run melos genAlls to update generated files",
+                    "4. Use: Access via context.appThemes.yourColorName"
+                ],
+                "forbidden": [
+                    "Color(0xFF...)",
+                    "Colors.red"
+                ],
+                "rationale": "Ensures consistent theming and dark mode support"
+            },
+            "mvi_pattern": {
+                "rule": "BLoC entry point is onAction() only",
+                "forbidden": [
+                    "bloc.add()",
+                    "bloc.customMethod()"
+                ],
+                "correct": [
+                    "bloc.onAction(MyAction())"
+                ]
+            },
+            "pure_domain": {
+                "rule": "Domain layer must be Pure Dart",
+                "forbidden": [
+                    "import 'package:flutter/*'"
+                ],
+                "applies_to": [
+                    "lib/features/*/domain/"
+                ]
+            },
+            "generated_files_protocol": {
+                "rule": "Always include generated files (e.g., *.g.dart, *.config.dart, *.freezed.dart) in context. Do not ignore them even if they are in .gitignore.",
+                "mandatory": [
+                    "Read injection.config.dart to understand the current DI container whenever analyzing dependencies or injection logic"
+                ],
+                "rationale": "Ensures the agent has full visibility into the derived state of the project, especially for dependency injection and serialized models."
+            }
+        }
+    },
+    "ai_optimization": {
+        "global_config": {
+            "max_context_window": 2000000,
+            "agentic_workflow": true,
+            "multimodal_input": true
+        },
+        "default_model": {
+            "capability": "balanced",
+            "recommended": [
+                "gemini-3-pro",
+                "claude-4.5-sonnet"
+            ]
+        },
+        "capabilities": {
+            "high_reasoning": {
+                "description": "Ability to handle complex, multi-step constraints and logic.",
+                "strengths": [
+                    "architectural_design",
+                    "error_analysis",
+                    "complex_refactoring"
+                ]
+            },
+            "coding_specialist": {
+                "description": "High fidelity code generation following strict patterns.",
+                "strengths": [
+                    "boilerplate_generation",
+                    "syntax_accuracy",
+                    "pattern_adherence"
+                ]
+            },
+            "fast_inference": {
+                "description": "Optimized for speed and cost-efficiency on simple tasks.",
+                "strengths": [
+                    "data_transformation",
+                    "simple_logic",
+                    "unit_tests"
+                ]
+            },
+            "balanced": {
+                "description": "General purpose reasoning and coding mix.",
+                "strengths": [
+                    "general_maintenance",
+                    "documentation",
+                    "explanation"
+                ]
+            }
+        },
+        "skills": {
+            "api_integration": {
+                "description": "Complex logic, requires understanding multiple files (DS, Repo, Entity, Model) and error handling.",
+                "capability_required": "high_reasoning",
+                "recommended_models": [
+                    "claude-4.5-opus",
+                    "gemini-3-pro"
+                ],
+                "context_window": "large"
+            },
+            "create_new_feature": {
+                "description": "Structural boilerplate generation, high consistency required.",
+                "capability_required": "coding_specialist",
+                "recommended_models": [
+                    "claude-4.5-sonnet",
+                    "gemini-3-pro"
+                ],
+                "context_window": "medium"
+            },
+            "json_to_freezed_model": {
+                "description": "Pure data transformation. High accuracy, low \"reasoning\" needed.",
+                "capability_required": "fast_inference",
+                "recommended_models": [
+                    "gemini-3-flash"
+                ],
+                "context_window": "small"
+            },
+            "setup_variants": {
+                "description": "Automate setup of build variants (flavors) for Android and iOS using scripts and config templates.",
+                "capability_required": "coding_specialist",
+                "recommended_models": [
+                    "claude-4.5-sonnet",
+                    "gemini-3-pro"
+                ],
+                "context_window": "medium"
+            },
+            "setup_keybindings": {
+                "description": "Merges workspace keybindings into user IDE configuration.",
+                "capability_required": "fast_inference",
+                "recommended_models": [
+                    "gemini-3-flash"
+                ],
+                "context_window": "small"
+            }
+        },
+        "roles": {
+            "architect": {
+                "recommended_models": [
+                    "claude-4.5-opus",
+                    "gemini-3-pro"
+                ]
+            },
+            "tech_lead": {
+                "recommended_models": [
+                    "claude-4.5-sonnet",
+                    "gemini-3-pro"
+                ]
+            },
+            "qa_engineer": {
+                "recommended_models": [
+                    "gemini-3-flash",
+                    "claude-4.5-sonnet"
+                ]
+            }
+        }
+    }
+}

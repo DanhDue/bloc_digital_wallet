@@ -2,7 +2,8 @@
 
 # 1. Khởi chạy Antigravity với Profile và Project đúng
 # Sử dụng fvm nếu dự án của bạn yêu cầu
-antigravity --user-data-dir ~/antigravity-danhdue ~/AllProjects/digital_wallet/bloc_digital_wallet
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+antigravity --user-data-dir ~/antigravity-danhdue "$PROJECT_DIR"
 
 echo "⏳ Waiting for Antigravity to initialize (10s)..."
 sleep 10 # Tăng thời gian chờ để đảm bảo AI Engine đã load xong

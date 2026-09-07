@@ -75,7 +75,7 @@ The template provides a cross-platform automated script (compatible with macOS, 
 
 3. Run the copy script to place configuration files into the native Android and iOS folders:
    ```bash
-   sh .agent/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
+   sh .agents/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
    ```
 
 ---
@@ -121,7 +121,13 @@ The script `./scripts/rename_project.sh` triggers the Mason brick `pac_rename_pr
    - Updates bundle name in `ios/Runner/Info.plist`.
    - Updates `BASE_ID` in `ios/scripts/verify_flavors.sh`.
    - Updates `DART_DEFINES_APP_NAME` across flavor configs in `ios/Flutter/*.xcconfig`.
-5. **Dependency Sync & Code Generation:**
+5. **App & Environment Configurations:**
+   - Updates `defaultValue` in `lib/config/app_config.dart`.
+   - Updates `APP_NAME` in `secureFiles/{dev,stg,prd}/environment-configs.json` and template resources.
+   - Updates target configurations in `.vscode/launch.json` and `.agents/skills/setup_variants/resources/launch.json`.
+   - Updates `project_name` in `.agents/config.json`.
+   - Updates package imports across `bricks/` Mason templates (`bricks/mvi_feature`, `bricks/mvi_subfeature`).
+6. **Dependency Sync & Code Generation:**
    - Executes `melos bootstrap`.
    - Executes `./scripts/genAlls.sh` (Slang localization code gen, `build_runner`, Freezed/Retrofit).
 

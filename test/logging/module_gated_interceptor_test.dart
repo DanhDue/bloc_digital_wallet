@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:bloc_digital_wallet/logging/module_gated_interceptor.dart';
+import 'package:d3_nexus_shield/logging/module_gated_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/d3nexus_logger.dart';

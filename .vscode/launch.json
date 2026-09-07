@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Zeno(devDebug)",
+            "name": "D3NexusShield(devDebug)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -14,7 +14,7 @@
             ]
         },
         {
-            "name": "Zeno(devProfile)",
+            "name": "D3NexusShield(devProfile)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -27,7 +27,7 @@
             ]
         },
         {
-            "name": "Zeno(devProd)",
+            "name": "D3NexusShield(devProd)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -40,7 +40,7 @@
             ]
         },
         {
-            "name": "Zeno(stgDebug)",
+            "name": "D3NexusShield(stgDebug)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -52,7 +52,7 @@
             ]
         },
         {
-            "name": "Zeno(stgProfile)",
+            "name": "D3NexusShield(stgProfile)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -65,7 +65,7 @@
             ]
         },
         {
-            "name": "Zeno(stgProd)",
+            "name": "D3NexusShield(stgProd)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -78,7 +78,7 @@
             ]
         },
         {
-            "name": "Zeno(prdDebug)",
+            "name": "D3NexusShield(prdDebug)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -90,7 +90,7 @@
             ]
         },
         {
-            "name": "Zeno(prdProfile)",
+            "name": "D3NexusShield(prdProfile)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -103,7 +103,7 @@
             ]
         },
         {
-            "name": "Zeno(prdProd)",
+            "name": "D3NexusShield(prdProd)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",

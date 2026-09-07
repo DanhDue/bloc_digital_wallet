@@ -26,7 +26,7 @@ The `pac_mvi_feature` brick's `post_gen.dart` hook currently writes each new fea
 - `bricks/remove_pac_feature/hooks/` — extend cleanup to remove the package's entry from `packages/platform/lib/deep_link_routes.dart`.
 - `bricks/mvi_feature/brick.yaml`, `bricks/mvi_subfeature/brick.yaml`, `bricks/remove_feature/brick.yaml`, `bricks/remove_subfeature/brick.yaml` — prefix each `description:` field with `[DEPRECATED — use pac_mvi_feature/pac_mvi_subfeature instead]`.
 - `bricks/pac_mvi_subfeature/` — no change (subfeature routes correctly stay internal to the owning package's router).
-- Check `.agent/skills/create_new_feature/` for any doc referencing `feature_public_routes.dart` by path and update it if so.
+- Check `.agents/skills/create_new_feature/` for any doc referencing `feature_public_routes.dart` by path and update it if so.
 
 ## Design Rationale
 Barrel-export discipline in the brick's `{{name}}.dart` template is already correct (only exports domain/presentation/DI/router, never `data/**`) — no change needed there. Reference the source spec's "Mason / Bricks changes" section for the full list of what does and doesn't change. `pac_mvi_subfeature` is explicitly out of scope — subfeature routes are not meant to be publicly deep-linkable by default.

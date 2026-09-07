@@ -27,7 +27,7 @@ QA/Dev need a runtime UI to mute noisy modules on the local Talker screen, and O
 ## Design Rationale
 **Two visually distinct sections, one persistence pattern**: module toggles (debug convenience) live in a standard Settings section; appender toggles (production-impacting) live in a separate "Advanced/Telemetry" section, so a QA engineer can't accidentally disable Datadog while trying to mute a noisy module's local logs. Both persist through the existing `packages/settings` storage layer rather than introducing a new persistence mechanism.
 
-Relevant project skills: `frontend-developer` and `mobile-uiux-promax` (`.agent/skills/`) for this repo's Settings screen UI conventions; `i18n-localization` since new toggle labels need translation entries.
+Relevant project skills: `frontend-developer` and `mobile-uiux-promax` (`.agents/skills/`) for this repo's Settings screen UI conventions; `i18n-localization` since new toggle labels need translation entries.
 
 ## TDD Checklist
 - [ ] **RED**: Write bloc tests for loading persisted toggles on init, toggling a module, and toggling an appender (asserting the correct `D3NexusLogger` method is called and the new state is persisted). Write widget tests for the module-toggle list and the Advanced/Telemetry appender-toggle section rendering and reacting to taps.

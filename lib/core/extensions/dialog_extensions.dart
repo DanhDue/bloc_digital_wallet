@@ -2,7 +2,7 @@
 
 // coverage:ignore-file
 
-import 'package:bloc_digital_wallet/app_router.dart';
+import 'package:d3_nexus_shield/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_kit/ui_kit.dart';
 

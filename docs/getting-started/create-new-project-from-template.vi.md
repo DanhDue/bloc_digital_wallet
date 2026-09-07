@@ -75,7 +75,7 @@ Template cung cấp script tự động hóa cross-platform (chạy được tr�
 
 3. Chạy script đồng bộ cấu hình vào các thư mục native Android và iOS:
    ```bash
-   sh .agent/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
+   sh .agents/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
    ```
 
 ---
@@ -122,7 +122,13 @@ Script `./scripts/rename_project.sh` gọi Mason brick `pac_rename_project` vớ
    - Cập nhật tên app trong `ios/Runner/Info.plist`.
    - Cập nhật `BASE_ID` trong `ios/scripts/verify_flavors.sh`.
    - Cập nhật `DART_DEFINES_APP_NAME` tương ứng cho từng flavor trong `ios/Flutter/*.xcconfig`.
-5. **Đồng bộ Dependencies & Code Generation:**
+5. **Cấu hình Ứng dụng & Môi trường:**
+   - Cập nhật `defaultValue` trong `lib/config/app_config.dart`.
+   - Cập nhật `APP_NAME` trong `secureFiles/{dev,stg,prd}/environment-configs.json` và template resources.
+   - Cập nhật tên cấu hình debug trong `.vscode/launch.json` và `.agents/skills/setup_variants/resources/launch.json`.
+   - Cập nhật `project_name` trong `.agents/config.json`.
+   - Cập nhật package imports trong toàn bộ các mẫu Mason `bricks/` (`bricks/mvi_feature`, `bricks/mvi_subfeature`).
+6. **Đồng bộ Dependencies & Code Generation:**
    - Tự động chạy `melos bootstrap`.
    - Tự động chạy `./scripts/genAlls.sh` (Slang localization code gen, `build_runner`, Freezed/Retrofit).
 

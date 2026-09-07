@@ -48,7 +48,7 @@ Concrete backends (`DatadogNativeAppender`) are **not** implemented inside `logg
 
 **Alternative rejected**: a fully separate native-only package (no pub involvement) for maximum isolation was considered and rejected — this repo has no Gradle/CocoaPods-only publishing pipeline, and DoD limits this to a single consumer today, so a second release pipeline isn't justified yet.
 
-Relevant project skill: `mobile-developer` (`.agent/skills/mobile-developer`) for Kotlin/Swift plugin conventions used elsewhere in this repo.
+Relevant project skill: `mobile-developer` (`.agents/skills/mobile-developer`) for Kotlin/Swift plugin conventions used elsewhere in this repo.
 
 ## TDD Checklist
 - [ ] **RED**: `NativeLogQueue` enqueue/drain is FIFO and bounded (oldest dropped once full).

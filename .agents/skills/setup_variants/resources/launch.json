@@ -1,0 +1,119 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "D3NexusShield(devDebug)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/dev/environment-configs.json",
+                "--flavor",
+                "dev"
+            ]
+        },
+        {
+            "name": "D3NexusShield(devProfile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/dev/environment-configs.json",
+                "--flavor",
+                "dev",
+                "--profile"
+            ]
+        },
+        {
+            "name": "D3NexusShield(devProd)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/dev/environment-configs.json",
+                "--flavor",
+                "dev",
+                "--release"
+            ]
+        },
+        {
+            "name": "D3NexusShield(stgDebug)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/stg/environment-configs.json",
+                "--flavor",
+                "stg"
+            ]
+        },
+        {
+            "name": "D3NexusShield(stgProfile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/stg/environment-configs.json",
+                "--flavor",
+                "stg",
+                "--profile"
+            ]
+        },
+        {
+            "name": "D3NexusShield(stgProd)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/stg/environment-configs.json",
+                "--flavor",
+                "stg",
+                "--release"
+            ]
+        },
+        {
+            "name": "D3NexusShield(prdDebug)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/prd/environment-configs.json",
+                "--flavor",
+                "prd"
+            ]
+        },
+        {
+            "name": "D3NexusShield(prdProfile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/prd/environment-configs.json",
+                "--flavor",
+                "prd",
+                "--profile"
+            ]
+        },
+        {
+            "name": "D3NexusShield(prdProd)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/prd/environment-configs.json",
+                "--flavor",
+                "prd",
+                "--release"
+            ]
+        }
+    ]
+}

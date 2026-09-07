@@ -27,7 +27,7 @@ The current logging system (`packages/core/lib/utils/log.dart`) is hard-coupled 
 ## Design Rationale
 **Dependency Isolation & Federated Packages**: extracting `logger` as a pure-Dart package keeps it free of any concrete telemetry SDK, so feature packages (`wallet`, `home`, ...) that depend on `logger` never transitively pull in Talker/Datadog/Otel. This is the foundation for Task 2-3's Dependency Inversion (core defines interfaces only; the app layer decides which concrete SDK to use).
 
-Relevant project skill: `create_new_feature` (`.agent/skills/create_new_feature`) covers this repo's convention for scaffolding a new package/module — follow it for package structure and melos wiring.
+Relevant project skill: `create_new_feature` (`.agents/skills/create_new_feature`) covers this repo's convention for scaffolding a new package/module — follow it for package structure and melos wiring.
 
 ## TDD Adaptation
 This task is infrastructure scaffolding with no testable behavior yet (an empty package has nothing to assert against) — RED/GREEN/REFACTOR doesn't apply. Concrete steps instead:

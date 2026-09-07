@@ -2,7 +2,7 @@
 
 // coverage:ignore-file
 
-import 'package:bloc_digital_wallet/logging/appenders/otel_appender.dart';
+import 'package:d3_nexus_shield/logging/appenders/otel_appender.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/d3nexus_logger.dart';
 import 'package:mockito/annotations.dart';

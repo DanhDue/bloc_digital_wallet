@@ -72,19 +72,22 @@ void main() {
       await subscription.cancel();
     });
 
-    test('Scenario 4: Publishing AppLanguageChanged delivers to on<AppLanguageChanged>()', () async {
-      final bus = AppEventBus();
-      final received = <AppLanguageChanged>[];
-      final subscription = bus.on<AppLanguageChanged>().listen(received.add);
+    test(
+      'Scenario 4: Publishing AppLanguageChanged delivers to on<AppLanguageChanged>()',
+      () async {
+        final bus = AppEventBus();
+        final received = <AppLanguageChanged>[];
+        final subscription = bus.on<AppLanguageChanged>().listen(received.add);
 
-      bus.publish(const AppLanguageChanged(languageCode: 'vi'));
-      await Future<void>.delayed(Duration.zero);
+        bus.publish(const AppLanguageChanged(languageCode: 'vi'));
+        await Future<void>.delayed(Duration.zero);
 
-      expect(received, hasLength(1));
-      expect(received.first.languageCode, 'vi');
+        expect(received, hasLength(1));
+        expect(received.first.languageCode, 'vi');
 
-      await subscription.cancel();
-    });
+        await subscription.cancel();
+      },
+    );
 
     test('Scenario 5: Stream isolation and cancellation', () async {
       final bus = AppEventBus();
@@ -104,7 +107,11 @@ void main() {
       bus.publish(const ThemeModeChanged(isDarkMode: true));
       await Future<void>.delayed(Duration.zero);
 
-      expect(themeEvents, hasLength(1), reason: 'Cancelled subscription must not receive new events');
+      expect(
+        themeEvents,
+        hasLength(1),
+        reason: 'Cancelled subscription must not receive new events',
+      );
 
       await langSub.cancel();
     });

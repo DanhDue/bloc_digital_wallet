@@ -12,7 +12,7 @@
     "mason *",
     "melos *",
     "fluttergen *",
-    "sh .agent/skills/*",
+    "sh .agents/skills/*",
     "adb *",
     "npx *",
     "node *",

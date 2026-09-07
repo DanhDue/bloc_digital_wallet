@@ -1,4 +1,4 @@
-name: bloc_digital_wallet
+name: d3_nexus_shield
 
 packages:
   - 'packages/**'

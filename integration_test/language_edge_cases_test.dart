@@ -9,7 +9,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:core/core.dart';
 import 'package:settings/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bloc_digital_wallet/main.dart' as app;
+import 'package:d3_nexus_shield/main.dart' as app;
 import 'helpers/language_test_helper.dart';
 
 void main() {

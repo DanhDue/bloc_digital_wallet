@@ -12,7 +12,7 @@ plugins {
 // Parse dart-defines from Flutter
 val dartEnvironmentVariables =
     mutableMapOf(
-        "DART_DEFINES_APP_NAME" to "Zeno",
+        "DART_DEFINES_APP_NAME" to "D3NexusShield",
         "DART_DEFINES_APP_ID_SUFFIX" to null,
         "DART_DEFINES_ENVIRONMENT" to "development",
     )
@@ -31,7 +31,7 @@ if (project.hasProperty("dart-defines")) {
 println("Dart defines: $dartEnvironmentVariables")
 
 android {
-    namespace = "com.example.bloc_digital_wallet"
+    namespace = "com.danhdue.d3nexusshield"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -46,7 +46,7 @@ android {
 
     defaultConfig {
         // Base application ID
-        applicationId = "com.example.bloc_digital_wallet"
+        applicationId = "com.danhdue.d3nexusshield"
         // Dynamic application ID suffix from dart-defines
         applicationIdSuffix = dartEnvironmentVariables["DART_DEFINES_APP_ID_SUFFIX"]
         minSdk = flutter.minSdkVersion

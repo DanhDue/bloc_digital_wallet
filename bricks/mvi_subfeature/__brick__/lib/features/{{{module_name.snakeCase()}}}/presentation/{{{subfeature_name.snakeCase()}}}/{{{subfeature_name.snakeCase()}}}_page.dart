@@ -4,7 +4,7 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc_digital_wallet/core/architecture/architecture.dart';
+import 'package:d3_nexus_shield/core/architecture/architecture.dart';
 import '{{{subfeature_name.snakeCase()}}}_bloc.dart';
 import '{{{subfeature_name.snakeCase()}}}_state.dart';
 import '{{{subfeature_name.snakeCase()}}}_event.dart';

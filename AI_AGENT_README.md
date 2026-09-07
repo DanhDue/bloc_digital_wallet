@@ -1,7 +1,7 @@
-# 🤖 AI Agent Entry Point - bloc_digital_wallet
+# 🤖 AI Agent Entry Point - D3NexusShield
 
 > [!IMPORTANT]
-> **Jules Master Guide**: For a complete index of all skills, rules, and workflows, see [.agent/JULES_GUIDE.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agent/JULES_GUIDE.md).
+> **Jules Master Guide**: For a complete index of all skills, rules, and workflows, see [.agents/JULES_GUIDE.md](file:///Users/danhdue/AllProjects/sample/bloc_digital_wallet/.agents/JULES_GUIDE.md).
 
 Welcome! This file provides the essential context for building and developing this project.
 
@@ -22,14 +22,14 @@ This project is optimized for **Dev Containers**. To mirror the developer's loca
       echo "$SECURE_FILES" | base64 -d | tar -xz
       ```
     - To generate this value locally, run: `bash scripts/secrets_ops.sh encode`
-    - See [Secrets ENV Workflow](file:///.agent/workflows/secrets-env.md) for details.
+    - See [Secrets ENV Workflow](file:///.agents/workflows/secrets-env.md) for details.
 
 ## 📚 Resources & Rules
-All detailed rules, skills, and workflows are located in the `.agent/` directory.
+All detailed rules, skills, and workflows are located in the `.agents/` directory.
 
-- **🚨 Critical Rules**: [.agent/rules/critical-rules.md](file:///.agent/rules/critical-rules.md)
-- **🛠️ AI Skills**: [.agent/README.md](file:///.agent/README.md) (Use `@api_integration`, `@create_new_feature`)
-- **🏗️ Patterns**: [.agent/patterns/](file:///.agent/patterns/) (Clean Architecture + MVI)
+- **🚨 Critical Rules**: [.agents/rules/critical-rules.md](file:///.agents/rules/critical-rules.md)
+- **🛠️ AI Skills**: [.agents/README.md](file:///.agents/README.md) (Use `@api_integration`, `@create_new_feature`)
+- **🏗️ Patterns**: [.agents/patterns/](file:///.agents/patterns/) (Clean Architecture + MVI)
 
 ## 🔧 CLI Commands
 Once the environment is set up (via `setup.sh`), use these tools:

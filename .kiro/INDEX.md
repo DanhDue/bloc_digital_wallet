@@ -206,16 +206,16 @@ See: [mason-workflows.md](steering/mason-workflows.md)
 
 See: [specs/README.md](specs/README.md)
 
-## Integration with .agent Folder
+## Integration with .agents Folder
 
-The `.agent` folder contains AI agent-specific documentation and skills. Kiro steering files complement this:
+The `.agents` folder contains AI agent-specific documentation and skills. Kiro steering files complement this:
 
-| .agent | .kiro | Purpose |
+| .agents | .kiro | Purpose |
 |--------|-------|---------|
-| `.agent/rules/` | `.kiro/steering/` | Development rules |
-| `.agent/workflows/` | `.kiro/specs/` | Feature workflows |
-| `.agent/skills/` | `.kiro/steering/mason-workflows.md` | Code generation |
-| `.agent/patterns/` | `.kiro/steering/mvi-architecture.md` | Architecture patterns |
+| `.agents/rules/` | `.kiro/steering/` | Development rules |
+| `.agents/workflows/` | `.kiro/specs/` | Feature workflows |
+| `.agents/skills/` | `.kiro/steering/mason-workflows.md` | Code generation |
+| `.agents/patterns/` | `.kiro/steering/mvi-architecture.md` | Architecture patterns |
 
 ## Documentation Map
 
@@ -233,7 +233,7 @@ Project Root
 │   │   └── spec-guidelines.md          # Spec workflow
 │   └── specs/                          # Feature specs
 │       └── README.md                   # Specs guide
-├── .agent/                             # AI agent resources
+├── .agents/                             # AI agent resources
 │   ├── README.md                       # Agent overview
 │   ├── JULES_GUIDE.md                  # Master agent index
 │   ├── rules/                          # Agent rules
@@ -313,8 +313,8 @@ Container(color: Colors.blue)
 - [.kiro/README.md](README.md) - Main navigation
 - [.kiro/QUICK_START.md](QUICK_START.md) - Quick start guide
 - [.kiro/specs/README.md](specs/README.md) - Specs workflow
-- [.agent/README.md](../.agent/README.md) - AI agent resources
-- [.agent/JULES_GUIDE.md](../.agent/JULES_GUIDE.md) - Master agent index
+- [.agents/README.md](../.agents/README.md) - AI agent resources
+- [.agents/JULES_GUIDE.md](../.agents/JULES_GUIDE.md) - Master agent index
 
 ### Project Documentation
 - [docs/ai-agents/AI_AGENT_CONTEXT.md](../docs/ai-agents/AI_AGENT_CONTEXT.md) - Code patterns

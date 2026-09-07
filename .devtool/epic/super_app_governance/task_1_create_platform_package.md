@@ -27,7 +27,7 @@ A routing-decoupling mechanism already exists — `packages/core/lib/utils/featu
 - New files: `packages/platform/pubspec.yaml`, `packages/platform/lib/platform.dart` (barrel), `packages/platform/lib/deep_link_routes.dart`, `packages/platform/lib/di/injection.dart`.
 
 ## Design Rationale
-`platform` is infrastructure shared by every Mini App, not an MVI feature — model its package layout after `network`/`ui_kit` (flat `lib/`, no `domain`/`data`/`presentation` split), not after the `pac_mvi_feature` brick output. No `.agent/skills/` entry targets shared-infra package creation specifically; follow the existing `network`/`ui_kit` package structure as the reference pattern. See the epic's source spec's "`platform` package" and "Approach A" (rejected: putting this in `core` instead) sections for why this is a separate package.
+`platform` is infrastructure shared by every Mini App, not an MVI feature — model its package layout after `network`/`ui_kit` (flat `lib/`, no `domain`/`data`/`presentation` split), not after the `pac_mvi_feature` brick output. No `.agents/skills/` entry targets shared-infra package creation specifically; follow the existing `network`/`ui_kit` package structure as the reference pattern. See the epic's source spec's "`platform` package" and "Approach A" (rejected: putting this in `core` instead) sections for why this is a separate package.
 
 ## TDD Adaptation
 This task is a relocation + wiring change with no new business logic (the route-resolution mechanism itself is unchanged, only its location and name). RED/GREEN/REFACTOR doesn't apply. Concrete verification steps instead:

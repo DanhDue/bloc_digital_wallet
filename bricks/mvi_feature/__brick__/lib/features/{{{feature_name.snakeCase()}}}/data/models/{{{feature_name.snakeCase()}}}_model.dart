@@ -5,7 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:bloc_digital_wallet/features/{{{feature_name.snakeCase()}}}/domain/entities/{{{feature_name.snakeCase()}}}_entity.dart';
+import 'package:d3_nexus_shield/features/{{{feature_name.snakeCase()}}}/domain/entities/{{{feature_name.snakeCase()}}}_entity.dart';
 
 part '{{feature_name.snakeCase()}}_model.freezed.dart';
 part '{{feature_name.snakeCase()}}_model.g.dart';

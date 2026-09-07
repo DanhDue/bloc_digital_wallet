@@ -3,7 +3,7 @@
 // coverage:ignore-file
 
 import 'package:flutter/material.dart';
-import 'package:bloc_digital_wallet/generated/translations.dart';
+import 'package:d3_nexus_shield/generated/translations.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 /// Tab index constants for the bottom navigation bar.

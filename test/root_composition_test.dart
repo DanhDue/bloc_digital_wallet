@@ -8,6 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockLogManager extends Mock implements ILogManager {}
+
 class MockLogger extends Mock implements ILogger {}
 
 void main() {
@@ -34,9 +35,7 @@ void main() {
           final mode = snapshot.data ?? ThemeMode.system;
           return MaterialApp(
             themeMode: mode,
-            home: Scaffold(
-              body: Text('CurrentMode: ${mode.name}'),
-            ),
+            home: Scaffold(body: Text('CurrentMode: ${mode.name}')),
           );
         },
       ),
@@ -64,9 +63,7 @@ void main() {
           final locale = snapshot.data ?? const Locale('en');
           return MaterialApp(
             locale: locale,
-            home: Scaffold(
-              body: Text('CurrentLocale: ${locale.languageCode}'),
-            ),
+            home: Scaffold(body: Text('CurrentLocale: ${locale.languageCode}')),
           );
         },
       ),

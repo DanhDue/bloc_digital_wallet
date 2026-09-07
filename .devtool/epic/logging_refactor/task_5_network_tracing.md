@@ -27,7 +27,7 @@ For traceId/spanId to be useful beyond the client, the active trace context must
 ## Design Rationale
 **W3C `traceparent` header**: format `version-traceId-parentId-flags`, built from the request's active `traceId`/`spanId`. This directly reuses the span model already defined in [Task 2](task_2_core_interfaces.md)/[Task 3](task_3_log_manager.md), so no separate trace-ID scheme is needed for network calls — the same IDs a developer sees in `buildTraceTree` on-device are the ones sent to the backend.
 
-Relevant project skill: `api_integration` (`.agent/skills/api_integration`) for this repo's Dio/interceptor conventions.
+Relevant project skill: `api_integration` (`.agents/skills/api_integration`) for this repo's Dio/interceptor conventions.
 
 ## TDD Checklist
 - [ ] **RED**: Write a unit test asserting the interceptor adds a `traceparent` header matching the W3C format for an active trace context, and a test asserting no header (or a fresh trace) is added when no trace context is active.

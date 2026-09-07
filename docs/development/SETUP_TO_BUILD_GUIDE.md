@@ -7,7 +7,7 @@ This document guides you on which workflow to choose based on the current state 
 
 **Action**: Use the **Setup Build Variants** workflow.
 - **Workflow**: `setup_build_variants`
-- **File**: `.agent/workflows/setup_build_variants.md`
+- **File**: `.agents/workflows/setup_build_variants.md`
 - **What it does**:
   1. Checks/Initializes `secureFiles` template.
   2. Sets up Android Flavors and Signing Configs.
@@ -21,7 +21,7 @@ This document guides you on which workflow to choose based on the current state 
 
 **Action**: Use the **Setup Build** workflow.
 - **Workflow**: `setup_build`
-- **File**: `.agent/workflows/setup_build.md`
+- **File**: `.agents/workflows/setup_build.md`
 - **What it does**:
   1. Verifies that `secureFiles` are present and valid (using `@check-secure-files` skill).
   2. Copies the secure configurations to the native project locations.

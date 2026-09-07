@@ -6,13 +6,13 @@
 
 ## Executive Summary
 
-Successfully analyzed and integrated the `.agent` folder structure with Kiro's `.kiro` configuration. Created comprehensive steering files, documentation, and workflows that maintain backward compatibility while providing enhanced IDE integration.
+Successfully analyzed and integrated the `.agents` folder structure with Kiro's `.kiro` configuration. Created comprehensive steering files, documentation, and workflows that maintain backward compatibility while providing enhanced IDE integration.
 
-## Analysis of .agent Folder
+## Analysis of .agents Folder
 
 ### Structure Analyzed
 ```
-.agent/
+.agents/
 ├── README.md                    # Agent overview
 ├── JULES_GUIDE.md              # Master agent index
 ├── config.json                 # AI model optimization
@@ -92,17 +92,17 @@ Successfully analyzed and integrated the `.agent` folder structure with Kiro's `
 #### 1. Rules → Steering Files
 
 **project-conventions.md**
-- Migrated from: `.agent/rules/critical-rules.md`, `.agent/rules/project-conventions.md`
+- Migrated from: `.agents/rules/critical-rules.md`, `.agents/rules/project-conventions.md`
 - Contains: Import conventions, Freezed patterns, theme/i18n rules
 - Status: ✅ Complete
 
 **mvi-architecture.md**
-- Migrated from: `.agent/patterns/mvi-patterns.md`, `.agent/rules/tech-stack.md`
+- Migrated from: `.agents/patterns/mvi-patterns.md`, `.agents/rules/tech-stack.md`
 - Contains: MVI flow, Action/State/Event patterns, Clean Architecture
 - Status: ✅ Complete
 
 **mason-workflows.md**
-- Migrated from: `.agent/workflows/create-new-feature.md`, `.agent/skills/create_new_feature/`
+- Migrated from: `.agents/workflows/create-new-feature.md`, `.agents/skills/create_new_feature/`
 - Contains: Mason bricks, decision trees, workflows
 - Status: ✅ Complete
 
@@ -146,7 +146,7 @@ Successfully analyzed and integrated the `.agent` folder structure with Kiro's `
 - Support information
 - Status: ✅ New
 
-### What Stays in .agent
+### What Stays in .agents
 
 #### Agent-Specific Content
 - **Contexts**: Project state and active context (AI memory)
@@ -157,7 +157,7 @@ Successfully analyzed and integrated the `.agent` folder structure with Kiro's `
 - **Guides**: JULES_GUIDE.md (master agent index)
 
 #### Rationale
-These remain in `.agent` because they are:
+These remain in `.agents` because they are:
 - AI agent-specific automation
 - Session management
 - Build/deployment specific
@@ -217,7 +217,7 @@ All steering files are automatically included in Kiro context:
 - ✅ Best practices included
 
 ### 5. Backward Compatibility
-- ✅ All .agent files still functional
+- ✅ All .agents files still functional
 - ✅ Skills can still be triggered
 - ✅ Workflows still execute
 - ✅ No breaking changes
@@ -252,7 +252,7 @@ All steering files are automatically included in Kiro context:
    - Context maintained
 
 3. **Integration**
-   - Seamless .agent/.kiro integration
+   - Seamless .agents/.kiro integration
    - No duplication
    - Clear separation of concerns
 
@@ -264,7 +264,7 @@ All steering files are automatically included in Kiro context:
 
 2. **Maintainability**
    - Update steering files (not scattered rules)
-   - Keep .agent for automation
+   - Keep .agents for automation
    - Clear documentation
 
 3. **Scalability**
@@ -282,7 +282,7 @@ All steering files are automatically included in Kiro context:
 - ✅ All common patterns documented
 
 ### Integration Completeness
-- ✅ .agent folder analyzed
+- ✅ .agents folder analyzed
 - ✅ Rules migrated to steering files
 - ✅ Patterns migrated to architecture docs
 - ✅ Workflows migrated to Mason docs
@@ -313,15 +313,15 @@ All steering files are automatically included in Kiro context:
 1. Add more feature specs as needed
 2. Update steering files as patterns evolve
 3. Add new Mason bricks as needed
-4. Maintain .agent skills for automation
+4. Maintain .agents skills for automation
 
 ## Conclusion
 
 The Kiro setup is complete and ready for use. The integration successfully:
 
-✅ **Migrated** critical rules and patterns from .agent to .kiro  
+✅ **Migrated** critical rules and patterns from .agents to .kiro  
 ✅ **Created** comprehensive documentation and navigation  
-✅ **Maintained** backward compatibility with .agent folder  
+✅ **Maintained** backward compatibility with .agents folder  
 ✅ **Provided** clear workflows and best practices  
 ✅ **Enabled** spec-driven development  
 ✅ **Integrated** Mason brick workflows  

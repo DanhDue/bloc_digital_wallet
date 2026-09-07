@@ -2,7 +2,7 @@
 
 // coverage:ignore-file
 
-import 'package:bloc_digital_wallet/generated/translations.dart';
+import 'package:d3_nexus_shield/generated/translations.dart';
 import 'package:core/core.dart' hide LocaleSettings, AppLocaleUtils;
 import 'package:core/generated/translations.dart' as core;
 import 'package:logger/d3nexus_logger.dart';
@@ -10,7 +10,7 @@ import 'package:scanner/generated/translations.dart' as scanner;
 import 'package:settings/generated/translations.dart' as settings;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:settings/domain/repositories/settings_repository.dart';
-import 'package:bloc_digital_wallet/di/injection.dart';
+import 'package:d3_nexus_shield/di/injection.dart';
 
 class LocalizationInitializer implements AppInitializer {
   static final _logger = D3NexusLogger.getLogger('App');

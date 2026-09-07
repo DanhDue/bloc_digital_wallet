@@ -4,4 +4,4 @@
 // CFBundleDisplayName for the 'stg' flavor - mirrored from
 // secureFiles/stg/environment-configs.json.
 // Regenerate: python3 ios/scripts/setup_ios_flavors.py
-DART_DEFINES_APP_NAME = Zeno(stg)
+DART_DEFINES_APP_NAME = D3NexusShield(stg)
