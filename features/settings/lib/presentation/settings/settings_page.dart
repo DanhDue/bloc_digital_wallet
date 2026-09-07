@@ -136,6 +136,7 @@ class SettingsPage extends BaseMviPage<SettingsBloc, SettingsAction, SettingsSta
                 onTap: () => _showCurrencyPicker(context),
               ),
               SettingsItemWidget(
+                key: const ValueKey('settings_language_item'),
                 icon: Icons.language,
                 label: t.preferences.language,
                 trailing: SettingsItemTrailing.value,
@@ -143,7 +144,9 @@ class SettingsPage extends BaseMviPage<SettingsBloc, SettingsAction, SettingsSta
                   final activeLang = (uiModel?.availableLanguages ?? [])
                       .where(
                         (l) =>
-                            LocalizationManager.instance.resolveLocale(l.languageCode).languageCode ==
+                            LocalizationManager.instance
+                                .resolveLocale(l.languageCode)
+                                .languageCode ==
                             LocalizationManager.instance.currentLocale.languageCode,
                       )
                       .firstOrNull;

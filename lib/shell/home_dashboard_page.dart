@@ -9,10 +9,7 @@ class HomeDashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Super App'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Super App'), centerTitle: true),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -33,9 +30,7 @@ class HomeDashboardPage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 'Modular Clean Architecture + MVI for Flutter',
-                style: context.appThemes.bodyMedium.copyWith(
-                  color: context.appThemes.ink60,
-                ),
+                style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink60),
                 textAlign: TextAlign.center,
               ),
             ],

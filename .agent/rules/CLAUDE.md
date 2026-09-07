@@ -8,11 +8,13 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-> **TL;DR — 4 rules to always follow:**
+> **TL;DR — 5 rules to always follow:**
 > 1. **Think first** — State assumptions, ask when unclear, present tradeoffs before acting.
 > 2. **Simplicity** — Minimum code that solves the problem. If it could be 50 lines, don't write 200.
 > 3. **Surgical** — Touch only what the request requires. Don't improve adjacent code.
 > 4. **Verify** — Define success criteria upfront. Don't claim done without running the check.
+> 5. **No Silent Commits** — Never commit automatically. Provide clear diffs and rationale; user is the sole decision maker.
+
 
 ## 1. Think Before Coding
 
@@ -75,6 +77,21 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+## 5. No Silent Commits & User Review Gate (Bug Fixes & Interactive Work)
+
+**Never assume done. Never commit behind the user's back. Present diffs for review.**
+
+- **Bug Fixes & Integration Tests**: NEVER run `git commit` or finalize commits automatically when fixing bugs discovered during testing or ad-hoc tasks. All changes must remain uncommitted in the working tree for the user to inspect.
+- **Always publish diff summaries**: When fixing bugs or modifying source code, clearly explain:
+  - *What failed / Root cause*
+  - *Where and what was changed (file paths & line highlights)*
+  - *Side effects or architectural implications*
+  - Direct guidance to review via IDE Source Control (`Cmd/Ctrl + Shift + G`) or `git diff`.
+- **User decides when to commit**: Only execute `git commit` for bug fixes / ad-hoc changes when the user explicitly reviews the diff and gives direct confirmation (e.g., "Code ok, commit đi").
+- **Epic Implementation (`epic-implementation`)**: Automated per-task commits (`[EPIC_NAME] <task_title>`) remain active during approved epic runs to maintain autonomous task-by-task execution in the worktree.
+
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+

@@ -45,26 +45,30 @@ void main() {
   });
 
   group('ToggleDarkModeUseCase BDD / TDD Scenarios', () {
-    test('Scenario 1: Toggle dark mode to enabled sets ThemeMode.dark and publishes ThemeModeChanged(true)', () async {
-      when(() => mockThemeManager.setThemeMode(ThemeMode.dark))
-          .thenAnswer((_) async {});
-      when(() => mockAppEventBus.publish(any())).thenReturn(null);
+    test(
+      'Scenario 1: Toggle dark mode to enabled sets ThemeMode.dark and publishes ThemeModeChanged(true)',
+      () async {
+        when(() => mockThemeManager.setThemeMode(ThemeMode.dark)).thenAnswer((_) async {});
+        when(() => mockAppEventBus.publish(any())).thenReturn(null);
 
-      await useCase(isEnabled: true);
+        await useCase(isEnabled: true);
 
-      verify(() => mockThemeManager.setThemeMode(ThemeMode.dark)).called(1);
-      verify(() => mockAppEventBus.publish(const ThemeModeChanged(isDarkMode: true))).called(1);
-    });
+        verify(() => mockThemeManager.setThemeMode(ThemeMode.dark)).called(1);
+        verify(() => mockAppEventBus.publish(const ThemeModeChanged(isDarkMode: true))).called(1);
+      },
+    );
 
-    test('Scenario 2: Toggle dark mode to disabled sets ThemeMode.light and publishes ThemeModeChanged(false)', () async {
-      when(() => mockThemeManager.setThemeMode(ThemeMode.light))
-          .thenAnswer((_) async {});
-      when(() => mockAppEventBus.publish(any())).thenReturn(null);
+    test(
+      'Scenario 2: Toggle dark mode to disabled sets ThemeMode.light and publishes ThemeModeChanged(false)',
+      () async {
+        when(() => mockThemeManager.setThemeMode(ThemeMode.light)).thenAnswer((_) async {});
+        when(() => mockAppEventBus.publish(any())).thenReturn(null);
 
-      await useCase(isEnabled: false);
+        await useCase(isEnabled: false);
 
-      verify(() => mockThemeManager.setThemeMode(ThemeMode.light)).called(1);
-      verify(() => mockAppEventBus.publish(const ThemeModeChanged(isDarkMode: false))).called(1);
-    });
+        verify(() => mockThemeManager.setThemeMode(ThemeMode.light)).called(1);
+        verify(() => mockAppEventBus.publish(const ThemeModeChanged(isDarkMode: false))).called(1);
+      },
+    );
   });
 }

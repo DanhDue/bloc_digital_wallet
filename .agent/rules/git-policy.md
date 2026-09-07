@@ -30,3 +30,13 @@ These operations are never blocked:
 - `git status`, `git log`, `git diff`, `git show`
 - `git worktree add`, `git worktree list`
 - `git checkout <branch>` (navigation only)
+
+## User Review & Explicit Commit Gate (Interactive Bug Fixes & Ad-hoc Work)
+
+1. **No Silent Commits on Bug Fixes**: Never execute `git commit` automatically when fixing bugs found during testing, refactoring, or interactive user requests.
+2. **Transparent Diff Presentation**: When bug fixes or code modifications are made, always provide a detailed summary:
+   - What failed / Root cause.
+   - Files changed and exact modifications.
+   - Side effects and how to review in IDE Source Control (`Cmd/Ctrl + Shift + G`) or CLI `git diff`.
+3. **User Decides**: Only commit when the user explicitly reviews the diff and commands: "Code ok, commit đi" or equivalent.
+4. **Epic Implementation**: Pre-approved Kanban tasks executing inside `epic-implementation` retain automated per-task commits to preserve autonomous end-to-end execution.

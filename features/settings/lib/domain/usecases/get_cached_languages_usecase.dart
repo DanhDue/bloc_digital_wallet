@@ -29,40 +29,34 @@ class GetCachedLanguagesUseCase {
     ),
   ];
 
-  GetCachedLanguagesUseCase(
-    this._repository,
-    this._checkLanguageCachedUseCase,
-  );
+  GetCachedLanguagesUseCase(this._repository, this._checkLanguageCachedUseCase);
 
   Future<Either<Failure, List<SupportedLanguage>>> call() async {
     final result = await _repository.getAvailableLanguages();
 
-    return result.fold(
-      (failure) => const Right(defaultBundledLanguages),
-      (languages) async {
-        if (languages.isEmpty) {
-          return const Right(defaultBundledLanguages);
-        }
+    return result.fold((failure) => const Right(defaultBundledLanguages), (languages) async {
+      if (languages.isEmpty) {
+        return const Right(defaultBundledLanguages);
+      }
 
-        final supportedList = <SupportedLanguage>[];
-        for (final lang in languages) {
-          final isCached = (lang.languageCode == 'en' || lang.languageCode == 'vi')
-              ? true
-              : await _checkLanguageCachedUseCase(lang.languageCode);
+      final supportedList = <SupportedLanguage>[];
+      for (final lang in languages) {
+        final isCached = (lang.languageCode == 'en' || lang.languageCode == 'vi')
+            ? true
+            : await _checkLanguageCachedUseCase(lang.languageCode);
 
-          supportedList.add(
-            SupportedLanguage(
-              languageCode: lang.languageCode,
-              languageName: lang.languageName,
-              isDefault: lang.isDefault,
-              isActive: lang.isActive,
-              isCached: isCached,
-            ),
-          );
-        }
+        supportedList.add(
+          SupportedLanguage(
+            languageCode: lang.languageCode,
+            languageName: lang.languageName,
+            isDefault: lang.isDefault,
+            isActive: lang.isActive,
+            isCached: isCached,
+          ),
+        );
+      }
 
-        return Right(supportedList);
-      },
-    );
+      return Right(supportedList);
+    });
   }
 }

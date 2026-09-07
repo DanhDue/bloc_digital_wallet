@@ -26,10 +26,7 @@ void main() {
     });
 
     test('default property values', () {
-      const lang = SupportedLanguage(
-        languageCode: 'ja',
-        languageName: 'Japanese',
-      );
+      const lang = SupportedLanguage(languageCode: 'ja', languageName: 'Japanese');
 
       expect(lang.isDefault, isFalse);
       expect(lang.isActive, isTrue);
@@ -38,10 +35,7 @@ void main() {
     });
 
     test('copyWith works correctly', () {
-      const lang = SupportedLanguage(
-        languageCode: 'en',
-        languageName: 'English',
-      );
+      const lang = SupportedLanguage(languageCode: 'en', languageName: 'English');
 
       final updated = lang.copyWith(isCached: true, version: '1.0.0');
 

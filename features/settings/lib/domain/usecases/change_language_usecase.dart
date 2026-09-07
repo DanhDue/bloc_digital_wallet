@@ -25,7 +25,10 @@ class ChangeLanguageUseCase {
     this._appEventBus,
   ]);
 
+  static String? _latestRequestedLanguageCode;
+
   Stream<LanguageSyncStatus> call(String languageCode) async* {
+    _latestRequestedLanguageCode = languageCode;
     final currentLocale = LocalizationManager.instance.currentLocale;
     final targetLocale = LocalizationManager.instance.resolveLocale(languageCode);
     final isSameLanguage = targetLocale.languageCode == currentLocale.languageCode;
@@ -41,12 +44,14 @@ class ChangeLanguageUseCase {
 
     if (isCached) {
       // Optimistic switch
+      if (_latestRequestedLanguageCode != languageCode) return;
       await LocalizationManager.instance.setLocaleFromCode(languageCode);
       _appEventBus?.publish(AppLanguageChanged(languageCode: languageCode));
       yield LanguageSyncStatus.cachedApplied(languageCode);
 
       // Silent delta check in background
       await _getDynamicLocalizationUseCase(languageCode);
+      if (_latestRequestedLanguageCode != languageCode) return;
       yield LanguageSyncStatus.success(languageCode);
     } else {
       // Uncached remote OTA download
@@ -54,8 +59,15 @@ class ChangeLanguageUseCase {
 
       final result = await _getDynamicLocalizationUseCase(languageCode);
 
+      // Race guard: If a newer language was requested while downloading, discard stale response
+      if (_latestRequestedLanguageCode != languageCode) {
+        return;
+      }
+
       if (result.isLeft()) {
-        final failure = result.swap().getOrElse(() => const ServerFailure(message: 'Unknown error'));
+        final failure = result.swap().getOrElse(
+          () => const ServerFailure(message: 'Unknown error'),
+        );
         yield LanguageSyncStatus.error(languageCode, failure.message);
         return;
       }
@@ -65,7 +77,9 @@ class ChangeLanguageUseCase {
       yield LanguageSyncStatus.success(languageCode);
     }
 
-    // Persist remote user preferences
-    await _updateUserLanguageUseCase(languageCode);
+    // Persist remote user preferences only if still the active selection
+    if (_latestRequestedLanguageCode == languageCode) {
+      await _updateUserLanguageUseCase(languageCode);
+    }
   }
 }

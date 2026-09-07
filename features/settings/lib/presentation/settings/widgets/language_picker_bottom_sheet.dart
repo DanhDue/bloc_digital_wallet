@@ -73,9 +73,7 @@ class LanguagePickerBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           ...languages.map((lang) {
@@ -83,6 +81,7 @@ class LanguagePickerBottomSheet extends StatelessWidget {
             final isSelected = langBase == currentBase;
 
             return ListTile(
+              key: ValueKey('language_option_$langBase'),
               title: Text(resolveNativeLanguageName(lang.languageCode, lang.languageName)),
               trailing: isSelected
                   ? const Icon(Icons.check, color: AppColors.settingsItemBlue)

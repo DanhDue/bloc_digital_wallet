@@ -6,10 +6,7 @@ import 'package:settings/domain/entities/language_sync_status.dart';
 void main() {
   group('LanguageSyncStatus', () {
     test('subclasses support value equality', () {
-      expect(
-        const LanguageSyncStatus.idle(),
-        equals(const LanguageSyncStatus.idle()),
-      );
+      expect(const LanguageSyncStatus.idle(), equals(const LanguageSyncStatus.idle()));
       expect(
         const LanguageSyncStatus.loading('ja'),
         equals(const LanguageSyncStatus.loading('ja')),

@@ -114,6 +114,30 @@
                 "prd",
                 "--release"
             ]
+        },
+        {
+            "name": "Integration Test: Language Standard (stg)",
+            "request": "launch",
+            "type": "dart",
+            "program": "integration_test/change_language_test.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/stg/environment-configs.json",
+                "--flavor",
+                "stg"
+            ]
+        },
+        {
+            "name": "Integration Test: Language Edge Cases (stg)",
+            "request": "launch",
+            "type": "dart",
+            "program": "integration_test/language_edge_cases_test.dart",
+            "args": [
+                "--dart-define-from-file",
+                "secureFiles/stg/environment-configs.json",
+                "--flavor",
+                "stg"
+            ]
         }
     ]
 }

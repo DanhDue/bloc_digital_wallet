@@ -57,10 +57,10 @@ void main() {
 
     test('Scenario 2: Optimistic switch for bundled or cached language (vi)', () async {
       when(() => mockCheckLanguageCachedUseCase('vi')).thenAnswer((_) async => true);
-      when(() => mockGetDynamicLocalizationUseCase('vi'))
-          .thenAnswer((_) async => const Right(null));
-      when(() => mockUpdateUserLanguageUseCase('vi'))
-          .thenAnswer((_) async => const Right(null));
+      when(
+        () => mockGetDynamicLocalizationUseCase('vi'),
+      ).thenAnswer((_) async => const Right(null));
+      when(() => mockUpdateUserLanguageUseCase('vi')).thenAnswer((_) async => const Right(null));
 
       final stream = usecase('vi');
 
@@ -79,10 +79,10 @@ void main() {
 
     test('Scenario 3: Uncached remote language (ja) shows loading dialog then succeeds', () async {
       when(() => mockCheckLanguageCachedUseCase('ja')).thenAnswer((_) async => false);
-      when(() => mockGetDynamicLocalizationUseCase('ja'))
-          .thenAnswer((_) async => const Right(null));
-      when(() => mockUpdateUserLanguageUseCase('ja'))
-          .thenAnswer((_) async => const Right(null));
+      when(
+        () => mockGetDynamicLocalizationUseCase('ja'),
+      ).thenAnswer((_) async => const Right(null));
+      when(() => mockUpdateUserLanguageUseCase('ja')).thenAnswer((_) async => const Right(null));
 
       final stream = usecase('ja');
 
@@ -99,28 +99,30 @@ void main() {
       verify(() => mockUpdateUserLanguageUseCase('ja')).called(1);
     });
 
-    test('Scenario 4: Uncached remote language network failure rolls back and retains locale', () async {
-      await LocalizationManager.instance.setLocaleFromCode('en');
-      when(() => mockCheckLanguageCachedUseCase('ko')).thenAnswer((_) async => false);
-      when(() => mockGetDynamicLocalizationUseCase('ko')).thenAnswer(
-        (_) async => const Left(ServerFailure(message: 'Connection timeout', code: 504)),
-      );
-      when(() => mockUpdateUserLanguageUseCase('ko'))
-          .thenAnswer((_) async => const Right(null));
+    test(
+      'Scenario 4: Uncached remote language network failure rolls back and retains locale',
+      () async {
+        await LocalizationManager.instance.setLocaleFromCode('en');
+        when(() => mockCheckLanguageCachedUseCase('ko')).thenAnswer((_) async => false);
+        when(() => mockGetDynamicLocalizationUseCase('ko')).thenAnswer(
+          (_) async => const Left(ServerFailure(message: 'Connection timeout', code: 504)),
+        );
+        when(() => mockUpdateUserLanguageUseCase('ko')).thenAnswer((_) async => const Right(null));
 
-      final stream = usecase('ko');
+        final stream = usecase('ko');
 
-      await expectLater(
-        stream,
-        emitsInOrder([
-          const LanguageSyncStatus.loading('ko'),
-          const LanguageSyncStatus.error('ko', 'Connection timeout'),
-          emitsDone,
-        ]),
-      );
+        await expectLater(
+          stream,
+          emitsInOrder([
+            const LanguageSyncStatus.loading('ko'),
+            const LanguageSyncStatus.error('ko', 'Connection timeout'),
+            emitsDone,
+          ]),
+        );
 
-      // Active locale must still be English
-      expect(LocalizationManager.instance.currentLocale.languageCode, equals('en'));
-    });
+        // Active locale must still be English
+        expect(LocalizationManager.instance.currentLocale.languageCode, equals('en'));
+      },
+    );
   });
 }

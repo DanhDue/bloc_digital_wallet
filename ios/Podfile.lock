@@ -11,8 +11,6 @@ PODS:
     - logger_native_bridge
   - permission_handler_apple (9.3.0):
     - Flutter
-  - pretty_animated_text (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - animated_item (from `.symlinks/plugins/animated_item/ios`)
@@ -21,7 +19,6 @@ DEPENDENCIES:
   - logger_native_bridge (from `.symlinks/plugins/logger_native_bridge/ios`)
   - native_security (from `.symlinks/plugins/native_security/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - pretty_animated_text (from `.symlinks/plugins/pretty_animated_text/ios`)
 
 EXTERNAL SOURCES:
   animated_item:
@@ -36,8 +33,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/native_security/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
-  pretty_animated_text:
-    :path: ".symlinks/plugins/pretty_animated_text/ios"
 
 SPEC CHECKSUMS:
   animated_item: 084ee2ea6acd303168dbcd18929b984e2a363633
@@ -46,7 +41,6 @@ SPEC CHECKSUMS:
   logger_native_bridge: 4dd6297ef7f176e1b43740518dc3a35dfec0828a
   native_security: c549f4dba4e835f106a88892f0381b411d512b2a
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
-  pretty_animated_text: cc861d9e60db9165c80a914de16b43d514992942
 
 PODFILE CHECKSUM: 90b7bfe7b9b060c832657a7fb4aef52b908527a2
 

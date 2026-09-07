@@ -78,12 +78,10 @@ void main() {
         buildNumber: '1',
       ),
     );
-    when(mockGetCachedLanguagesUseCase()).thenAnswer(
-      (_) async => const Right(defaultLanguages),
-    );
-    when(mockBootstrapUseCase()).thenAnswer(
-      (_) async => const Right(SyncBootstrapResponse(availableLanguages: [])),
-    );
+    when(mockGetCachedLanguagesUseCase()).thenAnswer((_) async => const Right(defaultLanguages));
+    when(
+      mockBootstrapUseCase(),
+    ).thenAnswer((_) async => const Right(SyncBootstrapResponse(availableLanguages: [])));
     when(
       mockChangeLanguageUseCase(any),
     ).thenAnswer((_) => Stream.value(const LanguageSyncStatus.success('en')));

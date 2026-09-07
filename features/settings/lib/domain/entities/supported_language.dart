@@ -38,12 +38,5 @@ class SupportedLanguage extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        languageCode,
-        languageName,
-        version,
-        isDefault,
-        isActive,
-        isCached,
-      ];
+  List<Object?> get props => [languageCode, languageName, version, isDefault, isActive, isCached];
 }

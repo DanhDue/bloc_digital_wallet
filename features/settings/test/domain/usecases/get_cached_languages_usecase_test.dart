@@ -10,6 +10,7 @@ import 'package:settings/domain/usecases/check_language_cached_usecase.dart';
 import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
 
 class MockSettingsRepository extends Mock implements SettingsRepository {}
+
 class MockCheckLanguageCachedUseCase extends Mock implements CheckLanguageCachedUseCase {}
 
 void main() {
@@ -25,8 +26,7 @@ void main() {
 
   group('GetCachedLanguagesUseCase', () {
     test('returns bundled default languages (en, vi) when stored cache is empty', () async {
-      when(() => mockRepository.getAvailableLanguages())
-          .thenAnswer((_) async => const Right([]));
+      when(() => mockRepository.getAvailableLanguages()).thenAnswer((_) async => const Right([]));
 
       final result = await useCase();
 
@@ -44,8 +44,9 @@ void main() {
     });
 
     test('returns bundled default languages when repository returns failure', () async {
-      when(() => mockRepository.getAvailableLanguages())
-          .thenAnswer((_) async => const Left(CacheFailure(message: 'Cache miss')));
+      when(
+        () => mockRepository.getAvailableLanguages(),
+      ).thenAnswer((_) async => const Left(CacheFailure(message: 'Cache miss')));
 
       final result = await useCase();
 

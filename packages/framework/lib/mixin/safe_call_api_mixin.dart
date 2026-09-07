@@ -31,6 +31,8 @@ mixin SafeCallApiMixin {
       final talker = GetIt.instance<Talker>();
       talker.handle(e, StackTrace.current, 'Type Error (JSON Parsing?)');
       return Left(UnknownFailure(message: 'Data parsing error', exception: e));
+    } on Failure catch (e) {
+      return Left(e);
     } catch (e, s) {
       final talker = GetIt.instance<Talker>();
       talker.handle(e, s, 'Unknown API Error');

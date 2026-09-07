@@ -42,7 +42,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     on<SettingsActionToggleNotifications>(_onToggleNotifications);
     on<SettingsActionToggleDeveloperMode>(_onToggleDeveloperMode);
     on<SettingsActionChangeCurrency>(_onChangeCurrency);
-    on<SettingsActionChangeLanguage>(_onChangeLanguage);
+    on<SettingsActionChangeLanguage>(_onChangeLanguage, transformer: restartable());
   }
 
   Future<void> _onStarted(SettingsActionStarted action, Emitter<SettingsState> emit) async {
@@ -79,15 +79,12 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
       (failure) async => null, // Stale cache is fine, silently proceed
       (response) async {
         final refreshedLanguagesResult = await _getCachedLanguagesUseCase();
-        refreshedLanguagesResult.fold(
-          (failure) => null,
-          (refreshedLanguages) {
-            if (!isClosed) {
-              final updatedModel = state.uiModel?.copyWith(availableLanguages: refreshedLanguages);
-              emit(state.copyWith(uiModel: updatedModel));
-            }
-          },
-        );
+        refreshedLanguagesResult.fold((failure) => null, (refreshedLanguages) {
+          if (!isClosed) {
+            final updatedModel = state.uiModel?.copyWith(availableLanguages: refreshedLanguages);
+            emit(state.copyWith(uiModel: updatedModel));
+          }
+        });
       },
     );
   }

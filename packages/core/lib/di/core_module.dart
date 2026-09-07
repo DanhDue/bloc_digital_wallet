@@ -6,6 +6,8 @@ import 'package:injectable/injectable.dart';
 
 import 'package:core/di/core_module.config.dart';
 
+import 'package:core/services/theme_manager.dart';
+
 @InjectableInit(initializerName: r'$initModuleGetIt')
 void configureModuleDependencies(GetIt getIt) {
   getIt.$initModuleGetIt();
@@ -18,4 +20,7 @@ abstract class CoreRegisterModule {
     aOptions: AndroidOptions(),
     iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
   );
+
+  @lazySingleton
+  ThemeManager get themeManager => ThemeManager.instance;
 }

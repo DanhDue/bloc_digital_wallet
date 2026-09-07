@@ -55,16 +55,21 @@ class SettingsRemoteDataSource with SafeCallApiMixin {
       Map<String, dynamic> translations = {};
 
       if (data is Map<String, dynamic>) {
-        if (data.containsKey('success') && data.containsKey('data')) {
-          // It's wrapped in BaseResponseObject
-          final innerData = data['data'];
-          if (innerData is Map<String, dynamic>) {
-            if (innerData.containsKey('version') && innerData.containsKey('translations')) {
-              version = innerData['version'] as String? ?? '1.0.0';
-              translations = innerData['translations'] as Map<String, dynamic>? ?? {};
-            } else {
-              // The inner data is directly the translations map
-              translations = innerData;
+        if (data.containsKey('success')) {
+          if (data['success'] == false) {
+            throw ServerFailure(message: data['message'] as String? ?? 'Translation not found');
+          }
+          if (data.containsKey('data')) {
+            // It's wrapped in BaseResponseObject
+            final innerData = data['data'];
+            if (innerData is Map<String, dynamic>) {
+              if (innerData.containsKey('version') && innerData.containsKey('translations')) {
+                version = innerData['version'] as String? ?? '1.0.0';
+                translations = innerData['translations'] as Map<String, dynamic>? ?? {};
+              } else {
+                // The inner data is directly the translations map
+                translations = innerData;
+              }
             }
           }
         } else if (data.containsKey('version') && data.containsKey('translations')) {

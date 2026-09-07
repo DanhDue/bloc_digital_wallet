@@ -4,45 +4,21 @@
 
 import 'package:bloc_digital_wallet/logging/module_gated_interceptor.dart';
 import 'package:core/core.dart';
-import 'package:network/network.dart';
-
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-/// Main app DI module for coordinating Dio setup with AuthInterceptor.
+/// Main app DI module for coordinating Dio setup with interceptors.
 ///
 /// This module handles cross-package dependency coordination that cannot
-/// be done within individual packages (e.g., adding auth interceptors to Dio).
+/// be done within individual packages (e.g., adding logging interceptors to Dio).
 @module
 abstract class AppNetworkModule {
-  @singleton
-  AuthInterceptor provideAuthInterceptor(
-    Dio dio,
-    AuthLocalDataSource localDataSource,
-    TokenRefresher tokenRefresher,
-    Talker talker,
-    AuthStreamService authStreamService,
-  ) {
-    // We inject the Dio instance provided by NetworkModule here just to configure it
-    final authInterceptor = AuthInterceptor(
-      dio,
-      localDataSource,
-      tokenRefresher,
-      talker,
-      authStreamService,
-    );
-    // Add the interceptor to the global Dio instance
-    dio.interceptors.add(authInterceptor);
-    return authInterceptor;
-  }
-
   /// Registers TalkerDioLogger onto the global Dio instance from the app
   /// layer, moved here from `packages/network`'s `DioFactory` per the
   /// logging-refactor epic's Phase 4 (talker_dio_logger no longer lives in
-  /// packages/network). Mirrors how [provideAuthInterceptor] configures the
-  /// same Dio instance it is handed.
+  /// packages/network).
   ///
   /// `TalkerDioLogger` writes directly to the shared `Talker` instance --
   /// it is a third-party Dio interceptor, not an `ILogAppender`, so it

@@ -4,6 +4,8 @@
 # Skills read this file to determine how to behave in this project.
 
 # auto_commit: true | false
-# When true (default), AI automatically commits after completing tasks and writing design docs.
+# When true, AI automatically commits after completing tasks in epic workflows (e.g. epic-implementation).
 # When false, all git commits and staging are skipped; files are left as modified for manual commit.
 auto_commit: true
+
+

@@ -71,6 +71,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
               ),
               _NavItem(
+                key: const ValueKey('settings_nav_tab'),
                 icon: Icons.settings_outlined,
                 activeIcon: Icons.settings,
                 label: context.t.home.nav.settings,
@@ -91,6 +92,7 @@ class CustomBottomNavBar extends StatelessWidget {
 /// Regular navigation item with icon and label.
 class _NavItem extends StatelessWidget {
   const _NavItem({
+    super.key,
     required this.icon,
     required this.activeIcon,
     required this.label,
