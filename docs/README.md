@@ -51,6 +51,8 @@ Feature implementation guides
 
 ### 🚀 [getting-started/](getting-started/)
 Quick start and reference materials
+- [create-new-project-from-template.vi.md](getting-started/create-new-project-from-template.vi.md) ⭐ **NEW** - Hướng dẫn tạo project mới từ Template (Tiếng Việt)
+- [create-new-project-from-template.en.md](getting-started/create-new-project-from-template.en.md) ⭐ **NEW** - Guide to create a new project from Template (English)
 - [QUICK_REFERENCE.md](getting-started/QUICK_REFERENCE.md) - Commands and tips
 - [QUICK_START.md](getting-started/QUICK_START.md) - Detailed quickstart
 - [DOCUMENTATION_NAV_MAP.md](getting-started/DOCUMENTATION_NAV_MAP.md) - Navigation

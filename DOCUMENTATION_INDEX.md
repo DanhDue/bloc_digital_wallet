@@ -43,6 +43,8 @@ Core architectural patterns and design principles.
 ### 🚀 Getting Started & Quick Reference ([docs/getting-started/](docs/getting-started/), [/](./))
 Quick start guides and reference materials.
 
+- [docs/getting-started/create-new-project-from-template.vi.md](docs/getting-started/create-new-project-from-template.vi.md) - ⭐ **NEW** Hướng dẫn tạo project mới từ Template (Tiếng Việt)
+- [docs/getting-started/create-new-project-from-template.en.md](docs/getting-started/create-new-project-from-template.en.md) - ⭐ **NEW** Guide to create a new project from Template (English)
 - [README.md](README.md) - Project overview and setup
 - [docs/getting-started/QUICK_REFERENCE.md](docs/getting-started/QUICK_REFERENCE.md) - Quick reference
 - [docs/getting-started/QUICK_START.md](docs/getting-started/QUICK_START.md) - Detailed quick start

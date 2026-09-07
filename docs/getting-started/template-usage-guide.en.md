@@ -1,170 +1,144 @@
 # Template Usage Guide
 
-A practical, use-case-driven guide — each section is one concrete thing you want to do, with the exact
-commands and a pointer back to the task/design doc for deeper detail. Read
-[flutter_super_app_template](../../.devtool/epic/flutter_super_app_template/flutter_super_app_template.en.md)
-first for the architecture overview.
+A practical, use-case-driven guide — each section is one concrete task you want to accomplish, with the exact commands and architectural pointers. Read [flutter_super_app_template](../../.devtool/epic/flutter_super_app_template/flutter_super_app_template.en.md) for the monorepo architecture overview.
 
-> **Note on command names**: earlier spec docs mentioned one shared brick/script covering both platforms
-> (`native_package`, `extract_native_standalone.sh`, `native_add_ui_dependency.sh`). The final decision is
-> **one command per platform** — nothing takes an `android`/`ios` argument. The names below are authoritative.
+> **Architecture Note**: Standalone native templates (pure Android / pure iOS apps without Flutter) are now maintained in their own dedicated repositories. Inside this Flutter Super App repository, native capabilities are provided through Tri-Platform plugins (`pac_native_plugin`) and shared libraries (`pac_library`).
+
+---
 
 ## Table of Contents
 0. [Start a new project from the template](#0-start-a-new-project-from-the-template)
-1. [Create a new Flutter package](#1-create-a-new-flutter-package)
-2. [Add native code with NO UI to a package](#2-add-native-code-with-no-ui-to-a-package)
-3. [Add native code WITH UI to a package](#3-add-native-code-with-ui-to-a-package)
-4. [Upgrade an existing no-UI package to add UI](#4-upgrade-an-existing-no-ui-package-to-add-ui)
-5. [Create a standalone Android Native project from the template](#5-create-a-standalone-android-native-project-from-the-template)
-6. [Create a standalone iOS Native project from the template](#6-create-a-standalone-ios-native-project-from-the-template)
-7. [Add a Go binding to an existing native package](#7-add-a-go-binding-to-an-existing-native-package)
+1. [Create a new Flutter Feature (`features/`)](#1-create-a-new-flutter-feature-features)
+2. [Create a shared Library (`packages/`)](#2-create-a-shared-library-packages)
+3. [Create a Native Plugin without UI (Headless Pigeon)](#3-create-a-native-plugin-without-ui-headless-pigeon)
+4. [Create a Native Plugin with UI (Compose & SwiftUI)](#4-create-a-native-plugin-with-ui-compose--swiftui)
+5. [Upgrade a headless Plugin to include Native UI](#5-upgrade-a-headless-plugin-to-include-native-ui)
+6. [Create a Subfeature within an existing Feature](#6-create-a-subfeature-within-an-existing-feature)
+7. [Add a Go binding to a native package](#7-add-a-go-binding-to-a-native-package)
 8. [Remove a feature package](#8-remove-a-feature-package)
 
 ---
 
 ## 0. Start a new project from the template
 
-The mandatory first step — every section below assumes this is already done.
+The mandatory first step when starting fresh from the template.
+> 📖 **Read the comprehensive step-by-step guide:** [create-new-project-from-template.en.md](create-new-project-from-template.en.md)
 
 ```bash
+# 1. Clone and initialize fresh git repository
 git clone <template-repo-url> my_new_app
 cd my_new_app
-./scripts/rename_project.sh my_new_app com.mycompany.mynewapp
-melos bootstrap
-melos genAlls
+rm -rf .git && git init
+
+# 2. Rename and re-identify project (app_name, package_name, bundle_id)
+./scripts/rename_project.sh "My New App" my_new_app com.mycompany.mynewapp
+
+# 3. Synchronize secure configurations (dev/stg/prd)
+sh .agent/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
+
+# 4. Verify and launch application
+melos run analyze
+fvm flutter test
+flutter run --flavor dev --dart-define-from-file=secureFiles/dev/environment-configs.json
 ```
 
-`rename_project.sh` renames the Dart package, every `lib/` import, `applicationId`/bundle id, and the
-app's display name — see [template_flutter task 7](../../.devtool/epic/template_flutter/task_7_rename_script.md).
-After this, `flutter run` boots straight into the Shell with the Settings tab active.
+`rename_project.sh` renames the Dart package, imports in `lib/`, `features/`, `applicationId`/bundle id, display names (Android & iOS) and runs `melos bootstrap` & `melos genAlls`. After this, `flutter run` boots straight into the Shell with Home, Scanner, and Settings tabs.
 
-## 1. Create a new Flutter package
+---
 
-No native code involved — a pure Dart/Flutter feature.
+## 1. Create a new Flutter Feature (`features/`)
+
+Use when implementing a new business feature (pure Dart/Flutter, following Clean Architecture + MVI).
 
 ```bash
-mason make pac_mvi_feature
-# enter the feature name when prompted, e.g. wallet
+mason make pac_mvi_feature --name <feature_name>
+# e.g., mason make pac_mvi_feature --name wallet
 ```
 
-The brick scaffolds `packages/<name>/` (Clean Architecture: `data/domain/presentation`), wires it into root
-`pubspec.yaml`, `lib/di/injection.dart`, `lib/app_router.dart`, `lib/core/localization/...`, and runs
-`melos bootstrap` + `./scripts/integrateFeatureToApp.sh <name>` for you. This is Case 1 in
-[flutter_super_app_template §2](../../.devtool/epic/flutter_super_app_template/flutter_super_app_template.en.md).
+- **Target location:** Scaffolds `features/<feature_name>/` (Clean Architecture: `data/`, `domain/`, `presentation/` with BLoC MVI).
+- **Automated Wiring:** Wires into root `pubspec.yaml`, `lib/di/injection.dart`, `lib/app_router.dart`, localization, and executes `melos bootstrap` + `./scripts/integrateFeatureToApp.sh <feature_name>`.
 
-## 2. Add native code with NO UI to a package
+---
 
-Use when a package needs to call into Kotlin/Swift but owns no native screen (e.g. secure storage,
-crypto, device info). Corresponds to Ô1/Ô3 in the use-case matrix.
+## 2. Create a shared Library (`packages/`)
+
+Use when creating shared infrastructure packages, networking helpers, or reusable UI components.
 
 ```bash
-# For Android native code:
-mason make native_android_package
-#   name: <package_name>
-#   trigger: passive        (Dart calls in)  |  os_triggered (OS calls in, independent of Flutter)
-#   has_ui: false
-
-# For iOS native code too (separate command, not combined):
-mason make native_ios_package
-#   name: <package_name>   (same name, writes into the same packages/<name>/)
-#   trigger: passive | os_triggered  (pick the same as Android for consistent behavior)
-#   has_ui: false
+mason make pac_library --name <library_name> --is_flutter true
 ```
 
-Need Android only? Run just the first command. iOS only? Just the second — the two are fully independent;
-each brick detects whether `packages/<name>/` already exists (from the other command) and merges instead
-of overwriting. Result: `platform/domain/data` scaffolding, depending on native `core`, manual DI (no
-Hilt). If `trigger=os_triggered`, the generated entry-point is pre-wrapped in `core.SafeExecution`. See
-[template_android task 6](../../.devtool/epic/template_android/task_6_native_package_brick.md) /
-[template_ios task 6](../../.devtool/epic/template_ios/task_6_native_package_brick_ios.md).
+- Set `--is_flutter false` for pure Dart packages without Flutter dependencies.
+- **Target location:** Scaffolds `packages/<library_name>/` and registers it within the Melos monorepo workspace.
 
-## 3. Add native code WITH UI to a package
+---
 
-Use when you need an actual native screen/overlay (e.g. a custom camera `PlatformView`). Corresponds to
-Ô2/Ô4.
+## 3. Create a Native Plugin without UI (Headless Pigeon)
+
+Use when a package needs to interact with native platform APIs (e.g., biometric authentication, secure hardware storage, device sensors) without rendering native UI views.
 
 ```bash
-mason make native_android_package   # has_ui: true
-mason make native_ios_package       # has_ui: true (if iOS is needed too)
+mason make pac_native_plugin --name <plugin_name> --has_ui false
 ```
 
-Compared to section 2, the generated package adds `presentation/` (Compose/SwiftUI + `MviViewModel`),
-automatically pulls in native `framework`, and applies the Hilt+Compose convention (Android). If
-`trigger=passive`, the result embeds into the Flutter widget tree via `PlatformView`; if
-`trigger=os_triggered`, it gets its own `Activity`/overlay/Extension, independent of any `FlutterEngine`.
+- **Target location:** Generates a Tri-Platform plugin in `packages/<plugin_name>/` with Clean Architecture for Android (Kotlin) and iOS (Swift) bridged via Pigeon.
+- Both Android and iOS platforms are scaffolded in one unified plugin package with clean separation of concerns.
 
-## 4. Upgrade an existing no-UI package to add UI
+---
 
-Use when a package created in section 2 (`has_ui=false`) later needs UI — **don't re-run the brick** (it
-would clobber the existing `platform/domain/data`).
+## 4. Create a Native Plugin with UI (Compose & SwiftUI)
+
+Use when a feature requires high-performance native UI components (e.g., custom camera viewfinder, maps, AR view) rendered via Flutter `PlatformView`.
 
 ```bash
-# Android:
-./scripts/native_add_ui_dependency_android.sh <package_name>
-
-# iOS (separate, independent command):
-./scripts/native_add_ui_dependency_ios.sh <package_name>
+mason make pac_native_plugin --name <plugin_name> --has_ui true
 ```
 
-These two scripts handle only the part most likely to be done wrong: adding the `framework` dependency +
-Hilt/Compose convention (Android) or `ios/framework` (iOS). Follow the manual checklist afterward (create
-`presentation/`, register `PlatformViewFactory`/`Activity`) — see
-[template_android task 7](../../.devtool/epic/template_android/task_7_add_ui_dependency_tool.md) /
-[template_ios task 7](../../.devtool/epic/template_ios/task_7_add_ui_dependency_tool_ios.md) for the full
-checklist.
+- **Target location:** Adds native presentation layers (`presentation/` with Jetpack Compose on Android and SwiftUI on iOS) alongside `MviViewModel`.
+- Automatically wires `PlatformViewFactory` registrations in both Kotlin and Swift.
 
-## 5. Create a standalone Android Native project from the template
+---
 
-Use when you want to write a pure native Android app (no Flutter) but still inherit the standardized MVI +
-tooling (Spotless/Detekt/Hilt/Compose) stack from the template.
+## 5. Upgrade a headless Plugin to include Native UI
+
+Use when a previously created headless plugin (`has_ui=false`) now requires native UI. **Do not re-run `pac_native_plugin`** (to avoid overwriting custom domain/data code).
 
 ```bash
-./scripts/extract_native_standalone_android.sh ~/Projects/my_native_android_app
-cd ~/Projects/my_native_android_app
-git init
-./gradlew :app:assembleDebug
+mason make pac_add_native_ui --name <plugin_name>
 ```
 
-The script copies `core`/`framework`/`buildSrc` (already Flutter-independent) into the new directory,
-generating a fresh `settings.gradle.kts` + minimal demo `app/` — the result runs immediately, with no
-Flutter involvement. `native_security`/`logger_native_bridge` are **not** copied (they are Flutter plugins,
-not part of a pure-native app skeleton). See
-[template_android task 9](../../.devtool/epic/template_android/task_9_standalone_extraction.md).
+- **Automated patches:** Updates Gradle dependencies for Jetpack Compose, iOS Podspec for SwiftUI, scaffolds native MVI ViewModels, and registers `PlatformViewFactory` bridge code.
 
-## 6. Create a standalone iOS Native project from the template
+---
+
+## 6. Create a Subfeature within an existing Feature
+
+Use when adding a secondary screen or workflow into an existing feature without creating a separate package (e.g., adding `order_detail` to `e_commerce`).
 
 ```bash
-./scripts/extract_native_standalone_ios.sh ~/Projects/my_native_ios_app
-cd ~/Projects/my_native_ios_app
-git init
-open MyNativeIosApp.xcodeproj
+mason make pac_mvi_subfeature --package_name <feature_name> --subfeature_name <subfeature_name>
 ```
 
-Same as section 5, copying `ios/core`/`ios/framework` into a fresh, minimal Xcode project with no
-`Flutter.framework` involvement. See
-[template_ios task 9](../../.devtool/epic/template_ios/task_9_standalone_extraction.md).
+- Reuses the existing repository and data source, extending them with the new subfeature methods and presentation widgets.
 
-## 7. Add a Go binding to an existing native package
+---
 
-Use when a package (created in section 2/3) needs to call into a compiled Go library (e.g. E2EE for chat).
-This is a **guide + copy-paste snippet**, not an automated command/brick — every Go library's API differs.
+## 7. Add a Go binding to a native package
 
-1. Read `docs/architecture/native-go-binding.md` (Android or iOS section as applicable).
-2. Drop the `.aar` (Android, from gomobile) or `.xcframework` (iOS) into the package's `data/`.
-3. Copy the panic-recovery snippet into the exact JNI (Android) / cgo (iOS) boundary — **mandatory**, never
-   skip it, or a Go panic will crash the whole app.
-4. If the package is `trigger=os_triggered`: call Go directly from Kotlin/Swift, don't spin up a headless
-   Flutter engine solely to reach Go.
+Use when a package needs to invoke precompiled Go routines (e.g., E2EE encryption engines). This is a manual integration pattern:
 
-See [template_android task 8](../../.devtool/epic/template_android/task_8_go_binding_guide.md) /
-[template_ios task 8](../../.devtool/epic/template_ios/task_8_go_binding_guide_ios.md).
+1. Place compiled `.aar` (Android, via gomobile) or `.xcframework` (iOS) into the package `data/` directory.
+2. Ensure panic-recovery wrappers are placed on the JNI (Android) / cgo (iOS) boundaries to prevent Go panics from terminating the Flutter host process.
+3. For OS-triggered plugins, communicate directly from Kotlin/Swift without instantiating a headless FlutterEngine.
+
+---
 
 ## 8. Remove a feature package
 
+Use when safely decommissioning an existing feature package:
+
 ```bash
-mason make remove_pac_feature
-# enter the feature name to remove
+mason make remove_pac_feature --name <feature_name>
 ```
 
-The brick unwires the package from `pubspec.yaml`, `injection.dart`, `app_router.dart`, translation
-providers — undoing exactly what `pac_mvi_feature` (section 1) wired in.
+- Automatically unwires the feature from `pubspec.yaml`, `injection.dart`, `app_router.dart`, and localization providers, cleaning up references cleanly.
