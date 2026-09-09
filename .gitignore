@@ -33,7 +33,10 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+build/
+**/build/
+coverage/
+**/coverage/
 
 # Symbolication related
 app.*.symbols
@@ -41,14 +44,33 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
+# Android Studio / Gradle build artifacts (root & packages/features)
 /android/app/debug
 /android/app/profile
 /android/app/release
 /android/app/src/dev/google-services.json
 /android/app/src/prd/google-services.json
 /android/app/src/stg/google-services.json
+**/android/build/
+**/android/.gradle/
+**/android/.cxx/
+**/android/.externalNativeBuild/
+**/android/local.properties
+**/android/captures/
+
+# iOS build artifacts (root & packages/features)
 /ios/Runner/Firebase/
+**/ios/build/
+**/ios/.build/
+**/ios/DerivedData/
+**/ios/.symlinks/
+**/ios/Pods/
+**/ios/.generated/
+**/ios/profile
+**/ios/xcuserdata/
+**/ios/*.xcworkspace/xcuserdata/
+**/ios/*.xcodeproj/xcuserdata/
+**/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
 
 # FVM Version Cache
 .fvm/
@@ -61,7 +83,9 @@ app.*.map.json
 *.config.dart
 /secureFiles/
 */fastlane/report.xml
-/lib/generated/
+lib/generated/
+**/lib/generated/
+**/generated/
 
 # ignore public folder contained Figma's exported images.
 public/
@@ -74,5 +98,3 @@ bricks/**/hooks/.dart_tool/
 bricks/**/hooks/packages/
 .metadata
 mason-lock.json
-# Gradle local cache (per Android/Kotlin native package)
-**/android/.gradle/

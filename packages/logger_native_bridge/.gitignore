@@ -28,7 +28,38 @@ migrate_working_dir/
 .dart_tool/
 .flutter-plugins-dependencies
 /build/
+build/
 /coverage/
+coverage/
+
+# Android & iOS build artifacts
+android/build/
+android/.gradle/
+android/.cxx/
+android/.externalNativeBuild/
+android/local.properties
+android/captures/
+ios/build/
+ios/.build/
+ios/DerivedData/
+ios/.symlinks/
+ios/Pods/
+ios/.generated/
+ios/profile
+ios/xcuserdata/
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcodeproj/xcuserdata/
+
+# Generated files.
+*.freezed.dart
+*.tailor.dart
+*.gr.dart
+*.config.dart
+/secureFiles/
+*/fastlane/report.xml
+/lib/generated/
+lib/generated/
+generated/
 
 # The root .gitignore's `*.g.dart` rule exists for build_runner output,
 # which regenerates automatically. lib/src/messages.g.dart is Pigeon
