@@ -88,15 +88,18 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
       }
     }
 
-    // 3. Patch iOS Plugin.swift
-    final iosPlugin = File('packages/$snakeCaseName/ios/Classes/${pascalCaseName}Plugin.swift');
+    // 3. Patch iOS Plugin.swift (SPM layout from pac_native_plugin).
+    final iosPlugin = File(
+      'packages/$snakeCaseName/ios/$snakeCaseName/Sources/$snakeCaseName/${pascalCaseName}Plugin.swift',
+    );
     if (iosPlugin.existsSync()) {
       var content = await iosPlugin.readAsString();
       if (!content.contains('${pascalCaseName}PlatformViewFactory')) {
+        // Closure-based factory — resolves the ViewModel (and its
+        // @Injected deps) through ${pascalCaseName}Container per creation.
         final factoryRegistration = '''
-        let viewModel = ${pascalCaseName}ViewModel()
-        let factory = ${pascalCaseName}PlatformViewFactory(viewModel: viewModel)
-        registrar.register(factory, withId: "com.danhdue.$snakeCaseName/native_view")
+        let nativeViewFactory = ${pascalCaseName}PlatformViewFactory { ${pascalCaseName}ViewModel() }
+        registrar.register(nativeViewFactory, withId: "com.danhdue.$snakeCaseName/native_view")
 ''';
         if (content
             .contains('public static func register(with registrar: FlutterPluginRegistrar) {')) {

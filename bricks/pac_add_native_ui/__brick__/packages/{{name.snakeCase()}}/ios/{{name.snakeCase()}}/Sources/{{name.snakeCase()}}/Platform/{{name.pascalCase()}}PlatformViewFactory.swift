@@ -5,13 +5,14 @@
 import Flutter
 import UIKit
 
+/// [has_ui=true] Builds a fresh `{{name.pascalCase()}}ViewModel` per platform
+/// view via the injected closure — in production `{ {{name.pascalCase()}}ViewModel() }`,
+/// which resolves the ViewModel's dependencies through `{{name.pascalCase()}}Container`.
 public class {{name.pascalCase()}}PlatformViewFactory: NSObject, FlutterPlatformViewFactory {
-    private var messenger: FlutterBinaryMessenger?
-    private var viewModel: {{name.pascalCase()}}ViewModel?
+    private let makeViewModel: () -> {{name.pascalCase()}}ViewModel
 
-    public init(messenger: FlutterBinaryMessenger? = nil, viewModel: {{name.pascalCase()}}ViewModel? = nil) {
-        self.messenger = messenger
-        self.viewModel = viewModel
+    public init(makeViewModel: @escaping () -> {{name.pascalCase()}}ViewModel) {
+        self.makeViewModel = makeViewModel
         super.init()
     }
 
@@ -20,16 +21,15 @@ public class {{name.pascalCase()}}PlatformViewFactory: NSObject, FlutterPlatform
         viewIdentifier viewId: Int64,
         arguments args: Any?
     ) -> FlutterPlatformView {
-        return {{name.pascalCase()}}PlatformView(
+        {{name.pascalCase()}}PlatformView(
             frame: frame,
             viewIdentifier: viewId,
             arguments: args,
-            binaryMessenger: messenger,
-            viewModel: viewModel
+            viewModel: makeViewModel()
         )
     }
 
     public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
-        return FlutterStandardMessageCodec.sharedInstance()
+        FlutterStandardMessageCodec.sharedInstance()
     }
 }

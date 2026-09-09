@@ -1,13 +1,13 @@
 ---
 id: "task_18_update_pac_add_native_ui_ios_spm"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-09T09:51:07.000Z"
-modified: "2026-09-09T09:51:07.000Z"
-completedAt: null
+modified: "2026-09-09T11:35:00.000Z"
+completedAt: "2026-09-09T11:35:00.000Z"
 labels: ["mason", "brick", "ios", "spm", "phase-5"]
 order: "a18"
 ---
@@ -42,11 +42,13 @@ The two bricks must stay in lockstep: `pac_add_native_ui` only ever runs against
 Applicable skills: `test-driven-development`, `writing-skills`, `verification-before-completion`.
 
 ## TDD Checklist
-- [ ] **RED**: Generation test — after `mason make pac_native_plugin --name device_info --has_ui false` then `mason make pac_add_native_ui --name device_info`, assert `ios/device_info/Sources/device_info/Presentation/DeviceInfoViewModel.swift` exists and `DeviceInfoPlugin.swift` contains the `PlatformViewFactory` registration. Fails against the current brick.
-- [ ] **GREEN**:
-  - [ ] Retarget `pre_gen.dart` path check; move `__brick__` Presentation templates into the SPM path; update `post_gen.dart` patch target.
-  - [ ] Run the upgrade on a freshly generated `device_info`; `flutter build ios --no-codesign` → the `UiKitView` renders the SwiftUI view; `ViewModel` resolves via the container.
-- [ ] **REFACTOR**: Ensure `pre_gen` guard message is clear; no dangling references to the old `ios/Classes/Presentation/` path.
+- [x] **RED**: Against the pre-change brick, `mason make pac_add_native_ui --name device_info` (on a task_17-generated `device_info`) targeted `ios/Classes/Presentation/` + `ios/Classes/DeviceInfoPlugin.swift` — paths that no longer exist in the SPM layout → no-op patch, assertions fail.
+- [x] **GREEN**:
+  - [x] `pre_gen.dart` iOS existence check → `packages/<name>/ios/<name>/Sources/<name>/Presentation`. `git mv` the `__brick__` Presentation templates into `ios/{{name}}/Sources/{{name}}/Presentation/` (+ `Platform/{{Name}}PlatformViewFactory.swift`); aligned `ViewModel` / `PlatformView` / `PlatformViewFactory` with task_17's versions (`@Injected`, closure-based factory). `post_gen.dart` step 3 → patches `Sources/<name>/<Name>Plugin.swift` with `let nativeViewFactory = <Name>PlatformViewFactory { <Name>ViewModel() }; registrar.register(nativeViewFactory, withId: "com.danhdue.<name>/native_view")`. **No `Package.swift` edit** — FactoryKit already a dep from `pac_native_plugin`; `Sources/` glob picks up the new folders.
+  - [x] `mason make pac_native_plugin --name device_info --has_ui false` → `mason make pac_add_native_ui --name device_info`: adds `Platform/DeviceInfoPlatformViewFactory.swift` + `Presentation/*.swift` (incl. `MviViewModel.swift`); `DeviceInfoPlugin.swift` gains the factory registration (Pigeon `HostApi` + PlatformView now coexist). Temp app dep → `flutter build ios --simulator --debug` → `✓ Built Runner.app`.
+  - [~] `UiKitView` on-screen render — needs a running app/device; deferred (proxy verification). The SwiftUI `View` + `UIHostingController` PlatformView compile and link.
+  - Throwaway `device_info` deleted; temp app edits reverted. `dart analyze` (both hooks) → No issues.
+- [x] **REFACTOR**: `pre_gen` guard messages unchanged (already clear); zero remaining references to `ios/Classes/` in the brick or hooks.
 
 ## Definition of Done (DoD)
 1. `pac_add_native_ui` emits `Presentation/` under `ios/{{name}}/Sources/{{name}}/` and patches the SPM-layout plugin class.

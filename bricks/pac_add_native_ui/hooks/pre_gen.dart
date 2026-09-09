@@ -29,7 +29,9 @@ Future<void> run(HookContext context) async {
     );
   }
 
-  final iosPresentationDir = Directory('packages/$snakeCaseName/ios/Classes/Presentation');
+  final iosPresentationDir = Directory(
+    'packages/$snakeCaseName/ios/$snakeCaseName/Sources/$snakeCaseName/Presentation',
+  );
   if (iosPresentationDir.existsSync()) {
     context.logger.err(
       'Package "$snakeCaseName" already has native UI implemented in iOS Presentation layer.',

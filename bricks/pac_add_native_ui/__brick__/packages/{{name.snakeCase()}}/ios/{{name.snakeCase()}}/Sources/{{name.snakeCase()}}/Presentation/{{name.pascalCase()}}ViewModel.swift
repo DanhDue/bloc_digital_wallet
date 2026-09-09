@@ -3,12 +3,12 @@
 // coverage:ignore-file
 
 import Combine
+import FactoryKit
 
 public class {{name.pascalCase()}}ViewModel: MviViewModel<{{name.pascalCase()}}Action, {{name.pascalCase()}}State, {{name.pascalCase()}}Event> {
-    private let repository: {{name.pascalCase()}}Repository
+    @Injected(\{{name.pascalCase()}}Container.repository) private var repository
 
-    public init(repository: {{name.pascalCase()}}Repository = {{name.pascalCase()}}RepositoryImpl()) {
-        self.repository = repository
+    public init() {
         super.init(initialState: {{name.pascalCase()}}State())
     }
 
@@ -16,12 +16,17 @@ public class {{name.pascalCase()}}ViewModel: MviViewModel<{{name.pascalCase()}}A
         switch action {
         case .initialize:
             setState { $0.isLoading = true }
-            let data = repository.fetchData()
-            setState {
-                $0.isLoading = false
-                $0.title = data
+            Task { [weak self] in
+                guard let self else { return }
+                let data = (try? await self.repository.getStatus()) ?? "Unavailable"
+                await MainActor.run {
+                    self.setState {
+                        $0.isLoading = false
+                        $0.title = data
+                    }
+                    self.sendEvent(.showToast("Loaded: \(data)"))
+                }
             }
-            sendEvent(.showToast("Loaded: \(data)"))
         case .submit(let value):
             setState { $0.title = value }
             sendEvent(.showToast("Submitted: \(value)"))
