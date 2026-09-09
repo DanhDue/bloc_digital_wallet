@@ -15,9 +15,10 @@
 
 ## Meta Data
 - **Epic**: `flutter_super_app_template`
-- **Trạng thái**: Đang thực hiện (In-Progress / Designing)
+- **Trạng thái**: Đang thực hiện (In-Progress — Giai đoạn 5: iOS DI → FactoryKit + Flutter SPM)
 - **Target Release**: Flutter Super App Template v1.0
 - **Source Spec**: [2026-09-06-flutter-super-app-template-design.md](2026-09-06-flutter-super-app-template-design.md)
+- **Spec Giai đoạn 5**: [2026-09-09-ios-native-plugin-factory-di-spm-design.md](2026-09-09-ios-native-plugin-factory-di-spm-design.md)
 - **Template Native Tham chiếu**:
   - Android: `/Users/danhdue/AllProjects/digital_wallet/android_digital_wallet/.worktrees/android_super_app_template`
   - iOS: `/Users/danhdue/AllProjects/digital_wallet/iOSDigitalWallet/.worktrees/ios_super_app_template`
@@ -48,11 +49,14 @@ Hiện tại, vì đã có sẵn 2 template native độc lập hoàn chỉnh ([
   - `pac_add_native_ui` & `scripts/add_native_ui.sh`: Nâng cấp một chạm từ headless sang có UI native an toàn.
 - **Công cụ Đổi tên dự án:** `scripts/rename_project.sh` đổi tên package, app, bundle ID, imports; giữ cố định namespace vendor `com.danhdue.*` của plugin native.
 - **CI Boundary Gate:** Cập nhật `scripts/check_module_boundaries.sh` kiểm tra phân định ranh giới giữa `features/*` và `packages/*`.
+- **Chuẩn hóa DI phía iOS (Giai đoạn 5):** Mọi package iOS-native — 2 plugin đang ship (`logger_native_bridge`, `native_security`) và mọi thứ `pac_native_plugin` sinh ra — dùng **FactoryKit 3.x** với **một `SharedContainer` subclass riêng cho mỗi plugin** (`register(with:)` là composition root), phân phối qua **Flutter Swift Package Manager** (`Package.swift`, không `.podspec`). Host bật SPM và chạy hybrid với CocoaPods.
 
 ### Ngoài phạm vi
 - Tự tạo hoặc trích xuất ứng dụng native Android/iOS độc lập từ repo Flutter (đã do 2 template native độc lập đảm nhiệm).
 - Xây dựng cơ chế tải mã động runtime (Flutter biên dịch thành 1 binary duy nhất).
 - Thay thế `auto_route` hoặc `get_it`.
+- **Gỡ hoàn toàn CocoaPods khỏi host iOS** — hoãn sang spec Giai đoạn 2 riêng; Giai đoạn 5 giữ hybrid (pod bên thứ 3 chưa có SPM vẫn resolve qua CocoaPods).
+- **Thay đổi phía Dart của plugin hoặc DI Android** — Giai đoạn 5 chỉ đụng Swift phía iOS.
 
 ---
 
@@ -86,10 +90,10 @@ graph TD
         Logger["packages/logger"]
     end
 
-    subgraph NativePlugins ["packages/ (Native Bridges & Plugins)"]
-        NativeSec["packages/native_security (FFI)"]
-        NativeLog["packages/logger_native_bridge (Pigeon)"]
-        NewPlugin["packages/{{plugin}} (sinh bởi pac_native_plugin)"]
+    subgraph NativePlugins ["packages/ (Native Bridges & Plugins) — Flutter SPM + FactoryKit DI"]
+        NativeSec["packages/native_security (FFI + NativeSecurityContainer)"]
+        NativeLog["packages/logger_native_bridge (Pigeon + LoggerNativeBridgeContainer)"]
+        NewPlugin["packages/{{plugin}} (sinh bởi pac_native_plugin — Package.swift + {{Plugin}}Container)"]
     end
 
     ShellPage --> Features
@@ -99,6 +103,7 @@ graph TD
     Features --> InfraPkgs
     NativePlugins --> Core
     NewPlugin -.->|PlatformView (UI) hoặc Pigeon (No-UI)| HostApp
+    NativePlugins -.->|resolve qua Flutter SwiftPM, hybrid với CocoaPods| HostApp
 ```
 
 ### Use Cases
@@ -117,10 +122,10 @@ flowchart TD
     B2 --> O2["Xuất ra packages/<name>/ & thêm vào workspace"]
 
     U3 -->|Chạy| B3["mason make pac_native_plugin --name <name> --has_ui <bool>"]
-    B3 --> O3["Xuất ra packages/<name>/ với Clean Arch Kotlin/Swift"]
+    B3 --> O3["Xuất ra packages/<name>/ · Kotlin Clean Arch · iOS = Package.swift + Sources/<name>/ + FactoryKit Container riêng"]
 
     U4 -->|Chạy| B4["mason make pac_add_native_ui --name <name>"]
-    B4 --> O4["Tự động chèn Compose/SwiftUI + PlatformView qua Mason Hooks"]
+    B4 --> O4["Chèn Compose (Android) + SwiftUI PlatformView vào ios/<name>/Sources/<name>/Presentation/ qua Mason Hooks"]
 
     U5 -->|Chạy| S1["mason make pac_rename_project (hoặc ./scripts/rename_project.sh)"]
     S1 --> O5["Đổi tên toàn diện đa nền tảng bằng Mason Dart Hook & kiểm tra với melos genAlls"]
@@ -144,11 +149,12 @@ sequenceDiagram
     HookPre->>PluginDir: Kiểm tra packages/<name> tồn tại & chưa có presentation/
     Mason->>Android: Bật Compose trong build.gradle.kts
     Mason->>Android: Sinh presentation/ (MviViewModel.kt, Screen.kt, PlatformView.kt)
-    Mason->>iOS: Sinh Presentation/ (MviViewModel.swift, View.swift, PlatformView.swift)
+    Mason->>iOS: Sinh ios/<name>/Sources/<name>/Presentation/ (MviViewModel.swift, View.swift, PlatformView.swift)
     Mason->>Dart: Sinh lib/src/ui/<name>_native_view.dart (AndroidView/UiKitView)
+    Mason->>HookPre: Kiểm tra ios/<name>/Sources/<name>/Presentation/ chưa tồn tại
     Mason->>HookPost: Chạy hoàn thiện & patch mã nguồn
     HookPost->>Android: Patch *Plugin.kt để đăng ký PlatformViewFactory
-    HookPost->>iOS: Patch *Plugin.swift để đăng ký FlutterPlatformViewFactory
+    HookPost->>iOS: Patch Sources/<name>/<Name>Plugin.swift để đăng ký FlutterPlatformViewFactory (Container đã có FactoryKit)
     HookPost->>Dart: Export view widget trong lib/<name>.dart
     Mason-->>Dev: Nâng cấp hoàn tất 100% bằng Mason (Sẵn sàng code Compose & SwiftUI)
 ```
@@ -162,11 +168,14 @@ sequenceDiagram
 2. **Giai đoạn 2 (Hệ thống Bricks):** Xây dựng và kiểm thử `pac_mvi_feature`, `pac_library`, `pac_native_plugin`, `pac_add_native_ui`, và `pac_rename_project`.
 3. **Giai đoạn 3 (Cắt gọn Template):** Loại bỏ các package domain ví, dựng lại Shell 3 tab, dọn assets, cập nhật script kiểm tra CI.
 4. **Giai đoạn 4 (Đổi tên & Nghiệm thu):** Thử nghiệm chạy `mason make pac_rename_project` trên branch cách ly, build kiểm thử thành công trên cả Android và iOS.
+5. **Giai đoạn 5 (iOS DI → FactoryKit + Flutter SPM):** Bật Flutter SPM trên host (hybrid với CocoaPods). Một spike (`task_14`) đo rủi ro target hỗn hợp C/C++/Swift của `native_security` dưới release dead-strip trước. Sau đó migrate `logger_native_bridge` và `native_security` từ `.podspec` sang `Package.swift` + FactoryKit `SharedContainer` riêng mỗi plugin, và viết lại phần iOS của `pac_native_plugin` / `pac_add_native_ui` theo layout SPM. `pac_rename_project` học xử lý token `Package.swift`. **Giai đoạn 2 (gỡ hoàn toàn CocoaPods khỏi host) ngoài phạm vi — spec riêng sau.**
 
 ### Rủi ro & Biện pháp Xử lý
 - **Lỗi đường dẫn tương đối khi chuyển sang `features/`:** Chiều sâu tương đối đến `packages/` đổi thành `../../packages/*`. Biện pháp: Kiểm tra tự động bằng `dart analyze` và `melos run analyze`.
 - **Xung đột phiên bản Pigeon:** Pigeon bản mới xung đột analyzer với `theme_tailor`. Biện pháp: Ghim phiên bản Pigeon `26.3.2` tương thích với workspace.
 - **Lỗi đăng ký plugin khi đổi tên:** Đổi tên nhầm namespace plugin native có thể làm gãy bridge. Biện pháp: Khóa cứng namespace `com.danhdue.*` trong hook `pac_rename_project`.
+- **FFI symbol reachability trên SPM (`native_security`):** Target static-library của SwiftPM có thể để linker dead-strip các symbol FFI mà `DynamicLibrary.executable()`/`.process()` cần. Biện pháp: `task_14` spike chứng minh release build trước; giữ `__attribute__((used))` + lời gọi force-reference trong `register(with:)`; fallback = giữ `native_security` trên `.podspec` (hybrid chịu được) và gộp vào Giai đoạn 2.
+- **Factory 3.x chỉ còn SPM:** Không có CocoaPods spec, nên plugin sinh ra là SPM-only, không dùng được ở host chưa bật SPM. Biện pháp: host template đã bật SPM; ghi rõ trong README của brick.
 
 ---
 
@@ -182,5 +191,18 @@ sequenceDiagram
 | [Task 6](task_6_template_trimming_and_shell.md) | Cắt gọn Template & Dựng lại Shell Host | Xóa 5 package domain ví, dựng Shell 3 tab (Home stub, Scanner, Settings), dọn assets, cập nhật CI gate. |
 | [Task 7](task_7_obsolete_cleanups.md) | Dọn dẹp Bricks Lỗi thời & Script Cũ | Xóa `sample`, `test_brick`, `native_feature_module`, và các script trích xuất standalone cũ. |
 | [Task 8](task_8_rename_project_brick_and_validation.md) | Brick `pac_rename_project` & Nghiệm thu Toàn diện | Xây dựng brick `pac_rename_project` (Dart hook cross-platform) + wrapper script, test clone/rename, chạy `melos genAlls`, build APK & iOS Runner. |
+
+### Giai đoạn 5 — iOS DI → FactoryKit + Flutter SPM ([spec](2026-09-09-ios-native-plugin-factory-di-spm-design.md))
+
+| Task ID | Tiêu đề Task | Phạm vi & Tệp tác động |
+|---|---|---|
+| [Task 13](task_13_enable_flutter_spm_host.md) | Bật Flutter SPM trên host (hybrid) | `flutter config --enable-swift-package-manager`, commit lần migrate `ios/Runner.xcodeproj` một lần, cập nhật docs CI/setup, verify build với pod cũ vẫn resolve. |
+| [Task 14](task_14_spike_native_security_spm_ffi.md) | Spike — `native_security` hỗn hợp C/C++/Swift dạng Flutter SPM ffiPlugin | Spike bỏ đi: `Package.swift` hỗn hợp build ở **release** (dead-strip bật) và `getSslPin1()` resolve từ Dart trên máy thật. Output = go/no-go + hướng làm hoặc fallback podspec. |
+| [Task 15](task_15_migrate_logger_native_bridge_spm_factorykit.md) | Migrate `logger_native_bridge` → SPM + FactoryKit | `.podspec` → `ios/logger_native_bridge/Package.swift`, source → `Sources/`, `LoggerNativeBridgeContainer: SharedContainer`, chuyển Pigeon `swiftOut`, port test Swift sang container override. |
+| [Task 16](task_16_migrate_native_security_spm_factorykit.md) | Migrate `native_security` → SPM + FactoryKit | `.podspec` → `Package.swift` (target C/C++ + target Swift + module map), `NativeSecurityContainer`, FFI symbol reachability, `logger_native_bridge` qua `.package(path:)`, test + smoke secure-storage. Blocked by 14, 15. |
+| [Task 17](task_17_rewrite_pac_native_plugin_ios_spm.md) | Viết lại brick `pac_native_plugin` — phía iOS | Layout SPM mới trong `__brick__` (`ios/{{name}}/Package.swift` + `Sources/{{name}}/…`), `{{Name}}Container.swift`, consumer `@Injected`, `register(with:)` composition root, cả 2 mode `has_ui`, bỏ template podspec, viết lại `post_gen.dart`, README brick + `.gitignore`. Blocked by 13. |
+| [Task 18](task_18_update_pac_add_native_ui_ios_spm.md) | Cập nhật brick `pac_add_native_ui` cho layout SPM | `pre_gen` check path → `ios/{{name}}/Sources/{{name}}/Presentation/`, `__brick__` sinh `Presentation/` dưới `Sources/`, `post_gen` patch `*Plugin.swift` layout SPM, export barrel. Blocked by 17. |
+| [Task 19](task_19_pac_rename_project_package_swift.md) | `pac_rename_project` — xử lý token `Package.swift` | Rewrite token `name` / library-product cho mọi SPM plugin (sinh ra + 2 plugin đã migrate), giữ `com.danhdue.*`, verify rename trên clone + build iOS. Blocked by 15, 16, 17. |
+| [Task 20](task_20_phase5_docs_sync.md) | Đồng bộ tài liệu — spec §4.3/§4.4/§8 + HLD + design doc | Phản ánh SPM + FactoryKit container riêng mỗi plugin trong `2026-09-06-…-design.md`, làm mới diagram/Kanban HLD epic, ghi nhận Giai đoạn 5 xong / Giai đoạn 2 hoãn. Sau 15–19. |
 
 
