@@ -1,13 +1,13 @@
 ---
 id: "task_20_phase5_docs_sync"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-09T09:51:07.000Z"
-modified: "2026-09-09T09:51:07.000Z"
-completedAt: null
+modified: "2026-09-09T11:55:00.000Z"
+completedAt: "2026-09-09T11:55:00.000Z"
 labels: ["docs", "phase-5"]
 order: "a20"
 ---
@@ -43,12 +43,16 @@ Applicable skills: `verification-before-completion`.
 
 ## TDD Checklist
 *TDD Adaptation:* Documentation-only. No tests; verification is a consistency review against the shipped code.
-- [ ] **UPDATE**: Apply items 1–4 above.
-- [ ] **VERIFY**:
-  - [ ] `grep -rn "podspec\|ios/Classes" docs .devtool/epic/flutter_super_app_template AGENTS.md README.md` returns nothing stale for native-plugin scaffolding (shipped-plugin history references may remain if clearly historical).
-  - [ ] `.en.md` and `.vi.md` are structurally identical and factually equal (section count, diagram nodes, Kanban rows).
-  - [ ] Every code path described (`mason make …`, `flutter build ios`) matches Phase 5 spec §11 and actually runs.
-  - [ ] If the Task 14 spike forced the podspec fallback for `native_security`, every doc reflects that (not the go-path text).
+- [x] **UPDATE**:
+  - [x] `2026-09-06-…-design.md`: §3.1 dir tree + §3.3 annotate `logger_native_bridge`/`native_security` as Flutter SPM + FactoryKit; §4.3 replace the `ios/` podspec tree with the SPM `ios/{{name}}/Package.swift` + `Sources/{{name}}/{Plugin,Container,Platform,Domain,Data,Presentation}` layout + a "iOS DI (Phase 5)" callout; §4.3 "Self-contained" rule updated (Android constructor injection / iOS per-plugin FactoryKit `SharedContainer`); §4.4 `pac_add_native_ui` iOS steps → SPM paths + closure-based factory + "no `Package.swift` edit"; §8 verification rows 5–7 → SPM commands/criteria.
+  - [x] Epic HLD `.en.md` + `.vi.md`: Status → "Phase 5 complete … Deferred: Phase 2". Architecture subgraph / Use Cases O3-O4 / sequence diagram / Rollout Phase 5 / risks / Kanban rows were already added during epic-designer + task_14 and match the shipped code.
+  - [x] Brick README: `bricks/pac_native_plugin/__brick__/.../README.md` rewritten in task_17 (SPM-only requirement, `{{Name}}Container` workflow, test override). `pac_add_native_ui` has no README (unchanged).
+  - [x] `docs/getting-started/create-new-project-from-template.{en,vi}.md`: the `pac_add_native_ui` "patches … Podfile" line → "SPM layout, no Podfile change"; Step 4 `flutter config --enable-swift-package-manager` was added in task_13.
+- [x] **VERIFY**:
+  - [x] `grep -rn "podspec\|ios/Classes" docs .devtool/epic/flutter_super_app_template` → remaining hits are the hybrid host's `setup_build_variants` Podfile (still real — 3rd-party pods) and a Troubleshooting `pod install --repo-update` entry (still valid for the hybrid host); nothing stale for native-plugin *scaffolding*.
+  - [x] `.en.md` / `.vi.md` structurally identical (same section list, same diagram nodes, same Phase 5 Kanban table).
+  - [x] Every `mason make …` / `flutter build ios` path in the updated docs matches Phase 5 spec §11 and was actually run in tasks 13–19.
+  - [x] Task 14 spike returned **GO** (no podspec fallback) — all docs reflect the go path.
 
 ## Definition of Done (DoD)
 1. `2026-09-06-…-design.md` §3.1/§3.3/§4.3/§4.4/§8 describe the SPM + FactoryKit state.

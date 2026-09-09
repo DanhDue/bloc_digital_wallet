@@ -174,7 +174,7 @@ Scaffolds a reusable library in `packages/network_cache` and registers it with t
 ```bash
 mason make pac_add_native_ui --plugin_name biometric_auth
 ```
-Automatically patches Gradle, Podfile, scaffolds native MVI ViewModels, and registers `PlatformViewFactory`.
+Automatically enables Compose in Android Gradle, scaffolds native MVI ViewModels under `ios/<name>/Sources/<name>/Presentation/` (Swift Package Manager layout — no Podfile change), and patches the plugin class to register `PlatformViewFactory`.
 
 ---
 

@@ -175,7 +175,7 @@ Sinh package tiện ích tại `packages/network_cache` và tự động đăng 
 ```bash
 mason make pac_add_native_ui --plugin_name biometric_auth
 ```
-Tự động patch Gradle, Podfile, sinh ViewModel MVI native và cầu nối `PlatformViewFactory`.
+Tự động bật Compose trong Gradle (Android), sinh ViewModel MVI native vào `ios/<name>/Sources/<name>/Presentation/` (layout Swift Package Manager — không đụng Podfile), và patch plugin class để đăng ký `PlatformViewFactory`.
 
 ---
 

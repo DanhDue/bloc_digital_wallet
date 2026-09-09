@@ -51,8 +51,8 @@ bloc_digital_wallet/ (Flutter Super App Template)
 │   ├── ui_kit/                      # Design system Flutter
 │   ├── platform/                    # app_platform: DeepLinkRoutes, AppEventBus
 │   ├── logger/                      # Logging system
-│   ├── logger_native_bridge/        # Pigeon headless log bridge
-│   └── native_security/             # FFI native security
+│   ├── logger_native_bridge/        # Pigeon headless log bridge (iOS: Flutter SPM + FactoryKit — Phase 5)
+│   └── native_security/             # FFI SSL pinning (iOS: Flutter SPM, C/C++ target + FactoryKit — Phase 5)
 ├── bricks/                          # Hệ thống Mason Bricks chuẩn hóa
 ├── scripts/                         # Script quản trị, đổi tên, CI gate
 ├── melos.yaml
@@ -71,6 +71,7 @@ bloc_digital_wallet/ (Flutter Super App Template)
 ### 3.3 Danh mục Packages trong Template Flutter
 1. **Giữ nguyên 8 packages hạ tầng trong `packages/`:**
    `core`, `framework`, `network`, `ui_kit`, `platform` (`app_platform`), `logger`, `logger_native_bridge`, `native_security`.
+   *(Phase 5 — 2026-09-09 spec: `logger_native_bridge` và `native_security` chuyển phần iOS từ CocoaPods `.podspec` sang Flutter SPM `Package.swift` + FactoryKit `SharedContainer` riêng mỗi plugin. Host bật `flutter config --enable-swift-package-manager`, chạy hybrid với CocoaPods cho các pod bên thứ 3 chưa hỗ trợ SPM.)*
 2. **Feature Packages trong `features/`:**
    - `settings`: Feature mẫu thực tế (BLoC, Clean Architecture, đa ngôn ngữ, data sources).
    - `scanner`: Feature mẫu khung rỗng chuẩn mực (sinh từ brick `pac_mvi_feature`).
@@ -185,19 +186,26 @@ packages/{{name}}/
 │           ├── {{name.pascalCase()}}Action.kt / State.kt / Event.kt
 │           ├── {{name.pascalCase()}}Screen.kt # Jetpack Compose UI (@Composable)
 │           └── {{name.pascalCase()}}PlatformView.kt # Bọc ComposeView vào PlatformView
-└── ios/
-    ├── {{name}}.podspec
-    └── Classes/ (hoặc Sources/{{name}}/)
-        ├── Platform/                      # Plugin registration, Pigeon Impl hoặc PlatformViewFactory
-        ├── Domain/                        # Pure Swift: Entity, Protocol, UseCase
-        ├── Data/                          # Apple frameworks, Security, AVFoundation
-        └── Presentation/                  # [CHỈ SINH KHI has_ui=true]
-            ├── MviViewModel.swift         # Base MVI độc lập (Combine @Published + PassthroughSubject)
-            ├── {{name.pascalCase()}}ViewModel.swift
-            ├── {{name.pascalCase()}}Action.swift / State.swift / Event.swift
-            ├── {{name.pascalCase()}}View.swift # SwiftUI View
-            └── {{name.pascalCase()}}PlatformView.swift # Bọc UIHostingController vào FlutterPlatformView
+└── ios/                                  # SPM-only (KHÔNG .podspec) — xem Phase 5, 2026-09-09 spec
+    └── {{name}}/
+        ├── Package.swift                 # FlutterFramework + FactoryKit (Factory 3.x); platforms iOS 15
+        └── Sources/{{name}}/
+            ├── {{name.pascalCase()}}Plugin.swift        # composition root: register(with:)
+            ├── {{name.pascalCase()}}Container.swift      # final class …Container: SharedContainer (FactoryKit)
+            ├── Messages.g.swift          # [has_ui=false] Pigeon
+            ├── Platform/
+            │   ├── {{name.pascalCase()}}HostApiImpl.swift        # [has_ui=false] @Injected(\…Container.repository)
+            │   └── {{name.pascalCase()}}PlatformViewFactory.swift # [has_ui=true] closure-based
+            ├── Domain/                   # Pure Swift: Protocol, UseCase
+            ├── Data/                     # Apple frameworks, Security, AVFoundation
+            └── Presentation/             # [CHỈ SINH KHI has_ui=true]
+                ├── MviViewModel.swift    # Base MVI độc lập (Combine @Published + PassthroughSubject)
+                ├── {{name.pascalCase()}}ViewModel.swift  # @Injected(\…Container.repository), init() thuần
+                ├── {{name.pascalCase()}}Action.swift / State.swift / Event.swift
+                ├── {{name.pascalCase()}}View.swift # SwiftUI View
+                └── {{name.pascalCase()}}PlatformView.swift # Bọc UIHostingController vào FlutterPlatformView
 ```
+> **iOS DI (Phase 5):** mỗi plugin có một `SharedContainer` subclass riêng (FactoryKit 3.x / `import FactoryKit`), `register(with:)` là composition root, phân phối qua Flutter SPM — không còn `.podspec` (Factory 3.x SPM-only). Chi tiết ở `2026-09-09-ios-native-plugin-factory-di-spm-design.md`.
 
 #### Quy tắc Kỹ thuật Native:
 1. **Khi `has_ui: false` (Headless IPC):**
@@ -207,7 +215,7 @@ packages/{{name}}/
 2. **Khi `has_ui: true` (Native UI):**
    - **Android:** Dùng **Jetpack Compose** (`Screen.kt`) kết hợp base `MviViewModel.kt` (Coroutines/StateFlow). Nhúng vào Flutter bằng `ComposeView` thông qua `PlatformView` & `PlatformViewFactory`.
    - **iOS:** Dùng **SwiftUI** (`View.swift`) kết hợp base `MviViewModel.swift` (Combine). Nhúng vào Flutter bằng `UIHostingController` thông qua `FlutterPlatformView` & `FlutterPlatformViewFactory`.
-   - **Self-contained:** Không phụ thuộc cứng ra đường dẫn bên ngoài, không ép Dagger-Hilt hay Tuist của app chủ; plugin tự quản lý DI nội bộ (constructor injection).
+   - **Self-contained:** Không phụ thuộc cứng ra đường dẫn bên ngoài, không ép Dagger-Hilt hay Tuist của app chủ. Android: constructor injection thuần. **iOS (Phase 5): FactoryKit `SharedContainer` riêng mỗi plugin** — vẫn self-contained (không dùng `Container.shared` toàn cục, không phụ thuộc composition root của app chủ).
 
 ---
 
@@ -218,15 +226,15 @@ packages/{{name}}/
   mason make pac_add_native_ui --name <package_name>
   ```
 * **Các tác vụ tự động qua Mason Hooks:**
-  1. **Hook `pre_gen.dart`:** Kiểm tra `packages/{{name}}/` tồn tại, kiểm tra chưa có `presentation/` để tránh ghi đè.
+  1. **Hook `pre_gen.dart`:** Kiểm tra `packages/{{name}}/` tồn tại; iOS check path `ios/{{name}}/Sources/{{name}}/Presentation/` chưa có (tránh ghi đè).
   2. **Template `__brick__/`:**
      - Sinh `presentation/` trên Android (Base `MviViewModel.kt`, Compose Screen, Action/State/Event, PlatformView).
-     - Sinh `Presentation/` trên iOS (Base `MviViewModel.swift`, SwiftUI View, Action/State/Event, FlutterPlatformView).
+     - Sinh `ios/{{name}}/Sources/{{name}}/Presentation/` + `Platform/{{name.pascalCase()}}PlatformViewFactory.swift` trên iOS (layout SPM; Base `MviViewModel.swift`, SwiftUI View, Action/State/Event, PlatformView; `ViewModel` dùng `@Injected(\{{name.pascalCase()}}Container.repository)`).
      - Sinh `lib/src/ui/{{name}}_native_view.dart` (Widget bọc `AndroidView` và `UiKitView`).
   3. **Hook `post_gen.dart`:**
      - Tự động bổ sung `buildFeatures { compose = true }` vào `build.gradle.kts`.
      - Patch `*Plugin.kt` đăng ký `PlatformViewFactory`.
-     - Patch `*Plugin.swift` đăng ký `FlutterPlatformViewFactory`.
+     - Patch `Sources/{{name}}/{{name.pascalCase()}}Plugin.swift` đăng ký `{{name.pascalCase()}}PlatformViewFactory { {{name.pascalCase()}}ViewModel() }` (closure-based). **Không sửa `Package.swift`** (FactoryKit đã có từ `pac_native_plugin`).
      - Thêm dòng export vào barrel file `lib/{{name}}.dart`.
 
 ---
@@ -284,9 +292,9 @@ flowchart TD
 | 2 | **CI Boundary Gate** | `scripts/check_module_boundaries.sh` | Quét sạch các file trong `features/*`, phát hiện lỗi nếu `features/A` import `features/B`, pass khi import `packages/*`. |
 | 3 | **Brick `pac_mvi_feature`** | `mason make pac_mvi_feature --name profile` | Sinh vào `features/profile/`, tự động wire Router, DI, và DeepLinkRoutes thành công. |
 | 4 | **Brick `pac_library`** | `mason make pac_library --name cache_manager` | Sinh vào `packages/cache_manager/`, `flutter test` trong package chạy pass. |
-| 5 | **Brick `pac_native_plugin (No-UI)`** | `mason make pac_native_plugin --name device_info --has_ui false` | Chạy Pigeon sinh code ra Kotlin & Swift, gọi qua lại giữa Dart và Native thành công. |
-| 6 | **Brick `pac_native_plugin (With-UI)`** | `mason make pac_native_plugin --name custom_camera --has_ui true` | Render thành công Jetpack Compose trên Android và SwiftUI trên iOS qua PlatformView. |
-| 7 | **Brick `pac_add_native_ui`** | `./scripts/add_native_ui.sh device_info` | Tự động nâng cấp package `device_info` lên Compose + SwiftUI, patch plugin class thành công. |
+| 5 | **Brick `pac_native_plugin (No-UI)`** | `mason make pac_native_plugin --name device_info --has_ui false` | Sinh `ios/device_info/Package.swift` (không `.podspec`) + `Sources/device_info/{DeviceInfoPlugin,DeviceInfoContainer,Platform/DeviceInfoHostApiImpl}.swift`; `flutter build ios` xanh, `device_info` resolve qua SPM, `@Injected` từ `DeviceInfoContainer`. |
+| 6 | **Brick `pac_native_plugin (With-UI)`** | `mason make pac_native_plugin --name custom_camera --has_ui true` | Sinh thêm `Sources/custom_camera/Presentation/` + `Platform/CustomCameraPlatformViewFactory.swift`; Jetpack Compose (Android) + SwiftUI qua PlatformView (iOS); `flutter build ios` xanh. |
+| 7 | **Brick `pac_add_native_ui`** | `mason make pac_add_native_ui --name device_info` | Nâng cấp `device_info` (headless) lên có UI: thêm `Sources/device_info/Presentation/` + `Platform/…PlatformViewFactory.swift`, patch `Sources/device_info/DeviceInfoPlugin.swift` đăng ký factory; `flutter build ios` xanh. |
 | 8 | **Script Đổi tên Template** | `./scripts/rename_project.sh SuperApp com.danhdue.superapp` | Đổi sạch sẽ tên, bundle id, `melos genAlls` pass, build APK và iOS Runner thành công. |
 
 ---

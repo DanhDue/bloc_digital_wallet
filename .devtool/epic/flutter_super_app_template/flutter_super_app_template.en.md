@@ -15,7 +15,7 @@
 
 ## Meta Data
 - **Epic**: `flutter_super_app_template`
-- **Status**: In-Progress (Phase 5: iOS DI → FactoryKit + Flutter SPM)
+- **Status**: Phase 5 complete (iOS DI → FactoryKit + Flutter SPM). Deferred: Phase 2 — full CocoaPods removal from the host (separate future spec).
 - **Target Release**: Flutter Super App Template v1.0
 - **Source Spec**: [2026-09-06-flutter-super-app-template-design.md](2026-09-06-flutter-super-app-template-design.md)
 - **Phase 5 Spec**: [2026-09-09-ios-native-plugin-factory-di-spm-design.md](2026-09-09-ios-native-plugin-factory-di-spm-design.md)
