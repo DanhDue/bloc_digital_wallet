@@ -3,8 +3,8 @@
 ## 1. Metadata
 - **Topic**: `ios-native-plugin-factory-di-spm`
 - **Date**: 2026-09-09
-- **Status**: Draft — pending user review
-- **Parent Epic**: `flutter_super_app_template` (amends `.devtool/epic/flutter_super_app_template/2026-09-06-flutter-super-app-template-design.md` §4.3, §4.4, §8)
+- **Status**: Approved — routing to `epic-designer`
+- **Parent Epic**: `flutter_super_app_template` (amends [`2026-09-06-flutter-super-app-template-design.md`](2026-09-06-flutter-super-app-template-design.md) §4.3, §4.4, §8)
 - **Reference (read-only)**: `/Users/danhdueexoictif/AllProjects/digital_wallet/ios_digital_wallet` — already migrated to Factory at commit `44716e9 [DI] use the Factory for the DI.` Used only as the pattern reference; not modified by this work.
 - **Chosen approach**: Phase 1 = enable Flutter SPM on the host (hybrid) + migrate **every local package that has iOS native code** (`logger_native_bridge`, `native_security`) **and** the two bricks (`pac_native_plugin`, `pac_add_native_ui`) to **SPM + FactoryKit per-plugin `SharedContainer`**. Phase 2 (separate future spec) = remove CocoaPods entirely from the host.
 
@@ -292,7 +292,7 @@ Vars unchanged: `name` (string), `has_ui` (bool, default `false`). No `android_p
 
 ## 12. Documentation updates
 
-- `.devtool/epic/flutter_super_app_template/2026-09-06-flutter-super-app-template-design.md`:
+- [`2026-09-06-flutter-super-app-template-design.md`](2026-09-06-flutter-super-app-template-design.md):
   - §3.1 / §3.3 — note that `logger_native_bridge` and `native_security` are SPM + FactoryKit.
   - §4.3 — replace the `ios/` podspec layout with the SPM layout from §6.1; note "iOS DI = FactoryKit per-plugin `SharedContainer`; SPM-only".
   - §4.4 — `pac_add_native_ui` iOS steps updated per §7.
@@ -304,4 +304,4 @@ Vars unchanged: `name` (string), `has_ui` (bool, default `false`). No `android_p
 
 ## 13. Next step
 
-After user review of this spec → invoke **`epic-designer`** with this spec's path (D7). The spec is relocated into `.devtool/epic/flutter_super_app_template/` so it sits with the epic's other docs; `epic-designer` produces the HLD (architecture / sequence diagrams) and the Kanban task files, including a dedicated spike task for `native_security` (§5.3 / R3). Phase 2 (full CocoaPods removal from the host) is a separate future spec under the same epic.
+Approved → `epic-designer` (D7). This spec now lives in `.devtool/epic/flutter_super_app_template/` alongside the epic's other docs. `epic-designer` appends the Phase 1 tasks to the existing epic (continuing the `task_*` sequence) and updates the epic HLD's diagrams / Kanban list, including a dedicated spike task for `native_security` (§5.3 / R3). Phase 2 (full CocoaPods removal from the host) is a separate future spec under the same epic.
