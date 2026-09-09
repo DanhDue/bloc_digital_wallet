@@ -1,12 +1,12 @@
 ---
 id: "task_17_rewrite_pac_native_plugin_ios_spm"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-09T09:51:07.000Z"
-modified: "2026-09-09T11:20:00.000Z"
+modified: "2026-09-09T12:20:00.000Z"
 completedAt: "2026-09-09T11:20:00.000Z"
 labels: ["mason", "brick", "ios", "spm", "factorykit", "phase-5"]
 order: "a17"
