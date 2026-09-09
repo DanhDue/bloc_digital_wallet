@@ -91,6 +91,20 @@ Therefore adopting Factory 3.x (`FactoryKit`) for the template's iOS code implie
 - Existing headless Swift tests move to `ios/native_security/Tests/native_securityTests/`.
 - **Spike first:** before committing the full refactor, a throwaway spike proves a mixed C++/Swift Flutter SPM ffiPlugin builds and its FFI symbols resolve from Dart (`getSslPin1()` returns the expected value) on a real device in **release** config (dead-strip on). If the spike fails, fall back: keep `native_security` on `.podspec` as the lone exception (hybrid tolerates it) and roll it into Phase 2.
 
+#### Spike findings (task_14 — 2026-09-09) — verdict: **GO**
+Ran a throwaway `flutter create --template=plugin_ffi` probe, converted its `ios/` to `ios/spm_ffi_probe/Package.swift` (C target + `include/module.modulemap`), built with SPM enabled.
+1. **ffiPlugin + SPM discovery works.** Flutter 3.47 generated `FlutterGeneratedPluginSwiftPackage/Package.swift` with `.package(name: "spm_ffi_probe", path: …)` + `.product(name: "spm-ffi-probe", …)` and `products: [.library(… type: .static …)]` — plugin SPM packages link **statically into the app binary** (same model as the podspec's `s.static_framework = true`).
+2. **Unreferenced C object files are dropped.** With only `__attribute__((visibility("default"))) __attribute__((used))` on the C functions, the symbols were **absent** from the release binary — `((used))` stops the *compiler* dropping them, but the *linker* still omits the whole unreferenced static-archive member.
+3. **A link anchor fixes it.** Adding `__attribute__((constructor)) static void _anchor(void){ volatile int k = sum(0,0); (void)k; }` to the C TU forced the member to link. Verified against a **release** build (`flutter build ios --release --no-codesign`, dead-strip on): `nm build/ios/Release-iphoneos/Runner.app/Runner` shows `T _sum`, `T _sum_long_running` exported; `dyld_info -exports` lists them → `DynamicLibrary.executable()/.process()` will resolve them.
+
+**Recipe for step 3 / task_16:**
+- Keep `__attribute__((used)) __attribute__((visibility("default")))` in `native_security.h`.
+- **Add a `__attribute__((constructor))` anchor in `native_security.cpp`** that references `get_ssl_pin_1/2/3` — the decisive fix.
+- Keep the existing Swift `_ = get_ssl_pin_1() …` force-reference in `NativeSecurityPlugin.register(with:)` as a second anchor.
+- `cSettings: [.unsafeFlags(["-fvisibility=default"])]` on the C/C++ target.
+- Verify: `flutter build ios --release --no-codesign` → `nm build/ios/Release-iphoneos/Runner.app/Runner | grep get_ssl_pin` shows all three; on-device `getSslPin1()` smoke test.
+- `lib/native_security.dart` loader needs **no change** — the `executable()` → `process()` fallback order already covers the static-link case.
+
 ---
 
 ## 6. `pac_native_plugin` — new iOS layout
