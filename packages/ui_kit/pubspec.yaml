@@ -22,11 +22,9 @@ dependencies:
   cached_network_image: ^3.4.1
   flutter_boring_avatars: ^2.0.1
   pretty_qr_code: ^3.5.0
-  image_gallery_saver_plus: ^4.0.1
   flutter_smart_dialog: ^4.9.4
   modal_bottom_sheet: ^3.0.0
   card_swiper: ^3.0.1
-  animated_item: ^0.0.2
   animated_text_kit: ^4.3.0
   # Theme
   theme_tailor_annotation: ^3.1.1

@@ -2,10 +2,12 @@
 
 // coverage:ignore-file
 
+import 'package:d3_nexus_shield/di/native_security_fingerprint_source.dart';
 import 'package:d3_nexus_shield/logging/module_gated_interceptor.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:network/network.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -15,6 +17,18 @@ import 'package:talker_flutter/talker_flutter.dart';
 /// be done within individual packages (e.g., adding logging interceptors to Dio).
 @module
 abstract class AppNetworkModule {
+  /// The app's SSL strategy — replaces `packages/network`'s no-pinning default
+  /// (which `lib/di/injection.dart` unregisters first). Pins non-debug builds
+  /// against `native_security`'s FFI fingerprints when
+  /// `EnvironmentConfig.enableSslPinning` (`ENABLE_SSL_PINNING`) is true; debug
+  /// builds still accept every certificate.
+  ///
+  /// This is the seam for per-backend pinning: give another client's
+  /// `DioFactory` a different `AutoSslConfiguration(source: …)` or `NoSslPinning()`.
+  @lazySingleton
+  SslConfiguration sslConfiguration() =>
+      const AutoSslConfiguration(source: NativeSecurityFingerprintSource());
+
   /// Registers TalkerDioLogger onto the global Dio instance from the app
   /// layer, moved here from `packages/network`'s `DioFactory` per the
   /// logging-refactor epic's Phase 4 (talker_dio_logger no longer lives in

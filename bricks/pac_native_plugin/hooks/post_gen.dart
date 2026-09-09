@@ -19,27 +19,21 @@ Future<void> run(HookContext context) async {
     if (!hasUi) {
       // Headless: drop the native-UI surface (Android + iOS + Dart).
       for (final dir in [
-        Directory(
-          '$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/presentation',
-        ),
+        Directory('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/presentation'),
         Directory('$iosSources/Presentation'),
         Directory('$pkg/lib/src/ui'),
       ]) {
         if (dir.existsSync()) dir.deleteSync(recursive: true);
       }
       // iOS PlatformViewFactory belongs to the has_ui path only.
-      final iosFactory = File(
-        '$iosSources/Platform/${name.pascalCase}PlatformViewFactory.swift',
-      );
+      final iosFactory = File('$iosSources/Platform/${name.pascalCase}PlatformViewFactory.swift');
       if (iosFactory.existsSync()) iosFactory.deleteSync();
     } else {
       // Native UI: drop the Pigeon/headless surface.
       for (final f in [
         Directory('$pkg/pigeons'),
         File('$pkg/lib/src/messages.g.dart'),
-        File(
-          '$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/Messages.g.kt',
-        ),
+        File('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/Messages.g.kt'),
         File('$iosSources/Messages.g.swift'),
         File('$iosSources/Platform/${name.pascalCase}HostApiImpl.swift'),
       ]) {
@@ -73,11 +67,7 @@ Future<void> run(HookContext context) async {
       context.logger.err('melos bootstrap failed: ${bootstrap.stderr}');
     }
     progress.update('Running flutter pub get...');
-    final pubGet = await Process.run('fvm', [
-      'flutter',
-      'pub',
-      'get',
-    ], runInShell: true);
+    final pubGet = await Process.run('fvm', ['flutter', 'pub', 'get'], runInShell: true);
     if (pubGet.exitCode != 0) {
       // Non-fatal: `fvm` may be absent; the next `flutter` invocation resolves it.
       context.logger.warn('flutter pub get skipped/failed: ${pubGet.stderr}');

@@ -2,10 +2,10 @@
 
 // coverage:ignore-file
 
-import 'package:core/core.dart';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class PrettyAnimatedQrView extends StatefulWidget {
@@ -40,24 +40,17 @@ class PrettyAnimatedQrViewState extends State<PrettyAnimatedQrView> {
     }
   }
 
-  void exportImage(String fileName) async {
-    final fileNameWithCreatedTime = "${fileName}_${DateTime.now().millisecond}";
-    final rawData = await widget.qrImage.toImageAsBytes(size: 1024, decoration: widget.decoration);
-    if (rawData != null) {
-      final data = rawData.buffer.asUint8List(rawData.offsetInBytes, rawData.lengthInBytes);
-      final result = await ImageGallerySaverPlus.saveImage(
-        data,
-        quality: 100,
-        name: fileNameWithCreatedTime,
-      );
-      if (result["isSuccess"] == true) {
-        if (!mounted) return;
-        SmartDialog.showToast(
-          context.coreT.core.common.qrCodeIsSaveToGallery,
-          displayTime: ToastDuration.lengthLong,
-        );
-      }
-    }
+  Future<Uint8List?> exportImageBytes({
+    int size = 1024,
+    ui.ImageByteFormat format = ui.ImageByteFormat.png,
+  }) async {
+    final rawData = await widget.qrImage.toImageAsBytes(
+      size: size,
+      decoration: widget.decoration,
+      format: format,
+    );
+    if (rawData == null) return null;
+    return rawData.buffer.asUint8List(rawData.offsetInBytes, rawData.lengthInBytes);
   }
 
   @override

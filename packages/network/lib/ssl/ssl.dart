@@ -4,9 +4,17 @@
 //
 // Available implementations:
 // - DebugSslConfiguration - Accepts all certificates (dev only)
-// - HardenedSslPinning - FFI-based fingerprint validation
-// - AutoSslConfiguration - Auto-selects based on build mode (recommended)
-export 'ssl_configuration.dart';
+// - HardenedSslPinning    - Certificate fingerprint validation (needs an SslFingerprintSource)
+// - NoSslPinning          - System trust store, no pinning
+// - AutoSslConfiguration  - Build-mode + config aware selector (recommended)
+//
+// Fingerprint sources:
+// - SslFingerprintSource   - interface, bound in the app's composition layer
+// - StaticFingerprintSource - pure-Dart, fingerprints passed in directly
+export 'auto_ssl_configuration.dart';
 export 'debug_ssl_configuration.dart';
 export 'hardened_ssl_pinning.dart';
-export 'auto_ssl_configuration.dart';
+export 'no_ssl_pinning.dart';
+export 'ssl_configuration.dart';
+export 'ssl_fingerprint_source.dart';
+export 'static_fingerprint_source.dart';

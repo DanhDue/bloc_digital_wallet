@@ -41,6 +41,7 @@ IGNORE_PATTERNS=(
   "**/MainActivity.java"
   "**/FlutterMultiDexApplication.java"
   "**/GeneratedPluginRegistrant.swift"
+  "**/Package.swift"
   "**/Pods/**"
   "**/*.gradle"
   "**/*.gradle.kts"

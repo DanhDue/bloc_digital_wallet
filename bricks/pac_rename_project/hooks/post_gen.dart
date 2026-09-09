@@ -29,10 +29,7 @@ Future<void> run(HookContext context) async {
 
     // 2. Update pubspec.yaml
     progress.update('Updating pubspec.yaml...');
-    pubspecContent = pubspecContent.replaceFirst(
-      nameRegex,
-      'name: $packageName',
-    );
+    pubspecContent = pubspecContent.replaceFirst(nameRegex, 'name: $packageName');
     await rootPubspecFile.writeAsString(pubspecContent);
 
     // 3. Update melos.yaml
@@ -40,17 +37,15 @@ Future<void> run(HookContext context) async {
     if (melosFile.existsSync()) {
       progress.update('Updating melos.yaml...');
       var melosContent = await melosFile.readAsString();
-      melosContent = melosContent.replaceFirst(
-        nameRegex,
-        'name: $packageName',
-      );
+      melosContent = melosContent.replaceFirst(nameRegex, 'name: $packageName');
       await melosFile.writeAsString(melosContent);
     }
 
     // 4. Update Dart package imports in lib/, test/, features/, integration_test/
     // CRITICAL: Strictly preserve packages/ (vendor locked)
-    progress
-        .update('Updating Dart imports from package:$oldPackageName/ to package:$packageName/...');
+    progress.update(
+      'Updating Dart imports from package:$oldPackageName/ to package:$packageName/...',
+    );
     final scanDirs = ['lib', 'test', 'features', 'integration_test'];
     final oldImportPrefix = 'package:$oldPackageName/';
     final newImportPrefix = 'package:$packageName/';
@@ -142,10 +137,7 @@ Future<void> run(HookContext context) async {
     if (pbxprojFile.existsSync()) {
       var pbxContent = await pbxprojFile.readAsString();
       // Replace bundle ID
-      pbxContent = pbxContent.replaceAll(
-        RegExp(r'com\.example\.blocDigitalWallet'),
-        bundleId,
-      );
+      pbxContent = pbxContent.replaceAll(RegExp(r'com\.example\.blocDigitalWallet'), bundleId);
       await pbxprojFile.writeAsString(pbxContent);
     }
 
@@ -166,10 +158,7 @@ Future<void> run(HookContext context) async {
     final verifyFlavors = File('${rootDir.path}/ios/scripts/verify_flavors.sh');
     if (verifyFlavors.existsSync()) {
       var verifyContent = await verifyFlavors.readAsString();
-      verifyContent = verifyContent.replaceAll(
-        RegExp(r'BASE_ID="[^"]+"'),
-        'BASE_ID="$bundleId"',
-      );
+      verifyContent = verifyContent.replaceAll(RegExp(r'BASE_ID="[^"]+"'), 'BASE_ID="$bundleId"');
       await verifyFlavors.writeAsString(verifyContent);
     }
 
@@ -310,9 +299,7 @@ Future<void> run(HookContext context) async {
       if (offenders.isEmpty) {
         context.logger.info('  SPM plugin manifests untouched (vendor-stable).');
       } else {
-        context.logger.err(
-          'Rename leaked into SPM manifests:\n  ${offenders.join('\n  ')}',
-        );
+        context.logger.err('Rename leaked into SPM manifests:\n  ${offenders.join('\n  ')}');
       }
     }
 

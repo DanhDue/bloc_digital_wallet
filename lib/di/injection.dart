@@ -19,5 +19,15 @@ Future<void> configureDependencies() async {
   scanner.configureModuleDependencies(getIt);
   await settings.configureModuleDependencies(getIt);
 
+  // `packages/network` registers a no-pinning `SslConfiguration` default; the
+  // app owns SSL pinning (it's the only layer allowed to touch
+  // `native_security`). Drop the package default so `AppNetworkModule`'s
+  // `sslConfiguration` — registered by `$initGetIt()` below — takes over. Safe
+  // to unregister here: `Dio`/`refreshDio` are lazy, nothing has resolved
+  // `SslConfiguration` yet.
+  if (getIt.isRegistered<network.SslConfiguration>()) {
+    getIt.unregister<network.SslConfiguration>();
+  }
+
   getIt.$initGetIt();
 }

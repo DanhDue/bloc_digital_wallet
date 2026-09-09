@@ -1,0 +1,4 @@
+# Analysis options for Mason bricks and hooks (pure Dart)
+analyzer:
+  exclude:
+    - "**/__brick__/**"

@@ -39,6 +39,16 @@ class EnvironmentConfig {
     defaultValue: true,
   );
 
+  /// Enable TLS certificate pinning in non-debug builds.
+  ///
+  /// Debug builds ignore this (they always accept every certificate). When
+  /// true, a non-debug build pins only if the app has also wired an
+  /// `SslFingerprintSource`; when false it uses the system trust store.
+  static const bool enableSslPinning = bool.fromEnvironment(
+    'ENABLE_SSL_PINNING',
+    defaultValue: true,
+  );
+
   /// Check if running in development
   static bool get isDevelopment => environment == 'development';
 
@@ -72,6 +82,7 @@ API Version: $apiVersion
 Full API URL: $fullApiUrl
 Enable Logging: $enableLogging
 Enable Analytics: $enableAnalytics
+Enable SSL Pinning: $enableSslPinning
 Show Debug Banner: $showDebugBanner
 Is Development: $isDevelopment
 Is Staging: $isStaging

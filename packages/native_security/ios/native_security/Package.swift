@@ -1,4 +1,8 @@
 // swift-tools-version: 5.9
+// Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
+
+// coverage:ignore-file
+
 import PackageDescription
 
 // `native_security` iOS — migrated from CocoaPods (`../native_security.podspec`)

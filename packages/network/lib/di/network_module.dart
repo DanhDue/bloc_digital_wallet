@@ -18,6 +18,10 @@ void configureModuleDependencies(GetIt getIt) => getIt.$initModuleGetIt();
 
 @module
 abstract class NetworkModule {
+  /// Package default: no fingerprint source ⇒ no pinning (non-debug builds use
+  /// the system trust store). The app's composition layer replaces this
+  /// registration with an `AutoSslConfiguration` that carries a real
+  /// `SslFingerprintSource` — see `lib/di/injection.dart`.
   @lazySingleton
   SslConfiguration get sslConfiguration => const AutoSslConfiguration();
 
@@ -29,7 +33,7 @@ abstract class NetworkModule {
     ),
   );
 
-  @singleton
+  @lazySingleton
   Dio provideDio(SslConfiguration sslConfiguration, Talker talker) => DioFactory(
     talker,
     sslConfiguration: sslConfiguration,
@@ -37,7 +41,7 @@ abstract class NetworkModule {
     enableLogging: EnvironmentConfig.enableLogging,
   ).dio;
 
-  @singleton
+  @lazySingleton
   @Named('refreshDio')
   Dio provideRefreshDio(SslConfiguration sslConfiguration, Talker talker) => DioFactory(
     talker,

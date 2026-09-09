@@ -25,12 +25,14 @@ class DioFactory {
   /// in the app layer (see `lib/di/app_network_module.dart`), gated on
   /// `core.EnvironmentConfig.enableLogging` directly. Kept as a parameter
   /// for API stability with existing callers (e.g. `NetworkModule`).
-  /// [sslConfiguration] - SSL pinning strategy (default: AutoSslConfiguration)
+  /// [sslConfiguration] - SSL strategy (default: `AutoSslConfiguration()`).
+  ///   Pass a different one per backend for independent pinning.
   ///
   /// Available strategies:
-  /// - [DebugSslConfiguration] - Accepts all certificates (dev only)
-  /// - [HardenedSslPinning] - FFI-based fingerprint validation
-  /// - [AutoSslConfiguration] - Auto-selects based on build mode (recommended)
+  /// - [DebugSslConfiguration] - accepts all certificates (dev only)
+  /// - [HardenedSslPinning] - fingerprint validation against an `SslFingerprintSource`
+  /// - [NoSslPinning] - system trust store, no pinning
+  /// - [AutoSslConfiguration] - build-mode + `ENABLE_SSL_PINNING` aware selector (recommended)
   DioFactory(
     this._talker, {
     required String baseUrl,

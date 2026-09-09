@@ -12,8 +12,6 @@ dependencies:
     sdk: flutter
   core:
     path: ../core
-  native_security:
-    path: ../native_security
   logger:
     path: ../logger
   # Network-specific dependencies

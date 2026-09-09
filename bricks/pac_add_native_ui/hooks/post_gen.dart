@@ -78,7 +78,8 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
         )
 ''';
         if (content.contains(
-            'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {')) {
+          'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {',
+        )) {
           content = content.replaceFirst(
             'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {',
             'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {\n$factoryRegistration',
@@ -101,8 +102,9 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
         let nativeViewFactory = ${pascalCaseName}PlatformViewFactory { ${pascalCaseName}ViewModel() }
         registrar.register(nativeViewFactory, withId: "com.danhdue.$snakeCaseName/native_view")
 ''';
-        if (content
-            .contains('public static func register(with registrar: FlutterPluginRegistrar) {')) {
+        if (content.contains(
+          'public static func register(with registrar: FlutterPluginRegistrar) {',
+        )) {
           content = content.replaceFirst(
             'public static func register(with registrar: FlutterPluginRegistrar) {',
             'public static func register(with registrar: FlutterPluginRegistrar) {\n$factoryRegistration',

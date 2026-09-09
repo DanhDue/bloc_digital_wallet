@@ -7,6 +7,7 @@
   "API_VERSION": "v1",
   "ENABLE_LOGGING": "true",
   "ENABLE_ANALYTICS": "false",
+  "ENABLE_SSL_PINNING": "false",
   "SHOW_DEBUG_BANNER": "true",
   "FIREBASE_OPTIONS": {
     "apiKey": "dev-api-key",
