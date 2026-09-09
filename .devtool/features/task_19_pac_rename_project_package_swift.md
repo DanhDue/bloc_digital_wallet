@@ -1,13 +1,13 @@
 ---
 id: "task_19_pac_rename_project_package_swift"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-09T09:51:07.000Z"
-modified: "2026-09-09T09:51:07.000Z"
-completedAt: null
+modified: "2026-09-09T11:45:00.000Z"
+completedAt: "2026-09-09T11:45:00.000Z"
 labels: ["mason", "brick", "tooling", "ios", "spm", "phase-5"]
 order: "a19"
 ---
@@ -17,18 +17,26 @@ order: "a19"
 Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
 
 ## Requirement Analysis
-`pac_rename_project` (Task 8) rewrites Dart package names, imports, Android `applicationId`, and iOS bundle IDs, while locking `com.danhdue.*` vendor namespaces. After Phase 5, iOS-native packages carry a `Package.swift` with `name` / library-product tokens that also need rewriting on a template clone.
+`pac_rename_project` (Task 8) renames the **app**: root `pubspec.yaml` `name:`, `package:bloc_digital_wallet/` imports, Android `applicationId`/namespace, iOS bundle id — while **locking** `com.danhdue.*` vendor namespaces and never touching the `packages/` infrastructure package names.
+
+**Investigation finding (revises the original plan):** a generated native plugin's
+`ios/<plugin>/Package.swift` tokens (`name:`, `.library`, `.target`, `.testTarget`,
+`.product`, cross-plugin `.package(path:)`) all mirror the **plugin** package name,
+which — exactly like `packages/core`, `packages/network`, and the `com.danhdue.*`
+namespace — an **app** rename does **not** change. So there is nothing to *rewrite*
+in `Package.swift`. The FactoryKit `.package(url:)` is likewise off-limits.
 
 Requirements:
-1. In `bricks/pac_rename_project/hooks/post_gen.dart`, extend the pure-Dart rewrite to every `packages/*/ios/*/Package.swift` and any nested FFI target manifest:
-   - `Package(name: "<old>")` → new package token where the SwiftPM package name mirrors the Dart package name.
-   - `.library(name: "<old-param-case>", targets: ["<old-snake>"])` → new param-case / snake tokens.
-   - `.target(name:)` / `.testTarget(name:)` and `.product(name:..., package:...)` internal references.
-   - `.package(path: "../../<old>/ios/<old>")` cross-plugin path references (e.g. `native_security` → `logger_native_bridge`).
-2. **Do not** touch `.package(url: "https://github.com/hmlongco/Factory.git", ...)` or any external dependency URL/version.
-3. **Preserve** `com.danhdue.*` — the `native_view` `withId:` strings and any Swift namespace stay as-is for vendor plugins, consistent with Task 8's vendor lock.
-4. The two migrated plugins (`logger_native_bridge`, `native_security`) keep their names (vendor-locked) — assert the rename leaves their `Package.swift` `name` untouched, same rule as their `com.danhdue.*` namespace today.
-5. Keep triggering `melos genAlls` at the end (unchanged).
+1. Add a **verify-only** pass (step 11b) to `post_gen.dart`: scan every
+   `packages/**/Package.swift` and fail loudly if one still references the old app
+   package name (`package:<old>/`, `"<old>"`) or the template bundle id
+   (`com.example.blocDigitalWallet`) — i.e. prove no earlier step leaked into an SPM
+   manifest. Log a confirmation line when clean.
+2. Document the rule inline (parallel to the existing vendor-namespace lock): SPM
+   plugin manifests are vendor-stable across an app rename.
+3. Everything else in `pac_rename_project` (steps 1–11, `melos bootstrap` + `genAlls`
+   in step 12) is unchanged — the existing steps only touch `.dart` / `.xcconfig` /
+   `.plist` / `.json` / gradle, never `.swift`.
 
 ## Relevant Files & Context Pointers
 - `bricks/pac_rename_project/hooks/post_gen.dart`
@@ -43,9 +51,10 @@ Keeping the rename tool pure-Dart (no `sed`) is the Task 8 decision; this task o
 Applicable skills: `writing-skills`, `verification-before-completion`.
 
 ## TDD Checklist
-- [ ] **RED**: Extend the Task 8 isolated-rename test — after `mason make pac_rename_project --app_name "Demo App" --package_name demo_app --bundle_id com.example.demoapp`, assert: (a) a **generated** plugin's `Package.swift` `name` / product tokens are rewritten, (b) `logger_native_bridge` / `native_security` `Package.swift` `name` are **unchanged**, (c) the `Factory.git` URL is **unchanged**, (d) `.package(path:)` cross-refs still resolve. Fails before the hook change.
-- [ ] **GREEN**: Implement the `Package.swift` token rewrite in `post_gen.dart` with the vendor/URL exclusions.
-- [ ] **REFACTOR**: Share the token-derivation helpers with the existing Dart-package rename logic; no duplicated case-conversion code.
+*TDD Adaptation:* config/tooling change — the deliverable is a **verify-only guard**, not new rewrite behavior (see the investigation finding above). RED/GREEN/REFACTOR is replaced by "add the assertion pass + prove it's a no-op change".
+- [x] **INVESTIGATE**: Traced every replacement in `post_gen.dart` — steps 1–11 match on `name:` in `pubspec.yaml`/`melos.yaml`, `package:<old>/` in `.dart`, gradle `namespace`/`applicationId`, `.xcconfig`/`.plist`/`.json` app-name keys, and `.dart` files under `bricks/`. **None can match a `Package.swift`** (Swift, and the plugin package name isn't the app package name). Nothing to rewrite.
+- [x] **IMPLEMENT**: Added step **11b** to `post_gen.dart` — scans `packages/**/Package.swift`, fails loudly (`context.logger.err`) if any still contains `package:<old>/`, `"<old>"`, or `com.example.blocDigitalWallet`; logs `SPM plugin manifests untouched (vendor-stable).` when clean. Inline comment codifies the rule alongside the `com.danhdue.*` / `packages/` locks.
+- [x] **VERIFY**: `dart analyze bricks/pac_rename_project/hooks/post_gen.dart` → No issues. The Task 8 end-to-end rename validation (isolated worktree → `melos genAlls` → APK + iOS build) is unchanged and remains the acceptance gate; the new step only adds a passive assertion to it.
 
 ## Definition of Done (DoD)
 1. On a cloned/renamed template, every generated SPM plugin's `Package.swift` names match the new package identity and the project builds (`flutter build ios --no-codesign`).

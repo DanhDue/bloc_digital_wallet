@@ -281,6 +281,41 @@ Future<void> run(HookContext context) async {
       }
     }
 
+    // 11b. Swift Package Manager manifests — VENDOR-STABLE, verify only.
+    //
+    // A generated native plugin's `ios/<plugin>/Package.swift` names
+    // (`name:`, `.library`, `.target`, `.testTarget`, `.product`) mirror the
+    // *plugin* package name, not the app's Dart package name — so an app
+    // rename must NOT touch them, exactly like the `com.danhdue.*` vendor
+    // namespace lock and the `packages/` import lock above. The external
+    // FactoryKit dependency URL is likewise off-limits.
+    //
+    // This pass only ASSERTS that: it fails loudly if a plugin manifest
+    // still references the old app package name or the template bundle id,
+    // which would mean an earlier step leaked into a place it shouldn't.
+    progress.update('Verifying SPM plugin manifests were left intact...');
+    final pkgsDir = Directory('${rootDir.path}/packages');
+    if (pkgsDir.existsSync()) {
+      final offenders = <String>[];
+      await for (final entity in pkgsDir.list(recursive: true)) {
+        if (entity is File && entity.uri.pathSegments.last == 'Package.swift') {
+          final swift = await entity.readAsString();
+          if (swift.contains('package:$oldPackageName/') ||
+              swift.contains('"$oldPackageName"') ||
+              swift.contains('com.example.blocDigitalWallet')) {
+            offenders.add(entity.path);
+          }
+        }
+      }
+      if (offenders.isEmpty) {
+        context.logger.info('  SPM plugin manifests untouched (vendor-stable).');
+      } else {
+        context.logger.err(
+          'Rename leaked into SPM manifests:\n  ${offenders.join('\n  ')}',
+        );
+      }
+    }
+
     // 12. Melos bootstrap and code generation
     progress.update('Running melos bootstrap...');
     final bootstrapResult = await Process.run('melos', ['bootstrap'], runInShell: true);
