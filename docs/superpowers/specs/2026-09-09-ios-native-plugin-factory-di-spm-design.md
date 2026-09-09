@@ -1,4 +1,4 @@
-# iOS Native Plugin — FactoryKit DI + Flutter Swift Package Manager — Design Spec
+# iOS Template DI → FactoryKit + Flutter Swift Package Manager (Phase 1) — Design Spec
 
 ## 1. Metadata
 - **Topic**: `ios-native-plugin-factory-di-spm`
@@ -58,7 +58,7 @@ Therefore adopting Factory 3.x (`FactoryKit`) for the template's iOS code implie
 | # | Decision | Rationale |
 |---|---|---|
 | D1 | Generated plugins are **SPM-only** — the brick emits `ios/<name>/Package.swift` and **no `.podspec`**. | FactoryKit 3.x has no CocoaPods spec; dual support would force the pod path onto `Factory` 2.4.3 and split the API surface (`import Factory` vs `import FactoryKit`). The template host has SPM enabled, so generated plugins resolve. Trade-off accepted: a generated plugin is not consumable by a non-SPM host. |
-| D2 | DI library: **FactoryKit 3.x** via `.package(url: "https://github.com/hmlongco/Factory.git", from: "3.x")`, exact version pinned in the brick template so every generated `Package.swift` matches. | Current, maintained line; Swift 6 concurrency & Swift Testing friendly. |
+| D2 | DI library: **FactoryKit 3.x** via `.package(url: "https://github.com/hmlongco/Factory.git", exact: "<3.x>")` — one exact version, pinned identically in the brick template and in `logger_native_bridge` / `native_security`. | Current, maintained line; Swift 6 concurrency & Swift Testing friendly. |
 | D3 | DI topology: **one `SharedContainer` subclass per plugin** (`final class <Name>Container: SharedContainer`), no shared/global container, no central iOS infra package. | Mirrors the Android bricks' self-contained plugins (parent epic §4.3). The Flutter host has no Swift composition root to own a global `Container.shared`; a per-plugin container avoids cross-plugin name collisions and keeps each plugin independently testable. |
 | D4 | `register(with registrar:)` is the plugin's **composition root** — it overrides any container default that needs `FlutterPluginRegistrar` / `messenger` before the ViewModel / HostApi is built. | The only per-plugin hook Flutter gives that has access to the engine-scoped objects. |
 | D5 | The `MviViewModel` base stays **copied into each plugin** (`Sources/<name>/Presentation/MviViewModel.swift`). | Consistency with the parent epic's "self-contained, no hard external path" rule; no shared package to hold it (D3). |
@@ -78,18 +78,18 @@ Therefore adopting Factory 3.x (`FactoryKit`) for the template's iOS code implie
 ### 5.2 Migrate `logger_native_bridge` (step 2 — Swift-only, lower risk)
 - `ios/logger_native_bridge.podspec` → `ios/logger_native_bridge/Package.swift`; move `ios/Classes/*.swift` → `ios/logger_native_bridge/Sources/logger_native_bridge/`.
 - `Package.swift` deps: `FlutterFramework` (path) + `FactoryKit` (url, same pin as the brick). Product name `logger-native-bridge`, target `logger_native_bridge`.
-- Add `Sources/logger_native_bridge/LoggerNativeBridgeContainer.swift` (`final class … : SharedContainer`). Register the current internal singletons as container factories: `nativeLogQueue`, `appenderToggleStore`, `nativeLogAppender`, and the Pigeon-facing `D3NexusNativeLogger`. `NativeLogBridgePlugin.register(with:)` becomes the composition root (overrides any factory needing `registrar`).
+- Add `Sources/logger_native_bridge/LoggerNativeBridgeContainer.swift` (`final class … : SharedContainer`). Register the plugin's current internal singletons as container factories (exact set — the log queue, the appender toggle store, the native appender, the Pigeon-facing `D3NexusNativeLogger` — mapped during implementation). `NativeLogBridgePlugin.register(with:)` becomes the composition root (overrides any factory needing `registrar`).
 - Pigeon: `Messages.g.swift` moves under `Sources/logger_native_bridge/`; update the generator config path. Dart `Messages.g.dart` path unchanged.
 - Existing Swift tests move to `ios/logger_native_bridge/Tests/logger_native_bridgeTests/`; rewrite fixture wiring to `LoggerNativeBridgeContainer.shared.<factory>.register { … }` + `.reset()`.
 
 ### 5.3 Migrate `native_security` (step 3 — C/C++/Swift, highest risk, see R3)
-- `ios/native_security.podspec` → `ios/native_security/Package.swift`. Sources today: `NativeSecurityPlugin.swift`, `DatadogNativeAppender.swift`, `native_security.cpp`, `native_security.h`.
-- SPM layout for a mixed-language module: a **C target** (`Sources/native_security_ffi/` with `native_security.c/.cpp` + `include/native_security.h` + a module map) and a **Swift target** (`Sources/native_security/`) that lists the C target in `dependencies`. Product `native-security`, umbrella target `native_security`.
+- `ios/native_security.podspec` → `ios/native_security/Package.swift`. Sources today: `NativeSecurityPlugin.swift`, `DatadogNativeAppender.swift`, `native_security.cpp`, `native_security.h`. `pubspec.yaml` keeps `flutter.plugin.platforms.ios.ffiPlugin: true`; Flutter's SPM support resolves an ffiPlugin from `ios/native_security/Package.swift`.
+- SPM layout for a mixed-language module: a **C/C++ target** (`Sources/native_security_ffi/` with `native_security.cpp` + `include/native_security.h` + a module map) and a **Swift target** (`Sources/native_security/`) that lists the C/C++ target in `dependencies`. Product `native-security`, umbrella target `native_security`.
 - Deps: `FlutterFramework` (path), `FactoryKit` (url), and `logger_native_bridge` as `.package(path: "../../logger_native_bridge/ios/logger_native_bridge")` (replaces the podspec `s.dependency 'logger_native_bridge'`).
 - Add `NativeSecurityContainer: SharedContainer`; move `DatadogNativeAppender` construction and its `D3NexusNativeLogger` hook onto it; `NativeSecurityPlugin.register(with:)` is the composition root.
-- The Dart FFI `DynamicLibrary.process()` lookup is unaffected (symbols still compiled into the app binary) provided the C target keeps `GCC_SYMBOLS_PRIVATE_EXTERN = NO` behaviour — verify the SPM equivalent (`-fvisibility=default` via `.unsafeFlags` or `cSettings`).
+- **FFI symbol reachability.** Dart loads via `DynamicLibrary.executable()` first, then `.process()`, then framework paths (`lib/native_security.dart`). The SPM static library links into the app binary, so `executable()`/`process()` stays valid **iff** the C symbols are kept: retain `__attribute__((used)) __attribute__((visibility("default")))` in `native_security.h` **and** the "force reference" calls (`_ = get_ssl_pin_1() …`) in `register(with:)`. Verify the SPM equivalent of the podspec's `GCC_SYMBOLS_PRIVATE_EXTERN = NO` (e.g. `-fvisibility=default` via `cSettings`/`.unsafeFlags`, plus `-Xlinker -exported_symbol` if dead-strip removes them).
 - Existing headless Swift tests move to `ios/native_security/Tests/native_securityTests/`.
-- **Spike first:** before committing the full refactor, a throwaway spike proves a mixed C++/Swift Flutter SPM plugin builds and its FFI symbols resolve from Dart on a device. If the spike fails, fall back: keep `native_security` on `.podspec` as the lone exception (hybrid tolerates it) and note it for Phase 2.
+- **Spike first:** before committing the full refactor, a throwaway spike proves a mixed C++/Swift Flutter SPM ffiPlugin builds and its FFI symbols resolve from Dart (`getSslPin1()` returns the expected value) on a real device in **release** config (dead-strip on). If the spike fails, fall back: keep `native_security` on `.podspec` as the lone exception (hybrid tolerates it) and roll it into Phase 2.
 
 ---
 
@@ -264,7 +264,7 @@ Vars unchanged: `name` (string), `has_ui` (bool, default `false`). No `android_p
 |---|---|---|
 | R1 | Generated plugin unusable by a non-SPM host (D1). | Accepted. Template host has SPM enabled. Documented in the brick README. |
 | R2 | Flutter ≥ 3.44 required. | Satisfied — template on 3.47.0 (`.fvmrc`). |
-| R3 | `native_security` C/C++/FFI → SPM (mixed-language target, module map, symbol visibility for `DynamicLibrary.process()`) is the riskiest item. | In scope (§5.3). **De-risked with a spike** before the full refactor; documented fallback = keep this one plugin on `.podspec` (hybrid tolerates it) and roll it into Phase 2. |
+| R3 | `native_security` C/C++/FFI → SPM (mixed-language target, module map, symbol reachability for `DynamicLibrary.executable()` / `.process()` under release dead-strip) is the riskiest item. | In scope (§5.3). **De-risked with a spike** before the full refactor; documented fallback = keep this one plugin on `.podspec` (hybrid tolerates it) and roll it into Phase 2. |
 | R4 | Third-party plugins without upstream SPM keep a minimal Podfile (true "zero CocoaPods" not reached in Phase 1). | Expected. Full host de-Pod is Phase 2 (§3.2). Hybrid is supported. |
 | R5 | `pac_rename_project` currently rewrites podspec/bundle-id tokens. | Light touch: add `Package.swift` `name` / library-product token rewrite; `com.danhdue.*` vendor namespace preserved as today. Include in the implementation plan. |
 | R6 | `FactoryKit` `@Injected(\CustomContainer.keyPath)` requires the keypath form (not the `Container.shared` form). | Confirmed against Factory source: `@Injected` has `init<C: SharedContainer>(_ keyPath: KeyPath<C, Factory<T>>)`. Brick templates use `\{{Name}}Container.repository`. |
@@ -278,7 +278,7 @@ Vars unchanged: `name` (string), `has_ui` (bool, default `false`). No `android_p
 |---|---|---|
 | 1 | `flutter config --enable-swift-package-manager`; `flutter build ios` on the template as-is | One-time `Runner.xcodeproj` SPM migration applied; app builds with existing pods still resolving (hybrid). |
 | 2 | `logger_native_bridge` migrated; `flutter build ios` + its Swift tests | Resolves via SPM (`Package.resolved` shows it + `FactoryKit`); Pigeon round-trips; tests pass using `LoggerNativeBridgeContainer` overrides. |
-| 3 | `native_security` spike | A mixed C++/Swift Flutter SPM plugin builds on device and its FFI symbols resolve from Dart via `DynamicLibrary.process()`. |
+| 3 | `native_security` spike | A mixed C++/Swift Flutter SPM ffiPlugin builds in **release** (dead-strip on) and `getSslPin1()` returns the expected value from Dart via `DynamicLibrary.executable()` / `.process()` on a real device. |
 | 4 | `native_security` migrated; `flutter build ios` + headless Swift tests + a secure-storage smoke test | FFI still works; `DatadogNativeAppender` still feeds `logger_native_bridge`; no regression vs. the podspec build. |
 | 5 | `mason make pac_native_plugin --name device_info --has_ui false` | Generates `packages/device_info/ios/device_info/Package.swift` + `Sources/device_info/**`; no `.podspec`. `melos bootstrap` + `flutter pub get` succeed. |
 | 6 | Build & run the generated plugin example on iOS (`has_ui=false`) | Pigeon round-trips Dart↔Swift; `DeviceInfoHostApiImpl` resolves `repository` from `DeviceInfoContainer`. |
