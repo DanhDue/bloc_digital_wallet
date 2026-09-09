@@ -3,29 +3,26 @@
 // coverage:ignore-file
 
 import Flutter
-import UIKit
 import SwiftUI
+import UIKit
 
 public class {{name.pascalCase()}}PlatformView: NSObject, FlutterPlatformView {
-    private var hostingController: UIHostingController<{{name.pascalCase()}}View>?
+    private let hostingController: UIHostingController<{{name.pascalCase()}}View>
 
     public init(
         frame: CGRect,
         viewIdentifier viewId: Int64,
         arguments args: Any?,
-        binaryMessenger messenger: FlutterBinaryMessenger?,
-        viewModel: {{name.pascalCase()}}ViewModel? = nil
+        viewModel: {{name.pascalCase()}}ViewModel
     ) {
-        super.init()
-        let vm = viewModel ?? {{name.pascalCase()}}ViewModel()
-        let swiftUIView = {{name.pascalCase()}}View(viewModel: vm)
-        let controller = UIHostingController(rootView: swiftUIView)
+        let controller = UIHostingController(rootView: {{name.pascalCase()}}View(viewModel: viewModel))
         controller.view.frame = frame
         controller.view.backgroundColor = .clear
         self.hostingController = controller
+        super.init()
     }
 
     public func view() -> UIView {
-        return hostingController?.view ?? UIView()
+        hostingController.view
     }
 }

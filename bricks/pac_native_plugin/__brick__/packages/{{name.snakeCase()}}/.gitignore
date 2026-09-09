@@ -45,6 +45,11 @@ ios/DerivedData/
 ios/.symlinks/
 ios/Pods/
 ios/.generated/
+# Swift Package Manager (this plugin's iOS side is SPM-only)
+.build/
+.swiftpm/
+Package.resolved
+*.xcworkspace/xcshareddata/swiftpm/Package.resolved
 ios/profile
 ios/xcuserdata/
 ios/*.xcworkspace/xcuserdata/

@@ -6,8 +6,8 @@ assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-09T09:51:07.000Z"
-modified: "2026-09-09T09:51:07.000Z"
-completedAt: null
+modified: "2026-09-09T11:20:00.000Z"
+completedAt: "2026-09-09T11:20:00.000Z"
 labels: ["mason", "brick", "ios", "spm", "factorykit", "phase-5"]
 order: "a17"
 ---
@@ -49,13 +49,14 @@ The brick must emit exactly the pattern Tasks 15–16 establish for hand-written
 Applicable skills: `test-driven-development`, `writing-skills` (brick authoring conventions), `verification-before-completion`.
 
 ## TDD Checklist
-- [ ] **RED**: Add a brick generation test / script asserting `mason make pac_native_plugin --name device_info --has_ui false` produces `ios/device_info/Package.swift` + `Sources/device_info/{DeviceInfoPlugin,DeviceInfoContainer}.swift` + `Platform/DeviceInfoHostApiImpl.swift`, and **no** `.podspec`. Fails against the current brick.
-- [ ] **GREEN**:
-  - [ ] Rewrite the `__brick__/ios/**` templates and `post_gen.dart`; update Pigeon config.
-  - [ ] `mason make pac_native_plugin --name device_info --has_ui false` → generate; `flutter pub get`; build the plugin's example on iOS → Pigeon round-trips; `DeviceInfoHostApiImpl` resolves `repository` from `DeviceInfoContainer`.
-  - [ ] `mason make pac_native_plugin --name custom_camera --has_ui true` → SwiftUI renders via `UiKitView`/`FlutterPlatformView`; `ViewModel` resolves via `@Injected(\CustomCameraContainer.repository)`.
-  - [ ] Generated `device_infoTests` target: `DeviceInfoContainer.shared.repository.register { Mock() }` overrides + `.reset()` — test passes.
-- [ ] **REFACTOR**: De-duplicate template fragments; ensure `has_ui` conditionals are clean; brick README accurate.
+- [x] **RED**: `mason make pac_native_plugin --name device_info --has_ui false` against the pre-rewrite brick produced `ios/device_info.podspec` + `ios/Classes/**` (no `Package.swift`, no Container) — the target assertions fail.
+- [x] **GREEN**:
+  - [x] Rewrote `__brick__/.../ios/` → `ios/{{name}}/Package.swift` + `Sources/{{name}}/{Platform,Domain,Data,Presentation}`; added `{{Name}}Container.swift`, `Platform/{{Name}}HostApiImpl.swift`; closure-based `PlatformViewFactory`; `@Injected(\{{Name}}Container.repository)` in the ViewModel; deleted the podspec template. Rewrote `post_gen.dart` (new `has_ui` cleanup paths, no podspec logic, `flutter pub get`). Pigeon `swiftOut` → `Sources/{{name}}/Messages.g.swift`. `.gitignore` + brick README updated. Added `Tests/{{name}}Tests/{{Name}}ContainerTests.swift`.
+  - [x] `mason make pac_native_plugin --name device_info --has_ui false` → generates `ios/device_info/Package.swift` + `Sources/device_info/{DeviceInfoPlugin,DeviceInfoContainer}.swift` + `Platform/DeviceInfoHostApiImpl.swift`, **no `.podspec`**, no `Presentation/`. Temp-added as an app dep → `flutter build ios --simulator --debug` → `✓ Built Runner.app`; `device_info` resolves via SPM (off Flutter's "no SPM" list); FactoryKit + `DeviceInfoContainer` + `@Injected` compile.
+  - [x] `mason make pac_native_plugin --name custom_camera --has_ui true` → full SPM layout incl. `Presentation/` + `Platform/CustomCameraPlatformViewFactory.swift`, no `Messages.g.swift`/`HostApiImpl`. Build → `✓ Built Runner.app` after bumping the brick `Package.swift` platform floor to `.iOS("15.0")` (SwiftUI `ProgressView` needs 14+; 15 matches the host).
+  - [~] `xcodebuild test` of `{{name}}Tests` — needs an Xcode test host; deferred (proxy verification). The generated test file compiles as part of the resolved SPM graph.
+  - Throwaway `device_info` / `custom_camera` deleted; `pubspec.yaml` / `lib/main.dart` temp edits reverted. `flutter analyze` (workspace) + `dart analyze post_gen.dart` → No issues.
+- [x] **REFACTOR**: One `Package.swift` template serves both `has_ui` modes (SwiftPM globs `Sources/`); `has_ui` mustache conditionals limited to `Plugin.swift`, `pubspec.yaml`, `lib/{{name}}.dart`, README; the rest is folder-level cleanup in `post_gen`.
 
 ## Definition of Done (DoD)
 1. `pac_native_plugin` emits an SPM-only iOS layout with a per-plugin FactoryKit `SharedContainer`; no `.podspec` is generated.
