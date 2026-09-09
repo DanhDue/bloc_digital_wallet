@@ -4,11 +4,6 @@ PODS:
   - Flutter (1.0.0)
   - image_gallery_saver_plus (0.0.1):
     - Flutter
-  - logger_native_bridge (0.0.1):
-    - Flutter
-  - native_security (0.0.1):
-    - Flutter
-    - logger_native_bridge
   - permission_handler_apple (9.3.0):
     - Flutter
 
@@ -16,8 +11,6 @@ DEPENDENCIES:
   - animated_item (from `.symlinks/plugins/animated_item/ios`)
   - Flutter (from `Flutter`)
   - image_gallery_saver_plus (from `.symlinks/plugins/image_gallery_saver_plus/ios`)
-  - logger_native_bridge (from `.symlinks/plugins/logger_native_bridge/ios`)
-  - native_security (from `.symlinks/plugins/native_security/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
 EXTERNAL SOURCES:
@@ -27,10 +20,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   image_gallery_saver_plus:
     :path: ".symlinks/plugins/image_gallery_saver_plus/ios"
-  logger_native_bridge:
-    :path: ".symlinks/plugins/logger_native_bridge/ios"
-  native_security:
-    :path: ".symlinks/plugins/native_security/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
@@ -38,8 +27,6 @@ SPEC CHECKSUMS:
   animated_item: 084ee2ea6acd303168dbcd18929b984e2a363633
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   image_gallery_saver_plus: e597bf65a7846979417a3eae0763b71b6dfec6c3
-  logger_native_bridge: 4dd6297ef7f176e1b43740518dc3a35dfec0828a
-  native_security: c549f4dba4e835f106a88892f0381b411d512b2a
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
 
 PODFILE CHECKSUM: 90b7bfe7b9b060c832657a7fb4aef52b908527a2

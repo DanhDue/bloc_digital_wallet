@@ -1,13 +1,13 @@
 ---
 id: "task_16_migrate_native_security_spm_factorykit"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-09T09:51:07.000Z"
-modified: "2026-09-09T09:51:07.000Z"
-completedAt: null
+modified: "2026-09-09T11:05:00.000Z"
+completedAt: "2026-09-09T11:05:00.000Z"
 labels: ["ios", "spm", "factorykit", "ffi", "phase-5"]
 order: "a16"
 ---
@@ -43,12 +43,15 @@ Same per-plugin `SharedContainer` rationale as Task 15 (spec D3/D4). The FFI tar
 Applicable skills: `systematic-debugging`, `test-driven-development`, `verification-before-completion`.
 
 ## TDD Checklist
-- [ ] **RED**: Author/port Swift tests for `DatadogNativeAppender` (headless) using `NativeSecurityContainer.shared.<factory>.register { spy }`; add a Dart test/integration assertion that `NativeSecurity.getSslPin1()` returns the expected constant. Fail against the pre-migration state.
-- [ ] **GREEN**:
-  - [ ] Create `Package.swift` (C/C++ + Swift targets, module map, spike flags); move sources; delete `.podspec`.
-  - [ ] Add `NativeSecurityContainer`; move `DatadogNativeAppender` wiring onto it.
-  - [ ] `flutter build ios --release` on a real device; `getSslPin1/2/3()` resolve via FFI; `swift test` / `xcodebuild test` pass.
-- [ ] **REFACTOR**: Remove dead manual-DI code; confirm `register(with:)` is the only registration site.
+- [x] **RED**: Added `Tests/native_securityTests/NativeSecurityContainerTests.swift` (`.register { spy }` override + `.reset()`); the existing `DatadogNativeAppenderHeadlessTests` moved unchanged. FFI constant check runs as the `nm` / `dyld_info -exports` assertion below (no Dart FFI test existed and `DynamicLibrary.executable()` can't run under `flutter test`).
+- [x] **GREEN**:
+  - [x] Created `ios/native_security/Package.swift` — **two targets**: C/C++ `native_security_ffi` (`cSettings: -fvisibility=default`, `include/native_security.h` + `module.modulemap`) and Swift `native_security` depending on it + `FlutterFramework` + `FactoryKit` + `logger-native-bridge` (`.package(path: "../../../logger_native_bridge/ios/logger_native_bridge")` — Flutter resolved this cross-plugin path). Deleted `.podspec`.
+  - [x] Added the `__attribute__((constructor)) native_security_link_anchor` to `native_security.cpp` (task_14 recipe); kept the Swift `_ = get_ssl_pin_*()` force-refs in `register(with:)`; kept `__attribute__((used, visibility("default")))` in the header.
+  - [x] Added `NativeSecurityContainer` with a `datadogAppender` factory (not newly wired into `D3NexusNativeLogger` — that stays Task 7's scope).
+  - [x] `flutter build ios --release --no-codesign` (dead-strip on) → `✓ Built Runner.app`. `nm build/ios/Release-iphoneos/Runner.app/Runner` → `T _get_ssl_pin_1/2/3` + `t native_security_link_anchor`; `dyld_info -exports` lists all three → `DynamicLibrary.executable()/.process()` resolves. `native_security` dropped off Flutter's "does not support SPM" list.
+  - [~] On-device `getSslPin1()` smoke + `xcodebuild test` — deferred (needs a device / test host; proxy verification agreed).
+  - [x] `packages/network` SSL pinning path: `flutter analyze packages/network` + `flutter test packages/network/test` pass — Dart API surface unchanged.
+- [x] **REFACTOR**: `register(with:)` is the only Swift registration site; `Package.swift` `swift-tools-version: 5.9` keeps the plugin Swift 5 while FactoryKit builds Swift 6.
 
 ## Definition of Done (DoD)
 1. `native_security` resolves via SPM (`Package.resolved` lists it, `FactoryKit`, and the local `logger_native_bridge` package); no `.podspec` remains — **or**, on the spike no-go path, it is explicitly left on `.podspec` with a Phase 2 note.

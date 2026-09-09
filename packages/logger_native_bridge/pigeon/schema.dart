@@ -21,7 +21,7 @@ import 'package:pigeon/pigeon.dart';
     dartOut: 'lib/src/messages.g.dart',
     kotlinOut: 'android/src/main/kotlin/com/danhdue/logger_native_bridge/Messages.g.kt',
     kotlinOptions: KotlinOptions(package: 'com.danhdue.logger_native_bridge'),
-    swiftOut: 'ios/Classes/Messages.g.swift',
+    swiftOut: 'ios/logger_native_bridge/Sources/logger_native_bridge/Messages.g.swift',
     dartPackageName: 'logger_native_bridge',
   ),
 )

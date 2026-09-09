@@ -1,13 +1,13 @@
 ---
 id: "task_15_migrate_logger_native_bridge_spm_factorykit"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-09T09:51:07.000Z"
-modified: "2026-09-09T09:51:07.000Z"
-completedAt: null
+modified: "2026-09-09T11:05:00.000Z"
+completedAt: "2026-09-09T11:05:00.000Z"
 labels: ["ios", "spm", "factorykit", "pigeon", "phase-5"]
 order: "a15"
 ---
@@ -42,13 +42,14 @@ Per-plugin `SharedContainer` subclass (not the global `Container.shared`) keeps 
 Applicable skills: `test-driven-development`, `verification-before-completion`, `mobile-developer`.
 
 ## TDD Checklist
-- [ ] **RED**: Port/author Swift tests that assert (a) the Pigeon `HostApi` forwards a log entry to the native appender, (b) the toggle store gates delivery, (c) `LoggerNativeBridgeContainer.shared.<factory>.register { spy }` overrides resolution and `.reset()` restores it. Run — they fail against the not-yet-moved sources.
-- [ ] **GREEN**:
-  - [ ] Create `ios/logger_native_bridge/Package.swift`; move sources into `Sources/logger_native_bridge/`; delete `.podspec`.
-  - [ ] Add `LoggerNativeBridgeContainer.swift`; convert singletons to `@Injected` resolution.
-  - [ ] Move Pigeon `swiftOut`; regenerate.
-  - [ ] `flutter build ios --no-codesign` + `swift test` (or `xcodebuild test`) → pass.
-- [ ] **REFACTOR**: Collapse any leftover manual DI plumbing; ensure `register(with:)` is the only place production factories are registered.
+- [x] **RED**: Added `Tests/logger_native_bridgeTests/LoggerNativeBridgeContainerTests.swift` — asserts `LoggerNativeBridgeContainer` resolves `toggleStore`/`logQueue` and that `.register { spy }` overrides + `.reset()` restores. The 3 existing headless Swift tests (`NativeLogQueueTests`, `NativeAppenderToggleStoreTests`, `D3NexusNativeLoggerTests`) moved unchanged — they already cover forwarding + toggle gating via constructor injection + fake `UserDefaults`.
+- [x] **GREEN**:
+  - [x] Created `ios/logger_native_bridge/Package.swift` (`swift-tools-version: 5.9`, product `logger-native-bridge`, deps `FlutterFramework` + `Factory` 3.3.2 → `FactoryKit`); `git mv` sources into `Sources/logger_native_bridge/`; deleted `.podspec`.
+  - [x] Added `LoggerNativeBridgeContainer.swift`; `register(with:)` now resolves `toggleStore`/`logQueue` through it (headless `D3NexusNativeLogger` path untouched — must not need FactoryKit).
+  - [x] `pigeon/schema.dart` `swiftOut` → `Sources/logger_native_bridge/Messages.g.swift`; regenerated (Android/Dart pigeon outputs reverted — iOS-only task).
+  - [x] `flutter build ios --simulator --debug` → `✓ Built Runner.app`; `logger_native_bridge` dropped off Flutter's "does not support SPM" list. Dart tests: `flutter test packages/logger_native_bridge` → 11/11 pass. `flutter analyze` → No issues.
+  - [~] `xcodebuild test` of the Swift test targets — needs an Xcode test host; deferred (proxy verification agreed for this environment). Sources compile as part of the resolved SPM graph.
+- [x] **REFACTOR**: `register(with:)` is the only production registration site; no manual DI plumbing left. Package kept at `swift-tools-version: 5.9` so the hand-tuned `NSLock` code stays Swift 5 language mode while FactoryKit builds in its own Swift 6 mode.
 
 ## Definition of Done (DoD)
 1. `logger_native_bridge` resolves via SPM — `ios/Runner.xcodeproj` `Package.resolved` lists it and `FactoryKit`; no `.podspec` remains.

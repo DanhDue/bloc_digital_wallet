@@ -1,0 +1,4 @@
+module native_security_ffi {
+    header "native_security.h"
+    export *
+}

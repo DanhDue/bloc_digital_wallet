@@ -2,6 +2,7 @@
 
 // coverage:ignore-file
 
+import FactoryKit
 import Flutter
 import UIKit
 
@@ -57,8 +58,12 @@ public class NativeLogBridgePlugin: NSObject, FlutterPlugin, NativeLogHostApi {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let instance = NativeLogBridgePlugin()
 
-    let toggleStore = NativeAppenderToggleStore(userDefaults: .standard)
-    let logQueue = NativeLogQueue(userDefaults: .standard)
+    // Composition root: resolve the two UserDefaults-backed collaborators
+    // through the plugin's FactoryKit container so tests can override them
+    // via `LoggerNativeBridgeContainer.shared.<factory>.register { … }`.
+    // Defaults are the same `.standard`-backed instances as before.
+    let toggleStore = LoggerNativeBridgeContainer.shared.toggleStore()
+    let logQueue = LoggerNativeBridgeContainer.shared.logQueue()
     instance.queue = logQueue
 
     // Idempotent: does not clear appenders already registered by an

@@ -54,3 +54,24 @@ FFI_EXPORT const char *get_ssl_pin_3() {
   unscramble(pin3_scrambled, sizeof(pin3_scrambled), buffer3);
   return buffer3;
 }
+
+// Link anchor (Phase 5 — flutter_super_app_template, task_14 spike finding).
+//
+// Under SwiftPM the FFI object file is a member of a static archive, and
+// the app linker drops any archive member nothing references at link
+// time. `__attribute__((used))` on the functions only stops the
+// *compiler* dropping them — the linker still omits the whole unreferenced
+// member, and `DynamicLibrary.executable()/.process()` then fails. A
+// load-time `constructor` that touches every exported function makes this
+// translation unit a linker root, so the member is pulled into the app
+// binary and the `get_ssl_pin_*` symbols stay in its export table through
+// `-dead_strip` in Release builds. `NativeSecurityPlugin.register(with:)`
+// force-references them from Swift as a second, independent anchor.
+__attribute__((constructor)) static void native_security_link_anchor(void) {
+  volatile const void *keep1 = (const void *)get_ssl_pin_1();
+  volatile const void *keep2 = (const void *)get_ssl_pin_2();
+  volatile const void *keep3 = (const void *)get_ssl_pin_3();
+  (void)keep1;
+  (void)keep2;
+  (void)keep3;
+}
