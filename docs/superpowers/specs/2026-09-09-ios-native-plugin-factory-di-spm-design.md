@@ -6,7 +6,7 @@
 - **Status**: Draft — pending user review
 - **Parent Epic**: `flutter_super_app_template` (amends `.devtool/epic/flutter_super_app_template/2026-09-06-flutter-super-app-template-design.md` §4.3, §4.4, §8)
 - **Reference (read-only)**: `/Users/danhdueexoictif/AllProjects/digital_wallet/ios_digital_wallet` — already migrated to Factory at commit `44716e9 [DI] use the Factory for the DI.` Used only as the pattern reference; not modified by this work.
-- **Chosen approach**: Approach B — bricks first, defer existing-plugin & host full migration.
+- **Chosen approach**: Phase 1 = enable Flutter SPM on the host (hybrid) + migrate **every local package that has iOS native code** (`logger_native_bridge`, `native_security`) **and** the two bricks (`pac_native_plugin`, `pac_add_native_ui`) to **SPM + FactoryKit per-plugin `SharedContainer`**. Phase 2 (separate future spec) = remove CocoaPods entirely from the host.
 
 ---
 
@@ -25,24 +25,25 @@ We want the Flutter template's generated iOS code to adopt the same DI philosoph
 1. **Factory 3.x dropped CocoaPods.** The module was renamed `FactoryKit` (`import FactoryKit`) and is SPM-only. The last CocoaPods-capable line is `Factory` 2.4.x/2.5.3 (`import Factory`), now frozen.
 2. **Flutter 3.44+ supports Swift Package Manager for plugins**, running SPM plugins and CocoaPods plugins side by side in the same app. The template is on **Flutter 3.47.0** (`.fvmrc`), so the modern SPM plugin layout is available.
 
-Therefore adopting Factory 3.x (`FactoryKit`) for generated plugins implies moving those plugins to SPM.
+Therefore adopting Factory 3.x (`FactoryKit`) for the template's iOS code implies moving that code — the two bricks and every local package with iOS-native sources — to SPM, and enabling SPM on the host so it can resolve them.
 
 ---
 
 ## 3. Scope
 
-### 3.1 In scope (this task)
-1. **Enable Flutter SPM for the template** — minimal, hybrid-safe host change.
-2. **Rewrite the iOS side of `pac_native_plugin`** — SPM package layout, `FactoryKit` dependency, one `SharedContainer` subclass per plugin, `@Injected` consumers, `register(with:)` as the composition point.
-3. **Update `pac_add_native_ui`** — emit `Presentation/` in the new SPM layout; patch the SPM-layout plugin class.
-4. **Update brick hooks** — drop podspec handling, adjust paths, adjust Pigeon `swiftOut`.
-5. **`pac_rename_project` light touch** — rewrite the `Package.swift` `name` / library-product tokens for generated SPM plugins (see R5); no other rename change.
-6. **Update documentation** — parent epic spec §4.3 / §4.4 / §8 and the epic HLD (`flutter_super_app_template.en.md` / `.vi.md`).
+### 3.1 In scope — Phase 1 (this spec)
+1. **Enable Flutter SPM on the host** — `flutter config --enable-swift-package-manager` + the one-time `ios/Runner.xcodeproj` migration. Hybrid: CocoaPods stays for third-party pods that lack SPM.
+2. **Migrate `logger_native_bridge`** — `.podspec` → `ios/logger_native_bridge/Package.swift`; sources → `Sources/logger_native_bridge/`; add `FactoryKit`; introduce `LoggerNativeBridgeContainer: SharedContainer`; move its internal wiring (`D3NexusNativeLogger`, `NativeAppenderToggleStore`, `NativeLogQueue`, `NativeLogAppender`) onto the container; Pigeon `swiftOut` path moves. Swift-only, lower risk.
+3. **Migrate `native_security`** — `.podspec` → `Package.swift` with a **mixed C/C++/Swift target layout** (separate C target + module map, Swift target depends on it); add `FactoryKit`; `NativeSecurityContainer: SharedContainer` for `NativeSecurityPlugin` / `DatadogNativeAppender`; keep the `logger_native_bridge` dependency (now `.package(path:)`). **Highest-risk item — see R3.**
+4. **Rewrite the iOS side of `pac_native_plugin`** — SPM package layout, `FactoryKit` dependency, one `SharedContainer` subclass per plugin, `@Injected` consumers, `register(with:)` as the composition point (§6).
+5. **Update `pac_add_native_ui`** — emit `Presentation/` in the new SPM layout; patch the SPM-layout plugin class (§7).
+6. **Update brick hooks** — drop podspec handling, adjust paths, adjust Pigeon `swiftOut` (§8).
+7. **`pac_rename_project`** — rewrite `Package.swift` `name` / library-product tokens for every SPM plugin (generated and the two migrated ones); `com.danhdue.*` vendor namespace preserved (R5).
+8. **Update documentation** — parent epic spec §4.3 / §4.4 / §8 and the epic HLD.
 
-### 3.2 Explicitly deferred (tracked as a follow-up epic, NOT done here)
-- Migrating the existing shipped plugins `native_security` (incl. its C++/FFI `native_security.cpp` / `.h`) and `logger_native_bridge` from podspec to `Package.swift`.
-- Removing CocoaPods entirely from `ios/Runner` (Podfile / Pods / `flutter_install_all_ios_pods`).
-- Replacing or forking third-party plugins that lack upstream SPM support (`image_gallery_saver_plus`, `animated_item`, `pretty_animated_text` — to be verified).
+### 3.2 Explicitly deferred — Phase 2 (separate future spec under this epic)
+- Removing CocoaPods entirely from `ios/Runner` (dropping the Podfile / Pods / `flutter_install_all_ios_pods`).
+- Replacing or forking third-party plugins that lack upstream SPM support (`image_gallery_saver_plus`, `animated_item`, `pretty_animated_text` — to be verified). Until then the host stays hybrid.
 
 ### 3.3 Non-goals
 - **Android side of the bricks** — unchanged (Kotlin plugins keep self-contained manual constructor injection per parent epic §4.3).
@@ -61,17 +62,34 @@ Therefore adopting Factory 3.x (`FactoryKit`) for generated plugins implies movi
 | D3 | DI topology: **one `SharedContainer` subclass per plugin** (`final class <Name>Container: SharedContainer`), no shared/global container, no central iOS infra package. | Mirrors the Android bricks' self-contained plugins (parent epic §4.3). The Flutter host has no Swift composition root to own a global `Container.shared`; a per-plugin container avoids cross-plugin name collisions and keeps each plugin independently testable. |
 | D4 | `register(with registrar:)` is the plugin's **composition root** — it overrides any container default that needs `FlutterPluginRegistrar` / `messenger` before the ViewModel / HostApi is built. | The only per-plugin hook Flutter gives that has access to the engine-scoped objects. |
 | D5 | The `MviViewModel` base stays **copied into each plugin** (`Sources/<name>/Presentation/MviViewModel.swift`). | Consistency with the parent epic's "self-contained, no hard external path" rule; no shared package to hold it (D3). |
-| D6 | Approach B: **bricks first**, existing plugins + host full migration deferred (§3.2). | User selection. Flutter's hybrid SPM+CocoaPods support makes this safe: pod plugins keep working while new plugins are SPM. |
-| D7 | Route the follow-up implementation to **`writing-plans`**, not `epic-designer`. | Approach B is a single coherent implementation plan (2 brick rewrites + host enablement + doc edits), not a multi-component epic. |
+| D6 | Phase 1 migrates **all local iOS-native packages** (`logger_native_bridge`, `native_security`) plus the two bricks. Only full CocoaPods removal from the host is deferred to Phase 2. | User selection. Flutter's hybrid SPM+CocoaPods support keeps third-party pods working during Phase 1. |
+| D7 | Route this spec to **`epic-designer`**. | Scope spans ~5 largely-independent components (host enablement, `logger_native_bridge`, `native_security` incl. C++/FFI, `pac_native_plugin`, `pac_add_native_ui`) and needs Kanban task breakdown + a spike for the `native_security` C++/SPM target. That is epic-scale, not a single plan. |
 
 ---
 
-## 5. Enabling Flutter SPM (host-side, minimal)
+## 5. Phase 1 — host enablement + existing-plugin migration
 
+### 5.1 Enable Flutter SPM on the host (step 1)
 - Add `flutter config --enable-swift-package-manager` to developer setup docs and CI setup steps. Requires Flutter ≥ 3.44 — template is on 3.47.0, satisfied.
 - On the first `flutter run` / `flutter build ios` with SPM enabled, the Flutter CLI performs a one-time migration of `ios/Runner.xcodeproj`, adding the local `FlutterGeneratedPluginSwiftPackage` package reference to the `Runner` target. This is committed to the template.
-- **CocoaPods stays** for `ios/Runner`: `native_security`, `logger_native_bridge`, and all third-party pods continue to resolve via CocoaPods unchanged. SPM and CocoaPods plugins coexist.
+- **CocoaPods stays, hybrid.** After Phase 1, `logger_native_bridge` and `native_security` resolve via **SPM** (steps 2–3); the remaining third-party plugins still resolve via **CocoaPods** until Phase 2. Flutter runs both mechanisms in the same app.
 - `scripts/buildIPA.sh` and other build scripts: no logic change; only the one-time `flutter config` in setup.
+
+### 5.2 Migrate `logger_native_bridge` (step 2 — Swift-only, lower risk)
+- `ios/logger_native_bridge.podspec` → `ios/logger_native_bridge/Package.swift`; move `ios/Classes/*.swift` → `ios/logger_native_bridge/Sources/logger_native_bridge/`.
+- `Package.swift` deps: `FlutterFramework` (path) + `FactoryKit` (url, same pin as the brick). Product name `logger-native-bridge`, target `logger_native_bridge`.
+- Add `Sources/logger_native_bridge/LoggerNativeBridgeContainer.swift` (`final class … : SharedContainer`). Register the current internal singletons as container factories: `nativeLogQueue`, `appenderToggleStore`, `nativeLogAppender`, and the Pigeon-facing `D3NexusNativeLogger`. `NativeLogBridgePlugin.register(with:)` becomes the composition root (overrides any factory needing `registrar`).
+- Pigeon: `Messages.g.swift` moves under `Sources/logger_native_bridge/`; update the generator config path. Dart `Messages.g.dart` path unchanged.
+- Existing Swift tests move to `ios/logger_native_bridge/Tests/logger_native_bridgeTests/`; rewrite fixture wiring to `LoggerNativeBridgeContainer.shared.<factory>.register { … }` + `.reset()`.
+
+### 5.3 Migrate `native_security` (step 3 — C/C++/Swift, highest risk, see R3)
+- `ios/native_security.podspec` → `ios/native_security/Package.swift`. Sources today: `NativeSecurityPlugin.swift`, `DatadogNativeAppender.swift`, `native_security.cpp`, `native_security.h`.
+- SPM layout for a mixed-language module: a **C target** (`Sources/native_security_ffi/` with `native_security.c/.cpp` + `include/native_security.h` + a module map) and a **Swift target** (`Sources/native_security/`) that lists the C target in `dependencies`. Product `native-security`, umbrella target `native_security`.
+- Deps: `FlutterFramework` (path), `FactoryKit` (url), and `logger_native_bridge` as `.package(path: "../../logger_native_bridge/ios/logger_native_bridge")` (replaces the podspec `s.dependency 'logger_native_bridge'`).
+- Add `NativeSecurityContainer: SharedContainer`; move `DatadogNativeAppender` construction and its `D3NexusNativeLogger` hook onto it; `NativeSecurityPlugin.register(with:)` is the composition root.
+- The Dart FFI `DynamicLibrary.process()` lookup is unaffected (symbols still compiled into the app binary) provided the C target keeps `GCC_SYMBOLS_PRIVATE_EXTERN = NO` behaviour — verify the SPM equivalent (`-fvisibility=default` via `.unsafeFlags` or `cSettings`).
+- Existing headless Swift tests move to `ios/native_security/Tests/native_securityTests/`.
+- **Spike first:** before committing the full refactor, a throwaway spike proves a mixed C++/Swift Flutter SPM plugin builds and its FFI symbols resolve from Dart on a device. If the spike fails, fall back: keep `native_security` on `.podspec` as the lone exception (hybrid tolerates it) and note it for Phase 2.
 
 ---
 
@@ -246,8 +264,8 @@ Vars unchanged: `name` (string), `has_ui` (bool, default `false`). No `android_p
 |---|---|---|
 | R1 | Generated plugin unusable by a non-SPM host (D1). | Accepted. Template host has SPM enabled. Documented in the brick README. |
 | R2 | Flutter ≥ 3.44 required. | Satisfied — template on 3.47.0 (`.fvmrc`). |
-| R3 | `native_security` C++/FFI → SPM (mixed C++/Swift target, module map) is fiddly. | Out of scope (§3.2); does not block this task since that plugin stays on CocoaPods. |
-| R4 | Third-party plugins without upstream SPM keep a minimal Podfile (true "zero CocoaPods" not reached). | Out of scope (§3.2). Hybrid is expected and supported. |
+| R3 | `native_security` C/C++/FFI → SPM (mixed-language target, module map, symbol visibility for `DynamicLibrary.process()`) is the riskiest item. | In scope (§5.3). **De-risked with a spike** before the full refactor; documented fallback = keep this one plugin on `.podspec` (hybrid tolerates it) and roll it into Phase 2. |
+| R4 | Third-party plugins without upstream SPM keep a minimal Podfile (true "zero CocoaPods" not reached in Phase 1). | Expected. Full host de-Pod is Phase 2 (§3.2). Hybrid is supported. |
 | R5 | `pac_rename_project` currently rewrites podspec/bundle-id tokens. | Light touch: add `Package.swift` `name` / library-product token rewrite; `com.danhdue.*` vendor namespace preserved as today. Include in the implementation plan. |
 | R6 | `FactoryKit` `@Injected(\CustomContainer.keyPath)` requires the keypath form (not the `Container.shared` form). | Confirmed against Factory source: `@Injected` has `init<C: SharedContainer>(_ keyPath: KeyPath<C, Factory<T>>)`. Brick templates use `\{{Name}}Container.repository`. |
 | R7 | Swift concurrency: `@Injected` in a `MainActor` ViewModel + `register` at plugin load. | Follow the reference repo's pattern (`@MainActor` factories where needed); validated during implementation via the example app build. |
@@ -258,27 +276,32 @@ Vars unchanged: `name` (string), `has_ui` (bool, default `false`). No `android_p
 
 | # | Check | Pass criteria |
 |---|---|---|
-| 1 | `flutter config --enable-swift-package-manager` then `mason make pac_native_plugin --name device_info --has_ui false` | Generates `packages/device_info/ios/device_info/Package.swift` + `Sources/device_info/**`; no `.podspec`. `melos bootstrap` + `flutter pub get` succeed. |
-| 2 | Build & run the plugin's example on iOS (`has_ui=false`) | Pigeon round-trips Dart↔Swift; `DeviceInfoHostApiImpl` resolves `repository` from `DeviceInfoContainer`. |
-| 3 | `mason make pac_native_plugin --name custom_camera --has_ui true` then run on iOS | SwiftUI `View` renders through `UiKitView` / `FlutterPlatformView`; `ViewModel` resolves `repository` via `@Injected(\CustomCameraContainer.repository)`. |
-| 4 | `mason make pac_add_native_ui --name device_info` | Adds `Sources/device_info/Presentation/**`; patches `DeviceInfoPlugin.swift` with the `PlatformViewFactory` registration; project builds. |
-| 5 | Swift unit test in the generated `device_infoTests` target | `DeviceInfoContainer.shared.repository.register { Mock() }` overrides resolution; `.reset()` restores; test passes. |
-| 6 | `melos build_ios` on the template with one SPM plugin present | IPA builds; SPM plugin and the existing CocoaPods plugins (`native_security`, `logger_native_bridge`) both link. |
-| 7 | Existing pod plugins unaffected | `native_security` / `logger_native_bridge` still resolve via CocoaPods; no regression. |
+| 1 | `flutter config --enable-swift-package-manager`; `flutter build ios` on the template as-is | One-time `Runner.xcodeproj` SPM migration applied; app builds with existing pods still resolving (hybrid). |
+| 2 | `logger_native_bridge` migrated; `flutter build ios` + its Swift tests | Resolves via SPM (`Package.resolved` shows it + `FactoryKit`); Pigeon round-trips; tests pass using `LoggerNativeBridgeContainer` overrides. |
+| 3 | `native_security` spike | A mixed C++/Swift Flutter SPM plugin builds on device and its FFI symbols resolve from Dart via `DynamicLibrary.process()`. |
+| 4 | `native_security` migrated; `flutter build ios` + headless Swift tests + a secure-storage smoke test | FFI still works; `DatadogNativeAppender` still feeds `logger_native_bridge`; no regression vs. the podspec build. |
+| 5 | `mason make pac_native_plugin --name device_info --has_ui false` | Generates `packages/device_info/ios/device_info/Package.swift` + `Sources/device_info/**`; no `.podspec`. `melos bootstrap` + `flutter pub get` succeed. |
+| 6 | Build & run the generated plugin example on iOS (`has_ui=false`) | Pigeon round-trips Dart↔Swift; `DeviceInfoHostApiImpl` resolves `repository` from `DeviceInfoContainer`. |
+| 7 | `mason make pac_native_plugin --name custom_camera --has_ui true` then run on iOS | SwiftUI `View` renders through `UiKitView` / `FlutterPlatformView`; `ViewModel` resolves `repository` via `@Injected(\CustomCameraContainer.repository)`. |
+| 8 | `mason make pac_add_native_ui --name device_info` | Adds `Sources/device_info/Presentation/**`; patches `DeviceInfoPlugin.swift` with the `PlatformViewFactory` registration; project builds. |
+| 9 | Swift unit test in the generated `device_infoTests` target | `DeviceInfoContainer.shared.repository.register { Mock() }` overrides resolution; `.reset()` restores; test passes. |
+| 10 | `melos build_ios` full template | IPA builds; SPM plugins (`logger_native_bridge`, `native_security`, generated) and remaining CocoaPods third-party plugins all link. |
+| 11 | `./scripts/rename_project.sh` on a clone | `Package.swift` `name` / product tokens rewritten for every SPM plugin; `com.danhdue.*` preserved; `melos genAlls` + iOS build pass. |
 
 ---
 
 ## 12. Documentation updates
 
 - `.devtool/epic/flutter_super_app_template/2026-09-06-flutter-super-app-template-design.md`:
+  - §3.1 / §3.3 — note that `logger_native_bridge` and `native_security` are SPM + FactoryKit.
   - §4.3 — replace the `ios/` podspec layout with the SPM layout from §6.1; note "iOS DI = FactoryKit per-plugin `SharedContainer`; SPM-only".
   - §4.4 — `pac_add_native_ui` iOS steps updated per §7.
-  - §8 — verification rows 5–7 updated per §11.
-- Epic HLD (`flutter_super_app_template.en.md` / `.vi.md`): add a "Deferred: full CocoaPods → SPM migration" note and reference this spec.
+  - §8 — verification rows updated per §11.
+- Epic HLD (`flutter_super_app_template.en.md` / `.vi.md`): record Phase 1 (this spec) and note Phase 2 (full CocoaPods removal from the host) as a deferred follow-up.
 - New brick `README.md` content: SPM-only requirement (R1), how to add a dependency to `{{Name}}Container`, how to override in tests.
 
 ---
 
 ## 13. Next step
 
-After user review of this spec → invoke **`writing-plans`** to produce the implementation plan (brick rewrites + hook edits + host SPM enablement + doc edits + `pac_rename_project` light touch). The deferred full migration (§3.2) is a separate future spec under the `flutter_super_app_template` epic.
+After user review of this spec → invoke **`epic-designer`** with this spec's path (D7). The spec is relocated into `.devtool/epic/flutter_super_app_template/` so it sits with the epic's other docs; `epic-designer` produces the HLD (architecture / sequence diagrams) and the Kanban task files, including a dedicated spike task for `native_security` (§5.3 / R3). Phase 2 (full CocoaPods removal from the host) is a separate future spec under the same epic.
