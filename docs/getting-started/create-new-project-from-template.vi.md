@@ -84,18 +84,24 @@ Template cung cấp script tự động hóa cross-platform (chạy được tr�
 
 Sau khi đổi tên và copy cấu hình, tiến hành xác thực dự án:
 
-1. **Kiểm tra phân tích tĩnh (Static Analysis):**
+1. **Bật Swift Package Manager (một lần cho mỗi máy):**
+   ```bash
+   flutter config --enable-swift-package-manager
+   ```
+   Các package native iOS của template (`logger_native_bridge`, `native_security`, và mọi thứ sinh bởi `pac_native_plugin`) được phân phối dưới dạng Swift Package, không phải CocoaPods pod. Yêu cầu Flutter ≥ 3.44. CocoaPods vẫn chạy song song với SPM cho các plugin bên thứ ba chưa hỗ trợ — không cần thao tác thêm.
+
+2. **Kiểm tra phân tích tĩnh (Static Analysis):**
    ```bash
    melos run analyze
    ```
    *Yêu cầu kết quả: `No issues found!`*
 
-2. **Chạy bộ kiểm thử tự động (Unit / Widget Tests):**
+3. **Chạy bộ kiểm thử tự động (Unit / Widget Tests):**
    ```bash
    fvm flutter test
    ```
 
-3. **Khởi chạy ứng dụng (Môi trường Dev):**
+4. **Khởi chạy ứng dụng (Môi trường Dev):**
    ```bash
    # Chạy trên máy ảo/thiết bị thật với flavor dev
    flutter run --flavor dev --dart-define-from-file=secureFiles/dev/environment-configs.json

@@ -29,7 +29,8 @@ This guide will walk you through creating a complete feature from scratch, follo
 
 Before starting, ensure you have:
 
-- [ ] Flutter SDK installed
+- [ ] Flutter SDK installed (≥ 3.44 for Swift Package Manager support)
+- [ ] Swift Package Manager enabled: `flutter config --enable-swift-package-manager` (iOS-native packages ship as Swift Packages; CocoaPods still runs alongside for un-migrated third-party plugins)
 - [ ] Project dependencies installed: `flutter pub get`
 - [ ] Mason CLI installed: `mason get`
 - [ ] Basic understanding of Clean Architecture
