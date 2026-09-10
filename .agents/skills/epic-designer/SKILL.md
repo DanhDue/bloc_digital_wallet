@@ -1,12 +1,12 @@
 ---
 name: epic-designer
-description: Use when analyzing high-level requirements to design a complete software Epic, including High-Level Design (HLD), Mermaid diagrams, and Kanban task breakdowns.
+description: Use when analyzing high-level requirements to design a complete software Epic, including High-Level Design (HLD), Mermaid diagrams, and Kanban task breakdowns with BDD & TDD specifications.
 ---
 
 # Epic Designer
 
 ## Overview
-This skill transforms high-level product or technical requirements into a structured, developer-ready Epic. It creates a centralized High-Level Design (HLD) document and breaks the work down into granular Kanban tasks enforcing Test-Driven Development (TDD) and strict Definition of Done (DoD).
+This skill transforms high-level product or technical requirements into a structured, developer-ready Epic. It creates a centralized High-Level Design (HLD) document and breaks the work down into granular Kanban tasks enforcing Behavior-Driven Development (BDD), Test-Driven Development (TDD), and strict Definition of Done (DoD), fully aligned with `epic-implementation`'s Dual-Persona workflow.
 
 ## When to Use
 - When the user provides a high-level requirement or problem statement and asks for a technical design or task breakdown.
@@ -49,8 +49,14 @@ Each document MUST contain the following sections:
    - **High-Level Architecture**: Use a `mermaid graph TD` to show component interactions.
    - **Use Cases**: Use a `mermaid flowchart` to define Actors and their interactions with the system.
    - **Sequence Diagram**: Use a `mermaid sequenceDiagram` to show the step-by-step lifecycle of the primary flow.
-5. **Rollout Strategy & Mitigation**: Describe how to deploy this safely (e.g., phased rollout, feature flags) and fallback plans.
-6. **Kanban Tasks Breakdown**: A list of links pointing to the individual task files created in Step 2.
+   - **Comprehensive BDD Test Scenarios**: A detailed Gherkin suite (`Given - When - Then`) covering all Use Cases and Sequence Diagram flows.
+5. **BDD Output in Epic Directory (`bdd_scenarios.md`)**:
+   - In addition to embedding in the Epic Overview, generate a dedicated `bdd_scenarios.md` file located at `.devtool/epic/<epic_name>/bdd_scenarios.md`.
+   - **Dual Value Purpose**:
+     1. *Human Maintenance (Living Documentation)*: Enables any incoming developer to instantly comprehend the business intent, state transitions, boundary limits, and resilience rules without wading through implementation code.
+     2. *Instant AI Agent Context Injection*: Provides a dense, unambiguous behavioral contract that can be loaded into an AI Agent's context window in one shot, eliminating hallucinations and ensuring rigorous compliance during implementation or bug fixes.
+6. **Rollout Strategy & Mitigation**: Describe how to deploy this safely (e.g., phased rollout, feature flags) and fallback plans.
+7. **Kanban Tasks Breakdown**: A list of links pointing to the individual task files created in Step 2.
 
 **Canonical language**: The `.en.md` variant is the source of truth for tooling/agents — always write and update it first. The `.vi.md` variant is a translation for local team communication and MUST be kept in sync whenever the `.en.md` changes; never let the two diverge in structure or facts.
 
@@ -66,7 +72,7 @@ Before writing any task file, check `.devtool/features/*.md` (excluding the `don
 If no other epic has any active (`todo`/`in-progress`/`review`) task, generate tasks with the normal default `status: "todo"` as usual.
 
 ### Step 2: Generate LachyFS Kanban Tasks
-Break the Epic down into granular implementation tasks. **Crucially, the task breakdown and implementation checklists MUST be structured around the Test-Driven Development (TDD) process** wherever the task produces testable behavior (see the TDD Adaptation note below for tasks that don't). For each task, generate a Markdown file located at `.devtool/features/task_<number>_<name>.md`.
+Break the Epic down into granular implementation tasks. **Crucially, each task must be structured around Behavior-Driven Development (BDD) and Test-Driven Development (TDD)** to feed directly into the Dual-Persona (QA Red Team + TDD Master) execution workflow in `epic-implementation`. Wherever the task produces testable behavior (see the TDD Adaptation note below for tasks that don't), generate Markdown task files located at `.devtool/features/task_<number>_<name>.md` (and mirrored in `.devtool/epic/<epic_name>/task_<number>_<name>.md` as permanent epic outputs).
 
 Task files are English-only — do not generate a `.vi.md` variant for tasks and do not mix Vietnamese prose into section headers or body. The English/Vietnamese pairing applies only to the Epic Overview document from Step 1.
 
@@ -89,19 +95,29 @@ Each task file MUST adhere to this exact structure:
    ---
    ```
 2. **Title**: `# Task <number>: <Task Name>`
-3. **Epic Reference**: A link back to the parent HLD, e.g. `Epic: [<epic_name>](../epic/<epic_name>/<epic_name>.en.md)`. This is the agent's entry point back to architecture/diagram context.
+3. **Epic Reference**: A link back to the parent HLD, e.g. `Epic: [<epic_name>](../epic/<epic_name>/<epic_name>.en.md)`. This is the agent's entry point back to architecture/diagram context (Use Cases and Sequence Diagrams).
 4. **Requirement Analysis**: Context and requirements specific to this task.
 5. **Relevant Files & Context Pointers**: An explicit bullet list of exact file/directory paths this task reads or modifies (e.g. `packages/core/lib/utils/log.dart`). This is what lets an agent load full context in one pass instead of searching — always populate it, even if just 2-3 paths.
 6. **Design Rationale**: Architecture decisions or design patterns chosen. **Crucially, review the available skills in `.agents/skills/` and if any skill is directly applicable to this task (e.g., `api_integration`, `mobile-uiux-promax`), explicitly note it here so the developer or agent knows which skill to invoke when implementing.**
-7. **TDD Checklist**:
-   - [ ] **RED**: Write failing tests (Unit/Widget/Integration).
-   - [ ] **GREEN**: Write minimal code to pass the tests.
-   - [ ] **REFACTOR**: Clean up code and optimize.
+7. **BDD Scenarios & Acceptance Criteria (The QA Persona)**:
+   Document this section under the markdown heading `### BDD SCENARIOS`.
+   Define behavioral scenarios using Gherkin syntax (`Given - When - Then`).
+   **Mandatory Self-Review**: You MUST perform a self-review by cross-checking these scenarios directly against the Use Cases (flowchart) and Sequence Diagrams defined in the Epic's HLD document (`<epic_name>.en.md`) to guarantee zero missing requirements before proceeding to the Dev/TDD phase.
+   Exhaustively apply Boundary Value Analysis & Equivalence Partitioning across 5 dimensions:
+   - **Happy Paths**: Normal data flow and standard successful outcomes.
+   - **Edge Cases & Boundaries**: Null inputs, empty arrays/collections, malformed payloads, boundary numbers.
+   - **State Transitions**: Valid and invalid state transitions (for BLoC/MVI architecture).
+   - **Async / Race Conditions**: Rapid consecutive user interactions (e.g. fast multi-tap), debouncing, stream `switchMap`/cancellation, out-of-order async responses.
+   - **Failures & Storage/Network Resilience**: Timeouts, 4xx/5xx HTTP errors, offline states, corrupted local storage/DB.
+8. **TDD Checklist (The Dev Persona)**:
+   - [ ] **RED**: Translate all BDD scenarios into failing tests (Unit/Widget/Integration). Write mock objects with artificial delays to test race conditions and verify stream subscriptions are cancelled. Confirm tests fail for the right reasons before writing implementation code.
+   - [ ] **GREEN**: Write minimal implementation code to satisfy the tests.
+   - [ ] **REFACTOR**: Optimize performance, clean up structure, format (`dart format -l 99`), and verify zero linter warnings (`melos run analyze`).
 
    **TDD Adaptation**: For tasks that are pure refactors, mass find/replace, or config/infra changes with no new behavior (e.g. "replace all call sites"), RED/GREEN/REFACTOR doesn't literally apply. Replace the checklist with concrete, verifiable steps instead (what to change, then "run the existing test suite / `melos run analyze` to confirm no regression"), and say explicitly in the task why TDD was adapted. Never silently drop structure — state the substitution.
-8. **Definition of Done (DoD)**: Acceptance criteria (e.g., 80% coverage, linting passed).
-9. **Dependencies & Blockers**: Link to blocking/blocked task files as markdown links (e.g. `Blocked by [Task 1](task_1_create_package.md)`), not prose-only references.
-10. **References & Rollback**: Links to docs, APIs, and a rollback strategy if this specific task fails.
+9. **Definition of Done (DoD)**: Acceptance criteria (e.g., 100% scenario coverage, stream subscription cancellation verified, zero lint warnings).
+10. **Dependencies & Blockers**: Link to blocking/blocked task files as markdown links (e.g. `Blocked by [Task 1](task_1_create_package.md)`), not prose-only references.
+11. **References & Rollback**: Links to docs, APIs, and a rollback strategy if this specific task fails.
 
 ### Step 3: Finalize & Commit
 After the Epic Overview and all confirmed task files are written (or updated), commit them to git — mirroring the `brainstorming` skill's convention:
@@ -121,7 +137,7 @@ Finally, update the Epic's **Status** field if the overall epic phase has change
 
 ## Red Flags - STOP and Start Over
 - Writing task files before the user has confirmed the task breakdown checkpoint.
-- Generating tasks without a TDD checklist or an explicit, stated TDD Adaptation.
+- Generating tasks without BDD scenarios / edge case specifications or without a TDD checklist (or stated TDD Adaptation).
 - Creating the Epic overview in the project root instead of `.devtool/epic/<epic_name>/`.
 - Generating the Epic Overview while its source spec still lives in `docs/superpowers/specs/` instead of `.devtool/epic/<epic_name>/`.
 - Defaulting new tasks to `status: "todo"` without checking for another epic's active tasks first (see Concurrent-Epic Backlog Rule).
@@ -132,3 +148,4 @@ Finally, update the Epic's **Status** field if the overall epic phase has change
 - Mixing languages within a single task file.
 
 If you violate any of these red flags, delete the generated files and start over.
+
