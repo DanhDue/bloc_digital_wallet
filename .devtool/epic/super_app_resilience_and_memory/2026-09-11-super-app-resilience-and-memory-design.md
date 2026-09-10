@@ -124,7 +124,7 @@ graph TD
   * `packages/ui_kit/lib/widgets/offline_banner.dart`
 * **Nguyên lý hoạt động:**
   1. `NetworkConnectivityService`:
-     * Đóng gói `connectivity_plus` (đã có trong `packages/core/pubspec.yaml`).
+     * Kết hợp mô hình Hybrid: Dùng `connectivity_plus` lắng nghe sự kiện thay đổi mạng từ OS và `internet_connection_checker_plus` để kiểm tra True Internet Reachability (xác thực internet thực tế, loại bỏ 100% false positive từ Wi-Fi captive portal).
      * Cung cấp enum `NetworkStatus { online, offline, unknown }`.
      * Expose `Stream<NetworkStatus> get onStatusChanged` và `Future<bool> get isConnected`.
   2. `OfflineBannerWrapper` (Standalone Component theo Phương án B đã chọn):
