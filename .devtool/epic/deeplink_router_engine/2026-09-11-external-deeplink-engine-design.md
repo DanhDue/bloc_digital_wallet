@@ -234,11 +234,11 @@ void navigate(DeepLinkPayload payload) {
 
 Cập nhật `post_gen.dart` hook của `pac_mvi_feature`:
 Khi tạo feature mới (vd: `payment`):
-1. Thêm constant vào `packages/platform/lib/deep_link_routes.dart`:
+1. Thêm constant vào `packages/platform/lib/deeplink/deep_link_routes.dart`:
    ```dart
    static const String payment = '/payment';
    ```
-2. Đăng ký tự động vào `DeepLinkRegistry.register(...)`.
+2. Đăng ký tự động vào `packages/platform/lib/deeplink/deep_link_registry.dart`.
 
 ---
 

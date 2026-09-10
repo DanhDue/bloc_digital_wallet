@@ -266,7 +266,7 @@ Future<void> _updateFeaturePublicRoutes(
   String pascalName,
   String camelName,
 ) async {
-  final file = File('packages/platform/lib/deep_link_routes.dart');
+  final file = File('packages/platform/lib/deeplink/deep_link_routes.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();
@@ -307,7 +307,7 @@ class _${pascalName}Route extends PageRouteInfo<void> {
 }
 
 Future<void> _updateDeepLinkRegistry(String snakeName, String camelName) async {
-  final file = File('packages/platform/lib/deep_link_registry.dart');
+  final file = File('packages/platform/lib/deeplink/deep_link_registry.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();

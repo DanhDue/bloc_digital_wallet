@@ -177,8 +177,8 @@ sequenceDiagram
 ---
 
 ## Kanban Tasks Breakdown
-- [Task 1: Platform DeepLink Protocol, Parser & Registry](../../features/task_1_deeplink_protocol_and_parser.md)
-- [Task 2: Native OS Configuration & AppLinks Integration](../../features/task_2_native_os_and_app_links.md)
-- [Task 3: DeepLink Coordinator, Auth Guard & Deduplication](../../features/task_3_deeplink_coordinator_and_auth_guard.md)
-- [Task 4: Shell Lifecycle Integration & Smart Hybrid Navigation](../../features/task_4_shell_lifecycle_and_hybrid_navigation.md)
-- [Task 5: Mason Brick Automation & E2E Integration Tests](../../features/task_5_mason_brick_and_integration_tests.md)
+- [x] [Task 1: Platform DeepLink Protocol, Parser & Registry](../../features/done/task_1_deeplink_protocol_and_parser.md)
+- [x] [Task 2: Native OS Configuration & AppLinks Integration](../../features/done/task_2_native_os_and_app_links.md)
+- [x] [Task 3: DeepLink Coordinator, Auth Guard & Deduplication](../../features/done/task_3_deeplink_coordinator_and_auth_guard.md)
+- [x] [Task 4: Shell Lifecycle Integration & Smart Hybrid Navigation](../../features/done/task_4_shell_lifecycle_and_hybrid_navigation.md)
+- [x] [Task 5: Mason Brick Automation & E2E Integration Tests](../../features/done/task_5_mason_brick_and_integration_tests.md)

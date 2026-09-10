@@ -1,8 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:app_platform/deep_link_parser.dart';
-import 'package:app_platform/deep_link_registry.dart';
-import 'package:app_platform/deep_link_routes.dart';
+import 'package:app_platform/platform.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -132,7 +132,7 @@ flowchart TB
   - Tự động đăng ký package vào `pubspec.yaml` root.
   - Tự động đăng ký DI vào `lib/di/injection.dart`.
   - Tự động đăng ký Router vào `lib/app_router.dart`.
-  - Tự động đăng ký route công khai vào `packages/platform/lib/deep_link_routes.dart`.
+  - Tự động đăng ký route công khai vào `packages/platform/lib/deeplink/deep_link_routes.dart` và `packages/platform/lib/deeplink/deep_link_registry.dart`.
 * **Bricks đi kèm:** `pac_mvi_subfeature` (thêm màn hình con vào feature), `remove_pac_feature`, `remove_pac_subfeature`.
 
 ---

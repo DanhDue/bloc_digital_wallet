@@ -52,8 +52,9 @@ Future<void> run(HookContext context) async {
     // 5. Update lib/app_router.dart - remove lines
     await _cleanAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 6. Update packages/platform/lib/deep_link_routes.dart - remove lines
+    // 6. Update packages/platform/lib/deeplink/deep_link_routes.dart and registry
     await _cleanFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
+    await _cleanDeepLinkRegistry(camelCaseName);
 
     // 7. Update pubspec.yaml workspace - remove package from workspace list
     await _cleanPubspecWorkspace(snakeCaseName);
@@ -229,7 +230,7 @@ Future<void> _cleanFeaturePublicRoutes(
   String pascalName,
   String camelName,
 ) async {
-  final file = File('packages/platform/lib/deep_link_routes.dart');
+  final file = File('packages/platform/lib/deeplink/deep_link_routes.dart');
   if (!file.existsSync()) return;
 
   var content = await file.readAsString();
@@ -248,6 +249,19 @@ class _${pascalName}Route extends PageRouteInfo<void> \\{
 ''', multiLine: true);
   content = content.replaceAll(privateClassPattern, '');
 
+  await file.writeAsString(content);
+}
+
+Future<void> _cleanDeepLinkRegistry(String camelName) async {
+  final file = File('packages/platform/lib/deeplink/deep_link_registry.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  final entryPattern = RegExp(
+    r'^\s*DeepLinkRoutes\.' + camelName + r':\s*const RouteRegistration\([\s\S]*?\),\n',
+    multiLine: true,
+  );
+  content = content.replaceAll(entryPattern, '');
   await file.writeAsString(content);
 }
 

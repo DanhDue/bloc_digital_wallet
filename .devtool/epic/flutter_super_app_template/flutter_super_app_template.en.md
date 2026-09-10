@@ -78,7 +78,7 @@ graph TD
     end
 
     subgraph PlatformPkg ["packages/platform (Governance)"]
-        DeepLink["DeepLinkRoutes (Decoupled Navigation)"]
+        DeepLink["deeplink/ (DeepLinkRoutes, Payload, Registry, Parser)"]
         EventBus["AppEventBus (Decoupled Events)"]
     end
 

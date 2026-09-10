@@ -22,8 +22,8 @@ To guarantee developer ergonomics in the Super App Template, creating a new Mini
 Key Requirements:
 1. Update `pac_mvi_feature` Mason Brick Hook:
    - In `bricks/pac_mvi_feature/hooks/post_gen.dart`:
-     - Append a new route string constant to `packages/platform/lib/deep_link_routes.dart` (e.g. `static const String {{name.camelCase()}} = '/{{name.snakeCase()}}';`).
-     - Register the new feature route in `DeepLinkRegistry`.
+      - Append a new route string constant to `packages/platform/lib/deeplink/deep_link_routes.dart` (e.g. `static const String {{name.camelCase()}} = '/{{name.snakeCase()}}';`).
+      - Register the new feature route in `packages/platform/lib/deeplink/deep_link_registry.dart`.
 2. Write End-to-End Integration Test:
    - Create `integration_test/deep_link_flow_test.dart` using Flutter `integration_test` package.
    - Verify that emitting a deep link (e.g. `d3nexus://scanner` or `d3nexus://settings`) transitions the UI properly from Tab 0 (Home) to the corresponding destination screen.
@@ -31,8 +31,8 @@ Key Requirements:
 
 ## Relevant Files & Context Pointers
 - `bricks/pac_mvi_feature/hooks/post_gen.dart` — Mason post-generation hook to enhance.
-- `packages/platform/lib/deep_link_routes.dart` — Target for auto-wired route constants.
-- `packages/platform/lib/src/deeplink/deep_link_registry.dart` — Target for auto-wired registration.
+- `packages/platform/lib/deeplink/deep_link_routes.dart` — Target for auto-wired route constants.
+- `packages/platform/lib/deeplink/deep_link_registry.dart` — Target for auto-wired registration.
 - `integration_test/deep_link_flow_test.dart` — [NEW] End-to-end integration test.
 
 ## Design Rationale
@@ -41,8 +41,8 @@ Key Requirements:
 
 ## Implementation Steps & Verification Checklist
 - [x] **Brick Hook Enhancement**:
-  - Edit `bricks/pac_mvi_feature/hooks/post_gen.dart` to inject route constants into `packages/platform/lib/deep_link_routes.dart`.
-  - Inject registration call into `DeepLinkRegistry`.
+  - Edit `bricks/pac_mvi_feature/hooks/post_gen.dart` to inject route constants into `packages/platform/lib/deeplink/deep_link_routes.dart`.
+  - Inject registration entry into `packages/platform/lib/deeplink/deep_link_registry.dart`.
   - Test brick generation locally with a dummy feature and verify clean injection.
   - Revert the dummy feature.
 - [x] **Integration Test Implementation**:

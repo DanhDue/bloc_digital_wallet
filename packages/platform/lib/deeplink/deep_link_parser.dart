@@ -1,8 +1,8 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-import 'package:app_platform/deep_link_payload.dart';
-import 'package:app_platform/deep_link_registry.dart';
-import 'package:app_platform/deep_link_routes.dart';
+import 'package:app_platform/deeplink/deep_link_payload.dart';
+import 'package:app_platform/deeplink/deep_link_registry.dart';
+import 'package:app_platform/deeplink/deep_link_routes.dart';
 
 /// Pure Dart parser for normalizing OS-level URIs into structured DeepLinkPayloads.
 class DeepLinkParser {

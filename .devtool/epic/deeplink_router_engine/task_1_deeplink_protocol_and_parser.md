@@ -29,10 +29,10 @@ Key Requirements:
 3. Implement `DeepLinkRegistry` to hold public route definitions and map URI paths to target shell tab indices (Home: 0, Scanner: 1, Settings: 2) and protected route flags.
 
 ## Relevant Files & Context Pointers
-- `packages/platform/lib/deep_link_routes.dart` — Existing route constants (`DeepLinkRoutes.home`, `scanner`, `settings`).
-- `packages/platform/lib/src/deeplink/deep_link_payload.dart` — [NEW] Immutable payload model.
-- `packages/platform/lib/src/deeplink/deep_link_parser.dart` — [NEW] Pure Dart URI parser and normalizer.
-- `packages/platform/lib/src/deeplink/deep_link_registry.dart` — [NEW] Route catalog and resolver.
+- `packages/platform/lib/deeplink/deep_link_routes.dart` — Existing route constants (`DeepLinkRoutes.home`, `scanner`, `settings`).
+- `packages/platform/lib/deeplink/deep_link_payload.dart` — [NEW] Immutable payload model.
+- `packages/platform/lib/deeplink/deep_link_parser.dart` — [NEW] Pure Dart URI parser and normalizer.
+- `packages/platform/lib/deeplink/deep_link_registry.dart` — [NEW] Route catalog and resolver.
 - `packages/platform/lib/platform.dart` — Export barrel for `packages/platform`.
 - `packages/platform/test/deep_link_parser_test.dart` — [NEW] Unit test suite for parser and registry.
 

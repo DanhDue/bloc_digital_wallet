@@ -78,7 +78,7 @@ graph TD
     end
 
     subgraph PlatformPkg ["packages/platform (Quản trị)"]
-        DeepLink["DeepLinkRoutes (Định tuyến phi phụ thuộc)"]
+        DeepLink["deeplink/ (DeepLinkRoutes, Payload, Registry, Parser)"]
         EventBus["AppEventBus (Giao tiếp phi phụ thuộc)"]
     end
 
