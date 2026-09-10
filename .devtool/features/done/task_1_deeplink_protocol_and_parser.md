@@ -1,13 +1,13 @@
 ---
 id: "task_1_deeplink_protocol_and_parser"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "deeplink_router_engine"
 dueDate: null
 created: "2026-09-11T01:58:25+07:00"
-modified: "2026-09-11T01:58:25+07:00"
-completedAt: null
+modified: "2026-09-11T02:17:40+07:00"
+completedAt: "2026-09-11T02:17:40+07:00"
 labels: ["architecture", "routing", "platform", "tdd"]
 order: "a1"
 ---
