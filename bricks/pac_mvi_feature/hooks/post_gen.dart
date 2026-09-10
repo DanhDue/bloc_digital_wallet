@@ -29,9 +29,10 @@ Future<void> run(HookContext context) async {
     // 5. Update lib/app_router.dart
     await _updateAppRouter(snakeCaseName, pascalCaseName, camelCaseName);
 
-    // 6. Update DeepLinkRoutes
-    progress.update('Updating DeepLinkRoutes...');
+    // 6. Update DeepLinkRoutes & DeepLinkRegistry
+    progress.update('Updating DeepLinkRoutes & Registry...');
     await _updateFeaturePublicRoutes(snakeCaseName, pascalCaseName, camelCaseName);
+    await _updateDeepLinkRegistry(snakeCaseName, camelCaseName);
 
     // 7. Run Melos commands
     progress.update('Running melos bootstrap...');
@@ -281,7 +282,7 @@ Future<void> _updateFeaturePublicRoutes(
       final newRouteConsts = '''
 
   // $pascalName
-  static const String $camelName = '/$camelName';
+  static const String $camelName = '/$snakeName';
   static const PageRouteInfo ${camelName}Route = _${pascalName}Route();
 ''';
       content = content.substring(0, lastBrace) + newRouteConsts + content.substring(lastBrace);
@@ -302,6 +303,30 @@ class _${pascalName}Route extends PageRouteInfo<void> {
 
   if (updated) {
     await file.writeAsString(content);
+  }
+}
+
+Future<void> _updateDeepLinkRegistry(String snakeName, String camelName) async {
+  final file = File('packages/platform/lib/deep_link_registry.dart');
+  if (!file.existsSync()) return;
+
+  var content = await file.readAsString();
+  if (content.contains('DeepLinkRoutes.$camelName:')) return;
+
+  final marker = 'static final Map<String, RouteRegistration> _defaultRegistry = {';
+  final endMarker = '  };';
+  if (content.contains(marker) && content.contains(endMarker)) {
+    final startIndex = content.indexOf(marker);
+    final endIndex = content.indexOf(endMarker, startIndex);
+    if (endIndex != -1) {
+      final newEntry = '''    DeepLinkRoutes.$camelName: const RouteRegistration(
+      path: DeepLinkRoutes.$camelName,
+      targetTab: null,
+      isProtected: false,
+    ),\n''';
+      content = content.substring(0, endIndex) + newEntry + content.substring(endIndex);
+      await file.writeAsString(content);
+    }
   }
 }
 
