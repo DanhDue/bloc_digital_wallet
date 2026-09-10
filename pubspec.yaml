@@ -48,6 +48,8 @@ dependencies:
   talker_dio_logger: ^4.0.0
   talker_bloc_logger: ^4.0.0
   slang_flutter: ^4.12.1
+  # DeepLink Management
+  app_links: ^6.3.4
 
 dev_dependencies:
   flutter_test:

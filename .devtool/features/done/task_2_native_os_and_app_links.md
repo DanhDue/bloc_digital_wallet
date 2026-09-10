@@ -1,13 +1,13 @@
 ---
 id: "task_2_native_os_and_app_links"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "deeplink_router_engine"
 dueDate: null
 created: "2026-09-11T01:58:25+07:00"
-modified: "2026-09-11T01:58:25+07:00"
-completedAt: null
+modified: "2026-09-11T02:20:20+07:00"
+completedAt: "2026-09-11T02:20:20+07:00"
 labels: ["architecture", "android", "ios", "native", "infrastructure"]
 order: "a2"
 ---
