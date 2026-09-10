@@ -1,13 +1,13 @@
 ---
 id: "task_3_deeplink_coordinator_and_auth_guard"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "deeplink_router_engine"
 dueDate: null
 created: "2026-09-11T01:58:25+07:00"
-modified: "2026-09-11T01:58:25+07:00"
-completedAt: null
+modified: "2026-09-11T02:24:00+07:00"
+completedAt: "2026-09-11T02:24:00+07:00"
 labels: ["architecture", "routing", "security", "tdd"]
 order: "a3"
 ---
@@ -46,7 +46,7 @@ Key Requirements:
 - **Skill Pointer:** Developers or agents working on this task should invoke `.agents/skills/test-driven-development/SKILL.md` to design the unit tests before writing the coordinator implementation.
 
 ## TDD Checklist
-- [ ] **RED**:
+- [x] **RED**:
   - Write unit tests in `test/deeplink/deep_link_coordinator_test.dart`:
     - Cold Start: When initial link is received before `markRouterReady()`, verify it is staged and not dispatched immediately.
     - Router Ready: When `markRouterReady()` is called, verify the staged link is parsed and dispatched.
@@ -57,19 +57,19 @@ Key Requirements:
     - Protected Route (Unauthenticated): Diverts to login and stores pending payload.
     - Post-Login Resume: Emitting `LoginSuccessEvent` dispatches the pending payload and resets the store.
   - Confirm tests fail before implementation.
-- [ ] **GREEN**:
+- [x] **GREEN**:
   - Implement `DeepLinkAuthGuard` with pending payload caching and event subscription.
   - Implement `DeepLinkCoordinator` with `AppLinks`, timing gates, and deduplication logic.
   - Wire services in DI container (`lib/di/`).
   - Run `flutter test test/deeplink/` and verify all tests pass.
-- [ ] **REFACTOR**:
+- [x] **REFACTOR**:
   - Clean up stream subscriptions, ensuring proper disposal on coordinator shutdown.
   - Run `dart format -l 99` and `melos run analyze`.
 
 ## Definition of Done (DoD)
-- [ ] Over 90% unit test coverage on `DeepLinkCoordinator` and `DeepLinkAuthGuard`.
-- [ ] Zero unhandled stream leaks or uncancelled subscriptions.
-- [ ] Clean compilation and zero lint warnings.
+- [x] Over 90% unit test coverage on `DeepLinkCoordinator` and `DeepLinkAuthGuard`.
+- [x] Zero unhandled stream leaks or uncancelled subscriptions.
+- [x] Clean compilation and zero lint warnings.
 
 ## Dependencies & Blockers
 - Blocked by: [Task 1: Platform DeepLink Protocol, Parser & Registry](task_1_deeplink_protocol_and_parser.md), [Task 2: Native OS Configuration & AppLinks Integration](task_2_native_os_and_app_links.md).

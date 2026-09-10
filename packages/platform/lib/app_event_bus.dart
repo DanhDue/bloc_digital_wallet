@@ -56,6 +56,39 @@ class AppLanguageChanged extends AppEvent {
   String toString() => 'AppLanguageChanged(languageCode: $languageCode)';
 }
 
+/// Published when a user successfully authenticates.
+class LoginSuccessEvent extends AppEvent {
+  final String? userId;
+
+  const LoginSuccessEvent({this.userId});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LoginSuccessEvent && runtimeType == other.runtimeType && userId == other.userId;
+
+  @override
+  int get hashCode => userId.hashCode;
+
+  @override
+  String toString() => 'LoginSuccessEvent(userId: $userId)';
+}
+
+/// Published when a user logs out or the session is invalidated.
+class UserLoggedOut extends AppEvent {
+  const UserLoggedOut();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is UserLoggedOut && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() => 'UserLoggedOut()';
+}
+
 /// App-wide, typed, broadcast-stream event bus.
 ///
 /// Lets Mini App packages publish and subscribe to cross-feature signals

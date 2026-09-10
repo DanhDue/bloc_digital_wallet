@@ -1,5 +1,7 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import 'package:app_links/app_links.dart';
+import 'package:app_platform/platform.dart';
 import 'package:core/core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:d3_nexus_shield/app_router.dart';
@@ -24,6 +26,12 @@ abstract class AppModule {
 
   @singleton
   AppRouter get appRouter => AppRouter();
+
+  @singleton
+  AppLinks get appLinks => AppLinks();
+
+  @singleton
+  DeepLinkParser get deepLinkParser => const DeepLinkParser();
 
   @singleton
   AppInitializer provideAppInitializer(
