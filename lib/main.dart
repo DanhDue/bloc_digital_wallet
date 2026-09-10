@@ -7,6 +7,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'app_router.dart';
 import 'logging/module_gated_route_observer.dart';
 import 'package:core/core.dart' as core;
+import 'deeplink/deep_link_coordinator.dart';
 import 'di/injection.dart';
 import 'generated/translations.dart';
 import 'config/app_config.dart';
@@ -26,6 +27,9 @@ void main() async {
 
   // Initialize App (Logging, Localization, Env, Bloc Observer, Auth Nav, etc.)
   await getIt<core.AppInitializer>().init();
+
+  // Initialize DeepLink Coordinator
+  await getIt<DeepLinkCoordinator>().initialize();
 
   runApp(
     StreamBuilder<ThemeMode>(

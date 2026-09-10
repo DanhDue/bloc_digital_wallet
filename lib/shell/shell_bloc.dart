@@ -10,7 +10,7 @@ import 'package:d3_nexus_shield/shell/shell_action.dart';
 import 'package:d3_nexus_shield/shell/shell_event.dart';
 import 'package:d3_nexus_shield/shell/shell_state.dart';
 
-@injectable
+@lazySingleton
 class ShellBloc extends MviBloc<ShellAction, ShellState, ShellEvent> {
   ShellBloc() : super(const ShellState()) {
     on<ShellAction>((event, emit) async {

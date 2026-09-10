@@ -9,6 +9,11 @@ import 'package:d3_nexus_shield/core/app_initializer/bloc_observer_initializer.d
 import 'package:d3_nexus_shield/core/app_initializer/environment_initializer.dart';
 import 'package:d3_nexus_shield/core/app_initializer/localization_initializer.dart';
 import 'package:d3_nexus_shield/core/app_initializer/logging_initializer.dart';
+import 'package:d3_nexus_shield/deeplink/deep_link_auth_guard.dart';
+import 'package:d3_nexus_shield/deeplink/deep_link_coordinator.dart';
+import 'package:d3_nexus_shield/deeplink/deep_link_navigator.dart';
+import 'package:d3_nexus_shield/di/injection.dart';
+import 'package:d3_nexus_shield/shell/shell_bloc.dart';
 
 @module
 abstract class AppModule {
@@ -46,5 +51,31 @@ abstract class AppModule {
       environmentInitializer,
       blocObserverInitializer,
     ]);
+  }
+
+  @lazySingleton
+  DeepLinkNavigator provideDeepLinkNavigator(AppRouter appRouter) {
+    return DeepLinkNavigator(shellBlocProvider: () => getIt<ShellBloc>(), appRouter: appRouter);
+  }
+
+  @lazySingleton
+  DeepLinkCoordinator provideDeepLinkCoordinator(
+    AppLinks appLinks,
+    DeepLinkParser parser,
+    DeepLinkNavigator navigator,
+  ) {
+    final authGuard = DeepLinkAuthGuard(
+      eventBus: getIt<AppEventBus>(),
+      isAuthenticated: () => true,
+      onRequireLogin: () {
+        navigator.navigate(const DeepLinkPayload(path: DeepLinkRoutes.login));
+      },
+    );
+    return DeepLinkCoordinator(
+      appLinks: appLinks,
+      parser: parser,
+      onNavigate: (payload) => navigator.navigate(payload),
+      authGuard: authGuard,
+    );
   }
 }

@@ -1,13 +1,13 @@
 ---
 id: "task_4_shell_lifecycle_and_hybrid_navigation"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "deeplink_router_engine"
 dueDate: null
 created: "2026-09-11T01:58:25+07:00"
-modified: "2026-09-11T01:58:25+07:00"
-completedAt: null
+modified: "2026-09-11T02:31:30+07:00"
+completedAt: "2026-09-11T02:31:30+07:00"
 labels: ["architecture", "navigation", "ui", "tdd"]
 order: "a4"
 ---
@@ -44,7 +44,7 @@ Key Requirements:
 - **Skill Pointer:** Developers or agents working on this task should follow `.agents/skills/test-driven-development/SKILL.md`.
 
 ## TDD Checklist
-- [ ] **RED**:
+- [x] **RED**:
   - Write unit tests in `test/deeplink/deep_link_navigator_test.dart`:
     - Root Tab Route (e.g. `/scanner`): Verifies `ShellBloc.onAction(ShellAction.tabChanged(1))` is dispatched.
     - Nested Route (e.g. `/settings/languages`): Verifies `appRouter.push(...)` is invoked.
@@ -52,19 +52,19 @@ Key Requirements:
   - Write widget test in `test/shell/shell_page_deeplink_test.dart`:
     - Mount `ShellPage` inside test environment, pump one frame, and verify `markRouterReady()` is called exactly once.
   - Confirm tests fail before implementation.
-- [ ] **GREEN**:
+- [x] **GREEN**:
   - Implement `DeepLinkNavigator` with `ShellBloc` and `AppRouter` dependencies.
   - Add post-frame callback in `ShellPage.initState()` to trigger `markRouterReady()`.
   - Wire `DeepLinkNavigator` into `DeepLinkCoordinator`.
   - Run tests and confirm all pass.
-- [ ] **REFACTOR**:
+- [x] **REFACTOR**:
   - Verify no memory leaks or context retention after pop.
   - Run `dart format -l 99` and `melos run analyze`.
 
 ## Definition of Done (DoD)
-- [ ] Unit and widget tests pass with 100% success rate.
-- [ ] Cold start and warm start navigation tested without console errors.
-- [ ] Code adheres strictly to formatting standards.
+- [x] Unit and widget tests pass with 100% success rate.
+- [x] Cold start and warm start navigation tested without console errors.
+- [x] Code adheres strictly to formatting standards.
 
 ## Dependencies & Blockers
 - Blocked by: [Task 3: DeepLink Coordinator, Auth Guard & Deduplication](task_3_deeplink_coordinator_and_auth_guard.md).

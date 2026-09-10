@@ -8,9 +8,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:d3_nexus_shield/generated/translations.dart';
 import 'package:framework/framework.dart';
 
+import 'package:d3_nexus_shield/deeplink/deep_link_coordinator.dart';
 import 'package:d3_nexus_shield/shell/shell_bloc.dart';
 import 'package:d3_nexus_shield/shell/shell_action.dart';
 import 'package:d3_nexus_shield/shell/shell_event.dart';
@@ -21,11 +23,32 @@ import 'package:scanner/scanner.dart';
 import 'package:settings/settings.dart';
 
 @RoutePage()
-class ShellPage extends BaseMviPage<ShellBloc, ShellAction, ShellState, ShellEvent> {
-  const ShellPage({super.key});
+class ShellPage extends BaseMviStatefulPage<ShellBloc, ShellAction, ShellState, ShellEvent> {
+  final VoidCallback? onRouterReady;
+
+  const ShellPage({super.key, this.onRouterReady});
 
   @override
-  ShellAction? get initialAction => const ShellAction.started();
+  BaseMviPageState<ShellBloc, ShellAction, ShellState, ShellEvent, ShellPage> createState() =>
+      _ShellPageState();
+}
+
+class _ShellPageState
+    extends BaseMviPageState<ShellBloc, ShellAction, ShellState, ShellEvent, ShellPage> {
+  @override
+  void initState() {
+    super.initState();
+    bloc.onAction(const ShellAction.started());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        if (widget.onRouterReady != null) {
+          widget.onRouterReady!();
+        } else if (GetIt.I.isRegistered<DeepLinkCoordinator>()) {
+          GetIt.I<DeepLinkCoordinator>().markRouterReady();
+        }
+      }
+    });
+  }
 
   @override
   Widget buildScaffold(BuildContext context) {

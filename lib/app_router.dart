@@ -1,6 +1,7 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:scanner/scanner.dart' as scanner;
 import 'package:settings/settings.dart' as settings;
 
