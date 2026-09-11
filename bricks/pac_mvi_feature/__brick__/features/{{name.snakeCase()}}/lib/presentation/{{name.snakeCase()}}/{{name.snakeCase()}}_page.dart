@@ -5,6 +5,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:framework/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 import '{{name.snakeCase()}}_action.dart';
 import '{{name.snakeCase()}}_bloc.dart';
@@ -30,7 +31,10 @@ class {{name.pascalCase()}}Page extends BaseMviPage<
 
   @override
   Widget handleState(BuildContext context, {{name.pascalCase()}}State state) {
-    return const Center(child: Text('{{name.pascalCase()}} Feature'));
+    return MiniAppErrorBoundary(
+      moduleName: '{{name.pascalCase()}}',
+      child: const Center(child: Text('{{name.pascalCase()}} Feature')),
+    );
   }
 
   @override

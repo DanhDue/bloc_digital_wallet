@@ -1,13 +1,13 @@
 ---
 id: "task_2_mini_app_error_boundary"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_resilience_and_memory"
 dueDate: null
 created: "2026-09-11T03:43:30+07:00"
-modified: "2026-09-11T03:50:00+07:00"
-completedAt: null
+modified: "2026-09-11T11:06:00+07:00"
+completedAt: "2026-09-11T11:06:00+07:00"
 labels: ["resilience", "error_boundary", "ui_kit", "shell", "bdd", "tdd"]
 order: "a2"
 ---
@@ -84,27 +84,27 @@ Key Requirements:
 - **Then** the debug accordion is completely omitted to protect sensitive internal symbols.
 
 ## TDD Checklist (The Dev Persona)
-- [ ] **RED**: Write failing widget tests in `packages/ui_kit/test/mini_app_error_boundary_test.dart`:
+- [x] **RED**: Write failing widget tests in `packages/ui_kit/test/widgets/mini_app_error_boundary_test.dart`:
   - Test healthy child renders without fallback UI.
   - Test throwing child triggers fallback UI and contains "Thử lại" & "Về Trang Chủ" buttons.
   - Test tapping "Thử lại" triggers rebuild attempt.
   - Test tapping "Về Trang Chủ" invokes `onGoHome` callback.
   - Test stack trace accordion renders in debug mode and is absent in release mode.
-- [ ] **GREEN**: Implement minimal code:
+- [x] **GREEN**: Implement minimal code:
   - Create `MiniAppErrorBoundary` in `packages/ui_kit/lib/widgets/mini_app_error_boundary.dart`.
   - Wrap tabs in `lib/shell/shell_page.dart`.
   - Update `pac_mvi_feature` template.
   - Verify all tests pass.
-- [ ] **REFACTOR**:
+- [x] **REFACTOR**:
   - Export component in `packages/ui_kit/lib/ui_kit.dart`.
   - Format with `dart format -l 99`.
   - Verify zero lint warnings with `melos run analyze`.
 
 ## Definition of Done (DoD)
-- [ ] 100% test coverage on `mini_app_error_boundary_test.dart` matching all BDD scenarios.
-- [ ] Mini App exceptions are 100% isolated; host shell navigation never freezes.
-- [ ] Stack trace accordion securely hidden in release builds.
-- [ ] Conforms strictly to project conventions.
+- [x] 100% test coverage on `mini_app_error_boundary_test.dart` matching all BDD scenarios.
+- [x] Mini App exceptions are 100% isolated; host shell navigation never freezes.
+- [x] Stack trace accordion securely hidden in release builds.
+- [x] Conforms strictly to project conventions.
 
 ## Dependencies & Blockers
 - Blocked by: None.

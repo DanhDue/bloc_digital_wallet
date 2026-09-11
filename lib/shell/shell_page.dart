@@ -21,6 +21,7 @@ import 'package:d3_nexus_shield/shell/widgets/custom_bottom_nav_bar.dart';
 import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
 import 'package:scanner/scanner.dart';
 import 'package:settings/settings.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 @RoutePage()
 class ShellPage extends BaseMviStatefulPage<ShellBloc, ShellAction, ShellState, ShellEvent> {
@@ -85,7 +86,23 @@ class _ShellPageState
       bottom: false,
       child: IndexedStack(
         index: state.currentTabIndex,
-        children: const [HomeDashboardPage(), ScannerPage(), SettingsPage()],
+        children: [
+          MiniAppErrorBoundary(
+            moduleName: 'Home',
+            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            child: const HomeDashboardPage(),
+          ),
+          MiniAppErrorBoundary(
+            moduleName: 'Scanner',
+            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            child: const ScannerPage(),
+          ),
+          MiniAppErrorBoundary(
+            moduleName: 'Settings',
+            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            child: const SettingsPage(),
+          ),
+        ],
       ),
     );
   }
