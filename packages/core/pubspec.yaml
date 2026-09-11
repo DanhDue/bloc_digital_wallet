@@ -50,6 +50,8 @@ dependencies:
   package_info_plus: ^8.1.2
   logger:
     path: ../logger
+  app_platform:
+    path: ../platform
 
 dev_dependencies:
   flutter_test:

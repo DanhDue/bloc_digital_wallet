@@ -1,13 +1,13 @@
 ---
 id: "task_3_memory_pressure_observer"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_resilience_and_memory"
 dueDate: null
 created: "2026-09-11T03:43:30+07:00"
-modified: "2026-09-11T03:50:00+07:00"
-completedAt: null
+modified: "2026-09-11T11:10:00+07:00"
+completedAt: "2026-09-11T11:10:00+07:00"
 labels: ["lifecycle", "memory", "event_bus", "core", "platform", "bdd", "tdd"]
 order: "a3"
 ---
@@ -86,24 +86,24 @@ Key Requirements:
 - **And** the remaining listeners continue receiving their eviction signals.
 
 ## TDD Checklist (The Dev Persona)
-- [ ] **RED**: Write failing tests:
+- [x] **RED**: Write failing tests:
   - In `packages/platform/test/app_event_bus_test.dart`: verify `LowMemoryEvent` can be published and filtered through `on<LowMemoryEvent>()`.
-  - In `packages/core/test/memory_pressure_observer_test.dart`: verify `didHaveMemoryPressure()` triggers `imageCache.clear()` and publishes `LowMemoryEvent`.
-- [ ] **GREEN**: Implement minimal code:
+  - In `packages/core/test/services/memory_pressure_observer_test.dart`: verify `didHaveMemoryPressure()` triggers `imageCache.clear()` and publishes `LowMemoryEvent`.
+- [x] **GREEN**: Implement minimal code:
   - Add `LowMemoryEvent` class to `packages/platform/lib/app_event_bus.dart`.
   - Implement `MemoryPressureObserver` in `packages/core/lib/services/memory_pressure_observer.dart`.
   - Wire registration in `AppInitializer.init()`.
   - Verify all tests pass.
-- [ ] **REFACTOR**:
+- [x] **REFACTOR**:
   - Export in `packages/core/lib/core.dart`.
   - Format with `dart format -l 99`.
   - Verify zero lint warnings with `melos run analyze`.
 
 ## Definition of Done (DoD)
-- [ ] 100% test coverage across all BDD scenarios.
-- [ ] `LowMemoryEvent` exported from `packages/platform/lib/platform.dart`.
-- [ ] Image cache purged and event broadcast verified on OS memory pressure.
-- [ ] Conforms strictly to project conventions.
+- [x] 100% test coverage across all BDD scenarios.
+- [x] `LowMemoryEvent` exported from `packages/platform/lib/platform.dart`.
+- [x] Image cache purged and event broadcast verified on OS memory pressure.
+- [x] Conforms strictly to project conventions.
 
 ## Dependencies & Blockers
 - Blocked by: None.

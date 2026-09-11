@@ -89,6 +89,24 @@ class UserLoggedOut extends AppEvent {
   String toString() => 'UserLoggedOut()';
 }
 
+/// Published when the mobile OS reports critical memory pressure (didHaveMemoryPressure).
+///
+/// Mini Apps, data layers, and caches subscribe to this event to drop non-essential
+/// in-memory caches, bitmaps, or ephemeral data.
+class LowMemoryEvent extends AppEvent {
+  const LowMemoryEvent();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is LowMemoryEvent && runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() => 'LowMemoryEvent()';
+}
+
 /// App-wide, typed, broadcast-stream event bus.
 ///
 /// Lets Mini App packages publish and subscribe to cross-feature signals

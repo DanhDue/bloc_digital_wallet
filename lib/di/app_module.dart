@@ -33,6 +33,10 @@ abstract class AppModule {
   ImageCacheInitializer get imageCacheInitializer => const ImageCacheInitializer();
 
   @singleton
+  MemoryPressureObserver provideMemoryPressureObserver() =>
+      MemoryPressureObserver(eventBus: getIt<AppEventBus>());
+
+  @singleton
   AppRouter get appRouter => AppRouter();
 
   @singleton
@@ -48,6 +52,7 @@ abstract class AppModule {
     EnvironmentInitializer environmentInitializer,
     BlocObserverInitializer blocObserverInitializer,
     ImageCacheInitializer imageCacheInitializer,
+    MemoryPressureObserver memoryPressureObserver,
   ) {
     return AppInitializerImpl([
       loggingInitializer,
@@ -55,6 +60,7 @@ abstract class AppModule {
       environmentInitializer,
       blocObserverInitializer,
       imageCacheInitializer,
+      memoryPressureObserver,
     ]);
   }
 

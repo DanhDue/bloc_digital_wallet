@@ -71,6 +71,26 @@ void main() {
     test('publishing before any subscription does not throw', () {
       expect(() => bus.publish(const _TestEventA(99)), returnsNormally);
     });
+
+    test(
+      'BDD-MEM-02: subscribers to LowMemoryEvent receive event and filter other events',
+      () async {
+        final receivedLowMem = <LowMemoryEvent>[];
+        final subscription = bus.on<LowMemoryEvent>().listen(receivedLowMem.add);
+
+        bus.publish(const _TestEventA(1));
+        bus.publish(const LowMemoryEvent());
+        await Future<void>.delayed(Duration.zero);
+
+        expect(receivedLowMem, hasLength(1));
+        expect(receivedLowMem.single, isA<LowMemoryEvent>());
+        expect(receivedLowMem.single, const LowMemoryEvent());
+        expect(receivedLowMem.single.toString(), 'LowMemoryEvent()');
+        expect(receivedLowMem.single.hashCode, const LowMemoryEvent().hashCode);
+
+        await subscription.cancel();
+      },
+    );
   });
 
   group('AppEventBus DI registration', () {
