@@ -41,7 +41,7 @@ Epic này xây dựng khung năng lực chịu lỗi 4 trụ cột nhằm bảo 
 ### 4.1. Kiến Trúc Tổng Thể (High-Level Architecture)
 
 ```mermaid
-graph TD
+flowchart TD
     subgraph CorePkg ["packages/core (Hạ tầng nền tảng)"]
         MemObserver["MemoryPressureObserver<br/>(WidgetsBindingObserver)"]
         NetService["NetworkConnectivityService<br/>(connectivity_plus + internet_connection_checker_plus)"]

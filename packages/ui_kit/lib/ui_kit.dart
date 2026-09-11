@@ -15,6 +15,7 @@ export 'widgets/custom_loading_widget.dart';
 export 'widgets/custom_unfilled_button.dart';
 export 'widgets/keep_alive_widget.dart';
 export 'widgets/mini_app_error_boundary.dart';
+export 'widgets/offline_banner.dart';
 export 'widgets/page_indicator.dart';
 export 'widgets/pretty_animated_qr_view.dart';
 export 'widgets/rectangular_indicator.dart';

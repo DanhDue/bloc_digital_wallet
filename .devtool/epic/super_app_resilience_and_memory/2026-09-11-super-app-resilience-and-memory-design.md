@@ -23,7 +23,7 @@ Epic này giải quyết triệt để 4 vấn đề trên thông qua **4 Trụ 
 ## 2. Kiến Trúc Tổng Thể & Ranh Giới Module
 
 ```mermaid
-graph TD
+flowchart TD
     subgraph CorePkg ["packages/core (Hạ tầng nền tảng)"]
         MemObserver["MemoryPressureObserver<br/>(WidgetsBindingObserver)"]
         NetService["NetworkConnectivityService<br/>(connectivity_plus wrapper)"]

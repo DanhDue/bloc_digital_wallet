@@ -32,6 +32,7 @@ export 'services/auth_stream_service.dart';
 export 'services/app_info_service.dart';
 export 'services/theme_manager.dart';
 export 'services/memory_pressure_observer.dart';
+export 'services/network_connectivity_service.dart';
 export 'utils/good_log.dart';
 export 'utils/constants.dart';
 export 'generated/translations.dart';

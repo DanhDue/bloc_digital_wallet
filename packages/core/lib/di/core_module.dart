@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:core/di/core_module.config.dart';
 
+import 'package:core/services/network_connectivity_service.dart';
 import 'package:core/services/theme_manager.dart';
 
 @InjectableInit(initializerName: r'$initModuleGetIt')
@@ -23,4 +24,7 @@ abstract class CoreRegisterModule {
 
   @lazySingleton
   ThemeManager get themeManager => ThemeManager.instance;
+
+  @lazySingleton
+  INetworkConnectivityService get networkConnectivityService => NetworkConnectivityService();
 }

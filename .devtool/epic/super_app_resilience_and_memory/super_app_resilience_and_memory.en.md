@@ -2,7 +2,7 @@
 
 ## 1. Meta Data
 - **Epic Name:** `super_app_resilience_and_memory`
-- **Status:** In Progress (Planning)
+- **Status:** Completed
 - **Target Release:** v1.0.0
 - **Source Spec:** [2026-09-11-super-app-resilience-and-memory-design.md](2026-09-11-super-app-resilience-and-memory-design.md)
 - **Owners / Lead:** Mobile Engineering & Architecture
@@ -41,7 +41,7 @@ This epic introduces a 4-pillar resilience framework to safeguard the Super App 
 ### 4.1. High-Level Architecture
 
 ```mermaid
-graph TD
+flowchart TD
     subgraph CorePkg ["packages/core (Foundational Infrastructure)"]
         MemObserver["MemoryPressureObserver<br/>(WidgetsBindingObserver)"]
         NetService["NetworkConnectivityService<br/>(connectivity_plus + internet_connection_checker_plus)"]
