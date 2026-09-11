@@ -1,13 +1,13 @@
 ---
 id: "task_1_app_cached_image_and_ram_cap"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_resilience_and_memory"
 dueDate: null
 created: "2026-09-11T03:43:30+07:00"
-modified: "2026-09-11T03:49:00+07:00"
-completedAt: null
+modified: "2026-09-11T10:55:09+07:00"
+completedAt: "2026-09-11T10:55:09+07:00"
 labels: ["performance", "memory", "ui_kit", "bdd", "tdd"]
 order: "a1"
 ---
@@ -85,26 +85,26 @@ Key Requirements:
 - **And** `PaintingBinding.instance.imageCache.maximumSizeBytes` equals `50 * 1024 * 1024` (50MB).
 
 ## TDD Checklist (The Dev Persona)
-- [ ] **RED**: Write failing widget tests in `packages/ui_kit/test/app_cached_image_test.dart` and `shimmer_loading_box_test.dart`:
+- [x] **RED**: Write failing widget tests in `packages/ui_kit/test/app_cached_image_test.dart` and `shimmer_loading_box_test.dart`:
   - Test physical pixel calculation with various `devicePixelRatio` values (1.0, 2.0, 3.0).
   - Test placeholder rendering with shimmer enabled and disabled.
   - Test error widget display when image loading fails or URL is malformed.
   - Test global `ImageCache` limits configuration in `packages/core/test/app_initializer_test.dart`.
-- [ ] **GREEN**: Implement minimal code:
+- [x] **GREEN**: Implement minimal code:
   - Create `ShimmerLoadingBox` in `packages/ui_kit/lib/widgets/shimmer_loading_box.dart`.
   - Create `AppCachedImage` in `packages/ui_kit/lib/widgets/app_cached_image.dart`.
   - Update `AppInitializer` in `packages/core/lib/app_initializer/app_initializer.dart` to set the 50MB / 100 entries ceiling.
   - Verify all tests pass.
-- [ ] **REFACTOR**:
+- [x] **REFACTOR**:
   - Export components in `packages/ui_kit/lib/ui_kit.dart`.
   - Format with `dart format -l 99`.
   - Verify zero lint or analysis warnings with `melos run analyze`.
 
 ## Definition of Done (DoD)
-- [ ] 100% test coverage across all BDD scenarios in `app_cached_image_test.dart`.
-- [ ] `AppCachedImage` automatically calculates physical downsample boundaries based on `devicePixelRatio`.
-- [ ] Global `ImageCache` cap (50MB / 100 items) is configured on startup.
-- [ ] Conforms strictly to project conventions (line length 99, no relative imports).
+- [x] 100% test coverage across all BDD scenarios in `app_cached_image_test.dart`.
+- [x] `AppCachedImage` automatically calculates physical downsample boundaries based on `devicePixelRatio`.
+- [x] Global `ImageCache` cap (50MB / 100 items) is configured on startup.
+- [x] Conforms strictly to project conventions (line length 99, no relative imports).
 
 ## Dependencies & Blockers
 - Blocked by: None. Can be implemented immediately as the foundational UI memory layer.

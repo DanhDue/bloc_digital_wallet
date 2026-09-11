@@ -71,17 +71,14 @@ Future<void> run(HookContext context) async {
     await _runCommand('melos', ['bootstrap'], context.logger);
 
     progress.update('Running code generation on root app...');
-    await _runCommand(
-        'fvm',
-        [
-          'flutter',
-          'pub',
-          'run',
-          'build_runner',
-          'build',
-          '--delete-conflicting-outputs',
-        ],
-        context.logger);
+    await _runCommand('fvm', [
+      'flutter',
+      'pub',
+      'run',
+      'build_runner',
+      'build',
+      '--delete-conflicting-outputs',
+    ], context.logger);
 
     progress.update('Running formatting and analysis...');
     await _runCommand('melos', ['run', 'dartfmt'], context.logger);
@@ -108,8 +105,9 @@ Future<void> _cleanInjection(String snakeName, String camelName) async {
 
   content = content.replaceAll(
     RegExp(
-        '^\\s*(await\\s+)?($camelName|$snakeName)\\.configureModuleDependencies\\(getIt\\);.*\\n',
-        multiLine: true),
+      '^\\s*(await\\s+)?($camelName|$snakeName)\\.configureModuleDependencies\\(getIt\\);.*\\n',
+      multiLine: true,
+    ),
     '',
   );
 
@@ -205,7 +203,9 @@ Future<void> _cleanPubspecWorkspace(String snakeName) async {
   var content = await file.readAsString();
 
   content = content.replaceAll(
-      RegExp('^\\s*- (features|packages)/$snakeName\\s*\\n', multiLine: true), '');
+    RegExp('^\\s*- (features|packages)/$snakeName\\s*\\n', multiLine: true),
+    '',
+  );
 
   await file.writeAsString(content);
 }

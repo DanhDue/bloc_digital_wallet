@@ -58,19 +58,22 @@ Future<void> run(HookContext context) async {
       var content = await androidPlugin.readAsString();
       if (!content.contains('${pascalCaseName}PlatformViewFactory')) {
         // Add imports
-        final importBlock = '''
+        final importBlock =
+            '''
 import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}PlatformViewFactory
 import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
 ''';
         if (content.contains('package com.danhdue.')) {
           final pkgLineEnd = content.indexOf('\n', content.indexOf('package com.danhdue.'));
-          content = content.substring(0, pkgLineEnd + 1) +
+          content =
+              content.substring(0, pkgLineEnd + 1) +
               importBlock +
               content.substring(pkgLineEnd + 1);
         }
 
         // Add registration inside onAttachedToEngine
-        final factoryRegistration = '''
+        final factoryRegistration =
+            '''
         val viewModel = ${pascalCaseName}ViewModel()
         flutterPluginBinding.platformViewRegistry.registerViewFactory(
             "com.danhdue.$snakeCaseName/native_view",
@@ -98,7 +101,8 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
       if (!content.contains('${pascalCaseName}PlatformViewFactory')) {
         // Closure-based factory — resolves the ViewModel (and its
         // @Injected deps) through ${pascalCaseName}Container per creation.
-        final factoryRegistration = '''
+        final factoryRegistration =
+            '''
         let nativeViewFactory = ${pascalCaseName}PlatformViewFactory { ${pascalCaseName}ViewModel() }
         registrar.register(nativeViewFactory, withId: "com.danhdue.$snakeCaseName/native_view")
 ''';

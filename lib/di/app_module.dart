@@ -30,6 +30,9 @@ abstract class AppModule {
   BlocObserverInitializer get blocObserverInitializer => BlocObserverInitializer();
 
   @singleton
+  ImageCacheInitializer get imageCacheInitializer => const ImageCacheInitializer();
+
+  @singleton
   AppRouter get appRouter => AppRouter();
 
   @singleton
@@ -44,12 +47,14 @@ abstract class AppModule {
     LocalizationInitializer localizationInitializer,
     EnvironmentInitializer environmentInitializer,
     BlocObserverInitializer blocObserverInitializer,
+    ImageCacheInitializer imageCacheInitializer,
   ) {
     return AppInitializerImpl([
       loggingInitializer,
       localizationInitializer,
       environmentInitializer,
       blocObserverInitializer,
+      imageCacheInitializer,
     ]);
   }
 

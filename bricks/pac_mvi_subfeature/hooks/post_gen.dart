@@ -97,7 +97,8 @@ Future<void> _updateRepositoryInterface(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -141,7 +142,8 @@ Future<void> _updateRepositoryImpl(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -152,7 +154,8 @@ Future<void> _updateRepositoryImpl(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newMethod = '''
+      final newMethod =
+          '''
 
   @override
   Future<Either<Failure, ${pascalSubfeature}Entity>> get$pascalSubfeature() {
@@ -192,7 +195,8 @@ Future<void> _updateRemoteDataSource(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$modelImport' +
           content.substring(endOfImport + 1);
     }
@@ -202,7 +206,8 @@ Future<void> _updateRemoteDataSource(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$entityImport' +
           content.substring(endOfImport + 1);
     }
@@ -213,7 +218,8 @@ Future<void> _updateRemoteDataSource(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newMethod = '''
+      final newMethod =
+          '''
 
   Future<Either<Failure, ${pascalSubfeature}Entity>> get$pascalSubfeature() async {
     final result = await safeApiCall(() => _client.get$pascalSubfeature());
@@ -250,7 +256,8 @@ Future<void> _updateClient(
     final lastImport = content.lastIndexOf("import '");
     if (lastImport != -1) {
       final endOfImport = content.indexOf(';', lastImport);
-      content = content.substring(0, endOfImport + 1) +
+      content =
+          content.substring(0, endOfImport + 1) +
           '\n$modelImport' +
           content.substring(endOfImport + 1);
     }
@@ -261,7 +268,8 @@ Future<void> _updateClient(
   if (classPattern.hasMatch(content)) {
     final lastBrace = content.lastIndexOf('}');
     if (lastBrace != -1) {
-      final newEndpoint = '''
+      final newEndpoint =
+          '''
 
   @GET('/$snakeSubfeature')
   Future<${pascalSubfeature}Model> get$pascalSubfeature();

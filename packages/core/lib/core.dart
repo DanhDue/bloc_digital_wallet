@@ -36,6 +36,7 @@ export 'utils/constants.dart';
 export 'generated/translations.dart';
 export 'app_initializer/app_initializer.dart';
 export 'app_initializer/app_initializer_impl.dart';
+export 'app_initializer/image_cache_initializer.dart';
 export 'config/environment_config.dart';
 // DI
 export 'di/core_module.dart';
