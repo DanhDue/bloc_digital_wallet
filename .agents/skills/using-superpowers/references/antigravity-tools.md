@@ -1,43 +1,23 @@
-# Antigravity Tool Mapping
+# Antigravity CLI (`agy`) Tool Mapping
 
-Some skills reference tool names from other platforms. Use the Antigravity equivalents below:
+Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On the Antigravity CLI (`agy`) these resolve to the tools below.
 
-| Skill references | Antigravity equivalent |
-|---|---|
-| `Read` (file reading) | `view_file` |
-| `Write` (file creation) | `write_to_file` |
-| `Edit` (file editing, single block) | `replace_file_content` |
-| `Edit` (file editing, multiple blocks) | `multi_replace_file_content` |
-| `Bash` (run commands) | `run_command` |
-| `Grep` (search file content) | `grep_search` |
-| `Glob` / `LS` (search files by name/pattern) | `find_by_name` |
-| `LS` (list directory) | `list_dir` |
-| `WebSearch` | `search_web` |
-| `WebFetch` | `read_url_content` |
-| `Skill` tool (invoke a skill) | `view_file` on `.agents/skills/<name>/SKILL.md` |
-| `TodoWrite` (task tracking) | ❌ No direct equivalent — track progress in responses |
-| `Task` tool (dispatch subagent) | `browser_subagent` (browser only, not general-purpose) |
+| Action skills request | Antigravity CLI equivalent |
+|----------------------|----------------------|
+| Dispatch a subagent (`Subagent (general-purpose):` template) | `invoke_subagent` with a built-in `TypeName` — `self` for full-capability work, `research` for read-only |
+| Task tracking ("create a todo", "mark complete") | a **task artifact** — `write_to_file` with `IsArtifact: true` and `ArtifactType: "task"` (see [Task tracking](#task-tracking)). **Not** `manage_task`, which manages background processes. |
 
-## Subagent support
+## Task tracking
 
-Antigravity does not support general-purpose subagent dispatch (`Task` tool). Skills that rely on `subagent-driven-development` or `dispatching-parallel-agents` should fall back to single-session execution via `executing-plans`.
+Antigravity has **no todo tool** (`manage_task` manages background
+processes — `list`/`kill`/`status`/`send_input` — it is *not* a checklist). When a
+skill says to create a todo list or track tasks, maintain a **task artifact**: a
+markdown checklist saved with `write_to_file` (`IsArtifact: true`,
+`ArtifactMetadata.ArtifactType: "task"`), edited with `replace_file_content` /
+`multi_replace_file_content` as you go.
 
-## Background commands
-
-Antigravity supports long-running background commands:
-
-| Tool | Purpose |
-|---|---|
-| `run_command` with `WaitMsBeforeAsync` | Start a command, optionally wait for output |
-| `command_status` | Poll status and output of a background command |
-| `send_command_input` | Send stdin to a running command |
-
-## Additional Antigravity tools
-
-These tools are available in Antigravity with no equivalent in other platforms:
-
-| Tool | Purpose |
-|---|---|
-| `generate_image` | Generate or edit images via AI |
-| `browser_subagent` | Automate browser interactions |
-| `list_resources` / `read_resource` | MCP resource access |
+At the start of any multi-step task, create the task artifact listing every step of
+your plan. As you complete each step, edit the artifact to mark it done (`- [x]`).
+If the plan changes, update the checklist. Keep it current — it is your source of
+truth for what remains; once the conversation gets long, re-read it before starting
+each step.

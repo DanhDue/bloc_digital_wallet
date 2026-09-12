@@ -1,5 +1,5 @@
 {
-  "APP_NAME": "D3NexusShield",
+  "APP_NAME": "Zeno",
   "APP_ID_SUFFIX": "",
   "APP_SUFFIX": "prd",
   "ENVIRONMENT": "production",
@@ -7,7 +7,6 @@
   "API_VERSION": "v1",
   "ENABLE_LOGGING": "false",
   "ENABLE_ANALYTICS": "true",
-  "ENABLE_SSL_PINNING": "true",
   "SHOW_DEBUG_BANNER": "false",
   "FIREBASE_OPTIONS": {
     "apiKey": "prd-api-key",

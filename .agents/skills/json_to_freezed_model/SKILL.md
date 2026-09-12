@@ -1,7 +1,6 @@
 ---
 name: json_to_freezed_model
 description: Parse JSON and create freezed object classes following project conventions.
-conversation_mode: Fast
 ---
 
 # JSON to Freezed Object Skill

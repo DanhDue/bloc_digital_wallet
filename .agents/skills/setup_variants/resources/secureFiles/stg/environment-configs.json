@@ -1,5 +1,5 @@
 {
-  "APP_NAME": "D3NexusShield(stg)",
+  "APP_NAME": "Zeno(stg)",
   "APP_ID_SUFFIX": ".stg",
   "APP_SUFFIX": "stg",
   "ENVIRONMENT": "staging",
@@ -7,7 +7,6 @@
   "API_VERSION": "v1",
   "ENABLE_LOGGING": "true",
   "ENABLE_ANALYTICS": "true",
-  "ENABLE_SSL_PINNING": "true",
   "SHOW_DEBUG_BANNER": "true",
   "FIREBASE_OPTIONS": {
     "apiKey": "stg-api-key",

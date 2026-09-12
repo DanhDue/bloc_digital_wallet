@@ -1,0 +1,19 @@
+{
+  "//": "Opens the project together with the agent kit, so skills can be read and edited at their source instead of from a vendored copy. Assumes ai-agent-tools is cloned as a sibling of digital_wallet; if it is not, that folder simply shows as unavailable.",
+  "folders": [
+    {
+      "name": "bloc_digital_wallet",
+      "path": "."
+    },
+    {
+      "name": "agent-kit (d3nexus — source of truth)",
+      "path": "../../ai-agent-tools"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.dart_tool": true,
+      "**/build": true
+    }
+  }
+}

@@ -1,5 +1,5 @@
 ---
-name: check-secure-files
+name: check_secure_files
 description: Enforces a checklist to verify that all required secure configuration files (google-services.json, GoogleService-Info.plist, environment-configs.json) are present for all environments (dev, stg, prd).
 ---
 

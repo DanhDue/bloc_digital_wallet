@@ -7,8 +7,6 @@ description: Use when about to claim work is complete, fixed, or passing, before
 
 ## Overview
 
-Claiming work is complete without verification is dishonesty, not efficiency.
-
 **Core principle:** Evidence before claims, always.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
@@ -105,15 +103,6 @@ Skip any step = lying, not verifying
 ❌ Trust agent report
 ```
 
-## Why This Matters
-
-From 24 failure memories:
-- your human partner said "I don't believe you" - trust broken
-- Undefined functions shipped - would crash
-- Missing requirements shipped - incomplete features
-- Time wasted on false completion → redirect → rework
-- Violates: "Honesty is a core value. If you lie, you'll be replaced."
-
 ## When To Apply
 
 **ALWAYS before:**
@@ -129,33 +118,3 @@ From 24 failure memories:
 - Paraphrases and synonyms
 - Implications of success
 - ANY communication suggesting completion/correctness
-
-## The Bottom Line
-
-**No shortcuts for verification.**
-
-Run the command. Read the output. THEN claim the result.
-
-This is non-negotiable.
-
----
-
-## Behavioral Rules Final Check — The Last Gate Before Responding
-
-<HARD-GATE>
-This is the final checkpoint. Before sending your response to the user:
-
-**Technical verification (above):**
-- [ ] Ran the verification command — not "should pass", actual output seen
-- [ ] Exit code / test count / build result confirms the claim
-
-**Behavioral rules (don't forget these during implementation):**
-- [ ] **Language** — Response is in the user's language?
-- [ ] **Debug gate** — If this was a bug fix: did I get confirmation before implementing? (debug-confirmation-policy)
-- [ ] **Git ops** — Any git write op: checked `auto_commit` in `.agents/config.yml`?
-- [ ] **Simplicity** — No features beyond what was asked? No speculative abstractions?
-- [ ] **Surgical** — Changed only what was necessary? No "while I'm here" edits?
-
-All boxes checked? → Send response.
-Any box unchecked? → Fix it first.
-</HARD-GATE>

@@ -65,6 +65,15 @@ When in doubt, ask the user which they want rather than guessing.
 
 If brainstorming decomposed the original request into multiple sub-project specs, route **each spec independently** — do not merge multiple specs into a single epic-designer invocation. Each spec keeps its own spec → design → implementation lineage.
 
+### Complete End-to-End Epic Lifecycle
+
+Routing to `epic-designer` enters the governed Epic Lifecycle. The stage sequence, the four
+approval gates, and the handoff artefact each stage owes the next are defined in one place —
+the **[`epic-lifecycle`](../epic-lifecycle/SKILL.md)** skill. Do not restate them here; this
+skill owns Stage 1 and Gate 1 only.
+
+---
+
 ## The Brainstorming Mindset
 
 To ensure this is a true creative collaboration and not just a rigid interrogation, you MUST adopt the following mindset during the session:
@@ -127,9 +136,9 @@ To ensure this is a true creative collaboration and not just a rigid interrogati
   - If this spec is later routed to `epic-designer` (see Routing After Approval), it does not stay here — it gets relocated into the epic's own directory so every doc for that epic lives in one place.
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git (if `auto_commit` is enabled):
-  - Read `.agents/config.yml` — check `auto_commit` setting
+  - Read `.agents/config.json` — check `auto_commit` setting
   - If `auto_commit: true` (default when absent): `git add <path> && git commit -m "docs: add <topic> design spec"`
-  - If `auto_commit: false`: skip commit and staging entirely. Print: "Skipping commit (auto_commit: false in .agents/config.yml). File is ready for manual commit."
+  - If `auto_commit: false`: skip commit and staging entirely. Print: "Skipping commit (auto_commit: false in .agents/config.json). File is ready for manual commit."
 
 **Spec Self-Review:**
 After writing the spec document, look at it with fresh eyes:

@@ -95,6 +95,5 @@
   "java.project.sourcePaths": [
     "ios"
   ],
-  "kiroAgent.configureMCP": "Enabled",
   "dart.showTodos": false
 }
