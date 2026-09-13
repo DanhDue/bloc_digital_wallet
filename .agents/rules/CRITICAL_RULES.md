@@ -7,7 +7,7 @@
 > [!IMPORTANT]
 > After completing any workflow or skill, you **MUST** use the `@quality_check` skill to run quality checks and fix any issues that arise. This is critical to maintain the quality of the project.
 > 
-> See: [Quality Check Skill](../skills/quality_check/SKILL.md)
+> The skill is supplied by the **d3nexus** agent kit — invoke it as `quality_check`.
 
 ## Commit Message Format
 

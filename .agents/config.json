@@ -3,6 +3,5 @@
         ".agents/rules/CRITICAL_RULES.md",
         ".agents/rules/CLAUDE.md"
     ],
-    "skills_directory": ".agents/skills",
     "auto_commit": true
 }

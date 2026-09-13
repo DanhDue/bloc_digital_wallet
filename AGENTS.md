@@ -2,8 +2,10 @@
 
 Flutter super-app monorepo (Clean Architecture + MVI, BLoC, Melos, FVM, Mason).
 
-All agent customizations live in [`.agents/`](.agents/README.md) — see that index for the full
-map of rules and skills, and for which runtime loads what.
+Skills come from the **`d3nexus`** agent kit
+([DanhDue/ai-agent-tools](https://github.com/DanhDue/ai-agent-tools)), installed per machine and
+shared by every mobile project. Project-specific rules live in [`.agents/`](.agents/README.md) —
+see that index for which runtime loads what.
 
 ## Rules
 
