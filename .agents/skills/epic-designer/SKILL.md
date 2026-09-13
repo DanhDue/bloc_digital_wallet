@@ -248,8 +248,11 @@ Each task file MUST adhere to this exact structure:
 After the Epic Overview and all confirmed task files are written (or updated), commit them to git:
 - Read `.agents/config.json` — check the `auto_commit` setting.
 - If `auto_commit: true`: stage exactly the generated/modified paths (the epic's `.devtool/epic/<epic_name>/` directory and each new/modified `.devtool/features/task_*.md` file). Then commit:
-  - New epic: `git commit -m "docs: generate epic and tasks for <epic_name>"`
-  - Update to an existing epic: `git commit -m "docs: add tasks to epic <epic_name>"`
+  - New epic: `git commit -m "[<EPIC_NAME>] Generate epic and task breakdown" -m "- <task 1 title>\n- <task 2 title>"`
+  - Update to an existing epic: `git commit -m "[<EPIC_NAME>] Add tasks to epic" -m "- <task title>"`
+
+  Follow [Commit Message Format](../../rules/CRITICAL_RULES.md#commit-message-format) — bracketed
+  scope, one-line title, one bullet per task written. No `Co-Authored-By` or other trailer.
 - If `auto_commit: false`: skip staging and committing entirely.
 
 ### Updating an Existing Epic

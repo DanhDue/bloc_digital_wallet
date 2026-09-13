@@ -124,7 +124,7 @@ Expected: PASS
 
 ```bash
 git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
+git commit -m "[SCOPE] Add specific feature" -m "- <what this step changed>"
 ```
 ````
 

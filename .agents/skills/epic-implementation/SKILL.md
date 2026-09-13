@@ -190,8 +190,12 @@ For each task in the confirmed order, follow `subagent-driven-development`.
    ```bash
    git status                                    # check nothing unrelated is pending
    git add -A                                    # code changes + .devtool/features/task_<n>.md
-   git commit -m "[EPIC_NAME] <task_title>"
+   git commit -m "[EPIC_NAME] <task_title>" -m "- <subtask 1>
+   - <subtask 2>"
    ```
+   The body lists the subtasks this task actually contained — drop it if there was only one.
+   See [Commit Message Format](../../rules/CRITICAL_RULES.md#commit-message-format); never append
+   `Co-Authored-By` or any other trailer.
 6. If implementation diverged from HLD, perform Phase 3 Doc Sync before next task.
 
 ### Phase 3 — Doc Sync on Divergence
@@ -201,7 +205,7 @@ Only when Phase 2 flags divergence:
 2. Update the affected task file(s)' prose.
 3. Commit separately:
    ```bash
-   git commit -m "[EPIC_NAME] docs: sync HLD after <task_title>"
+   git commit -m "[EPIC_NAME] Sync HLD after <task_title>" -m "- <diagram or section updated>"
    ```
 
 ### Phase 4 — End of Epic Verification (@quality_check)
@@ -228,9 +232,40 @@ Only when `@quality_check` reports **🟢 LGTM (All checks passing)**, use `fini
 | End-of-epic verification | `@quality_check` (Flutter 3-Tier + 4 Audits) | `@quality_check` (Gradle 3-Tier + 4 Audits + cleanup-java) | `@quality_check` (iOS 3-Tier + 4 Audits) |
 | Finish epic branch | `finishing-a-development-branch` | Same | Same |
 
+## Common Mistakes
+
+**Confusing `<epic_dir>` with `<epic_slug>`** — passing the directory name (`logging_refactor`) to the calculator makes it find zero tasks; passing the slug (`logging-refactor`) as a path makes the HLD read fail. See "Two Placeholders, Not One" above.
+
+**Creating the epic worktree without an explicit base ref** — `using-git-worktrees` branches from current HEAD. Always pass `develop` explicitly.
+
+**Trusting the computed layer blindly** — a task's own prose can carry softer notes the parser deliberately does not treat as hard blockers (currently lines containing "Recommended" or "New dependency"). Always read the "Manual review advised" output before confirming the order.
+
+**Committing before updating the task file's frontmatter** — `.devtool/features/task_*.md` is tracked, so this leaves the tree dirty and forces either a second commit or a leak into the next task's commit. Update the frontmatter first, then commit both together.
+
+**Copying build caches to "speed up" a new worktree** — `.dart_tool/`, `/build/`, `ios/Flutter/ephemeral/Packages/`, and native `.cxx/` directories hard-code the source checkout's absolute path; copying them corrupts the build in a different worktree path. Let them regenerate — the dependency-level caches (`~/.pub-cache`, `~/.gradle/caches`, Swift Package Manager's cache) are already global and make regeneration fast.
+
+**Running `pod install`** — this project migrated to Swift Package Manager; there is no `Podfile` tracked in git.
+
+**Folding a doc-sync into the task's code commit** — keep them separate so `git log` always shows a clean one-commit-per-task history, with doc-sync commits clearly labeled as such.
+
+**Leaving `status` at `todo` while a task is actually running** — the dashboard should show `in-progress` the moment you dispatch the implementer and `review` the moment reviewers are dispatched, cycling between the two through any fix rounds, all updated live on disk with no commit of their own; only the final `done` flip rides along with the task's single commit. The board's real columns are `backlog | todo | in-progress | review | done` — do not invent a `blocked` or `in-review` value that isn't one of these five; a stalled task just stays at `in-progress`.
+
 ## Red Flags
 - Committing before updating the task file's frontmatter.
 - Creating a worktree per task or dispatching concurrent implementation subagents without disjoint contracts.
 - Skipping the Phase 1 confirmation checkpoint before touching git.
 - Running cross-platform commands inappropriately (e.g., Gradle on Flutter/iOS, Melos on Android/iOS, Tuist/Swift on Flutter/Android).
 - Merging to `develop` without passing `@quality_check` (🟢 LGTM).
+
+## Integration
+
+**Required workflow skills:**
+- **using-git-worktrees** — creates the epic worktree (pass `develop` as the explicit base ref).
+- **subagent-driven-development** — runs each task.
+- **test-driven-development** — used by each task's implementer subagent.
+- **quality_check** — runs end-of-epic 3-Tier testing standard and 4 category audits.
+- **finishing-a-development-branch** — completes the epic branch.
+- **copy_secure_configurations** — invoked by `bootstrap_worktree.sh`.
+
+**Optional prerequisite:**
+- **check_secure_files** — documents what the gitignored `secureFiles/` directory must contain. Only needed if the main checkout's `secureFiles/` is missing or incomplete, which `bootstrap_worktree.sh` will tell you about explicitly.

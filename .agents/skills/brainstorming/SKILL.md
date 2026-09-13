@@ -137,7 +137,7 @@ To ensure this is a true creative collaboration and not just a rigid interrogati
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git (if `auto_commit` is enabled):
   - Read `.agents/config.json` — check `auto_commit` setting
-  - If `auto_commit: true` (default when absent): `git add <path> && git commit -m "docs: add <topic> design spec"`
+  - If `auto_commit: true` (default when absent): `git add <path> && git commit -m "[<TOPIC>] Add design spec"` — see [Commit Message Format](../../rules/CRITICAL_RULES.md#commit-message-format); no `Co-Authored-By` or other trailer
   - If `auto_commit: false`: skip commit and staging entirely. Print: "Skipping commit (auto_commit: false in .agents/config.json). File is ready for manual commit."
 
 **Spec Self-Review:**
