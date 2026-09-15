@@ -149,7 +149,8 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-/// Elevated center navigation item (QR Scanner button).
+// Elevated center navigation item (QR Scanner button).
+// shell:scanner-center-nav-item:begin
 class _CenterNavItem extends StatelessWidget {
   const _CenterNavItem({
     required this.icon,
@@ -192,3 +193,4 @@ class _CenterNavItem extends StatelessWidget {
     );
   }
 }
+// shell:scanner-center-nav-item:end

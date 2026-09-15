@@ -19,6 +19,7 @@ import 'package:d3_nexus_shield/shell/shell_event.dart';
 import 'package:d3_nexus_shield/shell/shell_state.dart';
 import 'package:d3_nexus_shield/shell/widgets/custom_bottom_nav_bar.dart';
 import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
+import 'package:d3_nexus_shield/shell/shell_config.dart';
 // shell:scanner-import:begin
 import 'package:scanner/scanner.dart';
 // shell:scanner-import:end
@@ -101,7 +102,7 @@ class _ShellPageState
       top: false,
       bottom: false,
       child: IndexedStack(
-        index: state.currentTabIndex,
+        index: state.currentTabIndex.clamp(0, ShellConfig.tabCount - 1).toInt(),
         children: [
           MiniAppErrorBoundary(
             moduleName: 'Home',

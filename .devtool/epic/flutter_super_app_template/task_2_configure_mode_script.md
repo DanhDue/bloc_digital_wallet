@@ -1,13 +1,13 @@
 ---
 id: "task_2_configure_mode_script"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T06:47:52Z"
+completedAt: "2026-09-15T06:47:52Z"
 labels: ["tooling", "scripts", "mode-switching", "cli"]
 order: "a2"
 ---

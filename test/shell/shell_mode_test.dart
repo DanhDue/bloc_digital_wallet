@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:d3_nexus_shield/shell/shell_config.dart';
-import 'package:d3_nexus_shield/shell/shell_state.dart';
+import 'package:d3_nexus_shield/shell/shell_bloc.dart';
 import 'package:d3_nexus_shield/shell/widgets/custom_bottom_nav_bar.dart';
 import 'package:ui_kit/ui_kit.dart';
 import 'package:d3_nexus_shield/generated/translations.dart';
@@ -27,10 +27,10 @@ void main() {
     });
 
     test(
-      'ShellState default currentTabIndex matches ShellConfig.defaultTabIndex',
+      'ShellBloc default currentTabIndex matches ShellConfig.defaultTabIndex',
       () {
-        const state = ShellState();
-        expect(state.currentTabIndex, equals(ShellConfig.defaultTabIndex));
+        final bloc = ShellBloc();
+        expect(bloc.state.currentTabIndex, equals(ShellConfig.defaultTabIndex));
       },
     );
 
