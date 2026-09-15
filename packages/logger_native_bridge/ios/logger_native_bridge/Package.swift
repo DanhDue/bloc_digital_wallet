@@ -16,7 +16,7 @@ import PackageDescription
 // Swift 5 language mode; FactoryKit builds itself in its own (Swift 6) mode.
 let package = Package(
     name: "logger_native_bridge",
-    platforms: [.iOS("13.0")],
+    platforms: [.iOS("15.0")],
     products: [
         .library(name: "logger-native-bridge", targets: ["logger_native_bridge"])
     ],

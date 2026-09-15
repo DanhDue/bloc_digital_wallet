@@ -1,13 +1,13 @@
 ---
 id: "task_7_sync_shipped_native_plugins"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T10:05:26Z"
+completedAt: "2026-09-15T10:05:26Z"
 labels: ["plugins", "native", "security", "logger", "spm", "kotlin"]
 order: "a7"
 ---
@@ -72,10 +72,10 @@ And logger_native_bridge forwards telemetry without IPC failure
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Assert test failures if FFI symbol lookup fails or SPM manifests are invalid.
-- [ ] **GREEN**: Synchronize gradle scripts and SPM manifests for both plugins.
-- [ ] **REFACTOR**: Ensure zero compiler warnings and verify code formatting.
-- [ ] **Tier C (Integration)**: Run package tests via `melos test --scope="logger_native_bridge,native_security"`.
+- [x] **RED**: Assert test failures if FFI symbol lookup fails or SPM manifests are invalid.
+- [x] **GREEN**: Synchronize gradle scripts and SPM manifests for both plugins.
+- [x] **REFACTOR**: Ensure zero compiler warnings and verify code formatting.
+- [x] **Tier C (Integration)**: Run package tests via `melos test --scope="logger_native_bridge,native_security"`.
 
 ## Definition of Done (DoD)
 - Both plugins compile cleanly with Kotlin 2.1.0 on Android and SwiftPM on iOS.

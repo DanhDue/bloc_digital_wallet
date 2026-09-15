@@ -19,7 +19,7 @@ import PackageDescription
 //     `DatadogNativeAppender` (a `logger_native_bridge.NativeLogAppender`).
 let package = Package(
     name: "native_security",
-    platforms: [.iOS("13.0")],
+    platforms: [.iOS("15.0")],
     products: [
         .library(name: "native-security", targets: ["native_security"])
     ],
