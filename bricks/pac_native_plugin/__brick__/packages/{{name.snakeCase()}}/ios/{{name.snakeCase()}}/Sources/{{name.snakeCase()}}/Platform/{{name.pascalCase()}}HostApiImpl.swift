@@ -1,22 +1,36 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
-
 import FactoryKit
-import Flutter
+import Foundation
 import UIKit
 
-/// [has_ui=false] The Pigeon `HostApi` implementation. Resolves its domain
-/// repository from the plugin's own container, so tests swap it with
-/// `{{name.pascalCase()}}Container.shared.repository.register { Mock() }`.
-final class {{name.pascalCase()}}HostApiImpl: {{name.pascalCase()}}HostApi {
-    @Injected(\{{name.pascalCase()}}Container.repository) private var repository
+/// Implementation of Pigeon Host API delegating calls to Clean Architecture UseCases.
+public final class {{name.pascalCase()}}HostApiImpl: {{name.pascalCase()}}HostApi, @unchecked Sendable {
+    private let getDataUseCase: GetDataUseCase
 
-    func getPlatformVersion() throws -> String {
-        // Demo schema method. A real headless call would go through
-        // `repository` — Pigeon supports async host methods via a completion
-        // parameter; regenerate the schema to that shape when you need it.
-        _ = repository
-        return "iOS " + UIDevice.current.systemVersion
+    public init(getDataUseCase: GetDataUseCase = {{name.pascalCase()}}Container.shared.getDataUseCase()) {
+        self.getDataUseCase = getDataUseCase
+    }
+
+    public func getPlatformVersion() throws -> String {
+        MainActor.assumeIsolated {
+            "iOS " + UIDevice.current.systemVersion
+        }
+    }
+
+    public func getData(completion: @escaping @Sendable (Result<Pigeon{{name.pascalCase()}}Data, Error>) -> Void) {
+        Task {
+            do {
+                let data = try await getDataUseCase.execute()
+                let message = Pigeon{{name.pascalCase()}}Data(
+                    id: data.id,
+                    title: data.title,
+                    timestamp: Int64(data.timestamp.timeIntervalSince1970 * 1000)
+                )
+                completion(.success(message))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 }

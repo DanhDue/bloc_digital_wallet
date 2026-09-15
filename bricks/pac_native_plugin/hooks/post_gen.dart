@@ -11,6 +11,7 @@ Future<void> run(HookContext context) async {
   final snakeCaseName = name.snakeCase;
   final pkg = 'packages/$snakeCaseName';
   final iosSources = '$pkg/ios/$snakeCaseName/Sources/$snakeCaseName';
+  final iosTests = '$pkg/ios/$snakeCaseName/Tests/${snakeCaseName}Tests';
 
   final progress = context.logger.progress('Configuring native plugin $name...');
 
@@ -26,13 +27,17 @@ Future<void> run(HookContext context) async {
       ]) {
         if (dir.existsSync()) dir.deleteSync(recursive: true);
       }
-      // PlatformViewFactory belongs to the has_ui path only.
+      // PlatformViewFactory and UI tests belong to the has_ui path only.
       final androidFactory = File(
         '$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}PlatformViewFactory.kt',
       );
       if (androidFactory.existsSync()) androidFactory.deleteSync();
       final iosFactory = File('$iosSources/Platform/${name.pascalCase}PlatformViewFactory.swift');
       if (iosFactory.existsSync()) iosFactory.deleteSync();
+      final iosVmTest = File('$iosTests/${name.pascalCase}ViewModelTests.swift');
+      if (iosVmTest.existsSync()) iosVmTest.deleteSync();
+      final iosPvTest = File('$iosTests/${name.pascalCase}PlatformViewTests.swift');
+      if (iosPvTest.existsSync()) iosPvTest.deleteSync();
     } else {
       // Native UI: drop the Pigeon/headless surface.
       for (final f in [
@@ -43,6 +48,7 @@ Future<void> run(HookContext context) async {
         File('$pkg/android/src/test/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}HostApiImplTest.kt'),
         File('$iosSources/Messages.g.swift'),
         File('$iosSources/Platform/${name.pascalCase}HostApiImpl.swift'),
+        File('$iosTests/${name.pascalCase}HostApiImplTests.swift'),
       ]) {
         if (f.existsSync()) f.deleteSync(recursive: true);
       }

@@ -1,13 +1,13 @@
 ---
 id: "task_5_pac_native_plugin_ios_bgtask"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T09:26:12Z"
+completedAt: "2026-09-15T09:26:12Z"
 labels: ["mason", "ios", "factorykit", "bgtaskscheduler", "swiftui", "spm", "bricks"]
 order: "a5"
 ---
@@ -92,10 +92,10 @@ And user touches propagate without gesture blocking
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Assert template failure when `BGTaskScheduler` registration or FactoryKit import is missing.
-- [ ] **GREEN**: Add `DataSyncTask.swift` and update `*Plugin.swift` and `Package.swift` in `pac_native_plugin`.
-- [ ] **REFACTOR**: Validate Swift formatting, access control levels (`public`/`internal`), and documentation comments.
-- [ ] **Tier C (Integration)**: Run `mason make pac_native_plugin --name test_ios_plugin --has_ui true` in a testbed and verify `Package.swift` syntax.
+- [x] **RED**: Assert template failure when `BGTaskScheduler` registration or FactoryKit import is missing.
+- [x] **GREEN**: Add `DataSyncTask.swift` and update `*Plugin.swift` and `Package.swift` in `pac_native_plugin`.
+- [x] **REFACTOR**: Validate Swift formatting, access control levels (`public`/`internal`), and documentation comments.
+- [x] **Tier C (Integration)**: Run `mason make pac_native_plugin --name test_ios_plugin --has_ui true` in a testbed and verify `Package.swift` syntax.
 
 ## Definition of Done (DoD)
 - SwiftPM `Package.swift` targets iOS 15 floor and FactoryKit 3.3.2.

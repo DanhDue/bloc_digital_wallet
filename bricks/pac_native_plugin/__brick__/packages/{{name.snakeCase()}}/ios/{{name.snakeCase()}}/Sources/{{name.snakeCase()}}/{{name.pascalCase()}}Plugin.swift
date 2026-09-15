@@ -6,25 +6,58 @@ import FactoryKit
 import Flutter
 import UIKit
 
-/// {{name.pascalCase()}}'s composition root — the only place with the
-/// `FlutterPluginRegistrar`. Register any `{{name.pascalCase()}}Container`
-/// override that needs `registrar` / `messenger` here, *before* building the
-/// consumer, then wire the Pigeon `HostApi` (headless) or the
-/// `PlatformViewFactory` (native UI).
-public class {{name.pascalCase()}}Plugin: NSObject, FlutterPlugin {
+/// Root plugin entry point and composition root for Flutter iOS bindings.
+public final class {{name.pascalCase()}}Plugin: NSObject, @preconcurrency FlutterPlugin {
+    private var messenger: FlutterBinaryMessenger?
+
+    public init(messenger: FlutterBinaryMessenger? = nil) {
+        self.messenger = messenger
+        super.init()
+    }
+
     public static func register(with registrar: FlutterPluginRegistrar) {
-        // Example override (delete if the default `{{name.pascalCase()}}DataSource`
-        // is enough):
-        // {{name.pascalCase()}}Container.shared.repository.register {
-        //     Real{{name.pascalCase()}}DataSource(messenger: registrar.messenger())
-        // }
+        let binaryMessenger = registrar.messenger()
+
 {{#has_ui}}
-        let factory = {{name.pascalCase()}}PlatformViewFactory { {{name.pascalCase()}}ViewModel() }
-        registrar.register(factory, withId: "com.danhdue.{{name.snakeCase()}}/native_view")
+        // Register Platform View Factory (With UI)
+        let viewFactory = {{name.pascalCase()}}PlatformViewFactory()
+        registrar.register(viewFactory, withId: {{name.pascalCase()}}PlatformViewFactory.viewType)
 {{/has_ui}}
 {{^has_ui}}
-        let api = {{name.pascalCase()}}HostApiImpl()
-        {{name.pascalCase()}}HostApiSetup.setUp(binaryMessenger: registrar.messenger(), api: api)
+        // Setup Headless Host API (Pigeon)
+        let hostApi = {{name.pascalCase()}}HostApiImpl()
+        {{name.pascalCase()}}HostApiSetup.setUp(binaryMessenger: binaryMessenger, api: hostApi)
 {{/has_ui}}
+
+        // Register Background Task scheduler before application launch completes
+        {{name.pascalCase()}}SyncTask.register()
+
+        let channel = FlutterMethodChannel(
+            name: "com.danhdue.{{name.snakeCase()}}/methods",
+            binaryMessenger: binaryMessenger
+        )
+        let instance = {{name.pascalCase()}}Plugin(messenger: binaryMessenger)
+        registrar.addMethodCallDelegate(instance, channel: channel)
+    }
+
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+        case "getPlatformVersion":
+            let version = MainActor.assumeIsolated {
+                "iOS " + UIDevice.current.systemVersion
+            }
+            result(version)
+        default:
+            result(FlutterMethodNotImplemented)
+        }
+    }
+
+    public func detachFromEngine(for _: FlutterPluginRegistrar) {
+{{^has_ui}}
+        if let messenger {
+            {{name.pascalCase()}}HostApiSetup.setUp(binaryMessenger: messenger, api: nil)
+        }
+{{/has_ui}}
+        messenger = nil
     }
 }

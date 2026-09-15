@@ -3,26 +3,30 @@
 import FactoryKit
 import Foundation
 
-/// {{name.pascalCase()}}'s own dependency-injection container.
-///
-/// A dedicated `SharedContainer` subclass — not the global `Container.shared` —
-/// so the plugin stays self-contained: it has no app-side Swift composition
-/// root, and per-plugin containers can't collide on factory names.
-///
-/// Register production overrides in `{{name.pascalCase()}}Plugin.register(with:)`
-/// (the only place with the `FlutterPluginRegistrar`). Tests override with
-/// `{{name.pascalCase()}}Container.shared.repository.register { Mock() }` and call
-/// `.reset()` (or `manager.reset()`) in teardown.
-public final class {{name.pascalCase()}}Container: SharedContainer {
+/// Dedicated Dependency Injection container for the {{name.pascalCase()}} package.
+/// Subclasses `SharedContainer` so multiple plugins can co-exist without colliding on global registrations.
+public final class {{name.pascalCase()}}Container: SharedContainer, @unchecked Sendable {
     public static let shared = {{name.pascalCase()}}Container()
     public let manager = ContainerManager()
-}
 
-public extension {{name.pascalCase()}}Container {
-    /// The domain repository. Default: the `Data`-layer implementation, which
-    /// needs nothing from the registrar. Override in `register(with:)` if a
-    /// real implementation needs `registrar.messenger()` or engine-scoped state.
-    var repository: Factory<{{name.pascalCase()}}Repository> {
-        self { {{name.pascalCase()}}DataSource() }
+    public init() {}
+
+    public var repository: Factory<{{name.pascalCase()}}Repository> {
+        self { {{name.pascalCase()}}RepositoryImpl() }
     }
+
+    public var getDataUseCase: Factory<GetDataUseCase> {
+        self { GetDataUseCase(repository: self.repository()) }
+    }
+
+    public var syncDataUseCase: Factory<SyncDataUseCase> {
+        self { SyncDataUseCase(repository: self.repository()) }
+    }
+
+{{#has_ui}}
+    @MainActor
+    public var {{name.camelCase()}}ViewModel: Factory<{{name.pascalCase()}}ViewModel> {
+        self { {{name.pascalCase()}}ViewModel(getDataUseCase: self.getDataUseCase()) }
+    }
+{{/has_ui}}
 }

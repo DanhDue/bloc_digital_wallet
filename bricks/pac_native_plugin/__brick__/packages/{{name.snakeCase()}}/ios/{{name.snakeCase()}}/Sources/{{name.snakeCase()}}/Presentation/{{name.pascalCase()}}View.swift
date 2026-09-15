@@ -1,35 +1,46 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
-
 import SwiftUI
 
+/// Standalone SwiftUI view rendering the plugin UI.
 public struct {{name.pascalCase()}}View: View {
-    @ObservedObject public var viewModel: {{name.pascalCase()}}ViewModel
+    @StateObject private var viewModel: {{name.pascalCase()}}ViewModel
 
-    public init(viewModel: {{name.pascalCase()}}ViewModel) {
-        self.viewModel = viewModel
+    public init(viewModel: {{name.pascalCase()}}ViewModel? = nil) {
+        let resolvedViewModel = viewModel ?? {{name.pascalCase()}}Container.shared.{{name.camelCase()}}ViewModel()
+        _viewModel = StateObject(wrappedValue: resolvedViewModel)
     }
 
     public var body: some View {
         VStack(spacing: 16) {
-            Text(viewModel.state.title)
-                .font(.headline)
-            if viewModel.state.isLoading {
-                ProgressView()
-            }
-            Button(action: {
-                viewModel.onAction(.initialize)
-            }) {
-                Text("Refresh Native Data")
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+            switch viewModel.state {
+            case .idle:
+                Text("Idle")
+                    .foregroundColor(.secondary)
+            case .loading:
+                ProgressView("Loading {{name.pascalCase()}} data...")
+            case let .loaded(data):
+                Text(data.title)
+                    .font(.headline)
+                Text("ID: \(data.id)")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Button("Refresh") {
+                    viewModel.dispatch(action: .refresh)
+                }
+            case let .error(message):
+                Text("Error: \(message)")
+                    .foregroundColor(.red)
+                Button("Retry") {
+                    viewModel.dispatch(action: .load)
+                }
             }
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            if viewModel.state == .idle {
+                viewModel.dispatch(action: .load)
+            }
+        }
     }
 }
