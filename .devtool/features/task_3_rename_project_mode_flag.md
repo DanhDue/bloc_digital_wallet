@@ -1,13 +1,13 @@
 ---
 id: "task_3_rename_project_mode_flag"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T06:49:50Z"
+completedAt: "2026-09-15T06:49:50Z"
 labels: ["tooling", "scripts", "renaming", "mason"]
 order: "a3"
 ---
@@ -85,15 +85,15 @@ And "fvm flutter test" passes cleanly
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Create `test/scripts/rename_project_test.sh` asserting argument parsing and mode delegation on a mock repository.
-- [ ] **GREEN**: Update `scripts/rename_project.sh` and `bricks/pac_rename_project/hooks/post_gen.dart` with `--mode` parameter.
-- [ ] **REFACTOR**: Verify argument validations and error messaging.
-- [ ] **Tier C (Integration)**: Run test renaming in a scratch clone, verifying compilation and clean git diff.
+- [x] **RED**: Create `test/scripts/rename_project_test.sh` asserting argument parsing and mode delegation on a mock repository.
+- [x] **GREEN**: Update `scripts/rename_project.sh` and `bricks/pac_rename_project/hooks/post_gen.dart` with `--mode` parameter.
+- [x] **REFACTOR**: Verify argument validations and error messaging.
+- [x] **Tier C (Integration)**: Run test renaming in a scratch clone, verifying compilation and clean git diff.
 
 ## Definition of Done (DoD)
-- `scripts/rename_project.sh` supports `--mode <enterprise|lean>`.
-- Project is renamed and configured to the desired mode in one step.
-- Internal plugin namespaces (`com.danhdue.*`) remain unchanged.
+- [x] `scripts/rename_project.sh` supports `--mode <enterprise|lean>`.
+- [x] Project is renamed and configured to the desired mode in one step.
+- [x] Internal plugin namespaces (`com.danhdue.*`) remain unchanged.
 
 ## Dependencies & Blockers
 - Blocked by [Task 2](task_2_configure_mode_script.md) (requires `configure_mode.sh`).

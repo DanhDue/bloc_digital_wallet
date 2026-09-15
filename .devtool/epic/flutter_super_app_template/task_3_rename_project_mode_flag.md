@@ -1,13 +1,13 @@
 ---
 id: "task_3_rename_project_mode_flag"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T06:49:50Z"
+completedAt: "2026-09-15T06:49:50Z"
 labels: ["tooling", "scripts", "renaming", "mason"]
 order: "a3"
 ---

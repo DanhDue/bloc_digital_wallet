@@ -1,6 +1,6 @@
 name: pac_rename_project
 description: Rename the Flutter Super App template (package name, bundle ID, app title, and imports)
-version: 0.1.0+1
+version: 0.1.0+2
 
 environment:
   mason: ">=0.1.0-dev.26 <1.0.0"
@@ -23,3 +23,12 @@ vars:
     description: Reverse-domain bundle identifier for mobile platforms (e.g. com.company.mysuperapp)
     prompt: What is the bundle identifier?
     default: com.example.mysuperapp
+
+  mode:
+    type: string
+    description: Project operating mode (enterprise or lean)
+    prompt: Which mode do you want to configure (enterprise or lean)?
+    default: enterprise
+    values:
+      - enterprise
+      - lean
