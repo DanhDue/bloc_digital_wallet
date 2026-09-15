@@ -19,23 +19,34 @@ import 'package:d3_nexus_shield/shell/shell_event.dart';
 import 'package:d3_nexus_shield/shell/shell_state.dart';
 import 'package:d3_nexus_shield/shell/widgets/custom_bottom_nav_bar.dart';
 import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
+// shell:scanner-import:begin
 import 'package:scanner/scanner.dart';
+// shell:scanner-import:end
 import 'package:settings/settings.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 @RoutePage()
-class ShellPage extends BaseMviStatefulPage<ShellBloc, ShellAction, ShellState, ShellEvent> {
+class ShellPage
+    extends
+        BaseMviStatefulPage<ShellBloc, ShellAction, ShellState, ShellEvent> {
   final VoidCallback? onRouterReady;
 
   const ShellPage({super.key, this.onRouterReady});
 
   @override
-  BaseMviPageState<ShellBloc, ShellAction, ShellState, ShellEvent, ShellPage> createState() =>
-      _ShellPageState();
+  BaseMviPageState<ShellBloc, ShellAction, ShellState, ShellEvent, ShellPage>
+  createState() => _ShellPageState();
 }
 
 class _ShellPageState
-    extends BaseMviPageState<ShellBloc, ShellAction, ShellState, ShellEvent, ShellPage> {
+    extends
+        BaseMviPageState<
+          ShellBloc,
+          ShellAction,
+          ShellState,
+          ShellEvent,
+          ShellPage
+        > {
   @override
   void initState() {
     super.initState();
@@ -62,15 +73,20 @@ class _ShellPageState
       child: Scaffold(
         body: buildBody(context),
         bottomNavigationBar: BlocBuilder<ShellBloc, ShellState>(
-          buildWhen: (previous, current) => previous.currentTabIndex != current.currentTabIndex,
+          buildWhen: (previous, current) =>
+              previous.currentTabIndex != current.currentTabIndex,
           builder: (context, state) {
             return CustomBottomNavBar(
               currentIndex: state.currentTabIndex,
               onTap: (index) {
-                context.read<ShellBloc>().onAction(ShellAction.tabChanged(index));
+                context.read<ShellBloc>().onAction(
+                  ShellAction.tabChanged(index),
+                );
               },
               onDoubleTap: (index) {
-                context.read<ShellBloc>().onAction(ShellAction.tabDoubleTapped(index));
+                context.read<ShellBloc>().onAction(
+                  ShellAction.tabDoubleTapped(index),
+                );
               },
             );
           },
@@ -89,17 +105,25 @@ class _ShellPageState
         children: [
           MiniAppErrorBoundary(
             moduleName: 'Home',
-            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            onGoHome: () => context.read<ShellBloc>().onAction(
+              const ShellAction.tabChanged(0),
+            ),
             child: const HomeDashboardPage(),
           ),
+          // shell:scanner-page:begin
           MiniAppErrorBoundary(
             moduleName: 'Scanner',
-            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            onGoHome: () => context.read<ShellBloc>().onAction(
+              const ShellAction.tabChanged(0),
+            ),
             child: const ScannerPage(),
           ),
+          // shell:scanner-page:end
           MiniAppErrorBoundary(
             moduleName: 'Settings',
-            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            onGoHome: () => context.read<ShellBloc>().onAction(
+              const ShellAction.tabChanged(0),
+            ),
             child: const SettingsPage(),
           ),
         ],

@@ -2,25 +2,31 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
+// app:scanner-import:begin
 import 'package:scanner/scanner.dart' as scanner;
+export 'package:scanner/scanner_router.dart';
+// app:scanner-import:end
 import 'package:settings/settings.dart' as settings;
 
 import 'package:d3_nexus_shield/shell/shell_page.dart';
 
-export 'package:scanner/scanner_router.dart';
 export 'package:settings/settings_router.dart';
 
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends RootStackRouter {
+  // app:scanner-router:begin
   final _scannerRouter = scanner.ScannerRouter();
+  // app:scanner-router:end
   final _settingsRouter = settings.SettingsRouter();
 
   @override
   List<AutoRoute> get routes => [
     AutoRoute(initial: true, page: ShellRoute.page, path: AppRoutes.home),
+    // app:scanner-routes:begin
     ..._scannerRouter.routes,
+    // app:scanner-routes:end
     ..._settingsRouter.routes,
   ];
 }

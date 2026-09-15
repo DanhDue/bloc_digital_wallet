@@ -4,7 +4,9 @@ import 'package:injectable/injectable.dart';
 import 'package:network/network.dart' as network;
 import 'package:app_platform/platform.dart' as platform;
 import 'package:core/core.dart' as core;
+// di:scanner-import:begin
 import 'package:scanner/scanner.dart' as scanner;
+// di:scanner-import:end
 import 'package:settings/settings.dart' as settings;
 
 import 'injection.config.dart';
@@ -16,7 +18,9 @@ Future<void> configureDependencies() async {
   core.configureModuleDependencies(getIt);
   network.configureModuleDependencies(getIt);
   platform.configureModuleDependencies(getIt);
+  // di:scanner-module:begin
   scanner.configureModuleDependencies(getIt);
+  // di:scanner-module:end
   await settings.configureModuleDependencies(getIt);
 
   // `packages/network` registers a no-pinning `SslConfiguration` default; the

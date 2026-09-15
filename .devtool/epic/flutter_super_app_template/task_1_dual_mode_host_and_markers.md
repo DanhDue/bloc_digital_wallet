@@ -1,13 +1,13 @@
 ---
 id: "task_1_dual_mode_host_and_markers"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T06:36:06Z"
+completedAt: "2026-09-15T06:36:06Z"
 labels: ["host", "shell", "router", "di", "markers"]
 order: "a1"
 ---

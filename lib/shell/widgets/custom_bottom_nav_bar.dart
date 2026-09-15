@@ -11,8 +11,13 @@ class ShellTabIndex {
   const ShellTabIndex._();
 
   static const int home = 0;
+  // shell:scanner-tab-index:begin
   static const int scanner = 1;
   static const int settings = 2;
+  // shell:scanner-tab-index:end
+  // shell:lean-tab-index:begin
+  // static const int settings = 1;
+  // shell:lean-tab-index:end
 }
 
 /// Custom bottom navigation bar with an elevated center QR Scanner button.
@@ -63,6 +68,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onTap: () => onTap(ShellTabIndex.home),
                 onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.home),
               ),
+              // shell:scanner-nav-item:begin
               _CenterNavItem(
                 icon: Icons.qr_code_scanner,
                 isActive: currentIndex == ShellTabIndex.scanner,
@@ -70,6 +76,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onTap: () => onTap(ShellTabIndex.scanner),
                 onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
               ),
+              // shell:scanner-nav-item:end
               _NavItem(
                 key: const ValueKey('settings_nav_tab'),
                 icon: Icons.settings_outlined,

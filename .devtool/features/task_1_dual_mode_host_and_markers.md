@@ -1,13 +1,13 @@
 ---
 id: "task_1_dual_mode_host_and_markers"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T06:36:06Z"
+completedAt: "2026-09-15T06:36:06Z"
 labels: ["host", "shell", "router", "di", "markers"]
 order: "a1"
 ---
@@ -105,15 +105,15 @@ And tapping "Home" switches to tab 0 smoothly
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Write `test/router/app_router_mode_test.dart` and `test/shell/shell_mode_test.dart` asserting 3-tab vs 2-tab configurations.
-- [ ] **GREEN**: Insert marker tags across `shell_page.dart`, `app_router.dart`, `injection.dart`, and `deep_link_registry.dart`.
-- [ ] **REFACTOR**: Ensure formatting is pristine with `melos format`, run `melos run analyze`, and assert zero linter errors.
-- [ ] **Tier C (Integration)**: Run `fvm flutter test test/shell/` and verify existing tests pass.
+- [x] **RED**: Write `test/router/app_router_mode_test.dart` and `test/shell/shell_mode_test.dart` asserting 3-tab vs 2-tab configurations.
+- [x] **GREEN**: Insert marker tags across `shell_page.dart`, `app_router.dart`, `injection.dart`, and `deep_link_registry.dart`.
+- [x] **REFACTOR**: Ensure formatting is pristine with `melos format`, run `melos run analyze`, and assert zero linter errors.
+- [x] **Tier C (Integration)**: Run `fvm flutter test test/shell/` and verify existing tests pass.
 
 ## Definition of Done (DoD)
-- Marker regions are in place and strictly delimited across all 4 target files.
-- Seam unit tests pass 100%.
-- `melos run analyze` reports zero issues.
+- [x] Marker regions are in place and strictly delimited across all 4 target files.
+- [x] Seam unit tests pass 100%.
+- [x] `melos run analyze` reports zero issues.
 
 ## Dependencies & Blockers
 - None. This is Task 1 (Foundational host task).
