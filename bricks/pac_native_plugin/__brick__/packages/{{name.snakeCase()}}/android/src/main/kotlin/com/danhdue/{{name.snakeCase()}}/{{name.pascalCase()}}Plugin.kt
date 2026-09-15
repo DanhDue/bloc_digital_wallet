@@ -8,23 +8,33 @@
 
 package com.danhdue.{{name.snakeCase()}}
 
-import io.flutter.embedding.engine.plugins.FlutterPlugin
+import com.danhdue.{{name.snakeCase()}}.di.{{name.pascalCase()}}ComponentProvider
 {{#has_ui}}
-import com.danhdue.{{name.snakeCase()}}.presentation.{{name.pascalCase()}}PlatformViewFactory
-import com.danhdue.{{name.snakeCase()}}.presentation.{{name.pascalCase()}}ViewModel
+import com.danhdue.{{name.snakeCase()}}.platform.{{name.pascalCase()}}PlatformViewFactory
 {{/has_ui}}
+{{^has_ui}}
+import com.danhdue.{{name.snakeCase()}}.platform.{{name.pascalCase()}}HostApi
+import com.danhdue.{{name.snakeCase()}}.platform.{{name.pascalCase()}}HostApiImpl
+{{/has_ui}}
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 
-class {{name.pascalCase()}}Plugin : FlutterPlugin{{^has_ui}}, {{name.pascalCase()}}HostApi{{/has_ui}} {
+class {{name.pascalCase()}}Plugin : FlutterPlugin {
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        val component = {{name.pascalCase()}}ComponentProvider.get(flutterPluginBinding.applicationContext)
+
 {{#has_ui}}
-        val viewModel = {{name.pascalCase()}}ViewModel()
         flutterPluginBinding.platformViewRegistry.registerViewFactory(
-            "com.danhdue.{{name.snakeCase()}}/native_view",
-            {{name.pascalCase()}}PlatformViewFactory(viewModel)
+            VIEW_TYPE,
+            {{name.pascalCase()}}PlatformViewFactory {
+                component.get{{name.pascalCase()}}ViewModel()
+            }
         )
 {{/has_ui}}
 {{^has_ui}}
-        {{name.pascalCase()}}HostApi.setUp(flutterPluginBinding.binaryMessenger, this)
+        {{name.pascalCase()}}HostApi.setUp(
+            flutterPluginBinding.binaryMessenger,
+            {{name.pascalCase()}}HostApiImpl(component.getGetDataUseCase())
+        )
 {{/has_ui}}
     }
 
@@ -33,10 +43,8 @@ class {{name.pascalCase()}}Plugin : FlutterPlugin{{^has_ui}}, {{name.pascalCase(
         {{name.pascalCase()}}HostApi.setUp(binding.binaryMessenger, null)
 {{/has_ui}}
     }
-{{^has_ui}}
 
-    override fun getPlatformVersion(): String {
-        return "Android ${android.os.Build.VERSION.RELEASE}"
+    companion object {
+        const val VIEW_TYPE = "com.danhdue.{{name.snakeCase()}}/native_view"
     }
-{{/has_ui}}
 }

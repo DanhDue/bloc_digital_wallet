@@ -1,13 +1,13 @@
 ---
 id: "task_4_pac_native_plugin_android_dagger_workmanager"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T07:02:24Z"
+completedAt: "2026-09-15T07:02:24Z"
 labels: ["mason", "android", "dagger2", "workmanager", "compose", "bricks"]
 order: "a4"
 ---
@@ -97,10 +97,10 @@ And the Jetpack Compose Screen renders on screen without frame drops
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Assert template failure when Dagger 2 or WorkManager dependencies are missing.
-- [ ] **GREEN**: Rewrite Android template files in `pac_native_plugin` with Kotlin DSL, Pure Dagger 2, KSP, and WorkManager.
-- [ ] **REFACTOR**: Validate Kotlin code style, ensure no hardcoded package names, and verify parameter interpolations.
-- [ ] **Tier C (Integration)**: Run `mason make pac_native_plugin --name test_android_plugin --has_ui true` in a temporary testbed and compile with `./gradlew compileDebugKotlin`.
+- [x] **RED**: Assert template failure when Dagger 2 or WorkManager dependencies are missing.
+- [x] **GREEN**: Rewrite Android template files in `pac_native_plugin` with Kotlin DSL, Pure Dagger 2, KSP, and WorkManager.
+- [x] **REFACTOR**: Validate Kotlin code style, ensure no hardcoded package names, and verify parameter interpolations.
+- [x] **Tier C (Integration)**: Run `mason make pac_native_plugin --name test_android_plugin --has_ui true` in a temporary testbed and compile with `./gradlew compileDebugKotlin`.
 
 ## Definition of Done (DoD)
 - Android plugin templates use Kotlin DSL `build.gradle.kts` and Kotlin 2.1.0.

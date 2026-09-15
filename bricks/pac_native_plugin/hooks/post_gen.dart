@@ -20,12 +20,17 @@ Future<void> run(HookContext context) async {
       // Headless: drop the native-UI surface (Android + iOS + Dart).
       for (final dir in [
         Directory('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/presentation'),
+        Directory('$pkg/android/src/test/kotlin/com/danhdue/$snakeCaseName/presentation'),
         Directory('$iosSources/Presentation'),
         Directory('$pkg/lib/src/ui'),
       ]) {
         if (dir.existsSync()) dir.deleteSync(recursive: true);
       }
-      // iOS PlatformViewFactory belongs to the has_ui path only.
+      // PlatformViewFactory belongs to the has_ui path only.
+      final androidFactory = File(
+        '$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}PlatformViewFactory.kt',
+      );
+      if (androidFactory.existsSync()) androidFactory.deleteSync();
       final iosFactory = File('$iosSources/Platform/${name.pascalCase}PlatformViewFactory.swift');
       if (iosFactory.existsSync()) iosFactory.deleteSync();
     } else {
@@ -33,7 +38,9 @@ Future<void> run(HookContext context) async {
       for (final f in [
         Directory('$pkg/pigeons'),
         File('$pkg/lib/src/messages.g.dart'),
-        File('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/Messages.g.kt'),
+        File('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/platform/Messages.g.kt'),
+        File('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}HostApiImpl.kt'),
+        File('$pkg/android/src/test/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}HostApiImplTest.kt'),
         File('$iosSources/Messages.g.swift'),
         File('$iosSources/Platform/${name.pascalCase}HostApiImpl.swift'),
       ]) {
