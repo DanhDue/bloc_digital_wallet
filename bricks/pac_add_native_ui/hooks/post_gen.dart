@@ -22,7 +22,8 @@ Future<void> run(HookContext context) async {
 
       // Add compose-compiler-gradle-plugin to buildscript dependencies if needed
       if (!content.contains('compose-compiler-gradle-plugin')) {
-        const composePluginDep = '        classpath("org.jetbrains.kotlin:compose-compiler-gradle-plugin:\$kotlinVersion")\n';
+        const composePluginDep =
+            '        classpath("org.jetbrains.kotlin:compose-compiler-gradle-plugin:\$kotlinVersion")\n';
         if (content.contains('dependencies {')) {
           content = content.replaceFirst(
             'dependencies {',
@@ -71,7 +72,8 @@ Future<void> run(HookContext context) async {
         if (content.contains('// Testing')) {
           content = content.replaceFirst('// Testing', '$composeDeps\n    // Testing');
         } else if (content.contains('testImplementation')) {
-          content = content.replaceFirst('testImplementation', '$composeDeps\n    testImplementation');
+          content =
+              content.replaceFirst('testImplementation', '$composeDeps\n    testImplementation');
         }
       }
 
@@ -126,8 +128,7 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
 ''';
         if (content.contains('package com.danhdue.')) {
           final pkgLineEnd = content.indexOf('\n', content.indexOf('package com.danhdue.'));
-          content =
-              content.substring(0, pkgLineEnd + 1) +
+          content = content.substring(0, pkgLineEnd + 1) +
               importBlock +
               content.substring(pkgLineEnd + 1);
         }
@@ -147,7 +148,8 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
         if (content.contains(
           'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {',
         )) {
-          final hookAnchor = 'val component = ${pascalCaseName}ComponentProvider.get(flutterPluginBinding.applicationContext)\n';
+          final hookAnchor =
+              'val component = ${pascalCaseName}ComponentProvider.get(flutterPluginBinding.applicationContext)\n';
           if (content.contains(hookAnchor)) {
             content = content.replaceFirst(
               hookAnchor,
@@ -176,7 +178,8 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
         let viewFactory = ${pascalCaseName}PlatformViewFactory()
         registrar.register(viewFactory, withId: ${pascalCaseName}PlatformViewFactory.viewType)
 ''';
-        if (content.contains('public static func register(with registrar: FlutterPluginRegistrar) {')) {
+        if (content
+            .contains('public static func register(with registrar: FlutterPluginRegistrar) {')) {
           final anchor = 'let binaryMessenger = registrar.messenger()\n';
           if (content.contains(anchor)) {
             content = content.replaceFirst(

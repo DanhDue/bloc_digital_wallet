@@ -193,4 +193,5 @@ class _CenterNavItem extends StatelessWidget {
     );
   }
 }
+
 // shell:scanner-center-nav-item:end

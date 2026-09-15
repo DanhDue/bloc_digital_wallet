@@ -8,11 +8,7 @@ class RouteRegistration {
   final int? targetTab;
   final bool isProtected;
 
-  const RouteRegistration({
-    required this.path,
-    this.targetTab,
-    this.isProtected = false,
-  });
+  const RouteRegistration({required this.path, this.targetTab, this.isProtected = false});
 }
 
 /// Central registry managing route metadata and tab associations for deep linking.
@@ -74,11 +70,7 @@ abstract class DeepLinkRegistry {
   static final Map<String, RouteRegistration> _dynamicRegistry = {};
 
   /// Registers a new route or overrides an existing registration.
-  static void registerRoute({
-    required String path,
-    int? targetTab,
-    bool isProtected = false,
-  }) {
+  static void registerRoute({required String path, int? targetTab, bool isProtected = false}) {
     final normalizedPath = _normalizePath(path);
     _dynamicRegistry[normalizedPath] = RouteRegistration(
       path: normalizedPath,

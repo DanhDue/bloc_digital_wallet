@@ -44,25 +44,22 @@ void main() {
     },
   );
 
-  testWidgets(
-    'ShellPage pumps and mounts SettingsPage without runtime errors',
-    (tester) async {
-      await ThemeManager.instance.init();
-      await getIt<AppInitializer>().init();
+  testWidgets('ShellPage pumps and mounts SettingsPage without runtime errors', (tester) async {
+    await ThemeManager.instance.init();
+    await getIt<AppInitializer>().init();
 
-      await tester.pumpWidget(
-        MultiTranslationProvider(
-          providers: appTranslationProviders,
-          child: MaterialApp(
-            theme: ThemeData(extensions: [AppThemes.light]),
-            home: const ShellPage(),
-          ),
+    await tester.pumpWidget(
+      MultiTranslationProvider(
+        providers: appTranslationProviders,
+        child: MaterialApp(
+          theme: ThemeData(extensions: [AppThemes.light]),
+          home: const ShellPage(),
         ),
-      );
-      await tester.pump();
+      ),
+    );
+    await tester.pump();
 
-      expect(find.byType(ShellPage), findsOneWidget);
-      expect(find.byType(SettingsPage), findsOneWidget);
-    },
-  );
+    expect(find.byType(ShellPage), findsOneWidget);
+    expect(find.byType(SettingsPage), findsOneWidget);
+  });
 }

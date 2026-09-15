@@ -26,41 +26,37 @@ void main() {
       }
     });
 
-    test(
-      'ShellBloc default currentTabIndex matches ShellConfig.defaultTabIndex',
-      () {
-        final bloc = ShellBloc();
-        expect(bloc.state.currentTabIndex, equals(ShellConfig.defaultTabIndex));
-      },
-    );
+    test('ShellBloc default currentTabIndex matches ShellConfig.defaultTabIndex', () {
+      final bloc = ShellBloc();
+      expect(bloc.state.currentTabIndex, equals(ShellConfig.defaultTabIndex));
+    });
 
-    testWidgets(
-      'CustomBottomNavBar renders appropriate items based on ShellConfig',
-      (tester) async {
-        await tester.pumpWidget(
-          TranslationProvider(
-            child: MaterialApp(
-              theme: ThemeData(extensions: [AppThemes.light]),
-              home: Scaffold(
-                bottomNavigationBar: CustomBottomNavBar(
-                  currentIndex: ShellConfig.defaultTabIndex,
-                  onTap: (_) {},
-                ),
+    testWidgets('CustomBottomNavBar renders appropriate items based on ShellConfig', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        TranslationProvider(
+          child: MaterialApp(
+            theme: ThemeData(extensions: [AppThemes.light]),
+            home: Scaffold(
+              bottomNavigationBar: CustomBottomNavBar(
+                currentIndex: ShellConfig.defaultTabIndex,
+                onTap: (_) {},
               ),
             ),
           ),
-        );
-        await tester.pumpAndSettle();
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        expect(find.text('Home'), findsOneWidget);
-        expect(find.byKey(const ValueKey('settings_nav_tab')), findsOneWidget);
+      expect(find.text('Home'), findsOneWidget);
+      expect(find.byKey(const ValueKey('settings_nav_tab')), findsOneWidget);
 
-        if (ShellConfig.hasScannerTab) {
-          expect(find.byIcon(Icons.qr_code_scanner), findsOneWidget);
-        } else {
-          expect(find.byIcon(Icons.qr_code_scanner), findsNothing);
-        }
-      },
-    );
+      if (ShellConfig.hasScannerTab) {
+        expect(find.byIcon(Icons.qr_code_scanner), findsOneWidget);
+      } else {
+        expect(find.byIcon(Icons.qr_code_scanner), findsNothing);
+      }
+    });
   });
 }

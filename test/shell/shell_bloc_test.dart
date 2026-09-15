@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:d3_nexus_shield/shell/shell_action.dart';
 import 'package:d3_nexus_shield/shell/shell_bloc.dart';
+import 'package:d3_nexus_shield/shell/shell_config.dart';
 import 'package:d3_nexus_shield/shell/shell_event.dart';
 import 'package:d3_nexus_shield/shell/shell_state.dart';
 
@@ -20,9 +21,9 @@ void main() {
     bloc.close();
   });
 
-  test('initial state should have currentTabIndex == 2 (Settings tab)', () {
-    expect(bloc.state, const ShellState());
-    expect(bloc.state.currentTabIndex, 2);
+  test('initial state should have currentTabIndex == ShellConfig.defaultTabIndex', () {
+    expect(bloc.state, const ShellState(currentTabIndex: ShellConfig.defaultTabIndex));
+    expect(bloc.state.currentTabIndex, ShellConfig.defaultTabIndex);
   });
 
   blocTest<ShellBloc, ShellState>(
@@ -42,7 +43,7 @@ void main() {
   blocTest<ShellBloc, ShellState>(
     'does not emit new state when tabDoubleTapped on current tab',
     build: () => bloc,
-    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(2)),
+    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(ShellConfig.defaultTabIndex)),
     expect: () => <ShellState>[],
   );
 

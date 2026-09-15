@@ -6,21 +6,16 @@ import 'dart:io';
 import 'package:mason/mason.dart';
 
 Future<void> run(HookContext context) async {
-  final appName =
-      (context.vars['app_name'] as String?)?.trim() ?? 'My Super App';
-  final packageName =
-      (context.vars['package_name'] as String?)?.trim() ?? 'my_super_app';
-  final bundleId = (context.vars['bundle_id'] as String?)?.trim() ??
-      'com.example.mysuperapp';
-  final mode =
-      (context.vars['mode'] as String?)?.trim().toLowerCase() ?? 'enterprise';
+  final appName = (context.vars['app_name'] as String?)?.trim() ?? 'My Super App';
+  final packageName = (context.vars['package_name'] as String?)?.trim() ?? 'my_super_app';
+  final bundleId = (context.vars['bundle_id'] as String?)?.trim() ?? 'com.example.mysuperapp';
+  final mode = (context.vars['mode'] as String?)?.trim().toLowerCase() ?? 'enterprise';
 
-  final progress = context.logger.progress(
-      'Renaming project to "$appName" ($packageName, mode: $mode)...');
+  final progress =
+      context.logger.progress('Renaming project to "$appName" ($packageName, mode: $mode)...');
 
   if (mode != 'enterprise' && mode != 'lean') {
-    progress.fail(
-        "Error: Unsupported mode '$mode'. Choose 'enterprise' or 'lean'.");
+    progress.fail("Error: Unsupported mode '$mode'. Choose 'enterprise' or 'lean'.");
     return;
   }
 
@@ -41,8 +36,7 @@ Future<void> run(HookContext context) async {
 
     // 2. Update pubspec.yaml
     progress.update('Updating pubspec.yaml...');
-    pubspecContent =
-        pubspecContent.replaceFirst(nameRegex, 'name: $packageName');
+    pubspecContent = pubspecContent.replaceFirst(nameRegex, 'name: $packageName');
     await rootPubspecFile.writeAsString(pubspecContent);
 
     // 3. Update melos.yaml
@@ -70,8 +64,7 @@ Future<void> run(HookContext context) async {
           if (entity is File && entity.path.endsWith('.dart')) {
             final content = await entity.readAsString();
             if (content.contains(oldImportPrefix)) {
-              final updated =
-                  content.replaceAll(oldImportPrefix, newImportPrefix);
+              final updated = content.replaceAll(oldImportPrefix, newImportPrefix);
               await entity.writeAsString(updated);
             }
           }
@@ -103,8 +96,7 @@ Future<void> run(HookContext context) async {
     }
 
     // Move & Update MainActivity.kt
-    final kotlinBaseDir =
-        Directory('${rootDir.path}/android/app/src/main/kotlin');
+    final kotlinBaseDir = Directory('${rootDir.path}/android/app/src/main/kotlin');
     if (kotlinBaseDir.existsSync()) {
       File? mainActivityFile;
       await for (final entity in kotlinBaseDir.list(recursive: true)) {
@@ -148,13 +140,11 @@ Future<void> run(HookContext context) async {
 
     // 6. Update iOS configuration
     progress.update('Updating iOS configuration...');
-    final pbxprojFile =
-        File('${rootDir.path}/ios/Runner.xcodeproj/project.pbxproj');
+    final pbxprojFile = File('${rootDir.path}/ios/Runner.xcodeproj/project.pbxproj');
     if (pbxprojFile.existsSync()) {
       var pbxContent = await pbxprojFile.readAsString();
       // Replace bundle ID
-      pbxContent = pbxContent.replaceAll(
-          RegExp(r'com\.example\.blocDigitalWallet'), bundleId);
+      pbxContent = pbxContent.replaceAll(RegExp(r'com\.example\.blocDigitalWallet'), bundleId);
       await pbxprojFile.writeAsString(pbxContent);
     }
 
@@ -175,8 +165,7 @@ Future<void> run(HookContext context) async {
     final verifyFlavors = File('${rootDir.path}/ios/scripts/verify_flavors.sh');
     if (verifyFlavors.existsSync()) {
       var verifyContent = await verifyFlavors.readAsString();
-      verifyContent = verifyContent.replaceAll(
-          RegExp(r'BASE_ID="[^"]+"'), 'BASE_ID="$bundleId"');
+      verifyContent = verifyContent.replaceAll(RegExp(r'BASE_ID="[^"]+"'), 'BASE_ID="$bundleId"');
       await verifyFlavors.writeAsString(verifyContent);
     }
 
@@ -281,8 +270,7 @@ Future<void> run(HookContext context) async {
           if (entity.path.contains('pac_rename_project')) continue;
           final content = await entity.readAsString();
           if (content.contains(oldImportPrefix)) {
-            final updated =
-                content.replaceAll(oldImportPrefix, newImportPrefix);
+            final updated = content.replaceAll(oldImportPrefix, newImportPrefix);
             await entity.writeAsString(updated);
           }
         }
@@ -316,11 +304,9 @@ Future<void> run(HookContext context) async {
         }
       }
       if (offenders.isEmpty) {
-        context.logger
-            .info('  SPM plugin manifests untouched (vendor-stable).');
+        context.logger.info('  SPM plugin manifests untouched (vendor-stable).');
       } else {
-        context.logger.err(
-            'Rename leaked into SPM manifests:\n  ${offenders.join('\n  ')}');
+        context.logger.err('Rename leaked into SPM manifests:\n  ${offenders.join('\n  ')}');
       }
     }
 
@@ -338,32 +324,27 @@ Future<void> run(HookContext context) async {
           ],
           runInShell: true);
       if (configResult.exitCode != 0) {
-        context.logger
-            .warn('configure_mode.sh warning: ${configResult.stderr}');
+        context.logger.warn('configure_mode.sh warning: ${configResult.stderr}');
       }
     }
 
     // 12. Melos bootstrap and code generation
     progress.update('Running melos bootstrap...');
-    final bootstrapResult =
-        await Process.run('melos', ['bootstrap'], runInShell: true);
+    final bootstrapResult = await Process.run('melos', ['bootstrap'], runInShell: true);
     if (bootstrapResult.exitCode != 0) {
       context.logger.warn('melos bootstrap warning: ${bootstrapResult.stderr}');
     }
 
     final genAllsScript = File('${rootDir.path}/scripts/genAlls.sh');
     if (genAllsScript.existsSync()) {
-      progress.update(
-          'Running ./scripts/genAlls.sh (slang, build_runner, analyze)...');
-      final genResult =
-          await Process.run('bash', ['scripts/genAlls.sh'], runInShell: true);
+      progress.update('Running ./scripts/genAlls.sh (slang, build_runner, analyze)...');
+      final genResult = await Process.run('bash', ['scripts/genAlls.sh'], runInShell: true);
       if (genResult.exitCode != 0) {
         context.logger.warn('scripts/genAlls.sh warning: ${genResult.stderr}');
       }
     }
 
-    progress
-        .complete('Project successfully renamed to "$appName" ($packageName)!');
+    progress.complete('Project successfully renamed to "$appName" ($packageName)!');
   } catch (e, st) {
     progress.fail('Failed to rename project: $e\n$st');
   }

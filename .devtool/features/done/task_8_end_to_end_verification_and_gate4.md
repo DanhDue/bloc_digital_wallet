@@ -1,13 +1,13 @@
 ---
 id: "task_8_end_to_end_verification_and_gate4"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T10:32:45Z"
+completedAt: "2026-09-15T10:32:45Z"
 labels: ["verification", "quality-gate", "gate4", "e2e", "acceptance"]
 order: "a8"
 ---
@@ -87,10 +87,10 @@ Then Gate 4 outputs "🟢 LGTM"
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Assert failure if any test in either mode fails or if any generated brick fails compilation.
-- [ ] **GREEN**: Fix any edge-case findings identified during end-to-end testing.
-- [ ] **REFACTOR**: Clean up all temporary test packages and restore git working tree.
-- [ ] **Tier C (Integration)**: Run `./scripts/testWithCoverage.sh` and execute `quality_check`.
+- [x] **RED**: Assert failure if any test in either mode fails or if any generated brick fails compilation.
+- [x] **GREEN**: Fix any edge-case findings identified during end-to-end testing.
+- [x] **REFACTOR**: Clean up all temporary test packages and restore git working tree.
+- [x] **Tier C (Integration)**: Run `./scripts/testWithCoverage.sh` and execute `quality_check`.
 
 ## Definition of Done (DoD)
 - Gate 4 machine criteria satisfied 100%.

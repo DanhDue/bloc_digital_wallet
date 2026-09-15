@@ -13,8 +13,7 @@ import 'package:d3_nexus_shield/shell/shell_config.dart';
 
 @lazySingleton
 class ShellBloc extends MviBloc<ShellAction, ShellState, ShellEvent> {
-  ShellBloc()
-    : super(const ShellState(currentTabIndex: ShellConfig.defaultTabIndex)) {
+  ShellBloc() : super(const ShellState(currentTabIndex: ShellConfig.defaultTabIndex)) {
     on<ShellAction>((event, emit) async {
       await event.map(
         started: (_) => _onStarted(emit),
@@ -50,8 +49,7 @@ class ShellBloc extends MviBloc<ShellAction, ShellState, ShellEvent> {
 
   FutureOr<void> _onBackPressed(Emitter<ShellState> emit) {
     final now = DateTime.now();
-    if (_lastBackPressTime == null ||
-        now.difference(_lastBackPressTime!) > _exitTimeWindow) {
+    if (_lastBackPressTime == null || now.difference(_lastBackPressTime!) > _exitTimeWindow) {
       _lastBackPressTime = now;
       emitEvent(const ShellEvent.showExitToast());
       return null;

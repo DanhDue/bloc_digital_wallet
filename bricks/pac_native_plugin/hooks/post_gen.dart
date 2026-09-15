@@ -44,8 +44,10 @@ Future<void> run(HookContext context) async {
         Directory('$pkg/pigeons'),
         File('$pkg/lib/src/messages.g.dart'),
         File('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/platform/Messages.g.kt'),
-        File('$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}HostApiImpl.kt'),
-        File('$pkg/android/src/test/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}HostApiImplTest.kt'),
+        File(
+            '$pkg/android/src/main/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}HostApiImpl.kt'),
+        File(
+            '$pkg/android/src/test/kotlin/com/danhdue/$snakeCaseName/platform/${name.pascalCase}HostApiImplTest.kt'),
         File('$iosSources/Messages.g.swift'),
         File('$iosSources/Platform/${name.pascalCase}HostApiImpl.swift'),
         File('$iosTests/${name.pascalCase}HostApiImplTests.swift'),

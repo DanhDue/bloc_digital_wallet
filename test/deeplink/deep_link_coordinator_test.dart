@@ -46,6 +46,16 @@ void main() {
 
     setUp(() {
       DeepLinkRegistry.reset();
+      DeepLinkRegistry.registerRoute(
+        path: DeepLinkRoutes.scanner,
+        targetTab: 1,
+        isProtected: false,
+      );
+      DeepLinkRegistry.registerRoute(
+        path: DeepLinkRoutes.settings,
+        targetTab: 2,
+        isProtected: false,
+      );
       fakeAppLinks = _FakeAppLinks();
       dispatchedPayloads = [];
 

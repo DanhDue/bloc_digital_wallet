@@ -9,7 +9,6 @@ part 'shell_state.freezed.dart';
 @freezed
 abstract class ShellState extends BaseState with _$ShellState {
   const ShellState._();
-  const factory ShellState({
-    @Default(ShellConfig.defaultTabIndex) int currentTabIndex,
-  }) = _ShellState;
+  const factory ShellState({@Default(ShellConfig.defaultTabIndex) int currentTabIndex}) =
+      _ShellState;
 }

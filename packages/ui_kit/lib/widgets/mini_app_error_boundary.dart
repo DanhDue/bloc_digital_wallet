@@ -217,7 +217,9 @@ class MiniAppErrorBoundaryState extends State<MiniAppErrorBoundary> {
                         borderRadius: .circular(8),
                         border: Border.all(color: theme.ink40),
                       ),
-                      child: ExpansionTile(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: ExpansionTile(
                         tilePadding: const .symmetric(horizontal: 16),
                         title: Text(
                           'Chi tiết lỗi (Debug)',
@@ -243,6 +245,7 @@ class MiniAppErrorBoundaryState extends State<MiniAppErrorBoundary> {
                         ],
                       ),
                     ),
+                  ),
                   ],
                 ],
               ),

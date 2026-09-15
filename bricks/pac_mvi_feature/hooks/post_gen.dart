@@ -196,8 +196,7 @@ Future<void> _updateLocalizationInitializer(String snakeName) async {
     );
     final match = settingsBlockRegex.firstMatch(content);
     if (match != null) {
-      final newBlock =
-          '''
+      final newBlock = '''
       await $snakeName.LocaleSettings.overrideTranslationsFromMap(
         locale: $snakeName.AppLocaleUtils.parse(rawLocale),
         isFlatMap: false,
@@ -281,8 +280,7 @@ Future<void> _updateFeaturePublicRoutes(
     final lastBrace = content.lastIndexOf('}', insertionPoint);
 
     if (lastBrace != -1) {
-      final newRouteConsts =
-          '''
+      final newRouteConsts = '''
 
   // $pascalName
   static const String $camelName = '/$snakeName';
@@ -294,8 +292,7 @@ Future<void> _updateFeaturePublicRoutes(
   }
 
   if (!content.contains('class _${pascalName}Route extends PageRouteInfo')) {
-    final newRouteClass =
-        '''
+    final newRouteClass = '''
 
 class _${pascalName}Route extends PageRouteInfo<void> {
   const _${pascalName}Route() : super('${pascalName}Route');
@@ -323,8 +320,7 @@ Future<void> _updateDeepLinkRegistry(String snakeName, String camelName) async {
     final startIndex = content.indexOf(marker);
     final endIndex = content.indexOf(endMarker, startIndex);
     if (endIndex != -1) {
-      final newEntry =
-          '''    DeepLinkRoutes.$camelName: const RouteRegistration(
+      final newEntry = '''    DeepLinkRoutes.$camelName: const RouteRegistration(
       path: DeepLinkRoutes.$camelName,
       targetTab: null,
       isProtected: false,
