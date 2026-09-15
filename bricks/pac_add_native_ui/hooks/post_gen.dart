@@ -13,12 +13,74 @@ Future<void> run(HookContext context) async {
   final progress = context.logger.progress('Wiring native UI for $name...');
 
   try {
-    // 1. Patch Android build.gradle
+    // 1. Patch Android build.gradle.kts or build.gradle
+    final buildGradleKts = File('packages/$snakeCaseName/android/build.gradle.kts');
     final buildGradle = File('packages/$snakeCaseName/android/build.gradle');
-    if (buildGradle.existsSync()) {
+
+    if (buildGradleKts.existsSync()) {
+      var content = await buildGradleKts.readAsString();
+
+      // Add compose-compiler-gradle-plugin to buildscript dependencies if needed
+      if (!content.contains('compose-compiler-gradle-plugin')) {
+        const composePluginDep = '        classpath("org.jetbrains.kotlin:compose-compiler-gradle-plugin:\$kotlinVersion")\n';
+        if (content.contains('dependencies {')) {
+          content = content.replaceFirst(
+            'dependencies {',
+            'dependencies {\n$composePluginDep',
+          );
+        }
+      }
+
+      // Add apply plugin for compose
+      if (!content.contains('org.jetbrains.kotlin.plugin.compose')) {
+        const applyCompose = 'apply(plugin = "org.jetbrains.kotlin.plugin.compose")\n';
+        if (content.contains('apply(plugin = "com.google.devtools.ksp")')) {
+          content = content.replaceFirst(
+            'apply(plugin = "com.google.devtools.ksp")',
+            'apply(plugin = "com.google.devtools.ksp")\n$applyCompose',
+          );
+        }
+      }
+
+      // Add buildFeatures { compose = true }
+      if (!content.contains('compose = true') && !content.contains('compose true')) {
+        const composeFeature = '''
+    buildFeatures {
+        compose = true
+    }
+''';
+        if (content.contains('sourceSets {')) {
+          content = content.replaceFirst('sourceSets {', '$composeFeature\n    sourceSets {');
+        }
+      }
+
+      // Add Compose dependencies
+      if (!content.contains('androidx.compose.material3')) {
+        const composeDeps = '''
+    // Jetpack Compose (Pure, No Hilt)
+    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.activity:activity-compose:1.9.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
+''';
+        if (content.contains('// Testing')) {
+          content = content.replaceFirst('// Testing', '$composeDeps\n    // Testing');
+        } else if (content.contains('testImplementation')) {
+          content = content.replaceFirst('testImplementation', '$composeDeps\n    testImplementation');
+        }
+      }
+
+      await buildGradleKts.writeAsString(content);
+    } else if (buildGradle.existsSync()) {
+      // Legacy Groovy build.gradle fallback
       var content = await buildGradle.readAsString();
       if (!content.contains('compose true') && !content.contains('compose = true')) {
-        final composeBlock = '''
+        const composeBlock = '''
     buildFeatures {
         compose true
     }
@@ -32,7 +94,7 @@ Future<void> run(HookContext context) async {
       }
 
       if (!content.contains('androidx.compose.material3')) {
-        final composeDeps = '''
+        const composeDeps = '''
         implementation platform('androidx.compose:compose-bom:2024.09.00')
         implementation 'androidx.compose.ui:ui'
         implementation 'androidx.compose.material3:material3'
@@ -58,9 +120,8 @@ Future<void> run(HookContext context) async {
       var content = await androidPlugin.readAsString();
       if (!content.contains('${pascalCaseName}PlatformViewFactory')) {
         // Add imports
-        final importBlock =
-            '''
-import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}PlatformViewFactory
+        final importBlock = '''
+import com.danhdue.$snakeCaseName.platform.${pascalCaseName}PlatformViewFactory
 import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
 ''';
         if (content.contains('package com.danhdue.')) {
@@ -72,47 +133,62 @@ import com.danhdue.$snakeCaseName.presentation.${pascalCaseName}ViewModel
         }
 
         // Add registration inside onAttachedToEngine
-        final factoryRegistration =
-            '''
-        val viewModel = ${pascalCaseName}ViewModel()
+        final factoryRegistration = '''
         flutterPluginBinding.platformViewRegistry.registerViewFactory(
-            "com.danhdue.$snakeCaseName/native_view",
-            ${pascalCaseName}PlatformViewFactory(viewModel)
+            VIEW_TYPE,
+            ${pascalCaseName}PlatformViewFactory {
+                ${pascalCaseName}ViewModel(
+                    component.getGetDataUseCase(),
+                    component.getSyncDataUseCase()
+                )
+            }
         )
 ''';
         if (content.contains(
           'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {',
         )) {
-          content = content.replaceFirst(
-            'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {',
-            'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {\n$factoryRegistration',
-          );
+          final hookAnchor = 'val component = ${pascalCaseName}ComponentProvider.get(flutterPluginBinding.applicationContext)\n';
+          if (content.contains(hookAnchor)) {
+            content = content.replaceFirst(
+              hookAnchor,
+              '$hookAnchor$factoryRegistration\n',
+            );
+          } else {
+            content = content.replaceFirst(
+              'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {',
+              'override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {\n$factoryRegistration',
+            );
+          }
         }
         await androidPlugin.writeAsString(content);
       }
     }
 
-    // 3. Patch iOS Plugin.swift (SPM layout from pac_native_plugin).
+    // 3. Patch iOS Plugin.swift (SPM layout from pac_native_plugin)
     final iosPlugin = File(
       'packages/$snakeCaseName/ios/$snakeCaseName/Sources/$snakeCaseName/${pascalCaseName}Plugin.swift',
     );
     if (iosPlugin.existsSync()) {
       var content = await iosPlugin.readAsString();
       if (!content.contains('${pascalCaseName}PlatformViewFactory')) {
-        // Closure-based factory — resolves the ViewModel (and its
-        // @Injected deps) through ${pascalCaseName}Container per creation.
-        final factoryRegistration =
-            '''
-        let nativeViewFactory = ${pascalCaseName}PlatformViewFactory { ${pascalCaseName}ViewModel() }
-        registrar.register(nativeViewFactory, withId: "com.danhdue.$snakeCaseName/native_view")
+        final factoryRegistration = '''
+        // Register Platform View Factory (With UI)
+        let viewFactory = ${pascalCaseName}PlatformViewFactory()
+        registrar.register(viewFactory, withId: ${pascalCaseName}PlatformViewFactory.viewType)
 ''';
-        if (content.contains(
-          'public static func register(with registrar: FlutterPluginRegistrar) {',
-        )) {
-          content = content.replaceFirst(
-            'public static func register(with registrar: FlutterPluginRegistrar) {',
-            'public static func register(with registrar: FlutterPluginRegistrar) {\n$factoryRegistration',
-          );
+        if (content.contains('public static func register(with registrar: FlutterPluginRegistrar) {')) {
+          final anchor = 'let binaryMessenger = registrar.messenger()\n';
+          if (content.contains(anchor)) {
+            content = content.replaceFirst(
+              anchor,
+              '$anchor$factoryRegistration\n',
+            );
+          } else {
+            content = content.replaceFirst(
+              'public static func register(with registrar: FlutterPluginRegistrar) {',
+              'public static func register(with registrar: FlutterPluginRegistrar) {\n$factoryRegistration',
+            );
+          }
         }
         await iosPlugin.writeAsString(content);
       }

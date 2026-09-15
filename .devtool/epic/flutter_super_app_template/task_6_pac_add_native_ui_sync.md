@@ -1,13 +1,13 @@
 ---
 id: "task_6_pac_add_native_ui_sync"
-status: "todo"
+status: "done"
 priority: "medium"
 assignee: null
 epic: "flutter_super_app_template"
 dueDate: null
 created: "2026-09-15T13:20:00Z"
-modified: "2026-09-15T13:20:00Z"
-completedAt: null
+modified: "2026-09-15T09:50:46Z"
+completedAt: "2026-09-15T09:50:46Z"
 labels: ["mason", "tooling", "ui-upgrade", "compose", "swiftui", "bricks"]
 order: "a6"
 ---
@@ -87,10 +87,10 @@ And no platform view channel mismatch occurs
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Create a mock headless plugin and verify upgrade failure if post_gen corrupts gradle or plugin files.
-- [ ] **GREEN**: Implement updated `pac_add_native_ui` templates and hooks matching Kotlin 2.1 and SPM.
-- [ ] **REFACTOR**: Validate idempotency and clean formatting.
-- [ ] **Tier C (Integration)**: Run `mason make pac_native_plugin --name test_up --has_ui false` followed by `mason make pac_add_native_ui --name test_up` and assert clean compilation.
+- [x] **RED**: Create a mock headless plugin and verify upgrade failure if post_gen corrupts gradle or plugin files.
+- [x] **GREEN**: Implement updated `pac_add_native_ui` templates and hooks matching Kotlin 2.1 and SPM.
+- [x] **REFACTOR**: Validate idempotency and clean formatting.
+- [x] **Tier C (Integration)**: Run `mason make pac_native_plugin --name test_up --has_ui false` followed by `mason make pac_add_native_ui --name test_up` and assert clean compilation.
 
 ## Definition of Done (DoD)
 - `pac_add_native_ui` upgrades a headless plugin without mutating Domain, Data, DI, or Workers.

@@ -6,23 +6,29 @@ import Flutter
 import SwiftUI
 import UIKit
 
-public class {{name.pascalCase()}}PlatformView: NSObject, FlutterPlatformView {
-    private let hostingController: UIHostingController<{{name.pascalCase()}}View>
+/// Flutter Platform View bridging {{name.pascalCase()}}View into Flutter widget trees.
+public final class {{name.pascalCase()}}PlatformView: NSObject, @preconcurrency FlutterPlatformView, @unchecked Sendable {
+    public let hostingController: UIHostingController<{{name.pascalCase()}}View>
 
     public init(
         frame: CGRect,
-        viewIdentifier viewId: Int64,
-        arguments args: Any?,
-        viewModel: {{name.pascalCase()}}ViewModel
+        viewIdentifier _: Int64,
+        arguments _: Any?,
+        viewModel: {{name.pascalCase()}}ViewModel? = nil
     ) {
-        let controller = UIHostingController(rootView: {{name.pascalCase()}}View(viewModel: viewModel))
-        controller.view.frame = frame
-        controller.view.backgroundColor = .clear
-        self.hostingController = controller
+        let controller = MainActor.assumeIsolated {
+            let pluginView = {{name.pascalCase()}}View(viewModel: viewModel)
+            let ctrl = UIHostingController(rootView: pluginView)
+            ctrl.view.frame = frame
+            return ctrl
+        }
+        hostingController = controller
         super.init()
     }
 
     public func view() -> UIView {
-        hostingController.view
+        MainActor.assumeIsolated {
+            hostingController.view
+        }
     }
 }

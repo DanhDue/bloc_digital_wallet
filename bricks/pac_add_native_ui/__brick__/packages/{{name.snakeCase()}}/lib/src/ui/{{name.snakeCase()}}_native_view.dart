@@ -3,12 +3,14 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class {{name.pascalCase()}}NativeView extends StatelessWidget {
-  const {{name.pascalCase()}}NativeView({super.key});
+  const {{name.pascalCase()}}NativeView({super.key, this.creationParams = const {}});
+
+  final Map<String, dynamic> creationParams;
 
   static const String viewType = 'com.danhdue.{{name.snakeCase()}}/native_view';
 
@@ -29,7 +31,7 @@ class {{name.pascalCase()}}NativeView extends StatelessWidget {
             id: params.id,
             viewType: viewType,
             layoutDirection: TextDirection.ltr,
-            creationParams: const <String, dynamic>{},
+            creationParams: creationParams,
             creationParamsCodec: const StandardMessageCodec(),
             onFocus: () {
               params.onFocusChanged(true);
@@ -40,18 +42,15 @@ class {{name.pascalCase()}}NativeView extends StatelessWidget {
         },
       );
     } else if (Platform.isIOS) {
-      return const UiKitView(
+      return UiKitView(
         viewType: viewType,
         layoutDirection: TextDirection.ltr,
-        creationParams: <String, dynamic>{},
-        creationParamsCodec: StandardMessageCodec(),
+        creationParams: creationParams,
+        creationParamsCodec: const StandardMessageCodec(),
       );
     }
-
     return Center(
-      child: Text(
-        '{{name.pascalCase()}}NativeView not supported on ${Platform.operatingSystem}',
-      ),
+      child: Text('{{name.pascalCase()}} Native View not supported on ${Platform.operatingSystem}'),
     );
   }
 }

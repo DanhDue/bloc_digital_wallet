@@ -19,13 +19,11 @@ Future<void> run(HookContext context) async {
     'packages/$snakeCaseName/android/src/main/kotlin/com/danhdue/$snakeCaseName/presentation',
   );
   if (androidPresentationDir.existsSync()) {
-    context.logger.err(
-      'Package "$snakeCaseName" already has native UI implemented in Android presentation layer.',
-    );
+    context.logger.err('Presentation layer already exists in $snakeCaseName');
     throw ProcessException(
       'mason',
       [],
-      'Package $snakeCaseName already has native UI implemented.',
+      'Presentation layer already exists in $snakeCaseName',
     );
   }
 
@@ -33,13 +31,11 @@ Future<void> run(HookContext context) async {
     'packages/$snakeCaseName/ios/$snakeCaseName/Sources/$snakeCaseName/Presentation',
   );
   if (iosPresentationDir.existsSync()) {
-    context.logger.err(
-      'Package "$snakeCaseName" already has native UI implemented in iOS Presentation layer.',
-    );
+    context.logger.err('Presentation layer already exists in $snakeCaseName');
     throw ProcessException(
       'mason',
       [],
-      'Package $snakeCaseName already has native UI implemented.',
+      'Presentation layer already exists in $snakeCaseName',
     );
   }
 }

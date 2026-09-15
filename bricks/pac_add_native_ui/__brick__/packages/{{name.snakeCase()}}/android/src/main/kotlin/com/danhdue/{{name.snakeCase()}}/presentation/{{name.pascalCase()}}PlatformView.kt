@@ -11,13 +11,18 @@ package com.danhdue.{{name.snakeCase()}}.presentation
 import android.content.Context
 import android.view.View
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import io.flutter.plugin.platform.PlatformView
 
 class {{name.pascalCase()}}PlatformView(
     context: Context,
-    viewModel: {{name.pascalCase()}}ViewModel = {{name.pascalCase()}}ViewModel()
+    viewId: Int,
+    args: Any?,
+    private val viewModel: {{name.pascalCase()}}ViewModel
 ) : PlatformView {
+
     private val composeView: ComposeView = ComposeView(context).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool)
         setContent {
             {{name.pascalCase()}}Screen(viewModel = viewModel)
         }
@@ -25,5 +30,7 @@ class {{name.pascalCase()}}PlatformView(
 
     override fun getView(): View = composeView
 
-    override fun dispose() {}
+    override fun dispose() {
+        composeView.disposeComposition()
+    }
 }

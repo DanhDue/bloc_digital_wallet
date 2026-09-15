@@ -1,8 +1,9 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
+import Foundation
 
-public enum {{name.pascalCase()}}Action: BaseAction {
-    case initialize
-    case submit(String)
+/// User and system actions dispatched to {{name.pascalCase()}}ViewModel.
+public enum {{name.pascalCase()}}Action: UiAction {
+    case load
+    case refresh
 }
