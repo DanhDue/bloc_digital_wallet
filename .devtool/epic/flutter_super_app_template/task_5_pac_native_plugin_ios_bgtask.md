@@ -14,7 +14,7 @@ order: "a5"
 
 # Task 5: Brick `pac_native_plugin` — iOS BGTaskScheduler & FactoryKit
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Upgrade the iOS portion of the `bricks/pac_native_plugin` Mason template to achieve 100% architectural parity with iOS Devbed `Plugin` (`ios_digital_wallet`):

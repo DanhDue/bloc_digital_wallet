@@ -14,7 +14,7 @@ order: "a3"
 
 # Task 3: Project Renamer `--mode` Flag Integration
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Upgrade `scripts/rename_project.sh` and the underlying Mason brick `bricks/pac_rename_project` to accept a `--mode` parameter:
@@ -85,15 +85,15 @@ And "fvm flutter test" passes cleanly
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Create `test/scripts/rename_project_test.sh` asserting argument parsing and mode delegation on a mock repository.
-- [ ] **GREEN**: Update `scripts/rename_project.sh` and `bricks/pac_rename_project/hooks/post_gen.dart` with `--mode` parameter.
-- [ ] **REFACTOR**: Verify argument validations and error messaging.
-- [ ] **Tier C (Integration)**: Run test renaming in a scratch clone, verifying compilation and clean git diff.
+- [x] **RED**: Create `test/scripts/rename_project_test.sh` asserting argument parsing and mode delegation on a mock repository.
+- [x] **GREEN**: Update `scripts/rename_project.sh` and `bricks/pac_rename_project/hooks/post_gen.dart` with `--mode` parameter.
+- [x] **REFACTOR**: Verify argument validations and error messaging.
+- [x] **Tier C (Integration)**: Run test renaming in a scratch clone, verifying compilation and clean git diff.
 
 ## Definition of Done (DoD)
-- `scripts/rename_project.sh` supports `--mode <enterprise|lean>`.
-- Project is renamed and configured to the desired mode in one step.
-- Internal plugin namespaces (`com.danhdue.*`) remain unchanged.
+- [x] `scripts/rename_project.sh` supports `--mode <enterprise|lean>`.
+- [x] Project is renamed and configured to the desired mode in one step.
+- [x] Internal plugin namespaces (`com.danhdue.*`) remain unchanged.
 
 ## Dependencies & Blockers
 - Blocked by [Task 2](task_2_configure_mode_script.md) (requires `configure_mode.sh`).

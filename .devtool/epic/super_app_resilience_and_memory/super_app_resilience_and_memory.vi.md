@@ -174,8 +174,8 @@ Tài liệu này mang lại giá trị kép:
 
 ## 6. Phân Rã Công Việc Kanban (Kanban Tasks Breakdown)
 
-- [ ] [Task 1: Tối ưu bộ nhớ đệm ảnh & Helper Downsampling](task_1_app_cached_image_and_ram_cap.md) ([Kanban Board Link](../../features/task_1_app_cached_image_and_ram_cap.md))
-- [ ] [Task 2: Cô lập sự cố Mini App & Error Boundary](task_2_mini_app_error_boundary.md) ([Kanban Board Link](../../features/task_2_mini_app_error_boundary.md))
-- [ ] [Task 3: Giám sát áp lực bộ nhớ & Sự kiện Low Memory](task_3_memory_pressure_observer.md) ([Kanban Board Link](../../features/task_3_memory_pressure_observer.md))
-- [ ] [Task 4: Dịch vụ kết nối mạng & Standalone Offline Banner](task_4_network_connectivity_service_and_offline_banner.md) ([Kanban Board Link](../../features/task_4_network_connectivity_service_and_offline_banner.md))
+- [ ] [Task 1: Tối ưu bộ nhớ đệm ảnh & Helper Downsampling](task_1_app_cached_image_and_ram_cap.md) ([Kanban Board Link](task_1_app_cached_image_and_ram_cap.md))
+- [ ] [Task 2: Cô lập sự cố Mini App & Error Boundary](task_2_mini_app_error_boundary.md) ([Kanban Board Link](task_2_mini_app_error_boundary.md))
+- [ ] [Task 3: Giám sát áp lực bộ nhớ & Sự kiện Low Memory](task_3_memory_pressure_observer.md) ([Kanban Board Link](task_3_memory_pressure_observer.md))
+- [ ] [Task 4: Dịch vụ kết nối mạng & Standalone Offline Banner](task_4_network_connectivity_service_and_offline_banner.md) ([Kanban Board Link](task_4_network_connectivity_service_and_offline_banner.md))
 

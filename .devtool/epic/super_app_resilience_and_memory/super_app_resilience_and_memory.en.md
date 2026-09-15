@@ -174,8 +174,8 @@ This document acts as:
 
 ## 6. Kanban Tasks Breakdown
 
-- [ ] [Task 1: Image Cache Optimization & Downsampling Helper](task_1_app_cached_image_and_ram_cap.md) ([Kanban Board Link](../../features/task_1_app_cached_image_and_ram_cap.md))
-- [ ] [Task 2: Mini App Crash Isolation & Error Boundary](task_2_mini_app_error_boundary.md) ([Kanban Board Link](../../features/task_2_mini_app_error_boundary.md))
-- [ ] [Task 3: Memory Pressure Observer & Low Memory Event](task_3_memory_pressure_observer.md) ([Kanban Board Link](../../features/task_3_memory_pressure_observer.md))
-- [ ] [Task 4: Network Connectivity Service & Standalone Offline Banner](task_4_network_connectivity_service_and_offline_banner.md) ([Kanban Board Link](../../features/task_4_network_connectivity_service_and_offline_banner.md))
+- [ ] [Task 1: Image Cache Optimization & Downsampling Helper](task_1_app_cached_image_and_ram_cap.md) ([Kanban Board Link](task_1_app_cached_image_and_ram_cap.md))
+- [ ] [Task 2: Mini App Crash Isolation & Error Boundary](task_2_mini_app_error_boundary.md) ([Kanban Board Link](task_2_mini_app_error_boundary.md))
+- [ ] [Task 3: Memory Pressure Observer & Low Memory Event](task_3_memory_pressure_observer.md) ([Kanban Board Link](task_3_memory_pressure_observer.md))
+- [ ] [Task 4: Network Connectivity Service & Standalone Offline Banner](task_4_network_connectivity_service_and_offline_banner.md) ([Kanban Board Link](task_4_network_connectivity_service_and_offline_banner.md))
 

@@ -17,7 +17,7 @@
 
 ## Meta Data
 - **Epic**: `flutter_super_app_template`
-- **Trạng thái**: Stage 2 — Đang duyệt HLD & Phân rã Task (Gate 2)
+- **Trạng thái**: Done
 - **Target Release**: Flutter Super App Template v2.0
 - **Nền tảng**: Flutter (Host & Monorepo) + Android Native + iOS Native
 - **Tài liệu Đặc tả Nguồn (Source Specs)**:

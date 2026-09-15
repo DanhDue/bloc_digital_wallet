@@ -14,7 +14,7 @@ order: "a8"
 
 # Task 8: End-to-End Verification & Gate 4 Quality Check
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Execute the final comprehensive validation and quality audit to satisfy Gate 4 machine criteria:

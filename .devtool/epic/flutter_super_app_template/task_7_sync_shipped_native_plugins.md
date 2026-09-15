@@ -14,7 +14,7 @@ order: "a7"
 
 # Task 7: Synchronize Shipped Native Plugins
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Audit and synchronize the two production native plugins bundled in `packages/` with the upgraded native toolchain:

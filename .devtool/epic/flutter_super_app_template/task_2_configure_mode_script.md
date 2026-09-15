@@ -14,7 +14,7 @@ order: "a2"
 
 # Task 2: Mode Configuration CLI (`configure_mode.sh`)
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Implement `scripts/configure_mode.sh` to automate switching between `enterprise` and `lean` modes:
@@ -105,15 +105,15 @@ Then the second run exits with 0 and modifies 0 files
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Create `test/scripts/configure_mode_test.sh` asserting mode transitions and error states on a temporary git fixture.
-- [ ] **GREEN**: Implement `scripts/configure_mode.sh` with robust sed/awk marker manipulation.
-- [ ] **REFACTOR**: Ensure script passes `shellcheck` if available, and executable bit is set (`chmod +x`).
-- [ ] **Tier C (Integration)**: Execute round-trip on current workspace, verifying `melos bootstrap` and `melos run analyze` pass cleanly.
+- [x] **RED**: Create `test/scripts/configure_mode_test.sh` asserting mode transitions and error states on a temporary git fixture.
+- [x] **GREEN**: Implement `scripts/configure_mode.sh` with robust sed/awk marker manipulation.
+- [x] **REFACTOR**: Ensure script passes `shellcheck` if available, and executable bit is set (`chmod +x`).
+- [x] **Tier C (Integration)**: Execute round-trip on current workspace, verifying `melos bootstrap` and `melos run analyze` pass cleanly.
 
 ## Definition of Done (DoD)
-- `scripts/configure_mode.sh` supports `enterprise`, `lean`, `--prune`, `--force`.
-- Script passes round-trip tests with 100% clean diff.
-- Execution is idempotent and safely guards against dirty worktree pruning.
+- [x] `scripts/configure_mode.sh` supports `enterprise`, `lean`, `--prune`, `--force`.
+- [x] Script passes round-trip tests with 100% clean diff.
+- [x] Execution is idempotent and safely guards against dirty worktree pruning.
 
 ## Dependencies & Blockers
 - Blocked by [Task 1](task_1_dual_mode_host_and_markers.md) (requires marker regions to exist).

@@ -14,7 +14,7 @@ order: "a6"
 
 # Task 6: Brick `pac_add_native_ui` Synchronization
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Update `bricks/pac_add_native_ui` and `scripts/add_native_ui.sh` to ensure a one-touch upgrade from a headless native package to a UI-enabled package while strictly preserving existing Pure Dagger 2, FactoryKit, and background workers:

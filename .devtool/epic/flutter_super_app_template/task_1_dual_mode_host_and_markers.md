@@ -14,7 +14,7 @@ order: "a1"
 
 # Task 1: Dual-Mode Host Seams & Marker Regions
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Prepare the Flutter Host Application (`lib/`) and governance layer (`packages/platform/`) to support Dual-Mode (`enterprise` and `lean`) via deterministic Marker Regions:
@@ -105,15 +105,15 @@ And tapping "Home" switches to tab 0 smoothly
 ```
 
 ## Test & Verification Checklist
-- [ ] **RED**: Write `test/router/app_router_mode_test.dart` and `test/shell/shell_mode_test.dart` asserting 3-tab vs 2-tab configurations.
-- [ ] **GREEN**: Insert marker tags across `shell_page.dart`, `app_router.dart`, `injection.dart`, and `deep_link_registry.dart`.
-- [ ] **REFACTOR**: Ensure formatting is pristine with `melos format`, run `melos run analyze`, and assert zero linter errors.
-- [ ] **Tier C (Integration)**: Run `fvm flutter test test/shell/` and verify existing tests pass.
+- [x] **RED**: Write `test/router/app_router_mode_test.dart` and `test/shell/shell_mode_test.dart` asserting 3-tab vs 2-tab configurations.
+- [x] **GREEN**: Insert marker tags across `shell_page.dart`, `app_router.dart`, `injection.dart`, and `deep_link_registry.dart`.
+- [x] **REFACTOR**: Ensure formatting is pristine with `melos format`, run `melos run analyze`, and assert zero linter errors.
+- [x] **Tier C (Integration)**: Run `fvm flutter test test/shell/` and verify existing tests pass.
 
 ## Definition of Done (DoD)
-- Marker regions are in place and strictly delimited across all 4 target files.
-- Seam unit tests pass 100%.
-- `melos run analyze` reports zero issues.
+- [x] Marker regions are in place and strictly delimited across all 4 target files.
+- [x] Seam unit tests pass 100%.
+- [x] `melos run analyze` reports zero issues.
 
 ## Dependencies & Blockers
 - None. This is Task 1 (Foundational host task).

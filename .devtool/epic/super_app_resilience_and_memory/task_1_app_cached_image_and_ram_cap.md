@@ -14,7 +14,7 @@ order: "a1"
 
 # Task 1: Image Cache Optimization & Downsampling Helper
 
-Epic: [super_app_resilience_and_memory](../epic/super_app_resilience_and_memory/super_app_resilience_and_memory.en.md)
+Epic: [super_app_resilience_and_memory](super_app_resilience_and_memory.en.md)
 
 ## Requirement Analysis
 In high-density feeds and multi-package layouts, loading full-resolution remote images into small thumbnail widgets forces the Flutter Engine to decode uncompressed bitmaps directly into memory (e.g. 2000x2000 px = ~16MB RAM/image), quickly exhausting graphical memory and causing Out-Of-Memory (OOM) crashes on low/mid-tier devices.

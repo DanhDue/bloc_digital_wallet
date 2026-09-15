@@ -14,7 +14,7 @@ order: "a4"
 
 # Task 4: Brick `pac_native_plugin` — Android Pure Dagger 2 & WorkManager
 
-Epic: [flutter_super_app_template](../epic/flutter_super_app_template/flutter_super_app_template.en.md)
+Epic: [flutter_super_app_template](flutter_super_app_template.en.md)
 
 ## Requirement Analysis
 Upgrade the Android portion of the `bricks/pac_native_plugin` Mason template to achieve 100% architectural parity with Android Devbed `:plugin` (`android_digital_wallet`):
