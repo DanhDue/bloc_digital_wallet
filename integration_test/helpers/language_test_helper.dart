@@ -18,8 +18,18 @@ abstract final class LanguageTestHelper {
     await IntegrationTestHelper.launchApp(tester);
 
     if (initialLocale.isNotEmpty) {
+      final targetLang = initialLocale.split('_').first;
       await LocalizationManager.instance.setLocaleFromCode(initialLocale);
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      // Wait until LocalizationManager confirms the locale is applied.
+      // NOTE: pumpAndSettle(Duration(seconds:3)) was WRONG — that arg is the frame
+      // interval, not a timeout. Use waitUntil to poll the actual state instead.
+      await IntegrationTestHelper.waitUntil(
+        tester,
+        () => LocalizationManager.instance.currentLocale.languageCode == targetLang,
+        timeout: const Duration(seconds: 10),
+        reason: 'LocalizationManager should apply locale $targetLang',
+      );
+      await tester.pump(const Duration(milliseconds: 300));
     }
 
     await humanDelay(800);
@@ -27,10 +37,23 @@ abstract final class LanguageTestHelper {
     // Navigate to Settings Tab
     await IntegrationTestHelper.switchTab(tester, const ValueKey('settings_nav_tab'));
 
-    await humanDelay(800);
-
-    // Verify that we are on Settings page
+    // Wait until Settings page shows the language item.
+    //
+    // 30s budget handles the worst case where:
+    //   1. Bootstrap response marks en_US translations as stale, triggering a full
+    //      OTA download (~10-15s on Heroku) that shows CustomLoadingWidget.
+    //   2. SettingsBloc has not yet emitted its first state after the tab switch.
+    //
+    // pumpUntil polls at 100ms — it will find the widget naturally once the
+    // download completes and CustomLoadingWidget dismisses, without requiring a
+    // separate pumpUntilDisappeared guard that races against late-appearing widgets.
     final languageSettingItem = find.byKey(const ValueKey('settings_language_item'));
+    await IntegrationTestHelper.pumpUntil(
+      tester,
+      languageSettingItem,
+      timeout: const Duration(seconds: 30),
+      reason: 'Language item must exist in Settings page',
+    );
     expect(
       languageSettingItem,
       findsOneWidget,

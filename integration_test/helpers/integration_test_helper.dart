@@ -10,6 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:core/core.dart';
 import 'package:d3_nexus_shield/main.dart' as app;
+import 'package:d3_nexus_shield/shell/shell_page.dart';
 
 /// Reusable helper routines for Super App Integration Tests.
 abstract final class IntegrationTestHelper {
@@ -72,75 +73,113 @@ abstract final class IntegrationTestHelper {
 
     app.main(
       onDependenciesConfigured: () {
+        // Reset LocalizationManager to English before runApp fires.
+        //
+        // LocalizationManager is a static singleton — it persists across tests.
+        // If a prior test (e.g. UC2 en→ja) left it in 'ja' state, the app would
+        // boot with stale 'ja' locale and a mid-test setLocaleFromCode('en') call
+        // would trigger applyDynamicTranslations, causing SettingsPage's BlocListener
+        // to showLoadingDialog which makes pumpUntil time out.
+        //
+        // D3NexusLogger IS available here (DI is configured), so the call succeeds.
+        // We fire-and-forget — only the synchronous _currentLocale assignment matters;
+        // the async OTA part is irrelevant for test setup.
+        LocalizationManager.instance.setLocaleFromCode('en').ignore();
+
         final dio = GetIt.instance<Dio>();
         dio.interceptors.insert(
           0,
           InterceptorsWrapper(
             onRequest: (options, handler) {
               final uri = options.uri.toString();
-              if (uri.contains('healthz')) {
-                return handler.resolve(
-                  Response(
-                    requestOptions: options,
-                    data: {'success': true, 'data': 'healthy'},
-                    statusCode: 200,
-                  ),
-                );
-              }
+              // Bootstrap is always mocked in integration tests — regardless of live vs offline.
+              // Reason: the real bootstrap on Heroku frequently returns stale_translations (e.g.
+              // en_US), which triggers a background OTA download that takes 30–50 s on cold
+              // start.  This blocks Settings from rendering and makes pumpUntil time out.
+              // User-initiated language switches (UC2 en→ja tap) still hit the live backend,
+              // so OTA behaviour is tested on the critical path without startup interference.
               if (uri.contains('bootstrap')) {
                 return handler.resolve(
                   Response(
                     requestOptions: options,
                     data: {
                       'success': true,
+                      'message': 'Bootstrap successful',
                       'data': {
-                        'translations': [],
-                        'user_preferences': {'selected_language': 'en'},
+                        'stale_translations': [],
+                        'stale_themes': [],
+                        'removed_resources': [],
+                        'active_campaign_theme_id': null,
+                        'user_preferences': null,
                         'available_languages': [
                           {
-                            'language_code': 'en',
-                            'language_name': 'English',
+                            'language_code': 'en_US',
+                            'language_name': 'English (US)',
+                            'version': '1.0.0',
                             'is_default': true,
                             'is_active': true,
                           },
                           {
                             'language_code': 'vi',
                             'language_name': 'Tiếng Việt',
+                            'version': '1.0.0',
                             'is_default': false,
                             'is_active': true,
                           },
                           {
-                            'language_code': 'ja',
-                            'language_name': 'Japanese',
+                            'language_code': 'ja_JP',
+                            'language_name': '日本語',
+                            'version': '1.0.0',
+                            'is_default': false,
+                            'is_active': true,
+                          },
+                          {
+                            'language_code': 'ko_KR',
+                            'language_name': '한국어',
+                            'version': '1.0.5',
                             'is_default': false,
                             'is_active': true,
                           },
                         ],
+                        'available_themes': [],
                       },
                     },
                     statusCode: 200,
                   ),
                 );
               }
-              if (uri.contains('translations')) {
-                return handler.resolve(
-                  Response(
-                    requestOptions: options,
-                    data: {
-                      'success': true,
-                      'data': {
-                        'version': '1.0.1',
-                        'translations': {
-                          'settings': {
-                            'title': '設定',
-                            'preferences': {'language': '言語'},
+
+              final isLiveBackend = EnvironmentConfig.apiBaseUrl.contains('herokuapp.com');
+              if (!isLiveBackend) {
+                if (uri.contains('healthz')) {
+                  return handler.resolve(
+                    Response(
+                      requestOptions: options,
+                      data: {'success': true, 'data': 'healthy'},
+                      statusCode: 200,
+                    ),
+                  );
+                }
+                if (uri.contains('translations')) {
+                  return handler.resolve(
+                    Response(
+                      requestOptions: options,
+                      data: {
+                        'success': true,
+                        'data': {
+                          'version': '1.0.1',
+                          'translations': {
+                            'settings': {
+                              'title': '設定',
+                              'preferences': {'language': '言語'},
+                            },
                           },
                         },
                       },
-                    },
-                    statusCode: 200,
-                  ),
-                );
+                      statusCode: 200,
+                    ),
+                  );
+                }
               }
               if (uri.contains('transactions')) {
                 return handler.resolve(
@@ -169,23 +208,20 @@ abstract final class IntegrationTestHelper {
                   ),
                 );
               }
-              return handler.resolve(
-                Response(
-                  requestOptions: options,
-                  data: {'success': true, 'data': {}},
-                  statusCode: 200,
-                ),
-              );
+              return handler.next(options);
             },
           ),
         );
       },
     );
 
-    // Wait for Splash animation and navigation to settle
-    for (int i = 0; i < 15; i++) {
-      await tester.pump(const Duration(milliseconds: 300));
-    }
+    // Wait for Splash screen (8s min duration) and animation to finish navigating into ShellPage
+    await pumpUntil(
+      tester,
+      find.byType(ShellPage),
+      timeout: const Duration(seconds: 15),
+      reason: 'ShellPage must be mounted after Splash screen completes',
+    );
     await tester.pumpAndSettle();
   }
 
