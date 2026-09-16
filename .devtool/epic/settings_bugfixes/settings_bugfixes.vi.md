@@ -180,6 +180,6 @@ Tài liệu kịch bản hành vi Gherkin chi tiết được lưu trữ tại [
 ---
 
 ## 7. Phân Rã Công Việc Kanban (Kanban Tasks Breakdown)
-- [Task 13: Domain & Data - Chuẩn Hóa Mã Ngôn Ngữ & Nhận Diện Bundled Cache](../../features/task_13_domain_data_language_normalization.md)
-- [Task 14: Presentation & Bloc - Chuyển Đổi Tức Thì & Chặn Dialog Tải Ngôn Ngữ Mặc Định](../../features/task_14_presentation_bloc_loading_dialog_guard.md)
-- [Task 15: Tích Hợp Host App & Kiểm Thử 3-Tier Hoàn Chỉnh](../../features/task_15_host_app_integration_3tier_verification.md)
+- [Task 13: Domain & Data - Chuẩn Hóa Mã Ngôn Ngữ & Nhận Diện Bundled Cache](task_13_domain_data_language_normalization.md)
+- [Task 14: Presentation & Bloc - Chuyển Đổi Tức Thì & Chặn Dialog Tải Ngôn Ngữ Mặc Định](task_14_presentation_bloc_loading_dialog_guard.md)
+- [Task 15: Tích Hợp Host App & Kiểm Thử 3-Tier Hoàn Chỉnh](task_15_host_app_integration_3tier_verification.md)

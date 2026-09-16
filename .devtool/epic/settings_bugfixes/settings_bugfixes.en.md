@@ -181,6 +181,6 @@ The full Gherkin behavioral specifications are formally defined in [bdd_scenario
 ---
 
 ## 7. Kanban Tasks Breakdown
-- [Task 13: Domain & Data - Language Normalization & Bundled Cache Resolution](../../features/task_13_domain_data_language_normalization.md)
-- [Task 14: Presentation & Bloc - Optimistic Switching & Loading Dialog Suppression](../../features/task_14_presentation_bloc_loading_dialog_guard.md)
-- [Task 15: Host App Integration & 3-Tier Verification](../../features/task_15_host_app_integration_3tier_verification.md)
+- [Task 13: Domain & Data - Language Normalization & Bundled Cache Resolution](task_13_domain_data_language_normalization.md)
+- [Task 14: Presentation & Bloc - Optimistic Switching & Loading Dialog Suppression](task_14_presentation_bloc_loading_dialog_guard.md)
+- [Task 15: Host App Integration & 3-Tier Verification](task_15_host_app_integration_3tier_verification.md)
