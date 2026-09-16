@@ -78,12 +78,10 @@ void main() {
         buildNumber: '1',
       ),
     );
+    when(mockGetCachedLanguagesUseCase()).thenAnswer((_) async => const Right(defaultLanguages));
     when(
-      mockGetCachedLanguagesUseCase(),
-    ).thenAnswer((_) async => const Right(defaultLanguages));
-    when(mockBootstrapUseCase()).thenAnswer(
-      (_) async => const Right(SyncBootstrapResponse(availableLanguages: [])),
-    );
+      mockBootstrapUseCase(),
+    ).thenAnswer((_) async => const Right(SyncBootstrapResponse(availableLanguages: [])));
     when(
       mockChangeLanguageUseCase(any),
     ).thenAnswer((_) => Stream.value(const LanguageSyncStatus.success('en')));
@@ -116,11 +114,7 @@ void main() {
       isA<SettingsState>()
           .having((s) => s.status, 'status', SettingsStatus.success)
           .having((s) => s.uiModel?.appVersion, 'appVersion', '1.0.0')
-          .having(
-            (s) => s.uiModel?.availableLanguages.length,
-            'availableLanguages length',
-            2,
-          ),
+          .having((s) => s.uiModel?.availableLanguages.length, 'availableLanguages length', 2),
     ],
     verify: (_) {
       verify(mockAppInfoService.getPackageInfo()).called(1);
@@ -141,8 +135,7 @@ void main() {
         );
         return bloc;
       },
-      act: (bloc) =>
-          bloc.add(const SettingsAction.changeLanguage(languageCode: 'ko')),
+      act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ko')),
       wait: const Duration(milliseconds: 10),
       expect: () => [const SettingsState(status: SettingsStatus.success)],
       verify: (_) {
@@ -161,8 +154,7 @@ void main() {
         );
         return bloc;
       },
-      act: (bloc) =>
-          bloc.add(const SettingsAction.changeLanguage(languageCode: 'en_US')),
+      act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'en_US')),
       wait: const Duration(milliseconds: 10),
       expect: () => [const SettingsState(status: SettingsStatus.success)],
       verify: (_) {
@@ -181,8 +173,7 @@ void main() {
         );
         return bloc;
       },
-      act: (bloc) =>
-          bloc.add(const SettingsAction.changeLanguage(languageCode: 'ja')),
+      act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ja')),
       wait: const Duration(milliseconds: 10),
       expect: () => [
         const SettingsState(status: SettingsStatus.loading),
@@ -229,13 +220,10 @@ void main() {
     blocTest<SettingsBloc, SettingsState>(
       'emits no UI state changes when switching to SAME language (silent completion)',
       build: () {
-        when(
-          mockChangeLanguageUseCase('ko'),
-        ).thenAnswer((_) => const Stream.empty());
+        when(mockChangeLanguageUseCase('ko')).thenAnswer((_) => const Stream.empty());
         return bloc;
       },
-      act: (bloc) =>
-          bloc.add(const SettingsAction.changeLanguage(languageCode: 'ko')),
+      act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'ko')),
       wait: const Duration(milliseconds: 10),
       expect: () => [],
       verify: (_) {
@@ -254,8 +242,7 @@ void main() {
         );
         return bloc;
       },
-      act: (bloc) =>
-          bloc.add(const SettingsAction.changeLanguage(languageCode: 'fr')),
+      act: (bloc) => bloc.add(const SettingsAction.changeLanguage(languageCode: 'fr')),
       wait: const Duration(milliseconds: 10),
       expect: () => [
         const SettingsState(status: SettingsStatus.loading),
@@ -269,15 +256,12 @@ void main() {
     blocTest<SettingsBloc, SettingsState>(
       'emits updated uiModel with isDarkModeEnabled and calls ToggleDarkModeUseCase when toggleDarkMode is added',
       build: () => bloc,
-      act: (bloc) =>
-          bloc.add(const SettingsAction.toggleDarkMode(isEnabled: true)),
+      act: (bloc) => bloc.add(const SettingsAction.toggleDarkMode(isEnabled: true)),
       verify: (_) {
         verify(mockToggleDarkModeUseCase(isEnabled: true)).called(1);
       },
       expect: () => [
-        predicate<SettingsState>(
-          (state) => state.uiModel?.isDarkModeEnabled == true,
-        ),
+        predicate<SettingsState>((state) => state.uiModel?.isDarkModeEnabled == true),
       ],
     );
   });

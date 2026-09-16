@@ -16,31 +16,25 @@ void main() {
   });
 
   group('LocalizationInitializer', () {
-    test(
-      'initializes default locale when no savedLanguageCode exists',
-      () async {
-        SharedPreferences.setMockInitialValues({});
+    test('initializes default locale when no savedLanguageCode exists', () async {
+      SharedPreferences.setMockInitialValues({});
 
-        final initializer = LocalizationInitializer();
-        await initializer.init();
+      final initializer = LocalizationInitializer();
+      await initializer.init();
 
-        final currentLocale = LocalizationManager.instance.currentLocale;
-        expect(currentLocale, isNotNull);
-        expect(['en', 'vi'], contains(currentLocale.languageCode));
-      },
-    );
+      final currentLocale = LocalizationManager.instance.currentLocale;
+      expect(currentLocale, isNotNull);
+      expect(['en', 'vi'], contains(currentLocale.languageCode));
+    });
 
-    test(
-      'initializes saved locale when savedLanguageCode exists in SharedPreferences',
-      () async {
-        SharedPreferences.setMockInitialValues({'saved_language_code': 'vi'});
+    test('initializes saved locale when savedLanguageCode exists in SharedPreferences', () async {
+      SharedPreferences.setMockInitialValues({'saved_language_code': 'vi'});
 
-        final initializer = LocalizationInitializer();
-        await initializer.init();
+      final initializer = LocalizationInitializer();
+      await initializer.init();
 
-        final currentLocale = LocalizationManager.instance.currentLocale;
-        expect(currentLocale.languageCode, equals('vi'));
-      },
-    );
+      final currentLocale = LocalizationManager.instance.currentLocale;
+      expect(currentLocale.languageCode, equals('vi'));
+    });
   });
 }

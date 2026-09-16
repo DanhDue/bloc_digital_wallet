@@ -40,6 +40,10 @@ abstract class DeepLinkRoutes {
   // Transaction
   static const String transaction = '/transaction';
   static const PageRouteInfo transactionRoute = _TransactionRoute();
+
+  // Onboard
+  static const String onboard = '/onboard';
+  static const PageRouteInfo onboardRoute = _OnboardRoute();
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -73,4 +77,8 @@ class _TransactionRoute extends PageRouteInfo<void> {
 
 class _ScannerRoute extends PageRouteInfo<void> {
   const _ScannerRoute() : super('ScannerRoute');
+}
+
+class _OnboardRoute extends PageRouteInfo<void> {
+  const _OnboardRoute() : super('OnboardRoute');
 }

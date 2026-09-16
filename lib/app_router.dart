@@ -7,10 +7,12 @@ import 'package:scanner/scanner.dart' as scanner;
 export 'package:scanner/scanner_router.dart';
 // app:scanner-import:end
 import 'package:settings/settings.dart' as settings;
+import 'package:onboard/onboard.dart' as onboard;
 
 import 'package:d3_nexus_shield/shell/shell_page.dart';
 
 export 'package:settings/settings_router.dart';
+export 'package:onboard/onboard_router.dart';
 
 part 'app_router.gr.dart';
 
@@ -20,6 +22,7 @@ class AppRouter extends RootStackRouter {
   final _scannerRouter = scanner.ScannerRouter();
   // app:scanner-router:end
   final _settingsRouter = settings.SettingsRouter();
+  final _onboardRouter = onboard.OnboardRouter();
 
   @override
   List<AutoRoute> get routes => [
@@ -28,6 +31,7 @@ class AppRouter extends RootStackRouter {
     ..._scannerRouter.routes,
     // app:scanner-routes:end
     ..._settingsRouter.routes,
+    ..._onboardRouter.routes,
   ];
 }
 

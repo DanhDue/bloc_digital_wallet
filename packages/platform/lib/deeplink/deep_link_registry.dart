@@ -65,6 +65,11 @@ abstract class DeepLinkRegistry {
       targetTab: null,
       isProtected: true,
     ),
+    DeepLinkRoutes.onboard: const RouteRegistration(
+      path: DeepLinkRoutes.onboard,
+      targetTab: null,
+      isProtected: false,
+    ),
   };
 
   static final Map<String, RouteRegistration> _dynamicRegistry = {};

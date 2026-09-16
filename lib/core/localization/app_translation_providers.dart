@@ -7,6 +7,7 @@ import '../../generated/translations.dart';
 import 'package:core/core.dart' as core;
 import 'package:scanner/scanner.dart' as scanner;
 import 'package:settings/settings.dart' as settings;
+import 'package:onboard/onboard.dart' as onboard;
 
 /// List of all TranslationProviders for the application.
 /// Add new feature providers here.
@@ -20,4 +21,5 @@ final List<Widget Function({required Widget child})> appTranslationProviders = [
   // Features
   ({required child}) => scanner.TranslationProvider(child: child),
   ({required child}) => settings.TranslationProvider(child: child),
+  ({required child}) => onboard.TranslationProvider(child: child),
 ];
