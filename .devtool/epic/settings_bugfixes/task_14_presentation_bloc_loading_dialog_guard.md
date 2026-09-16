@@ -1,13 +1,13 @@
 ---
 id: "task_14_presentation_bloc_loading_dialog_guard"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "settings-bugfixes"
 dueDate: null
 created: "2026-09-16T13:36:00+07:00"
-modified: "2026-09-16T13:36:00+07:00"
-completedAt: null
+modified: "2026-09-16T06:49:42Z"
+completedAt: "2026-09-16T06:49:42Z"
 labels: ["presentation", "bloc", "ui", "bugfix"]
 order: "a2"
 ---
