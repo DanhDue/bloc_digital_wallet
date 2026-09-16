@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:core/core.dart';
 import 'package:ui_kit/ui_kit.dart';
-import 'package:d3_nexus_shield/main.dart' as app;
+import 'integration_test_helper.dart';
 
 /// Reusable helper routines for Language Integration Tests.
 abstract final class LanguageTestHelper {
@@ -15,9 +15,7 @@ abstract final class LanguageTestHelper {
     WidgetTester tester, {
     String initialLocale = 'en',
   }) async {
-    await GetIt.instance.reset();
-    app.main();
-    await tester.pumpAndSettle(const Duration(seconds: 5));
+    await IntegrationTestHelper.launchApp(tester);
 
     if (initialLocale.isNotEmpty) {
       await LocalizationManager.instance.setLocaleFromCode(initialLocale);
@@ -27,14 +25,7 @@ abstract final class LanguageTestHelper {
     await humanDelay(800);
 
     // Navigate to Settings Tab
-    final settingsNavTab = find.byKey(const ValueKey('settings_nav_tab'));
-    expect(
-      settingsNavTab,
-      findsOneWidget,
-      reason: 'Settings tab icon must exist in bottom nav bar',
-    );
-    await tester.tap(settingsNavTab);
-    await tester.pumpAndSettle(const Duration(seconds: 2));
+    await IntegrationTestHelper.switchTab(tester, const ValueKey('settings_nav_tab'));
 
     await humanDelay(800);
 

@@ -2,6 +2,6 @@
 
 /// URI constants for the Onboard module.
 class OnboardUri {
-  static const String healthz = 'healthz';
-  static const String baseUrl = 'baseUrl';
+  static const String healthz = '/healthz';
+  static const String baseUrl = '/baseUrl';
 }

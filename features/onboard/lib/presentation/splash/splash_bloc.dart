@@ -5,6 +5,7 @@
 import 'package:onboard/presentation/splash/splash_constants.dart';
 import 'package:framework/framework.dart';
 import 'package:onboard/domain/usecases/health_check_usecase.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:network/network.dart';
@@ -30,13 +31,23 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
   final Duration lottieDelay;
   final Duration minSplashDuration;
 
-  SplashBloc(
+  SplashBloc(this._healthCheckUseCase, this._bootstrapUseCase, this._fetchTranslationUseCase)
+    : visibilityDelay = SplashConstants.visibilityDelay,
+      lottieDelay = SplashConstants.lottieDelay,
+      minSplashDuration = SplashConstants.minSplashDuration,
+      super(const SplashInitial()) {
+    handleActionDroppable<InitSplashAction>(_onInit);
+    handleActionDroppable<RetryHealthCheckAction>(_onRetryHealthCheck);
+  }
+
+  @visibleForTesting
+  SplashBloc.test(
     this._healthCheckUseCase,
     this._bootstrapUseCase,
     this._fetchTranslationUseCase, {
-    this.visibilityDelay = SplashConstants.visibilityDelay,
-    this.lottieDelay = SplashConstants.lottieDelay,
-    this.minSplashDuration = SplashConstants.minSplashDuration,
+    this.visibilityDelay = Duration.zero,
+    this.lottieDelay = Duration.zero,
+    this.minSplashDuration = Duration.zero,
   }) : super(const SplashInitial()) {
     handleActionDroppable<InitSplashAction>(_onInit);
     handleActionDroppable<RetryHealthCheckAction>(_onRetryHealthCheck);

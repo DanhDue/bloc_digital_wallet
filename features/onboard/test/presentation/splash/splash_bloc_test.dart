@@ -69,7 +69,7 @@ void main() {
       ),
     );
 
-    splashBloc = SplashBloc(
+    splashBloc = SplashBloc.test(
       mockHealthCheck,
       mockBootstrap,
       mockFetchTranslation,

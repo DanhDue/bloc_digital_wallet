@@ -26,15 +26,13 @@ import 'package:trends/domain/usecases/get_coin_markets_usecase.dart' as _i3;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
-  _FakeEither_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeEither_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
 /// A class which mocks [GetCoinMarketsUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetCoinMarketsUseCase extends _i1.Mock
-    implements _i3.GetCoinMarketsUseCase {
+class MockGetCoinMarketsUseCase extends _i1.Mock implements _i3.GetCoinMarketsUseCase {
   MockGetCoinMarketsUseCase() {
     _i1.throwOnMissingStub(this);
   }
@@ -46,15 +44,12 @@ class MockGetCoinMarketsUseCase extends _i1.Mock
   }) =>
       (super.noSuchMethod(
             Invocation.method(#call, [], {#page: page, #limit: limit}),
-            returnValue:
-                _i4.Future<
-                  _i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>
-                >.value(
-                  _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
-                    this,
-                    Invocation.method(#call, [], {#page: page, #limit: limit}),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i5.CoinMarketEntity>>(
+                this,
+                Invocation.method(#call, [], {#page: page, #limit: limit}),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, List<_i5.CoinMarketEntity>>>);
 }

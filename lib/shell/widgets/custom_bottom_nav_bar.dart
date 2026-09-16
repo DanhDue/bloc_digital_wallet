@@ -56,6 +56,7 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _NavItem(
+                key: const ValueKey('wallet_nav_tab'),
                 icon: Icons.account_balance_wallet_outlined,
                 activeIcon: Icons.account_balance_wallet,
                 label: context.t.home.nav.wallet,
@@ -66,6 +67,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.wallet),
               ),
               _NavItem(
+                key: const ValueKey('transaction_nav_tab'),
                 icon: Icons.receipt_long_outlined,
                 activeIcon: Icons.receipt_long,
                 label: 'Transaction',
@@ -76,6 +78,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.transaction),
               ),
               _CenterNavItem(
+                key: const ValueKey('scanner_nav_tab'),
                 icon: Icons.qr_code_scanner,
                 isActive: currentIndex == ShellTabIndex.scanner,
                 activeColor: activeColor,
@@ -83,6 +86,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
               ),
               _NavItem(
+                key: const ValueKey('trends_nav_tab'),
                 icon: Icons.trending_up_outlined,
                 activeIcon: Icons.trending_up,
                 label: context.t.home.nav.trends,
@@ -168,6 +172,7 @@ class _NavItem extends StatelessWidget {
 // shell:scanner-center-nav-item:begin
 class _CenterNavItem extends StatelessWidget {
   const _CenterNavItem({
+    super.key,
     required this.icon,
     required this.isActive,
     required this.activeColor,
