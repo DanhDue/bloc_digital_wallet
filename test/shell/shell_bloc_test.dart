@@ -50,8 +50,8 @@ void main() {
   blocTest<ShellBloc, ShellState>(
     'emits state with updated tab when tabDoubleTapped on different tab',
     build: () => bloc,
-    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(0)),
-    expect: () => [const ShellState(currentTabIndex: 0)],
+    act: (bloc) => bloc.add(const ShellAction.tabDoubleTapped(1)),
+    expect: () => [const ShellState(currentTabIndex: 1)],
   );
 
   blocTest<ShellBloc, ShellState>(

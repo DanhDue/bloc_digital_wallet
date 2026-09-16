@@ -34,11 +34,12 @@ class AppRouter extends RootStackRouter {
   final _transactionRouter = transaction.TransactionRouter();
   final _walletRouter = wallet.WalletRouter();
   final _authenticationRouter = authentication.AuthenticationRouter();
-  final _onboardRouter = onboard.OnboardRouter();
 
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(initial: true, page: ShellRoute.page, path: AppRoutes.home),
+    AutoRoute(initial: true, page: onboard.SplashRoute.page, path: AppRoutes.splash),
+    ..._authenticationRouter.routes,
+    AutoRoute(page: ShellRoute.page, path: AppRoutes.home),
     // app:scanner-routes:begin
     ..._scannerRouter.routes,
     // app:scanner-routes:end
@@ -46,12 +47,12 @@ class AppRouter extends RootStackRouter {
     ..._trendsRouter.routes,
     ..._transactionRouter.routes,
     ..._walletRouter.routes,
-    ..._authenticationRouter.routes,
-    ..._onboardRouter.routes,
   ];
 }
 
 class AppRoutes {
+  static const String splash = '/splash';
+  static const String login = '/login';
   static const String home = '/home';
   static const String scanner = '/scanner';
   static const String settings = '/settings';

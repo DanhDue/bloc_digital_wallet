@@ -15,15 +15,9 @@ void main() {
 
   group('Shell Mode & Config Tests', () {
     test('ShellConfig exposes valid tab count and default tab index', () {
-      expect(ShellConfig.tabCount, isIn([2, 3]));
-      expect(ShellConfig.defaultTabIndex, isIn([1, 2]));
-      if (ShellConfig.tabCount == 3) {
-        expect(ShellConfig.hasScannerTab, isTrue);
-        expect(ShellConfig.defaultTabIndex, equals(2));
-      } else {
-        expect(ShellConfig.hasScannerTab, isFalse);
-        expect(ShellConfig.defaultTabIndex, equals(1));
-      }
+      expect(ShellConfig.tabCount, equals(5));
+      expect(ShellConfig.defaultTabIndex, equals(0));
+      expect(ShellConfig.hasScannerTab, isTrue);
     });
 
     test('ShellBloc default currentTabIndex matches ShellConfig.defaultTabIndex', () {
@@ -49,7 +43,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Home'), findsOneWidget);
+      expect(find.text('Wallet'), findsOneWidget);
+      expect(find.text('Transaction'), findsOneWidget);
+      expect(find.text('Trends'), findsOneWidget);
       expect(find.byKey(const ValueKey('settings_nav_tab')), findsOneWidget);
 
       if (ShellConfig.hasScannerTab) {

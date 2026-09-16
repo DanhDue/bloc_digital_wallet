@@ -10,6 +10,7 @@ import 'package:d3_nexus_shield/shell/shell_bloc.dart';
 import 'package:core/core.dart' hide test;
 import 'package:scanner/scanner.dart';
 import 'package:settings/settings.dart';
+import 'package:wallet/wallet.dart';
 
 import 'package:flutter/material.dart';
 import 'package:d3_nexus_shield/shell/shell_page.dart';
@@ -60,6 +61,7 @@ void main() {
     await tester.pump();
 
     expect(find.byType(ShellPage), findsOneWidget);
-    expect(find.byType(SettingsPage), findsOneWidget);
+    expect(find.byType(WalletPage), findsOneWidget);
+    expect(find.byType(SettingsPage, skipOffstage: false), findsOneWidget);
   });
 }
