@@ -19,6 +19,7 @@ workspace:
   - features/scanner
   - features/settings
   - features/onboard
+  - features/authentication
 dependencies:
   flutter:
     sdk: flutter
@@ -42,6 +43,8 @@ dependencies:
     path: features/scanner
   settings:
     path: features/settings
+  authentication:
+    path: features/authentication
   onboard:
     path: features/onboard
   # Dialog Management

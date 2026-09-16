@@ -70,6 +70,11 @@ abstract class DeepLinkRegistry {
       targetTab: null,
       isProtected: false,
     ),
+    DeepLinkRoutes.authentication: const RouteRegistration(
+      path: DeepLinkRoutes.authentication,
+      targetTab: null,
+      isProtected: false,
+    ),
   };
 
   static final Map<String, RouteRegistration> _dynamicRegistry = {};

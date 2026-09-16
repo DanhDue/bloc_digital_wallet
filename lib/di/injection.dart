@@ -8,6 +8,7 @@ import 'package:core/core.dart' as core;
 import 'package:scanner/scanner.dart' as scanner;
 // di:scanner-import:end
 import 'package:settings/settings.dart' as settings;
+import 'package:authentication/authentication.dart' as authentication;
 import 'package:onboard/onboard.dart' as onboard;
 
 import 'injection.config.dart';
@@ -23,6 +24,7 @@ Future<void> configureDependencies() async {
   scanner.configureModuleDependencies(getIt);
   // di:scanner-module:end
   await settings.configureModuleDependencies(getIt);
+  authentication.configureModuleDependencies(getIt);
   onboard.configureModuleDependencies(getIt);
 
   // `packages/network` registers a no-pinning `SslConfiguration` default; the

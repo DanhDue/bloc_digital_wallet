@@ -17,35 +17,36 @@ class MockHealthCheckUseCase extends Mock implements HealthCheckUseCase {
   @override
   Future<Either<Failure, BaseResponseObject<dynamic>>> call() =>
       super.noSuchMethod(
-        Invocation.method(#call, []),
-        returnValue: Future.value(
-          Right<Failure, BaseResponseObject<dynamic>>(
-            BaseResponseObject(data: 'ok', success: true),
-          ),
-        ),
-      ) as Future<Either<Failure, BaseResponseObject<dynamic>>>;
+            Invocation.method(#call, []),
+            returnValue: Future.value(
+              Right<Failure, BaseResponseObject<dynamic>>(
+                BaseResponseObject(data: 'ok', success: true),
+              ),
+            ),
+          )
+          as Future<Either<Failure, BaseResponseObject<dynamic>>>;
 }
 
 class MockBootstrapUseCase extends Mock implements BootstrapUseCase {
   @override
   Future<Either<Failure, SyncBootstrapResponse>> call() =>
       super.noSuchMethod(
-        Invocation.method(#call, []),
-        returnValue: Future.value(
-          Right<Failure, SyncBootstrapResponse>(
-            SyncBootstrapResponse(),
-          ),
-        ),
-      ) as Future<Either<Failure, SyncBootstrapResponse>>;
+            Invocation.method(#call, []),
+            returnValue: Future.value(
+              Right<Failure, SyncBootstrapResponse>(SyncBootstrapResponse()),
+            ),
+          )
+          as Future<Either<Failure, SyncBootstrapResponse>>;
 }
 
 class MockFetchTranslationUseCase extends Mock implements FetchTranslationUseCase {
   @override
   Future<Either<Failure, void>> call(BootstrapTranslationItem item) =>
       super.noSuchMethod(
-        Invocation.method(#call, [item]),
-        returnValue: Future.value(const Right<Failure, void>(null)),
-      ) as Future<Either<Failure, void>>;
+            Invocation.method(#call, [item]),
+            returnValue: Future.value(const Right<Failure, void>(null)),
+          )
+          as Future<Either<Failure, void>>;
 }
 
 void main() {
@@ -60,9 +61,7 @@ void main() {
     mockFetchTranslation = MockFetchTranslationUseCase();
 
     when(mockBootstrap.call()).thenAnswer(
-      (_) => Future<Either<Failure, SyncBootstrapResponse>>.value(
-        Right(SyncBootstrapResponse()),
-      ),
+      (_) => Future<Either<Failure, SyncBootstrapResponse>>.value(Right(SyncBootstrapResponse())),
     );
     when(mockHealthCheck.call()).thenAnswer(
       (_) => Future<Either<Failure, BaseResponseObject<dynamic>>>.value(

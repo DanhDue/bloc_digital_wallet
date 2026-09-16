@@ -44,6 +44,10 @@ abstract class DeepLinkRoutes {
   // Onboard
   static const String onboard = '/onboard';
   static const PageRouteInfo onboardRoute = _OnboardRoute();
+
+  // Authentication
+  static const String authentication = '/authentication';
+  static const PageRouteInfo authenticationRoute = _AuthenticationRoute();
 }
 
 // Private route classes for type-safe navigation without importing package routers
@@ -81,4 +85,8 @@ class _ScannerRoute extends PageRouteInfo<void> {
 
 class _OnboardRoute extends PageRouteInfo<void> {
   const _OnboardRoute() : super('OnboardRoute');
+}
+
+class _AuthenticationRoute extends PageRouteInfo<void> {
+  const _AuthenticationRoute() : super('AuthenticationRoute');
 }

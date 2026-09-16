@@ -106,8 +106,7 @@ class SplashBloc extends MviBloc<SplashAction, SplashState, SplashEvent> {
 
   Future<void> _performBootstrapAndHealthCheck(Emitter<SplashState> emit) async {
     // Perform bootstrap and health check
-    final Future<Either<Failure, SyncBootstrapResponse>> bootstrapFuture =
-        _bootstrapUseCase();
+    final Future<Either<Failure, SyncBootstrapResponse>> bootstrapFuture = _bootstrapUseCase();
     final results = await Future.wait([
       bootstrapFuture.timeout(
         const Duration(seconds: 5),
