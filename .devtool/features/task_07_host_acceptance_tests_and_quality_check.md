@@ -1,13 +1,13 @@
 ---
 id: "task_07_host_acceptance_tests_and_quality_check"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_features_migration"
 dueDate: null
 created: "2026-09-16T18:02:00+07:00"
-modified: "2026-09-16T18:02:00+07:00"
-completedAt: null
+modified: "2026-09-16T11:44:55Z"
+completedAt: "2026-09-16T11:44:55Z"
 labels: ["qa", "acceptance", "quality-check"]
 order: "a07"
 ---
