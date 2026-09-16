@@ -14,7 +14,7 @@ order: "a3"
 
 # Task 15: Host App Integration & 3-Tier Verification
 
-Epic: [settings_bugfixes](./settings_bugfixes.en.md)
+Epic: [settings_bugfixes](settings_bugfixes.en.md)
 
 ## Requirement Analysis
 This task connects the domain, data, and presentation bugfixes into the Host App composition root and executes the complete 3-Tier verification suite:

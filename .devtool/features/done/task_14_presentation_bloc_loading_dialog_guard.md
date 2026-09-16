@@ -14,7 +14,7 @@ order: "a2"
 
 # Task 14: Presentation & Bloc - Optimistic Switching & Loading Dialog Suppression
 
-Epic: [settings_bugfixes](../epic/settings_bugfixes/settings_bugfixes.en.md)
+Epic: [settings_bugfixes](settings_bugfixes.en.md)
 
 ## Requirement Analysis
 In the Presentation layer, `SettingsBloc` handles `SettingsActionChangeLanguage` by subscribing to `ChangeLanguageUseCase`.

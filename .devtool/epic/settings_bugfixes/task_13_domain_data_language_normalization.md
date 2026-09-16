@@ -14,7 +14,7 @@ order: "a1"
 
 # Task 13: Domain & Data - Language Normalization & Bundled Cache Resolution
 
-Epic: [settings_bugfixes](./settings_bugfixes.en.md)
+Epic: [settings_bugfixes](settings_bugfixes.en.md)
 
 ## Requirement Analysis
 The application has two bundled compiled-in languages (`en` and `vi`). Currently, `ChangeLanguageUseCase`, `CheckLanguageCachedUseCase`, `GetCachedLanguagesUseCase`, and `SettingsLocalDataSourceImpl.loadBundledFallback` perform literal string matching (`== 'en' || == 'vi'`). When backend bootstrap or device locale settings provide region-tagged language codes (e.g. `en_US`, `en-US`, `vi_VN`, `vi-VN`), these checks fail.
