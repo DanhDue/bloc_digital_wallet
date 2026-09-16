@@ -1,32 +1,26 @@
 # Slang Localization Guide
 
-**Comprehensive guide for using slang for multilingual support in bloc_digital_wallet**
+**Comprehensive guide for using slang for multilingual support in Digital Wallet**
 
 ---
 
 ## 🎯 Overview
 
-This project uses [slang](https://pub.dev/packages/slang) and [slang_flutter](https://pub.dev/packages/slang_flutter) for type-safe, compile-time checked localization with support for:
-
-- **English (en)** - Base locale
-- **Vietnamese (vi)** - Secondary locale
+This project uses [slang](https://pub.dev/packages/slang) and [slang_flutter](https://pub.dev/packages/slang_flutter) for type-safe, compile-time checked localization with multi-language support (English `en`, Vietnamese `vi`, and more).
 
 ---
 
 ## 📁 Project Structure
 
 ```
-bloc_digital_wallet/
+packages/core/
 ├── assets/locales/
 │   ├── en.i18n.json         # English translations (base)
 │   ├── vi.i18n.json         # Vietnamese translations
-│   ├── en_US.json           # Legacy (kept for reference)
-│   └── vn_VI.json           # Legacy (kept for reference)
+│   └── ...                  # Other locale translations
 ├── lib/generated/
-│   ├── translations.dart    # Main translations file
-│   ├── translations_en.g.dart
-│   └── translations_vi.g.dart
-└── build.yaml               # slang configuration
+│   └── translations.dart    # Main translations file
+└── slang.yaml               # slang configuration
 ```
 
 ---
@@ -37,29 +31,26 @@ bloc_digital_wallet/
 
 There are two ways to access translations in your widgets:
 
-#### Method A: Simple (No Rebuild on Locale Change)
+#### Method A: Context Extension (Rebuilds on Locale Change) ✅ **Recommended**
 
 ```dart
-import 'package:bloc_digital_wallet/generated/translations.dart';
+import 'package:core/generated/translations.dart';
 
-// Use directly with `t`
-final text = t.authWelcomeBack;
-final email = t.authEmail;
-```
-
-#### Method B: Context Extension (Rebuilds on Locale Change) ✅ **Recommended**
-
-```dart
-import 'package:bloc_digital_wallet/generated/translations.dart';
-
-// In widget build method
 @override
 Widget build(BuildContext context) {
-  return Text(context.t.authWelcomeBack);
+  return Text(context.coreT.app_name);
 }
 ```
 
-**Always use `context.t` in widgets** to ensure proper rebuilding when locale changes.
+#### Method B: Direct Access (No Rebuild on Locale Change)
+
+```dart
+import 'package:core/generated/translations.dart';
+
+final text = coreT.app_name;
+```
+
+**Always use `context.coreT` in widgets** to ensure proper rebuilding when locale changes.
 
 ---
 
@@ -299,28 +290,8 @@ Text(context.t.authPassword)
 Text(context.t.welcome(name: user.name))
 ```
 
-### ❌ DON'T
-
-1. **Don't use hardcoded strings** in UI
-2. **Don't forget to add keys to all locales**
-3. **Don't use `t` directly in StatefulWidgets** (use `context.t` instead)
-4. **Don't forget to regenerate** after changes
-
-```dart
-// ❌ Bad - Hardcoded
-Text('Welcome Back')
-
-// ❌ Bad - Missing locale
-// Only added to en.i18n.json, forgot vi.i18n.json
-
-// ❌ Bad - Using `t` in widget
-class MyWidget extends StatefulWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(t.authEmail); // Won't rebuild on locale change
-  }
-}
-```
+> **Localization do/don’t rules →** [FLUTTER_QUALITY_RULES.md §5](../cheat-sheets/FLUTTER_QUALITY_RULES.md#5-localization-rules)
+> Consolidated source used by `d3nexus:flutter-ui-audit` and `d3nexus:code-health-audit`.
 
 ---
 

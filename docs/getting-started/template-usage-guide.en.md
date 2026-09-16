@@ -8,14 +8,15 @@ A practical, use-case-driven guide — each section is one concrete task you wan
 
 ## Table of Contents
 0. [Start a new project from the template](#0-start-a-new-project-from-the-template)
-1. [Create a new Flutter Feature (`features/`)](#1-create-a-new-flutter-feature-features)
-2. [Create a shared Library (`packages/`)](#2-create-a-shared-library-packages)
-3. [Create a Native Plugin without UI (Headless Pigeon)](#3-create-a-native-plugin-without-ui-headless-pigeon)
-4. [Create a Native Plugin with UI (Compose & SwiftUI)](#4-create-a-native-plugin-with-ui-compose--swiftui)
-5. [Upgrade a headless Plugin to include Native UI](#5-upgrade-a-headless-plugin-to-include-native-ui)
-6. [Create a Subfeature within an existing Feature](#6-create-a-subfeature-within-an-existing-feature)
-7. [Add a Go binding to a native package](#7-add-a-go-binding-to-a-native-package)
-8. [Remove a feature package](#8-remove-a-feature-package)
+1. [Switch between Enterprise and Lean modes](#1-switch-between-enterprise-and-lean-modes)
+2. [Create a new Flutter Feature (`features/`)](#2-create-a-new-flutter-feature-features)
+3. [Create a shared Library (`packages/`)](#3-create-a-shared-library-packages)
+4. [Create a Native Plugin without UI (Headless Pigeon)](#4-create-a-native-plugin-without-ui-headless-pigeon)
+5. [Create a Native Plugin with UI (Compose & SwiftUI)](#5-create-a-native-plugin-with-ui-compose--swiftui)
+6. [Upgrade a headless Plugin to include Native UI](#6-upgrade-a-headless-plugin-to-include-native-ui)
+7. [Create a Subfeature within an existing Feature](#7-create-a-subfeature-within-an-existing-feature)
+8. [Add a Go binding to a native package](#8-add-a-go-binding-to-a-native-package)
+9. [Remove a feature package](#9-remove-a-feature-package)
 
 ---
 
@@ -31,10 +32,14 @@ cd my_new_app
 rm -rf .git && git init
 
 # 2. Rename and re-identify project (app_name, package_name, bundle_id)
+#    Enterprise mode (default) — full Super App with 3-tab Shell
 ./scripts/rename_project.sh "My New App" my_new_app com.mycompany.mynewapp
 
+#    OR: Lean mode — standalone 2-tab app without Scanner
+./scripts/rename_project.sh "My MVP" my_mvp com.mycompany.mvp --mode lean
+
 # 3. Synchronize secure configurations (dev/stg/prd)
-sh .agents/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
+./scripts/copy_secure_files.sh
 
 # 4. Verify and launch application
 melos run analyze
@@ -42,11 +47,34 @@ fvm flutter test
 flutter run --flavor dev --dart-define-from-file=secureFiles/dev/environment-configs.json
 ```
 
-`rename_project.sh` renames the Dart package, imports in `lib/`, `features/`, `applicationId`/bundle id, display names (Android & iOS) and runs `melos bootstrap` & `melos genAlls`. After this, `flutter run` boots straight into the Shell with Home, Scanner, and Settings tabs.
+`rename_project.sh` renames the Dart package, imports in `lib/`, `features/`, `applicationId`/bundle id, display names (Android & iOS) and runs `melos bootstrap` & `melos genAlls`. The `--mode` flag (default: `enterprise`) controls the Shell layout:
+- **Enterprise**: boots into the Shell with 3 tabs — Home, Scanner, and Settings.
+- **Lean**: boots into the Shell with 2 tabs — Home and Settings (Scanner unhooked).
 
 ---
 
-## 1. Create a new Flutter Feature (`features/`)
+## 1. Switch between Enterprise and Lean modes
+
+Use when you want to toggle the project between **Enterprise Super App** (3-tab Shell) and **Lean Standalone App** (2-tab Shell) after initial setup.
+
+```bash
+# Switch to lean mode (unhook Scanner — code stays on disk)
+./scripts/configure_mode.sh lean
+
+# Switch back to enterprise mode (re-enable Scanner)
+./scripts/configure_mode.sh enterprise
+
+# Permanently prune Scanner code (irreversible without git reset)
+./scripts/configure_mode.sh lean --prune
+```
+
+- **How it works**: The script toggles marker regions (begin/end comment tags) in `shell_page.dart`, `app_router.dart`, `injection.dart`, and `deep_link_registry.dart`, then runs `melos bootstrap && melos run analyze` to verify.
+- **`--prune`**: Deletes `features/scanner/` and removes it from `pubspec.yaml`. Requires a clean git tree (use `--force` to override).
+- **`--skip-verify`**: Skips the automatic analysis verification after switching.
+
+---
+
+## 2. Create a new Flutter Feature (`features/`)
 
 Use when implementing a new business feature (pure Dart/Flutter, following Clean Architecture + MVI).
 
@@ -60,7 +88,7 @@ mason make pac_mvi_feature --name <feature_name>
 
 ---
 
-## 2. Create a shared Library (`packages/`)
+## 3. Create a shared Library (`packages/`)
 
 Use when creating shared infrastructure packages, networking helpers, or reusable UI components.
 
@@ -73,7 +101,7 @@ mason make pac_library --name <library_name> --is_flutter true
 
 ---
 
-## 3. Create a Native Plugin without UI (Headless Pigeon)
+## 4. Create a Native Plugin without UI (Headless Pigeon)
 
 Use when a package needs to interact with native platform APIs (e.g., biometric authentication, secure hardware storage, device sensors) without rendering native UI views.
 
@@ -83,10 +111,12 @@ mason make pac_native_plugin --name <plugin_name> --has_ui false
 
 - **Target location:** Generates a Tri-Platform plugin in `packages/<plugin_name>/` with Clean Architecture for Android (Kotlin) and iOS (Swift) bridged via Pigeon.
 - Both Android and iOS platforms are scaffolded in one unified plugin package with clean separation of concerns.
+- **Android architecture**: Kotlin 2.1.0, KSP, **Pure Dagger 2** (`PluginComponentProvider` — zero Hilt), and **WorkManager** `DataSyncWorker` for background execution with zero Flutter Engine.
+- **iOS architecture**: Swift Package Manager (`Package.swift`), **FactoryKit 3.3.2** (`SharedContainer` subclass), and **`BGTaskScheduler`** `DataSyncTask` for background execution with zero Flutter Engine.
 
 ---
 
-## 4. Create a Native Plugin with UI (Compose & SwiftUI)
+## 5. Create a Native Plugin with UI (Compose & SwiftUI)
 
 Use when a feature requires high-performance native UI components (e.g., custom camera viewfinder, maps, AR view) rendered via Flutter `PlatformView`.
 
@@ -94,12 +124,12 @@ Use when a feature requires high-performance native UI components (e.g., custom 
 mason make pac_native_plugin --name <plugin_name> --has_ui true
 ```
 
-- **Target location:** Adds native presentation layers (`presentation/` with Jetpack Compose on Android and SwiftUI on iOS) alongside `MviViewModel`.
+- **Target location:** Adds native presentation layers (`presentation/` with Jetpack Compose on Android and SwiftUI on iOS) alongside `MviViewModel`, on top of the same DI and background worker architecture as headless plugins.
 - Automatically wires `PlatformViewFactory` registrations in both Kotlin and Swift.
 
 ---
 
-## 5. Upgrade a headless Plugin to include Native UI
+## 6. Upgrade a headless Plugin to include Native UI
 
 Use when a previously created headless plugin (`has_ui=false`) now requires native UI. **Do not re-run `pac_native_plugin`** (to avoid overwriting custom domain/data code).
 
@@ -107,11 +137,12 @@ Use when a previously created headless plugin (`has_ui=false`) now requires nati
 mason make pac_add_native_ui --name <plugin_name>
 ```
 
-- **Automated patches:** Updates Gradle dependencies for Jetpack Compose, iOS Podspec for SwiftUI, scaffolds native MVI ViewModels, and registers `PlatformViewFactory` bridge code.
+- **Automated patches:** Updates Gradle dependencies for Jetpack Compose, iOS SPM manifest for SwiftUI, scaffolds native MVI ViewModels, and registers `PlatformViewFactory` bridge code.
+- **Strictly preserves** existing Dagger 2 / FactoryKit DI modules and WorkManager / BGTaskScheduler background workers — only presentation layers are added.
 
 ---
 
-## 6. Create a Subfeature within an existing Feature
+## 7. Create a Subfeature within an existing Feature
 
 Use when adding a secondary screen or workflow into an existing feature without creating a separate package (e.g., adding `order_detail` to `e_commerce`).
 
@@ -123,7 +154,7 @@ mason make pac_mvi_subfeature --package_name <feature_name> --subfeature_name <s
 
 ---
 
-## 7. Add a Go binding to a native package
+## 8. Add a Go binding to a native package
 
 Use when a package needs to invoke precompiled Go routines (e.g., E2EE encryption engines). This is a manual integration pattern:
 
@@ -133,7 +164,7 @@ Use when a package needs to invoke precompiled Go routines (e.g., E2EE encryptio
 
 ---
 
-## 8. Remove a feature package
+## 9. Remove a feature package
 
 Use when safely decommissioning an existing feature package:
 

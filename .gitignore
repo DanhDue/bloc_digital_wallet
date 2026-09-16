@@ -99,5 +99,7 @@ bricks/**/hooks/packages/
 .metadata
 mason-lock.json
 
-# Superpowers Brainstorming
+# Superpowers Brainstorming & Specs (synced to .devtool/epic/ via epic-lifecycle)
 .superpowers/
+docs/superpowers/
+.docs/

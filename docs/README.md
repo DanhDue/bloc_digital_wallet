@@ -1,150 +1,110 @@
-# Documentation
+# Flutter Super App Template — Documentation Hub
 
-**Comprehensive documentation for the Digital Wallet project**
-
----
-
-## 🎯 Start Here
-
-👉 **[../DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md)** - Complete documentation index with all categories
+**Trung tâm điều hướng tài liệu kỹ thuật & quy chuẩn kiến trúc cho `bloc_digital_wallet`**
 
 ---
 
-## 📁 Folder Structure
+## 🤖 AI-Driven Development Workflow (`/epic-lifecycle`)
 
-**[docs/](./)**
-- 🤖 **[ai-agents/](ai-agents/)** - AI Agent guides
-- 🏗️ **[architecture/](architecture/)** - Architecture documentation
-- ⚙️ **[environment/](environment/)** - Environment setup
-- 🎨 **[development/](development/)** - Implementation guides
-- 🚀 **[getting-started/](getting-started/)** - Quick start guides
-- 🧱 **[mason/](mason/)** - Code generation
-- 📝 **[task-prompt-templates/](task-prompt-templates/)** ⭐ **NEW** - AI task templates
+Mọi tác vụ phát triển — tính năng mới, refactor, hay sửa lỗi — đều được quản trị qua
+**`/epic-lifecycle`**: quy trình 4 giai đoạn dành cho **Flutter, Android Native và iOS Native**.
 
----
+| Giai đoạn | Skill | Output |
+|-----------|-------|--------|
+| 1 — Spec & Exploration | `d3nexus:brainstorming` | Approved design spec |
+| 2 — HLD & Task Breakdown | `d3nexus:epic-designer` | HLD (en+vi) + BDD + Kanban tasks |
+| 3 — Isolated Implementation | `d3nexus:epic-implementation` | TDD code in git worktree |
+| 4 — Quality & Merge | `d3nexus:quality_check` + `finishing-a-development-branch` | Clean merge to develop |
 
-## 📚 What's Inside
+| Platform | Template | Toolchain |
+|----------|----------|-----------|
+| 🟦 Flutter | `bloc_digital_wallet` | Melos + Mason (`pac_mvi_feature`, `pac_native_plugin`) |
+| 🤖 Android Native | `android_digital_wallet` | Gradle + Dagger2 + WorkManager |
+| 🍎 iOS Native | `ios_digital_wallet` | SPM + FactoryKit + BGTaskScheduler |
 
-### 🤖 [ai-agents/](ai-agents/)
-AI assistant documentation and workflows
-- [AI_AGENT_README.md](ai-agents/AI_AGENT_README.md) - Main AI guide
-- [AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md) - Common workflows
-- [DOUBLE_CHECK_GUIDE.md](ai-agents/DOUBLE_CHECK_GUIDE.md) - Quality checks
-- And more...
-
-### 🏗️ [architecture/](architecture/)
-Project architecture and design patterns
-- [ARCHITECTURE.md](architecture/ARCHITECTURE.md) - Main overview
-- [ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md) - In-depth details
-- [CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md) - MVI pattern
-- [VISUAL_GUIDE.md](architecture/VISUAL_GUIDE.md) - Diagrams
-
-### ⚙️ [environment/](environment/)
-Environment setup and build configuration
-- **[FLAVORS_SETUP_COMPLETE.md](environment/FLAVORS_SETUP_COMPLETE.md)** ⭐ - Flavors + dart-defines (latest!)
-- [ENVIRONMENT_SETUP.md](environment/ENVIRONMENT_SETUP.md) - Complete guide
-- [ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md) - Quick reference
-
-### 🎨 [development/](development/)
-Feature implementation guides
-- [IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md) - Complete tutorial
-
-### 🚀 [getting-started/](getting-started/)
-Quick start and reference materials
-- [create-new-project-from-template.vi.md](getting-started/create-new-project-from-template.vi.md) ⭐ **NEW** - Hướng dẫn tạo project mới từ Template (Tiếng Việt)
-- [create-new-project-from-template.en.md](getting-started/create-new-project-from-template.en.md) ⭐ **NEW** - Guide to create a new project from Template (English)
-- [QUICK_REFERENCE.md](getting-started/QUICK_REFERENCE.md) - Commands and tips
-- [QUICK_START.md](getting-started/QUICK_START.md) - Detailed quickstart
-- [DOCUMENTATION_NAV_MAP.md](getting-started/DOCUMENTATION_NAV_MAP.md) - Navigation
-
-### 🧱 [mason/](mason/)
-Mason code generation templates
-- [MASON_GUIDE.md](mason/MASON_GUIDE.md) - Complete guide
-- [MASON_INTEGRATION.md](mason/MASON_INTEGRATION.md) - Integration
-- [MASON_SYNTAX.md](mason/MASON_SYNTAX.md) - Syntax reference
-
-### 📝 [task-prompt-templates/](task-prompt-templates/) ⭐ **NEW**
-Ready-to-use templates for AI task assignment
-- **[README.md](task-prompt-templates/README.md)** - Main guide (comprehensive)
-- **[create-new-feature.md](task-prompt-templates/create-new-feature.md)** - New modules/subfeatures (2 examples)
-- **[fix-bug.md](task-prompt-templates/fix-bug.md)** - Bug fixes (2 examples)
-- **[refactor-code.md](task-prompt-templates/refactor-code.md)** - Code improvements (2 examples)
-- **[update-ui.md](task-prompt-templates/update-ui.md)** - UI/styling updates (2 examples)
-
-**Why Use These?**
-- ✅ Structured task assignments for AI agents
-- ✅ All critical rules included automatically
-- ✅ 8 complete real-world examples
-- ✅ Consistent, high-quality results
-- ✅ Fewer errors and iterations
+> All epics live in `.devtool/epic/<name>/` — design spec → HLD → BDD → task files —
+> enabling full AI agent context reproduction in any session.
 
 ---
 
-## 🔍 Quick Links
+## 📚 Tài Liệu Theo Danh Mục
 
-### New to Project?
-1. [../README.md](../README.md) - Project overview
-2. [getting-started/QUICK_REFERENCE.md](getting-started/QUICK_REFERENCE.md)
-3. [getting-started/QUICK_START.md](getting-started/QUICK_START.md)
+### 1. 🏗️ Kiến Trúc (Architecture)
 
-### Understanding Architecture?
-1. [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md)
-2. [architecture/ARCHITECTURE_DETAILED.md](architecture/ARCHITECTURE_DETAILED.md)
-3. [architecture/CLEAN_MVI_SUMMARY.md](architecture/CLEAN_MVI_SUMMARY.md)
+Tài liệu quy chuẩn thiết kế và cấu trúc hệ thống:
 
-### Setting Up Environment?
-1. [environment/FLAVORS_SETUP_COMPLETE.md](environment/FLAVORS_SETUP_COMPLETE.md) ⭐
-2. [environment/ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md)
+- [Kiến trúc Clean + MVI & Dual-Mode](architecture/ARCHITECTURE.md) — Clean Architecture + MVI, phân vùng Monorepo, Dual-Mode (`enterprise` vs `lean`), `AppInitializer` pattern và quy tắc module boundary.
+- [Kiến trúc Mạng & Retrofit Client](architecture/NETWORKING.md) — Network package, Dio interceptors, SSL Pinning, Token Refresh Mutex, BaseResponse và xử lý lỗi phân tầng.
+- [Thiết kế hệ thống Refresh Token](architecture/REFRESH_TOKEN_DESIGN.md) — Concurrency mutex locking, Token Rotation và lưu trữ bảo mật Keychain/Keystore.
 
-### Implementing Features?
-1. [development/IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md)
-2. [mason/MASON_GUIDE.md](mason/MASON_GUIDE.md)
+### 2. 🔬 Phân Tích Kỹ Thuật (Technical Analysis) — NEW
 
-### AI Agent?
-1. **[task-prompt-templates/README.md](task-prompt-templates/README.md)** ⭐ Start here for task assignment!
-2. [ai-agents/AI_AGENT_README.md](ai-agents/AI_AGENT_README.md)
-3. [ai-agents/AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md)
-4. [ai-agents/DOUBLE_CHECK_GUIDE.md](ai-agents/DOUBLE_CHECK_GUIDE.md)
+Các quyết định kiến trúc chuyên sâu được distill từ epics, và bản đồ requirements:
 
----
+- [Super App Overview & Maturity Scorecard (EN)](technical-analysis/OVERVIEW.en.md) | [VI](technical-analysis/OVERVIEW.vi.md) — Tổng quan kiến trúc, 4 trụ cột quản trị cốt lõi, bảng điểm trưởng thành 88.5%, phân tích khoảng cách kỹ thuật Flutter vs Android DFM.
+- [Flutter Super App Production Roadmap (EN)](technical-analysis/flutter_production_roadmap.en.md) | [VI](technical-analysis/flutter_production_roadmap.vi.md) — Lộ trình kỹ thuật sản xuất toàn diện: Lean Core, Quản trị RAM/ImageCache 25% cap, Permission Broker, giải quyết 3 bài toán sống còn, Backlog 7 lĩnh vực, Ma trận P0–P2 và Kế hoạch 8 bước.
+- [Super App Requirements & Implementation Status](technical-analysis/super_app_requirements.md) — Bản đồ 4 trụ cột + 11 lĩnh vực → 59 requirements với implementation status (76.3% hoàn thành).
+- [Logging System HLD](technical-analysis/logging_system.en.md) | [VI](technical-analysis/logging_system.vi.md) — D3NexusLogger, pluggable appenders, W3C trace context, headless native logging.
+- [Super App Governance HLD](technical-analysis/super_app_governance.en.md) | [VI](technical-analysis/super_app_governance.vi.md) — 4-pillar framework, AppEventBus, module boundary CI, FeaturePublicRoutes.
+- [DeepLink Engine HLD](technical-analysis/deeplink_engine.en.md) | [VI](technical-analysis/deeplink_engine.vi.md) — DeepLinkCoordinator, AuthGuard, native OS integration (App Links / Universal Links).
+- [Resilience & Memory HLD](technical-analysis/resilience_and_memory.en.md) | [VI](technical-analysis/resilience_and_memory.vi.md) — AppCachedImage, MiniAppErrorBoundary, MemoryPressureObserver, OfflineBanner.
 
-## 🎯 By Task
+### 3. 🚀 Getting Started (Template Guides)
 
-| I want to... | Go to |
-|--------------|-------|
-| Get started | [getting-started/QUICK_START.md](getting-started/QUICK_START.md) |
-| Understand architecture | [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md) |
-| Create a feature | [development/IMPLEMENTATION_GUIDE.md](development/IMPLEMENTATION_GUIDE.md) |
-| Assign task to AI | **[task-prompt-templates/README.md](task-prompt-templates/README.md)** ⭐ |
-| Setup environment | [environment/ENVIRONMENT_QUICK_START.md](environment/ENVIRONMENT_QUICK_START.md) |
-| Use code generation | [mason/MASON_GUIDE.md](mason/MASON_GUIDE.md) |
-| AI workflow | [ai-agents/AI_AGENT_WORKFLOWS.md](ai-agents/AI_AGENT_WORKFLOWS.md) |
+Hướng dẫn bắt đầu và sử dụng template:
 
----
+- [Tạo dự án mới từ Template (VI)](getting-started/create-new-project-from-template.vi.md) | [EN](getting-started/create-new-project-from-template.en.md) — Quy trình 4 bước: rename, Dual-Mode, secureFiles, chạy app.
+- [Hướng dẫn sử dụng Template theo Use Case (VI)](getting-started/template-usage-guide.vi.md) | [EN](getting-started/template-usage-guide.en.md) — Tạo feature, shared library, native plugin, subfeature.
+- [Quick Reference](getting-started/QUICK_REFERENCE.md) — Commands, Mason bricks, Melos scripts, code templates.
 
-## 📊 Statistics
+### 4. ⚙️ Development (Tool Guides)
 
-- **Total Documentation Files**: 30+
-- **Categories**: 7 (added task-prompt-templates)
-- **Organization**: ✅ By folder
-- **Last Updated**: 2026-01-12
+Hướng dẫn công cụ và hạ tầng:
+
+- [Cấu hình môi trường & Flavors](development/ENVIRONMENT_SETUP.md) — Thiết lập `dev`/`stg`/`prd`, mã hóa secureFiles, `--dart-define-from-file`.
+- [Lệnh Melos & CodeGen Pipeline](development/MELOS_COMMANDS.md) — Quản trị monorepo, `genAlls.sh`, `genChanged.sh`.
+- [Quản lý giao diện (ThemeTailor)](development/THEME_TAILOR_GUIDE.md) — Design system & theme tokens qua `context.appThemes`.
+- [Đa ngôn ngữ Type-Safe (Slang)](development/SLANG_LOCALIZATION_GUIDE.md) — Quản lý bản dịch qua `context.coreT`, cấu hình Slang.
+
+### 5. 📋 Cheat Sheets (Quality Audit Source) — NEW
+
+Nguồn tổng hợp cho quality audit skills:
+
+- [Flutter Quality Rules](cheat-sheets/FLUTTER_QUALITY_RULES.md) — 8 rule sets (MVI naming, architecture layers, anti-patterns, theme, i18n, networking, token security, DI). Used by `flutter-ui-audit`, `architecture-audit`, `code-health-audit`, `security-audit`.
 
 ---
 
-## 🆕 Recent Changes
+## 📁 Cấu Trúc Thư Mục
 
-### 2026-01-12
-✅ **Added** task-prompt-templates folder with 5 comprehensive files  
-✅ **Created** 8 complete real-world examples for AI task assignment  
-✅ **Merged** TASK_ASSIGNMENT.md into centralized location  
-✅ **Improved** AI agent task assignment workflow
-
-### 2026-01-11
-✅ **Reorganized** documentation into logical folders  
-✅ **Cleaned** root directory (only 3 files!)  
-✅ **Improved** navigation and discoverability  
-✅ **Updated** all links and references  
-
----
-
-**For complete navigation, see:** [../DOCUMENTATION_INDEX.md](../DOCUMENTATION_INDEX.md)
+```
+docs/
+├── README.md                              # File này — navigation hub
+│
+├── architecture/                          # 🏗️ Kiến trúc cốt lõi
+│   ├── ARCHITECTURE.md                    # Clean Architecture + MVI + Dual-Mode
+│   ├── NETWORKING.md                      # Network package + Dio + Retrofit
+│   └── REFRESH_TOKEN_DESIGN.md            # Token refresh + Mutex + Secure Storage
+│
+├── technical-analysis/                    # 🔬 Phân tích kỹ thuật chuyên sâu (NEW)
+│   ├── OVERVIEW.(en|vi).md                # Đánh giá tổng quan & Maturity Scorecard (Focus)
+│   ├── flutter_production_roadmap.(en|vi).md # Lộ trình kỹ thuật sản xuất Flutter Super App
+│   ├── super_app_requirements.md          # 4-pillar + 11 domains → 59 requirements + status
+│   ├── logging_system.(en|vi).md          # D3NexusLogger HLD
+│   ├── super_app_governance.(en|vi).md    # Governance framework HLD
+│   ├── deeplink_engine.(en|vi).md         # DeepLink router engine HLD
+│   └── resilience_and_memory.(en|vi).md   # Resilience & memory HLD
+│
+├── getting-started/                       # 🚀 Template guides
+│   ├── create-new-project-from-template.(en|vi).md
+│   ├── template-usage-guide.(en|vi).md
+│   └── QUICK_REFERENCE.md                 # Commands + Mason + code templates
+│
+├── development/                           # ⚙️ Tool guides
+│   ├── ENVIRONMENT_SETUP.md               # Flavors + secureFiles
+│   ├── MELOS_COMMANDS.md                  # Melos + CodeGen pipeline
+│   ├── THEME_TAILOR_GUIDE.md              # ThemeTailor API + how-to
+│   └── SLANG_LOCALIZATION_GUIDE.md        # Slang i18n + how-to
+│
+└── cheat-sheets/                          # 📋 Quality audit source (NEW)
+    └── FLUTTER_QUALITY_RULES.md           # 8 rule sets for quality audit skills
+```

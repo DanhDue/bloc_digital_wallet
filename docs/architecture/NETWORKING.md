@@ -1,6 +1,6 @@
 # Networking Architecture
 
-This document describes the networking architecture for the `bloc_digital_wallet` project. It outlines how the core network infrastructure interacts with feature modules while strictly adhering to Clean Architecture principles.
+This document describes the networking architecture for the `Digital Wallet` project. It outlines how the core network infrastructure interacts with feature modules while strictly adhering to Clean Architecture principles.
 
 ---
 

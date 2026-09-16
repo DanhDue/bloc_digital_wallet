@@ -2,22 +2,42 @@
 
 This guide provides step-by-step instructions for creating and configuring a new Flutter application from the **Flutter Super App Template**, using the automated renaming and identification tooling (`rename_project.sh` / `pac_rename_project`).
 
+The template ships with a **Dual-Mode Architecture** — choose between an **Enterprise Super App** (3-tab Shell with Home, Scanner, and Settings) or a **Lean Standalone App** (2-tab Shell with Home and Settings only). You select the mode during project creation, and can switch at any time afterward.
+
 ---
 
 ## 📌 Table of Contents
-- [1. Quick 4-Step Setup Process](#1-quick-4-step-setup-process)
+- [1. Choose Your Template Mode](#1-choose-your-template-mode)
+- [2. Quick 4-Step Setup Process](#2-quick-4-step-setup-process)
   - [Step 1: Copy Template & Initialize Git](#step-1-copy-template--initialize-git)
   - [Step 2: Rename & Re-identify Project (Single Command)](#step-2-rename--re-identify-project-single-command)
   - [Step 3: Configure Secure Files & Flavors](#step-3-configure-secure-files--flavors)
   - [Step 4: Verify & Run the Application](#step-4-verify--run-the-application)
-- [2. Under the Hood (Automated Mechanics)](#2-under-the-hood-automated-mechanics)
-- [3. Developing New Features with Mason Bricks](#3-developing-new-features-with-mason-bricks)
-- [4. Common Utility Scripts](#4-common-utility-scripts)
-- [5. Troubleshooting](#5-troubleshooting)
+- [3. Under the Hood (Automated Mechanics)](#3-under-the-hood-automated-mechanics)
+  - [3.1 Rename Project Mechanics](#31-rename-project-mechanics)
+  - [3.2 Mode Switching Mechanics (`configure_mode.sh`)](#32-mode-switching-mechanics-configure_modesh)
+- [4. Developing New Features with Mason Bricks](#4-developing-new-features-with-mason-bricks)
+- [5. Common Utility Scripts](#5-common-utility-scripts)
+- [6. Troubleshooting](#6-troubleshooting)
 
 ---
 
-## 1. Quick 4-Step Setup Process
+## 1. Choose Your Template Mode
+
+Before starting, decide which mode fits your project:
+
+| | **Enterprise** (default) | **Lean** |
+|---|---|---|
+| **Shell Tabs** | 3 tabs: Home, Scanner, Settings | 2 tabs: Home, Settings |
+| **Target Use Case** | Super App with multiple mini-apps | Standalone app or MVP |
+| **Scanner Feature** | Active and wired into Router, DI, DeepLink | Unhooked (code present but inactive) |
+| **`--prune` option** | N/A | Permanently removes Scanner code |
+
+> **Tip**: You can always switch modes later using `./scripts/configure_mode.sh <enterprise|lean>`. Start with `enterprise` if you're unsure.
+
+---
+
+## 2. Quick 4-Step Setup Process
 
 ### Step 1: Copy Template & Initialize Git
 
@@ -43,7 +63,7 @@ This guide provides step-by-step instructions for creating and configuring a new
 
 The template provides a cross-platform automated script (compatible with macOS, Linux, and Windows):
 ```bash
-./scripts/rename_project.sh "<App Name>" <package_name> <bundle_id>
+./scripts/rename_project.sh "<App Name>" <package_name> <bundle_id> [--mode <enterprise|lean>]
 ```
 
 #### Parameters:
@@ -52,13 +72,18 @@ The template provides a cross-platform automated script (compatible with macOS, 
 | `app_name` | String | `"My Super App"` | Display name shown on the mobile home screen |
 | `package_name` | `snake_case` | `my_super_app` | Dart package identifier in `pubspec.yaml` |
 | `bundle_id` | `reverse-domain` | `com.company.mysuperapp` | Android Application ID / iOS Bundle Identifier |
+| `--mode` | `enterprise` \| `lean` | `--mode lean` | *(Optional)* Template mode. Defaults to `enterprise` |
 
-#### Concrete Example:
+#### Concrete Examples:
 ```bash
+# Enterprise mode (default) — full Super App with Scanner + Settings
 ./scripts/rename_project.sh "E-Commerce App" ecommerce_app com.mycompany.ecommerce
+
+# Lean mode — standalone app with Settings only, Scanner unhooked
+./scripts/rename_project.sh "My MVP" my_mvp com.mycompany.mvp --mode lean
 ```
 
-> **Note**: Running `./scripts/rename_project.sh` with no arguments triggers interactive prompts for each field.
+> **Note**: Running `./scripts/rename_project.sh` with no arguments triggers interactive prompts for each field. The `--mode` flag defaults to `enterprise` when omitted.
 
 ---
 
@@ -75,7 +100,7 @@ The template provides a cross-platform automated script (compatible with macOS, 
 
 3. Run the copy script to place configuration files into the native Android and iOS folders:
    ```bash
-   sh .agents/skills/copy_secure_configurations/resources/scripts/copy_secure_files.sh
+   ./scripts/copy_secure_files.sh
    ```
 
 ---
@@ -108,7 +133,9 @@ Verify that the newly renamed project builds and passes tests:
 
 ---
 
-## 2. Under the Hood (Automated Mechanics)
+## 3. Under the Hood (Automated Mechanics)
+
+### 3.1 Rename Project Mechanics
 
 The script `./scripts/rename_project.sh` triggers the Mason brick `pac_rename_project` whose pure Dart hook [post_gen.dart](../../bricks/pac_rename_project/hooks/post_gen.dart) executes:
 
@@ -133,13 +160,53 @@ The script `./scripts/rename_project.sh` triggers the Mason brick `pac_rename_pr
    - Updates target configurations in `.vscode/launch.json` and `.agents/skills/setup_variants/resources/launch.json`.
    - Updates `project_name` in `.agents/config.json`.
    - Updates package imports across `bricks/` Mason templates (`bricks/mvi_feature`, `bricks/mvi_subfeature`).
-6. **Dependency Sync & Code Generation:**
+6. **Mode Configuration:**
+   - When `--mode lean` is specified, delegates to `scripts/configure_mode.sh lean` to unhook the Scanner feature (see below).
+7. **Dependency Sync & Code Generation:**
    - Executes `melos bootstrap`.
    - Executes `./scripts/genAlls.sh` (Slang localization code gen, `build_runner`, Freezed/Retrofit).
 
+### 3.2 Mode Switching Mechanics (`configure_mode.sh`)
+
+The script `./scripts/configure_mode.sh` toggles between **enterprise** and **lean** modes by manipulating **marker regions** embedded in key host files:
+
+```bash
+./scripts/configure_mode.sh <enterprise|lean> [--prune] [--force] [--skip-verify]
+```
+
+#### What it does:
+
+| Target File | Effect |
+|---|---|
+| `lib/shell/shell_page.dart` | Toggles Scanner tab (3-tab ↔ 2-tab) |
+| `lib/app_router.dart` | Comments/uncomments Scanner route |
+| `lib/di/injection.dart` | Comments/uncomments Scanner DI module |
+| `packages/platform/deeplink/` | Comments/uncomments Scanner deep-link registration |
+
+#### Flags:
+| Flag | Description |
+|---|---|
+| `--prune` | **Lean mode only.** Permanently removes `features/scanner` directory and its `pubspec.yaml` references. Irreversible without `git reset`. |
+| `--force` | Overrides the dirty-tree safety check when using `--prune`. |
+| `--skip-verify` | Skips the automatic `melos bootstrap && melos run analyze` verification after switching. |
+
+#### Round-trip switching:
+```bash
+# Switch to lean mode (unhook Scanner, code stays on disk)
+./scripts/configure_mode.sh lean
+
+# Switch back to enterprise mode (re-enable Scanner)
+./scripts/configure_mode.sh enterprise
+
+# Permanently remove Scanner (requires clean git tree)
+./scripts/configure_mode.sh lean --prune
+```
+
+> **Safety**: `--prune` checks `git status --porcelain` before deleting code. If uncommitted changes exist, it aborts unless `--force` is passed.
+
 ---
 
-## 3. Developing New Features with Mason Bricks
+## 4. Developing New Features with Mason Bricks
 
 Once the project is initialized, you can scale the application using the standardized Super App Mason Bricks:
 
@@ -170,18 +237,23 @@ Scaffolds a reusable library in `packages/network_cache` and registers it with t
   mason make pac_native_plugin --name custom_scanner --has_ui true
   ```
 
+Generated plugins include production-ready native architecture out of the box:
+- **Android**: Kotlin 2.1.0, Kotlin DSL `build.gradle.kts`, KSP, **Pure Dagger 2** (`PluginComponentProvider` — zero Hilt), and **WorkManager** `DataSyncWorker` for background execution with **zero Flutter Engine** (saving 150MB+ RAM).
+- **iOS**: Swift Package Manager (`Package.swift`), **FactoryKit 3.3.2** (`SharedContainer` subclass), and **`BGTaskScheduler`** `DataSyncTask` for background execution with **zero Flutter Engine**.
+
 ### 5. Upgrade an Existing No-UI Plugin to With-UI (Compose & SwiftUI)
 ```bash
 mason make pac_add_native_ui --plugin_name biometric_auth
 ```
-Automatically enables Compose in Android Gradle, scaffolds native MVI ViewModels under `ios/<name>/Sources/<name>/Presentation/` (Swift Package Manager layout — no Podfile change), and patches the plugin class to register `PlatformViewFactory`.
+Automatically enables Compose in Android Gradle, scaffolds native MVI ViewModels under `ios/<name>/Sources/<name>/Presentation/` (Swift Package Manager layout — no Podfile change), and patches the plugin class to register `PlatformViewFactory`. **Existing DI (Dagger 2 / FactoryKit) and background workers (WorkManager / BGTaskScheduler) are strictly preserved** — only presentation layers are added.
 
 ---
 
-## 4. Common Utility Scripts
+## 5. Common Utility Scripts
 
 | Action | Command | Notes |
 |---|---|---|
+| **Switch template mode** | `./scripts/configure_mode.sh <enterprise\|lean>` | Toggle between 3-tab and 2-tab Shell |
 | **Generate all code** | `./scripts/genAlls.sh` | Runs Slang l10n + `build_runner` across the monorepo |
 | **Generate code for changed files** | `./scripts/genChanged.sh` | Fast incremental code generation |
 | **Check architectural boundaries** | `./scripts/check_module_boundaries.sh` | Validates Clean Architecture module boundaries |
@@ -191,7 +263,7 @@ Automatically enables Compose in Android Gradle, scaffolds native MVI ViewModels
 
 ---
 
-## 5. Troubleshooting
+## 6. Troubleshooting
 
 ### Issue 1: `melos: command not found` or `mason: command not found`
 **Solution:** Activate CLI tools globally via Dart SDK:

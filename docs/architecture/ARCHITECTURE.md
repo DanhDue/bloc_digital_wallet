@@ -1,7 +1,7 @@
 # Architecture: Clean Architecture + MVI
 *(Feature-First Organization)*
 
-This document is the **authoritative architecture guide** for the bloc_digital_wallet project.
+This document is the **authoritative architecture guide** for the Flutter Super App Template (`super_app_template`).
 
 ---
 
@@ -239,50 +239,43 @@ View reacts to Event (Navigation, Toast, Dialog)
 ### 1. Directory Structure
 
 ```
-lib/
-├── core/                    # Shared infrastructure
-│   ├── architecture/        # MVI base classes (BaseAction, BaseState, MviBloc)
-│   ├── errors/              # Failures & exceptions
-│   ├── network/             # API clients (Dio, interceptors)
-│   └── storage/             # Local storage (Hive, SharedPreferences)
-│
-├── features/                # Feature modules
-│   └── {feature}/
-│       ├── data/
-│       │   ├── datasources/
-│       │   │   ├── {feature}_local_datasource.dart
-│       │   │   └── {feature}_remote_datasource.dart
-│       │   ├── models/
-│       │   │   └── {feature}_model.dart (+.freezed.dart, +.g.dart)
-│       │   └── repositories/
-│       │       └── {feature}_repository_impl.dart
-│       ├── domain/
-│       │   ├── entities/
-│       │   │   └── {feature}_entity.dart
-│       │   ├── repositories/
-│       │   │   └── {feature}_repository.dart
-│       │   └── usecases/
-│       │       ├── get_{feature}_usecase.dart
-│       │       ├── get_all_{feature}s_usecase.dart
-│       │       ├── {subfeature_1}_usecase.dart      # Added by mvi_subfeature
-│       │       └── {subfeature_2}_usecase.dart      # Added by mvi_subfeature
-│       └── presentation/
-│           ├── models/
-│           │   └── {feature}_ui_model.dart (+.freezed.dart, +.g.dart)
-│           ├── {feature}/                           # Main feature page
-│           │   ├── {feature}_action.dart
-│           │   ├── {feature}_bloc.dart
-│           │   ├── {feature}_event.dart
-│           │   ├── {feature}_page.dart
-│           │   └── {feature}_state.dart
-│           ├── {subfeature_1}/                      # Subfeature 1 (mvi_subfeature)
-│           └── {subfeature_2}/                      # Subfeature 2 (mvi_subfeature)
-│
-├── di/                      # Dependency injection
-│   ├── injection.dart
-│   └── injection.config.dart
-│
-└── generated/               # Auto-generated (assets, colors, translations)
+lib/                         # Root App Shell ("The Glue")
+├── app_router.dart          # Main router configuration
+├── main.dart                # Application entry point
+├── di/                      # Root Dependency Injection
+│   ├── app_module.dart      # Global singletons & initializers
+│   └── injection.dart       # Orchestrates DI across all packages
+└── core/                    # Root core setup (e.g., initializers)
+
+packages/                    # Shared Infrastructure Libraries
+├── core/                    # Core utilities, failures, base models, AppInitializer
+│   ├── assets/locales/      # Multi-language translation files (slang)
+│   └── lib/                 # Core services, auth stream, memory observer
+├── framework/               # Architecture foundation (MviBloc, BaseAction, BaseState)
+├── logger/                  # Unified logging abstraction
+├── logger_native_bridge/    # Platform channel / FFI logging bridge
+├── native_security/         # Native security plugins (Android/iOS)
+├── network/                 # Dio client, interceptors, SSL pinning
+├── platform/                # Platform event bus and helpers
+└── ui_kit/                  # Shared widgets, themes (ThemeTailor), assets
+
+features/                    # Feature Modules (Clean Architecture + MVI Packages)
+└── {feature}/               # e.g., scanner, settings
+    ├── lib/
+    │   ├── data/
+    │   │   ├── datasources/ # Remote & Local data sources
+    │   │   ├── models/      # Freezed DTO models + JSON serializers
+    │   │   └── repositories/# Repository implementations
+    │   ├── domain/
+    │   │   ├── entities/    # Pure Dart domain entities
+    │   │   ├── repositories/# Repository interfaces
+    │   │   └── usecases/    # Business use cases
+    │   ├── presentation/
+    │   │   ├── models/      # UI display models
+    │   │   └── {subfeature}/# MVI: Action, State, Event, BLoC, Page
+    │   ├── {feature}.dart   # Package barrel exports
+    │   └── {feature}_router.dart # Feature route definition
+    └── pubspec.yaml
 ```
 
 ### 2. Architecture Layer Details
@@ -313,126 +306,55 @@ lib/
 | **DataSource** | Remote (Dio, Retrofit) or Local (Hive, SharedPreferences). Throws Exceptions on error. |
 | **Repository Impl** | Implements Domain interface. Decides cache strategy. Maps Model → Entity. Converts Exceptions → Failures. |
 
-### 3. Usage with Mason
+### 3. Dual-Mode Architecture (Enterprise vs Lean)
 
-#### a. Quick Reference
+The template provides built-in dual-mode flexibility for the host application:
+
+| Mode | Shell Structure | Default Tabs | Use Case |
+|---|---|---|---|
+| **`enterprise`** (Default) | Full 3-tab Shell | Home, Scanner, Settings | Super App ecosystem with multi-mini-app capabilities |
+| **`lean`** | Focused 2-tab Shell | Home, Settings | Standalone MVP or single-purpose client (Scanner unhooked) |
+
+#### How Mode Switching Works:
+The mode switcher (`scripts/configure_mode.sh`) toggles declarative marker comment blocks across the 4 integration seams of the host app without breaking Git history or compilation:
+1. `lib/shell/shell_page.dart` (toggles `// shell:scanner-tab` and adjusts tab count)
+2. `lib/app_router.dart` (toggles `// app:scanner-route`)
+3. `lib/di/injection.dart` (toggles `// di:scanner-module`)
+4. `packages/platform/lib/deeplink/deep_link_registry.dart` (toggles `// deeplink:scanner-register`)
+
+```bash
+# Switch to Lean mode (keeps code on disk, unhooks from UI/DI/Router)
+./scripts/configure_mode.sh lean
+
+# Switch back to Enterprise mode
+./scripts/configure_mode.sh enterprise
+
+# Permanently prune Scanner feature from monorepo (clean git tree required)
+./scripts/configure_mode.sh lean --prune
+
+# Initialize new project directly in chosen mode
+./scripts/rename_project.sh "My App" my_app com.company.app --mode lean
+```
+
+### 4. Code Generation with Mason (Monorepo Bricks)
+
+The monorepo uses Mason bricks specifically designed for isolated packages and Tri-Platform plugins:
 
 | Command | Description |
-|---------|-------------|
-| `mason make mvi_feature --feature_name <name>` | Create a new feature module |
-| `mason make mvi_subfeature --module_name <mod> --subfeature_name <name>` | Add a subfeature to a module |
-| `mason make remove_feature --feature_name <name>` | Remove a feature module |
-| `mason make remove_subfeature --module_name <mod> --subfeature_name <name>` | Remove a subfeature |
+|---|---|
+| `mason make pac_mvi_feature --name <name>` | Create new feature package in `features/<name>` |
+| `mason make pac_mvi_subfeature --package_name <pkg> --subfeature_name <name>` | Add subfeature (action/state/event/bloc/page) |
+| `mason make pac_library --name <name> --is_flutter true` | Create shared library package in `packages/<name>` |
+| `mason make pac_native_plugin --name <name> --has_ui <bool>` | Create Tri-Platform plugin (Android Kotlin + iOS Swift) |
+| `mason make pac_add_native_ui --name <name>` | Upgrade plugin with Jetpack Compose & SwiftUI |
+| `mason make remove_pac_feature --name <name>` | Safely remove feature package |
+| `mason make remove_pac_subfeature --package_name <pkg> --subfeature_name <name>` | Remove subfeature from package |
 
-#### b. Decision Tree
+> **Native Plugin Architecture**:
+> - **Android**: Kotlin 2.1.0, KSP, **Pure Dagger 2** (`PluginComponentProvider` — zero Hilt), and **WorkManager** `DataSyncWorker` for background execution with zero Flutter Engine.
+> - **iOS**: Swift Package Manager (`Package.swift`), **FactoryKit 3.3.2** (`SharedContainer`), and **`BGTaskScheduler`** `DataSyncTask` for background execution with zero Flutter Engine.
 
-```
-Need to add new functionality?
-│
-├─ Is there an existing module for this domain?
-│  │
-│  ├─ YES → Use mvi_subfeature
-│  │         Examples:
-│  │         - Add "Forgot Password" to authentication
-│  │         - Add "Transfer Money" to wallet
-│  │
-│  └─ NO → Use mvi_feature
-│           Examples:
-│           - Create authentication module
-│           - Create wallet module
-```
-
-#### c. `mvi_feature` - Create New Module
-
-Generates a complete feature module (14 files) with its own domain, data, and presentation layers.
-
-**Command:**
-```bash
-mason make mvi_feature --feature_name wallet
-```
-
-**What It Does:**
-- Creates `lib/features/<name>/` structure
-- **Automatically adds** the route to `lib/app_router.dart`
-- **Automatically runs** `build_runner` and `dart format`
-
-**Generated Structure (14 files):**
-```
-lib/features/<name>/
-├── data/
-│   ├── datasources/
-│   │   ├── <name>_local_datasource.dart
-│   │   └── <name>_remote_datasource.dart
-│   ├── models/
-│   │   └── <name>_model.dart
-│   └── repositories/
-│       └── <name>_repository_impl.dart
-├── domain/
-│   ├── entities/
-│   │   └── <name>_entity.dart
-│   ├── repositories/
-│   │   └── <name>_repository.dart
-│   └── usecases/
-│       ├── get_<name>_usecase.dart
-│       └── get_all_<name>s_usecase.dart
-└── presentation/
-    ├── models/
-    │   └── <name>_ui_model.dart
-    └── <name>/
-        ├── <name>_action.dart
-        ├── <name>_bloc.dart
-        ├── <name>_event.dart
-        ├── <name>_page.dart
-        └── <name>_state.dart
-```
-
-#### d. `mvi_subfeature` - Add to Existing Module
-
-Adds a nested feature (7 files) inside an existing module, reusing the parent's data layer infrastructure.
-
-**Command:**
-```bash
-mason make mvi_subfeature --module_name wallet --subfeature_name transfer
-```
-
-**Interactive Prompts:**
-1. `Entity name?` - Press Enter to use module's main entity, or specify a new one
-2. `Create a new data model?` - Y/n (default: No)
-3. `Create a new entity?` - Y/n (default: No)
-
-**What It Does:**
-- Adds files to existing `lib/features/<module>/`
-- **Automatically adds** the route to `lib/app_router.dart`
-- **Automatically runs** `build_runner` and `dart format`
-
-**Generated Structure (7 files):**
-```
-lib/features/<module>/
-├── domain/
-│   └── usecases/
-│       └── <subfeature>_usecase.dart          # NEW
-└── presentation/
-    ├── models/
-    │   └── <subfeature>_ui_model.dart
-    └── <subfeature>/                          # NEW folder
-        ├── <subfeature>_action.dart
-        ├── <subfeature>_bloc.dart
-        ├── <subfeature>_event.dart
-        ├── <subfeature>_page.dart
-        └── <subfeature>_state.dart
-```
-
-#### e. Automated Workflows
-
-| Manual Step | Automated? | Description |
-|-------------|------------|-------------|
-| Creating files | ✅ | Mason creates all necessary files |
-| Registering Route | ✅ | Hooks inject the route into `app_router.dart` |
-| Dependency Injection | ❌ | **Manual.** Register new repositories/usecases in `lib/di/injection.dart` |
-| Code Generation | ✅ | `build_runner` runs automatically |
-| Formatting | ✅ | `dart format` runs automatically |
-
-> 📖 **See**: [Mason Guide](../mason/MASON_GUIDE.md) for full details and troubleshooting.
+> 📖 **See**: [Quick Reference](../getting-started/QUICK_REFERENCE.md) for full commands and code templates.
 
 
 ---
@@ -660,28 +582,46 @@ flutter analyze --no-fatal-infos
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
+### 5. App Initializer Pattern
+
+The `AppInitializer` pattern orchestrates application startup logic in a modular, testable, and deterministic way. Instead of cluttering `main.dart` with initialization calls, each startup task (Logging, Firebase, Analytics, Security) is encapsulated in its own class implementing `AppInitializer` located in `lib/core/app_initializer/`.
+
+Initializers are registered in the DI graph and composed in `lib/di/app_module.dart`:
+
+```dart
+@module
+abstract class AppModule {
+  @singleton
+  AppInitializer provideAppInitializer(
+    LoggingInitializer loggingInitializer,
+    SecurityInitializer securityInitializer,
+  ) {
+    return AppInitializerImpl([
+      loggingInitializer,
+      securityInitializer,
+    ]);
+  }
+}
+```
+
+In `main.dart`, the composite initializer runs before launching the UI:
+```dart
+void main() async {
+  configureDependencies();
+  await getIt<AppInitializer>().init();
+  runApp(const MyApp());
+}
+```
+
 ---
 
 ## VI. References
 
-### 1. Implementation Guides
-- **[Implementation Guide](../development/IMPLEMENTATION_GUIDE.md)** - Step-by-step feature creation tutorial
-- **[Quick Reference](../getting-started/QUICK_REFERENCE.md)** - Developer cheat sheet
-- **[Quick Start](../getting-started/QUICK_START.md)** - 5-minute getting started
-
-### 2. Mason & Code Generation
-- **[Mason Guide](../mason/MASON_GUIDE.md)** - Feature generation guide
-- **[Mason Integration](../mason/MASON_INTEGRATION.md)** - Integration details
-- **[Mason Syntax](../mason/MASON_SYNTAX.md)** - Template syntax reference
-
-### 3. AI Agent Resources
-- **[AI Agent Context](../ai-agents/AI_AGENT_CONTEXT.md)** - Patterns and templates
-- **[AI Agent Workflows](../ai-agents/AI_AGENT_WORKFLOWS.md)** - Step-by-step workflows
-
-### 4. External Resources
+- **[Networking Architecture](NETWORKING.md)** - Network layer & Retrofit clients
+- **[Quick Reference](../getting-started/QUICK_REFERENCE.md)** - Developer cheat sheet with MVI code templates & commands
+- **[Documentation Hub](../README.md)** - Complete documentation directory
 - [Clean Architecture by Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [BLoC Library](https://bloclibrary.dev/)
-- [Mason Documentation](https://docs.brickhub.dev/)
 
 ---
 
@@ -692,12 +632,12 @@ flutter pub run build_runner build --delete-conflicting-outputs
 | Aspect | Implementation |
 |--------|---------------|
 | **Architecture** | Clean Architecture (3 layers) + MVI |
-| **Structure** | Feature-first in `lib/features/` |
+| **Structure** | Feature packages in `features/` & `packages/` |
 | **State Management** | `flutter_bloc` with Action/State/Event |
 | **DI** | `get_it` + `injectable` (auto-registration) |
 | **Code Generation** | `mason` (features), `build_runner` (models/DI) |
 | **Theming** | `theme_tailor` via `context.appThemes` |
-| **Localization** | `slang` via `context.t` |
+| **Localization** | `slang` via `context.coreT` |
 
 ### 2. Key Principles
 

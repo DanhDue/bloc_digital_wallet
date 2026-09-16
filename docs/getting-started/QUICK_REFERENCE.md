@@ -18,23 +18,7 @@ Action (INPUT)  →  BLoC  →  State (DATA) + Event (OUTPUT)  →  View
 
 ---
 
-## 🎨 Theme & Styling Rules
-
-### ✅ ALWAYS Use Theme Tailor
-
-```dart
-// ❌ NEVER
-Theme.of(context).textTheme.bodyMedium
-Theme.of(context).colorScheme.surface
-Colors.red
-
-// ✅ ALWAYS
-context.appThemes.bodyMedium
-context.appThemes.surfaceColor
-context.appThemes.errorColor
-```
-
-### Quick Reference
+## 🎨 Theme Quick Reference
 
 ```dart
 // Text Styles
@@ -53,18 +37,22 @@ context.appThemes.bodyMedium.copyWith(
 )
 ```
 
+> **Theme do/don't rules** → [FLUTTER_QUALITY_RULES.md §4](../cheat-sheets/FLUTTER_QUALITY_RULES.md#4-theme-usage-rules)
+
 ---
 
 ## 📁 File Structure Template
 
 ```
-lib/features/{feature}/
+features/{feature}/lib/
 ├── data/
 │   ├── datasources/
 │   │   ├── {feature}_remote_datasource.dart
 │   │   └── {feature}_local_datasource.dart
 │   ├── models/
-│   │   └── {feature}_model.dart
+│   │   ├── {feature}_model.dart
+│   │   ├── {feature}_model.freezed.dart
+│   │   └── {feature}_model.g.dart
 │   └── repositories/
 │       └── {feature}_repository_impl.dart
 ├── domain/
@@ -77,57 +65,79 @@ lib/features/{feature}/
 └── presentation/
     ├── models/
     │   └── {feature}_ui_model.dart
-    └── {feature}/
-        ├── {feature}_action.dart
-        ├── {feature}_state.dart
-        ├── {feature}_event.dart
-        ├── {feature}_bloc.dart
-        └── {feature}_page.dart
+    └── {subfeature}/
+        ├── {subfeature}_action.dart
+        ├── {subfeature}_state.dart
+        ├── {subfeature}_event.dart
+        ├── {subfeature}_bloc.dart
+        └── {subfeature}_page.dart
 ```
 
 ---
 
 ## 🚀 Quick Start Commands
 
-### Mason Feature Generation
+### 1. Dual-Mode Host & Project Setup
 
 ```bash
-# Create new feature module
-mason make mvi_feature --feature_name wallet
+# Initialize/rename new project from template
+./scripts/rename_project.sh "My App" my_app com.company.app
 
-# Add subfeature to existing module (interactive)
-mason make mvi_subfeature
-# → What is the module name? authentication
-# → What is the subfeature name? forgot_password
-# → Entity name (press Enter to use module's main entity)? [Enter]
-# → Create a new data model? false
-# → Create a new entity? false
+# OR initialize in Lean mode (2 tabs: Home, Settings)
+./scripts/rename_project.sh "My MVP" my_mvp com.company.mvp --mode lean
 
-# Remove feature module
-mason make remove_feature --feature_name wallet
+# Switch existing checkout between Enterprise (3 tabs) and Lean (2 tabs)
+./scripts/configure_mode.sh lean
+./scripts/configure_mode.sh enterprise
 
-# Remove subfeature
-mason make remove_subfeature --module_name authentication --subfeature_name forgot_password
+# Permanently prune Scanner feature in lean mode (clean git tree required)
+./scripts/configure_mode.sh lean --prune
 ```
 
-### Code Generation & Verification
+### 2. Mason Feature & Plugin Generation
 
 ```bash
-# 1. Run code generation
+# Create new feature package in features/
+mason make pac_mvi_feature --name <feature_name>
+
+# Add subfeature / screen to existing feature package
+mason make pac_mvi_subfeature --package_name <feature_name> --subfeature_name <subfeature_name>
+
+# Create shared library in packages/
+mason make pac_library --name <library_name> --is_flutter true
+
+# Create Tri-Platform Native Plugin (Pure Dagger 2 + FactoryKit 3.3.2 + BG Workers)
+mason make pac_native_plugin --name <plugin_name> --has_ui false   # Headless
+mason make pac_native_plugin --name <plugin_name> --has_ui true    # With Compose & SwiftUI
+
+# Upgrade headless plugin to include Native UI (preserves DI and workers)
+mason make pac_add_native_ui --name <plugin_name>
+
+# Remove feature package or subfeature
+mason make remove_pac_feature --name <feature_name>
+mason make remove_pac_subfeature --package_name <feature_name> --subfeature_name <subfeature_name>
+```
+
+### 3. Code Generation & Verification
+
+```bash
+# 1. Run full code generation pipeline (all packages + root app)
 melos genAlls
-# OR: flutter pub run build_runner build --delete-conflicting-outputs
 
-# 2. Format code
-dart format lib/
+# 2. Run code generation for single feature
+melos genFeature <feature_name>
 
-# 3. Analyze (must be 0 issues)
-flutter analyze --no-fatal-infos
+# 3. Format code with 99 column line length
+dart format .
 
-# 4. Test
-flutter test
+# 4. Analyze all packages (must have zero issues)
+melos run analyze
 
-# 5. Run app
-flutter run
+# 5. Run tests across workspace
+fvm flutter test
+
+# 6. Run app locally with dev flavor
+flutter run --flavor dev --dart-define-from-file=secureFiles/dev/environment-configs.json
 ```
 
 ---
@@ -337,28 +347,16 @@ class WalletPage extends StatelessWidget {
 
 ---
 
-## ✅ Architecture Rules
+## ✅ Architecture Rules & Anti-Patterns
 
-| Rule | Description | Example |
-|------|-------------|---------|
-| **Unidirectional Flow** | Data flows in one direction | View → BLoC → Domain → Data |
-| **Dependency Rule** | Outer depends on inner | Presentation → Domain ← Data |
-| **Pure Domain** | No framework dependencies | No `import 'package:flutter/*'` |
-| **Single Entry Point** | One method for all actions | `bloc.onAction(action)` only |
-| **State vs Event** | State persistent, Event transient | State = what to show, Event = what to do |
+> Full do/don't rules → [FLUTTER_QUALITY_RULES.md](../cheat-sheets/FLUTTER_QUALITY_RULES.md) (consolidated source for quality audit skills)  
+> Canonical architecture spec → [ARCHITECTURE.md](../architecture/ARCHITECTURE.md)
 
----
-
-## ⚠️ Common Mistakes
-
-| ❌ Wrong | ✅ Correct |
-|---------|-----------|
-| `bloc.add(action)` directly | `bloc.onAction(action)` |
-| Flutter imports in Domain | Pure Dart only |
-| Multiple entry points | Single `onAction()` |
-| Business logic in View | Logic in UseCase |
-| Using State for navigation | Use Events |
-| Entity with `@JsonKey` | Model with `@freezed` |
+**Quick reminders:**
+- Data flow: `View → BLoC → UseCase → Repository → DataSource`
+- Domain layer: **pure Dart only** — no `import 'package:flutter/*'`
+- Always `bloc.onAction(action)` — never `bloc.add(event)` directly
+- State = persistent UI data · Event = one-time side effect
 
 ---
 
@@ -445,9 +443,10 @@ dev_dependencies:
 
 ## 📚 Documentation
 
-- [docs/architecture/ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - Full architecture guide
-- [docs/development/IMPLEMENTATION_GUIDE.md](../development/IMPLEMENTATION_GUIDE.md) - Step-by-step tutorial
-- [docs/architecture/VISUAL_GUIDE.md](../architecture/VISUAL_GUIDE.md) - Visual diagrams
+- [docs/getting-started/create-new-project-from-template.vi.md](create-new-project-from-template.vi.md) - Create new project guide (VI)
+- [docs/getting-started/template-usage-guide.vi.md](template-usage-guide.vi.md) - Template usage guide by use cases (VI)
+- [docs/architecture/ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - Clean Architecture + MVI & Dual-Mode
+- [docs/README.md](../README.md) - Central Documentation Hub
 - [README.md](../../README.md) - Project overview
 
 ---

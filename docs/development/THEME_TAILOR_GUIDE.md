@@ -1,6 +1,6 @@
 # Theme Tailor Guide
 
-**Centralized Theme Management for bloc_digital_wallet**
+**Centralized Theme Management for Digital Wallet**
 
 This guide explains how to use `theme_tailor` for consistent theming across the application.
 
@@ -10,30 +10,8 @@ This guide explains how to use `theme_tailor` for consistent theming across the 
 
 **NEVER** use `Theme.of(context)` directly. **ALWAYS** use `context.appThemes`.
 
----
-
-## ❌ What NOT to Do
-
-### Don't Use Theme.of(context)
-
-```dart
-// ❌ WRONG - Direct theme access
-Text(
-  'Hello',
-  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-    color: Theme.of(context).colorScheme.onSurfaceVariant,
-  ),
-)
-
-Container(
-  color: Theme.of(context).colorScheme.surface,
-)
-
-// ❌ WRONG - Hardcoded colors
-Container(color: Colors.red)
-Text('Error', style: TextStyle(color: Colors.red))
-Icon(Icons.check, color: Color(0xFF00FF00))
-```
+> **Do/don’t patterns →** [FLUTTER_QUALITY_RULES.md §4](../cheat-sheets/FLUTTER_QUALITY_RULES.md#4-theme-usage-rules)
+> Consolidated source used by `d3nexus:flutter-ui-audit` and `d3nexus:code-health-audit`.
 
 ---
 
@@ -351,7 +329,7 @@ Container(
 
 1. **Import Required**: Always import the AppThemes extension:
    ```dart
-   import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
+   import 'package:ui_kit/theme/app_themes.dart';
    ```
 
 2. **BuildContext Required**: `context.appThemes` requires a valid `BuildContext`.
@@ -420,7 +398,7 @@ context.appThemes.bodyMediumEmphasized
 
 **Solution**: Import the extension:
 ```dart
-import 'package:bloc_digital_wallet/config/theme/app_themes.dart';
+import 'package:ui_kit/theme/app_themes.dart';
 ```
 
 ### Error: "The getter 'appThemes' isn't defined"
@@ -444,8 +422,8 @@ melos genAlls
 
 ## 📚 Related Documentation
 
-- [Implementation Guide](IMPLEMENTATION_GUIDE.md) - Complete feature creation guide
-- [AI Agent Context](../ai-agents/AI_AGENT_CONTEXT.md) - AI-specific guidelines
+- [Architecture Guide](../architecture/ARCHITECTURE.md) - Clean Architecture + MVI
+- [Slang Localization Guide](SLANG_LOCALIZATION_GUIDE.md) - Type-safe internationalization
 - [Quick Reference](../getting-started/QUICK_REFERENCE.md) - Quick lookup cheat sheet
 
 ---

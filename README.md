@@ -1,6 +1,6 @@
-# D3NexusShield
+# Flutter Super App Template
 
-A modern Flutter Super App built with **Clean Architecture** and **MVI (Model-View-Intent)** pattern.
+A production-ready Flutter Super App monorepo template built with **Clean Architecture + MVI**, **Dual-Mode Architecture** (`enterprise` vs `lean`), and **Tri-Platform Native SDK Parity**.
 
 ---
 
@@ -11,14 +11,9 @@ A modern Flutter Super App built with **Clean Architecture** and **MVI (Model-Vi
   - [2. MVI Mechanism](#ii-mvi-mechanism)
   - [3. Feature-First Organization](#iii-feature-first-organization)
 - [II. Documents](#-documents)
-  - [1. Getting Started](#1-getting-started)
-  - [2. Architecture](#2-architecture)
-  - [3. Development](#3-development)
-  - [4. Mason](#4-mason)
-  - [5. Environment](#5-environment)
-  - [6. AI Agents](#6-ai-agents)
-  - [7. AI Agent Skills](#7-ai-agent-skills)
-  - [8. Task Templates](#8-task-templates)
+  - [1. Super App Template Guides](#1-super-app-template-guides)
+  - [2. Architecture Documents](#2-architecture-documents)
+  - [3. Critical Technical Documents](#3-critical-technical-documents)
 - [III. Demo](#-demo)
 - [IV. References](#-references)
   - [1. UI/UX Design](#1-uiux-design)
@@ -266,57 +261,29 @@ packages/
 
 ## 📚 Documents
 
-### 1. Getting Started
+For the complete technical documentation hub, see **[docs/README.md](docs/README.md)**.
+
+### 1. Super App Template Guides
 | Document | Description |
 |----------|-------------|
-| [Quick Start](docs/getting-started/QUICK_START.md) | Setup in 5 minutes |
-| [Quick Reference](docs/getting-started/QUICK_REFERENCE.md) | Cheat sheet with code templates |
-| [Modular Dev Guide](docs/implementation_guide.md) | **Recommended**: High-level module concepts |
-| [Implementation Guide](docs/development/IMPLEMENTATION_GUIDE.md) | **Deep Dive**: Step-by-step feature creation |
+| [Create New Project Guide (VI)](docs/getting-started/create-new-project-from-template.vi.md) \| [(EN)](docs/getting-started/create-new-project-from-template.en.md) | 4-step guide to clone, rename (`rename_project.sh --mode`), configure Dual-Mode, and run |
+| [Template Usage Guide (VI)](docs/getting-started/template-usage-guide.vi.md) \| [(EN)](docs/getting-started/template-usage-guide.en.md) | Use-case cookbook: create features (`pac_mvi_feature`), libraries (`pac_library`), native plugins (`pac_native_plugin`, `pac_add_native_ui`), and subfeatures |
+| [Quick Reference](docs/getting-started/QUICK_REFERENCE.md) | Cheatsheet for Dual-Mode commands, Mason monorepo bricks, Melos scripts, theme & code templates |
 
-### 2. Architecture
+### 2. Architecture Documents
 | Document | Description |
 |----------|-------------|
-| [Architecture Guide](docs/architecture/ARCHITECTURE.md) | Complete architecture overview |
-| [App Initializer](docs/architecture/app_initialization.md) | Startup logic guide |
+| [Architecture Guide](docs/architecture/ARCHITECTURE.md) | Clean Architecture + MVI in Monorepo, Dual-Mode (Enterprise vs Lean), and `AppInitializer` |
+| [Networking Architecture](docs/architecture/NETWORKING.md) | Network layer design, Dio interceptors, SSL Pinning, Token Refresh Mutex, and Retrofit |
 
-### 3. Development
+### 3. Critical Technical Documents
 | Document | Description |
 |----------|-------------|
-| [Theme Tailor Guide](docs/development/THEME_TAILOR_GUIDE.md) | Theming system |
-| [Slang Localization](docs/development/SLANG_LOCALIZATION_GUIDE.md) | i18n setup |
-
-### 4. Mason
-| Document | Description |
-|----------|-------------|
-| [Mason Guide](docs/mason/MASON_GUIDE.md) | Code generation |
-
-### 5. Environment
-| Document | Description |
-|----------|-------------|
-| [Flavors Setup](docs/environment/FLAVORS_SETUP_COMPLETE.md) | Build variants |
-
-### 6. AI Agents
-| Document | Description |
-|----------|-------------|
-| [AI Agent README](docs/ai-agents/AI_AGENT_README.md) | Guide for AI assistants |
-| [Double Check Guide](docs/ai-agents/DOUBLE_CHECK_GUIDE.md) | Verification steps |
-
-### 7. AI Agent Skills
-| Skill | Description |
-|-------|-------------|
-| [api_integration](.agents/skills/api_integration/SKILL.md) | Automate API request handling from model generation to Data Source integration |
-| [check_secure_files](.agents/skills/check_secure_files/SKILL.md) | Verify required secure config files for all environments (dev, stg, prd) |
-| [copy_secure_configurations](.agents/skills/copy_secure_configurations/SKILL.md) | Copy secure config files to Android and iOS project paths |
-| [create_new_feature](.agents/skills/create_new_feature/SKILL.md) | Create features following Clean Architecture + MVI pattern |
-| [json_to_freezed_model](.agents/skills/json_to_freezed_model/SKILL.md) | Parse JSON and create freezed object classes |
-| [setup_keybindings](.agents/skills/setup_keybindings/SKILL.md) | Merge workspace keybindings into global IDE configuration |
-| [setup_variants](.agents/skills/setup_variants/SKILL.md) | Automate build variants (flavors) setup for Android and iOS |
-
-### 8. Task Templates
-| Document | Description |
-|----------|-------------|
-| [Prompt Templates](docs/task-prompt-templates/README.md) | Ready-to-use AI prompts |
+| [Environment & Flavors](docs/environment/ENVIRONMENT_SETUP.md) | Multi-environment setup (`dev`, `stg`, `prd`), secureFiles management, and dart-defines |
+| [Melos Commands](docs/development/MELOS_COMMANDS.md) | Monorepo orchestration, Melos scripts, and code generation pipeline |
+| [Theme Tailor Guide](docs/development/THEME_TAILOR_GUIDE.md) | Centralized theme tokens and design system via `context.appThemes` |
+| [Slang Localization](docs/development/SLANG_LOCALIZATION_GUIDE.md) | Type-safe multi-package internationalization via `context.coreT` |
+| [Refresh Token Design](docs/system-design/refresh_token.md) | Concurrency mutex locking, Token Rotation & Secure Storage |
 
 ---
 
