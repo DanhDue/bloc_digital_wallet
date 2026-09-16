@@ -1,13 +1,13 @@
 ---
 id: "task_15_host_app_integration_3tier_verification"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "settings-bugfixes"
 dueDate: null
 created: "2026-09-16T13:36:00+07:00"
-modified: "2026-09-16T13:36:00+07:00"
-completedAt: null
+modified: "2026-09-16T06:51:40Z"
+completedAt: "2026-09-16T06:51:40Z"
 labels: ["integration", "testing", "governance", "acceptance"]
 order: "a3"
 ---
