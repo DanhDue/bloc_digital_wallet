@@ -11,7 +11,8 @@ import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
 
 class MockSettingsRepository extends Mock implements SettingsRepository {}
 
-class MockCheckLanguageCachedUseCase extends Mock implements CheckLanguageCachedUseCase {}
+class MockCheckLanguageCachedUseCase extends Mock
+    implements CheckLanguageCachedUseCase {}
 
 void main() {
   late GetCachedLanguagesUseCase useCase;
@@ -21,62 +22,151 @@ void main() {
   setUp(() {
     mockRepository = MockSettingsRepository();
     mockCheckLanguageCachedUseCase = MockCheckLanguageCachedUseCase();
-    useCase = GetCachedLanguagesUseCase(mockRepository, mockCheckLanguageCachedUseCase);
+    useCase = GetCachedLanguagesUseCase(
+      mockRepository,
+      mockCheckLanguageCachedUseCase,
+    );
   });
 
   group('GetCachedLanguagesUseCase', () {
-    test('returns bundled default languages (en, vi) when stored cache is empty', () async {
-      when(() => mockRepository.getAvailableLanguages()).thenAnswer((_) async => const Right([]));
+    test(
+      'returns bundled default languages (en, vi) when stored cache is empty',
+      () async {
+        when(
+          () => mockRepository.getAvailableLanguages(),
+        ).thenAnswer((_) async => const Right([]));
 
-      final result = await useCase();
+        final result = await useCase();
 
-      expect(result.isRight(), isTrue);
-      final languages = result.getOrElse(() => []);
-      expect(languages.length, equals(2));
-      expect(languages[0].languageCode, equals('en'));
-      expect(languages[0].languageName, equals('English'));
-      expect(languages[0].isDefault, isTrue);
-      expect(languages[0].isCached, isTrue);
-      expect(languages[1].languageCode, equals('vi'));
-      expect(languages[1].languageName, equals('Tiếng Việt'));
-      expect(languages[1].isDefault, isFalse);
-      expect(languages[1].isCached, isTrue);
-    });
+        expect(result.isRight(), isTrue);
+        final languages = result.getOrElse(() => []);
+        expect(languages.length, equals(2));
+        expect(languages[0].languageCode, equals('en'));
+        expect(languages[0].languageName, equals('English'));
+        expect(languages[0].isDefault, isTrue);
+        expect(languages[0].isCached, isTrue);
+        expect(languages[1].languageCode, equals('vi'));
+        expect(languages[1].languageName, equals('Tiếng Việt'));
+        expect(languages[1].isDefault, isFalse);
+        expect(languages[1].isCached, isTrue);
+      },
+    );
 
-    test('returns bundled default languages when repository returns failure', () async {
-      when(
-        () => mockRepository.getAvailableLanguages(),
-      ).thenAnswer((_) async => const Left(CacheFailure(message: 'Cache miss')));
+    test(
+      'returns bundled default languages when repository returns failure',
+      () async {
+        when(() => mockRepository.getAvailableLanguages()).thenAnswer(
+          (_) async => const Left(CacheFailure(message: 'Cache miss')),
+        );
 
-      final result = await useCase();
+        final result = await useCase();
 
-      expect(result.isRight(), isTrue);
-      final languages = result.getOrElse(() => []);
-      expect(languages.length, equals(2));
-      expect(languages.map((e) => e.languageCode), containsAll(['en', 'vi']));
-      expect(languages.every((l) => l.isCached), isTrue);
-    });
+        expect(result.isRight(), isTrue);
+        final languages = result.getOrElse(() => []);
+        expect(languages.length, equals(2));
+        expect(languages.map((e) => e.languageCode), containsAll(['en', 'vi']));
+        expect(languages.every((l) => l.isCached), isTrue);
+      },
+    );
 
-    test('maps available languages and checks cache status for remote languages', () async {
-      when(() => mockRepository.getAvailableLanguages()).thenAnswer(
-        (_) async => const Right([
-          AvailableLanguage(languageCode: 'en', languageName: 'English', isDefault: true),
-          AvailableLanguage(languageCode: 'vi', languageName: 'Tiếng Việt', isDefault: false),
-          AvailableLanguage(languageCode: 'ja', languageName: 'Japanese', isDefault: false),
-        ]),
-      );
-      when(() => mockCheckLanguageCachedUseCase('en')).thenAnswer((_) async => true);
-      when(() => mockCheckLanguageCachedUseCase('vi')).thenAnswer((_) async => true);
-      when(() => mockCheckLanguageCachedUseCase('ja')).thenAnswer((_) async => false);
+    test(
+      'maps available languages and checks cache status for remote languages',
+      () async {
+        when(() => mockRepository.getAvailableLanguages()).thenAnswer(
+          (_) async => const Right([
+            AvailableLanguage(
+              languageCode: 'en',
+              languageName: 'English',
+              isDefault: true,
+            ),
+            AvailableLanguage(
+              languageCode: 'vi',
+              languageName: 'Tiếng Việt',
+              isDefault: false,
+            ),
+            AvailableLanguage(
+              languageCode: 'ja',
+              languageName: 'Japanese',
+              isDefault: false,
+            ),
+          ]),
+        );
+        when(
+          () => mockCheckLanguageCachedUseCase('en'),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockCheckLanguageCachedUseCase('vi'),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockCheckLanguageCachedUseCase('ja'),
+        ).thenAnswer((_) async => false);
 
-      final result = await useCase();
+        final result = await useCase();
 
-      expect(result.isRight(), isTrue);
-      final languages = result.getOrElse(() => []);
-      expect(languages.length, equals(3));
-      expect(languages.firstWhere((l) => l.languageCode == 'en').isCached, isTrue);
-      expect(languages.firstWhere((l) => l.languageCode == 'vi').isCached, isTrue);
-      expect(languages.firstWhere((l) => l.languageCode == 'ja').isCached, isFalse);
-    });
+        expect(result.isRight(), isTrue);
+        final languages = result.getOrElse(() => []);
+        expect(languages.length, equals(3));
+        expect(
+          languages.firstWhere((l) => l.languageCode == 'en').isCached,
+          isTrue,
+        );
+        expect(
+          languages.firstWhere((l) => l.languageCode == 'vi').isCached,
+          isTrue,
+        );
+        expect(
+          languages.firstWhere((l) => l.languageCode == 'ja').isCached,
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'marks region-tagged bundled languages (en_US, vi_VN) as cached without calling CheckLanguageCachedUseCase',
+      () async {
+        when(() => mockRepository.getAvailableLanguages()).thenAnswer(
+          (_) async => const Right([
+            AvailableLanguage(
+              languageCode: 'en_US',
+              languageName: 'English (US)',
+              isDefault: true,
+            ),
+            AvailableLanguage(
+              languageCode: 'vi_VN',
+              languageName: 'Tiếng Việt (VN)',
+              isDefault: false,
+            ),
+            AvailableLanguage(
+              languageCode: 'ja',
+              languageName: 'Japanese',
+              isDefault: false,
+            ),
+          ]),
+        );
+        when(
+          () => mockCheckLanguageCachedUseCase('ja'),
+        ).thenAnswer((_) async => false);
+
+        final result = await useCase();
+
+        expect(result.isRight(), isTrue);
+        final languages = result.getOrElse(() => []);
+        expect(languages.length, equals(3));
+        expect(
+          languages.firstWhere((l) => l.languageCode == 'en_US').isCached,
+          isTrue,
+        );
+        expect(
+          languages.firstWhere((l) => l.languageCode == 'vi_VN').isCached,
+          isTrue,
+        );
+        expect(
+          languages.firstWhere((l) => l.languageCode == 'ja').isCached,
+          isFalse,
+        );
+        verifyNever(() => mockCheckLanguageCachedUseCase('en_US'));
+        verifyNever(() => mockCheckLanguageCachedUseCase('vi_VN'));
+      },
+    );
   });
 }

@@ -23,10 +23,14 @@ void main() {
   late SettingsLocalDataSourceImpl dataSource;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('settings_local_datasource_test_');
+    tempDir = await Directory.systemTemp.createTemp(
+      'settings_local_datasource_test_',
+    );
     PathProviderPlatform.instance = _FakePathProviderPlatform(tempDir.path);
     SharedPreferences.setMockInitialValues({});
-    dataSource = SettingsLocalDataSourceImpl(await SharedPreferences.getInstance());
+    dataSource = SettingsLocalDataSourceImpl(
+      await SharedPreferences.getInstance(),
+    );
   });
 
   tearDown(() async {
@@ -42,10 +46,20 @@ void main() {
     test('round-trips version and checksum saved together', () async {
       final checksum = ChecksumUtils.computeSha256(translations);
       await dataSource.saveCachedTranslationJson(languageCode, translations);
-      await dataSource.saveCachedTranslationVersion(languageCode, '1.0.0', checksum);
+      await dataSource.saveCachedTranslationVersion(
+        languageCode,
+        '1.0.0',
+        checksum,
+      );
 
-      expect(await dataSource.getCachedTranslationVersion(languageCode), '1.0.0');
-      expect(await dataSource.getCachedTranslationJson(languageCode), translations);
+      expect(
+        await dataSource.getCachedTranslationVersion(languageCode),
+        '1.0.0',
+      );
+      expect(
+        await dataSource.getCachedTranslationJson(languageCode),
+        translations,
+      );
     });
 
     test('treats the cache as corrupt and returns null when the saved checksum '
@@ -54,22 +68,39 @@ void main() {
       await dataSource.saveCachedTranslationJson(languageCode, translations);
       // Save a version+checksum pair that does NOT match `translations`,
       // simulating the file and the version metadata having desynced.
-      await dataSource.saveCachedTranslationVersion(languageCode, '1.0.0', 'stale-checksum');
+      await dataSource.saveCachedTranslationVersion(
+        languageCode,
+        '1.0.0',
+        'stale-checksum',
+      );
 
       final result = await dataSource.getCachedTranslationJson(languageCode);
 
       expect(result, isNull);
     });
 
-    test('deletes the desynced cache entry entirely so the next read is a clean miss', () async {
-      await dataSource.saveCachedTranslationJson(languageCode, translations);
-      await dataSource.saveCachedTranslationVersion(languageCode, '1.0.0', 'stale-checksum');
+    test(
+      'deletes the desynced cache entry entirely so the next read is a clean miss',
+      () async {
+        await dataSource.saveCachedTranslationJson(languageCode, translations);
+        await dataSource.saveCachedTranslationVersion(
+          languageCode,
+          '1.0.0',
+          'stale-checksum',
+        );
 
-      await dataSource.getCachedTranslationJson(languageCode);
+        await dataSource.getCachedTranslationJson(languageCode);
 
-      expect(await dataSource.getCachedTranslationVersion(languageCode), isNull);
-      expect(await dataSource.getAllCachedLanguageCodes(), isNot(contains(languageCode)));
-    });
+        expect(
+          await dataSource.getCachedTranslationVersion(languageCode),
+          isNull,
+        );
+        expect(
+          await dataSource.getAllCachedLanguageCodes(),
+          isNot(contains(languageCode)),
+        );
+      },
+    );
 
     test(
       'a cache saved before checksum tracking existed (bare version string) is not treated as corrupt',
@@ -85,10 +116,22 @@ void main() {
       },
     );
 
-    test('saveCachedTranslationJson registers language code into cached language codes', () async {
-      await dataSource.saveCachedTranslationJson(languageCode, translations);
-      final codes = await dataSource.getAllCachedLanguageCodes();
-      expect(codes, contains(languageCode));
-    });
+    test(
+      'saveCachedTranslationJson registers language code into cached language codes',
+      () async {
+        await dataSource.saveCachedTranslationJson(languageCode, translations);
+        final codes = await dataSource.getAllCachedLanguageCodes();
+        expect(codes, contains(languageCode));
+      },
+    );
+
+    test(
+      'loadBundledFallback gracefully handles region-tagged language code',
+      () async {
+        final result = await dataSource.loadBundledFallback('en_US');
+        expect(result, isNotNull);
+        expect(result, isA<Map<String, dynamic>>());
+      },
+    );
   });
 }

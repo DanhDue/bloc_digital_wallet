@@ -53,7 +53,9 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>?> getCachedTranslationJson(String languageCode) async {
+  Future<Map<String, dynamic>?> getCachedTranslationJson(
+    String languageCode,
+  ) async {
     final file = await _getTranslationFile(languageCode);
     if (!await file.exists()) {
       return null;
@@ -63,7 +65,8 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
 
       final expectedChecksum = _readVersionMeta(languageCode)?.checksum;
-      if (expectedChecksum != null && ChecksumUtils.computeSha256(jsonMap) != expectedChecksum) {
+      if (expectedChecksum != null &&
+          ChecksumUtils.computeSha256(jsonMap) != expectedChecksum) {
         // The cached file's content no longer matches the checksum saved
         // alongside its version - the two writes desynced (e.g. a crash
         // between saving the file and saving the version+checksum).
@@ -85,11 +88,16 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   /// is also `null`, and callers should treat the cache as unverifiable
   /// rather than corrupt.
   _VersionMeta? _readVersionMeta(String languageCode) {
-    final raw = _sharedPreferences.getString('$_translationVersionPrefix$languageCode');
+    final raw = _sharedPreferences.getString(
+      '$_translationVersionPrefix$languageCode',
+    );
     if (raw == null) return null;
     try {
       final decoded = jsonDecode(raw) as Map<String, dynamic>;
-      return _VersionMeta(decoded['version'] as String?, decoded['checksum'] as String?);
+      return _VersionMeta(
+        decoded['version'] as String?,
+        decoded['checksum'] as String?,
+      );
     } catch (_) {
       // Legacy format: a bare version string saved before checksum tracking existed.
       return _VersionMeta(raw, null);
@@ -97,7 +105,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   }
 
   @override
-  Future<void> saveCachedTranslationJson(String languageCode, Map<String, dynamic> jsonMap) async {
+  Future<void> saveCachedTranslationJson(
+    String languageCode,
+    Map<String, dynamic> jsonMap,
+  ) async {
     final file = await _getTranslationFile(languageCode);
     // Write atomically
     final tempFile = File('${file.path}.tmp');
@@ -134,7 +145,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<void> saveAvailableLanguages(List<AvailableLanguage> languages) async {
     final jsonList = languages.map((e) => e.toJson()).toList();
-    await _sharedPreferences.setString(_availableLanguagesKey, jsonEncode(jsonList));
+    await _sharedPreferences.setString(
+      _availableLanguagesKey,
+      jsonEncode(jsonList),
+    );
   }
 
   @override
@@ -144,7 +158,9 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
     try {
       final jsonList = jsonDecode(jsonString) as List;
-      return jsonList.map((e) => AvailableLanguage.fromJson(e as Map<String, dynamic>)).toList();
+      return jsonList
+          .map((e) => AvailableLanguage.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       return [];
     }
@@ -153,15 +169,20 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<Map<String, dynamic>> loadBundledFallback(String languageCode) async {
     final Map<String, dynamic> combinedJson = {};
+    final baseCode = languageCode.toLowerCase().split(RegExp(r'[-_]')).first;
+    final candidateCodes = {languageCode, baseCode};
 
-    final candidatePaths = [
-      'assets/locales/$languageCode.i18n.json',
-      'packages/core/assets/locales/$languageCode.i18n.json',
-      'packages/scanner/assets/locales/$languageCode.i18n.json',
-      'packages/settings/assets/locales/$languageCode.i18n.json',
-      'features/scanner/assets/locales/$languageCode.i18n.json',
-      'features/settings/assets/locales/$languageCode.i18n.json',
-    ];
+    final candidatePaths = <String>[];
+    for (final code in candidateCodes) {
+      candidatePaths.addAll([
+        'assets/locales/$code.i18n.json',
+        'packages/core/assets/locales/$code.i18n.json',
+        'packages/scanner/assets/locales/$code.i18n.json',
+        'packages/settings/assets/locales/$code.i18n.json',
+        'features/scanner/assets/locales/$code.i18n.json',
+        'features/settings/assets/locales/$code.i18n.json',
+      ]);
+    }
 
     for (final path in candidatePaths) {
       try {
@@ -193,7 +214,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
   @override
   Future<void> saveAppenderToggles(Map<String, bool> toggles) async {
-    await _sharedPreferences.setString(_appenderTogglesKey, jsonEncode(toggles));
+    await _sharedPreferences.setString(
+      _appenderTogglesKey,
+      jsonEncode(toggles),
+    );
   }
 
   Map<String, bool> _getToggleMap(String key) {

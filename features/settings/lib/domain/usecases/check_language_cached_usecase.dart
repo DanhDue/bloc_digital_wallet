@@ -12,8 +12,11 @@ class CheckLanguageCachedUseCase {
   CheckLanguageCachedUseCase(this._repository);
 
   Future<bool> call(String languageCode) async {
-    if (languageCode == 'en' || languageCode == 'vi') return true;
-    final cachedVersionResult = await _repository.getCachedTranslationVersion(languageCode);
+    final baseCode = languageCode.toLowerCase().split(RegExp(r'[-_]')).first;
+    if (baseCode == 'en' || baseCode == 'vi') return true;
+    final cachedVersionResult = await _repository.getCachedTranslationVersion(
+      languageCode,
+    );
     return cachedVersionResult.fold((l) => false, (r) => r != null);
   }
 }

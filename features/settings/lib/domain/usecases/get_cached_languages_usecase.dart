@@ -34,14 +34,20 @@ class GetCachedLanguagesUseCase {
   Future<Either<Failure, List<SupportedLanguage>>> call() async {
     final result = await _repository.getAvailableLanguages();
 
-    return result.fold((failure) => const Right(defaultBundledLanguages), (languages) async {
+    return result.fold((failure) => const Right(defaultBundledLanguages), (
+      languages,
+    ) async {
       if (languages.isEmpty) {
         return const Right(defaultBundledLanguages);
       }
 
       final supportedList = <SupportedLanguage>[];
       for (final lang in languages) {
-        final isCached = (lang.languageCode == 'en' || lang.languageCode == 'vi')
+        final baseCode = lang.languageCode
+            .toLowerCase()
+            .split(RegExp(r'[-_]'))
+            .first;
+        final isCached = (baseCode == 'en' || baseCode == 'vi')
             ? true
             : await _checkLanguageCachedUseCase(lang.languageCode);
 

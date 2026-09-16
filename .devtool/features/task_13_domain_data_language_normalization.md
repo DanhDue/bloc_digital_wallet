@@ -1,13 +1,13 @@
 ---
 id: "task_13_domain_data_language_normalization"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "settings-bugfixes"
 dueDate: null
 created: "2026-09-16T13:36:00+07:00"
-modified: "2026-09-16T13:36:00+07:00"
-completedAt: null
+modified: "2026-09-16T06:48:30Z"
+completedAt: "2026-09-16T06:48:30Z"
 labels: ["domain", "data", "bugfix", "localization"]
 order: "a1"
 ---
