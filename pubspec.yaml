@@ -22,6 +22,7 @@ workspace:
   - features/authentication
   - features/wallet
   - features/transaction
+  - features/trends
 dependencies:
   flutter:
     sdk: flutter
@@ -45,6 +46,8 @@ dependencies:
     path: features/scanner
   settings:
     path: features/settings
+  trends:
+    path: features/trends
   transaction:
     path: features/transaction
   wallet:

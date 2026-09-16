@@ -8,6 +8,7 @@ import 'package:core/core.dart' as core;
 import 'package:scanner/scanner.dart' as scanner;
 // di:scanner-import:end
 import 'package:settings/settings.dart' as settings;
+import 'package:trends/trends.dart' as trends;
 import 'package:transaction/transaction.dart' as transaction;
 import 'package:wallet/wallet.dart' as wallet;
 import 'package:authentication/authentication.dart' as authentication;
@@ -26,6 +27,7 @@ Future<void> configureDependencies() async {
   scanner.configureModuleDependencies(getIt);
   // di:scanner-module:end
   await settings.configureModuleDependencies(getIt);
+  trends.configureModuleDependencies(getIt);
   transaction.configureModuleDependencies(getIt);
   wallet.configureModuleDependencies(getIt);
   authentication.configureModuleDependencies(getIt);
