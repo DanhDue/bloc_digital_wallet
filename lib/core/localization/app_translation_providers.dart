@@ -7,6 +7,7 @@ import '../../generated/translations.dart';
 import 'package:core/core.dart' as core;
 import 'package:scanner/scanner.dart' as scanner;
 import 'package:settings/settings.dart' as settings;
+import 'package:wallet/wallet.dart' as wallet;
 import 'package:authentication/authentication.dart' as authentication;
 import 'package:onboard/onboard.dart' as onboard;
 
@@ -22,6 +23,7 @@ final List<Widget Function({required Widget child})> appTranslationProviders = [
   // Features
   ({required child}) => scanner.TranslationProvider(child: child),
   ({required child}) => settings.TranslationProvider(child: child),
+  ({required child}) => wallet.TranslationProvider(child: child),
   ({required child}) => authentication.TranslationProvider(child: child),
   ({required child}) => onboard.TranslationProvider(child: child),
 ];

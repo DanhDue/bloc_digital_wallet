@@ -7,12 +7,14 @@ import 'package:scanner/scanner.dart' as scanner;
 export 'package:scanner/scanner_router.dart';
 // app:scanner-import:end
 import 'package:settings/settings.dart' as settings;
+import 'package:wallet/wallet.dart' as wallet;
 import 'package:authentication/authentication.dart' as authentication;
 import 'package:onboard/onboard.dart' as onboard;
 
 import 'package:d3_nexus_shield/shell/shell_page.dart';
 
 export 'package:settings/settings_router.dart';
+export 'package:wallet/wallet_router.dart';
 export 'package:authentication/authentication_router.dart';
 export 'package:onboard/onboard_router.dart';
 
@@ -24,6 +26,7 @@ class AppRouter extends RootStackRouter {
   final _scannerRouter = scanner.ScannerRouter();
   // app:scanner-router:end
   final _settingsRouter = settings.SettingsRouter();
+  final _walletRouter = wallet.WalletRouter();
   final _authenticationRouter = authentication.AuthenticationRouter();
   final _onboardRouter = onboard.OnboardRouter();
 
@@ -34,6 +37,7 @@ class AppRouter extends RootStackRouter {
     ..._scannerRouter.routes,
     // app:scanner-routes:end
     ..._settingsRouter.routes,
+    ..._walletRouter.routes,
     ..._authenticationRouter.routes,
     ..._onboardRouter.routes,
   ];

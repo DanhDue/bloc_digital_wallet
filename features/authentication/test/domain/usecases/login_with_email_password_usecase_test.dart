@@ -13,16 +13,14 @@ class MockAuthenticationRepository extends Mock implements AuthenticationReposit
     required String password,
   }) =>
       super.noSuchMethod(
-        Invocation.method(#loginWithEmailPassword, [], {
-          #email: email,
-          #password: password,
-        }),
-        returnValue: Future.value(
-          const Right<Failure, AuthUserEntity>(
-            AuthUserEntity(id: 'u1', email: 'test@wallet.com'),
-          ),
-        ),
-      ) as Future<Either<Failure, AuthUserEntity>>;
+            Invocation.method(#loginWithEmailPassword, [], {#email: email, #password: password}),
+            returnValue: Future.value(
+              const Right<Failure, AuthUserEntity>(
+                AuthUserEntity(id: 'u1', email: 'test@wallet.com'),
+              ),
+            ),
+          )
+          as Future<Either<Failure, AuthUserEntity>>;
 }
 
 void main() {
@@ -72,20 +70,14 @@ void main() {
 
     test('calls repository when email and password are valid', () async {
       when(
-        mockRepository.loginWithEmailPassword(
-          email: 'test@wallet.com',
-          password: 'password123',
-        ),
+        mockRepository.loginWithEmailPassword(email: 'test@wallet.com', password: 'password123'),
       ).thenAnswer((_) => Future.value(const Right(tUser)));
 
       final result = await useCase(email: '  test@wallet.com  ', password: 'password123');
 
       expect(result, equals(const Right(tUser)));
       verify(
-        mockRepository.loginWithEmailPassword(
-          email: 'test@wallet.com',
-          password: 'password123',
-        ),
+        mockRepository.loginWithEmailPassword(email: 'test@wallet.com', password: 'password123'),
       ).called(1);
     });
   });
