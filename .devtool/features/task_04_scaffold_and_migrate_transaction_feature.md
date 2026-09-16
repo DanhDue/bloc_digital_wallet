@@ -1,13 +1,13 @@
 ---
 id: "task_04_scaffold_and_migrate_transaction_feature"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_features_migration"
 dueDate: null
 created: "2026-09-16T18:02:00+07:00"
-modified: "2026-09-16T18:02:00+07:00"
-completedAt: null
+modified: "2026-09-16T11:30:50Z"
+completedAt: "2026-09-16T11:30:50Z"
 labels: ["architecture", "transaction", "ledger"]
 order: "a04"
 ---

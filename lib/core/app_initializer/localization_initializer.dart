@@ -8,6 +8,7 @@ import 'package:core/generated/translations.dart' as core;
 import 'package:logger/d3nexus_logger.dart';
 import 'package:scanner/generated/translations.dart' as scanner;
 import 'package:settings/generated/translations.dart' as settings;
+import 'package:transaction/generated/translations.dart' as transaction;
 import 'package:wallet/generated/translations.dart' as wallet;
 import 'package:authentication/generated/translations.dart' as authentication;
 import 'package:onboard/generated/translations.dart' as onboard;
@@ -39,6 +40,7 @@ class LocalizationInitializer implements AppInitializer {
       LocaleSettings.setLocaleRaw(rawLocale);
       scanner.LocaleSettings.setLocaleRaw(rawLocale);
       settings.LocaleSettings.setLocaleRaw(rawLocale);
+      transaction.LocaleSettings.setLocaleRaw(rawLocale);
       wallet.LocaleSettings.setLocaleRaw(rawLocale);
       authentication.LocaleSettings.setLocaleRaw(rawLocale);
       onboard.LocaleSettings.setLocaleRaw(rawLocale);
@@ -72,6 +74,11 @@ class LocalizationInitializer implements AppInitializer {
         locale: settings.AppLocaleUtils.parse(rawLocale),
         isFlatMap: false,
         map: {'settings': json['settings'] ?? {}},
+      );
+      await transaction.LocaleSettings.overrideTranslationsFromMap(
+        locale: transaction.AppLocaleUtils.parse(rawLocale),
+        isFlatMap: false,
+        map: {'transaction': json['transaction'] ?? {}},
       );
       await wallet.LocaleSettings.overrideTranslationsFromMap(
         locale: wallet.AppLocaleUtils.parse(rawLocale),

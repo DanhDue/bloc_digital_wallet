@@ -29,8 +29,7 @@ import 'package:wallet/domain/repositories/wallet_repository.dart' as _i3;
 // ignore_for_file: invalid_use_of_internal_member
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
-  _FakeEither_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeEither_0(Object parent, Invocation parentInvocation) : super(parent, parentInvocation);
 }
 
 /// A class which mocks [WalletRepository].
@@ -45,30 +44,27 @@ class MockWalletRepository extends _i1.Mock implements _i3.WalletRepository {
   _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>> getWallet() =>
       (super.noSuchMethod(
             Invocation.method(#getWallet, []),
-            returnValue:
-                _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>>.value(
-                  _FakeEither_0<_i2.Failure, _i5.WalletEntity>(
-                    this,
-                    Invocation.method(#getWallet, []),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>>.value(
+              _FakeEither_0<_i2.Failure, _i5.WalletEntity>(
+                this,
+                Invocation.method(#getWallet, []),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, _i5.WalletEntity>>);
 
   @override
-  _i4.Future<_i2.Either<_i2.Failure, List<_i6.TokenListEntity>>>
-  getTokenAccounts(String? address) =>
+  _i4.Future<_i2.Either<_i2.Failure, List<_i6.TokenListEntity>>> getTokenAccounts(
+    String? address,
+  ) =>
       (super.noSuchMethod(
             Invocation.method(#getTokenAccounts, [address]),
-            returnValue:
-                _i4.Future<
-                  _i2.Either<_i2.Failure, List<_i6.TokenListEntity>>
-                >.value(
-                  _FakeEither_0<_i2.Failure, List<_i6.TokenListEntity>>(
-                    this,
-                    Invocation.method(#getTokenAccounts, [address]),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, List<_i6.TokenListEntity>>>.value(
+              _FakeEither_0<_i2.Failure, List<_i6.TokenListEntity>>(
+                this,
+                Invocation.method(#getTokenAccounts, [address]),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, List<_i6.TokenListEntity>>>);
 
@@ -76,13 +72,12 @@ class MockWalletRepository extends _i1.Mock implements _i3.WalletRepository {
   _i4.Future<_i2.Either<_i2.Failure, _i7.NftsListEntity>> getNftsList() =>
       (super.noSuchMethod(
             Invocation.method(#getNftsList, []),
-            returnValue:
-                _i4.Future<_i2.Either<_i2.Failure, _i7.NftsListEntity>>.value(
-                  _FakeEither_0<_i2.Failure, _i7.NftsListEntity>(
-                    this,
-                    Invocation.method(#getNftsList, []),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i7.NftsListEntity>>.value(
+              _FakeEither_0<_i2.Failure, _i7.NftsListEntity>(
+                this,
+                Invocation.method(#getNftsList, []),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, _i7.NftsListEntity>>);
 
@@ -90,13 +85,12 @@ class MockWalletRepository extends _i1.Mock implements _i3.WalletRepository {
   _i4.Future<_i2.Either<_i2.Failure, _i8.WalletListEntity>> getWalletList() =>
       (super.noSuchMethod(
             Invocation.method(#getWalletList, []),
-            returnValue:
-                _i4.Future<_i2.Either<_i2.Failure, _i8.WalletListEntity>>.value(
-                  _FakeEither_0<_i2.Failure, _i8.WalletListEntity>(
-                    this,
-                    Invocation.method(#getWalletList, []),
-                  ),
-                ),
+            returnValue: _i4.Future<_i2.Either<_i2.Failure, _i8.WalletListEntity>>.value(
+              _FakeEither_0<_i2.Failure, _i8.WalletListEntity>(
+                this,
+                Invocation.method(#getWalletList, []),
+              ),
+            ),
           )
           as _i4.Future<_i2.Either<_i2.Failure, _i8.WalletListEntity>>);
 }
