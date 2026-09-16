@@ -220,32 +220,32 @@ class MiniAppErrorBoundaryState extends State<MiniAppErrorBoundary> {
                       child: Material(
                         color: Colors.transparent,
                         child: ExpansionTile(
-                        tilePadding: const .symmetric(horizontal: 16),
-                        title: Text(
-                          'Chi tiết lỗi (Debug)',
-                          style: theme.bodyMedium.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: theme.errorColor,
-                          ),
-                        ),
-                        children: [
-                          Container(
-                            width: .infinity,
-                            padding: const .all(12),
-                            color: theme.ink20,
-                            child: SelectableText(
-                              '$_error\n\nStack Trace:\n${_stackTrace ?? "No stack trace"}',
-                              style: const TextStyle(
-                                fontFamily: 'monospace',
-                                fontSize: 11,
-                                height: 1.4,
-                              ),
+                          tilePadding: const .symmetric(horizontal: 16),
+                          title: Text(
+                            'Chi tiết lỗi (Debug)',
+                            style: theme.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: theme.errorColor,
                             ),
                           ),
-                        ],
+                          children: [
+                            Container(
+                              width: .infinity,
+                              padding: const .all(12),
+                              color: theme.ink20,
+                              child: SelectableText(
+                                '$_error\n\nStack Trace:\n${_stackTrace ?? "No stack trace"}',
+                                style: const TextStyle(
+                                  fontFamily: 'monospace',
+                                  fontSize: 11,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   ],
                 ],
               ),
