@@ -36,7 +36,7 @@ Sau khi hoàn thành các đợt tối ưu hóa cold start ban đầu (lazy tab 
 ### Kiến trúc tổng thể (High-Level Architecture)
 
 ```mermaid
-graph TD
+flowchart TD
     subgraph CoreModule ["packages/core (Telemetry & Initializers)"]
         PROFILER["ColdStartProfiler (Singleton)"]
         APP_INIT["AppInitializerImpl"]

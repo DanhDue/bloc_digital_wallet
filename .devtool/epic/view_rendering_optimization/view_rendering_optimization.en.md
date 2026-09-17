@@ -39,7 +39,7 @@ During cold start, after Dart VM initialization and asynchronous dependency setu
 
 ### High-Level Architecture
 ```mermaid
-graph TD
+flowchart TD
     subgraph HostApp ["Host Application (lib/main.dart)"]
         MAIN["main()"] --> CACHE["Cached AppThemeData"]
         MAIN --> GATED["Gated Streams (theme & locale .distinct())"]

@@ -42,8 +42,8 @@ Phân tích sâu đã chỉ rõ hai điểm nghẽn kiến trúc cốt lõi:
 ### Sơ Đồ Kiến Trúc Tổng Thể
 
 ```mermaid
-graph TD
-    subgraph HostApp ["Host Application (lib/)"]
+flowchart TD
+    subgraph HostApp ["Ứng dụng Host (lib/)"]
         MAIN["lib/main.dart"] --> SHELL["lib/shell/shell_page.dart (defaultTabIndex = 2)"]
     end
 

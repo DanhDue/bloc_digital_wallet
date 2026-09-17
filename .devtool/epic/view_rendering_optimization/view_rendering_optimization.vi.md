@@ -39,7 +39,7 @@ Trong quá trình khởi động nguội (Cold Start), sau khi Dart VM và việ
 
 ### Kiến trúc tổng thể (High-Level Architecture)
 ```mermaid
-graph TD
+flowchart TD
     subgraph HostApp ["Ứng dụng Host (lib/main.dart)"]
         MAIN["main()"] --> CACHE["Cached AppThemeData"]
         MAIN --> GATED["Gated Streams (theme & locale .distinct())"]

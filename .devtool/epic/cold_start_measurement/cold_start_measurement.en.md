@@ -36,7 +36,7 @@ Following initial cold start optimizations (lazy tab indexing, deferred deep lin
 ### High-Level Architecture
 
 ```mermaid
-graph TD
+flowchart TD
     subgraph CoreModule ["packages/core (Telemetry & Initializers)"]
         PROFILER["ColdStartProfiler (Singleton)"]
         APP_INIT["AppInitializerImpl"]

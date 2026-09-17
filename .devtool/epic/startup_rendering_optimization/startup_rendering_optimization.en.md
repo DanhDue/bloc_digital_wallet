@@ -41,7 +41,7 @@ Deep investigation identified two primary architectural bottlenecks:
 ### High-Level Architecture
 
 ```mermaid
-graph TD
+flowchart TD
     subgraph HostApp ["Host Application (lib/)"]
         MAIN["lib/main.dart"] --> SHELL["lib/shell/shell_page.dart (defaultTabIndex = 2)"]
     end
