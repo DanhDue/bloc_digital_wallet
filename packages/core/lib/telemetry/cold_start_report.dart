@@ -64,6 +64,13 @@ class ColdStartReport {
     return end - start;
   }
 
+  /// Duration spent building and mounting the initial widget tree from runApp to first frame.
+  Duration get widgetTreeDuration {
+    final runAppStart = elapsedFor(ColdStartMilestone.runAppInvoked) ?? Duration.zero;
+    final fcp = elapsedFor(ColdStartMilestone.firstFrameRendered) ?? runAppStart;
+    return fcp > runAppStart ? fcp - runAppStart : Duration.zero;
+  }
+
   /// Formats the report into a structured, human-readable ASCII table.
   String toFormattedAsciiTable() {
     final totalMs = totalToTti.inMicroseconds / 1000.0;

@@ -1,13 +1,13 @@
 ---
 id: "task_04_startup_rendering_acceptance_and_benchmarking"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "startup_rendering_optimization"
 dueDate: null
 created: "2026-09-17T18:00:00+07:00"
-modified: "2026-09-17T18:00:00+07:00"
-completedAt: null
+modified: "2026-09-17T11:20:57Z"
+completedAt: "2026-09-17T11:20:57Z"
 labels: ["acceptance", "performance", "telemetry", "benchmarking"]
 order: "a4"
 ---

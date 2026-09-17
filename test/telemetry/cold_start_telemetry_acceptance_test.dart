@@ -10,6 +10,9 @@ import 'package:d3_nexus_shield/core/localization/app_translation_providers.dart
 import 'package:d3_nexus_shield/core/localization/multi_translation_provider.dart';
 import 'package:d3_nexus_shield/di/injection.dart';
 import 'package:d3_nexus_shield/shell/shell_page.dart';
+import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
+import 'package:scanner/scanner.dart';
+import 'package:settings/settings.dart';
 
 void main() {
   setUp(() async {
@@ -28,89 +31,100 @@ void main() {
   });
 
   group('Cold Start Telemetry Acceptance Tests', () {
-    testWidgets('Full cold-start simulation records all milestones, initializers, and generates valid ASCII report', (
-      tester,
-    ) async {
-      final profiler = ColdStartProfiler.instance;
+    testWidgets(
+      'Full cold-start simulation records all milestones, initializers, and generates valid ASCII report',
+      (tester) async {
+        final profiler = ColdStartProfiler.instance;
 
-      // 1. App entry
-      profiler.start();
+        // 1. App entry
+        profiler.start();
 
-      // 2. Engine and binding
-      profiler.mark(ColdStartMilestone.bindingInitialized);
+        // 2. Engine and binding
+        profiler.mark(ColdStartMilestone.bindingInitialized);
 
-      // 3. DI configuration
-      profiler.mark(ColdStartMilestone.diStarted);
-      // getIt is already configured in setUp
-      profiler.mark(ColdStartMilestone.diReady);
+        // 3. DI configuration
+        profiler.mark(ColdStartMilestone.diStarted);
+        // getIt is already configured in setUp
+        profiler.mark(ColdStartMilestone.diReady);
 
-      // 4. Core services & sub-initializers
-      profiler.mark(ColdStartMilestone.coreServicesStarted);
-      await ThemeManager.instance.init();
-      await getIt<AppInitializer>().init();
-      profiler.mark(ColdStartMilestone.coreServicesReady);
+        // 4. Core services & sub-initializers
+        profiler.mark(ColdStartMilestone.coreServicesStarted);
+        await ThemeManager.instance.init();
+        await getIt<AppInitializer>().init();
+        profiler.mark(ColdStartMilestone.coreServicesReady);
 
-      // 5. runApp & FCP hook (mirroring main.dart)
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        profiler.mark(ColdStartMilestone.firstFrameRendered);
-      });
-      profiler.mark(ColdStartMilestone.runAppInvoked);
+        // 5. runApp & FCP hook (mirroring main.dart)
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          profiler.mark(ColdStartMilestone.firstFrameRendered);
+        });
+        profiler.mark(ColdStartMilestone.runAppInvoked);
 
-      // 6. Pump widget tree and simulate first frame
-      await tester.pumpWidget(
-        MultiTranslationProvider(
-          providers: appTranslationProviders,
-          child: MaterialApp(
-            theme: ThemeData(extensions: [AppThemes.light]),
-            home: const ShellPage(),
+        // 6. Pump widget tree and simulate first frame
+        await tester.pumpWidget(
+          MultiTranslationProvider(
+            providers: appTranslationProviders,
+            child: MaterialApp(
+              theme: ThemeData(extensions: [AppThemes.light]),
+              home: const ShellPage(),
+            ),
           ),
-        ),
-      );
+        );
 
-      // Allow post-frame callbacks and ShellPage TTI to complete
-      await tester.pumpAndSettle();
+        // Allow post-frame callbacks and ShellPage TTI to complete
+        await tester.pumpAndSettle();
 
-      final report = profiler.report;
+        final report = profiler.report;
 
-      // Assertions on report structure
-      expect(report.records, isNotEmpty);
-      expect(report.elapsedFor(ColdStartMilestone.mainEntry), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.bindingInitialized), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.diStarted), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.diReady), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.coreServicesStarted), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.coreServicesReady), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.runAppInvoked), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.firstFrameRendered), isNotNull);
-      expect(report.elapsedFor(ColdStartMilestone.firstScreenInteractive), isNotNull);
+        // Assertions on report structure
+        expect(report.records, isNotEmpty);
+        expect(report.elapsedFor(ColdStartMilestone.mainEntry), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.bindingInitialized), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.diStarted), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.diReady), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.coreServicesStarted), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.coreServicesReady), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.runAppInvoked), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.firstFrameRendered), isNotNull);
+        expect(report.elapsedFor(ColdStartMilestone.firstScreenInteractive), isNotNull);
 
-      // Performance sanity bounds
-      expect(report.totalToFcp.inMilliseconds, greaterThanOrEqualTo(0));
-      expect(report.totalToFcp.inMilliseconds, lessThan(5000));
-      expect(report.totalToTti.inMicroseconds, greaterThanOrEqualTo(report.totalToFcp.inMicroseconds));
+        // Performance sanity bounds & optimized budget
+        expect(report.totalToFcp.inMilliseconds, greaterThanOrEqualTo(0));
+        expect(report.totalToFcp.inMilliseconds, lessThan(400));
+        expect(report.widgetTreeDuration.inMilliseconds, lessThan(300));
+        expect(
+          report.totalToTti.inMicroseconds,
+          greaterThanOrEqualTo(report.totalToFcp.inMicroseconds),
+        );
 
-      // Sub-initializers verification
-      expect(report.subInitializersDuration.containsKey('LocalizationInitializer'), isTrue);
-      expect(report.subInitializersDuration.containsKey('EnvironmentInitializer'), isTrue);
-      expect(report.subInitializersDuration.containsKey('BlocObserverInitializer'), isTrue);
-      expect(report.subInitializersDuration.containsKey('ImageCacheInitializer'), isTrue);
-      expect(report.subInitializersDuration.containsKey('MemoryPressureObserver'), isTrue);
-      expect(report.subInitializersDuration.containsKey('LoggingInitializer'), isTrue);
+        // Startup rendering verification: lazy tabs & Frame-0 instant render
+        expect(find.byType(SettingsPage), findsOneWidget);
+        expect(find.byType(HomeDashboardPage), findsNothing);
+        expect(find.byType(ScannerPage), findsNothing);
+        expect(find.byType(SettingsSectionWidget), findsWidgets);
 
-      // Formatted table verification
-      final asciiTable = report.toFormattedAsciiTable();
-      expect(asciiTable, contains('COLD START PERFORMANCE TELEMETRY REPORT'));
-      expect(asciiTable, contains('1. Engine & Binding Init'));
-      expect(asciiTable, contains('2. Dependency Injection (GetIt)'));
-      expect(asciiTable, contains('3. Core Services & Initializers'));
-      expect(asciiTable, contains('LocalizationInitializer'));
-      expect(asciiTable, contains('LoggingInitializer'));
-      expect(asciiTable, contains('4. Widget Tree Build (runApp)'));
-      expect(asciiTable, contains('5. First Contentful Paint (FCP)'));
-      expect(asciiTable, contains('6. Shell & First Screen Interactive'));
-      expect(asciiTable, contains('TOTAL COLD START TIME (to FCP)'));
-      expect(asciiTable, contains('TIME TO INTERACTIVE (TTI)'));
-    });
+        // Sub-initializers verification
+        expect(report.subInitializersDuration.containsKey('LocalizationInitializer'), isTrue);
+        expect(report.subInitializersDuration.containsKey('EnvironmentInitializer'), isTrue);
+        expect(report.subInitializersDuration.containsKey('BlocObserverInitializer'), isTrue);
+        expect(report.subInitializersDuration.containsKey('ImageCacheInitializer'), isTrue);
+        expect(report.subInitializersDuration.containsKey('MemoryPressureObserver'), isTrue);
+        expect(report.subInitializersDuration.containsKey('LoggingInitializer'), isTrue);
+
+        // Formatted table verification
+        final asciiTable = report.toFormattedAsciiTable();
+        expect(asciiTable, contains('COLD START PERFORMANCE TELEMETRY REPORT'));
+        expect(asciiTable, contains('1. Engine & Binding Init'));
+        expect(asciiTable, contains('2. Dependency Injection (GetIt)'));
+        expect(asciiTable, contains('3. Core Services & Initializers'));
+        expect(asciiTable, contains('LocalizationInitializer'));
+        expect(asciiTable, contains('LoggingInitializer'));
+        expect(asciiTable, contains('4. Widget Tree Build (runApp)'));
+        expect(asciiTable, contains('5. First Contentful Paint (FCP)'));
+        expect(asciiTable, contains('6. Shell & First Screen Interactive'));
+        expect(asciiTable, contains('TOTAL COLD START TIME (to FCP)'));
+        expect(asciiTable, contains('TIME TO INTERACTIVE (TTI)'));
+      },
+    );
 
     test('Idempotent finish and logReport behavior', () {
       final profiler = ColdStartProfiler.instance;
