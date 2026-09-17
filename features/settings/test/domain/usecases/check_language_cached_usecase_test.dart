@@ -24,23 +24,14 @@ void main() {
     test(
       'Scenario 1: Returns true immediately for bundled languages with or without region tags',
       () async {
-        final bundledCodes = [
-          'en',
-          'vi',
-          'en_US',
-          'en-US',
-          'vi_VN',
-          'vi-VN',
-          'en_GB',
-        ];
+        final bundledCodes = ['en', 'vi', 'en_US', 'en-US', 'vi_VN', 'vi-VN', 'en_GB'];
 
         for (final code in bundledCodes) {
           final result = await usecase(code);
           expect(
             result,
             isTrue,
-            reason:
-                'Expected $code to be recognized as cached bundled language',
+            reason: 'Expected $code to be recognized as cached bundled language',
           );
           verifyZeroInteractions(mockRepository);
         }
@@ -57,9 +48,7 @@ void main() {
         final result = await usecase('ja');
 
         expect(result, isTrue);
-        verify(
-          () => mockRepository.getCachedTranslationVersion('ja'),
-        ).called(1);
+        verify(() => mockRepository.getCachedTranslationVersion('ja')).called(1);
       },
     );
 
@@ -73,9 +62,7 @@ void main() {
         final result = await usecase('ko');
 
         expect(result, isFalse);
-        verify(
-          () => mockRepository.getCachedTranslationVersion('ko'),
-        ).called(1);
+        verify(() => mockRepository.getCachedTranslationVersion('ko')).called(1);
       },
     );
   });

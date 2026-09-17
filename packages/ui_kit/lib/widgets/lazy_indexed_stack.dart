@@ -113,9 +113,7 @@ class _LazyIndexedStackState extends State<LazyIndexedStack> {
       alignment: widget.alignment,
       textDirection: widget.textDirection,
       sizing: widget.sizing,
-      children: [
-        for (int i = 0; i < count; i++) _buildChild(context, i),
-      ],
+      children: [for (int i = 0; i < count; i++) _buildChild(context, i)],
     );
   }
 
@@ -129,4 +127,3 @@ class _LazyIndexedStackState extends State<LazyIndexedStack> {
     );
   }
 }
-

@@ -7,31 +7,30 @@ import 'package:ui_kit/ui_kit.dart';
 
 void main() {
   group('SettingsSectionWidget Unit & Widget Tests', () {
-    testWidgets(
-      'encloses shadow container inside RepaintBoundary for GPU caching',
-      (tester) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            theme: ThemeData(extensions: [AppThemes.light]),
-            home: const Scaffold(
-              body: SettingsSectionWidget(
-                title: 'Account',
-                children: [Text('Profile'), Text('Security')],
-              ),
+    testWidgets('encloses shadow container inside RepaintBoundary for GPU caching', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [AppThemes.light]),
+          home: const Scaffold(
+            body: SettingsSectionWidget(
+              title: 'Account',
+              children: [Text('Profile'), Text('Security')],
             ),
           ),
-        );
+        ),
+      );
 
-        expect(find.text('ACCOUNT'), findsOneWidget);
-        expect(find.text('Profile'), findsOneWidget);
+      expect(find.text('ACCOUNT'), findsOneWidget);
+      expect(find.text('Profile'), findsOneWidget);
 
-        // Verify RepaintBoundary wraps the card container
-        final repaintBoundaryFinder = find.descendant(
-          of: find.byType(SettingsSectionWidget),
-          matching: find.byType(RepaintBoundary),
-        );
-        expect(repaintBoundaryFinder, findsOneWidget);
-      },
-    );
+      // Verify RepaintBoundary wraps the card container
+      final repaintBoundaryFinder = find.descendant(
+        of: find.byType(SettingsSectionWidget),
+        matching: find.byType(RepaintBoundary),
+      );
+      expect(repaintBoundaryFinder, findsOneWidget);
+    });
   });
 }

@@ -30,11 +30,8 @@ class ChangeLanguageUseCase {
   Stream<LanguageSyncStatus> call(String languageCode) async* {
     _latestRequestedLanguageCode = languageCode;
     final currentLocale = LocalizationManager.instance.currentLocale;
-    final targetLocale = LocalizationManager.instance.resolveLocale(
-      languageCode,
-    );
-    final isSameLanguage =
-        targetLocale.languageCode == currentLocale.languageCode;
+    final targetLocale = LocalizationManager.instance.resolveLocale(languageCode);
+    final isSameLanguage = targetLocale.languageCode == currentLocale.languageCode;
 
     // Same-language skip: immediately return without any emissions or network calls
     if (isSameLanguage) {
@@ -44,8 +41,7 @@ class ChangeLanguageUseCase {
     // Bundled languages (en, vi) are always treated as cached
     final baseCode = languageCode.toLowerCase().split(RegExp(r'[-_]')).first;
     final isBundled = baseCode == 'en' || baseCode == 'vi';
-    final isCached =
-        isBundled || await _checkLanguageCachedUseCase(languageCode);
+    final isCached = isBundled || await _checkLanguageCachedUseCase(languageCode);
 
     if (isCached) {
       // Optimistic switch

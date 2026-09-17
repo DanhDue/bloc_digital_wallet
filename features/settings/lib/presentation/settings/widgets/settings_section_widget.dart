@@ -7,11 +7,7 @@ import 'package:ui_kit/ui_kit.dart' hide AppColors;
 
 /// A settings section container with a header label.
 class SettingsSectionWidget extends StatelessWidget {
-  const SettingsSectionWidget({
-    required this.title,
-    required this.children,
-    super.key,
-  });
+  const SettingsSectionWidget({required this.title, required this.children, super.key});
 
   final String title;
   final List<Widget> children;
@@ -43,9 +39,7 @@ class SettingsSectionWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color:
-                      appThemes?.shadowColor ??
-                      theme.shadowColor.withValues(alpha: 0.05),
+                  color: appThemes?.shadowColor ?? theme.shadowColor.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
