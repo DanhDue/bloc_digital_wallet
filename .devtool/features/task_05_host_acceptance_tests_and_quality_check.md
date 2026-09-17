@@ -1,13 +1,13 @@
 ---
 id: "task_05_host_acceptance_tests_and_quality_check"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "test_suite_remediation"
 dueDate: null
 created: "2026-09-17T14:40:00Z"
-modified: "2026-09-17T14:40:00Z"
-completedAt: null
+modified: "2026-09-17T08:02:42Z"
+completedAt: "2026-09-17T08:02:42Z"
 labels: ["testing", "acceptance", "quality-gate"]
 order: "a5"
 ---

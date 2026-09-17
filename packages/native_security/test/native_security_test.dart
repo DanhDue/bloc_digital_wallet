@@ -5,16 +5,13 @@ import 'package:native_security/native_security.dart';
 
 void main() {
   group('NativeSecurity Tests', () {
-    test(
-      'getAllowedFingerprints executes or throws UnsupportedError in host env',
-      () {
-        try {
-          final fingerprints = NativeSecurity.getAllowedFingerprints();
-          expect(fingerprints, isA<List<String>>());
-        } on UnsupportedError catch (e) {
-          expect(e.message, isNotEmpty);
-        }
-      },
-    );
+    test('getAllowedFingerprints executes or throws UnsupportedError in host env', () {
+      try {
+        final fingerprints = NativeSecurity.getAllowedFingerprints();
+        expect(fingerprints, isA<List<String>>());
+      } on UnsupportedError catch (e) {
+        expect(e.message, isNotEmpty);
+      }
+    });
   });
 }
