@@ -8,35 +8,43 @@ class HomeDashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Super App'), centerTitle: true),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.dashboard_customize_outlined,
-                size: 64,
-                color: context.appThemes.trueBlue,
+    return Column(
+      children: [
+        AppBar(
+          title: const Text('Super App'),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        Expanded(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.dashboard_customize_outlined,
+                    size: 64,
+                    color: context.appThemes.trueBlue,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Super App Template',
+                    style: context.appThemes.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Modular Clean Architecture + MVI for Flutter',
+                    style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink60),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              Text(
-                'Super App Template',
-                style: context.appThemes.titleLarge,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Modular Clean Architecture + MVI for Flutter',
-                style: context.appThemes.bodyMedium.copyWith(color: context.appThemes.ink60),
-                textAlign: TextAlign.center,
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
