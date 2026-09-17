@@ -54,7 +54,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
 
     _themeSubscription = _themeManager.themeModeStream.skip(1).listen((_) {
       if (!_themeManager.hasUserExplicitPreference) {
-        onAction(SettingsAction.systemThemeChanged(isDarkMode: _themeManager.isDarkMode));
+        add(SettingsAction.systemThemeChanged(isDarkMode: _themeManager.isDarkMode));
       }
     });
   }
