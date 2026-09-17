@@ -79,5 +79,5 @@ This task acts as the final verification gate for the `test_suite_remediation` e
 - Blocked by: [Task 01](task_01_create_staging_integration_test_helper.md), [Task 02](task_02_add_package_test_stubs_for_framework_and_native_security.md), [Task 03](task_03_remediate_language_integration_tests.md), [Task 04](task_04_remediate_deep_link_integration_test.md).
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Revert any failing test modifications.

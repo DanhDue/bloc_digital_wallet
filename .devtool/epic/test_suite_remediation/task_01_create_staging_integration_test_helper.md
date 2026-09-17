@@ -76,5 +76,5 @@ This task introduces a dedicated `IntegrationTestHelper` that:
 - Blocks: [Task 03](task_03_remediate_language_integration_tests.md), [Task 04](task_04_remediate_deep_link_integration_test.md).
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Revert `integration_test/helpers/`.

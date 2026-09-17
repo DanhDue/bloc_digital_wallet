@@ -63,5 +63,5 @@ This task introduces minimal, valid test suites for both packages:
 - None.
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Delete newly added `test/` directories in `packages/framework` and `packages/native_security`.
