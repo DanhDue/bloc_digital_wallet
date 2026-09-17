@@ -21,6 +21,7 @@ export 'widgets/pretty_animated_qr_view.dart';
 export 'widgets/rectangular_indicator.dart';
 export 'widgets/shimmer_loading_box.dart';
 export 'widgets/token_action_button.dart';
+export 'widgets/lazy_indexed_stack.dart';
 export 'extensions/dialog_extensions.dart';
 export 'theme/app_themes.dart';
 export 'generated/assets.gen.dart';

@@ -1,13 +1,13 @@
 ---
 id: "task_01_lazy_indexed_stack_and_shell_navigation"
-status: "backlog"
+status: "done"
 priority: "high"
 assignee: null
 epic: "cold_start_optimization"
 dueDate: null
 created: "2026-09-17T14:59:15Z"
-modified: "2026-09-17T14:59:15Z"
-completedAt: null
+modified: "2026-09-17T08:22:56Z"
+completedAt: "2026-09-17T08:22:56Z"
 labels: ["ui", "navigation", "performance"]
 order: "a1"
 ---

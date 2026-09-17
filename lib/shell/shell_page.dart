@@ -87,7 +87,7 @@ class _ShellPageState
     return SafeArea(
       top: false,
       bottom: false,
-      child: IndexedStack(
+      child: LazyIndexedStack(
         index: state.currentTabIndex.clamp(0, ShellConfig.tabCount - 1).toInt(),
         children: [
           MiniAppErrorBoundary(
