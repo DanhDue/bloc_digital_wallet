@@ -9,7 +9,7 @@ A production-ready Flutter Super App monorepo template built with **Clean Archit
 - [I. Architecture](#️-architecture)
   - [1. Clean Architecture + MVI](#i-clean-architecture--mvi)
   - [2. MVI Mechanism](#ii-mvi-mechanism)
-  - [3. Feature-First Organization](#iii-feature-first-organization)
+  - [3. Modular Architecture (Multi-Package)](#iii-modular-architecture-multi-package)
 - [II. Startup Performance & Cold Start Benchmarks](#-startup-performance--cold-start-benchmarks)
 - [III. Documents](#-documents)
   - [1. Super App Template Guides](#1-super-app-template-guides)
@@ -23,7 +23,6 @@ A production-ready Flutter Super App monorepo template built with **Clean Archit
   - [4. Flutter Packages](#4-flutter-packages)
 - [VI. License](#-license)
 
-
 ---
 
 ## 🏗️ Architecture
@@ -33,7 +32,7 @@ A production-ready Flutter Super App monorepo template built with **Clean Archit
 #### 1. Core Concepts
 
 | Principle | Description |
-|-----------|-------------|
+| ----------- | ------------- |
 | **Dependency Rule** | `Presentation → Domain ← Data`. Domain knows nothing about outer layers. |
 | **Separation of Concerns** | UI, business logic, and data handling are strictly separated. |
 | **Testability** | Each layer can be tested independently. |
@@ -84,6 +83,7 @@ graph LR
 
 > [!IMPORTANT]
 > **Important Rules**
+>
 > 1. **Dependency Rule:** `Presentation` -> `Domain` <- `Data`. Presentation MUST NOT call Data directly.
 > 2. **No Flutter in Domain:** Domain layer must be `Pure Dart`.
 > 3. **Unidirectional Data Flow:** `View` -> `BLoC` -> `Domain` -> `Data` -> `Domain` -> `BLoC` -> `View`.
@@ -102,7 +102,7 @@ graph LR
 
 #### 2. Full Data Flow
 
-```
+```text
 ┌───────────────────────────────────────────────────────────────────────────┐
 │                         PRESENTATION LAYER                                │
 │                                                                           │
@@ -150,15 +150,14 @@ graph LR
 
 ### III. Modular Architecture (Multi-Package)
 
-This project adopts a **Modular Architecture** where each feature and infrastructure layer is separated into its own standalone package. This follows the official [Flutter Packages & Plugins](https://docs.flutter.dev/packages-and-plugins/developing-packages) guidelines.
+This project adopts a **Modular Architecture** where each feature and infrastructure layer is separated into its own standalone package. This follows the official [Flutter Packages & Plugins][12] guidelines.
 
 #### Why Multi-Package?
-1.  **Decoupling**: Features have strict boundaries and cannot access each other's internals unless explicitly exported.
-2.  **Scalability**: New features can be added as new packages without bloating the main app.
-3.  **Faster Builds**: Changes in one package don't force recompilation of unrelated packages (cached by Melos/BuildRunner).
-4.  **Reusability**: Packages like `ui_kit` or `network` can be reused across different apps or modules.
 
-This project adopts a **Modular Architecture** where each feature and infrastructure layer is separated into its own standalone package. This follows the official [Flutter Packages & Plugins][12] guidelines.
+1. **Decoupling**: Features have strict boundaries and cannot access each other's internals unless explicitly exported.
+2. **Scalability**: New features can be added as new packages without bloating the main app.
+3. **Faster Builds**: Changes in one package don't force recompilation of unrelated packages (cached by Melos/BuildRunner).
+4. **Reusability**: Packages like `ui_kit` or `network` can be reused across different apps or modules.
 
 > **Note:** If you prefer a monolithic (single-module) approach, check out the [`single-module` branch][13].
 
@@ -234,17 +233,16 @@ packages/
 #### Infrastructure Packages
 
 | Package | Role | Key Components |
-|---------|------|----------------|
+| --------- | ------ | ---------------- |
 | **Core** | Shared utilities & Base config | `AppInitializer`, `AuthStreamService`, `Failures`, `EnvironmentConfig` |
 | **Framework** | Architecture Backbone | `MviBloc`, `SafeCallApiMixin`, Base MVI classes |
 | **Network** | Connectivity & API Client | `DioFactory`, `AuthInterceptor`, `SslConfiguration` |
 | **Ui Kit** | Design System & Assets | Shared Widgets, Themes, Generated Assets |
 
-
 #### Architecture Layer Details
 
 | Layer | Component | Responsibility |
-|-------|-----------|----------------|
+| ------- | ----------- | ---------------- |
 | 🟢 **Presentation** | View (Widget) | Render UI based on State. No business logic. |
 | | BLoC | Manages State, processes Actions. Single entry: `onAction()`. |
 | 🟡 **Domain** | Entity | Pure Dart objects. **MUST use `@freezed`**. |
@@ -274,6 +272,7 @@ Comprehensive empirical telemetry measurements across development (JIT Simulator
 | **🎯 TIME TO INTERACTIVE (TTI)** | **552.4 ms** | **32.0 ms** | **19.0 ms** | 🚀 **29.1x faster** (-96.6%) |
 
 > **Key Architectural Takeaways:**
+>
 > - **Zero I/O on Frame 0**: Main isolate performs 0 disk/database operations before `runApp()`.
 > - **AOT + Impeller Metal Acceleration**: On physical Apple Silicon hardware (`iPhone 16 Pro Max`), native AOT compilation and Metal Impeller shader pipelines reduce Widget Tree construction to **15.8 ms**.
 > - **Non-blocking Background Sync**: Heavy background synchronization (bootstrap API, cache hydration) is scheduled asynchronously after initial paint, ensuring instantaneous sub-20ms frame delivery.
@@ -285,21 +284,24 @@ Comprehensive empirical telemetry measurements across development (JIT Simulator
 For the complete technical documentation hub, see **[docs/README.md](docs/README.md)**.
 
 ### 1. Super App Template Guides
+
 | Document | Description |
-|----------|-------------|
+| ---------- | ------------- |
 | [Create New Project Guide (VI)](docs/getting-started/create-new-project-from-template.vi.md) \| [(EN)](docs/getting-started/create-new-project-from-template.en.md) | 4-step guide to clone, rename (`rename_project.sh --mode`), configure Dual-Mode, and run |
 | [Template Usage Guide (VI)](docs/getting-started/template-usage-guide.vi.md) \| [(EN)](docs/getting-started/template-usage-guide.en.md) | Use-case cookbook: create features (`pac_mvi_feature`), libraries (`pac_library`), native plugins (`pac_native_plugin`, `pac_add_native_ui`), and subfeatures |
 | [Quick Reference](docs/getting-started/QUICK_REFERENCE.md) | Cheatsheet for Dual-Mode commands, Mason monorepo bricks, Melos scripts, theme & code templates |
 
 ### 2. Architecture Documents
+
 | Document | Description |
-|----------|-------------|
+| ---------- | ------------- |
 | [Architecture Guide](docs/architecture/ARCHITECTURE.md) | Clean Architecture + MVI in Monorepo, Dual-Mode (Enterprise vs Lean), and `AppInitializer` |
 | [Networking Architecture](docs/architecture/NETWORKING.md) | Network layer design, Dio interceptors, SSL Pinning, Token Refresh Mutex, and Retrofit |
 
 ### 3. Critical Technical Documents
+
 | Document | Description |
-|----------|-------------|
+| ---------- | ------------- |
 | [Environment & Flavors](docs/environment/ENVIRONMENT_SETUP.md) | Multi-environment setup (`dev`, `stg`, `prd`), secureFiles management, and dart-defines |
 | [Melos Commands](docs/development/MELOS_COMMANDS.md) | Monorepo orchestration, Melos scripts, and code generation pipeline |
 | [Theme Tailor Guide](docs/development/THEME_TAILOR_GUIDE.md) | Centralized theme tokens and design system via `context.appThemes` |
@@ -310,6 +312,7 @@ For the complete technical documentation hub, see **[docs/README.md](docs/README
 
 ## 🎬 Demo
 
+<!-- markdownlint-disable MD033 -->
 <table>
   <tr>
     <td align="center"><b>Splash & Onboard</b></td>
@@ -317,41 +320,45 @@ For the complete technical documentation hub, see **[docs/README.md](docs/README
     <td align="center"><b>Token Details</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/demo_01.gif" width="250"/></td>
-    <td><img src="screenshots/demo_02.gif" width="250"/></td>
-    <td><img src="screenshots/demo_03.gif" width="250"/></td>
+    <td><img src="screenshots/demo_01.gif" alt="Splash & Onboard Demo" width="250"/></td>
+    <td><img src="screenshots/demo_02.gif" alt="Wallet List Demo" width="250"/></td>
+    <td><img src="screenshots/demo_03.gif" alt="Token Details Demo" width="250"/></td>
   </tr>
   <tr>
-    <td><img src="screenshots/demo_04.gif" width="250"/></td>
-    <td><img src="screenshots/demo_05.gif" width="250"/></td>
-    <td><img src="screenshots/demo_06.gif" width="250"/></td>
+    <td><img src="screenshots/demo_04.gif" alt="Send Token Demo" width="250"/></td>
+    <td><img src="screenshots/demo_05.gif" alt="Receive Token Demo" width="250"/></td>
+    <td><img src="screenshots/demo_06.gif" alt="Transaction History Demo" width="250"/></td>
   </tr>
 </table>
+<!-- markdownlint-enable MD033 -->
 
 ---
 
 ## 🔗 References
 
 ### 1. UI/UX Design
--   [MetaMask Redesign on Figma][0] - Web 3.0 wallet redesign case study used as design inspiration.
+
+- [MetaMask Redesign on Figma][0] - Web 3.0 wallet redesign case study used as design inspiration.
 
 ### 2. API Documents
--   [Swagger Docs][1] - Interactive API documentation for backend endpoints.
--   [API Repository][2] - Backend API source code on GitHub that based on the Django Ninja Rest Framework.
+
+- [Swagger Docs][1] - Interactive API documentation for backend endpoints.
+- [API Repository][2] - Backend API source code on GitHub that based on the Django Ninja Rest Framework.
 
 ### 3. Architecture & Patterns
--   [Flutter BLoC][3] - Official BLoC library documentation.
--   [Clean Architecture][4] - Uncle Bob's original Clean Architecture article.
--   [MVI Pattern][5] - Model-View-Intent pattern explanation by Hannes Dorfmann.
--   [Dependency Manager][6] - Dependency Manager — An Approach to Multiple Repositories in Flutter.
+
+- [Flutter BLoC][3] - Official BLoC library documentation.
+- [Clean Architecture][4] - Uncle Bob's original Clean Architecture article.
+- [MVI Pattern][5] - Model-View-Intent pattern explanation by Hannes Dorfmann.
+- [Dependency Manager][6] - Dependency Manager — An Approach to Multiple Repositories in Flutter.
 
 ### 4. Flutter Packages
--   [AutoRoute][7] - Declarative routing with code generation.
--   [Freezed][8] - Immutable data classes with union types.
--   [Mason][9] - Template-based code generation.
--   [Theme Tailor][10] - Type-safe theming system.
--   [Slang][11] - Type-safe localization.
 
+- [AutoRoute][7] - Declarative routing with code generation.
+- [Freezed][8] - Immutable data classes with union types.
+- [Mason][9] - Template-based code generation.
+- [Theme Tailor][10] - Type-safe theming system.
+- [Slang][11] - Type-safe localization.
 
 [0]: https://www.figma.com/design/uy4hISX1JFBu02QMpBKBql/Case-Study--Web-3.0---MetaMask-Redesign--Community-?m=auto&t=i8dTyUCu7EZFdKiT-6
 [1]: https://digital-wallet-93c4ba68a41d.herokuapp.com/api/v1/docs
