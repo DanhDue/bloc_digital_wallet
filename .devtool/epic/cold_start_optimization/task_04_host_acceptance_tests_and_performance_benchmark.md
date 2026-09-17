@@ -1,13 +1,13 @@
 ---
 id: "task_04_host_acceptance_tests_and_performance_benchmark"
-status: "backlog"
+status: "done"
 priority: "high"
 assignee: null
 epic: "cold_start_optimization"
 dueDate: null
 created: "2026-09-17T14:59:15Z"
-modified: "2026-09-17T14:59:15Z"
-completedAt: null
+modified: "2026-09-17T08:54:23Z"
+completedAt: "2026-09-17T08:54:23Z"
 labels: ["testing", "acceptance", "performance"]
 order: "a4"
 ---
