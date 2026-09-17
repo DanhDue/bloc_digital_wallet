@@ -16,11 +16,12 @@ import 'core/localization/multi_translation_provider.dart';
 import 'core/localization/app_translation_providers.dart';
 import 'core/environment_banner.dart';
 
-void main() async {
+void main({void Function()? onDependenciesConfigured}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize dependency injection
   await configureDependencies();
+  onDependenciesConfigured?.call();
 
   // Initialize ThemeManager
   await core.ThemeManager.instance.init();

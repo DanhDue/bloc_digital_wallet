@@ -59,6 +59,7 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: .spaceBetween,
             children: [
               _NavItem(
+                key: const ValueKey('home_nav_tab'),
                 icon: Icons.home_outlined,
                 activeIcon: Icons.home,
                 label: 'Home',
@@ -70,6 +71,7 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
               // shell:scanner-nav-item:begin
               _CenterNavItem(
+                key: const ValueKey('scanner_nav_tab'),
                 icon: Icons.qr_code_scanner,
                 isActive: currentIndex == ShellTabIndex.scanner,
                 activeColor: activeColor,
@@ -153,6 +155,7 @@ class _NavItem extends StatelessWidget {
 // shell:scanner-center-nav-item:begin
 class _CenterNavItem extends StatelessWidget {
   const _CenterNavItem({
+    super.key,
     required this.icon,
     required this.isActive,
     required this.activeColor,

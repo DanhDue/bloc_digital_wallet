@@ -1,13 +1,13 @@
 ---
 id: "task_03_remediate_language_integration_tests"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "test_suite_remediation"
 dueDate: null
 created: "2026-09-17T14:40:00Z"
-modified: "2026-09-17T14:40:00Z"
-completedAt: null
+modified: "2026-09-17T07:58:46Z"
+completedAt: "2026-09-17T07:58:46Z"
 labels: ["testing", "integration", "localization"]
 order: "a3"
 ---
@@ -81,5 +81,5 @@ Integration tests for language switching on Staging currently suffer from timing
 - Blocked by: [Task 01](task_01_create_staging_integration_test_helper.md).
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Revert `integration_test/change_language_test.dart` and `integration_test/language_edge_cases_test.dart`.

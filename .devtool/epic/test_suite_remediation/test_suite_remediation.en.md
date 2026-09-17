@@ -2,7 +2,7 @@
 
 ## 1. Meta Data
 - **Epic Name**: `test_suite_remediation`
-- **Status**: In Progress (Stage 2 — Dev Designer)
+- **Status**: Done
 - **Target Release**: v1.0.0-stg
 - **Platform**: `Flutter` (Melos monorepo)
 - **Source Spec**: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
@@ -148,8 +148,8 @@ The exhaustive 5-dimension BDD specification is located in [bdd_scenarios.md](bd
 ---
 
 ## 7. Kanban Tasks Breakdown
-- [Task 01: Create Staging IntegrationTestHelper and Update LanguageTestHelper](../../features/task_01_create_staging_integration_test_helper.md)
-- [Task 02: Add Package Test Stubs for Framework and Native Security](../../features/task_02_add_package_test_stubs_for_framework_and_native_security.md)
-- [Task 03: Remediate Language Integration Tests](../../features/task_03_remediate_language_integration_tests.md)
-- [Task 04: Remediate Deep Link Integration Test for 3-Tab Shell](../../features/task_04_remediate_deep_link_integration_test.md)
-- [Task 05: Host Acceptance Tests and Quality Check](../../features/task_05_host_acceptance_tests_and_quality_check.md)
+- [Task 01: Create Staging IntegrationTestHelper and Update LanguageTestHelper](task_01_create_staging_integration_test_helper.md)
+- [Task 02: Add Package Test Stubs for Framework and Native Security](task_02_add_package_test_stubs_for_framework_and_native_security.md)
+- [Task 03: Remediate Language Integration Tests](task_03_remediate_language_integration_tests.md)
+- [Task 04: Remediate Deep Link Integration Test for 3-Tab Shell](task_04_remediate_deep_link_integration_test.md)
+- [Task 05: Host Acceptance Tests and Quality Check](task_05_host_acceptance_tests_and_quality_check.md)

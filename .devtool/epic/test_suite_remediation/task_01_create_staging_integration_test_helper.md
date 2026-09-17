@@ -1,13 +1,13 @@
 ---
 id: "task_01_create_staging_integration_test_helper"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "test_suite_remediation"
 dueDate: null
 created: "2026-09-17T14:40:00Z"
-modified: "2026-09-17T14:40:00Z"
-completedAt: null
+modified: "2026-09-17T07:48:10Z"
+completedAt: "2026-09-17T07:48:10Z"
 labels: ["testing", "integration", "infrastructure"]
 order: "a1"
 ---
@@ -76,5 +76,5 @@ This task introduces a dedicated `IntegrationTestHelper` that:
 - Blocks: [Task 03](task_03_remediate_language_integration_tests.md), [Task 04](task_04_remediate_deep_link_integration_test.md).
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Revert `integration_test/helpers/`.

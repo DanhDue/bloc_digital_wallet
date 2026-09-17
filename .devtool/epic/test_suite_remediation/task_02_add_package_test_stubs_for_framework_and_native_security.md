@@ -1,13 +1,13 @@
 ---
 id: "task_02_add_package_test_stubs_for_framework_and_native_security"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "test_suite_remediation"
 dueDate: null
 created: "2026-09-17T14:40:00Z"
-modified: "2026-09-17T14:40:00Z"
-completedAt: null
+modified: "2026-09-17T07:54:49Z"
+completedAt: "2026-09-17T07:54:49Z"
 labels: ["testing", "monorepo", "governance"]
 order: "a2"
 ---
@@ -63,5 +63,5 @@ This task introduces minimal, valid test suites for both packages:
 - None.
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Delete newly added `test/` directories in `packages/framework` and `packages/native_security`.

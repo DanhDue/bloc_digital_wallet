@@ -55,11 +55,8 @@ void main() {
 
         await tester.tap(jaOption);
 
-        // Expectation: Loading dialog appears during download
-        await tester.pump();
-
-        // Visual pause: Loading dialog (Lottie) is visible on screen
-        await LanguageTestHelper.humanDelay(1200);
+        // Advance to frame where loading dialog is mounted
+        await tester.pump(const Duration(milliseconds: 100));
 
         final loadingIndicator = find.byType(CustomLoadingWidget);
         expect(
@@ -67,6 +64,9 @@ void main() {
           findsOneWidget,
           reason: 'CustomLoadingWidget should appear for uncached OTA language',
         );
+
+        // Visual pause: Loading dialog (Lottie) is visible on screen
+        await LanguageTestHelper.humanDelay(800);
 
         // Wait for remote fetch from Staging server to finish and dialog to be dismissed
         await LanguageTestHelper.waitForLoadingToDisappear(tester);

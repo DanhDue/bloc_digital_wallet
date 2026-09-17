@@ -1,13 +1,13 @@
 ---
 id: "task_05_host_acceptance_tests_and_quality_check"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "test_suite_remediation"
 dueDate: null
 created: "2026-09-17T14:40:00Z"
-modified: "2026-09-17T14:40:00Z"
-completedAt: null
+modified: "2026-09-17T08:02:42Z"
+completedAt: "2026-09-17T08:02:42Z"
 labels: ["testing", "acceptance", "quality-gate"]
 order: "a5"
 ---
@@ -79,5 +79,5 @@ This task acts as the final verification gate for the `test_suite_remediation` e
 - Blocked by: [Task 01](task_01_create_staging_integration_test_helper.md), [Task 02](task_02_add_package_test_stubs_for_framework_and_native_security.md), [Task 03](task_03_remediate_language_integration_tests.md), [Task 04](task_04_remediate_deep_link_integration_test.md).
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Revert any failing test modifications.
