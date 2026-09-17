@@ -1,13 +1,13 @@
 ---
 id: "task_03_shell_page_lazy_wiring"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "startup_rendering_optimization"
 dueDate: null
 created: "2026-09-17T18:00:00+07:00"
-modified: "2026-09-17T18:00:00+07:00"
-completedAt: null
+modified: "2026-09-17T11:15:35Z"
+completedAt: "2026-09-17T11:15:35Z"
 labels: ["shell", "navigation", "lazy-wiring"]
 order: "a3"
 ---

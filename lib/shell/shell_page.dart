@@ -94,33 +94,55 @@ class _ShellPageState
   }
 
   @override
+  Widget buildBody(BuildContext context) {
+    return BlocBuilder<ShellBloc, ShellState>(
+      buildWhen: (previous, current) => previous.currentTabIndex != current.currentTabIndex,
+      builder: (context, state) => handleState(context, state),
+    );
+  }
+
+  @override
   Widget handleState(BuildContext context, ShellState state) {
     return SafeArea(
       top: false,
       bottom: false,
-      child: LazyIndexedStack(
+      child: LazyIndexedStack.builder(
         index: state.currentTabIndex.clamp(0, ShellConfig.tabCount - 1).toInt(),
-        children: [
-          MiniAppErrorBoundary(
-            moduleName: 'Home',
-            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
-            child: const HomeDashboardPage(),
-          ),
-          // shell:scanner-page:begin
-          MiniAppErrorBoundary(
-            moduleName: 'Scanner',
-            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
-            child: const ScannerPage(),
-          ),
-          // shell:scanner-page:end
-          MiniAppErrorBoundary(
-            moduleName: 'Settings',
-            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
-            child: const SettingsPage(),
-          ),
-        ],
+        itemCount: ShellConfig.tabCount,
+        itemBuilder: (context, index) => _buildTab(context, index),
       ),
     );
+  }
+
+  void _onGoHome(BuildContext context) {
+    context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0));
+  }
+
+  Widget _buildTab(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        return MiniAppErrorBoundary(
+          moduleName: 'Home',
+          onGoHome: () => _onGoHome(context),
+          child: const HomeDashboardPage(),
+        );
+      // shell:scanner-page:begin
+      case 1:
+        return MiniAppErrorBoundary(
+          moduleName: 'Scanner',
+          onGoHome: () => _onGoHome(context),
+          child: const ScannerPage(),
+        );
+      // shell:scanner-page:end
+      case 2:
+        return MiniAppErrorBoundary(
+          moduleName: 'Settings',
+          onGoHome: () => _onGoHome(context),
+          child: const SettingsPage(),
+        );
+      default:
+        return const SizedBox.shrink();
+    }
   }
 
   @override

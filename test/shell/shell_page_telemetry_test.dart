@@ -11,6 +11,12 @@ import 'package:d3_nexus_shield/core/localization/multi_translation_provider.dar
 import 'package:d3_nexus_shield/di/injection.dart';
 import 'package:d3_nexus_shield/shell/shell_page.dart';
 
+import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
+import 'package:scanner/scanner.dart';
+import 'package:settings/settings.dart';
+import 'package:d3_nexus_shield/shell/shell_bloc.dart';
+import 'package:d3_nexus_shield/shell/shell_action.dart';
+
 void main() {
   setUp(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +27,9 @@ void main() {
     ColdStartProfiler.instance.reset();
   });
 
-  tearDown(() {
+  tearDown(() async {
     ColdStartProfiler.instance.reset();
+    await getIt.reset();
   });
 
   testWidgets('ShellPage post-frame records firstScreenInteractive and finishes profiler', (
@@ -51,4 +58,41 @@ void main() {
     expect(interactiveElapsed!.inMicroseconds, greaterThanOrEqualTo(0));
     expect(report.totalToTti.inMicroseconds, greaterThanOrEqualTo(0));
   });
+
+  testWidgets('ShellPage mounts only SettingsPage on launch, deferring other tabs', (
+    tester,
+  ) async {
+    await ThemeManager.instance.init();
+    await getIt<AppInitializer>().init();
+
+    await tester.pumpWidget(
+      MultiTranslationProvider(
+        providers: appTranslationProviders,
+        child: MaterialApp(
+          theme: ThemeData(extensions: [AppThemes.light]),
+          home: const ShellPage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Default tab is index 2 (SettingsPage)
+    expect(find.byType(SettingsPage), findsOneWidget);
+    // Tab 0 and Tab 1 must NOT be in the widget tree on launch
+    expect(find.byType(HomeDashboardPage), findsNothing);
+    expect(find.byType(ScannerPage), findsNothing);
+
+    // Switch to Tab 0 (Home)
+    getIt<ShellBloc>().onAction(const ShellAction.tabChanged(0));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pumpAndSettle();
+
+    // Now Home is mounted, while Settings remains preserved in tree
+    expect(find.byType(HomeDashboardPage), findsOneWidget);
+    expect(find.byType(SettingsPage, skipOffstage: false), findsOneWidget);
+    // Scanner was never visited, so it remains unmounted
+    expect(find.byType(ScannerPage, skipOffstage: false), findsNothing);
+  });
 }
+
