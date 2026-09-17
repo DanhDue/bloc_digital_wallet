@@ -2,7 +2,7 @@
 
 ## Meta Data
 - **Epic**: `cold_start_measurement`
-- **Trạng thái**: Đang lập kế hoạch (Gate 2 In-Flight)
+- **Trạng thái**: done
 - **Phiên bản mục tiêu**: v1.1.0
 - **Nền tảng**: Flutter
 - **Tài liệu Spec nguồn**: [2026-09-17-cold-start-measurement-and-profiling-design.md](2026-09-17-cold-start-measurement-and-profiling-design.md)

@@ -2,7 +2,7 @@
 
 ## Meta Data
 - **Epic**: `cold_start_measurement`
-- **Status**: Planning (Gate 2 In-Flight)
+- **Status**: done
 - **Target Release**: v1.1.0
 - **Platform**: Flutter
 - **Source Spec**: [2026-09-17-cold-start-measurement-and-profiling-design.md](2026-09-17-cold-start-measurement-and-profiling-design.md)
