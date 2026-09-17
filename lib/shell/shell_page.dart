@@ -18,12 +18,14 @@ import 'package:d3_nexus_shield/shell/shell_action.dart';
 import 'package:d3_nexus_shield/shell/shell_event.dart';
 import 'package:d3_nexus_shield/shell/shell_state.dart';
 import 'package:d3_nexus_shield/shell/widgets/custom_bottom_nav_bar.dart';
-import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
 import 'package:d3_nexus_shield/shell/shell_config.dart';
 // shell:scanner-import:begin
 import 'package:scanner/scanner.dart';
 // shell:scanner-import:end
 import 'package:settings/settings.dart';
+import 'package:transaction/transaction.dart';
+import 'package:trends/trends.dart';
+import 'package:wallet/wallet.dart';
 import 'package:ui_kit/ui_kit.dart';
 
 @RoutePage()
@@ -91,17 +93,25 @@ class _ShellPageState
         index: state.currentTabIndex.clamp(0, ShellConfig.tabCount - 1).toInt(),
         children: [
           MiniAppErrorBoundary(
-            moduleName: 'Home',
+            moduleName: 'Wallet',
             onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
-            child: const HomeDashboardPage(),
+            child: const WalletPage(),
           ),
-          // shell:scanner-page:begin
+          MiniAppErrorBoundary(
+            moduleName: 'Transaction',
+            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            child: const TransactionPage(),
+          ),
           MiniAppErrorBoundary(
             moduleName: 'Scanner',
             onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
             child: const ScannerPage(),
           ),
-          // shell:scanner-page:end
+          MiniAppErrorBoundary(
+            moduleName: 'Trends',
+            onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),
+            child: const TrendsPage(),
+          ),
           MiniAppErrorBoundary(
             moduleName: 'Settings',
             onGoHome: () => context.read<ShellBloc>().onAction(const ShellAction.tabChanged(0)),

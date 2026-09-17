@@ -19,27 +19,35 @@ abstract class DeepLinkRegistry {
       targetTab: 0,
       isProtected: false,
     ),
-    // deeplink:scanner-register:begin
-    DeepLinkRoutes.scanner: const RouteRegistration(
-      path: DeepLinkRoutes.scanner,
+    DeepLinkRoutes.wallet: const RouteRegistration(
+      path: DeepLinkRoutes.wallet,
+      targetTab: 0,
+      isProtected: false,
+    ),
+    DeepLinkRoutes.transaction: const RouteRegistration(
+      path: DeepLinkRoutes.transaction,
       targetTab: 1,
       isProtected: false,
     ),
-    // deeplink:scanner-register:end
-    // deeplink:settings-tab-enterprise:begin
-    DeepLinkRoutes.settings: const RouteRegistration(
-      path: DeepLinkRoutes.settings,
+    // deeplink:scanner-register:begin
+    DeepLinkRoutes.scanner: const RouteRegistration(
+      path: DeepLinkRoutes.scanner,
       targetTab: 2,
       isProtected: false,
     ),
+    // deeplink:scanner-register:end
+    DeepLinkRoutes.trends: const RouteRegistration(
+      path: DeepLinkRoutes.trends,
+      targetTab: 3,
+      isProtected: false,
+    ),
+    // deeplink:settings-tab-enterprise:begin
+    DeepLinkRoutes.settings: const RouteRegistration(
+      path: DeepLinkRoutes.settings,
+      targetTab: 4,
+      isProtected: false,
+    ),
     // deeplink:settings-tab-enterprise:end
-    // deeplink:settings-tab-lean:begin
-    // DeepLinkRoutes.settings: const RouteRegistration(
-    //   path: DeepLinkRoutes.settings,
-    //   targetTab: 1,
-    //   isProtected: false,
-    // ),
-    // deeplink:settings-tab-lean:end
     DeepLinkRoutes.splash: const RouteRegistration(
       path: DeepLinkRoutes.splash,
       targetTab: null,
@@ -50,20 +58,15 @@ abstract class DeepLinkRegistry {
       targetTab: null,
       isProtected: false,
     ),
-    DeepLinkRoutes.trends: const RouteRegistration(
-      path: DeepLinkRoutes.trends,
+    DeepLinkRoutes.onboard: const RouteRegistration(
+      path: DeepLinkRoutes.onboard,
       targetTab: null,
-      isProtected: true,
+      isProtected: false,
     ),
-    DeepLinkRoutes.wallet: const RouteRegistration(
-      path: DeepLinkRoutes.wallet,
+    DeepLinkRoutes.authentication: const RouteRegistration(
+      path: DeepLinkRoutes.authentication,
       targetTab: null,
-      isProtected: true,
-    ),
-    DeepLinkRoutes.transaction: const RouteRegistration(
-      path: DeepLinkRoutes.transaction,
-      targetTab: null,
-      isProtected: true,
+      isProtected: false,
     ),
   };
 

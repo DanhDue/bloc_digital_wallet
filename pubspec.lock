@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
+  animated_visibility:
+    dependency: transitive
+    description:
+      name: animated_visibility
+      sha256: f68b65a78ef1fbe6b9d665d5a6399d1c859fcd0755eaa648345d1224eea9b342
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   ansi_styles:
     dependency: transitive
     description:
@@ -1196,6 +1204,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.3"
+  pretty_animated_text:
+    dependency: transitive
+    description:
+      name: pretty_animated_text
+      sha256: "80c8054807bc1580df4672eb55794a60781179398b2cbe4987bc75b144ae8346"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   pretty_qr_code:
     dependency: transitive
     description:

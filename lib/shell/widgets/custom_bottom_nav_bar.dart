@@ -10,14 +10,11 @@ import 'package:ui_kit/ui_kit.dart';
 class ShellTabIndex {
   const ShellTabIndex._();
 
-  static const int home = 0;
-  // shell:scanner-tab-index:begin
-  static const int scanner = 1;
-  static const int settings = 2;
-  // shell:scanner-tab-index:end
-  // shell:lean-tab-index:begin
-  // static const int settings = 1;
-  // shell:lean-tab-index:end
+  static const int wallet = 0;
+  static const int transaction = 1;
+  static const int scanner = 2;
+  static const int trends = 3;
+  static const int settings = 4;
 }
 
 /// Custom bottom navigation bar with an elevated center QR Scanner button.
@@ -56,27 +53,49 @@ class CustomBottomNavBar extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 3, bottom: 6),
           child: Row(
-            mainAxisAlignment: .spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _NavItem(
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home,
-                label: 'Home',
-                isActive: currentIndex == ShellTabIndex.home,
+                key: const ValueKey('wallet_nav_tab'),
+                icon: Icons.account_balance_wallet_outlined,
+                activeIcon: Icons.account_balance_wallet,
+                label: context.t.home.nav.wallet,
+                isActive: currentIndex == ShellTabIndex.wallet,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
-                onTap: () => onTap(ShellTabIndex.home),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.home),
+                onTap: () => onTap(ShellTabIndex.wallet),
+                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.wallet),
               ),
-              // shell:scanner-nav-item:begin
+              _NavItem(
+                key: const ValueKey('transaction_nav_tab'),
+                icon: Icons.receipt_long_outlined,
+                activeIcon: Icons.receipt_long,
+                label: 'Transaction',
+                isActive: currentIndex == ShellTabIndex.transaction,
+                activeColor: activeColor,
+                inactiveColor: inactiveColor,
+                onTap: () => onTap(ShellTabIndex.transaction),
+                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.transaction),
+              ),
               _CenterNavItem(
+                key: const ValueKey('scanner_nav_tab'),
                 icon: Icons.qr_code_scanner,
                 isActive: currentIndex == ShellTabIndex.scanner,
                 activeColor: activeColor,
                 onTap: () => onTap(ShellTabIndex.scanner),
                 onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
               ),
-              // shell:scanner-nav-item:end
+              _NavItem(
+                key: const ValueKey('trends_nav_tab'),
+                icon: Icons.trending_up_outlined,
+                activeIcon: Icons.trending_up,
+                label: context.t.home.nav.trends,
+                isActive: currentIndex == ShellTabIndex.trends,
+                activeColor: activeColor,
+                inactiveColor: inactiveColor,
+                onTap: () => onTap(ShellTabIndex.trends),
+                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.trends),
+              ),
               _NavItem(
                 key: const ValueKey('settings_nav_tab'),
                 icon: Icons.settings_outlined,
@@ -153,6 +172,7 @@ class _NavItem extends StatelessWidget {
 // shell:scanner-center-nav-item:begin
 class _CenterNavItem extends StatelessWidget {
   const _CenterNavItem({
+    super.key,
     required this.icon,
     required this.isActive,
     required this.activeColor,

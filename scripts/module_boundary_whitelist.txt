@@ -7,3 +7,5 @@
 #
 # All previous violations have been cleanly migrated or purged.
 # New cross-feature imports are strictly prohibited by architecture rules.
+# onboard→settings is a documented business-logic dependency (BootstrapUseCase/FetchTranslationUseCase).
+onboard→settings

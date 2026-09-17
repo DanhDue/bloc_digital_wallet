@@ -1,0 +1,18 @@
+{
+  "languageCode": "en",
+  "languageName": "English",
+  "languageEnglishName": "English",
+  "transaction": {
+    "title": "Transaction Feature",
+    "noData": "No Data",
+    "history": {
+      "received": "Received",
+      "sent": "Sent"
+    },
+    "bitcoin": {
+      "wallet": "Bitcoin Wallet",
+      "received": "Received BTC",
+      "sent": "Sent BTC"
+    }
+  }
+}

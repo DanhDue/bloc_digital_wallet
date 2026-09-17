@@ -2,80 +2,34 @@
 
 // coverage:ignore-file
 
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:core/core.dart';
 import 'package:scanner/scanner.dart';
 import 'package:settings/settings.dart';
 import 'package:d3_nexus_shield/deeplink/deep_link_coordinator.dart';
-import 'package:d3_nexus_shield/shell/home_dashboard_page.dart';
+import 'package:wallet/wallet.dart';
 import 'package:d3_nexus_shield/shell/shell_page.dart';
-import 'package:d3_nexus_shield/main.dart' as app;
+
+import 'helpers/integration_test_helper.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('DeepLink Flow End-to-End Integration Tests', () {
     setUp(() {
-      SharedPreferences.setMockInitialValues({});
-      PackageInfo.setMockInitialValues(
-        appName: 'D3NexusShield',
-        packageName: 'com.danhdue.d3nexusshield',
-        version: '1.0.0',
-        buildNumber: '1',
-        buildSignature: '',
-      );
-
-      // Mock native logger bridge flush channel
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        'dev.flutter.pigeon.logger_native_bridge.NativeLogHostApi.triggerFlush',
-        (ByteData? message) async {
-          return const StandardMessageCodec().encodeMessage(<Object?>[null]);
-        },
-      );
-
-      // Mock AppLinks method channel
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        'com.llfbandit.app_links/messages',
-        (ByteData? message) async {
-          return const StandardMethodCodec().encodeSuccessEnvelope(null);
-        },
-      );
-
-      // Mock AppLinks event channel
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        'com.llfbandit.app_links/events',
-        (ByteData? message) async {
-          return const StandardMethodCodec().encodeSuccessEnvelope(null);
-        },
-      );
+      IntegrationTestHelper.setupPlatformMocks();
     });
 
     tearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        'dev.flutter.pigeon.logger_native_bridge.NativeLogHostApi.triggerFlush',
-        null,
-      );
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        'com.llfbandit.app_links/messages',
-        null,
-      );
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        'com.llfbandit.app_links/events',
-        null,
-      );
+      IntegrationTestHelper.teardownPlatformMocks();
     });
 
     testWidgets(
       'Deep links to Scanner, Settings, and Unknown fallback transition tabs seamlessly in Shell',
       (WidgetTester tester) async {
         // 1. Launch App from fresh state
-        await GetIt.instance.reset();
-        app.main();
-        await tester.pumpAndSettle(const Duration(seconds: 5));
+        await IntegrationTestHelper.launchApp(tester);
 
         expect(find.byType(ShellPage), findsOneWidget, reason: 'ShellPage must be mounted');
 
@@ -107,9 +61,9 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 2));
 
         expect(
-          find.byType(HomeDashboardPage),
+          find.byType(WalletPage),
           findsOneWidget,
-          reason: 'Unknown link must fallback safely to Home tab without crashing',
+          reason: 'Unknown link must fallback safely to Wallet tab without crashing',
         );
       },
     );
