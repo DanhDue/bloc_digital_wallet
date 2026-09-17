@@ -24,9 +24,7 @@ void main() {
   });
 
   group('View Rendering Acceptance Tests', () {
-    testWidgets('Scenario 4.1: HomeDashboardPage has zero nested Scaffolds', (
-      tester,
-    ) async {
+    testWidgets('Scenario 4.1: HomeDashboardPage has zero nested Scaffolds', (tester) async {
       await ThemeManager.instance.init();
       await getIt<AppInitializer>().init();
 
@@ -51,10 +49,7 @@ void main() {
       expect(find.byType(HomeDashboardPage), findsOneWidget);
       expect(find.text('Super App'), findsOneWidget);
       expect(find.text('Super App Template'), findsOneWidget);
-      expect(
-        find.text('Modular Clean Architecture + MVI for Flutter'),
-        findsOneWidget,
-      );
+      expect(find.text('Modular Clean Architecture + MVI for Flutter'), findsOneWidget);
       expect(find.byIcon(Icons.dashboard_customize_outlined), findsOneWidget);
 
       // Verify that HomeDashboardPage itself has zero Scaffolds in its subtree
@@ -65,9 +60,7 @@ void main() {
       expect(innerScaffolds, findsNothing);
     });
 
-    testWidgets('Scenario 4.2: Two-stage shadow transition inside ShellPage', (
-      tester,
-    ) async {
+    testWidgets('Scenario 4.2: Two-stage shadow transition inside ShellPage', (tester) async {
       await ThemeManager.instance.init();
       await getIt<AppInitializer>().init();
 
@@ -83,10 +76,9 @@ void main() {
       );
 
       // Frame 0: Immediately after mount before post-frame callback fires
-      final outerContainerFinder = find.descendant(
-        of: find.byType(CustomBottomNavBar),
-        matching: find.byType(Container),
-      ).first;
+      final outerContainerFinder = find
+          .descendant(of: find.byType(CustomBottomNavBar), matching: find.byType(Container))
+          .first;
 
       final Container frame0Container = tester.widget<Container>(outerContainerFinder);
       final frame0Decoration = frame0Container.decoration as BoxDecoration;

@@ -26,10 +26,7 @@ void main({void Function()? onDependenciesConfigured}) async {
 
   // Parallelize ThemeManager and AppInitializer — both read SharedPreferences
   // independently and do not depend on each other.
-  await Future.wait([
-    core.ThemeManager.instance.init(),
-    getIt<core.AppInitializer>().init(),
-  ]);
+  await Future.wait([core.ThemeManager.instance.init(), getIt<core.AppInitializer>().init()]);
 
   // Defer DeepLink initialization to post-frame: DeepLinkCoordinator already
   // buffers the cold-start URI in stagedInitialLink, so no link is lost.
@@ -76,8 +73,7 @@ void main({void Function()? onDependenciesConfigured}) async {
                 darkTheme: AppThemeData.darkTheme,
                 builder: (context, child) => EnvironmentBanner(
                   child: FlutterSmartDialog.init(
-                    loadingBuilder: (String msg) =>
-                        CustomLoadingWidget(msg: msg),
+                    loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
                   )(context, child),
                 ),
               ),

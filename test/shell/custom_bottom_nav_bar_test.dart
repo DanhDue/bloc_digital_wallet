@@ -20,20 +20,16 @@ void main() {
           child: MaterialApp(
             theme: ThemeData(extensions: [AppThemes.light]),
             home: Scaffold(
-              bottomNavigationBar: CustomBottomNavBar(
-                currentIndex: 0,
-                onTap: (_) {},
-              ),
+              bottomNavigationBar: CustomBottomNavBar(currentIndex: 0, onTap: (_) {}),
             ),
           ),
         ),
       );
 
       // Frame 0 only (do not pumpAndSettle yet)
-      final outerContainerFinder = find.descendant(
-        of: find.byType(CustomBottomNavBar),
-        matching: find.byType(Container),
-      ).first;
+      final outerContainerFinder = find
+          .descendant(of: find.byType(CustomBottomNavBar), matching: find.byType(Container))
+          .first;
 
       final Container initialContainer = tester.widget<Container>(outerContainerFinder);
       final initialBoxDecoration = initialContainer.decoration as BoxDecoration;
