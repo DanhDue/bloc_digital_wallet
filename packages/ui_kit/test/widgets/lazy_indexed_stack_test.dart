@@ -141,5 +141,130 @@ void main() {
 
       expect(find.byType(LazyIndexedStack), findsOneWidget);
     });
+
+    testWidgets('itemBuilder is invoked ONLY for active tab on initial mount', (tester) async {
+      final builtIndices = <int>[];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LazyIndexedStack(
+              index: 2,
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                builtIndices.add(index);
+                return Text('Tab $index');
+              },
+            ),
+          ),
+        ),
+      );
+
+      // Only index 2 should have been built on initial frame
+      expect(builtIndices, equals([2]));
+      expect(find.text('Tab 2'), findsOneWidget);
+      expect(find.text('Tab 0'), findsNothing);
+      expect(find.text('Tab 1'), findsNothing);
+    });
+
+    testWidgets(
+      'LazyIndexedStack.builder invokes itemBuilder only when tab is navigated to, preserving state',
+      (tester) async {
+        final builtIndices = <int>[];
+        int activeIndex = 2;
+
+        await tester.pumpWidget(
+          StatefulBuilder(
+            builder: (context, setState) {
+              return MaterialApp(
+                home: Scaffold(
+                  body: LazyIndexedStack.builder(
+                    index: activeIndex,
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      builtIndices.add(index);
+                      return _StatefulTestChild(label: 'Tab $index');
+                    },
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => setState(() => activeIndex = 0),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+
+        expect(builtIndices, contains(2));
+        expect(builtIndices, isNot(contains(0)));
+        expect(builtIndices, isNot(contains(1)));
+        expect(find.text('Tab 2'), findsOneWidget);
+
+        // Increment count on Tab 2
+        await tester.tap(find.text('Increment Tab 2'));
+        await tester.pump();
+        expect(find.text('Count: 1'), findsOneWidget);
+
+        // Switch to Tab 0
+        await tester.tap(find.byType(FloatingActionButton));
+        await tester.pump();
+
+        // Tab 0 is now built
+        expect(builtIndices, contains(0));
+        expect(builtIndices, isNot(contains(1)));
+        expect(find.text('Tab 0'), findsOneWidget);
+        // Tab 2 state is preserved
+        expect(find.text('Count: 1', skipOffstage: false), findsOneWidget);
+      },
+    );
+
+    testWidgets('clamps out of bounds index gracefully with builder constructor', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LazyIndexedStack.builder(
+              index: 99,
+              itemCount: 2,
+              itemBuilder: (context, index) => Text('Item $index'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Item 1'), findsOneWidget);
+      expect(find.text('Item 0'), findsNothing);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LazyIndexedStack.builder(
+              index: -5,
+              itemCount: 2,
+              itemBuilder: (context, index) => Text('Item $index'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Item 0'), findsOneWidget);
+      expect(find.text('Item 1'), findsNothing);
+    });
+
+    testWidgets('handles empty itemCount in builder gracefully', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LazyIndexedStack.builder(
+              index: 0,
+              itemCount: 0,
+              itemBuilder: (context, index) => Text('Item $index'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(LazyIndexedStack), findsOneWidget);
+    });
   });
 }
+

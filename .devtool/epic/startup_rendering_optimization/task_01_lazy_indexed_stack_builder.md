@@ -1,13 +1,13 @@
 ---
 id: "task_01_lazy_indexed_stack_builder"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "startup_rendering_optimization"
 dueDate: null
 created: "2026-09-17T18:00:00+07:00"
-modified: "2026-09-17T18:00:00+07:00"
-completedAt: null
+modified: "2026-09-17T11:04:34Z"
+completedAt: "2026-09-17T11:04:34Z"
 labels: ["ui_kit", "rendering", "lazy-loading"]
 order: "a1"
 ---
