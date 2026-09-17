@@ -738,4 +738,9 @@ class AppThemes extends ThemeExtension<AppThemes> with _$AppThemesTailorMixin {
   );
 }
 
-final talkerTheme = TalkerScreenTheme(logColors: {GoodLog.getKey: AppColors.materialGreen500});
+final talkerTheme = TalkerScreenTheme(
+  logColors: {
+    GoodLog.getKey: AppColors.materialGreen500,
+    ColdStartLog.getKey: AppColors.materialCyan500,
+  },
+);

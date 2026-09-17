@@ -57,6 +57,12 @@ void main() {
     expect(interactiveElapsed, isNotNull);
     expect(interactiveElapsed!.inMicroseconds, greaterThanOrEqualTo(0));
     expect(report.totalToTti.inMicroseconds, greaterThanOrEqualTo(0));
+
+    final coldStartLogs = getIt<Talker>().history.whereType<ColdStartLog>();
+    expect(coldStartLogs, isNotEmpty);
+    expect(coldStartLogs.first.title, equals('COLD START'));
+    expect(coldStartLogs.first.key, equals('cold_start'));
+    expect(coldStartLogs.first.message, contains('COLD START PERFORMANCE TELEMETRY REPORT'));
   });
 
   testWidgets('ShellPage mounts only SettingsPage on launch, deferring other tabs', (

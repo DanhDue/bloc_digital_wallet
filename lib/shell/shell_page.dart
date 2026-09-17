@@ -56,7 +56,7 @@ class _ShellPageState
         ColdStartProfiler.instance.finish();
         ColdStartProfiler.instance.logReport((table) {
           if (GetIt.I.isRegistered<Talker>()) {
-            GetIt.I<Talker>().info('\n$table');
+            GetIt.I<Talker>().logCustom(ColdStartLog('\n$table'));
           } else {
             debugPrint(table);
           }

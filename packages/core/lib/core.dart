@@ -48,3 +48,4 @@ export 'localization/dynamic_translator.dart';
 export 'telemetry/cold_start_milestone.dart';
 export 'telemetry/cold_start_report.dart';
 export 'telemetry/cold_start_profiler.dart';
+export 'telemetry/cold_start_log.dart';
