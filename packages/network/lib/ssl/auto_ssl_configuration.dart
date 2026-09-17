@@ -15,12 +15,11 @@ import 'ssl_fingerprint_source.dart';
 
 /// Build-mode + config aware SSL strategy selector.
 ///
-/// - **Debug** builds always use [DebugSslConfiguration] (accept every
-///   certificate) — pinning against localhost / self-signed dev servers is not
-///   useful.
-/// - **Non-debug** builds use [HardenedSslPinning] when pinning is enabled
-///   (`EnvironmentConfig.enableSslPinning`, overridable via [pinningEnabled])
-///   **and** a [source] is provided; otherwise [NoSslPinning] (system trust).
+/// - When [pinningEnabled] is `true` (`ENABLE_SSL_PINNING=true`) and a [source]
+///   is provided, activates [HardenedSslPinning] across all modes.
+/// - Otherwise in **Debug** builds uses [DebugSslConfiguration] (accepts all
+///   certificates for local dev).
+/// - In non-debug builds without pinning, falls back to [NoSslPinning] (system trust).
 ///
 /// `packages/network` registers `const AutoSslConfiguration()` (no [source]) as
 /// its default, so a bare template does no pinning. The app overrides it with a
@@ -54,10 +53,14 @@ class AutoSslConfiguration extends SslConfiguration {
 
   @override
   void configure(Dio dio, Talker talker) {
+    if (pinningEnabled && source != null) {
+      HardenedSslPinning(source: source!).configure(dio, talker);
+      return;
+    }
     if (kDebugMode) {
       DebugSslConfiguration().configure(dio, talker);
       return;
     }
-    releaseStrategy(pinningEnabled: pinningEnabled, source: source).configure(dio, talker);
+    const NoSslPinning().configure(dio, talker);
   }
 }

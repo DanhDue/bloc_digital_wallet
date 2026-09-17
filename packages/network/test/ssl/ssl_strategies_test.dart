@@ -81,6 +81,44 @@ void main() {
       ).configure(dio, talker);
       expect((dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient, isNotNull);
     });
+
+    test('AutoSslConfiguration with pinningEnabled: true activates HardenedSslPinning', () {
+      final dio = Dio();
+      final localTalker = Talker();
+      const config = AutoSslConfiguration(
+        pinningEnabled: true,
+        source: StaticFingerprintSource(
+          byHost: {
+            'api.test.com': ['CORRECT_PIN'],
+          },
+        ),
+      );
+      config.configure(dio, localTalker);
+
+      final adapter = dio.httpClientAdapter as IOHttpClientAdapter;
+      expect(adapter.createHttpClient, isNotNull);
+      expect(
+        localTalker.history.any((record) => record.message?.contains('hardened mode') ?? false),
+        isTrue,
+      );
+    });
+
+    test('AutoSslConfiguration with pinningEnabled: false uses DebugSslConfiguration in debug', () {
+      final dio = Dio();
+      final localTalker = Talker();
+      const config = AutoSslConfiguration(
+        pinningEnabled: false,
+        source: StaticFingerprintSource(anyHost: ['X']),
+      );
+      config.configure(dio, localTalker);
+
+      final adapter = dio.httpClientAdapter as IOHttpClientAdapter;
+      expect(adapter.createHttpClient, isNotNull);
+      expect(
+        localTalker.history.any((record) => record.message?.contains('Debug mode') ?? false),
+        isTrue,
+      );
+    });
   });
 
   group('HardenedSslPinning.accepts (the badCertificateCallback body)', () {
