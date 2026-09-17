@@ -2,7 +2,7 @@
 
 ## Meta Data
 - **Epic**: `view_rendering_optimization`
-- **Status**: Planning (Gate 2 In-Flight)
+- **Status**: Done
 - **Target Release**: v1.1.0
 - **Platform**: Flutter
 - **Source Spec**: [2026-09-17-view-rendering-optimization-design.md](2026-09-17-view-rendering-optimization-design.md)

@@ -2,7 +2,7 @@
 
 ## Meta Data
 - **Epic**: `view_rendering_optimization`
-- **Trạng thái**: Đang lập kế hoạch (Gate 2 In-Flight)
+- **Trạng thái**: Done
 - **Phiên bản mục tiêu**: v1.1.0
 - **Nền tảng**: Flutter
 - **Tài liệu Spec nguồn**: [2026-09-17-view-rendering-optimization-design.md](2026-09-17-view-rendering-optimization-design.md)
