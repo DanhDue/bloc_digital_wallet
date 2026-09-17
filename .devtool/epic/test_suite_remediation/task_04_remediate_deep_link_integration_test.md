@@ -1,13 +1,13 @@
 ---
 id: "task_04_remediate_deep_link_integration_test"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "test_suite_remediation"
 dueDate: null
 created: "2026-09-17T14:40:00Z"
-modified: "2026-09-17T14:40:00Z"
-completedAt: null
+modified: "2026-09-17T08:00:38Z"
+completedAt: "2026-09-17T08:00:38Z"
 labels: ["testing", "integration", "deeplink"]
 order: "a4"
 ---
