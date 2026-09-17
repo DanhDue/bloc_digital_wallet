@@ -8,14 +8,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:core/core.dart';
 import 'package:settings/settings.dart';
+import 'package:ui_kit/ui_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:d3_nexus_shield/main.dart' as app;
 import 'helpers/language_test_helper.dart';
+import 'helpers/integration_test_helper.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Language Switching Edge Cases & Resilience Integration Test', () {
+    setUp(() {
+      IntegrationTestHelper.setupPlatformMocks();
+    });
+
+    tearDown(() {
+      IntegrationTestHelper.teardownPlatformMocks();
+    });
+
     // -------------------------------------------------------------------------
     // EDGE CASE 1: Rapid Switching Race Condition (BDD-08) & Post-Action Side Effects
     // Latest selection wins; earlier in-flight requests are safely ignored.
@@ -101,14 +111,20 @@ void main() {
 
         await tester.pump();
 
-        // Visual pause: Loading appears briefly while querying backend
-        await LanguageTestHelper.humanDelay(1000);
+        // Wait until CustomLoadingWidget is dismissed without pumpAndSettle dismissing the SnackBar
+        int waitCount = 0;
+        while (find.byType(CustomLoadingWidget).evaluate().isNotEmpty && waitCount < 20) {
+          await tester.pump(const Duration(milliseconds: 200));
+          waitCount++;
+        }
 
-        // Wait for error handling to complete and loading dialog to dismiss
-        await LanguageTestHelper.waitForLoadingToDisappear(tester);
-
-        // Visual pause: Observe error SnackBar on screen
-        await LanguageTestHelper.humanDelay(1500);
+        // Wait until SnackBar is visible
+        await IntegrationTestHelper.pumpUntil(
+          tester,
+          find.byType(SnackBar),
+          timeout: const Duration(seconds: 5),
+          reason: 'Error SnackBar must be displayed upon translation download failure',
+        );
 
         // Expectation: SnackBar with error message is displayed
         expect(
@@ -184,6 +200,8 @@ void main() {
     testWidgets('Edge Case 4: Cold-start restores saved language from SharedPreferences cleanly', (
       WidgetTester tester,
     ) async {
+      IntegrationTestHelper.setupPlatformMocks();
+
       // Pre-seed SharedPreferences with Japanese locale
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('saved_language_code', 'ja_JP');
@@ -192,8 +210,11 @@ void main() {
       await GetIt.instance.reset();
       app.main();
 
-      // Settle all startup initializers and UI frames
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      // Settle startup frames and bypass repeating splash animations
+      for (int i = 0; i < 15; i++) {
+        await tester.pump(const Duration(milliseconds: 300));
+      }
+      await tester.pumpAndSettle();
 
       // Expectation: Initial boot has already applied Japanese
       expect(
@@ -206,10 +227,7 @@ void main() {
       await LanguageTestHelper.humanDelay(1500);
 
       // Navigate to Settings to verify Japanese UI strings
-      final settingsNavTab = find.byKey(const ValueKey('settings_nav_tab'));
-      await tester.tap(settingsNavTab);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-
+      await IntegrationTestHelper.switchTab(tester, const ValueKey('settings_nav_tab'));
       await LanguageTestHelper.humanDelay(1500);
 
       // Teardown / hygiene: Reset back to English for following runs
