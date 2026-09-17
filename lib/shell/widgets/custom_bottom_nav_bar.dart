@@ -39,56 +39,58 @@ class CustomBottomNavBar extends StatelessWidget {
     final inactiveColor = context.appThemes.ink40;
     final backgroundColor = context.appThemes.white;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: context.appThemes.ink40.withValues(alpha: 0.15),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 3, bottom: 6),
-          child: Row(
-            mainAxisAlignment: .spaceBetween,
-            children: [
-              _NavItem(
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home,
-                label: 'Home',
-                isActive: currentIndex == ShellTabIndex.home,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => onTap(ShellTabIndex.home),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.home),
-              ),
-              // shell:scanner-nav-item:begin
-              _CenterNavItem(
-                icon: Icons.qr_code_scanner,
-                isActive: currentIndex == ShellTabIndex.scanner,
-                activeColor: activeColor,
-                onTap: () => onTap(ShellTabIndex.scanner),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
-              ),
-              // shell:scanner-nav-item:end
-              _NavItem(
-                key: const ValueKey('settings_nav_tab'),
-                icon: Icons.settings_outlined,
-                activeIcon: Icons.settings,
-                label: context.t.home.nav.settings,
-                isActive: currentIndex == ShellTabIndex.settings,
-                activeColor: activeColor,
-                inactiveColor: inactiveColor,
-                onTap: () => onTap(ShellTabIndex.settings),
-                onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.settings),
-              ),
-            ],
+    return RepaintBoundary(
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          boxShadow: [
+            BoxShadow(
+              color: context.appThemes.ink40.withValues(alpha: 0.15),
+              blurRadius: 10,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 3, bottom: 6),
+            child: Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                _NavItem(
+                  icon: Icons.home_outlined,
+                  activeIcon: Icons.home,
+                  label: 'Home',
+                  isActive: currentIndex == ShellTabIndex.home,
+                  activeColor: activeColor,
+                  inactiveColor: inactiveColor,
+                  onTap: () => onTap(ShellTabIndex.home),
+                  onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.home),
+                ),
+                // shell:scanner-nav-item:begin
+                _CenterNavItem(
+                  icon: Icons.qr_code_scanner,
+                  isActive: currentIndex == ShellTabIndex.scanner,
+                  activeColor: activeColor,
+                  onTap: () => onTap(ShellTabIndex.scanner),
+                  onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
+                ),
+                // shell:scanner-nav-item:end
+                _NavItem(
+                  key: const ValueKey('settings_nav_tab'),
+                  icon: Icons.settings_outlined,
+                  activeIcon: Icons.settings,
+                  label: context.t.home.nav.settings,
+                  isActive: currentIndex == ShellTabIndex.settings,
+                  activeColor: activeColor,
+                  inactiveColor: inactiveColor,
+                  onTap: () => onTap(ShellTabIndex.settings),
+                  onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.settings),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -173,21 +175,23 @@ class _CenterNavItem extends StatelessWidget {
       onDoubleTap: onDoubleTap,
       child: Transform.translate(
         offset: const Offset(0, -16),
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: activeColor,
-            shape: .circle,
-            boxShadow: [
-              BoxShadow(
-                color: activeColor.withValues(alpha: 0.4),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
+        child: RepaintBoundary(
+          child: Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: activeColor,
+              shape: .circle,
+              boxShadow: [
+                BoxShadow(
+                  color: activeColor.withValues(alpha: 0.4),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: context.appThemes.white, size: 28),
           ),
-          child: Icon(icon, color: context.appThemes.white, size: 28),
         ),
       ),
     );
