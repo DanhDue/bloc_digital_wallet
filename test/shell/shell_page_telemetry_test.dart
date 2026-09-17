@@ -60,8 +60,8 @@ void main() {
 
     final coldStartLogs = getIt<Talker>().history.whereType<ColdStartLog>();
     expect(coldStartLogs, isNotEmpty);
-    expect(coldStartLogs.first.title, equals('COLD START'));
-    expect(coldStartLogs.first.key, equals('cold_start'));
+    expect(coldStartLogs.first.title, equals('ColdStartProfiler'));
+    expect(coldStartLogs.first.key, equals('cold_start_profiler'));
     expect(coldStartLogs.first.message, contains('COLD START PERFORMANCE TELEMETRY REPORT'));
   });
 

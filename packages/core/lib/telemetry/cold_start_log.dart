@@ -6,14 +6,14 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 /// [ColdStartLog] - Dedicated Talker log entry for Cold Start Telemetry.
 ///
-/// Provides a dedicated filter tag [title] of `COLD START` so developers
+/// Provides a dedicated filter tag [title] of `ColdStartProfiler` so developers
 /// and QA can quickly isolate startup performance measurements in TalkerScreen.
 class ColdStartLog extends TalkerLog {
   ColdStartLog(String super.message);
 
   /// Tag displayed in Talker and used for filter chips.
   @override
-  String get title => 'COLD START';
+  String get title => 'ColdStartProfiler';
 
   /// Key used by TalkerScreenTheme for color mapping.
   @override
@@ -27,5 +27,5 @@ class ColdStartLog extends TalkerLog {
   static AnsiPen get getPen => AnsiPen()..xterm(45);
 
   /// Key identifier for theme configuration.
-  static String get getKey => 'cold_start';
+  static String get getKey => 'cold_start_profiler';
 }
