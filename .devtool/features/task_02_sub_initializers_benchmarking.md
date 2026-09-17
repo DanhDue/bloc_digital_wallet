@@ -1,13 +1,13 @@
 ---
 id: "task_02_sub_initializers_benchmarking"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "cold_start_measurement"
 dueDate: null
 created: "2026-09-17T17:15:00+07:00"
-modified: "2026-09-17T17:15:00+07:00"
-completedAt: null
+modified: "2026-09-17T10:33:27Z"
+completedAt: "2026-09-17T10:33:27Z"
 labels: ["telemetry", "initializers", "benchmarking"]
 order: "a2"
 ---

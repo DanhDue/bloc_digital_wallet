@@ -1,5 +1,6 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
+import '../telemetry/cold_start_profiler.dart';
 import 'app_initializer.dart';
 
 class AppInitializerImpl implements AppInitializer {
@@ -11,9 +12,11 @@ class AppInitializerImpl implements AppInitializer {
   Future<void> init() async {
     await Future.wait(
       _initializers.map(
-        (initializer) => initializer.init().catchError((_) {
-          // Individual initializer failures must not abort siblings.
-        }),
+        (initializer) => ColdStartProfiler.instance
+            .timeAsync(initializer.runtimeType.toString(), () => initializer.init())
+            .catchError((_) {
+              // Individual initializer failures must not abort siblings.
+            }),
       ),
     );
   }

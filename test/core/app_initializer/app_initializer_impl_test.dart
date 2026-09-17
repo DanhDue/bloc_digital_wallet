@@ -11,11 +11,7 @@ class _TimedFakeInitializer implements AppInitializer {
   final Duration delay;
   final List<String> log;
 
-  _TimedFakeInitializer({
-    required this.name,
-    required this.delay,
-    required this.log,
-  });
+  _TimedFakeInitializer({required this.name, required this.delay, required this.log});
 
   @override
   Future<void> init() async {
@@ -47,16 +43,8 @@ void main() {
       // With Future.wait: B_end appears BEFORE A_end.
       // With sequential for-await: A_end appears BEFORE B_start.
       final impl = AppInitializerImpl([
-        _TimedFakeInitializer(
-          name: 'A',
-          delay: const Duration(milliseconds: 100),
-          log: log,
-        ),
-        _TimedFakeInitializer(
-          name: 'B',
-          delay: const Duration(milliseconds: 10),
-          log: log,
-        ),
+        _TimedFakeInitializer(name: 'A', delay: const Duration(milliseconds: 100), log: log),
+        _TimedFakeInitializer(name: 'B', delay: const Duration(milliseconds: 10), log: log),
       ]);
 
       await impl.init();
@@ -66,11 +54,7 @@ void main() {
       final bEndIdx = log.indexOf('B_end');
       final aEndIdx = log.indexOf('A_end');
       // B (10ms) should complete before A (100ms).
-      expect(
-        bEndIdx,
-        lessThan(aEndIdx),
-        reason: 'B should complete before A in concurrent mode',
-      );
+      expect(bEndIdx, lessThan(aEndIdx), reason: 'B should complete before A in concurrent mode');
     });
 
     test('completes all initializers even when one throws', () async {
@@ -78,20 +62,36 @@ void main() {
 
       final impl = AppInitializerImpl([
         _FailingInitializer(log),
-        _TimedFakeInitializer(
-          name: 'C',
-          delay: const Duration(milliseconds: 5),
-          log: log,
-        ),
+        _TimedFakeInitializer(name: 'C', delay: const Duration(milliseconds: 5), log: log),
       ]);
 
       // Should NOT throw — failures are swallowed so startup is crash-free.
       await expectLater(impl.init(), completes);
-      expect(
-        log,
-        contains('C_end'),
-        reason: 'C must complete despite the failing initializer',
-      );
+      expect(log, contains('C_end'), reason: 'C must complete despite the failing initializer');
     });
+
+    test(
+      'records micro-benchmarking duration in ColdStartProfiler for each initializer',
+      () async {
+        ColdStartProfiler.instance.reset();
+        ColdStartProfiler.instance.start();
+
+        final log = <String>[];
+        final impl = AppInitializerImpl([
+          _TimedFakeInitializer(name: 'A', delay: const Duration(milliseconds: 20), log: log),
+          _FailingInitializer(log),
+        ]);
+
+        await impl.init();
+
+        final report = ColdStartProfiler.instance.report;
+        expect(report.subInitializersDuration.containsKey('_TimedFakeInitializer'), isTrue);
+        expect(report.subInitializersDuration.containsKey('_FailingInitializer'), isTrue);
+        expect(
+          report.subInitializersDuration['_TimedFakeInitializer']!.inMilliseconds,
+          greaterThanOrEqualTo(15),
+        );
+      },
+    );
   });
 }
