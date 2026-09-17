@@ -1,7 +1,5 @@
 // Copyright (c) 2026, one of DanhDue ExOICTIF projects. All rights reserved.
 
-// coverage:ignore-file
-
 import 'app_initializer.dart';
 
 class AppInitializerImpl implements AppInitializer {
@@ -11,8 +9,12 @@ class AppInitializerImpl implements AppInitializer {
 
   @override
   Future<void> init() async {
-    for (final initializer in _initializers) {
-      await initializer.init();
-    }
+    await Future.wait(
+      _initializers.map(
+        (initializer) => initializer.init().catchError((_) {
+          // Individual initializer failures must not abort siblings.
+        }),
+      ),
+    );
   }
 }

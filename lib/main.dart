@@ -22,14 +22,18 @@ void main() async {
   // Initialize dependency injection
   await configureDependencies();
 
-  // Initialize ThemeManager
-  await core.ThemeManager.instance.init();
+  // Parallelize ThemeManager and AppInitializer — both read SharedPreferences
+  // independently and do not depend on each other.
+  await Future.wait([
+    core.ThemeManager.instance.init(),
+    getIt<core.AppInitializer>().init(),
+  ]);
 
-  // Initialize App (Logging, Localization, Env, Bloc Observer, Auth Nav, etc.)
-  await getIt<core.AppInitializer>().init();
-
-  // Initialize DeepLink Coordinator
-  await getIt<DeepLinkCoordinator>().initialize();
+  // Defer DeepLink initialization to post-frame: DeepLinkCoordinator already
+  // buffers the cold-start URI in stagedInitialLink, so no link is lost.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    getIt<DeepLinkCoordinator>().initialize();
+  });
 
   runApp(
     StreamBuilder<ThemeMode>(
@@ -96,7 +100,8 @@ void main() async {
                 ),
                 builder: (context, child) => EnvironmentBanner(
                   child: FlutterSmartDialog.init(
-                    loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+                    loadingBuilder: (String msg) =>
+                        CustomLoadingWidget(msg: msg),
                   )(context, child),
                 ),
               ),
