@@ -2,7 +2,10 @@
 
 // coverage:ignore-file
 
+import 'dart:async';
+
 import 'package:core/core.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:framework/framework.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings/domain/entities/language_sync_status.dart';
@@ -24,25 +27,36 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   final BootstrapUseCase _bootstrapUseCase;
   final ChangeLanguageUseCase _changeLanguageUseCase;
   final ToggleDarkModeUseCase _toggleDarkModeUseCase;
+  final ThemeManager _themeManager;
 
   String? _pendingLanguageCode;
+  StreamSubscription<ThemeMode>? _themeSubscription;
 
   SettingsBloc(
     this._appInfoService,
     this._getCachedLanguagesUseCase,
     this._bootstrapUseCase,
     this._changeLanguageUseCase,
-    this._toggleDarkModeUseCase,
-  ) : super(const SettingsState()) {
+    this._toggleDarkModeUseCase, {
+    ThemeManager? themeManager,
+  }) : _themeManager = themeManager ?? ThemeManager.instance,
+       super(const SettingsState()) {
     on<SettingsActionStarted>(_onStarted);
     on<SettingsActionNavigateToProfile>(_onNavigateToProfile);
     on<SettingsActionNavigateToSecurity>(_onNavigateToSecurity);
     on<SettingsActionToggleDarkMode>(_onToggleDarkMode);
+    on<SettingsActionSystemThemeChanged>(_onSystemThemeChanged);
     on<SettingsActionToggleBiometric>(_onToggleBiometric);
     on<SettingsActionToggleNotifications>(_onToggleNotifications);
     on<SettingsActionToggleDeveloperMode>(_onToggleDeveloperMode);
     on<SettingsActionChangeCurrency>(_onChangeCurrency);
     on<SettingsActionChangeLanguage>(_onChangeLanguage, transformer: restartable());
+
+    _themeSubscription = _themeManager.themeModeStream.skip(1).listen((_) {
+      if (!_themeManager.hasUserExplicitPreference) {
+        add(SettingsAction.systemThemeChanged(isDarkMode: _themeManager.isDarkMode));
+      }
+    });
   }
 
   Future<void> _onStarted(SettingsActionStarted action, Emitter<SettingsState> emit) async {
@@ -51,7 +65,7 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
       id: 'local',
       appVersion: '1.0.0',
       buildNumber: '1',
-      isDarkModeEnabled: ThemeManager.instance.isDarkMode,
+      isDarkModeEnabled: _themeManager.isDarkMode,
       availableLanguages: GetCachedLanguagesUseCase.defaultBundledLanguages,
     );
 
@@ -126,6 +140,18 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     await _toggleDarkModeUseCase(isEnabled: action.isEnabled);
   }
 
+  void _onSystemThemeChanged(
+    SettingsActionSystemThemeChanged action,
+    Emitter<SettingsState> emit,
+  ) {
+    if (!_themeManager.hasUserExplicitPreference) {
+      final currentModel = state.uiModel;
+      if (currentModel != null) {
+        emit(state.copyWith(uiModel: currentModel.copyWith(isDarkModeEnabled: action.isDarkMode)));
+      }
+    }
+  }
+
   void _onToggleBiometric(SettingsActionToggleBiometric action, Emitter<SettingsState> emit) {
     final updatedModel = state.uiModel?.copyWith(isBiometricEnabled: action.isEnabled);
     emit(state.copyWith(uiModel: updatedModel));
@@ -191,5 +217,11 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
     Emitter<SettingsState> emit,
   ) {
     emitEvent(const SettingsEvent.navigateToSecurity());
+  }
+
+  @override
+  Future<void> close() {
+    _themeSubscription?.cancel();
+    return super.close();
   }
 }

@@ -1,13 +1,13 @@
 ---
 id: "task_01_core_theme_manager_effective_brightness"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "system_theme_sync"
 dueDate: null
 created: "2026-09-17T22:25:00+07:00"
-modified: "2026-09-17T22:25:00+07:00"
-completedAt: null
+modified: "2026-09-17T15:29:03Z"
+completedAt: "2026-09-17T15:29:03Z"
 labels: ["core", "theme", "platform-brightness", "tdd"]
 order: "a1"
 ---

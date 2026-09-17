@@ -12,6 +12,7 @@ import 'package:logger/d3nexus_logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:settings/data/models/sync/sync_bootstrap_response.dart';
 import 'package:settings/domain/entities/language_sync_status.dart';
 import 'package:settings/domain/entities/supported_language.dart';
@@ -19,6 +20,7 @@ import 'package:settings/domain/usecases/bootstrap_usecase.dart';
 import 'package:settings/domain/usecases/change_language_usecase.dart';
 import 'package:settings/domain/usecases/get_cached_languages_usecase.dart';
 import 'package:settings/domain/usecases/toggle_dark_mode_usecase.dart';
+import 'package:settings/presentation/settings/models/settings_ui_model.dart';
 import 'package:settings/presentation/settings/settings_action.dart';
 import 'package:settings/presentation/settings/settings_bloc.dart';
 import 'package:settings/presentation/settings/settings_state.dart';
@@ -302,7 +304,9 @@ void main() {
         verify(mockChangeLanguageUseCase('fr')).called(1);
       },
     );
+  });
 
+  group('theme management and synchronization', () {
     blocTest<SettingsBloc, SettingsState>(
       'emits updated uiModel with isDarkModeEnabled and calls ToggleDarkModeUseCase when toggleDarkMode is added',
       build: () => bloc,
@@ -314,5 +318,42 @@ void main() {
         predicate<SettingsState>((state) => state.uiModel?.isDarkModeEnabled == true),
       ],
     );
+
+    blocTest<SettingsBloc, SettingsState>(
+      'updates isDarkModeEnabled when systemThemeChanged is dispatched without user preference',
+      build: () => bloc,
+      seed: () => const SettingsState(
+        status: SettingsStatus.success,
+        uiModel: SettingsUiModel(id: 'local', isDarkModeEnabled: false),
+      ),
+      act: (bloc) => bloc.add(const SettingsAction.systemThemeChanged(isDarkMode: true)),
+      expect: () => [
+        predicate<SettingsState>((state) => state.uiModel?.isDarkModeEnabled == true),
+      ],
+    );
+
+    test('ignores systemThemeChanged when user has set explicit preference', () async {
+      SharedPreferences.setMockInitialValues({'app_theme_mode': ThemeMode.light.index});
+      final manager = ThemeManager.instance;
+      await manager.init();
+
+      final testBloc = SettingsBloc(
+        mockAppInfoService,
+        mockGetCachedLanguagesUseCase,
+        mockBootstrapUseCase,
+        mockChangeLanguageUseCase,
+        mockToggleDarkModeUseCase,
+        themeManager: manager,
+      );
+
+      testBloc.add(const SettingsAction.started());
+      await Future.microtask(() {});
+
+      testBloc.add(const SettingsAction.systemThemeChanged(isDarkMode: true));
+      await Future.microtask(() {});
+
+      expect(testBloc.state.uiModel?.isDarkModeEnabled, isFalse);
+      await testBloc.close();
+    });
   });
 }

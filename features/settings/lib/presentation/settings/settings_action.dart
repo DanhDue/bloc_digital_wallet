@@ -15,6 +15,8 @@ abstract class SettingsAction extends BaseAction with _$SettingsAction {
   const factory SettingsAction.started() = SettingsActionStarted;
   const factory SettingsAction.toggleDarkMode({required bool isEnabled}) =
       SettingsActionToggleDarkMode;
+  const factory SettingsAction.systemThemeChanged({required bool isDarkMode}) =
+      SettingsActionSystemThemeChanged;
   const factory SettingsAction.toggleBiometric({required bool isEnabled}) =
       SettingsActionToggleBiometric;
   const factory SettingsAction.toggleNotifications({required bool isEnabled}) =

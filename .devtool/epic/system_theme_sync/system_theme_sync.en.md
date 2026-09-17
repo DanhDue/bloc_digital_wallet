@@ -2,7 +2,7 @@
 
 ## 1. Meta Data
 - **Epic Name**: `system_theme_sync`
-- **Status**: `In Progress`
+- **Status**: Done
 - **Target Release**: `v1.1.0`
 - **Platform**: `Flutter` (Monorepo with BLoC, Clean Architecture, Melos, FVM)
 - **Source Spec**: [2026-09-17-system-theme-sync-and-ssl-pinning-design.md](2026-09-17-system-theme-sync-and-ssl-pinning-design.md)

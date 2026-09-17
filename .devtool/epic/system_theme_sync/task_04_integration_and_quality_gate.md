@@ -1,13 +1,13 @@
 ---
 id: "task_04_integration_and_quality_gate"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "system_theme_sync"
 dueDate: null
 created: "2026-09-17T22:25:00+07:00"
-modified: "2026-09-17T22:25:00+07:00"
-completedAt: null
+modified: "2026-09-17T15:38:46Z"
+completedAt: "2026-09-17T15:38:46Z"
 labels: ["integration", "quality_check", "3-tier", "governance"]
 order: "a4"
 ---

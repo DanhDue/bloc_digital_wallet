@@ -1,13 +1,13 @@
 ---
 id: "task_03_native_security_ssl_pinning_verification"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "system_theme_sync"
 dueDate: null
 created: "2026-09-17T22:25:00+07:00"
-modified: "2026-09-17T22:25:00+07:00"
-completedAt: null
+modified: "2026-09-17T15:35:56Z"
+completedAt: "2026-09-17T15:35:56Z"
 labels: ["native_security", "network", "ssl-pinning", "security", "tdd"]
 order: "a3"
 ---
