@@ -95,4 +95,3 @@ void main() {
     expect(find.byType(ScannerPage, skipOffstage: false), findsNothing);
   });
 }
-
