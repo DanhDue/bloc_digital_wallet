@@ -42,7 +42,7 @@ A production-ready Flutter Super App monorepo template built with **Clean Archit
 
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': 40, 'diagramPadding': 30}}}%%
-graph LR
+flowchart LR
     %% --- LAYER DEFINITIONS ---
     subgraph Presentation_Layer ["Presentation"]
         View["View (Widget)"]
