@@ -2,7 +2,7 @@
 
 ## 1. Thông Tin Chung (Meta Data)
 - **Tên Epic**: `startup_rendering_optimization`
-- **Trạng Thái**: Planning
+- **Trạng Thái**: Done
 - **Phiên Bản Dự Kiến**: v1.1.0
 - **Nền Tảng**: Flutter (iOS / Android)
 - **Tài Liệu Nguồn**: [2026-09-17-startup-rendering-optimization-design.md](2026-09-17-startup-rendering-optimization-design.md)

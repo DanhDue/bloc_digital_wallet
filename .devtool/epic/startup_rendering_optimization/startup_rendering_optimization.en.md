@@ -2,7 +2,7 @@
 
 ## 1. Meta Data
 - **Epic Name**: `startup_rendering_optimization`
-- **Status**: Planning
+- **Status**: Done
 - **Target Release**: v1.1.0
 - **Platform**: Flutter (iOS / Android)
 - **Source Spec**: [2026-09-17-startup-rendering-optimization-design.md](2026-09-17-startup-rendering-optimization-design.md)
