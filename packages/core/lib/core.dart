@@ -44,3 +44,7 @@ export 'config/environment_config.dart';
 export 'di/core_module.dart';
 export 'localization/localization_manager.dart';
 export 'localization/dynamic_translator.dart';
+// Telemetry
+export 'telemetry/cold_start_milestone.dart';
+export 'telemetry/cold_start_report.dart';
+export 'telemetry/cold_start_profiler.dart';

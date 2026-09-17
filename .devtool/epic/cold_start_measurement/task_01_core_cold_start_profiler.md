@@ -1,13 +1,13 @@
 ---
 id: "task_01_core_cold_start_profiler"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "cold_start_measurement"
 dueDate: null
 created: "2026-09-17T17:15:00+07:00"
-modified: "2026-09-17T17:15:00+07:00"
-completedAt: null
+modified: "2026-09-17T10:32:22Z"
+completedAt: "2026-09-17T10:32:22Z"
 labels: ["telemetry", "profiling", "core"]
 order: "a1"
 ---
