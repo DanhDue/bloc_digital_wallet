@@ -1,22 +1,15 @@
+// Copyright 2024 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 group = "com.danhdue.native_security"
 version = "1.0-SNAPSHOT"
 
-buildscript {
-    val kotlinVersion = "2.1.0"
-    val agpVersion = "8.13.2"
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:$agpVersion")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    }
+plugins {
+    // Versions are managed by pluginManagement in the host app's settings.gradle.kts.
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
 }
-
-apply(plugin = "com.android.library")
-apply(plugin = "org.jetbrains.kotlin.android")
 
 android {
     namespace = "com.danhdue.native_security"
