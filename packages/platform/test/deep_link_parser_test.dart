@@ -22,7 +22,7 @@ void main() {
         final payload = parser.parse(uri);
 
         expect(payload.path, DeepLinkRoutes.scanner);
-        expect(payload.targetTab, 1);
+        expect(payload.targetTab, 2);
         expect(payload.queryParams, isEmpty);
         expect(payload.isProtected, isFalse);
         expect(payload.isFallback, isFalse);
@@ -33,7 +33,7 @@ void main() {
         final payload = parser.parse(uri);
 
         expect(payload.path, DeepLinkRoutes.settings);
-        expect(payload.targetTab, 2);
+        expect(payload.targetTab, 4);
         expect(payload.isFallback, isFalse);
       });
 
@@ -42,19 +42,19 @@ void main() {
         final payload = parser.parse(uri);
 
         expect(payload.path, DeepLinkRoutes.scanner);
-        expect(payload.targetTab, 1);
+        expect(payload.targetTab, 2);
         expect(payload.queryParams, {'auto_scan': 'true', 'filter': 'qr'});
       });
 
       test('parses custom scheme with sub-path (d3nexus://settings/languages)', () {
         // Register sub-path in registry
-        DeepLinkRegistry.registerRoute(path: '/settings/languages', targetTab: 2);
+        DeepLinkRegistry.registerRoute(path: '/settings/languages', targetTab: 4);
 
         final uri = Uri.parse('d3nexus://settings/languages');
         final payload = parser.parse(uri);
 
         expect(payload.path, '/settings/languages');
-        expect(payload.targetTab, 2);
+        expect(payload.targetTab, 4);
         expect(payload.isFallback, isFalse);
       });
 
@@ -74,7 +74,7 @@ void main() {
         final payload = parser.parse(uri);
 
         expect(payload.path, DeepLinkRoutes.settings);
-        expect(payload.targetTab, 2);
+        expect(payload.targetTab, 4);
         expect(payload.isFallback, isFalse);
       });
 
@@ -90,6 +90,7 @@ void main() {
 
     group('Protected Routes', () {
       test('identifies protected route from registry', () {
+        DeepLinkRegistry.registerRoute(path: DeepLinkRoutes.wallet, isProtected: true);
         final uri = Uri.parse('d3nexus://wallet');
         final payload = parser.parse(uri);
 

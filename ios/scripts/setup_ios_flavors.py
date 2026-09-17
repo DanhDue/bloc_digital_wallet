@@ -135,6 +135,7 @@ def write_xcconfigs(repo_root: pathlib.Path, flavor_cfg: dict[str, dict]) -> Non
         for mode in MODES:
             lc = mode.lower()
             (flutter_dir / f"{mode}-{flavor}.xcconfig").write_text(
+                f'#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.{lc}-{flavor}.xcconfig"\n'
                 f'#include "Generated.xcconfig"\n'
                 f"\n"
                 f"// CFBundleDisplayName for the '{flavor}' flavor - mirrored from\n"
