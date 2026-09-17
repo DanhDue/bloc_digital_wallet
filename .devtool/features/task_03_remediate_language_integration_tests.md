@@ -1,13 +1,13 @@
 ---
 id: "task_03_remediate_language_integration_tests"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "test_suite_remediation"
 dueDate: null
 created: "2026-09-17T14:40:00Z"
-modified: "2026-09-17T14:40:00Z"
-completedAt: null
+modified: "2026-09-17T07:58:46Z"
+completedAt: "2026-09-17T07:58:46Z"
 labels: ["testing", "integration", "localization"]
 order: "a3"
 ---
