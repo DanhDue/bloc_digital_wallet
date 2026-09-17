@@ -1,13 +1,13 @@
 ---
 id: "task_02_settings_bloc_theme_synchronization"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "system_theme_sync"
 dueDate: null
 created: "2026-09-17T22:25:00+07:00"
-modified: "2026-09-17T22:25:00+07:00"
-completedAt: null
+modified: "2026-09-17T15:34:44Z"
+completedAt: "2026-09-17T15:34:44Z"
 labels: ["settings", "bloc", "mvi", "presentation", "tdd"]
 order: "a2"
 ---
