@@ -15,6 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/localization/multi_translation_provider.dart';
 import 'core/localization/app_translation_providers.dart';
 import 'core/environment_banner.dart';
+import 'theme/app_theme_data.dart';
 
 void main({void Function()? onDependenciesConfigured}) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,13 +39,13 @@ void main({void Function()? onDependenciesConfigured}) async {
 
   runApp(
     StreamBuilder<ThemeMode>(
-      stream: core.ThemeManager.instance.themeModeStream,
+      stream: core.ThemeManager.instance.themeModeStream.distinct(),
       initialData: core.ThemeManager.instance.currentThemeMode,
       builder: (context, themeSnapshot) {
         final currentThemeMode = themeSnapshot.data ?? ThemeMode.system;
 
         return StreamBuilder<Locale>(
-          stream: core.LocalizationManager.instance.localeStream,
+          stream: core.LocalizationManager.instance.localeStream.distinct(),
           initialData: LocaleSettings.currentLocale.flutterLocale,
           builder: (context, snapshot) {
             final currentLocale = snapshot.data!;
@@ -71,34 +72,8 @@ void main({void Function()? onDependenciesConfigured}) async {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 themeMode: currentThemeMode,
-                theme: ThemeData(
-                  scaffoldBackgroundColor: AppThemes.light.backgroundColor,
-                  splashFactory: NoSplash.splashFactory,
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  extensions: [AppThemes.light],
-                  colorScheme: ColorScheme.light(
-                    primary: AppThemes.light.primaryColor,
-                    secondary: AppThemes.light.secondaryColor,
-                    surface: AppThemes.light.surfaceColor,
-                    error: AppThemes.light.errorColor,
-                  ),
-                ),
-                darkTheme: ThemeData(
-                  scaffoldBackgroundColor: AppThemes.dark.backgroundColor,
-                  splashFactory: NoSplash.splashFactory,
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  extensions: [AppThemes.dark],
-                  colorScheme: ColorScheme.dark(
-                    primary: AppThemes.dark.primaryColor,
-                    secondary: AppThemes.dark.secondaryColor,
-                    surface: AppThemes.dark.surfaceColor,
-                    error: AppThemes.dark.errorColor,
-                  ),
-                ),
+                theme: AppThemeData.lightTheme,
+                darkTheme: AppThemeData.darkTheme,
                 builder: (context, child) => EnvironmentBanner(
                   child: FlutterSmartDialog.init(
                     loadingBuilder: (String msg) =>

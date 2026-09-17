@@ -1,13 +1,13 @@
 ---
 id: "task_02_static_cached_theme_data"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "view_rendering_optimization"
 dueDate: null
 created: "2026-09-17T16:25:00+07:00"
-modified: "2026-09-17T16:25:00+07:00"
-completedAt: null
+modified: "2026-09-17T09:31:24Z"
+completedAt: "2026-09-17T09:31:24Z"
 labels: ["architecture", "performance", "theme"]
 order: "a2"
 ---
