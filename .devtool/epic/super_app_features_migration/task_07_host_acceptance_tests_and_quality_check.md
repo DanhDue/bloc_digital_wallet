@@ -1,20 +1,20 @@
 ---
 id: "task_07_host_acceptance_tests_and_quality_check"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_features_migration"
 dueDate: null
 created: "2026-09-16T18:02:00+07:00"
-modified: "2026-09-16T18:02:00+07:00"
-completedAt: null
+modified: "2026-09-16T11:44:55Z"
+completedAt: "2026-09-16T11:44:55Z"
 labels: ["qa", "acceptance", "quality-check"]
 order: "a07"
 ---
 
 # Task 07: Host Acceptance Tests & Quality Check
 
-Epic: [super_app_features_migration](../epic/super_app_features_migration/super_app_features_migration.en.md)
+Epic: [super_app_features_migration](super_app_features_migration.en.md)
 
 ## Requirement Analysis
 Execute full acceptance testing and quality verification for the migrated Super App. Update host unit and integration tests (`integration_test/deep_link_flow_test.dart`, `test/shell/`, `test/router/`, `test/di/`), verify module boundaries via `./scripts/check_module_boundaries.sh`, run static analyzer (`melos analyze`), execute the 3-Tier test suite via `./scripts/testWithCoverage.sh`, and run the master `@quality_check` workflow to achieve 🟢 LGTM for Gate 4 and prepare for Gate 5 Developer Kanban Review.

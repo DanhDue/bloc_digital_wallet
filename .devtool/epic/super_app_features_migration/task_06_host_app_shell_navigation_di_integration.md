@@ -1,20 +1,20 @@
 ---
 id: "task_06_host_app_shell_navigation_di_integration"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "super_app_features_migration"
 dueDate: null
 created: "2026-09-16T18:02:00+07:00"
-modified: "2026-09-16T18:02:00+07:00"
-completedAt: null
+modified: "2026-09-16T11:42:54Z"
+completedAt: "2026-09-16T11:42:54Z"
 labels: ["architecture", "shell", "integration"]
 order: "a06"
 ---
 
 # Task 06: Host App Shell, Navigation & DI Integration
 
-Epic: [super_app_features_migration](../epic/super_app_features_migration/super_app_features_migration.en.md)
+Epic: [super_app_features_migration](super_app_features_migration.en.md)
 
 ## Requirement Analysis
 Integrate the 5 migrated features (`onboard`, `authentication`, `wallet`, `transaction`, `trends`) into the Super App Host (`lib/`). Update the root `pubspec.yaml` workspace, configure 5 tabs in `ShellPage` wrapped in `MiniAppErrorBoundary`, update `CustomBottomNavBar` and `ShellConfig`, wire up all sub-routers in `AppRouter`, update DI in `lib/di/injection.dart`, remove obsolete empty package directories from `packages/`, and run `melos genAlls`.
