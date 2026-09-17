@@ -14,7 +14,7 @@ order: "a01"
 
 # Task 01: Scaffold & Migrate Onboard Feature
 
-Epic: [super_app_features_migration](../epic/super_app_features_migration/super_app_features_migration.en.md)
+Epic: [super_app_features_migration](super_app_features_migration.en.md)
 
 ## Requirement Analysis
 Create the autonomous mini-app `features/onboard` following Clean Architecture and MVI using the Mason brick `pac_mvi_feature`. Port over the application launch, splash screen, and initialization flow from `danhdue/full_features:packages/onboard`, upgrading it to Slang v4 and Flutter Pub Workspace standards.

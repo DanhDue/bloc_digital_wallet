@@ -14,7 +14,7 @@ order: "a03"
 
 # Task 03: Scaffold & Migrate Wallet Feature
 
-Epic: [super_app_features_migration](../epic/super_app_features_migration/super_app_features_migration.en.md)
+Epic: [super_app_features_migration](super_app_features_migration.en.md)
 
 ## Requirement Analysis
 Create the autonomous mini-app `features/wallet` using Mason `pac_mvi_feature`. Port over the digital wallet dashboard, token accounts, NFT gallery, and blockchain network selector from `danhdue/full_features:packages/wallet`. Upgrade models to Freezed v3, Slang v4, and ensure strict financial decimal precision.

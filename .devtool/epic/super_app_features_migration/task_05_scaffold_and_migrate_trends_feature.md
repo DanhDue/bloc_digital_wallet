@@ -14,7 +14,7 @@ order: "a05"
 
 # Task 05: Scaffold & Migrate Trends Feature
 
-Epic: [super_app_features_migration](../epic/super_app_features_migration/super_app_features_migration.en.md)
+Epic: [super_app_features_migration](super_app_features_migration.en.md)
 
 ## Requirement Analysis
 Create the autonomous mini-app `features/trends` using Mason `pac_mvi_feature`. Port over the market analytics, crypto/fiat price trends, interactive charts, and timeframe selection from `danhdue/full_features:packages/trends`. Upgrade models to Freezed v3, Slang v4, and Clean Architecture MVI.

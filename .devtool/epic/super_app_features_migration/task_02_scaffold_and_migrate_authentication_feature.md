@@ -14,7 +14,7 @@ order: "a02"
 
 # Task 02: Scaffold & Migrate Authentication Feature
 
-Epic: [super_app_features_migration](../epic/super_app_features_migration/super_app_features_migration.en.md)
+Epic: [super_app_features_migration](super_app_features_migration.en.md)
 
 ## Requirement Analysis
 Create the autonomous mini-app `features/authentication` using Mason `pac_mvi_feature`. Port over the login user flow, credential validation, LoginBloc, LoginUseCase, token interceptor, and secure storage integration from `danhdue/full_features:packages/authentication`.

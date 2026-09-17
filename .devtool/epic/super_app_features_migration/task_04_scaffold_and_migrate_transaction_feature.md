@@ -14,7 +14,7 @@ order: "a04"
 
 # Task 04: Scaffold & Migrate Transaction Feature
 
-Epic: [super_app_features_migration](../epic/super_app_features_migration/super_app_features_migration.en.md)
+Epic: [super_app_features_migration](super_app_features_migration.en.md)
 
 ## Requirement Analysis
 Create the autonomous mini-app `features/transaction` using Mason `pac_mvi_feature`. Port over the transaction ledger, categorized transaction history list, pagination, and transaction details screen from `danhdue/full_features:packages/transaction`. Upgrade to Freezed v3, Slang v4, and MVI architecture.
