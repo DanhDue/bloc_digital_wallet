@@ -81,5 +81,5 @@ Integration tests for language switching on Staging currently suffer from timing
 - Blocked by: [Task 01](task_01_create_staging_integration_test_helper.md).
 
 ## 9. References & Rollback
-- Source Spec: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
+- Source Spec: [.devtool/epic/test_suite_remediation/2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
 - Rollback: Revert `integration_test/change_language_test.dart` and `integration_test/language_edge_cases_test.dart`.

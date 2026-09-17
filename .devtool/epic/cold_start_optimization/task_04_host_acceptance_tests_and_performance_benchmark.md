@@ -14,7 +14,7 @@ order: "a4"
 
 # Task 4: Host Acceptance Tests & Performance Benchmark
 
-Epic: [cold_start_optimization](../epic/cold_start_optimization/cold_start_optimization.en.md)
+Epic: [cold_start_optimization](cold_start_optimization.en.md)
 
 ## Requirement Analysis
 Following the implementation of `LazyIndexedStack` (Task 1), `RepaintBoundary` shadow isolation (Task 2), and non-blocking parallel bootstrapping (Task 3), this final Tier C integration task validates the end-to-end user experience, benchmarks cold start metrics against the agreed KPIs, and executes the mandatory 3-tier quality gate (`@quality_check`).

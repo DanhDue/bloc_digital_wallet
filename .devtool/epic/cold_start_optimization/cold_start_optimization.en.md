@@ -2,7 +2,7 @@
 
 ## 1. Meta Data
 - **Epic Name**: `cold_start_optimization`
-- **Status**: `Queued (backlog) — behind test_suite_remediation`
+- **Status**: Done
 - **Target Release**: `v1.1.0`
 - **Platform**: `Flutter` (Melos Monorepo)
 - **Source Spec**: [2026-09-17-cold-start-optimization-design.md](2026-09-17-cold-start-optimization-design.md)

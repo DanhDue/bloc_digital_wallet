@@ -14,7 +14,7 @@ order: "a3"
 
 # Task 3: Non-blocking Bootstrapping & Deferred I/O
 
-Epic: [cold_start_optimization](../epic/cold_start_optimization/cold_start_optimization.en.md)
+Epic: [cold_start_optimization](cold_start_optimization.en.md)
 
 ## Requirement Analysis
 In `lib/main.dart`, the execution flow sequentially awaits:

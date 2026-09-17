@@ -14,7 +14,7 @@ order: "a1"
 
 # Task 1: Lazy Navigation Shell (LazyIndexedStack)
 
-Epic: [cold_start_optimization](../epic/cold_start_optimization/cold_start_optimization.en.md)
+Epic: [cold_start_optimization](cold_start_optimization.en.md)
 
 ## Requirement Analysis
 In `d3_nexus_shield`, `ShellPage` hosts 3 primary tabs (`HomeDashboardPage`, `ScannerPage`, and `SettingsPage`) using Flutter's built-in `IndexedStack`. Because `IndexedStack` eagerly evaluates all child widget subtrees upon initial build, all 3 tabs are constructed on Frame 0 even though the app defaults to tab 2 (`SettingsPage`). This triples the initial widget inflation, layout passes, and BLoC subscriptions during cold start.

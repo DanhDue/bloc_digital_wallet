@@ -2,7 +2,7 @@
 
 ## 1. Thông Tin Chung (Meta Data)
 - **Tên Epic**: `cold_start_optimization`
-- **Trạng thái**: `Queued (backlog) — behind test_suite_remediation`
+- **Trạng thái**: Done
 - **Phiên bản mục tiêu**: `v1.1.0`
 - **Nền tảng**: `Flutter` (Melos Monorepo)
 - **Tài liệu thiết kế gốc (Source Spec)**: [2026-09-17-cold-start-optimization-design.md](2026-09-17-cold-start-optimization-design.md)

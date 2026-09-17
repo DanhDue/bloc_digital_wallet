@@ -2,7 +2,7 @@
 
 ## 1. Meta Data
 - **Tên Epic**: `test_suite_remediation`
-- **Trạng thái**: Đang thực hiện (Stage 2 — Dev Designer)
+- **Trạng thái**: Done
 - **Phiên bản mục tiêu**: v1.0.0-stg
 - **Nền tảng**: `Flutter` (Melos monorepo)
 - **Tài liệu đặc tả nguồn**: [2026-09-17-test-suite-remediation-design.md](2026-09-17-test-suite-remediation-design.md)
@@ -148,8 +148,8 @@ Toàn bộ kịch bản BDD 5 chiều được định nghĩa đầy đủ tại
 ---
 
 ## 7. Phân rã Kanban Tasks
-- [Task 01: Tạo Staging IntegrationTestHelper và cập nhật LanguageTestHelper](../../features/task_01_create_staging_integration_test_helper.md)
-- [Task 02: Bổ sung Package Test Stubs cho Framework và Native Security](../../features/task_02_add_package_test_stubs_for_framework_and_native_security.md)
-- [Task 03: Chuẩn hóa bộ Language Integration Tests](../../features/task_03_remediate_language_integration_tests.md)
-- [Task 04: Chuẩn hóa Deep Link Integration Test cho Shell 3 Tabs](../../features/task_04_remediate_deep_link_integration_test.md)
-- [Task 05: Host Acceptance Tests và Quality Check](../../features/task_05_host_acceptance_tests_and_quality_check.md)
+- [Task 01: Tạo Staging IntegrationTestHelper và cập nhật LanguageTestHelper](task_01_create_staging_integration_test_helper.md)
+- [Task 02: Bổ sung Package Test Stubs cho Framework và Native Security](task_02_add_package_test_stubs_for_framework_and_native_security.md)
+- [Task 03: Chuẩn hóa bộ Language Integration Tests](task_03_remediate_language_integration_tests.md)
+- [Task 04: Chuẩn hóa Deep Link Integration Test cho Shell 3 Tabs](task_04_remediate_deep_link_integration_test.md)
+- [Task 05: Host Acceptance Tests và Quality Check](task_05_host_acceptance_tests_and_quality_check.md)
