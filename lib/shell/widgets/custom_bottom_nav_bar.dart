@@ -21,17 +21,41 @@ class ShellTabIndex {
 }
 
 /// Custom bottom navigation bar with an elevated center QR Scanner button.
-class CustomBottomNavBar extends StatelessWidget {
+class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
     this.onDoubleTap,
+    this.enableStagedRendering = true,
   });
 
   final int currentIndex;
   final void Function(int) onTap;
   final void Function(int)? onDoubleTap;
+  final bool enableStagedRendering;
+
+  @override
+  State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
+}
+
+class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+  late bool _showShadows;
+
+  @override
+  void initState() {
+    super.initState();
+    _showShadows = !widget.enableStagedRendering;
+    if (widget.enableStagedRendering) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_showShadows) {
+          setState(() {
+            _showShadows = true;
+          });
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +67,15 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: backgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: context.appThemes.ink40.withValues(alpha: 0.15),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
+          boxShadow: _showShadows
+              ? [
+                  BoxShadow(
+                    color: context.appThemes.ink40.withValues(alpha: 0.15),
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
+                  ),
+                ]
+              : null,
         ),
         child: SafeArea(
           top: false,
@@ -64,20 +90,21 @@ class CustomBottomNavBar extends StatelessWidget {
                   icon: Icons.home_outlined,
                   activeIcon: Icons.home,
                   label: 'Home',
-                  isActive: currentIndex == ShellTabIndex.home,
+                  isActive: widget.currentIndex == ShellTabIndex.home,
                   activeColor: activeColor,
                   inactiveColor: inactiveColor,
-                  onTap: () => onTap(ShellTabIndex.home),
-                  onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.home),
+                  onTap: () => widget.onTap(ShellTabIndex.home),
+                  onDoubleTap: () => widget.onDoubleTap?.call(ShellTabIndex.home),
                 ),
                 // shell:scanner-nav-item:begin
                 _CenterNavItem(
                   key: const ValueKey('scanner_nav_tab'),
                   icon: Icons.qr_code_scanner,
-                  isActive: currentIndex == ShellTabIndex.scanner,
+                  isActive: widget.currentIndex == ShellTabIndex.scanner,
                   activeColor: activeColor,
-                  onTap: () => onTap(ShellTabIndex.scanner),
-                  onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.scanner),
+                  enableShadow: _showShadows,
+                  onTap: () => widget.onTap(ShellTabIndex.scanner),
+                  onDoubleTap: () => widget.onDoubleTap?.call(ShellTabIndex.scanner),
                 ),
                 // shell:scanner-nav-item:end
                 _NavItem(
@@ -85,11 +112,11 @@ class CustomBottomNavBar extends StatelessWidget {
                   icon: Icons.settings_outlined,
                   activeIcon: Icons.settings,
                   label: context.t.home.nav.settings,
-                  isActive: currentIndex == ShellTabIndex.settings,
+                  isActive: widget.currentIndex == ShellTabIndex.settings,
                   activeColor: activeColor,
                   inactiveColor: inactiveColor,
-                  onTap: () => onTap(ShellTabIndex.settings),
-                  onDoubleTap: () => onDoubleTap?.call(ShellTabIndex.settings),
+                  onTap: () => widget.onTap(ShellTabIndex.settings),
+                  onDoubleTap: () => widget.onDoubleTap?.call(ShellTabIndex.settings),
                 ),
               ],
             ),
@@ -163,6 +190,7 @@ class _CenterNavItem extends StatelessWidget {
     required this.activeColor,
     required this.onTap,
     this.onDoubleTap,
+    this.enableShadow = true,
   });
 
   final IconData icon;
@@ -170,6 +198,7 @@ class _CenterNavItem extends StatelessWidget {
   final Color activeColor;
   final VoidCallback onTap;
   final VoidCallback? onDoubleTap;
+  final bool enableShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -185,13 +214,15 @@ class _CenterNavItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: activeColor,
               shape: .circle,
-              boxShadow: [
-                BoxShadow(
-                  color: activeColor.withValues(alpha: 0.4),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              boxShadow: enableShadow
+                  ? [
+                      BoxShadow(
+                        color: activeColor.withValues(alpha: 0.4),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                  : null,
             ),
             child: Icon(icon, color: context.appThemes.white, size: 28),
           ),

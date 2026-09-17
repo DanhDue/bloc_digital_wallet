@@ -1,13 +1,13 @@
 ---
 id: "task_03_two_stage_bottom_nav_bar"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "view_rendering_optimization"
 dueDate: null
 created: "2026-09-17T16:25:00+07:00"
-modified: "2026-09-17T16:25:00+07:00"
-completedAt: null
+modified: "2026-09-17T09:33:52Z"
+completedAt: "2026-09-17T09:33:52Z"
 labels: ["architecture", "performance", "ui"]
 order: "a3"
 ---
