@@ -2,7 +2,7 @@
 
 ## 1. Thông tin Meta (Meta Data)
 - **Tên Epic**: `system_theme_sync`
-- **Trạng thái**: `In Progress`
+- **Trạng thái**: Done
 - **Phiên bản mục tiêu**: `v1.1.0`
 - **Nền tảng**: `Flutter` (Monorepo với BLoC, Clean Architecture, Melos, FVM)
 - **Spec nguồn**: [2026-09-17-system-theme-sync-and-ssl-pinning-design.md](2026-09-17-system-theme-sync-and-ssl-pinning-design.md)
