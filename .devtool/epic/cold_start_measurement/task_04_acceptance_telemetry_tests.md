@@ -1,13 +1,13 @@
 ---
 id: "task_04_acceptance_telemetry_tests"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "cold_start_measurement"
 dueDate: null
 created: "2026-09-17T17:15:00+07:00"
-modified: "2026-09-17T17:15:00+07:00"
-completedAt: null
+modified: "2026-09-17T10:37:48Z"
+completedAt: "2026-09-17T10:37:48Z"
 labels: ["acceptance", "integration", "testing"]
 order: "a4"
 ---
