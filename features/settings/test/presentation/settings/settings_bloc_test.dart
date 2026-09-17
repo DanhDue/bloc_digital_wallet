@@ -2,6 +2,8 @@
 
 // coverage:ignore-file
 
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:core/core.dart' hide test;
 import 'package:dartz/dartz.dart';
@@ -128,6 +130,52 @@ void main() {
       verify(mockBootstrapUseCase()).called(1);
     },
   );
+
+  test('emits Frame-0 success synchronously without waiting for async I/O', () async {
+    final completer = Completer<PackageInfo>();
+    when(mockAppInfoService.getPackageInfo()).thenAnswer((_) => completer.future);
+
+    bloc.add(const SettingsAction.started());
+    // Give event loop 0ms microtask tick
+    await Future.microtask(() {});
+
+    // Frame 0 must ALREADY be success synchronously!
+    expect(bloc.state.status, equals(SettingsStatus.success));
+    expect(bloc.state.uiModel, isNotNull);
+    expect(
+      bloc.state.uiModel?.availableLanguages,
+      equals(GetCachedLanguagesUseCase.defaultBundledLanguages),
+    );
+
+    // Complete the deferred background task with updated package info
+    completer.complete(
+      PackageInfo(
+        appName: 'Insight',
+        packageName: 'com.example.insight',
+        version: '2.0.0',
+        buildNumber: '42',
+      ),
+    );
+    await Future.delayed(const Duration(milliseconds: 20));
+
+    // Now state should be updated with actual package info
+    expect(bloc.state.uiModel?.appVersion, equals('2.0.0'));
+    expect(bloc.state.uiModel?.buildNumber, equals('42'));
+  });
+
+  test('background sync handles network exception gracefully without crashing or losing Frame-0 state', () async {
+    when(mockBootstrapUseCase()).thenThrow(Exception('Network timeout'));
+
+    bloc.add(const SettingsAction.started());
+    await Future.microtask(() {});
+
+    expect(bloc.state.status, equals(SettingsStatus.success));
+    await Future.delayed(const Duration(milliseconds: 20));
+
+    expect(bloc.state.status, equals(SettingsStatus.success));
+    expect(bloc.state.uiModel, isNotNull);
+  });
+
 
   group('changeLanguage', () {
     blocTest<SettingsBloc, SettingsState>(

@@ -1,13 +1,13 @@
 ---
 id: "task_02_settings_bloc_zero_io_frame_zero"
-status: "todo"
+status: "done"
 priority: "high"
 assignee: null
 epic: "startup_rendering_optimization"
 dueDate: null
 created: "2026-09-17T18:00:00+07:00"
-modified: "2026-09-17T18:00:00+07:00"
-completedAt: null
+modified: "2026-09-17T11:06:28Z"
+completedAt: "2026-09-17T11:06:28Z"
 labels: ["settings", "bloc", "non-blocking", "frame-zero"]
 order: "a2"
 ---

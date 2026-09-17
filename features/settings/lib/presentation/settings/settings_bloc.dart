@@ -46,47 +46,73 @@ class SettingsBloc extends MviBloc<SettingsAction, SettingsState, SettingsEvent>
   }
 
   Future<void> _onStarted(SettingsActionStarted action, Emitter<SettingsState> emit) async {
-    // 1. Instant Frame-0: get package info and cached languages
-    final results = await Future.wait([
-      _appInfoService.getPackageInfo(),
-      _getCachedLanguagesUseCase(),
-    ]);
-
-    final packageInfo = results[0] as PackageInfo;
-    final languagesResult = results[1] as Either<Failure, List<SupportedLanguage>>;
-    final cachedLanguages = languagesResult.getOrElse(
-      () => GetCachedLanguagesUseCase.defaultBundledLanguages,
-    );
-
+    // 1. Frame-0 Synchronous emission: zero-IO, zero-network.
     final initialUiModel = SettingsUiModel(
       id: 'local',
-      appVersion: packageInfo.version,
-      buildNumber: packageInfo.buildNumber,
+      appVersion: '1.0.0',
+      buildNumber: '1',
       isDarkModeEnabled: ThemeManager.instance.isDarkMode,
-      availableLanguages: cachedLanguages,
+      availableLanguages: GetCachedLanguagesUseCase.defaultBundledLanguages,
     );
 
-    // Frame-0: Instant render without modal loading dialog
     emit(state.copyWith(status: SettingsStatus.success, uiModel: initialUiModel));
 
-    // 2. Silent background bootstrap
-    await _runBackgroundBootstrap(emit);
+    // 2. Background non-blocking sync: retrieve device package info & execute bootstrap
+    await _runBackgroundSync(emit);
+  }
+
+  Future<void> _runBackgroundSync(Emitter<SettingsState> emit) async {
+    try {
+      final results = await Future.wait([
+        _appInfoService.getPackageInfo(),
+        _getCachedLanguagesUseCase(),
+      ]);
+
+      if (isClosed) return;
+
+      final packageInfo = results[0] as PackageInfo;
+      final languagesResult = results[1] as Either<Failure, List<SupportedLanguage>>;
+      final cachedLanguages = languagesResult.getOrElse(
+        () => GetCachedLanguagesUseCase.defaultBundledLanguages,
+      );
+
+      final currentModel = state.uiModel;
+      if (currentModel != null && !isClosed) {
+        emit(
+          state.copyWith(
+            uiModel: currentModel.copyWith(
+              appVersion: packageInfo.version,
+              buildNumber: packageInfo.buildNumber,
+              availableLanguages: cachedLanguages,
+            ),
+          ),
+        );
+      }
+
+      await _runBackgroundBootstrap(emit);
+    } catch (_) {
+      // Background sync failures must never crash or invalidate Frame-0 UI state
+    }
   }
 
   Future<void> _runBackgroundBootstrap(Emitter<SettingsState> emit) async {
-    final bootstrapResult = await _bootstrapUseCase();
-    await bootstrapResult.fold(
-      (failure) async => null, // Stale cache is fine, silently proceed
-      (response) async {
-        final refreshedLanguagesResult = await _getCachedLanguagesUseCase();
-        refreshedLanguagesResult.fold((failure) => null, (refreshedLanguages) {
-          if (!isClosed) {
-            final updatedModel = state.uiModel?.copyWith(availableLanguages: refreshedLanguages);
-            emit(state.copyWith(uiModel: updatedModel));
-          }
-        });
-      },
-    );
+    try {
+      final bootstrapResult = await _bootstrapUseCase();
+      await bootstrapResult.fold(
+        (failure) async => null, // Stale cache is fine, silently proceed
+        (response) async {
+          final refreshedLanguagesResult = await _getCachedLanguagesUseCase();
+          refreshedLanguagesResult.fold((failure) => null, (refreshedLanguages) {
+            if (!isClosed) {
+              final updatedModel = state.uiModel?.copyWith(availableLanguages: refreshedLanguages);
+              emit(state.copyWith(uiModel: updatedModel));
+            }
+          });
+        },
+      );
+    } catch (_) {
+      // Silently catch any network exceptions
+    }
   }
 
   Future<void> _onToggleDarkMode(
