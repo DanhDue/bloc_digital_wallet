@@ -104,5 +104,32 @@ void main() {
     test('rejects a host with no configured fingerprints (fail-closed)', () {
       expect(pin.accepts(_FakeCert(der), 'unpinned.com'), isFalse);
     });
+
+    test('accepts certificate matching active Heroku rotated fingerprint', () {
+      final certDer = utf8.encode('active-heroku-leaf-cert');
+      final certFingerprint = HardenedSslPinning.fingerprintOf(_FakeCert(certDer));
+      final herokuPin = HardenedSslPinning(
+        source: StaticFingerprintSource(
+          byHost: {
+            'digital-wallet-93c4ba68a41d.herokuapp.com': [
+              'k9HqKHp7CLk410cHWxSuIB6q1sbvRQ3rjgSZ2NwzkvA=',
+              certFingerprint,
+            ],
+          },
+        ),
+      );
+
+      expect(
+        herokuPin.accepts(_FakeCert(certDer), 'digital-wallet-93c4ba68a41d.herokuapp.com'),
+        isTrue,
+      );
+      expect(
+        herokuPin.accepts(
+          _FakeCert(utf8.encode('untrusted')),
+          'digital-wallet-93c4ba68a41d.herokuapp.com',
+        ),
+        isFalse,
+      );
+    });
   });
 }
