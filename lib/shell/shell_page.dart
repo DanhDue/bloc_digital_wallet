@@ -25,6 +25,7 @@ import 'package:scanner/scanner.dart';
 // shell:scanner-import:end
 import 'package:settings/settings.dart';
 import 'package:ui_kit/ui_kit.dart';
+import 'package:core/core.dart';
 
 @RoutePage()
 class ShellPage extends BaseMviStatefulPage<ShellBloc, ShellAction, ShellState, ShellEvent> {
@@ -50,6 +51,16 @@ class _ShellPageState
         } else if (GetIt.I.isRegistered<DeepLinkCoordinator>()) {
           GetIt.I<DeepLinkCoordinator>().markRouterReady();
         }
+
+        ColdStartProfiler.instance.mark(ColdStartMilestone.firstScreenInteractive);
+        ColdStartProfiler.instance.finish();
+        ColdStartProfiler.instance.logReport((table) {
+          if (GetIt.I.isRegistered<Talker>()) {
+            GetIt.I<Talker>().info('\n$table');
+          } else {
+            debugPrint(table);
+          }
+        });
       }
     });
   }

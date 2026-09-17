@@ -20,10 +20,12 @@ class ColdStartProfiler {
   final Map<String, Duration> _subInitializers = {};
   developer.TimelineTask? _timelineTask;
   bool _isFinished = false;
+  bool _hasLoggedReport = false;
 
   /// Starts the cold-start profiling stopwatch and records the [ColdStartMilestone.mainEntry].
   void start() {
     _isFinished = false;
+    _hasLoggedReport = false;
     _records.clear();
     _subInitializers.clear();
     if (!enabled) return;
@@ -36,7 +38,7 @@ class ColdStartProfiler {
 
   /// Records a lifecycle milestone with its elapsed duration.
   void mark(ColdStartMilestone milestone, [String? extra]) {
-    if (!enabled || _stopwatch == null) return;
+    if (!enabled || _isFinished || _stopwatch == null) return;
 
     final elapsedMicros = _stopwatch!.elapsedMicroseconds;
     final timestampMicros = _startTimestampMicros + elapsedMicros;
@@ -94,6 +96,7 @@ class ColdStartProfiler {
   /// Resets internal buffers for testing or next runs.
   void reset() {
     _isFinished = false;
+    _hasLoggedReport = false;
     _records.clear();
     _subInitializers.clear();
     _stopwatch = null;
@@ -113,7 +116,8 @@ class ColdStartProfiler {
 
   /// Formats and delivers the report to the provided [logger] callback.
   void logReport(void Function(String) logger) {
-    if (!enabled) return;
+    if (!enabled || _hasLoggedReport) return;
+    _hasLoggedReport = true;
     logger(report.toFormattedAsciiTable());
   }
 }

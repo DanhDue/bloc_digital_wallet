@@ -18,22 +18,36 @@ import 'core/environment_banner.dart';
 import 'theme/app_theme_data.dart';
 
 void main({void Function()? onDependenciesConfigured}) async {
+  core.ColdStartProfiler.instance.start();
   WidgetsFlutterBinding.ensureInitialized();
+  core.ColdStartProfiler.instance.mark(core.ColdStartMilestone.bindingInitialized);
 
   // Initialize dependency injection
+  core.ColdStartProfiler.instance.mark(core.ColdStartMilestone.diStarted);
   await configureDependencies();
+  core.ColdStartProfiler.instance.mark(core.ColdStartMilestone.diReady);
   onDependenciesConfigured?.call();
 
   // Parallelize ThemeManager and AppInitializer — both read SharedPreferences
   // independently and do not depend on each other.
-  await Future.wait([core.ThemeManager.instance.init(), getIt<core.AppInitializer>().init()]);
+  core.ColdStartProfiler.instance.mark(core.ColdStartMilestone.coreServicesStarted);
+  await Future.wait([
+    core.ColdStartProfiler.instance.timeAsync(
+      'ThemeManager.init',
+      () => core.ThemeManager.instance.init(),
+    ),
+    getIt<core.AppInitializer>().init(),
+  ]);
+  core.ColdStartProfiler.instance.mark(core.ColdStartMilestone.coreServicesReady);
 
   // Defer DeepLink initialization to post-frame: DeepLinkCoordinator already
   // buffers the cold-start URI in stagedInitialLink, so no link is lost.
   WidgetsBinding.instance.addPostFrameCallback((_) {
+    core.ColdStartProfiler.instance.mark(core.ColdStartMilestone.firstFrameRendered);
     getIt<DeepLinkCoordinator>().initialize();
   });
 
+  core.ColdStartProfiler.instance.mark(core.ColdStartMilestone.runAppInvoked);
   runApp(
     StreamBuilder<ThemeMode>(
       stream: core.ThemeManager.instance.themeModeStream.distinct(),
