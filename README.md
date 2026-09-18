@@ -27,7 +27,18 @@ A production-ready Flutter Super App monorepo template built with **Clean Archit
 
 ## ⚡ Startup Performance & Cold Start Benchmarks
 
-Comprehensive empirical telemetry measurements across development (JIT Simulator), profile, and physical Apple hardware environments:
+Comprehensive empirical telemetry measurements across development (JIT Simulator), profile, and physical Apple hardware environments (`iPhone 16 Pro Max`):
+
+> [!NOTE]
+> **Baseline Template Scope & Architecture Boundary:**
+> Telemetry metrics below reflect the baseline runtime overhead of the **Flutter Super App Template** (Clean Architecture + MVI + DI + Core Modules). These numbers isolate the core framework and shell costs, distinct from the full demo app containing heavy domain features:
+>
+> - **Bottom Tabs (3 tabs)**: Home (`HomeDashboardPage`), Scanner (`ScannerPage`), and Settings (`SettingsPage`).
+> - **Default Tab on Launch**: Tab 2 (`SettingsPage`).
+> - **Deferred View Rendering (`LazyIndexedStack`)**: Only Tab 2 is inflated on Frame 0; Tabs 0 and 1 are lazily mounted upon first user interaction.
+> - **Active Modules in Cold Start**: 6 Core Initializers (`Environment`, `BlocObserver`, `ImageCache`, `MemoryPressure`, `Logging`, `Localization`) and Host Shell.
+> - **Background Bootstrap Networking**: Asynchronous, non-blocking sync (`SettingsBloc` calling `BootstrapUseCase` -> `POST /api/v1/settings/sync/bootstrap` to check supported remote translations and language delta maps) executed safely post-paint.
+> - **Scope**: Scaled-down baseline template app compared to the full demo.
 
 ### Detailed Telemetry Comparison Across Test Runs
 
@@ -39,6 +50,25 @@ Comprehensive empirical telemetry measurements across development (JIT Simulator
 | **4. Widget Tree Build (`runApp`)** | 468.2 ms | 27.5 ms | **15.8 ms** | 🟢 **29.6x faster** (-96.6%) |
 | **🏁 TOTAL COLD START (to FCP)** | **552.3 ms** | **31.9 ms** | **18.9 ms** | 🚀 **29.2x faster** (-96.6%) |
 | **🎯 TIME TO INTERACTIVE (TTI)** | **552.4 ms** | **32.0 ms** | **19.0 ms** | 🚀 **29.1x faster** (-96.6%) |
+
+### Cold Start Telemetry & Navigation Demo
+
+<!-- markdownlint-disable MD033 -->
+<table width="100%"> 
+  <tr>
+    <td align="center" width="25%"><b>Telemetry Report (Talker)</b></td>
+    <td align="center" width="25%"><b>Live Telemetry & Logs</b></td>
+    <td align="center" width="25%"><b>Instant Launch Demo</b></td>
+    <td align="center" width="25%"><b>Lazy Tab Navigation</b></td>
+  </tr>
+  <tr>
+    <td width="25%"><img src="screenshots/cold_start_01.png" alt="Cold Start Telemetry Report" width="100%"/></td>
+    <td width="25%"><img src="screenshots/cold_start_02.gif" alt="Live Telemetry and Dev Logs" width="100%"/></td>
+    <td width="25%"><img src="screenshots/cold_start_03.gif" alt="Cold Start Launch Demo" width="100%"/></td>
+    <td width="25%"><img src="screenshots/cold_start_04.gif" alt="Lazy Tab Navigation Demo" width="100%"/></td>
+  </tr>
+</table>
+<!-- markdownlint-enable MD033 -->
 
 > **Key Architectural Takeaways:**
 >
